@@ -37,8 +37,8 @@ const CONTACT_INFO = [
     {
         icon: MapPin,
         label: "Location",
-        value: "Tamil Nadu, India",
-        href: null
+        value: "SS40 NETWORK, 1st Floor, Municipal Corporation Incubation Centre (Near by trade centre), Swamy Nellaiappar Temple Highway, Tirunelveli Junction, Tirunelveli, Tamil Nadu 627001",
+        href: "https://goo.gl/maps/DWiCMVGgqKi2r5188"
     },
     {
         icon: MessageCircle,

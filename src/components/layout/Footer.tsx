@@ -51,20 +51,27 @@ export function Footer() {
                     </div>
 
                     {/* Column 4: Contact */}
-                    <div className="flex flex-col items-center md:items-start text-center md:text-left">
+                    <div className="flex flex-col items-center md:items-start text-center md:text-left w-full overflow-hidden">
                         <h4 className="text-[var(--color-heading)] font-semibold mb-6">Contact</h4>
-                        <ul className="flex flex-col items-center md:items-start gap-4 text-sm text-[var(--color-body-text)]">
-                            <li className="flex flex-col md:flex-row items-center md:items-start gap-2 md:gap-3">
-                                <Mail className="w-5 h-5 text-[var(--color-primary)] shrink-0" />
-                                <a href="mailto:hello@ss40network.com" className="hover:text-[var(--color-primary)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] rounded">hello@ss40network.com</a>
+                        <ul className="flex flex-col items-start gap-4 text-sm text-[var(--color-body-text)] text-left w-fit mx-auto md:mx-0">
+                            <li className="flex flex-row items-start gap-3">
+                                <Mail className="w-5 h-5 text-[var(--color-primary)] shrink-0 mt-0.5" />
+                                <a href="mailto:support@ss40network.com" className="hover:text-[var(--color-primary)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] rounded">support@ss40network.com</a>
                             </li>
-                            <li className="flex flex-col md:flex-row items-center md:items-start gap-2 md:gap-3">
-                                <Phone className="w-5 h-5 text-[var(--color-primary)] shrink-0" />
-                                <a href="tel:+1234567890" className="hover:text-[var(--color-primary)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] rounded">+1 (234) 567-890</a>
+                            <li className="flex flex-row items-start gap-3">
+                                <Phone className="w-5 h-5 text-[var(--color-primary)] shrink-0 mt-0.5" />
+                                <a href="tel:+918300591750" className="hover:text-[var(--color-primary)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] rounded">+91 83005 91750</a>
                             </li>
-                            <li className="flex flex-col md:flex-row items-center md:items-start gap-2 md:gap-3">
-                                <MapPin className="w-5 h-5 text-[var(--color-primary)] shrink-0" />
-                                <span>One Premium Plaza,<br className="hidden md:block" />SaaS City, 10001</span>
+                            <li className="flex flex-row items-start gap-3">
+                                <MapPin className="w-5 h-5 text-[var(--color-primary)] shrink-0 mt-0.5" />
+                                <span>
+                                    SS40 NETWORK,<br />
+                                    1st Floor,<br />
+                                    Municipal Corporation Incubation Centre (Near by trade centre),<br />
+                                    Swamy Nellaiappar Temple Highway,<br />
+                                    Tirunelveli Junction, Tirunelveli,<br />
+                                    Tamil Nadu 627001
+                                </span>
                             </li>
                         </ul>
                     </div>

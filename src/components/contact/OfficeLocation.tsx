@@ -43,12 +43,12 @@ export function OfficeLocation() {
                         <h3 className="text-xl md:text-2xl font-bold text-[#111827] mb-4">SS40 NETWORK PRIVATE LIMITED</h3>
 
                         <address className="not-italic text-gray-500 text-base leading-relaxed mb-8 flex flex-col gap-1">
-                            <span>1st Floor</span>
-                            <span>Municipal Corporation Incubation Centre</span>
-                            <span>Near Trade Centre</span>
-                            <span>Swamy Nellaiappar Temple Highway</span>
-                            <span>Tirunelveli Junction</span>
-                            <span>Tirunelveli, Tamil Nadu – 627001</span>
+                            <span>SS40 NETWORK,</span>
+                            <span>1st Floor,</span>
+                            <span>Municipal Corporation Incubation Centre (Near by trade centre),</span>
+                            <span>Swamy Nellaiappar Temple Highway,</span>
+                            <span>Tirunelveli Junction,</span>
+                            <span>Tirunelveli, Tamil Nadu 627001</span>
                         </address>
 
                         <div className="flex items-center gap-4 text-sm font-bold text-[#111827] mb-8 bg-[#F2F7F5] w-max px-4 py-3 rounded-xl border border-gray-100">
@@ -60,7 +60,7 @@ export function OfficeLocation() {
                         </div>
 
                         <div className="flex flex-wrap gap-4 mt-auto">
-                            <a href="https://maps.google.com/?q=SS40+NETWORK+Tirunelveli" target="_blank" rel="noopener noreferrer">
+                            <a href="https://goo.gl/maps/DWiCMVGgqKi2r5188" target="_blank" rel="noopener noreferrer">
                                 <Button className="bg-[#6B9F91] text-white hover:bg-[#5C8C80] font-bold px-6 py-6 rounded-xl group shadow-md shadow-[#6B9F91]/20">
                                     <Navigation className="w-4 h-4 mr-2 group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform" />
                                     Get Directions
@@ -76,7 +76,7 @@ export function OfficeLocation() {
                     </div>
 
                     {/* Right: Map Placeholder */}
-                    <div className="flex-1 w-full bg-[#F2F7F5] rounded-2xl border border-gray-100 overflow-hidden relative min-h-[300px] flex items-center justify-center group overflow-hidden">
+                    <div className="flex-1 w-full bg-[#F2F7F5] rounded-2xl border border-gray-100 overflow-hidden relative min-h-[300px] flex items-center justify-center group">
 
                         {/* Fake map pattern background */}
                         <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(#111827 2px, transparent 2px)', backgroundSize: '16px 16px' }} />
@@ -90,7 +90,7 @@ export function OfficeLocation() {
                             </div>
                             <span className="font-bold text-gray-500 uppercase tracking-widest text-xs mb-6">Interactive Map</span>
 
-                            <a href="https://maps.google.com/?q=SS40+NETWORK+Tirunelveli" target="_blank" rel="noopener noreferrer">
+                            <a href="https://goo.gl/maps/DWiCMVGgqKi2r5188" target="_blank" rel="noopener noreferrer">
                                 <Button className="bg-[#111827] text-white hover:bg-gray-800 font-bold px-6 py-5 rounded-lg text-sm shadow-xl hover:-translate-y-0.5 transition-transform border border-gray-700">
                                     View on Google Maps
                                 </Button>
