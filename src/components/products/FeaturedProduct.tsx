@@ -79,10 +79,10 @@ export function FeaturedProduct() {
                             </div>
 
                             <Button asChild size="lg" className="w-full sm:w-auto bg-[#2DD4BF] hover:bg-[#14b8a6] text-white shadow-lg shadow-[#2DD4BF]/20 rounded-xl group">
-                                <Link href="/contact">
+                                <a href="https://invoice.ss40network.cloud/" target="_blank" rel="noopener noreferrer">
                                     Start using ClearInvoice
                                     <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                                </Link>
+                                </a>
                             </Button>
                         </motion.div>
                     </div>
