@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { motion } from "framer-motion";
-import { MapPin, Navigation, Phone, Clock, Map } from "lucide-react";
+import { MapPin, Navigation, Phone, Clock, Map, ExternalLink } from "lucide-react";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
@@ -81,12 +81,25 @@ export function OfficeLocation() {
                         {/* Live Google Map Iframe */}
                         <iframe
                             title="SS40 NETWORK Office Location"
-                            src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=Startup%20TN%20Tirunelveli%20Regional%20Hub,%201st%20Floor,%20Municipal%20Corporation%20Incubation%20Centre,%20Trade%20Centre,%20Swamy%20Nellaiappar%20Temple%20Highway,%20next%20to%20Tirunelveli,%20Thirunagar,%20Tirunelveli%20Junction,%20Tirunelveli,%20Tamil%20Nadu%20627001,%20India+(SS40%20NETWORK%20PRIVATE%20LIMITED)&amp;t=&amp;z=15&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
+                            src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=8.72921,77.69742+(SS40%20NETWORK%20PRIVATE%20LIMITED)&amp;t=&amp;z=17&amp;ie=UTF8&amp;iwloc=near&amp;output=embed"
                             className="absolute inset-0 w-full h-full border-0 grayscale-[15%] contrast-[1.05]"
                             allowFullScreen
                             loading="lazy"
                             referrerPolicy="no-referrer-when-downgrade"
                         />
+
+                        {/* Custom Google Places Mock Overlay */}
+                        <div className="absolute top-3 left-3 md:top-4 md:left-4 bg-white rounded-md shadow-[0_2px_6px_rgba(0,0,0,0.3)] p-3 md:p-4 z-20 w-[240px] md:w-[280px] pointer-events-auto">
+                            <h4 className="text-[15px] font-semibold text-gray-900 leading-tight mb-1 flex justify-between items-start">
+                                SS40 NETWORK PRIVATE LIMITED
+                                <a href="https://goo.gl/maps/DWiCMVGgqKi2r5188" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 p-1">
+                                    <ExternalLink className="w-4 h-4" />
+                                </a>
+                            </h4>
+                            <p className="text-[12px] text-gray-600 leading-snug">
+                                Startup TN Tirunelveli Regional Hub, 1st Floor, Municipal Corporation Incubation Centre, Trade Centre, Swamy Nellaiappar Temple Highway, Thirunagar, Tirunelveli Junction, Tirunelveli, Tamil Nadu 627001, India
+                            </p>
+                        </div>
 
                         {/* Floating protection gradient for button */}
                         <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#111827]/30 to-transparent pointer-events-none" />
