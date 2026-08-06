@@ -61,14 +61,14 @@ export function Hero() {
 
                         <motion.h1
                             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }}
-                            className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-[#111827] mb-6 leading-[1.1] tracking-tight"
+                            className="text-[clamp(40px,5vw,56px)] font-bold text-[#111827] leading-[1.1] tracking-tight mb-6 max-w-2xl"
                         >
                             Let's Build Something <br className="hidden lg:block" /> Meaningful <span className="text-[#6B9F91]">Together.</span>
                         </motion.h1>
 
                         <motion.p
                             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}
-                            className="text-gray-500 text-base md:text-lg lg:text-xl max-w-2xl mx-auto lg:mx-0 leading-relaxed font-medium mb-10"
+                            className="text-lg md:text-xl text-[#6B7280] mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed"
                         >
                             Whether you're looking for digital solutions, exploring our products, or interested in academic collaborations, our team is ready to help you take the next step.
                         </motion.p>
