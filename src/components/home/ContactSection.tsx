@@ -75,7 +75,7 @@ export function ContactSection() {
                 <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
 
                     {/* Left Column - Contact Information (40%) */}
-                    <div className="w-full lg:w-[40%] flex flex-col gap-8">
+                    <div className="w-full lg:w-[40%] flex flex-col gap-8 h-full">
                         <motion.div
                             initial="hidden"
                             whileInView="visible"
@@ -94,18 +94,18 @@ export function ContactSection() {
                             initial="hidden"
                             whileInView="visible"
                             viewport={{ once: true, margin: "-100px" }}
-                            className="flex flex-col gap-4"
+                            className="flex flex-col gap-4 flex-1 justify-between h-full"
                         >
                             {CONTACT_INFO.map((item, idx) => {
                                 const Icon = item.icon;
                                 const content = (
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center text-[var(--color-primary)] group-hover:bg-[var(--color-primary)] group-hover:text-white transition-colors duration-300">
+                                    <div className="flex items-start gap-3">
+                                        <div className="w-12 h-12 shrink-0 rounded-full bg-gray-50 flex items-center justify-center text-[var(--color-primary)] group-hover:bg-[var(--color-primary)] group-hover:text-white transition-colors duration-300">
                                             <Icon className="w-5 h-5" />
                                         </div>
-                                        <div>
+                                        <div className="pt-0.5 text-left">
                                             <p className="text-sm font-semibold text-[var(--color-heading)]">{item.label}</p>
-                                            <p className="text-sm text-gray-500">{item.value}</p>
+                                            <p className="text-sm text-gray-500 leading-relaxed">{item.value}</p>
                                         </div>
                                     </div>
                                 );
@@ -118,7 +118,7 @@ export function ContactSection() {
                                         className="p-4 group bg-white border border-[var(--color-border)] hover:border-[var(--color-primary)]/30 transition-colors cursor-pointer"
                                     >
                                         {item.href ? (
-                                            <a href={item.href} target={item.href.startsWith('http') ? "_blank" : undefined} rel="noopener noreferrer" className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md">
+                                            <a href={item.href} target={item.href?.startsWith('http') ? "_blank" : undefined} rel="noopener noreferrer" className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md">
                                                 {content}
                                             </a>
                                         ) : (
@@ -131,13 +131,13 @@ export function ContactSection() {
                     </div>
 
                     {/* Right Column - Premium Form (60%) */}
-                    <div className="w-full lg:w-[60%] flex flex-col gap-8">
+                    <div className="w-full lg:w-[60%] flex flex-col flex-1">
                         <CardMotion
                             initial="hidden"
                             whileInView="visible"
                             viewport={{ once: true, margin: "-100px" }}
                             variants={slideUp}
-                            className="p-8 md:p-10 bg-white shadow-xl shadow-gray-200/50 border border-[var(--color-border)] rounded-2xl relative overflow-hidden"
+                            className="p-8 md:p-10 bg-white shadow-xl shadow-gray-200/50 border border-[var(--color-border)] rounded-2xl relative overflow-hidden flex-1 flex flex-col justify-between"
                         >
                             {/* Decorative Glow */}
                             <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--color-primary)]/5 blur-[80px] rounded-full pointer-events-none" />
@@ -220,10 +220,6 @@ export function ContactSection() {
                                     <Button type="submit" size="lg" className="w-full sm:w-auto shadow-lg shadow-[var(--color-primary)]/20 group">
                                         Send Message
                                         <Send className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                                    </Button>
-                                    <Button type="button" variant="outline" size="lg" className="w-full sm:w-auto group">
-                                        <Calendar className="mr-2 w-4 h-4" />
-                                        Schedule a Meeting
                                     </Button>
                                 </div>
                             </form>

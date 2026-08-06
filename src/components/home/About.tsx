@@ -98,7 +98,7 @@ const AboutIllustration = () => (
 
 export function About() {
     return (
-        <SectionWrapper id="about" className="bg-[#F2F7F5]">
+        <SectionWrapper id="about" className="bg-[#EDF5F2]">
             <Container className="space-y-12 lg:space-y-16">
 
                 {/* 1. Section Header & Abstract Graphic */}

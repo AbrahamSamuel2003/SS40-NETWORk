@@ -84,7 +84,7 @@ export function WhatWeBuild() {
     };
 
     return (
-        <SectionWrapper id="what-we-build" className="bg-[#F2F7F5]">
+        <SectionWrapper id="what-we-build" className="bg-[#EDF5F2] !overflow-visible">
             <Container className="space-y-12 lg:space-y-16">
 
                 {/* Section Header */}
@@ -94,7 +94,7 @@ export function WhatWeBuild() {
                     description="From enterprise software to AI-powered automation, we create scalable digital products that solve real business challenges."
                 />
 
-                <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
+                <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 lg:items-start relative">
 
                     {/* Left Column - Controller Selection (40%) */}
                     <div className="w-full lg:w-[40%] flex flex-col gap-4">
@@ -172,22 +172,24 @@ export function WhatWeBuild() {
                     </div>
 
                     {/* Right Column - Dynamic Preview Panel (60%) */}
-                    <div className="hidden lg:flex w-full lg:w-[60%] flex-col pt-4">
-                        <div className="relative w-full aspect-[4/3] min-h-[400px] md:min-h-[500px] rounded-3xl bg-white border border-[var(--color-border)] shadow-xl overflow-hidden flex items-center justify-center p-8 lg:p-12">
+                    <div className="hidden lg:flex w-full lg:w-[60%] flex-col pt-4 lg:sticky lg:top-28">
+                        {/* 
+                          The container preserves the exact grid size, padding, and alignment, 
+                          but acts purely as a transparent layout scaffold to hold the illustrations. 
+                        */}
+                        <div className="relative w-full aspect-[4/3] min-h-[400px] md:min-h-[500px] flex items-center justify-center p-8 lg:p-12 z-0">
 
-                            {/* Ambient background glow inside panel */}
-                            <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-white z-0" />
-                            <div className="absolute top-0 right-0 w-64 h-64 bg-[#6B9F91]/10 blur-[80px] rounded-full translate-x-1/3 -translate-y-1/3" />
+                            {/* Illustrations animate freely inside this transparent area */}
 
                             <AnimatePresence mode="wait">
                                 {/* ENTERPRISE SOFTWARE PREVIEW */}
                                 {activeId === "enterprise" && (
                                     <motion.div
                                         key="enterprise"
-                                        initial={{ opacity: 0, y: 20 }}
+                                        initial={{ opacity: 0, y: 10 }}
                                         animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, y: -20 }}
-                                        transition={{ duration: 0.4 }}
+                                        exit={{ opacity: 0, y: -10 }}
+                                        transition={{ duration: 0.2, ease: "easeOut" }}
                                         className="relative z-10 w-full h-full flex flex-col gap-4"
                                     >
                                         {/* Floating Notification */}
@@ -248,10 +250,10 @@ export function WhatWeBuild() {
                                 {activeId === "web" && (
                                     <motion.div
                                         key="web"
-                                        initial={{ opacity: 0, y: 20 }}
+                                        initial={{ opacity: 0, y: 10 }}
                                         animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, y: -20 }}
-                                        transition={{ duration: 0.4 }}
+                                        exit={{ opacity: 0, y: -10 }}
+                                        transition={{ duration: 0.2, ease: "easeOut" }}
                                         className="relative z-10 w-full h-full flex flex-col"
                                     >
                                         <div className="w-full h-full bg-white rounded-xl border border-[var(--color-border)] shadow-sm flex flex-col overflow-hidden group">
@@ -329,10 +331,10 @@ export function WhatWeBuild() {
                                 {activeId === "mobile" && (
                                     <motion.div
                                         key="mobile"
-                                        initial={{ opacity: 0, y: 20 }}
+                                        initial={{ opacity: 0, y: 10 }}
                                         animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, y: -20 }}
-                                        transition={{ duration: 0.4 }}
+                                        exit={{ opacity: 0, y: -10 }}
+                                        transition={{ duration: 0.2, ease: "easeOut" }}
                                         className="relative z-10 w-full h-full flex items-center justify-center gap-6"
                                     >
                                         <div className="relative w-48 h-[380px] bg-white rounded-[2rem] shadow-xl border-[6px] border-gray-900 overflow-hidden hidden md:flex flex-col opacity-50 scale-90 translate-x-8">
@@ -408,10 +410,10 @@ export function WhatWeBuild() {
                                 {activeId === "ai" && (
                                     <motion.div
                                         key="ai"
-                                        initial={{ opacity: 0, y: 20 }}
+                                        initial={{ opacity: 0, y: 10 }}
                                         animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, y: -20 }}
-                                        transition={{ duration: 0.4 }}
+                                        exit={{ opacity: 0, y: -10 }}
+                                        transition={{ duration: 0.2, ease: "easeOut" }}
                                         className="relative z-10 w-full h-full flex flex-col items-center justify-center"
                                     >
                                         <div className="w-[85%] max-w-[400px] bg-white rounded-2xl shadow-xl border border-[var(--color-border)] overflow-hidden flex flex-col">
@@ -456,10 +458,10 @@ export function WhatWeBuild() {
                                 {activeId === "cloud" && (
                                     <motion.div
                                         key="cloud"
-                                        initial={{ opacity: 0, y: 20 }}
+                                        initial={{ opacity: 0, y: 10 }}
                                         animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, y: -20 }}
-                                        transition={{ duration: 0.4 }}
+                                        exit={{ opacity: 0, y: -10 }}
+                                        transition={{ duration: 0.2, ease: "easeOut" }}
                                         className="relative z-10 w-full h-full flex flex-col items-center justify-center gap-8"
                                     >
                                         <div className="w-full max-w-[450px] flex justify-between items-center relative">
@@ -511,10 +513,10 @@ export function WhatWeBuild() {
                                 {activeId === "automation" && (
                                     <motion.div
                                         key="automation"
-                                        initial={{ opacity: 0, y: 20 }}
+                                        initial={{ opacity: 0, y: 10 }}
                                         animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, y: -20 }}
-                                        transition={{ duration: 0.4 }}
+                                        exit={{ opacity: 0, y: -10 }}
+                                        transition={{ duration: 0.2, ease: "easeOut" }}
                                         className="relative z-10 w-full h-full flex flex-col justify-center gap-6"
                                     >
                                         <div className="flex flex-col gap-6 max-w-[400px] mx-auto w-full relative">

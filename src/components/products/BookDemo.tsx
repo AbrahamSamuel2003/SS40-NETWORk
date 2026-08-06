@@ -54,67 +54,91 @@ export function BookDemo() {
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true, margin: "-100px" }}
-                        variants={slideUp}
+                        variants={{
+                            hidden: { opacity: 0 },
+                            visible: {
+                                opacity: 1,
+                                transition: { staggerChildren: 0.15 }
+                            }
+                        }}
                         className="w-full lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left"
                     >
-                        <Badge className="mb-6 rounded-md uppercase tracking-widest text-[10px] font-bold bg-[#6B9F91]/15 text-[#6B9F91]">
-                            BOOK A DEMO
-                        </Badge>
+                        <motion.div variants={slideUp}>
+                            <Badge className="mb-6 rounded-md uppercase tracking-widest text-[10px] font-bold bg-[#6B9F91]/15 text-[#6B9F91]">
+                                BOOK A DEMO
+                            </Badge>
+                        </motion.div>
 
-                        <h2 className="text-4xl md:text-5xl font-bold text-[#111827] leading-tight tracking-tight mb-6">
+                        <motion.h2 variants={slideUp} className="text-4xl md:text-5xl font-bold text-[#111827] leading-tight tracking-tight mb-6">
                             See Our Products <br />
                             <span className="text-[#6B9F91]">in Action.</span>
-                        </h2>
+                        </motion.h2>
 
-                        <p className="text-lg text-[#6B7280] mb-10 leading-relaxed max-w-lg">
+                        <motion.p variants={slideUp} className="text-lg text-[#6B7280] mb-10 leading-relaxed max-w-lg">
                             Schedule a live walkthrough with our team to explore how SS40 NETWORK products can simplify workflows, improve efficiency, and support your business goals.
-                        </p>
+                        </motion.p>
 
-                        <div className="flex flex-col sm:flex-row w-full sm:w-auto gap-4">
-                            <Button asChild size="lg" className="w-full sm:w-auto bg-[#6B9F91] hover:bg-[#5C8C80] text-white shadow-xl shadow-[#6B9F91]/20 group">
-                                <Link href="/contact">
-                                    <CalendarCheck className="w-5 h-5 mr-2" />
+                        <motion.div variants={slideUp} className="flex flex-col sm:flex-row w-full sm:w-auto gap-4">
+                            <Button asChild size="lg" className="w-full sm:w-auto bg-[#6B9F91] hover:bg-[#5C8C80] text-white shadow-xl shadow-[#6B9F91]/20 hover:shadow-2xl hover:shadow-[#6B9F91]/40 group transition-all duration-300 relative overflow-hidden">
+                                <Link href="/contact" className="relative z-10 flex items-center justify-center w-full h-full">
+                                    <CalendarCheck className="w-5 h-5 mr-2 group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-300" />
                                     Book a Demo
+                                    {/* Soft shine */}
+                                    <div className="absolute inset-0 -translate-x-[150%] group-hover:translate-x-[150%] bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000 ease-in-out pointer-events-none" />
                                 </Link>
                             </Button>
-                            <Button asChild variant="outline" size="lg" className="w-full sm:w-auto bg-white hover:bg-gray-50 border-gray-200 text-gray-700">
-                                <Link href="/contact">
-                                    Talk to Sales
-                                    <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                            <Button asChild variant="outline" size="lg" className="w-full sm:w-auto bg-white hover:bg-gray-50 border-gray-200 text-gray-700 group hover:border-gray-300 hover:shadow-md transition-all duration-300">
+                                <Link href="/contact" className="flex items-center justify-center w-full h-full">
+                                    Talk to Expert
+                                    <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1.5 transition-transform duration-300 ease-out" />
                                 </Link>
                             </Button>
-                        </div>
+                        </motion.div>
                     </motion.div>
 
                     {/* Right Column - Information Card */}
-                    <div className="w-full lg:w-1/2 relative">
+                    <div className="w-full lg:w-1/2 relative group/section">
+
+                        {/* Ambient glow specifically in right container */}
+                        <motion.div
+                            animate={{ rotate: 360 }} transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+                            className="absolute inset-0 opacity-[0.04] blur-[60px] bg-gradient-to-tr from-[#6B9F91] via-[#FFC900] to-[#6B9F91] scale-150 pointer-events-none z-0"
+                        />
+
                         <motion.div
                             initial={{ opacity: 0, x: 40, y: 40 }}
                             whileInView={{ opacity: 1, x: 0, y: 0 }}
+                            whileHover={{ y: -6 }}
                             viewport={{ once: true, margin: "-100px" }}
                             transition={{ duration: 0.7, type: "spring", bounce: 0.2 }}
-                            className="w-full max-w-md mx-auto lg:ml-auto bg-white/80 backdrop-blur-xl border border-white p-8 md:p-10 rounded-[2rem] shadow-2xl shadow-gray-200/50"
+                            className="relative w-full max-w-md mx-auto lg:ml-auto bg-white/80 backdrop-blur-xl border border-white hover:border-[#6B9F91]/20 p-6 md:p-8 rounded-[2rem] shadow-2xl shadow-gray-200/50 hover:shadow-[0_30px_60px_-15px_rgba(107,159,145,0.15)] transition-all duration-500 z-10"
                         >
                             {/* Card Header */}
-                            <div className="flex items-center gap-4 mb-3">
-                                <div className="w-12 h-12 rounded-xl bg-[#6B9F91]/10 flex items-center justify-center text-[#6B9F91]">
-                                    <MonitorPlay className="w-6 h-6" />
+                            <div className="flex items-center gap-4 mb-2.5">
+                                <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-[#6B9F91]/10 flex items-center justify-center text-[#6B9F91]">
+                                    <MonitorPlay className="w-5 h-5 md:w-6 md:h-6" />
                                 </div>
-                                <h3 className="text-xl md:text-2xl font-bold text-[#111827]">
+                                <h3 className="text-lg md:text-xl font-bold text-[#111827]">
                                     Live Product Walkthrough
                                 </h3>
                             </div>
-                            <p className="text-[#6B7280] text-sm mb-8">
+                            <p className="text-[#6B7280] text-sm mb-6">
                                 A guided session tailored to your business needs, engineered to demonstrate exact outcomes.
                             </p>
 
                             {/* Benefit List */}
                             <motion.ul
-                                variants={staggerContainer}
+                                variants={{
+                                    hidden: { opacity: 0 },
+                                    visible: {
+                                        opacity: 1,
+                                        transition: { staggerChildren: 0.1, delayChildren: 0.2 }
+                                    }
+                                }}
                                 initial="hidden"
                                 whileInView="visible"
                                 viewport={{ once: true }}
-                                className="space-y-4 mb-10"
+                                className="space-y-2 mb-6"
                             >
                                 {DEMO_BENEFITS.map((item, idx) => {
                                     const Icon = item.icon;
@@ -122,36 +146,43 @@ export function BookDemo() {
                                         <motion.li
                                             key={idx}
                                             variants={slideUp}
-                                            className="flex items-center gap-4"
+                                            className="group/feature flex items-center gap-3 p-2 -mx-2 rounded-xl hover:bg-[#6B9F91]/[0.03] hover:shadow-[0_4px_15px_rgba(107,159,145,0.05)] border border-transparent hover:border-[#6B9F91]/10 transition-all duration-300 cursor-default"
                                         >
-                                            <div className="w-8 h-8 rounded-full bg-[#F2F7F5] text-[#6B9F91] flex items-center justify-center shrink-0">
-                                                <Icon className="w-4 h-4" />
+                                            <div className="w-7 h-7 rounded-full bg-[#EDF5F2] text-[#6B9F91] flex items-center justify-center shrink-0 group-hover/feature:bg-[#6B9F91] group-hover/feature:text-white group-hover/feature:shadow-[0_0_12px_rgba(107,159,145,0.3)] transition-all duration-300">
+                                                <Icon className="w-3.5 h-3.5 group-hover/feature:scale-110 transition-transform duration-300" />
                                             </div>
-                                            <span className="font-semibold text-gray-700 text-sm">{item.text}</span>
+                                            <span className="font-semibold text-gray-700 text-sm group-hover/feature:text-[#111827] group-hover/feature:translate-x-1 transition-all duration-300 ease-out">{item.text}</span>
                                         </motion.li>
                                     );
                                 })}
                             </motion.ul>
 
                             {/* Info Badge */}
-                            <div className="w-full bg-[#F2F7F5] border border-[#6B9F91]/20 rounded-2xl p-5 flex items-center justify-between">
+                            <motion.div
+                                variants={slideUp}
+                                initial="hidden"
+                                whileInView="visible"
+                                viewport={{ once: true }}
+                                whileHover={{ scale: 1.02 }}
+                                className="w-full bg-[#EDF5F2] border border-[#6B9F91]/20 hover:border-[#6B9F91]/40 hover:shadow-[0_4px_20px_rgba(107,159,145,0.1)] transition-all duration-300 rounded-2xl p-4 flex items-center justify-between group/duration cursor-default"
+                            >
                                 <div className="flex flex-col">
                                     <span className="text-[10px] font-bold text-[#6B9F91] uppercase tracking-wider mb-1">Typical Demo Duration</span>
-                                    <span className="font-bold text-[#111827] flex items-center gap-2">
-                                        <Clock className="w-4 h-4 text-gray-500" />
-                                        30–45 Minutes
+                                    <span className="font-bold text-[#111827] flex items-center gap-2 group-hover/duration:text-[#6B9F91] transition-colors duration-300">
+                                        <Clock className="w-4 h-4 text-gray-500 group-hover/duration:text-[#6B9F91] group-hover/duration:animate-pulse transition-colors" />
+                                        <span className="group-hover/duration:scale-105 origin-left transition-transform duration-300 inline-block text-gray-900 group-hover/duration:text-[#6B9F91]">30–45 Minutes</span>
                                     </span>
                                 </div>
                                 <div className="flex -space-x-2">
-                                    <div className="w-8 h-8 rounded-full border-2 border-white bg-gray-100" />
-                                    <div className="w-8 h-8 rounded-full border-2 border-white bg-gray-200" />
-                                    <div className="w-8 h-8 rounded-full border-2 border-white bg-[#6B9F91] text-[10px] text-white flex items-center justify-center font-bold">+</div>
+                                    <div className="w-8 h-8 rounded-full border-2 border-white bg-gray-100 relative group-hover/duration:-translate-x-1 transition-transform" />
+                                    <div className="w-8 h-8 rounded-full border-2 border-white bg-gray-200 relative group-hover/duration:-translate-x-0.5 transition-transform" />
+                                    <div className="w-8 h-8 rounded-full border-2 border-white bg-[#6B9F91] text-[10px] text-white flex items-center justify-center font-bold relative group-hover/duration:scale-110 transition-transform">+</div>
                                 </div>
-                            </div>
+                            </motion.div>
                         </motion.div>
 
                         {/* Decorative Glass Panel Behind */}
-                        <div className="absolute -inset-4 bg-gradient-to-tr from-white/40 to-[#6B9F91]/10 border border-white backdrop-blur-md rounded-[2.5rem] z-[-1] transform rotate-3" />
+                        <div className="absolute -inset-4 bg-gradient-to-tr from-white/40 to-[#6B9F91]/10 border border-white backdrop-blur-md rounded-[2.5rem] z-[0] transform rotate-3" />
                     </div>
 
                 </div>

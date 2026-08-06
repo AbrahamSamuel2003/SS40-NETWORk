@@ -102,10 +102,10 @@ export function Collaborations() {
                     </svg>
 
                     {/* Central Node */}
-                    <div className="relative z-20 flex flex-col items-center justify-center w-36 h-36 md:w-44 md:h-44 bg-white rounded-full shadow-[0_15px_50px_rgba(107,159,145,0.15)] border-4 border-[#F2F7F5]">
+                    <div className="relative z-20 flex flex-col items-center justify-center w-36 h-36 md:w-44 md:h-44 bg-white rounded-full shadow-[0_15px_50px_rgba(107,159,145,0.15)] border-4 border-[#EDF5F2]">
                         <div className="absolute inset-0 bg-[#6B9F91]/5 rounded-full animate-pulse -z-10" />
                         <Network className="w-8 h-8 text-[#6B9F91] mb-2" />
-                        <span className="font-extrabold text-[#111827] text-xs md:text-sm tracking-wider text-center">SS40<br />NETWORK</span>
+                        <span className="font-extrabold text-[#111827] text-xs md:text-sm tracking-wider text-center">SS40<br />ACADEMICS</span>
                     </div>
 
                     {/* Outer Nodes */}
@@ -163,7 +163,7 @@ export function Collaborations() {
                             {marqueeItems.map((inst, idx) => (
                                 <div
                                     key={`inst-${idx}`}
-                                    className="w-[280px] md:w-[320px] bg-[#F2F7F5] rounded-2xl p-6 border border-gray-100 shadow-sm flex items-center gap-4 shrink-0 transition-all hover:-translate-y-1 hover:shadow-lg hover:shadow-gray-200/50"
+                                    className="w-[280px] md:w-[320px] bg-[#EDF5F2] rounded-2xl p-6 border border-gray-100 shadow-sm flex items-center gap-4 shrink-0 transition-all hover:-translate-y-1 hover:shadow-lg hover:shadow-gray-200/50"
                                 >
                                     {/* Logo Placeholder */}
                                     <div className="w-14 h-14 bg-white rounded-xl shadow-inner border border-gray-100 flex items-center justify-center shrink-0">
@@ -204,7 +204,7 @@ export function Collaborations() {
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ margin: "-50px", once: true }}
                                     transition={{ delay: idx * 0.1, duration: 0.5 }}
-                                    className="p-6 md:p-8 bg-[#F2F7F5] rounded-[2rem] border border-gray-100 hover:bg-white hover:shadow-xl hover:shadow-[#6B9F91]/5 transition-all duration-300 group"
+                                    className="p-6 md:p-8 bg-[#EDF5F2] rounded-[2rem] border border-gray-100 hover:bg-white hover:shadow-xl hover:shadow-[#6B9F91]/5 transition-all duration-300 group"
                                 >
                                     <div className="w-12 h-12 bg-white rounded-2xl shadow-sm border border-gray-100 flex items-center justify-center mb-5 group-hover:bg-[#6B9F91]/10 group-hover:border-[#6B9F91]/20 transition-colors">
                                         <Icon className="w-6 h-6 text-[#6B9F91]" />

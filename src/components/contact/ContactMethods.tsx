@@ -35,7 +35,7 @@ const METHODS = [
 
 export function ContactMethods() {
     return (
-        <SectionWrapper id="contact-methods" className="bg-[#F2F7F5] py-20 md:py-32">
+        <SectionWrapper id="contact-methods" className="bg-[#EDF5F2] py-20 md:py-32">
             <Container className="max-w-6xl mx-auto">
 
                 {/* SECTION HEADER */}
@@ -71,12 +71,12 @@ export function ContactMethods() {
                                 {/* Thin primary hover accent line */}
                                 <div className="absolute top-0 left-0 right-0 h-1 bg-[#6B9F91] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-                                <div className="w-14 h-14 bg-[#F2F7F5] rounded-xl flex items-center justify-center mb-6 border border-gray-100 group-hover:bg-[#6B9F91]/5 group-hover:border-[#6B9F91]/20 transition-colors">
+                                <div className="w-14 h-14 bg-[#EDF5F2] rounded-xl flex items-center justify-center mb-6 border border-gray-100 group-hover:bg-[#6B9F91]/5 group-hover:border-[#6B9F91]/20 transition-colors">
                                     <Icon className="w-6 h-6 text-[#6B9F91]" />
                                 </div>
 
                                 <h3 className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-2">{method.title}</h3>
-                                <p className="text-xl md:text-2xl font-bold text-[#111827] mb-4 group-hover:text-[#6B9F91] transition-colors">{method.content}</p>
+                                <p className="text-lg md:text-xl font-bold text-[#111827] mb-4 group-hover:text-[#6B9F91] transition-colors">{method.content}</p>
                                 <p className="text-gray-500 text-sm leading-relaxed">{method.description}</p>
                             </motion.a>
                         );

@@ -54,7 +54,7 @@ const ADDITIONAL_PROJECTS = [
 
 export function ClientProjects() {
     return (
-        <SectionWrapper id="featured-projects" className="bg-[#F2F7F5]">
+        <SectionWrapper id="featured-projects" className="bg-[#EDF5F2]">
             <Container className="space-y-12 lg:space-y-16">
 
                 {/* Section Header */}

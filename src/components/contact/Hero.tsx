@@ -3,7 +3,7 @@
 import * as React from "react";
 import { motion } from "framer-motion";
 import { ArrowDown, PhoneCall, Mail, Phone, Video, HelpCircle, Network } from "lucide-react";
-import { SectionWrapper } from "@/components/layout/SectionWrapper";
+import { HERO_SPACING_CLASSES, cn } from "@/utils/cn";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 
@@ -17,7 +17,7 @@ const NODES = [
 
 export function Hero() {
     return (
-        <SectionWrapper id="contact-hero" className="bg-white relative overflow-hidden pt-32 pb-20 lg:pt-40 lg:pb-32">
+        <section id="contact-hero" className={cn("relative w-full overflow-hidden bg-white border-b border-gray-100", HERO_SPACING_CLASSES)}>
 
             {/* Ambient Background Elements */}
             <div className="absolute inset-0 pointer-events-none z-0">
@@ -90,7 +90,7 @@ export function Hero() {
                             <a href="tel:+918300591750" className="w-full sm:w-auto">
                                 <Button
                                     variant="outline"
-                                    className="w-full bg-[#F2F7F5] border-gray-200 text-[#111827] hover:bg-gray-50 hover:border-gray-300 font-bold text-base px-8 py-6 rounded-full group transition-all"
+                                    className="w-full bg-[#EDF5F2] border-gray-200 text-[#111827] hover:bg-gray-50 hover:border-gray-300 font-bold text-base px-8 py-6 rounded-full group transition-all"
                                 >
                                     <PhoneCall className="w-4 h-4 mr-2 text-[#6B9F91]" />
                                     Call Us
@@ -121,7 +121,7 @@ export function Hero() {
                             {/* Center Node */}
                             <motion.div
                                 initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 0.5, type: "spring" }}
-                                className="relative z-20 flex flex-col items-center justify-center w-28 h-28 md:w-32 md:h-32 bg-white rounded-full shadow-[0_15px_50px_rgba(107,159,145,0.15)] border-4 border-[#F2F7F5]"
+                                className="relative z-20 flex flex-col items-center justify-center w-28 h-28 md:w-32 md:h-32 bg-white rounded-full shadow-[0_15px_50px_rgba(107,159,145,0.15)] border-4 border-[#EDF5F2]"
                             >
                                 <motion.div
                                     animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
@@ -166,6 +166,6 @@ export function Hero() {
                     </div>
                 </div>
             </Container>
-        </SectionWrapper>
+        </section>
     );
 }

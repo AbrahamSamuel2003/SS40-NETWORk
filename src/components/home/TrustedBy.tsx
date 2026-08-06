@@ -30,7 +30,7 @@ const MIXED_ROW_2 = [
 
 export function TrustedBy() {
     return (
-        <SectionWrapper id="trusted-by" className="bg-[#F2F7F5] relative overflow-hidden">
+        <SectionWrapper id="trusted-by" className="bg-[#EDF5F2] relative overflow-hidden">
             {/* Soft Ambient Background Enhancements */}
             <div className="absolute inset-0 pointer-events-none z-0">
                 <div
@@ -81,8 +81,8 @@ export function TrustedBy() {
             <div className="relative z-10 w-full flex flex-col gap-6 md:gap-8 overflow-hidden py-4">
 
                 {/* Left/Right Fade Gradients for visual smoothness */}
-                <div className="absolute top-0 bottom-0 left-0 w-24 md:w-48 bg-gradient-to-r from-[#F2F7F5] to-transparent z-20 pointer-events-none" />
-                <div className="absolute top-0 bottom-0 right-0 w-24 md:w-48 bg-gradient-to-l from-[#F2F7F5] to-transparent z-20 pointer-events-none" />
+                <div className="absolute top-0 bottom-0 left-0 w-24 md:w-48 bg-gradient-to-r from-[#EDF5F2] to-transparent z-20 pointer-events-none" />
+                <div className="absolute top-0 bottom-0 right-0 w-24 md:w-48 bg-gradient-to-l from-[#EDF5F2] to-transparent z-20 pointer-events-none" />
 
                 {/* ROW 1: Scroll Left */}
                 <MarqueeRow items={MIXED_ROW_1} direction="left" speed={30} />
@@ -124,7 +124,7 @@ function MarqueeRow({ items, direction, speed }: MarqueeRowProps) {
                             key={`${item.id}-${idx}`}
                             className="bg-white border border-gray-100 rounded-2xl p-4 md:p-5 w-[240px] md:w-[280px] h-[80px] md:h-[90px] flex items-center justify-start gap-4 shadow-sm hover:-translate-y-1 hover:shadow-lg hover:shadow-[#6B9F91]/20 hover:border-[#6B9F91] transition-all duration-300 cursor-pointer overflow-hidden"
                         >
-                            <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-[#F2F7F5] text-[#6B9F91] flex items-center justify-center shrink-0 transition-colors">
+                            <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-[#EDF5F2] text-[#6B9F91] flex items-center justify-center shrink-0 transition-colors">
                                 <Icon className="w-5 h-5 md:w-6 md:h-6 group-hover:scale-110 transition-transform duration-300" />
                             </div>
                             <span className="font-bold text-gray-800 text-sm md:text-base whitespace-nowrap overflow-hidden text-ellipsis w-full text-left">

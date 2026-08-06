@@ -70,28 +70,28 @@ export function ContactForm() {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="flex flex-col gap-2">
                                     <label htmlFor="fullName" className="text-sm font-bold text-[#111827]">Full Name</label>
-                                    <input type="text" id="fullName" className="w-full bg-[#F2F7F5] border border-gray-200 rounded-xl px-4 py-4 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 placeholder:text-gray-400" placeholder="Full Name" />
+                                    <input type="text" id="fullName" className="w-full bg-[#EDF5F2] border border-gray-200 rounded-xl px-4 py-4 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 placeholder:text-gray-400" placeholder="Full Name" />
                                 </div>
                                 <div className="flex flex-col gap-2">
                                     <label htmlFor="email" className="text-sm font-bold text-[#111827]">Email Address</label>
-                                    <input type="email" id="email" className="w-full bg-[#F2F7F5] border border-gray-200 rounded-xl px-4 py-4 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 placeholder:text-gray-400" placeholder="Email Address" />
+                                    <input type="email" id="email" className="w-full bg-[#EDF5F2] border border-gray-200 rounded-xl px-4 py-4 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 placeholder:text-gray-400" placeholder="Email Address" />
                                 </div>
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="flex flex-col gap-2">
                                     <label htmlFor="phone" className="text-sm font-bold text-[#111827]">Phone Number</label>
-                                    <input type="tel" id="phone" className="w-full bg-[#F2F7F5] border border-gray-200 rounded-xl px-4 py-4 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 placeholder:text-gray-400" placeholder="Mobile Number" />
+                                    <input type="tel" id="phone" className="w-full bg-[#EDF5F2] border border-gray-200 rounded-xl px-4 py-4 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 placeholder:text-gray-400" placeholder="Mobile Number" />
                                 </div>
                                 <div className="flex flex-col gap-2">
                                     <label htmlFor="company" className="text-sm font-bold text-[#111827]">Company / Institution <span className="text-gray-400 font-normal">(Optional)</span></label>
-                                    <input type="text" id="company" className="w-full bg-[#F2F7F5] border border-gray-200 rounded-xl px-4 py-4 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 placeholder:text-gray-400" placeholder="Company Name (Optional)" />
+                                    <input type="text" id="company" className="w-full bg-[#EDF5F2] border border-gray-200 rounded-xl px-4 py-4 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 placeholder:text-gray-400" placeholder="Company Name (Optional)" />
                                 </div>
                             </div>
 
                             <div className="flex flex-col gap-2">
                                 <label htmlFor="interestedIn" className="text-sm font-bold text-[#111827]">Interested In</label>
-                                <select id="interestedIn" defaultValue="" className="w-full bg-[#F2F7F5] border border-gray-200 rounded-xl px-4 py-4 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 appearance-none">
+                                <select id="interestedIn" defaultValue="" className="w-full bg-[#EDF5F2] border border-gray-200 rounded-xl px-4 py-4 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 appearance-none">
                                     <option value="" disabled>Select an option</option>
                                     {INTEREST_OPTIONS.map((opt) => (
                                         <option key={opt} value={opt}>{opt}</option>
@@ -101,7 +101,7 @@ export function ContactForm() {
 
                             <div className="flex flex-col gap-2">
                                 <label htmlFor="message" className="text-sm font-bold text-[#111827]">Message</label>
-                                <textarea id="message" rows={5} className="w-full bg-[#F2F7F5] border border-gray-200 rounded-xl px-4 py-4 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 placeholder:text-gray-400 resize-none" placeholder="Project Message"></textarea>
+                                <textarea id="message" rows={5} className="w-full bg-[#EDF5F2] border border-gray-200 rounded-xl px-4 py-4 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 placeholder:text-gray-400 resize-none" placeholder="Project Message"></textarea>
                             </div>
 
                             <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }} className="mt-4">
@@ -121,7 +121,7 @@ export function ContactForm() {
                                 <motion.div
                                     key={idx}
                                     initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.3 + idx * 0.1 }}
-                                    className="bg-[#F2F7F5] rounded-2xl p-6 md:p-8 border border-gray-100 flex items-start gap-4 hover:shadow-lg hover:shadow-gray-200/50 hover:-translate-y-1 transition-all duration-300"
+                                    className="bg-[#EDF5F2] rounded-2xl p-6 md:p-8 border border-gray-100 flex items-start gap-4 hover:shadow-lg hover:shadow-gray-200/50 hover:-translate-y-1 transition-all duration-300"
                                 >
                                     <div className="w-12 h-12 rounded-xl bg-white border border-gray-200 flex items-center justify-center shrink-0">
                                         <Icon className="w-5 h-5 text-[#6B9F91]" />

@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/Button";
 
 export function OfficeLocation() {
     return (
-        <SectionWrapper id="office-location" className="bg-[#F2F7F5] py-20 md:py-32">
+        <SectionWrapper id="office-location" className="bg-[#EDF5F2] py-20 md:py-32">
             <Container className="max-w-6xl mx-auto flex flex-col items-center">
 
                 {/* HEADINGS */}
@@ -36,7 +36,7 @@ export function OfficeLocation() {
 
                     {/* Left: Info */}
                     <div className="flex-1 flex flex-col">
-                        <div className="w-16 h-16 bg-[#F2F7F5] rounded-2xl flex items-center justify-center border border-gray-100 mb-8">
+                        <div className="w-16 h-16 bg-[#EDF5F2] rounded-2xl flex items-center justify-center border border-gray-100 mb-8">
                             <MapPin className="w-8 h-8 text-[#6B9F91]" />
                         </div>
 
@@ -51,7 +51,7 @@ export function OfficeLocation() {
                             <span>Tirunelveli, Tamil Nadu 627001</span>
                         </address>
 
-                        <div className="flex items-center gap-4 text-sm font-bold text-[#111827] mb-8 bg-[#F2F7F5] w-max px-4 py-3 rounded-xl border border-gray-100">
+                        <div className="flex items-center gap-4 text-sm font-bold text-[#111827] mb-8 bg-[#EDF5F2] w-max px-4 py-3 rounded-xl border border-gray-100">
                             <Clock className="w-5 h-5 text-[#6B9F91]" />
                             <div className="flex flex-col">
                                 <span className="text-gray-500 text-[10px] uppercase tracking-widest">Office Hours</span>
@@ -75,23 +75,27 @@ export function OfficeLocation() {
                         </div>
                     </div>
 
-                    {/* Right: Map Placeholder */}
-                    <div className="flex-1 w-full bg-[#F2F7F5] rounded-2xl border border-gray-100 overflow-hidden relative min-h-[300px] flex items-center justify-center group">
+                    {/* Right: Embedded Interactive Map */}
+                    <div className="flex-1 w-full bg-[#EDF5F2] rounded-2xl border border-gray-100 overflow-hidden relative min-h-[350px] lg:min-h-[100%] group shadow-inner">
 
-                        {/* Fake map pattern background */}
-                        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(#111827 2px, transparent 2px)', backgroundSize: '16px 16px' }} />
-                        <div className="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PHBhdGggZD0iTTAgMGg0MHY0MEgwek0yMCAyMGMxMS0xMSAxMS0xMSAxMS0xMSBMMSAxWiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMTExODI3IiBzdHJva2Utd2lkdGg9IjEuNSIvPjwvc3ZnPg==')] pointer-events-none" />
+                        {/* Live Google Map Iframe */}
+                        <iframe
+                            title="SS40 NETWORK Office Location"
+                            src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=Startup%20TN%20Tirunelveli%20Regional%20Hub,%201st%20Floor,%20Municipal%20Corporation%20Incubation%20Centre,%20Trade%20Centre,%20Swamy%20Nellaiappar%20Temple%20Highway,%20next%20to%20Tirunelveli,%20Thirunagar,%20Tirunelveli%20Junction,%20Tirunelveli,%20Tamil%20Nadu%20627001,%20India+(SS40%20NETWORK%20PRIVATE%20LIMITED)&amp;t=&amp;z=15&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
+                            className="absolute inset-0 w-full h-full border-0 grayscale-[15%] contrast-[1.05]"
+                            allowFullScreen
+                            loading="lazy"
+                            referrerPolicy="no-referrer-when-downgrade"
+                        />
 
-                        <div className="absolute inset-x-0 bottom-0 top-1/2 bg-gradient-to-t from-[#6B9F91]/10 to-transparent" />
+                        {/* Floating protection gradient for button */}
+                        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#111827]/30 to-transparent pointer-events-none" />
 
-                        <div className="z-10 flex flex-col items-center">
-                            <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg mb-4 text-[#6B9F91]">
-                                <Map className="w-5 h-5" />
-                            </div>
-                            <span className="font-bold text-gray-500 uppercase tracking-widest text-xs mb-6">Interactive Map</span>
-
-                            <a href="https://goo.gl/maps/DWiCMVGgqKi2r5188" target="_blank" rel="noopener noreferrer">
-                                <Button className="bg-[#111827] text-white hover:bg-gray-800 font-bold px-6 py-5 rounded-lg text-sm shadow-xl hover:-translate-y-0.5 transition-transform border border-gray-700">
+                        {/* Floating Action Button */}
+                        <div className="absolute inset-x-0 bottom-6 flex justify-center z-10 pointer-events-none">
+                            <a href="https://goo.gl/maps/DWiCMVGgqKi2r5188" target="_blank" rel="noopener noreferrer" className="pointer-events-auto">
+                                <Button className="bg-[#111827] text-white hover:bg-[#1f2937] font-bold px-6 py-6 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.2)] hover:-translate-y-1 transition-all border border-gray-700/50 flex items-center group/btn">
+                                    <Map className="w-4 h-4 mr-2 text-[#6B9F91] group-hover/btn:text-white transition-colors" />
                                     View on Google Maps
                                 </Button>
                             </a>

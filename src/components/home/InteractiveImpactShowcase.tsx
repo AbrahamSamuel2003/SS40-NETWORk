@@ -43,7 +43,7 @@ const GlowingOrbs = () => (
 );
 
 // SCENE 1: DIGITAL SOLUTIONS
-const VisualDigital = () => {
+const VisualDigital = React.memo(() => {
     const radius = 140; // Mathematically exact radius
     // Distribute nodes equally around a 360 degree circle
     const nodes = [
@@ -79,9 +79,9 @@ const VisualDigital = () => {
                             />
                             {/* Travelling Particle exactly on line */}
                             <motion.circle
-                                r="4" fill="#6B9F91"
-                                initial={{ opacity: 0, cx: 0, cy: 0 }}
-                                animate={{ opacity: [0, 1, 1, 0], cx: [0, node.pos.x], cy: [0, node.pos.y] }}
+                                r="4" fill="#6B9F91" cx="0" cy="0"
+                                initial={{ opacity: 0, x: 0, y: 0 }}
+                                animate={{ opacity: [0, 1, 1, 0], x: [0, node.pos.x], y: [0, node.pos.y] }}
                                 transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.3, ease: "easeInOut" }}
                             />
                         </g>
@@ -91,7 +91,7 @@ const VisualDigital = () => {
                 {/* Central Hub */}
                 <motion.div
                     initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", bounce: 0.5 }}
-                    className="absolute left-[50%] top-[50%] w-20 h-20 -ml-10 -mt-10 bg-white rounded-full shadow-2xl border-4 border-[#F2F7F5] flex items-center justify-center z-20"
+                    className="absolute left-[50%] top-[50%] w-20 h-20 -ml-10 -mt-10 bg-white rounded-full shadow-2xl border-4 border-[#EDF5F2] flex items-center justify-center z-20"
                 >
                     <div className="text-[#111827] font-black text-xl tracking-tighter">SS40</div>
                     <motion.div animate={{ scale: [1, 1.25, 1], opacity: [0, 0.2, 0] }} transition={{ duration: 2.5, repeat: Infinity }} className="absolute inset-0 bg-[#6B9F91] rounded-full z-[-1]" />
@@ -108,7 +108,7 @@ const VisualDigital = () => {
                             transition={{ type: "spring", delay: 0.5 + i * 0.1, bounce: 0.4 }}
                             className="absolute left-[50%] top-[50%] w-14 h-14 -ml-7 -mt-7 flex flex-col items-center justify-center group z-30"
                         >
-                            <div className="w-14 h-14 bg-white rounded-2xl shadow-xl shadow-[#6B9F91]/10 border border-gray-100 flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:border-[#6B9F91] group-hover:bg-[#F2F7F5] cursor-pointer relative">
+                            <div className="w-14 h-14 bg-white rounded-2xl shadow-xl shadow-[#6B9F91]/10 border border-gray-100 flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:border-[#6B9F91] group-hover:bg-[#EDF5F2] cursor-pointer relative">
                                 <Icon className="w-6 h-6 text-[#6B9F91]" />
                                 {/* Label positioned radially outward */}
                                 <div className={`absolute whitespace-nowrap px-3 py-1.5 rounded-lg bg-[#111827] text-white text-[10px] font-bold opacity-0 group-hover:opacity-100 transition-opacity shadow-lg pointer-events-none ${node.pos.y > 0 ? 'top-[calc(100%+8px)]' : 'bottom-[calc(100%+8px)]'}`}>
@@ -121,10 +121,10 @@ const VisualDigital = () => {
             </div>
         </motion.div>
     );
-};
+});
 
 // SCENE 2: PRODUCTS
-const VisualProducts = () => {
+const VisualProducts = React.memo(() => {
     return (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="relative w-full h-full flex flex-col items-center justify-center p-8 perspective-1000">
             <GlowingOrbs />
@@ -147,8 +147,8 @@ const VisualProducts = () => {
                         {[40, 70, 50, 90, 60, 100, 85].map((h, i) => (
                             <motion.div
                                 key={i}
-                                initial={{ height: 0 }} animate={{ height: `${h}%` }} transition={{ duration: 1, delay: i * 0.1, ease: "easeOut" }}
-                                className={`w-full rounded-t-md ${i === 5 ? 'bg-[#6B9F91]' : 'bg-[#6B9F91]/20'}`}
+                                initial={{ scaleY: 0 }} animate={{ scaleY: h / 100 }} transition={{ duration: 1, delay: i * 0.1, ease: "easeOut" }}
+                                className={`w-full h-full origin-bottom rounded-t-md ${i === 5 ? 'bg-[#6B9F91]' : 'bg-[#6B9F91]/20'}`}
                             />
                         ))}
                     </div>
@@ -191,10 +191,10 @@ const VisualProducts = () => {
             </div>
         </motion.div>
     );
-};
+});
 
 // SCENE 3: ACADEMICS
-const VisualAcademics = () => {
+const VisualAcademics = React.memo(() => {
     // Mathematically bounded roadmap points relative to center SVG
     const pathData = "M -80 140 L 80 70 L -80 0 L 80 -70 L 0 -140";
     const milestones = [
@@ -264,71 +264,66 @@ const VisualAcademics = () => {
             </div>
         </motion.div>
     );
-};
+});
+VisualDigital.displayName = "VisualDigital";
+VisualProducts.displayName = "VisualProducts";
+VisualAcademics.displayName = "VisualAcademics";
 
-const ParallaxMobileScene = ({ scene, idx, scrollYProgress }: { scene: any, idx: number, scrollYProgress: any }) => {
-    let inputY: number[];
-    let outputY: string[];
-
-    // Create perfect parallax overlays mapping
-    // Each scene takes 1/3 of the scroll space to animate
-    if (idx === 0) {
-        inputY = [0, 0.4];
-        outputY = ["0vh", "-30vh"]; // Outgoing scene moves UP slower
-    } else if (idx === 1) {
-        inputY = [0, 0.4, 0.8];
-        outputY = ["100vh", "0vh", "-30vh"];
-    } else { // idx === 2
-        inputY = [0.4, 0.8];
-        outputY = ["100vh", "0vh"];
-    }
-
-    const y = useTransform(scrollYProgress, inputY, outputY);
+const MobileSwipeCard = ({ scene, idx }: { scene: any, idx: number }) => {
     const Visual = idx === 0 ? VisualDigital : (idx === 1 ? VisualProducts : VisualAcademics);
 
     return (
-        <motion.div
-            className={`absolute inset-0 w-full h-[100dvh] flex flex-col bg-white overflow-hidden shadow-[0_-20px_40px_rgba(0,0,0,0.15)] border-t border-gray-100 ${idx === 0 ? 'rounded-none border-t-0 shadow-none' : 'rounded-t-[2.5rem]'}`}
-            style={{ y, zIndex: 10 + idx }}
+        <div
+            className="mobile-swipe-card w-[82vw] sm:w-[350px] flex-shrink-0 flex flex-col bg-white rounded-3xl overflow-hidden shadow-xl shadow-gray-200/50 border border-gray-100 snap-center relative scroll-ml-6"
+            data-mobile-id={idx}
+            style={{ transform: 'translateZ(0)', willChange: 'transform' }}
         >
-            {/* Visual Part */}
-            <div className="h-[45dvh] w-full flex items-center justify-center bg-[#FAFCFB] border-b border-gray-100 overflow-hidden relative shrink-0">
-                <Visual />
+            {/* Visual Part (Blended seamlessly into the card) */}
+            <div className="h-[260px] w-full flex items-center justify-center bg-white overflow-hidden relative shrink-0 z-0">
+                {/* Scaled explicit bounding box to prevent clipping and guarantee safe padding */}
+                <div
+                    className="absolute flex items-center justify-center origin-center w-[500px] h-[500px]"
+                    style={{ transform: 'scale(0.55) translate3d(0,0,0)', backfaceVisibility: 'hidden' }}
+                >
+                    <Visual />
+                </div>
             </div>
 
             {/* Content Part */}
-            <div className="flex-1 w-full flex flex-col p-6 pb-12 bg-white">
-                <div className="w-10 h-10 rounded-xl bg-[#F2F7F5] text-[#6B9F91] flex items-center justify-center font-bold text-base mb-6 border border-gray-100 shrink-0">
+            <div className="flex-1 w-full flex flex-col px-6 pb-8 bg-white text-left relative z-10">
+                <div className="w-10 h-10 rounded-xl bg-[#EDF5F2] text-[#6B9F91] flex items-center justify-center font-bold text-base mb-4 border border-gray-100 shrink-0">
                     0{idx + 1}
                 </div>
-                <h3 className="text-3xl font-black text-[#111827] tracking-tight mb-4">{scene.title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed mb-6 shrink-0">{scene.description}</p>
+                <h3 className="text-2xl font-black text-[#111827] tracking-tight mb-2">{scene.title}</h3>
+                <p className="text-gray-500 text-sm leading-snug mb-5 shrink-0 line-clamp-2">{scene.description}</p>
 
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-2">
                     {scene.cards.map((card: any, i: number) => (
-                        <div key={i} className="flex flex-col gap-1 p-4 bg-white rounded-xl border border-gray-100 shadow-sm shrink-0">
-                            <div className="flex items-center gap-3">
-                                <div className="w-6 h-6 rounded-full bg-[#F2F7F5] flex items-center justify-center shadow-sm border border-gray-50 text-[#6B9F91] font-bold text-xs">
-                                    {i + 1}
-                                </div>
-                                <span className="text-[#111827] font-bold text-sm tracking-wide">{card.title}</span>
-                            </div>
-                            <p className="text-gray-500 text-xs leading-relaxed pl-9">{card.text}</p>
+                        <div key={i} className="flex flex-col gap-1 p-3 bg-gray-50/70 rounded-xl border border-gray-100 shrink-0">
+                            <span className="text-[#111827] font-bold text-sm tracking-tight">{card.title}</span>
+                            <p className="text-gray-500 text-xs leading-relaxed opacity-90">{card.text}</p>
                         </div>
                     ))}
                 </div>
             </div>
-        </motion.div>
+        </div>
     );
 };
 
 export function InteractiveImpactShowcase() {
     const [activeScene, setActiveScene] = React.useState(0);
-    const mobileContainerRef = React.useRef<HTMLDivElement>(null);
-    const { scrollYProgress } = useScroll({
-        target: mobileContainerRef,
-        offset: ["start start", "end end"]
-    });
+    const [activeMobileIdx, setActiveMobileIdx] = React.useState(0);
+    const mobileScrollRef = React.useRef<HTMLDivElement>(null);
+
+    const scrollToMobileScene = (idx: number) => {
+        if (!mobileScrollRef.current) return;
+        const container = mobileScrollRef.current;
+        const cardWidth = container.clientWidth * 0.82 + 20; // Exact match to scroll math
+        container.scrollTo({
+            left: idx * cardWidth,
+            behavior: "smooth"
+        });
+    };
 
     React.useEffect(() => {
         const observer = new IntersectionObserver((entries) => {
@@ -341,7 +336,22 @@ export function InteractiveImpactShowcase() {
 
         const sections = document.querySelectorAll(".impact-topic");
         sections.forEach(s => observer.observe(s));
-        return () => observer.disconnect();
+
+        const mobileObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    setActiveMobileIdx(Number(entry.target.getAttribute("data-mobile-id")));
+                }
+            });
+        }, { root: mobileScrollRef.current, threshold: 0.6 });
+
+        const mobileCards = document.querySelectorAll(".mobile-swipe-card");
+        mobileCards.forEach(c => mobileObserver.observe(c));
+
+        return () => {
+            observer.disconnect();
+            mobileObserver.disconnect();
+        };
     }, []);
 
     const CurrentVisual = () => {
@@ -354,7 +364,7 @@ export function InteractiveImpactShowcase() {
         <section className="bg-white border-t border-b border-gray-100 relative">
 
             {/* Header Area above the sticky scroll */}
-            <div className="w-full bg-[#FAFCFB] pt-16 pb-20 md:py-24 border-b border-gray-100 relative z-20">
+            <div className="w-full bg-[#FAFCFB] pt-16 md:pt-24 pb-8 md:pb-10 border-b border-gray-100 relative z-20">
                 <Container className="text-center">
                     <motion.span
                         initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
@@ -374,6 +384,7 @@ export function InteractiveImpactShowcase() {
                     >
                         One Vision. Three Ways We Build the Future.
                     </motion.p>
+
                 </Container>
             </div>
 
@@ -401,7 +412,7 @@ export function InteractiveImpactShowcase() {
                                     viewport={{ margin: "-20% 0px -20% 0px" }}
                                     transition={{ duration: 0.4 }}
                                 >
-                                    <div className="w-12 h-12 rounded-xl bg-[#F2F7F5] text-[#6B9F91] flex items-center justify-center font-bold text-lg mb-8 border border-gray-100">
+                                    <div className="w-12 h-12 rounded-xl bg-[#EDF5F2] text-[#6B9F91] flex items-center justify-center font-bold text-lg mb-8 border border-gray-100">
                                         0{idx + 1}
                                     </div>
                                     <h3 className="text-4xl font-black text-[#111827] tracking-tight mb-6">{scene.title}</h3>
@@ -411,7 +422,7 @@ export function InteractiveImpactShowcase() {
                                         {scene.cards.map((card, i) => (
                                             <div key={i} className="flex flex-col gap-2 p-5 bg-white rounded-2xl border border-gray-100 shadow-sm">
                                                 <div className="flex items-center gap-3">
-                                                    <div className="w-8 h-8 rounded-full bg-[#F2F7F5] flex items-center justify-center shadow-sm border border-gray-50 text-[#6B9F91] font-bold text-sm">
+                                                    <div className="w-8 h-8 rounded-full bg-[#EDF5F2] flex items-center justify-center shadow-sm border border-gray-50 text-[#6B9F91] font-bold text-sm">
                                                         {i + 1}
                                                     </div>
                                                     <span className="text-[#111827] font-bold text-lg tracking-wide">{card.title}</span>
@@ -421,17 +432,35 @@ export function InteractiveImpactShowcase() {
                                         ))}
                                     </div>
                                 </motion.div>
-                            </Container>    
+                            </Container>
                         </div>
                     ))}
                 </div>
             </div>
 
-            {/* Mobile Scroll Storytelling Engine */}
-            <div ref={mobileContainerRef} className="flex flex-col lg:hidden w-full relative bg-gray-50 h-[300vh]">
-                <div className="sticky top-0 w-full h-[100dvh] overflow-hidden bg-white">
+            {/* Mobile Native Horizontal Swipe Deck */}
+            <div className="flex flex-col lg:hidden w-full bg-gray-50 pt-10 pb-16 relative">
+                <div
+                    ref={mobileScrollRef}
+                    className="flex w-full overflow-x-auto snap-x snap-mandatory px-6 gap-5 items-stretch [&::-webkit-scrollbar]:hidden"
+                    style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                >
                     {SCENES.map((scene, idx) => (
-                        <ParallaxMobileScene key={`mobile-scene-${idx}`} scene={scene} idx={idx} scrollYProgress={scrollYProgress} />
+                        <MobileSwipeCard key={`mobile-card-${idx}`} scene={scene} idx={idx} />
+                    ))}
+                    {/* End spacer so the last card doesn't hit the right screen edge */}
+                    <div className="w-[4vw] shrink-0" />
+                </div>
+
+                {/* Pagination Dots representation */}
+                <div className="w-full flex justify-center items-center gap-3 mt-8 z-10 relative">
+                    {SCENES.map((_, i) => (
+                        <button
+                            key={`dot-${i}`}
+                            onClick={() => scrollToMobileScene(i)}
+                            aria-label={`Scroll to scene ${i + 1}`}
+                            className={`h-2.5 rounded-full transition-all duration-400 ease-out ${activeMobileIdx === i ? 'bg-[#6B9F91] w-8 shadow-sm scale-100' : 'bg-gray-300 w-2.5 hover:bg-gray-400 scale-90'} border-none cursor-pointer focus:outline-none`}
+                        />
                     ))}
                 </div>
             </div>

@@ -28,7 +28,7 @@ const ICON_MAP: Record<string, React.ElementType> = {
 export function LegalHero({ title, description, lastUpdated }: { title: string, description: string, lastUpdated: string }) {
     return (
         <section className="bg-white pt-32 pb-14 md:pt-40 md:pb-20 lg:pb-24 relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-b from-[#F2F7F5] to-white pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#EDF5F2] to-white pointer-events-none" />
             <Container className="relative z-10 flex flex-col items-center text-center">
                 <motion.span
                     initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
@@ -50,7 +50,7 @@ export function LegalHero({ title, description, lastUpdated }: { title: string, 
                 </motion.p>
                 <motion.div
                     initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}
-                    className="flex items-center gap-2 text-sm font-bold text-[#111827] bg-[#F2F7F5] px-4 py-2 rounded-lg border border-gray-100"
+                    className="flex items-center gap-2 text-sm font-bold text-[#111827] bg-[#EDF5F2] px-4 py-2 rounded-lg border border-gray-100"
                 >
                     <Calendar className="w-4 h-4 text-[#6B9F91]" />
                     Last Updated: <span className="text-gray-500 font-medium">{lastUpdated}</span>
@@ -72,7 +72,7 @@ export function LegalSummaryBlocks({ summaries }: { summaries: { title: string, 
                             <motion.div
                                 key={idx}
                                 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }}
-                                className="bg-[#F2F7F5] rounded-2xl p-6 border border-gray-100 hover:shadow-lg hover:shadow-gray-200/50 hover:border-gray-200 transition-all group"
+                                className="bg-[#EDF5F2] rounded-2xl p-6 border border-gray-100 hover:shadow-lg hover:shadow-gray-200/50 hover:border-gray-200 transition-all group"
                             >
                                 <div className="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center mb-4 group-hover:bg-[#6B9F91]/5 transition-colors border border-gray-50">
                                     <Icon className="w-5 h-5 text-[#6B9F91]" />
@@ -134,7 +134,7 @@ export function LegalSidebarLayout({ sections }: { sections: { id: string, title
     };
 
     return (
-        <section className="bg-[#F2F7F5] border-t border-gray-100 py-14 md:py-20 lg:py-24 relative">
+        <section className="bg-[#EDF5F2] border-t border-gray-100 py-14 md:py-20 lg:py-24 relative">
             <Container>
 
                 {/* Mobile/Tablet Navigation */}
@@ -158,7 +158,7 @@ export function LegalSidebarLayout({ sections }: { sections: { id: string, title
                                     key={sec.id}
                                     href={`#${sec.id}`}
                                     onClick={(e) => scrollToSection(e, sec.id)}
-                                    className={`text-left text-sm font-medium px-4 py-3 border-b border-gray-50 last:border-0 transition-colors ${activeSection === sec.id ? 'text-[#6B9F91] font-bold bg-[#F2F7F5]' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}
+                                    className={`text-left text-sm font-medium px-4 py-3 border-b border-gray-50 last:border-0 transition-colors ${activeSection === sec.id ? 'text-[#6B9F91] font-bold bg-[#EDF5F2]' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}
                                 >
                                     {sec.title}
                                 </a>
@@ -202,7 +202,7 @@ export function LegalSidebarLayout({ sections }: { sections: { id: string, title
                                 className="bg-white rounded-3xl p-8 md:p-12 border border-gray-100 shadow-xl shadow-gray-200/40 scroll-mt-32"
                             >
                                 <motion.div initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.5 }}>
-                                    <div className="w-8 h-8 rounded-full bg-[#F2F7F5] text-[#6B9F91] font-bold text-xs flex items-center justify-center mb-6 border border-gray-100">
+                                    <div className="w-8 h-8 rounded-full bg-[#EDF5F2] text-[#6B9F91] font-bold text-xs flex items-center justify-center mb-6 border border-gray-100">
                                         {idx + 1}
                                     </div>
                                     <h2 className="text-2xl md:text-3xl font-extrabold text-[#111827] mb-6 tracking-tight">

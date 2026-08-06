@@ -28,7 +28,7 @@ const CARDS = [
 
 export function Collaborate() {
     return (
-        <SectionWrapper id="collaborate" className="bg-[#F2F7F5] relative overflow-hidden pt-4 pb-20 md:pt-8 md:pb-32">
+        <SectionWrapper id="collaborate" className="bg-[#EDF5F2] relative overflow-hidden pt-4 pb-20 md:pt-8 md:pb-32">
 
             {/* Ambient Background Elements */}
             <div className="absolute inset-0 pointer-events-none z-0">
@@ -93,7 +93,7 @@ export function Collaborate() {
                                 {/* Thin primary hover accent line */}
                                 <div className="absolute top-0 left-0 right-0 h-1 bg-[#6B9F91] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-                                <div className="w-14 h-14 bg-[#F2F7F5] rounded-xl flex items-center justify-center mb-6 border border-gray-100 group-hover:bg-[#6B9F91]/5 group-hover:border-[#6B9F91]/20 transition-colors">
+                                <div className="w-14 h-14 bg-[#EDF5F2] rounded-xl flex items-center justify-center mb-6 border border-gray-100 group-hover:bg-[#6B9F91]/5 group-hover:border-[#6B9F91]/20 transition-colors">
                                     <Icon className="w-6 h-6 text-[#6B9F91]" />
                                 </div>
                                 <h3 className="text-xl font-bold text-[#111827] mb-3">{card.title}</h3>

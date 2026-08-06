@@ -1,216 +1,343 @@
 "use client";
 
 import * as React from "react";
-import { motion } from "framer-motion";
-import { Play, ArrowRight, CheckCircle2, ChevronRight, Award, Briefcase, Code, Network } from "lucide-react";
+import { useRef, useState } from "react";
+import { motion, useMotionValue, useSpring, useTransform, Variants, AnimatePresence } from "framer-motion";
+import Link from "next/link";
+import { Play, Star, ArrowRight, Quote, ChevronUp, ChevronLeft, ChevronRight } from "lucide-react";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
-import { Badge } from "@/components/ui/Badge";
-import { Button } from "@/components/ui/Button";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { slideUp, staggerContainer, hoverLift } from "@/lib/animations";
+import { Button } from "@/components/ui/Button";
 
-const TIMELINE_STEPS = ["Learning", "Real Project", "Mentorship", "Industry Ready"];
+// Data-driven placeholders specific to SS40 Academics
+const FEATURED_STORY = {
+    clientName: "David Chen",
+    company: "Software Engineer, Google",
+    quote: "Building scalable backend solutions at SS40 Academics gave me the exact architectural experience I needed to immediately contribute on day one of my new career.",
+    link: "/academics/apply",
+};
+
+const SECONDARY_STORIES = [
+    {
+        clientName: "Sarah Jenkins",
+        company: "Data Scientist",
+        quote: "The final live project totally changed how I approach data pipelines. It bridged the gap between theory and industry reality.",
+        route: "Data Science Track"
+    },
+    {
+        clientName: "Marcus Torres",
+        company: "Cloud Architect",
+        quote: "Deploying real microservices for actual clients gave me a massive edge in technical interviews and system design discussions.",
+        route: "Cloud Architecture"
+    },
+    {
+        clientName: "Priya Sharma",
+        company: "Frontend Developer",
+        quote: "The hands-on practical learning and real-world projects bridged my talent gap and directly helped me secure a top-tier UI engineering role.",
+        route: "Web Development"
+    },
+];
+
+// Elegant stagger entrance sequence
+const entranceStagger: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.15,
+            delayChildren: 0.1,
+        }
+    }
+};
+
+const fadeUpAnim: Variants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] } }
+};
 
 export function StudentImpacts() {
     return (
-        <SectionWrapper id="student-impacts" className="bg-[#F2F7F5] relative overflow-hidden">
+        <SectionWrapper id="student-impact" className="bg-[#EDF5F2] overflow-hidden">
+            <Container className="space-y-12 lg:space-y-16">
 
-            {/* Ambient Background */}
-            <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-                <div
-                    className="absolute inset-0 opacity-[0.04] mix-blend-multiply"
-                    style={{ backgroundImage: 'radial-gradient(#6B9F91 2px, transparent 2px)', backgroundSize: '40px 40px' }}
-                />
+                {/* Section Header */}
                 <motion.div
-                    animate={{ rotate: 360 }} transition={{ duration: 200, repeat: Infinity, ease: "linear" }}
-                    className="absolute -top-[10%] -left-[10%] w-[800px] h-[800px] bg-[#6B9F91]/5 blur-[120px] rounded-full"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ duration: 0.7, ease: "easeOut" }}
+                >
+                    <SectionHeading
+                        badge="Student Impact"
+                        title="From Learning to Professional Success."
+                        description="Discover how our students build practical skills, complete real-world projects, and prepare for successful careers through hands-on architecture."
+                    />
+                </motion.div>
+
+                {/* Main Grid Layout */}
+                <motion.div
+                    variants={entranceStagger}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-100px" }}
+                    className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-6xl mx-auto perspective-1000"
+                >
+                    {/* === LEFT COLUMN (Featured Story) === */}
+                    <div className="lg:col-span-2 flex flex-col relative z-20 h-full">
+                        <FeaturedVideoArea />
+                    </div>
+
+                    {/* === RIGHT COLUMN (Secondary Stories Carousel) === */}
+                    <div className="lg:col-span-1 flex flex-col relative z-10 h-full">
+                        <SecondaryStoryCarousel />
+                    </div>
+                </motion.div>
+
+                {/* Bottom CTA Block */}
+                <BottomCTA />
+
+            </Container>
+        </SectionWrapper>
+    );
+}
+
+// ============================================================================
+// MICRO-INTERACTION COMPONENTS
+// ============================================================================
+
+function FeaturedVideoArea() {
+    const ref = useRef<HTMLDivElement>(null);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const x = useMotionValue(0);
+    const y = useMotionValue(0);
+
+    const rotateX = useTransform(y, [-0.5, 0.5], [2, -2]);
+    const rotateY = useTransform(x, [-0.5, 0.5], [-2, 2]);
+
+    const videoRef = useRef<HTMLVideoElement>(null);
+
+    function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+        if (!ref.current || isPlaying) return;
+        const rect = ref.current.getBoundingClientRect();
+        const width = rect.width;
+        const height = rect.height;
+        const mouseXPos = e.clientX - rect.left;
+        const mouseYPos = e.clientY - rect.top;
+        const xPct = mouseXPos / width - 0.5;
+        const yPct = mouseYPos / height - 0.5;
+        x.set(xPct);
+        y.set(yPct);
+    }
+
+    function handleMouseLeave() {
+        x.set(0);
+        y.set(0);
+    }
+
+    return (
+        <motion.div
+            variants={fadeUpAnim}
+            ref={ref}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            style={{
+                rotateX: isPlaying ? 0 : rotateX,
+                rotateY: isPlaying ? 0 : rotateY,
+                transformStyle: "preserve-3d"
+            }}
+            onClick={() => {
+                if (!isPlaying && videoRef.current) {
+                    videoRef.current.play().catch((error) => {
+                        console.warn("Video playback was intercepted or failed to load source:", error);
+                        setIsPlaying(true);
+                    });
+                }
+            }}
+            className={`relative w-full aspect-video bg-gray-100 rounded-2xl overflow-hidden flex flex-col items-center justify-center group shadow-[0_4px_20px_rgb(0,0,0,0.05)] ${isPlaying ? 'cursor-auto' : 'cursor-pointer'}`}
+        >
+            {/* Native HTML5 Video Element */}
+            <video
+                ref={videoRef}
+                className="absolute inset-0 w-full h-full object-cover z-0"
+                controls={isPlaying}
+                playsInline
+                preload="metadata"
+                onPlay={() => setIsPlaying(true)}
+                onPause={() => setIsPlaying(false)}
+                onEnded={() => setIsPlaying(false)}
+                src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+            />
+
+            {/* Ambient Thumbnail Overlay (Mockup background before play) */}
+            <div className={`absolute inset-0 pointer-events-none bg-gradient-to-tr from-gray-200 via-gray-100 to-[#E8F0EE] z-0 transition-opacity duration-700 ${isPlaying ? 'opacity-0' : 'opacity-100'}`} />
+            <motion.div
+                className={`absolute inset-0 pointer-events-none bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-12 z-0 transition-opacity duration-700 ${isPlaying ? 'opacity-0' : 'opacity-100'}`}
+                animate={{ x: ["-200%", "200%"] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", repeatDelay: 4 }}
+            />
+            <div className={`absolute inset-0 pointer-events-none opacity-[0.03] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PHBhdGggZD0iTTAgMGg0MHY0MEgwek0yMCAyMGMxMS0xMSAxMS0xMSAxMS0xMSBMMSAxWiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMTExODI3IiBzdHJva2Utd2lkdGg9IjEuNSIvPjwvc3ZnPg==')] mix-blend-multiply z-0 transition-opacity duration-700 ${isPlaying ? 'opacity-0' : 'opacity-100'}`} />
+
+            {/* Premium Play Button - Visual indicator only */}
+            <motion.button
+                animate={{
+                    opacity: isPlaying ? 0 : 1,
+                    scale: isPlaying ? 0.8 : 1,
+                    pointerEvents: "none"
+                }}
+                style={{ translateZ: 20 }}
+                className="relative z-10 w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/90 backdrop-blur-sm shadow-[0_8px_30px_rgb(107,159,145,0.2)] flex items-center justify-center text-[#6B9F91] transition-all duration-500 ease-out border border-white focus-visible:outline-none"
+                aria-label="Play testimonial video"
+            >
+                <Play className="w-6 h-6 md:w-8 md:h-8 ml-1 fill-current drop-shadow-sm" />
+
+                <motion.div
+                    animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0, 0.5] }}
+                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                    className="absolute inset-0 rounded-full border border-white pointer-events-none"
                 />
-                <div className="absolute top-[30%] right-[10%] w-64 h-64 border border-[#FFC900]/20 rounded-full opacity-60" />
-                <div className="absolute bottom-[20%] right-[30%] w-32 h-32 border border-[#6B9F91]/20 rounded-full opacity-60" />
-            </div>
+            </motion.button>
 
-            {/* Floating Achievement Badges */}
-            <div className="absolute inset-0 pointer-events-none z-10 hidden lg:block">
-                <motion.div animate={{ y: [-10, 10, -10] }} transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }} className="absolute top-[20%] left-[8%] bg-white/80 backdrop-blur-md px-4 py-2 rounded-full shadow-lg border border-gray-100 flex items-center gap-2">
-                    <Briefcase className="w-4 h-4 text-[#6B9F91]" /><span className="text-[10px] font-bold text-gray-700 uppercase tracking-wider">Career Ready</span>
-                </motion.div>
-                <motion.div animate={{ y: [10, -10, 10] }} transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }} className="absolute top-[35%] right-[5%] bg-white/80 backdrop-blur-md px-4 py-2 rounded-full shadow-lg border border-gray-100 flex items-center gap-2">
-                    <Code className="w-4 h-4 text-blue-500" /><span className="text-[10px] font-bold text-gray-700 uppercase tracking-wider">Portfolio Built</span>
-                </motion.div>
-                <motion.div animate={{ y: [-15, 15, -15] }} transition={{ repeat: Infinity, duration: 7, ease: "easeInOut", delay: 2 }} className="absolute bottom-[10%] left-[5%] bg-white/80 backdrop-blur-md px-4 py-2 rounded-full shadow-lg border border-gray-100 flex items-center gap-2">
-                    <Network className="w-4 h-4 text-purple-500" /><span className="text-[10px] font-bold text-gray-700 uppercase tracking-wider">Industry Exposure</span>
-                </motion.div>
-            </div>
+            {/* Static Teaser Panel - Extremely Compact */}
+            <motion.div
+                animate={{
+                    opacity: isPlaying ? 0 : 1,
+                    y: isPlaying ? 20 : 0,
+                    pointerEvents: isPlaying ? "none" : "auto"
+                }}
+                transition={{ duration: 0.5, type: "spring", bounce: 0.15 }}
+                className="absolute inset-x-0 bottom-0 z-20 flex flex-col justify-end overflow-hidden border-t border-white/60 shadow-[0_-10px_40px_rgba(0,0,0,0.04)]"
+            >
+                <div className="absolute inset-0 z-0 bg-white/95 backdrop-blur-md" />
 
-            <Container className="relative z-20">
-                <SectionHeading
-                    badge="STUDENT IMPACTS"
-                    title={<>From Learning to <span className="text-[#6B9F91]">Real Achievement.</span></>}
-                    description="Discover how students build practical skills, complete real-world projects, and prepare for successful careers through hands-on learning."
-                    align="center"
-                    className="mb-16 lg:mb-24"
-                />
+                <div className="relative z-10 flex flex-col w-full py-3 px-4 md:py-5 md:px-8 text-left">
+                    {/* Stars */}
+                    <div className="flex gap-1 text-[#FFC900] mb-1.5 md:mb-2">
+                        {[1, 2, 3, 4, 5].map((i) => (
+                            <Star key={i} className="w-3 h-3 md:w-4 md:h-4 fill-current" />
+                        ))}
+                    </div>
+                    <p className="font-medium text-[#111827] italic leading-tight text-[11px] md:text-sm line-clamp-2">
+                        "{FEATURED_STORY.quote}"
+                    </p>
+                </div>
+            </motion.div>
+        </motion.div>
+    );
+}
 
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+function SecondaryStoryCarousel() {
+    const [currentIndex, setCurrentIndex] = useState(0);
 
-                    {/* LEFT: Featured Journey Card (Large) */}
+    // Automatic rotation
+    React.useEffect(() => {
+        const timer = setInterval(() => {
+            setCurrentIndex((prev) => (prev === SECONDARY_STORIES.length - 1 ? 0 : prev + 1));
+        }, 3000); // 2s visibility + approx 1s transition
+        return () => clearInterval(timer);
+    }, []);
+
+    const story = SECONDARY_STORIES[currentIndex];
+
+    // Smooth horizontal slide variants
+    const slideVariants: Variants = {
+        initial: { x: 15, opacity: 0 },
+        animate: {
+            x: 0,
+            opacity: 1,
+            transition: { duration: 0.4, ease: "easeOut" }
+        },
+        exit: {
+            x: -15,
+            opacity: 0,
+            transition: { duration: 0.3, ease: "easeIn" }
+        }
+    };
+
+    return (
+        <motion.div
+            variants={fadeUpAnim}
+            className="group flex-1 bg-white border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_15px_35px_rgb(107,159,145,0.06)] hover:border-[#6B9F91]/20 rounded-2xl p-8 lg:p-10 flex flex-col relative overflow-hidden h-full min-h-[340px] lg:min-h-0"
+        >
+            {/* Subtle highlight glow on hover */}
+            <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-[#6B9F91]/0 to-transparent group-hover:via-[#6B9F91]/40 transition-all duration-700 ease-out" />
+
+            <div className="flex-1 relative flex flex-col h-full">
+                <AnimatePresence mode="wait">
                     <motion.div
-                        initial={{ opacity: 0, y: 40 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, margin: "-100px" }}
-                        transition={{ duration: 0.7, ease: "easeOut" }}
-                        className="lg:col-span-7 bg-white rounded-[2rem] shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden flex flex-col relative group"
+                        key={currentIndex}
+                        variants={slideVariants}
+                        initial="initial"
+                        animate="animate"
+                        exit="exit"
+                        className="flex flex-col flex-1 h-full"
                     >
-                        {/* Video/Image Placeholder Header */}
-                        <div className="relative w-full aspect-video bg-gray-900 overflow-hidden isolate">
-                            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-60 mix-blend-overlay group-hover:scale-105 transition-transform duration-1000" />
-
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10" />
-
-                            {/* Play Button */}
-                            <motion.button
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 text-white z-20 group/play"
-                                aria-label="Play impact story"
-                            >
-                                <div className="absolute inset-0 rounded-full animate-ping bg-white/20" style={{ animationDuration: '3s' }} />
-                                <Play className="w-6 h-6 ml-1 fill-white opacity-90 group-hover/play:opacity-100 transition-opacity" />
-                            </motion.button>
-
-                            <div className="absolute bottom-6 left-6 z-20 flex flex-col gap-2">
-                                <Badge className="bg-[#FFC900] text-amber-900 border-none font-bold uppercase tracking-wider text-[10px] w-fit">
-                                    Software Engineering Pathway
-                                </Badge>
-                                <h3 className="text-3xl font-bold text-white">David Chen</h3>
-                            </div>
+                        {/* Rating */}
+                        <div className="flex gap-1 mb-6 text-[#FFC900]">
+                            {[1, 2, 3, 4, 5].map((i) => (
+                                <Star key={i} className="w-5 h-5 fill-current" />
+                            ))}
                         </div>
 
-                        {/* Content Body */}
-                        <div className="p-8 md:p-10 flex flex-col flex-grow">
+                        {/* Quote expands to consume middle space */}
+                        <p className="text-lg lg:text-xl text-gray-700 font-medium italic leading-relaxed mb-6 flex-1">
+                            "{story.quote}"
+                        </p>
 
-                            {/* Visual Timeline */}
-                            <div className="relative flex justify-between items-center mb-10 mt-2">
-                                <div className="absolute top-1/2 left-[10%] right-[10%] h-[2px] bg-gray-100 -translate-y-1/2 -z-10" />
-                                <motion.div
-                                    initial={{ width: 0 }}
-                                    whileInView={{ width: "80%" }}
-                                    viewport={{ once: true }}
-                                    transition={{ duration: 1.5, delay: 0.3 }}
-                                    className="absolute top-1/2 left-[10%] h-[2px] bg-[#6B9F91] -translate-y-1/2 -z-10"
-                                />
-                                {TIMELINE_STEPS.map((step, idx) => (
-                                    <div key={idx} className="flex flex-col items-center gap-3 bg-white px-2">
-                                        <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center bg-white ${idx === 3 ? 'border-[#FFC900] text-[#FFC900]' : 'border-[#6B9F91] text-[#6B9F91]'}`}>
-                                            {idx === 3 ? <Award className="w-4 h-4" /> : <CheckCircle2 className="w-4 h-4" />}
-                                        </div>
-                                        <span className="text-[10px] uppercase font-bold text-gray-500 tracking-wider hidden sm:block">{step}</span>
-                                    </div>
-                                ))}
-                            </div>
-
-                            <p className="text-gray-600 text-lg md:text-xl font-medium leading-relaxed italic mb-8 relative">
-                                <span className="text-4xl text-gray-200 absolute -top-4 -left-3">"</span>
-                                Building scalable solutions here gave me the exact architecture experience I needed to immediately contribute on day one of my new career.
-                            </p>
-
-                            <div className="mt-auto pt-6 border-t border-gray-100 flex items-center justify-between">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-full bg-[#111827] flex items-center justify-center text-white"><Briefcase className="w-4 h-4" /></div>
-                                    <div>
-                                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-none mb-1">Current Role</p>
-                                        <p className="text-sm font-bold text-gray-900 leading-none">Backend Engineer, TechCorp</p>
-                                    </div>
+                        {/* Profile Info block */}
+                        <div className="flex items-center gap-4 border-t border-gray-100 pt-6 mt-auto">
+                            <div className="w-12 h-12 shrink-0 rounded-full bg-gradient-to-tr from-gray-200 to-gray-100 p-[2px]">
+                                <div className="w-full h-full bg-white rounded-full flex items-center justify-center">
+                                    <span className="text-gray-500 font-bold">{story.clientName.charAt(0)}</span>
                                 </div>
-                                <Button variant="ghost" className="text-[#6B9F91] hover:text-[#5C8C80] hover:bg-[#6B9F91]/5 font-bold p-0 hidden sm:flex">
-                                    Read Journey <ArrowRight className="ml-2 w-4 h-4" />
-                                </Button>
+                            </div>
+                            <div>
+                                <p className="font-bold text-[#111827] text-base">{story.clientName}</p>
+                                <p className="text-sm font-semibold text-[#6B9F91] uppercase tracking-wider mt-0.5">
+                                    {story.route}
+                                </p>
                             </div>
                         </div>
                     </motion.div>
+                </AnimatePresence>
+            </div>
+        </motion.div>
+    );
+}
 
-                    {/* RIGHT: Secondary Journey Cards Stack */}
-                    <div className="lg:col-span-5 flex flex-col gap-6 lg:gap-8">
+function BottomCTA() {
+    return (
+        <motion.div
+            variants={fadeUpAnim}
+            className="flex flex-col items-center justify-center text-center pt-8 lg:pt-10"
+        >
+            <div className="relative bg-white border border-gray-100 rounded-[2rem] p-12 lg:p-16 w-full max-w-4xl mx-auto flex flex-col items-center shadow-[0_8px_40px_rgb(0,0,0,0.03)] overflow-hidden group">
 
-                        {/* Secondary Card 1 */}
-                        <motion.div
-                            initial={{ opacity: 0, x: 40 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true, margin: "-100px" }}
-                            transition={{ duration: 0.6, delay: 0.2 }}
-                            className="bg-white rounded-[2rem] shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden flex flex-col sm:flex-row group"
-                        >
-                            <div className="w-full sm:w-[40%] aspect-video sm:aspect-auto sm:h-full relative overflow-hidden isolate bg-gray-900">
-                                <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-70 group-hover:scale-105 transition-transform duration-700" />
-                                <div className="absolute inset-0 flex items-center justify-center">
-                                    <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 text-white z-20">
-                                        <Play className="w-4 h-4 ml-0.5 fill-white" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="p-6 flex flex-col justify-between w-full sm:w-[60%]">
-                                <div>
-                                    <Badge className="bg-[#6B9F91]/10 text-[#6B9F91] border-none font-bold uppercase tracking-wider text-[9px] mb-2">Data Science Track</Badge>
-                                    <h4 className="text-lg font-bold text-gray-900 mb-1">Sarah Jenkins</h4>
+                {/* Ambient Soft Glow Background */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[#6B9F91]/5 blur-3xl rounded-full opacity-50 group-hover:opacity-100 transition-opacity duration-1000" />
 
-                                    {/* Mini Timeline */}
-                                    <div className="flex items-center gap-1.5 mb-4">
-                                        <span className="text-[9px] uppercase font-bold text-gray-400">Learn</span>
-                                        <ChevronRight className="w-3 h-3 text-gray-300" />
-                                        <span className="text-[9px] uppercase font-bold text-gray-400">Build</span>
-                                        <ChevronRight className="w-3 h-3 text-gray-300" />
-                                        <span className="text-[9px] uppercase font-bold text-[#FFC900]">Placed</span>
-                                    </div>
+                {/* Very subtle floating dust particles */}
+                <motion.div animate={{ y: [0, -10, 0], opacity: [0, 0.5, 0] }} transition={{ duration: 4, repeat: Infinity }} className="absolute top-[20%] left-[20%] w-1.5 h-1.5 rounded-full bg-[#6B9F91]/30 blur-[1px]" />
+                <motion.div animate={{ y: [0, 10, 0], opacity: [0, 0.4, 0] }} transition={{ duration: 5, repeat: Infinity, delay: 1 }} className="absolute bottom-[20%] right-[25%] w-2 h-2 rounded-full bg-[#6B9F91]/20 blur-[1px]" />
 
-                                    <p className="text-sm text-gray-600 italic line-clamp-3 leading-relaxed">
-                                        "The mentorship during the final live project totally changed how I approach data pipelines."
-                                    </p>
-                                </div>
-                            </div>
-                        </motion.div>
+                <h3 className="relative z-10 text-3xl md:text-4xl font-bold text-gray-900 mb-8 max-w-2xl tracking-tight">
+                    Ready to Launch Your Tech Career? Become Our Next Success Story.
+                </h3>
 
-                        {/* Secondary Card 2 */}
-                        <motion.div
-                            initial={{ opacity: 0, x: 40 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true, margin: "-100px" }}
-                            transition={{ duration: 0.6, delay: 0.4 }}
-                            className="bg-white rounded-[2rem] shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden flex flex-col sm:flex-row group"
-                        >
-                            <div className="w-full sm:w-[40%] aspect-video sm:aspect-auto sm:h-full relative overflow-hidden isolate bg-gray-900">
-                                <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-70 group-hover:scale-105 transition-transform duration-700" />
-                                <div className="absolute inset-0 flex items-center justify-center">
-                                    <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 text-white z-20">
-                                        <Play className="w-4 h-4 ml-0.5 fill-white" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="p-6 flex flex-col justify-between w-full sm:w-[60%]">
-                                <div>
-                                    <Badge className="bg-blue-100 text-blue-700 border-none font-bold uppercase tracking-wider text-[9px] mb-2">Cloud Architecture</Badge>
-                                    <h4 className="text-lg font-bold text-gray-900 mb-1">Marcus Torres</h4>
-
-                                    {/* Mini Timeline */}
-                                    <div className="flex items-center gap-1.5 mb-4">
-                                        <span className="text-[9px] uppercase font-bold text-gray-400">Theory</span>
-                                        <ChevronRight className="w-3 h-3 text-gray-300" />
-                                        <span className="text-[9px] uppercase font-bold text-gray-400">Deploy</span>
-                                        <ChevronRight className="w-3 h-3 text-gray-300" />
-                                        <span className="text-[9px] uppercase font-bold text-[#FFC900]">Hired</span>
-                                    </div>
-
-                                    <p className="text-sm text-gray-600 italic line-clamp-3 leading-relaxed">
-                                        "Deploying real microservices for actual clients gave me a massive edge in technical interviews."
-                                    </p>
-                                </div>
-                            </div>
-                        </motion.div>
-
-                    </div>
-
-                </div>
-            </Container>
-        </SectionWrapper>
+                <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }} className="flex flex-col sm:flex-row gap-4">
+                    <Button asChild size="lg" className="relative z-10 w-full sm:w-auto shadow-xl shadow-[#6B9F91]/20 hover:shadow-[#6B9F91]/40 bg-[#6B9F91] text-white hover:bg-[#5C8C80] transition-all duration-300">
+                        <Link href="/contact" className="group/btn">
+                            Apply Now
+                            <ArrowRight className="ml-2 w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                        </Link>
+                    </Button>
+                    <Button asChild variant="outline" size="lg" className="relative z-10 w-full sm:w-auto bg-white hover:bg-gray-50 border-gray-200 text-gray-700 transition-all duration-300">
+                        <Link href="/contact">
+                            Join SS40 Academics
+                        </Link>
+                    </Button>
+                </motion.div>
+            </div>
+        </motion.div>
     );
 }

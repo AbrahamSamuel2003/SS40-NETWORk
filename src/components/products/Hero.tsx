@@ -15,10 +15,11 @@ import {
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Container } from "@/components/ui/Container";
+import { HERO_SPACING_CLASSES, cn } from "@/utils/cn";
 
 export function Hero() {
     return (
-        <section className="relative w-full overflow-hidden bg-white pt-12 pb-16 lg:pt-16 lg:pb-32 min-h-[min(85vh,900px)] flex items-center">
+        <section className={cn("relative w-full overflow-hidden bg-white", HERO_SPACING_CLASSES)}>
 
             {/* Ambient Background Elements */}
             <div className="absolute inset-0 z-0">

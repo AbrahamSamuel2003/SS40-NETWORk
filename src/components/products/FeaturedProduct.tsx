@@ -39,7 +39,7 @@ function FileSignature(props: any) {
 
 export function FeaturedProduct() {
     return (
-        <SectionWrapper id="featured-product" className="bg-[#F2F7F5]">
+        <SectionWrapper id="featured-product" className="bg-[#EDF5F2]">
             <Container className="space-y-16">
 
                 {/* Top Section Layout (Two Columns) */}

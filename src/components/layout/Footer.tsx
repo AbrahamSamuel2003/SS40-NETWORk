@@ -53,25 +53,31 @@ export function Footer() {
                     {/* Column 4: Contact */}
                     <div className="flex flex-col items-center md:items-start text-center md:text-left w-full overflow-hidden">
                         <h4 className="text-[var(--color-heading)] font-semibold mb-6">Contact</h4>
-                        <ul className="flex flex-col items-start gap-4 text-sm text-[var(--color-body-text)] text-left w-fit mx-auto md:mx-0">
-                            <li className="flex flex-row items-start gap-3">
+                        <ul className="flex flex-col items-center md:items-start gap-4 text-sm text-[var(--color-body-text)] text-left w-full">
+                            <li className="flex flex-row items-start justify-center md:justify-start gap-3 w-full">
                                 <Mail className="w-5 h-5 text-[var(--color-primary)] shrink-0 mt-0.5" />
-                                <a href="mailto:support@ss40network.com" className="hover:text-[var(--color-primary)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] rounded">support@ss40network.com</a>
+                                <div className="text-left w-[240px] md:w-auto">
+                                    <a href="mailto:support@ss40network.com" className="hover:text-[var(--color-primary)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] rounded">support@ss40network.com</a>
+                                </div>
                             </li>
-                            <li className="flex flex-row items-start gap-3">
+                            <li className="flex flex-row items-start justify-center md:justify-start gap-3 w-full">
                                 <Phone className="w-5 h-5 text-[var(--color-primary)] shrink-0 mt-0.5" />
-                                <a href="tel:+918300591750" className="hover:text-[var(--color-primary)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] rounded">+91 83005 91750</a>
+                                <div className="text-left w-[240px] md:w-auto">
+                                    <a href="tel:+918300591750" className="hover:text-[var(--color-primary)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] rounded">+91 83005 91750</a>
+                                </div>
                             </li>
-                            <li className="flex flex-row items-start gap-3">
+                            <li className="flex flex-row items-start justify-center md:justify-start gap-3 w-full">
                                 <MapPin className="w-5 h-5 text-[var(--color-primary)] shrink-0 mt-0.5" />
-                                <span>
-                                    SS40 NETWORK,<br />
-                                    1st Floor,<br />
-                                    Municipal Corporation Incubation Centre (Near by trade centre),<br />
-                                    Swamy Nellaiappar Temple Highway,<br />
-                                    Tirunelveli Junction, Tirunelveli,<br />
-                                    Tamil Nadu 627001
-                                </span>
+                                <div className="text-left w-[240px] md:w-auto">
+                                    <span>
+                                        SS40 NETWORK,<br />
+                                        1st Floor,<br />
+                                        Municipal Corporation Incubation Centre (Near by trade centre),<br />
+                                        Swamy Nellaiappar Temple Highway,<br />
+                                        Tirunelveli Junction, Tirunelveli,<br />
+                                        Tamil Nadu 627001
+                                    </span>
+                                </div>
                             </li>
                         </ul>
                     </div>

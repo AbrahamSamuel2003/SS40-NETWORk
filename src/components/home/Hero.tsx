@@ -7,10 +7,11 @@ import { ArrowRight, Sparkles, Activity, Users, Box, BarChart3, LayoutDashboard,
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Container } from "@/components/ui/Container";
+import { HERO_SPACING_CLASSES, cn } from "@/utils/cn";
 
 export function Hero() {
     return (
-        <section className="relative w-full overflow-hidden bg-white pt-12 pb-16 lg:pt-16 lg:pb-24">
+        <section className={cn("relative w-full overflow-hidden bg-white", HERO_SPACING_CLASSES)}>
 
             {/* Background Blur Shapes */}
             <div className="absolute top-0 left-1/2 -z-10 -translate-x-1/2 transform-gpu">

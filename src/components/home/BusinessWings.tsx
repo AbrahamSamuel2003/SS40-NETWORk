@@ -162,7 +162,7 @@ export function BusinessWings() {
                                 className="relative z-20 w-[140px] h-[180px] bg-white rounded-t-2xl shadow-[0_20px_40px_rgba(0,0,0,0.08)] border border-gray-100 flex flex-col items-center justify-start pt-5 overflow-hidden"
                             >
                                 {/* Inner Glass Pillar / Grid Facade */}
-                                <div className="w-[104px] h-[110px] bg-gradient-to-b from-[#F2F7F5] to-white rounded-t-xl border-t-2 border-x border-[var(--color-primary)]/20 relative overflow-hidden flex flex-col p-1.5 shadow-inner">
+                                <div className="w-[104px] h-[110px] bg-gradient-to-b from-[#EDF5F2] to-white rounded-t-xl border-t-2 border-x border-[var(--color-primary)]/20 relative overflow-hidden flex flex-col p-1.5 shadow-inner">
 
                                     {/* Sub-structure: premium window grid */}
                                     <div className="w-full flex-1 grid grid-cols-4 gap-[3px] relative z-10">

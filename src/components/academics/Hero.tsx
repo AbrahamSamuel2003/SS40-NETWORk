@@ -23,10 +23,11 @@ import {
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Container } from "@/components/ui/Container";
+import { HERO_SPACING_CLASSES, cn } from "@/utils/cn";
 
 export function Hero() {
     return (
-        <section className="relative w-full overflow-hidden bg-white pt-12 pb-16 lg:pt-16 lg:pb-32 lg:min-h-[min(85vh,900px)] flex items-center border-b border-gray-100">
+        <section className={cn("relative w-full overflow-hidden bg-white border-b border-gray-100", HERO_SPACING_CLASSES)}>
 
             {/* Ambient Background Elements */}
             <div className="absolute inset-0 z-0 overflow-hidden">
@@ -86,7 +87,7 @@ export function Hero() {
 
                     {/* Right Column: Career Launch Pad Visual */}
                     {/* Hidden on mobile completely for a cleaner layout */}
-                    <div className="w-full lg:w-[55%] relative hidden lg:flex justify-center items-center min-h-[500px] lg:min-h-[600px] pt-12 pb-8 perspective-1000">
+                    <div className="w-full lg:w-[55%] relative hidden lg:flex justify-center items-center h-[350px] lg:h-[450px] perspective-1000">
                         <div className="relative w-full max-w-[550px] aspect-square">
 
                             {/* SVG Connection Lines for Progression Sequence */}
@@ -112,8 +113,8 @@ export function Hero() {
                                 </motion.circle>
 
                                 {/* Soft glowing ring around center */}
-                                <motion.circle cx="50" cy="50" r="25" fill="transparent" stroke="#F2F7F5" strokeWidth="0.5" opacity="0.6" />
-                                <motion.circle cx="50" cy="50" r="35" fill="transparent" stroke="#F2F7F5" strokeWidth="0.5" opacity="0.4" strokeDasharray="1 2" />
+                                <motion.circle cx="50" cy="50" r="25" fill="transparent" stroke="#EDF5F2" strokeWidth="0.5" opacity="0.6" />
+                                <motion.circle cx="50" cy="50" r="35" fill="transparent" stroke="#EDF5F2" strokeWidth="0.5" opacity="0.4" strokeDasharray="1 2" />
                             </svg>
 
                             {/* Ambient Glow */}
@@ -122,7 +123,7 @@ export function Hero() {
                             {/* CENTER: Career Launch Pad Platform */}
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, type: "spring" }}
-                                className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 z-10 w-44 h-44 bg-white/80 backdrop-blur-xl rounded-full border border-white shadow-2xl flex flex-col items-center justify-center p-6 text-center ring-8 ring-[#F2F7F5]/50"
+                                className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 z-10 w-44 h-44 bg-white/80 backdrop-blur-xl rounded-full border border-white shadow-2xl flex flex-col items-center justify-center p-6 text-center ring-8 ring-[#EDF5F2]/50"
                             >
                                 <div className="absolute inset-0 rounded-full bg-gradient-to-t from-[#6B9F91]/5 to-transparent pointer-events-none" />
                                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#111827] to-gray-800 flex items-center justify-center shadow-lg border border-gray-700 mb-3 group">
