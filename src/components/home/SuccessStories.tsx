@@ -4,7 +4,7 @@ import * as React from "react";
 import { useRef, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform, Variants, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { Play, Star, ArrowRight, Quote, ChevronUp, ChevronLeft, ChevronRight } from "lucide-react";
+import { Play, Star, ArrowRight, Quote, ChevronUp, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -51,6 +51,14 @@ const fadeUpAnim: Variants = {
 };
 
 export function SuccessStories() {
+    // Modal state lifted here to avoid CSS perspective trapping fixed elements
+    const [activeModalStory, setActiveModalStory] = useState<{
+        clientName: string;
+        company: string;
+        quote: string;
+        route: string;
+    } | null>(null);
+
     return (
         <SectionWrapper id="success-stories" className="bg-[#EDF5F2] overflow-hidden">
             <Container className="space-y-12 lg:space-y-16">
@@ -84,7 +92,7 @@ export function SuccessStories() {
 
                     {/* === RIGHT COLUMN (Secondary Stories Carousel) === */}
                     <div className="lg:col-span-1 flex flex-col relative z-10 h-full">
-                        <SecondaryStoryCarousel />
+                        <SecondaryStoryCarousel onOpenModal={(story) => setActiveModalStory(story)} />
                     </div>
                 </motion.div>
 
@@ -92,6 +100,13 @@ export function SuccessStories() {
                 <BottomCTA />
 
             </Container>
+
+            {/* Reading Modal */}
+            <AnimatePresence>
+                {activeModalStory && (
+                    <StoryModal story={activeModalStory} onClose={() => setActiveModalStory(null)} />
+                )}
+            </AnimatePresence>
         </SectionWrapper>
     );
 }
@@ -213,14 +228,14 @@ function FeaturedVideoArea() {
                     style={{ backgroundColor: "rgba(255, 255, 255, 0.42)" }}
                 />
 
-                <div className="relative z-10 flex flex-col w-full py-3 px-4 md:py-5 md:px-8 text-left">
-                    {/* Stars */}
-                    <div className="flex gap-1 text-[#FFC900] mb-1.5 md:mb-2">
+                <div className="relative z-10 flex flex-col w-full py-2 px-3 md:py-5 md:px-8 text-left">
+                    {/* Stars - hidden on mobile for compact overlay */}
+                    <div className="hidden md:flex gap-1 text-[#FFC900] mb-2">
                         {[1, 2, 3, 4, 5].map((i) => (
-                            <Star key={i} className="w-3 h-3 md:w-4 md:h-4 fill-current" />
+                            <Star key={i} className="w-4 h-4 fill-current" />
                         ))}
                     </div>
-                    <p className="font-medium text-[#111827] italic leading-tight text-[11px] md:text-sm line-clamp-2">
+                    <p className="font-medium text-[#111827] italic leading-tight text-[11px] md:text-sm line-clamp-1 md:line-clamp-2">
                         "{FEATURED_STORY.quote}"
                     </p>
                 </div>
@@ -229,18 +244,35 @@ function FeaturedVideoArea() {
     );
 }
 
-function SecondaryStoryCarousel() {
+function SecondaryStoryCarousel({ onOpenModal }: { onOpenModal: (story: any) => void }) {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [isTruncated, setIsTruncated] = useState(true); // Default to assuming truncation for safety
+    const quoteRef = useRef<HTMLParagraphElement>(null);
 
     // Automatic rotation
     React.useEffect(() => {
         const timer = setInterval(() => {
             setCurrentIndex((prev) => (prev === SECONDARY_STORIES.length - 1 ? 0 : prev + 1));
-        }, 3000); // 2s visibility + approx 1s transition
+        }, 3500);
         return () => clearInterval(timer);
     }, []);
 
     const story = SECONDARY_STORIES[currentIndex];
+
+    // Detect if content is overflowing (clamped) to conditionally show the "Read Full Story" button
+    React.useEffect(() => {
+        const checkTruncation = () => {
+            if (quoteRef.current) {
+                const { scrollHeight, clientHeight } = quoteRef.current;
+                // If scrollHeight is strictly greater than client height, text was cut off
+                setIsTruncated(scrollHeight > clientHeight);
+            }
+        };
+        // Small delay to ensure DOM rendered the text
+        setTimeout(checkTruncation, 50);
+        window.addEventListener('resize', checkTruncation);
+        return () => window.removeEventListener('resize', checkTruncation);
+    }, [currentIndex]);
 
     // Smooth horizontal slide variants
     const slideVariants: Variants = {
@@ -260,12 +292,14 @@ function SecondaryStoryCarousel() {
     return (
         <motion.div
             variants={fadeUpAnim}
-            className="group flex-1 bg-white border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_15px_35px_rgb(107,159,145,0.06)] hover:border-[#6B9F91]/20 rounded-2xl p-8 lg:p-10 flex flex-col relative overflow-hidden h-full min-h-[340px] lg:min-h-0"
+            className="bg-white border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_15px_35px_rgb(107,159,145,0.06)] hover:border-[#6B9F91]/20 rounded-2xl p-8 lg:p-10 flex flex-col relative overflow-hidden w-full lg:h-full lg:absolute lg:inset-0"
+            // We use absolute positioning on desktop to force it to exactly match the left video container's height
+            style={{ height: '380px', minHeight: '100%' }} // Safe fallback for mobile
         >
             {/* Subtle highlight glow on hover */}
             <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-[#6B9F91]/0 to-transparent group-hover:via-[#6B9F91]/40 transition-all duration-700 ease-out" />
 
-            <div className="flex-1 relative flex flex-col h-full">
+            <div className="flex-1 relative flex flex-col h-full min-h-0">
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={currentIndex}
@@ -273,22 +307,42 @@ function SecondaryStoryCarousel() {
                         initial="initial"
                         animate="animate"
                         exit="exit"
-                        className="flex flex-col flex-1 h-full"
+                        className="flex flex-col h-full min-h-0"
                     >
-                        {/* Rating */}
-                        <div className="flex gap-1 mb-6 text-[#FFC900]">
+                        {/* Rating - fixed at top */}
+                        <div className="flex gap-1 mb-6 text-[#FFC900] shrink-0">
                             {[1, 2, 3, 4, 5].map((i) => (
                                 <Star key={i} className="w-5 h-5 fill-current" />
                             ))}
                         </div>
 
-                        {/* Quote expands to consume middle space */}
-                        <p className="text-lg lg:text-xl text-gray-700 font-medium italic leading-relaxed mb-6 flex-1">
-                            "{story.quote}"
-                        </p>
+                        {/* Quote area - permanently clamped to 4 lines */}
+                        <div className="flex-1 min-h-0 relative mb-2">
+                            <div className="h-full overflow-hidden">
+                                <p
+                                    ref={quoteRef}
+                                    className="text-lg lg:text-xl text-gray-700 font-medium italic leading-relaxed line-clamp-4"
+                                >
+                                    &ldquo;{story.quote}&rdquo;
+                                </p>
+                            </div>
+                        </div>
 
-                        {/* Profile Info block */}
-                        <div className="flex items-center gap-4 border-t border-gray-100 pt-6 mt-auto">
+                        {/* Action Area - Conditionally visible if clamped */}
+                        <div className="h-10 shrink-0 flex items-start">
+                            {isTruncated && (
+                                <button
+                                    onClick={() => onOpenModal(story)}
+                                    className="text-sm font-bold text-[#6B9F91] hover:text-[#5C8C80] flex items-center group/read transition-colors focus-visible:outline-none"
+                                >
+                                    Read Full Story
+                                    <ArrowRight className="w-3.5 h-3.5 ml-1 transition-transform group-hover/read:translate-x-1" />
+                                </button>
+                            )}
+                        </div>
+
+                        {/* Profile Info block - fixed at bottom */}
+                        <div className="flex items-center gap-4 border-t border-gray-100 pt-6 shrink-0 mt-auto">
                             <div className="w-12 h-12 shrink-0 rounded-full bg-gradient-to-tr from-gray-200 to-gray-100 p-[2px]">
                                 <div className="w-full h-full bg-white rounded-full flex items-center justify-center">
                                     <span className="text-gray-500 font-bold">{story.clientName.charAt(0)}</span>
@@ -305,6 +359,90 @@ function SecondaryStoryCarousel() {
                 </AnimatePresence>
             </div>
         </motion.div>
+    );
+}
+
+// ============================================================================
+// READING MODAL COMPONENT
+// ============================================================================
+
+function StoryModal({ story, onClose }: { story: any, onClose: () => void }) {
+    // Lock body scroll when modal opens
+    React.useEffect(() => {
+        document.body.style.overflow = 'hidden';
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') onClose();
+        };
+        document.addEventListener('keydown', handleKeyDown);
+        return () => {
+            document.body.style.overflow = 'unset';
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [onClose]);
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4 sm:px-6">
+            {/* Backdrop */}
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={onClose}
+                className="absolute inset-0 bg-gray-900/40 backdrop-blur-sm transition-opacity"
+            />
+
+            {/* Modal Dialog */}
+            <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                transition={{ duration: 0.3, ease: [0.21, 0.47, 0.32, 0.98] }}
+                className="relative w-full max-w-2xl bg-white/95 backdrop-blur-xl border border-gray-100 shadow-2xl rounded-3xl overflow-hidden flex flex-col max-h-[80vh]"
+            >
+                {/* Close Button */}
+                <button
+                    onClick={onClose}
+                    className="absolute top-4 right-4 md:top-6 md:right-6 w-10 h-10 bg-gray-100 hover:bg-gray-200 text-gray-500 hover:text-gray-900 rounded-full flex items-center justify-center transition-colors z-10 focus-visible:outline-none"
+                    aria-label="Close modal"
+                >
+                    <X className="w-5 h-5" />
+                </button>
+
+                {/* Scrollable Content Area */}
+                <div
+                    className="overflow-y-auto px-6 py-8 md:px-10 md:py-12 flex flex-col h-full [&::-webkit-scrollbar]:hidden"
+                    style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+                >
+                    <div className="flex gap-1 mb-8 text-[#FFC900] shrink-0">
+                        {[1, 2, 3, 4, 5].map((i) => (
+                            <Star key={i} className="w-6 h-6 fill-current drop-shadow-sm" />
+                        ))}
+                    </div>
+
+                    <div className="relative mb-12">
+                        {/* Large faded quote mark decorative */}
+                        <Quote className="absolute -top-4 -left-4 w-12 h-12 text-[#6B9F91]/10 transform -scale-x-100 pointer-events-none" />
+                        <p className="relative z-10 text-xl md:text-2xl lg:text-[28px] text-gray-800 font-medium italic leading-relaxed md:leading-[1.6]">
+                            &ldquo;{story.quote}&rdquo;
+                        </p>
+                    </div>
+
+                    <div className="flex items-center gap-5 border-t border-gray-100 pt-6 mt-auto shrink-0">
+                        <div className="w-14 h-14 shrink-0 rounded-full bg-gradient-to-tr from-gray-200 to-gray-100 p-[2px]">
+                            <div className="w-full h-full bg-white rounded-full flex items-center justify-center">
+                                <span className="text-gray-500 font-bold text-lg">{story.clientName.charAt(0)}</span>
+                            </div>
+                        </div>
+                        <div>
+                            <p className="font-bold text-[#111827] text-lg">{story.clientName}</p>
+                            <p className="text-sm font-bold text-[#6B9F91] uppercase tracking-wider mt-0.5">
+                                {story.route.replace('/', '')} | {story.company}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </motion.div>
+        </div>
     );
 }
 
@@ -328,7 +466,7 @@ function BottomCTA() {
                 </h3>
 
                 <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }}>
-                    <Button asChild size="lg" className="relative z-10 w-full sm:w-auto shadow-xl shadow-[#6B9F91]/20 hover:shadow-[#6B9F91]/40 bg-[#6B9F91] text-white hover:bg-[#5C8C80] transition-all duration-300">
+                    <Button asChild size="lg" className="relative z-10 w-full sm:w-auto min-w-[220px] whitespace-nowrap shadow-xl shadow-[#6B9F91]/20 hover:shadow-[#6B9F91]/40 bg-[#6B9F91] text-white hover:bg-[#5C8C80] transition-all duration-300">
                         <Link href="/contact" className="group/btn">
                             Start Your Project
                             <ArrowRight className="ml-2 w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
