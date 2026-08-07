@@ -78,7 +78,7 @@ export function Hero() {
                     </div>
 
                     {/* Right Column - Mockup (50%) */}
-                    <div className="w-full lg:w-1/2 relative flex justify-center lg:justify-end min-h-[450px]">
+                    <div className="w-full lg:w-1/2 relative flex justify-center lg:justify-end min-h-[450px] px-6 md:px-12 lg:px-0">
 
                         {/* Main Application Mockup */}
                         <motion.div
