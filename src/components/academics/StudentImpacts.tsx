@@ -170,7 +170,7 @@ function FeaturedVideoArea() {
             />
 
             {/* Ambient Thumbnail Overlay (Mockup background before play) */}
-            <div className={`absolute inset-0 pointer-events-none bg-gradient-to-tr from-gray-200 via-gray-100 to-[#E8F0EE] z-0 transition-opacity duration-700 ${isPlaying ? 'opacity-0' : 'opacity-100'}`} />
+            <div className={`absolute inset-0 pointer-events-none bg-gradient-to-tr from-gray-200/55 via-gray-100/45 to-[#E8F0EE]/55 z-0 transition-opacity duration-700 ${isPlaying ? 'opacity-0' : 'opacity-55'}`} />
             <motion.div
                 className={`absolute inset-0 pointer-events-none bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-12 z-0 transition-opacity duration-700 ${isPlaying ? 'opacity-0' : 'opacity-100'}`}
                 animate={{ x: ["-200%", "200%"] }}
@@ -206,9 +206,12 @@ function FeaturedVideoArea() {
                     pointerEvents: isPlaying ? "none" : "auto"
                 }}
                 transition={{ duration: 0.5, type: "spring", bounce: 0.15 }}
-                className="absolute inset-x-0 bottom-0 z-20 flex flex-col justify-end overflow-hidden border-t border-white/60 shadow-[0_-10px_40px_rgba(0,0,0,0.04)]"
+                className="absolute inset-x-0 bottom-0 z-20 flex flex-col justify-end overflow-hidden border-t border-white/50 shadow-[0_-10px_40px_rgba(0,0,0,0.04)]"
             >
-                <div className="absolute inset-0 z-0 bg-white/95 backdrop-blur-md" />
+                <div
+                    className="absolute inset-0 z-0 backdrop-blur-xl"
+                    style={{ backgroundColor: "rgba(255, 255, 255, 0.42)" }}
+                />
 
                 <div className="relative z-10 flex flex-col w-full py-3 px-4 md:py-5 md:px-8 text-left">
                     {/* Stars */}
@@ -326,12 +329,6 @@ function BottomCTA() {
 
                 <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }} className="flex flex-col sm:flex-row gap-4">
                     <Button asChild size="lg" className="relative z-10 w-full sm:w-auto shadow-xl shadow-[#6B9F91]/20 hover:shadow-[#6B9F91]/40 bg-[#6B9F91] text-white hover:bg-[#5C8C80] transition-all duration-300">
-                        <Link href="/contact" className="group/btn">
-                            Apply Now
-                            <ArrowRight className="ml-2 w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                        </Link>
-                    </Button>
-                    <Button asChild variant="outline" size="lg" className="relative z-10 w-full sm:w-auto bg-white hover:bg-gray-50 border-gray-200 text-gray-700 transition-all duration-300">
                         <Link href="/contact">
                             Join SS40 Academics
                         </Link>

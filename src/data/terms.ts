@@ -70,7 +70,7 @@ export const termsData = {
         {
             id: "contact",
             title: "Contact",
-            content: "If you have any questions about these Terms of Service, please contact us at support@ss40network.com or by post to our registered office address in Tirunelveli, Tamil Nadu."
+            content: "If you have any questions about these Terms of Service, please contact us at support@ss40network.com or by post to SS40 NETWORK PRIVATE LIMITED, 1st Floor, Municipal Corporation Incubation Centre\n(Near by trade centre), Sree Puram, Tirunelveli, Tamil Nadu 627001."
         }
     ],
 

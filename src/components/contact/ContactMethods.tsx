@@ -27,7 +27,7 @@ const METHODS = [
         id: "visit",
         icon: MapPin,
         title: "Visit Us",
-        content: "Tamil Nadu, India",
+        content: "SS40 NETWORK PRIVATE LIMITED, 1st Floor, Municipal Corporation Incubation Centre\n(Near by trade centre), Sree Puram, Tirunelveli, Tamil Nadu 627001.",
         description: "Serving businesses and educational institutions across India with innovative digital solutions and products.",
         href: "#office-location"
     }
@@ -76,7 +76,7 @@ export function ContactMethods() {
                                 </div>
 
                                 <h3 className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-2">{method.title}</h3>
-                                <p className="text-lg md:text-xl font-bold text-[#111827] mb-4 group-hover:text-[#6B9F91] transition-colors">{method.content}</p>
+                                <p className="text-lg md:text-xl font-bold text-[#111827] mb-4 group-hover:text-[#6B9F91] transition-colors whitespace-pre-line">{method.content}</p>
                                 <p className="text-gray-500 text-sm leading-relaxed">{method.description}</p>
                             </motion.a>
                         );

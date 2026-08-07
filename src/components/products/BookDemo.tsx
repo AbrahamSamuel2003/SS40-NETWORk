@@ -31,15 +31,18 @@ export function BookDemo() {
 
             {/* Abstract Background Enhancements */}
             <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+                {/* Static on mobile, rotating on md+ */}
+                <div className="absolute -top-1/2 -right-1/4 w-[800px] h-[800px] bg-[#6B9F91]/5 blur-[100px] rounded-full md:hidden" />
                 <motion.div
                     animate={{ rotate: 360 }}
                     transition={{ duration: 150, repeat: Infinity, ease: "linear" }}
-                    className="absolute -top-1/2 -right-1/4 w-[800px] h-[800px] bg-[#6B9F91]/5 blur-[100px] rounded-full"
+                    className="absolute -top-1/2 -right-1/4 w-[800px] h-[800px] bg-[#6B9F91]/5 blur-[100px] rounded-full hidden md:block"
                 />
+                <div className="absolute -bottom-1/2 -left-1/4 w-[600px] h-[600px] bg-[#FFC900]/5 blur-[120px] rounded-full md:hidden" />
                 <motion.div
                     animate={{ rotate: -360 }}
                     transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
-                    className="absolute -bottom-1/2 -left-1/4 w-[600px] h-[600px] bg-[#FFC900]/5 blur-[120px] rounded-full"
+                    className="absolute -bottom-1/2 -left-1/4 w-[600px] h-[600px] bg-[#FFC900]/5 blur-[120px] rounded-full hidden md:block"
                 />
                 {/* Geometrics */}
                 <div className="absolute right-[10%] top-[40%] w-64 h-64 border border-[#6B9F91]/20 rounded-full rotate-45" />
@@ -79,18 +82,16 @@ export function BookDemo() {
                         </motion.p>
 
                         <motion.div variants={slideUp} className="flex flex-col sm:flex-row w-full sm:w-auto gap-4">
-                            <Button asChild size="lg" className="w-full sm:w-auto bg-[#6B9F91] hover:bg-[#5C8C80] text-white shadow-xl shadow-[#6B9F91]/20 hover:shadow-2xl hover:shadow-[#6B9F91]/40 group transition-all duration-300 relative overflow-hidden">
-                                <Link href="/contact" className="relative z-10 flex items-center justify-center w-full h-full">
-                                    <CalendarCheck className="w-5 h-5 mr-2 group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-300" />
+                            <Button asChild size="lg" className="w-full sm:w-auto bg-[#6B9F91] hover:bg-[#5C8C80] text-white shadow-lg shadow-[#6B9F91]/20 group">
+                                <Link href="/contact">
+                                    <CalendarCheck className="w-5 h-5 mr-2 transition-transform" />
                                     Book a Demo
-                                    {/* Soft shine */}
-                                    <div className="absolute inset-0 -translate-x-[150%] group-hover:translate-x-[150%] bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000 ease-in-out pointer-events-none" />
                                 </Link>
                             </Button>
-                            <Button asChild variant="outline" size="lg" className="w-full sm:w-auto bg-white hover:bg-gray-50 border-gray-200 text-gray-700 group hover:border-gray-300 hover:shadow-md transition-all duration-300">
-                                <Link href="/contact" className="flex items-center justify-center w-full h-full">
+                            <Button asChild variant="outline" size="lg" className="w-full sm:w-auto bg-white hover:bg-gray-50 border-gray-200 text-gray-700 group">
+                                <Link href="/contact">
                                     Talk to Expert
-                                    <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1.5 transition-transform duration-300 ease-out" />
+                                    <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                                 </Link>
                             </Button>
                         </motion.div>
@@ -100,18 +101,19 @@ export function BookDemo() {
                     <div className="w-full lg:w-1/2 relative group/section">
 
                         {/* Ambient glow specifically in right container */}
+                        {/* Static ambient glow on mobile, rotating on md+ */}
+                        <div className="absolute inset-0 opacity-[0.04] blur-[60px] bg-gradient-to-tr from-[#6B9F91] via-[#FFC900] to-[#6B9F91] scale-150 pointer-events-none z-0 md:hidden" />
                         <motion.div
                             animate={{ rotate: 360 }} transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-                            className="absolute inset-0 opacity-[0.04] blur-[60px] bg-gradient-to-tr from-[#6B9F91] via-[#FFC900] to-[#6B9F91] scale-150 pointer-events-none z-0"
+                            className="absolute inset-0 opacity-[0.04] blur-[60px] bg-gradient-to-tr from-[#6B9F91] via-[#FFC900] to-[#6B9F91] scale-150 pointer-events-none z-0 hidden md:block"
                         />
 
                         <motion.div
                             initial={{ opacity: 0, x: 40, y: 40 }}
                             whileInView={{ opacity: 1, x: 0, y: 0 }}
-                            whileHover={{ y: -6 }}
                             viewport={{ once: true, margin: "-100px" }}
                             transition={{ duration: 0.7, type: "spring", bounce: 0.2 }}
-                            className="relative w-full max-w-md mx-auto lg:ml-auto bg-white/80 backdrop-blur-xl border border-white hover:border-[#6B9F91]/20 p-6 md:p-8 rounded-[2rem] shadow-2xl shadow-gray-200/50 hover:shadow-[0_30px_60px_-15px_rgba(107,159,145,0.15)] transition-all duration-500 z-10"
+                            className="relative w-full max-w-md mx-auto lg:ml-auto bg-white/80 backdrop-blur-xl border border-white md:hover:border-[#6B9F91]/20 p-6 md:p-8 rounded-[2rem] shadow-2xl shadow-gray-200/50 md:hover:shadow-[0_30px_60px_-15px_rgba(107,159,145,0.15)] transition-all duration-300 md:duration-500 z-10"
                         >
                             {/* Card Header */}
                             <div className="flex items-center gap-4 mb-2.5">
@@ -146,12 +148,12 @@ export function BookDemo() {
                                         <motion.li
                                             key={idx}
                                             variants={slideUp}
-                                            className="group/feature flex items-center gap-3 p-2 -mx-2 rounded-xl hover:bg-[#6B9F91]/[0.03] hover:shadow-[0_4px_15px_rgba(107,159,145,0.05)] border border-transparent hover:border-[#6B9F91]/10 transition-all duration-300 cursor-default"
+                                            className="group/feature flex items-center gap-3 p-2 -mx-2 rounded-xl md:hover:bg-[#6B9F91]/[0.03] md:hover:shadow-[0_4px_15px_rgba(107,159,145,0.05)] border border-transparent md:hover:border-[#6B9F91]/10 transition-colors duration-200 md:transition-all md:duration-300 cursor-default"
                                         >
-                                            <div className="w-7 h-7 rounded-full bg-[#EDF5F2] text-[#6B9F91] flex items-center justify-center shrink-0 group-hover/feature:bg-[#6B9F91] group-hover/feature:text-white group-hover/feature:shadow-[0_0_12px_rgba(107,159,145,0.3)] transition-all duration-300">
-                                                <Icon className="w-3.5 h-3.5 group-hover/feature:scale-110 transition-transform duration-300" />
+                                            <div className="w-7 h-7 rounded-full bg-[#EDF5F2] text-[#6B9F91] flex items-center justify-center shrink-0 md:group-hover/feature:bg-[#6B9F91] md:group-hover/feature:text-white md:group-hover/feature:shadow-[0_0_12px_rgba(107,159,145,0.3)] transition-colors duration-200 md:transition-all md:duration-300">
+                                                <Icon className="w-3.5 h-3.5 md:group-hover/feature:scale-110 transition-transform duration-200" />
                                             </div>
-                                            <span className="font-semibold text-gray-700 text-sm group-hover/feature:text-[#111827] group-hover/feature:translate-x-1 transition-all duration-300 ease-out">{item.text}</span>
+                                            <span className="font-semibold text-gray-700 text-sm md:group-hover/feature:text-[#111827] md:group-hover/feature:translate-x-1 transition-colors duration-200 md:transition-all md:duration-300 ease-out">{item.text}</span>
                                         </motion.li>
                                     );
                                 })}
@@ -163,20 +165,19 @@ export function BookDemo() {
                                 initial="hidden"
                                 whileInView="visible"
                                 viewport={{ once: true }}
-                                whileHover={{ scale: 1.02 }}
-                                className="w-full bg-[#EDF5F2] border border-[#6B9F91]/20 hover:border-[#6B9F91]/40 hover:shadow-[0_4px_20px_rgba(107,159,145,0.1)] transition-all duration-300 rounded-2xl p-4 flex items-center justify-between group/duration cursor-default"
+                                className="w-full bg-[#EDF5F2] border border-[#6B9F91]/20 md:hover:border-[#6B9F91]/40 md:hover:shadow-[0_4px_20px_rgba(107,159,145,0.1)] transition-colors duration-200 md:transition-all md:duration-300 rounded-2xl p-4 flex items-center justify-between group/duration cursor-default"
                             >
                                 <div className="flex flex-col">
                                     <span className="text-[10px] font-bold text-[#6B9F91] uppercase tracking-wider mb-1">Typical Demo Duration</span>
-                                    <span className="font-bold text-[#111827] flex items-center gap-2 group-hover/duration:text-[#6B9F91] transition-colors duration-300">
-                                        <Clock className="w-4 h-4 text-gray-500 group-hover/duration:text-[#6B9F91] group-hover/duration:animate-pulse transition-colors" />
-                                        <span className="group-hover/duration:scale-105 origin-left transition-transform duration-300 inline-block text-gray-900 group-hover/duration:text-[#6B9F91]">30–45 Minutes</span>
+                                    <span className="font-bold text-[#111827] flex items-center gap-2 md:group-hover/duration:text-[#6B9F91] transition-colors duration-200">
+                                        <Clock className="w-4 h-4 text-gray-500 md:group-hover/duration:text-[#6B9F91] transition-colors duration-200" />
+                                        <span className="inline-block text-gray-900 md:group-hover/duration:scale-105 origin-left md:group-hover/duration:text-[#6B9F91] transition-colors duration-200 md:transition-transform md:duration-300">30–45 Minutes</span>
                                     </span>
                                 </div>
                                 <div className="flex -space-x-2">
-                                    <div className="w-8 h-8 rounded-full border-2 border-white bg-gray-100 relative group-hover/duration:-translate-x-1 transition-transform" />
-                                    <div className="w-8 h-8 rounded-full border-2 border-white bg-gray-200 relative group-hover/duration:-translate-x-0.5 transition-transform" />
-                                    <div className="w-8 h-8 rounded-full border-2 border-white bg-[#6B9F91] text-[10px] text-white flex items-center justify-center font-bold relative group-hover/duration:scale-110 transition-transform">+</div>
+                                    <div className="w-8 h-8 rounded-full border-2 border-white bg-gray-100 relative md:group-hover/duration:-translate-x-1 transition-transform" />
+                                    <div className="w-8 h-8 rounded-full border-2 border-white bg-gray-200 relative md:group-hover/duration:-translate-x-0.5 transition-transform" />
+                                    <div className="w-8 h-8 rounded-full border-2 border-white bg-[#6B9F91] text-[10px] text-white flex items-center justify-center font-bold relative md:group-hover/duration:scale-110 transition-transform">+</div>
                                 </div>
                             </motion.div>
                         </motion.div>

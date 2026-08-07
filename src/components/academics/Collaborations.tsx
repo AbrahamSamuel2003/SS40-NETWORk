@@ -44,6 +44,20 @@ export function Collaborations() {
 
     // Provide a continuous array for infinite scrolling
     const marqueeItems = [...INSTITUTIONS, ...INSTITUTIONS];
+    const pauseMarquee = (event: React.PointerEvent<HTMLDivElement>) => {
+        if (event.pointerType === "touch") {
+            event.currentTarget.classList.add("marquee-touch-paused");
+            event.currentTarget.setPointerCapture(event.pointerId);
+        }
+    };
+    const resumeMarquee = (event: React.PointerEvent<HTMLDivElement>) => {
+        if (event.pointerType === "touch") {
+            event.currentTarget.classList.remove("marquee-touch-paused");
+            if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+                event.currentTarget.releasePointerCapture(event.pointerId);
+            }
+        }
+    };
 
     return (
         <SectionWrapper id="collaborations" className="bg-white relative overflow-hidden pb-8 md:pb-12">
@@ -158,12 +172,18 @@ export function Collaborations() {
                     <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-white to-transparent z-10 hidden md:block" />
                     <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-white to-transparent z-10 hidden md:block" />
 
-                    <div className="flex overflow-hidden group">
-                        <div className="flex animate-[scroll-left_40s_linear_infinite] group-hover:animate-play-state-paused gap-6 pr-6 w-max">
+                    <div
+                        className="academic-marquee-row flex overflow-hidden group touch-pan-y select-none"
+                        onPointerDown={pauseMarquee}
+                        onPointerUp={resumeMarquee}
+                        onPointerCancel={resumeMarquee}
+                        onLostPointerCapture={(e) => e.currentTarget.classList.remove("marquee-touch-paused")}
+                    >
+                        <div className="academic-marquee-track flex animate-[scroll-left_40s_linear_infinite] gap-6 pr-6 w-max will-change-transform">
                             {marqueeItems.map((inst, idx) => (
                                 <div
                                     key={`inst-${idx}`}
-                                    className="w-[280px] md:w-[320px] bg-[#EDF5F2] rounded-2xl p-6 border border-gray-100 shadow-sm flex items-center gap-4 shrink-0 transition-all hover:-translate-y-1 hover:shadow-lg hover:shadow-gray-200/50"
+                                    className="academic-marquee-card w-[280px] md:w-[320px] bg-[#EDF5F2] rounded-2xl p-6 border border-gray-100 shadow-sm flex items-center gap-4 shrink-0 transition-all"
                                 >
                                     {/* Logo Placeholder */}
                                     <div className="w-14 h-14 bg-white rounded-xl shadow-inner border border-gray-100 flex items-center justify-center shrink-0">
@@ -227,6 +247,20 @@ export function Collaborations() {
                 @keyframes scroll-left {
                     0% { transform: translateX(0); }
                     100% { transform: translateX(calc(-50% - 12px)); } /* accounting for gap */
+                }
+                @media (hover: hover) and (pointer: fine) {
+                    .academic-marquee-row:hover .academic-marquee-track {
+                        animation-play-state: paused !important;
+                    }
+                    .academic-marquee-card:hover {
+                        transform: translateY(-0.25rem);
+                        box-shadow: 0 10px 15px -3px rgb(229 231 235 / 0.5), 0 4px 6px -4px rgb(229 231 235 / 0.5);
+                    }
+                }
+                @media (hover: none), (pointer: coarse) {
+                    .marquee-touch-paused .academic-marquee-track {
+                        animation-play-state: paused !important;
+                    }
                 }
             `}} />
         </SectionWrapper>

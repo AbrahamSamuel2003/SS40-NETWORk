@@ -169,7 +169,7 @@ function FeaturedVideoArea() {
             />
 
             {/* Ambient Thumbnail Overlay (Mockup background before play) */}
-            <div className={`absolute inset-0 pointer-events-none bg-gradient-to-tr from-gray-200 via-gray-100 to-[#E8F0EE] z-0 transition-opacity duration-700 ${isPlaying ? 'opacity-0' : 'opacity-100'}`} />
+            <div className={`absolute inset-0 pointer-events-none bg-gradient-to-tr from-gray-200/55 via-gray-100/45 to-[#E8F0EE]/55 z-0 transition-opacity duration-700 ${isPlaying ? 'opacity-0' : 'opacity-55'}`} />
             <motion.div
                 className={`absolute inset-0 pointer-events-none bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-12 z-0 transition-opacity duration-700 ${isPlaying ? 'opacity-0' : 'opacity-100'}`}
                 animate={{ x: ["-200%", "200%"] }}
@@ -206,9 +206,12 @@ function FeaturedVideoArea() {
                     pointerEvents: isPlaying ? "none" : "auto"
                 }}
                 transition={{ duration: 0.5, type: "spring", bounce: 0.15 }}
-                className="absolute inset-x-0 bottom-0 z-20 flex flex-col justify-end overflow-hidden border-t border-white/60 shadow-[0_-10px_40px_rgba(0,0,0,0.04)]"
+                className="absolute inset-x-0 bottom-0 z-20 flex flex-col justify-end overflow-hidden border-t border-white/50 shadow-[0_-10px_40px_rgba(0,0,0,0.04)]"
             >
-                <div className="absolute inset-0 z-0 bg-white/95 backdrop-blur-md" />
+                <div
+                    className="absolute inset-0 z-0 backdrop-blur-xl"
+                    style={{ backgroundColor: "rgba(255, 255, 255, 0.42)" }}
+                />
 
                 <div className="relative z-10 flex flex-col w-full py-3 px-4 md:py-5 md:px-8 text-left">
                     {/* Stars */}

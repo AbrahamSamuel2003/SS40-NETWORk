@@ -8,6 +8,15 @@ import { Container } from "@/components/ui/Container";
 
 const TABS = [
     {
+        id: "tab-0",
+        label: "Placement Training",
+        nodeRef: "Placement Training",
+        icon: User,
+        title: "Placement Preparation",
+        description: "Intensive training covering mock interviews, aptitude tests, resume building, and interview coaching to ensure placement readiness.",
+        tags: ["Mock Interviews", "Aptitude", "Resume"]
+    },
+    {
         id: "tab-1",
         label: "Practical Learning",
         nodeRef: "Practical Learning",
@@ -46,7 +55,7 @@ const TABS = [
 ];
 
 const HUB_NODES = [
-    { id: "Student", label: "Student", x: -120, y: 0 },
+    { id: "Placement Training", label: "Placement Training", x: -120, y: 0 },
     { id: "Practical Learning", label: "Practical Learning", x: -72, y: -108 },
     { id: "Live Projects", label: "Live Projects", x: 72, y: -108 },
     { id: "Mentorship", label: "Mentorship", x: 120, y: 0 },
@@ -140,9 +149,8 @@ export function Placements() {
                                     onMouseEnter={() => tabIndex !== -1 && handleInteract(tabIndex, 'hover')}
                                     onClick={() => tabIndex !== -1 && handleInteract(tabIndex, 'click')}
                                     disabled={tabIndex === -1}
-                                    className={`absolute px-4 py-2 rounded-full transition-all duration-300 ease-out flex items-center justify-center flex-col gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91]
+                                    className={`absolute px-4 py-2 rounded-full transition-all duration-300 ease-out flex items-center justify-center flex-col gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] cursor-pointer
                                         ${isActive ? 'bg-[#6B9F91] border border-[#5C8C80] z-30 shadow-[0_4px_15px_rgba(107,159,145,0.4)] scale-[1.05]' : 'bg-white border border-gray-100 z-10 opacity-70 shadow-md hover:opacity-100 hover:scale-[1.03] hover:shadow-lg lg:hover:bg-[#EDF5F2]/50'}
-                                        ${node.id === "Student" && !isActive ? 'opacity-40 cursor-default hover:scale-100' : 'cursor-pointer'}
                                     `}
                                     style={{ x: node.x, y: node.y }}
                                     animate={{
@@ -173,11 +181,11 @@ export function Placements() {
                                         onMouseEnter={() => handleInteract(idx, 'hover')}
                                         onClick={() => handleInteract(idx, 'click')}
                                         className={`
-                                            w-full lg:w-auto py-3 px-4 rounded-xl lg:rounded-xl text-[11px] lg:text-[13px] font-extrabold uppercase tracking-wide transition-all duration-300 ease-out text-center relative focus-visible:outline-none
+                                            w-full lg:w-auto py-3 px-4 rounded-xl lg:rounded-xl text-[11px] lg:text-[9px] xl:text-[10px] font-extrabold uppercase tracking-wide transition-all duration-300 ease-out text-center relative focus-visible:outline-none
                                             ${isActive
-                                                ? 'bg-[#6B9F91] border border-[#5C8C80] text-white shadow-[0_4px_15px_rgba(107,159,145,0.4)] scale-[1.03] lg:scale-[1.05]'
-                                                : 'bg-white border border-gray-100 text-gray-500 hover:border-gray-300 lg:bg-transparent lg:border-transparent lg:text-gray-400 hover:text-gray-900 lg:hover:bg-gray-50/50 lg:hover:scale-[1.02]'}
-                                            lg:flex-1 lg:py-3.5 lg:px-2 lg:min-w-[120px]
+                                                ? 'bg-[#6B9F91] border border-[#5C8C80] text-white shadow-[0_4px_15px_rgba(107,159,145,0.4)] lg:scale-[1.03]'
+                                                : 'bg-white border border-gray-100 text-gray-500 hover:border-gray-300 lg:bg-transparent lg:border-transparent lg:text-gray-400 hover:text-gray-900 lg:hover:bg-gray-50/50'}
+                                            lg:flex-1 lg:py-3.5 lg:px-1 xl:px-2 lg:min-w-0
                                         `}
                                     >
                                         <span className="relative z-10 transition-colors duration-300">{tab.label}</span>
@@ -212,17 +220,13 @@ export function Placements() {
                                                 </p>
 
                                                 {/* Tags */}
-                                                <div className="flex flex-wrap justify-center md:justify-start gap-2 mb-8">
+                                                <div className="flex flex-wrap justify-center md:justify-start gap-2 mb-2">
                                                     {tab.tags?.map(tag => (
                                                         <span key={tag} className="px-3 py-1 bg-gray-50 border border-gray-100 rounded-full text-[10px] sm:text-[11px] font-bold text-gray-500 tracking-wider uppercase">
                                                             {tag}
                                                         </span>
                                                     ))}
                                                 </div>
-
-                                                <button className="flex items-center justify-center md:justify-start gap-2 text-[#6B9F91] font-bold text-sm tracking-wide group hover:text-[#5C8C80] transition-colors w-full md:w-auto">
-                                                    Learn More <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                                                </button>
                                             </div>
                                         </motion.div>
                                     );

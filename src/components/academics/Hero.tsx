@@ -71,7 +71,7 @@ export function Hero() {
 
                             <div className="flex flex-col sm:flex-row items-center w-full sm:w-auto gap-4">
                                 <Button asChild size="lg" className="w-full sm:w-auto bg-[#6B9F91] hover:bg-[#5C8C80] text-white shadow-lg shadow-[#6B9F91]/20 group">
-                                    <a href="#student-impacts">
+                                    <a href="#placements">
                                         Explore Programs
                                         <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                                     </a>

@@ -43,19 +43,19 @@ export function OfficeLocation() {
                         <h3 className="text-xl md:text-2xl font-bold text-[#111827] mb-4">SS40 NETWORK PRIVATE LIMITED</h3>
 
                         <address className="not-italic text-gray-500 text-base leading-relaxed mb-8 flex flex-col gap-1">
-                            <span>SS40 NETWORK,</span>
+                            <span>SS40 NETWORK PRIVATE LIMITED,</span>
                             <span>1st Floor,</span>
-                            <span>Municipal Corporation Incubation Centre (Near by trade centre),</span>
-                            <span>Swamy Nellaiappar Temple Highway,</span>
-                            <span>Tirunelveli Junction,</span>
+                            <span>Municipal Corporation Incubation Centre</span>
+                            <span>(Near by trade centre),</span>
+                            <span>Sree Puram,</span>
                             <span>Tirunelveli, Tamil Nadu 627001</span>
                         </address>
 
-                        <div className="flex items-center gap-4 text-sm font-bold text-[#111827] mb-8 bg-[#EDF5F2] w-max px-4 py-3 rounded-xl border border-gray-100">
-                            <Clock className="w-5 h-5 text-[#6B9F91]" />
-                            <div className="flex flex-col">
-                                <span className="text-gray-500 text-[10px] uppercase tracking-widest">Office Hours</span>
-                                Monday – Friday: 9:30 AM – 6:30 PM
+                        <div className="flex items-center gap-3 md:gap-4 text-[13px] md:text-sm font-bold text-[#111827] mb-8 bg-[#EDF5F2] w-full md:w-max px-3 md:px-4 py-3 rounded-xl border border-gray-100">
+                            <Clock className="w-5 h-5 text-[#6B9F91] shrink-0" />
+                            <div className="flex flex-col min-w-0">
+                                <span className="text-gray-500 text-[10px] uppercase tracking-widest whitespace-nowrap">Office Hours</span>
+                                <span className="mt-1 md:mt-0 whitespace-nowrap">Monday – Friday: 9:30 AM – 6:30 PM</span>
                             </div>
                         </div>
 
@@ -97,7 +97,8 @@ export function OfficeLocation() {
                                 </a>
                             </h4>
                             <p className="text-[12px] text-gray-600 leading-snug">
-                                Startup TN Tirunelveli Regional Hub, 1st Floor, Municipal Corporation Incubation Centre, Trade Centre, Swamy Nellaiappar Temple Highway, Thirunagar, Tirunelveli Junction, Tirunelveli, Tamil Nadu 627001, India
+                                SS40 NETWORK PRIVATE LIMITED, 1st Floor, Municipal Corporation Incubation Centre<br />
+                                (Near by trade centre), Sree Puram, Tirunelveli, Tamil Nadu 627001.
                             </p>
                         </div>
 

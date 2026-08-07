@@ -49,7 +49,7 @@ export function Hero() {
                             className="flex flex-col items-center lg:items-start w-full"
                         >
                             <Badge className="mb-6 rounded-md uppercase tracking-widest text-[10px] font-bold bg-[#F59E0B]/15 text-[#D97706] hover:bg-[#F59E0B]/25 border border-[#F59E0B]/20 shadow-sm">
-                                Digital Solutions
+                                SS40 Digital Solutions
                             </Badge>
 
                             <h1 className="text-[clamp(40px,5vw,56px)] font-bold text-[var(--color-heading)] leading-[1.1] tracking-tight mb-6 max-w-2xl">
@@ -78,7 +78,7 @@ export function Hero() {
                     </div>
 
                     {/* Right Column - Mockup (50%) */}
-                    <div className="w-full lg:w-1/2 relative flex justify-center lg:justify-end min-h-[450px] px-6 md:px-12 lg:px-0">
+                    <div className="w-full lg:w-1/2 relative flex justify-center lg:justify-end min-h-[450px]">
 
                         {/* Main Application Mockup */}
                         <motion.div
@@ -199,7 +199,7 @@ export function Hero() {
                         <motion.div
                             animate={{ y: [10, -10, 10] }}
                             transition={{ repeat: Infinity, duration: 7, ease: "easeInOut" }}
-                            className="absolute -left-6 md:-left-12 top-20 z-20 bg-white/90 backdrop-blur-md p-3 md:p-4 rounded-xl shadow-xl border border-[var(--color-border)] flex items-start gap-3 w-[200px] md:w-[240px]"
+                            className="absolute left-0 sm:-left-6 md:-left-12 top-20 z-20 bg-white/90 backdrop-blur-md p-3 md:p-4 rounded-xl shadow-xl border border-[var(--color-border)] flex items-start gap-3 w-[200px] md:w-[240px]"
                         >
                             <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-green-100 flex flex-col shrink-0 items-center justify-center text-green-600">
                                 <Bell className="w-4 h-4 md:w-5 md:h-5" />

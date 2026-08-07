@@ -1,7 +1,6 @@
 import * as React from "react";
 import { cn } from "@/utils/cn";
 import { Slot } from "@radix-ui/react-slot";
-import { motion, HTMLMotionProps } from "framer-motion";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     variant?: "primary" | "secondary" | "outline" | "ghost";

@@ -16,23 +16,82 @@ const NAV_LINKS = [
 
 export function Navbar() {
     const [isScrolled, setIsScrolled] = React.useState(false);
+    const [isHidden, setIsHidden] = React.useState(false);
     const pathname = usePathname();
 
     React.useEffect(() => {
+        let lastY = window.scrollY;
+        let ticking = false;
+        let frameId: number | null = null;
+        let scrolledState = window.scrollY > 10;
+        let hiddenState = false;
+
         const handleScroll = () => {
-            setIsScrolled(window.scrollY > 10);
+            if (ticking) return;
+
+            ticking = true;
+            frameId = window.requestAnimationFrame(() => {
+                const currentY = window.scrollY;
+                const nextScrolled = currentY > 10;
+
+                if (nextScrolled !== scrolledState) {
+                    scrolledState = nextScrolled;
+                    setIsScrolled(nextScrolled);
+                }
+
+                // Always show at top and lock anchor
+                if (currentY <= 20) {
+                    if (hiddenState) {
+                        hiddenState = false;
+                        setIsHidden(false);
+                    }
+                    lastY = currentY;
+                    ticking = false;
+                    return;
+                }
+
+                // Calculate exact scroll delta
+                const diff = currentY - lastY;
+
+                // Hide if scrolling down past 8px deadzone
+                if (diff > 8 && currentY > 80) {
+                    if (!hiddenState) {
+                        hiddenState = true;
+                        setIsHidden(true);
+                    }
+                    lastY = currentY;
+                }
+                // Reveal if scrolling up past 8px deadzone
+                else if (diff < -8) {
+                    if (hiddenState) {
+                        hiddenState = false;
+                        setIsHidden(false);
+                    }
+                    lastY = currentY;
+                }
+
+                ticking = false;
+            });
         };
+
         window.addEventListener("scroll", handleScroll, { passive: true });
-        return () => window.removeEventListener("scroll", handleScroll);
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+            if (frameId !== null) {
+                window.cancelAnimationFrame(frameId);
+            }
+        };
     }, []);
 
     return (
         <header
+            // Uses standard transform positioning to animate. MobileNav overlay is portaled out to avoid containing block bugs
             className={cn(
-                "sticky top-0 z-40 w-full transition-all duration-300",
+                "sticky top-0 z-40 w-full transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] transform-gpu",
                 isScrolled
                     ? "bg-gray-50/80 shadow-sm border-b border-[var(--color-border)]"
-                    : "bg-gray-50 border-b border-transparent"
+                    : "bg-gray-50 border-b border-transparent",
+                isHidden ? "-translate-y-full" : "translate-y-0"
             )}
         >
             {/* Dedicated Blur Layer to prevent breaking fixed positioning context for MobileNav */}

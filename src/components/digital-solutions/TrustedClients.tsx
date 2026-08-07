@@ -61,13 +61,33 @@ export function TrustedClients() {
                 }
                 .animate-marquee-left {
                     animation: scroll-left var(--duration, 40s) linear infinite;
+                    will-change: transform;
+                    transform: translateZ(0);
                 }
                 .animate-marquee-right {
                     animation: scroll-right var(--duration, 40s) linear infinite;
+                    will-change: transform;
+                    transform: translateZ(0);
                 }
-                .group:hover .animate-marquee-left,
-                .group:hover .animate-marquee-right {
-                    animation-play-state: paused !important;
+                @media (hover: hover) and (pointer: fine) {
+                    .group:hover .animate-marquee-left,
+                    .group:hover .animate-marquee-right {
+                        animation-play-state: paused !important;
+                    }
+                    .marquee-logo-card:hover {
+                        transform: translateY(-0.25rem);
+                        border-color: #6B9F91;
+                        box-shadow: 0 10px 15px -3px rgb(107 159 145 / 0.2), 0 4px 6px -4px rgb(107 159 145 / 0.2);
+                    }
+                    .group:hover .marquee-logo-icon {
+                        transform: scale(1.1);
+                    }
+                }
+                @media (hover: none), (pointer: coarse) {
+                    .marquee-touch-paused .animate-marquee-left,
+                    .marquee-touch-paused .animate-marquee-right {
+                        animation-play-state: paused !important;
+                    }
                 }
             `}} />
 
@@ -102,9 +122,29 @@ function MarqueeRow({ items, direction, speed }: MarqueeRowProps) {
     // Duplicate exactly to fit -50% perfectly.
     const half = [...items, ...items, ...items];
     const duplicatedItems = [...half, ...half];
+    const pauseMarquee = (event: React.PointerEvent<HTMLDivElement>) => {
+        if (event.pointerType === "touch") {
+            event.currentTarget.classList.add("marquee-touch-paused");
+            event.currentTarget.setPointerCapture(event.pointerId);
+        }
+    };
+    const resumeMarquee = (event: React.PointerEvent<HTMLDivElement>) => {
+        if (event.pointerType === "touch") {
+            event.currentTarget.classList.remove("marquee-touch-paused");
+            if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+                event.currentTarget.releasePointerCapture(event.pointerId);
+            }
+        }
+    };
 
     return (
-        <div className="flex w-max relative group">
+        <div
+            className="flex w-max relative group touch-pan-y select-none"
+            onPointerDown={pauseMarquee}
+            onPointerUp={resumeMarquee}
+            onPointerCancel={resumeMarquee}
+            onLostPointerCapture={(e) => e.currentTarget.classList.remove("marquee-touch-paused")}
+        >
             <div
                 className={cn(
                     "flex items-center gap-6 px-3 w-max",
@@ -117,10 +157,10 @@ function MarqueeRow({ items, direction, speed }: MarqueeRowProps) {
                     return (
                         <div
                             key={`${item.id}-${idx}`}
-                            className="bg-white border border-gray-100 rounded-2xl p-4 md:p-5 w-[220px] md:w-[260px] h-[80px] md:h-[90px] flex items-center justify-start gap-4 shadow-sm hover:-translate-y-1 hover:shadow-lg hover:shadow-[#6B9F91]/20 hover:border-[#6B9F91] transition-all duration-300 cursor-pointer overflow-hidden"
+                            className="marquee-logo-card bg-white border border-gray-100 rounded-2xl p-4 md:p-5 w-[220px] md:w-[260px] h-[80px] md:h-[90px] flex items-center justify-start gap-4 shadow-sm transition-all duration-300 cursor-pointer overflow-hidden"
                         >
                             <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-[#EDF5F2] text-[#6B9F91] flex items-center justify-center shrink-0 transition-colors">
-                                <Icon className="w-5 h-5 md:w-6 md:h-6 group-hover:scale-110 transition-transform duration-300" />
+                                <Icon className="marquee-logo-icon w-5 h-5 md:w-6 md:h-6 transition-transform duration-300" />
                             </div>
                             <span className="font-bold text-gray-800 text-sm md:text-base whitespace-nowrap overflow-hidden text-ellipsis w-full text-left">
                                 {item.name}

@@ -37,7 +37,7 @@ const CONTACT_INFO = [
     {
         icon: MapPin,
         label: "Location",
-        value: "SS40 NETWORK, 1st Floor, Municipal Corporation Incubation Centre (Near by trade centre), Swamy Nellaiappar Temple Highway, Tirunelveli Junction, Tirunelveli, Tamil Nadu 627001",
+        value: "SS40 NETWORK PRIVATE LIMITED, 1st Floor, Municipal Corporation Incubation Centre\n(Near by trade centre), Sree Puram, Tirunelveli, Tamil Nadu 627001.",
         href: "https://goo.gl/maps/DWiCMVGgqKi2r5188"
     },
     {
@@ -105,7 +105,7 @@ export function ContactSection() {
                                         </div>
                                         <div className="pt-0.5 text-left">
                                             <p className="text-sm font-semibold text-[var(--color-heading)]">{item.label}</p>
-                                            <p className="text-sm text-gray-500 leading-relaxed">{item.value}</p>
+                                            <p className="text-sm text-gray-500 leading-relaxed whitespace-pre-line">{item.value}</p>
                                         </div>
                                     </div>
                                 );

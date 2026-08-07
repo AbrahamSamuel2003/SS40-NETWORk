@@ -36,9 +36,9 @@ const SCENES = [
 ];
 
 const GlowingOrbs = () => (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.3, 0.1] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} className="absolute top-1/4 left-1/4 w-64 h-64 bg-[#6B9F91] rounded-full blur-[100px]" />
-        <motion.div animate={{ scale: [1, 1.5, 1], opacity: [0.1, 0.2, 0.1] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }} className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#A6CBBE] rounded-full blur-[120px]" />
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0 transform-gpu" style={{ willChange: "transform" }}>
+        <motion.div animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.3, 0.1] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} className="absolute top-1/4 left-1/4 w-64 h-64 bg-[#6B9F91] rounded-full blur-[100px] transform-gpu" style={{ willChange: "transform, opacity" }} />
+        <motion.div animate={{ scale: [1, 1.5, 1], opacity: [0.1, 0.2, 0.1] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }} className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#A6CBBE] rounded-full blur-[120px] transform-gpu" style={{ willChange: "transform, opacity" }} />
     </div>
 );
 
@@ -51,7 +51,7 @@ const VisualDigital = React.memo(() => {
         { label: "Data", icon: Database, angle: 60 },
         { label: "Security", icon: Shield, angle: 120 },
         { label: "Web", icon: Globe, angle: 180 },
-        { label: "AI", icon: Brain, angle: 240 },
+        { label: "Dev", icon: Brain, angle: 240 },
         { label: "Cloud", icon: Cloud, angle: 300 },
     ].map((n, i) => {
         const rad = n.angle * (Math.PI / 180);
@@ -71,22 +71,26 @@ const VisualDigital = React.memo(() => {
                 {/* SVG Lines originating perfectly from (0,0) */}
                 <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="-160 -160 320 320">
                     {nodes.map((node, i) => (
-                        <g key={i}>
-                            <motion.line
-                                x1="0" y1="0" x2={node.pos.x} y2={node.pos.y}
-                                stroke="#6B9F91" strokeWidth="2" strokeOpacity="0.4" strokeDasharray="4 4"
-                                initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1, delay: i * 0.15, ease: "easeOut" }}
-                            />
-                            {/* Travelling Particle exactly on line */}
-                            <motion.circle
-                                r="4" fill="#6B9F91" cx="0" cy="0"
-                                initial={{ opacity: 0, x: 0, y: 0 }}
-                                animate={{ opacity: [0, 1, 1, 0], x: [0, node.pos.x], y: [0, node.pos.y] }}
-                                transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.3, ease: "easeInOut" }}
-                            />
-                        </g>
+                        <motion.line
+                            key={`line-${i}`}
+                            x1="0" y1="0" x2={node.pos.x} y2={node.pos.y}
+                            stroke="#6B9F91" strokeWidth="2" strokeOpacity="0.4" strokeDasharray="4 4"
+                            initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1, delay: i * 0.15, ease: "easeOut" }}
+                        />
                     ))}
                 </svg>
+
+                {/* HTML DOM Particles (Hardware Accelerated to instantly stop Webkit SVG flickering) */}
+                {nodes.map((node, i) => (
+                    <motion.div
+                        key={`particle-${i}`}
+                        className="absolute left-[50%] top-[50%] w-2 h-2 -ml-1 -mt-1 bg-[#6B9F91] rounded-full z-10 pointer-events-none transform-gpu"
+                        style={{ willChange: "transform, opacity" }}
+                        initial={{ opacity: 0, x: 0, y: 0 }}
+                        animate={{ opacity: [0, 1, 1, 0], x: [0, node.pos.x], y: [0, node.pos.y] }}
+                        transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.3, ease: "easeInOut" }}
+                    />
+                ))}
 
                 {/* Central Hub */}
                 <motion.div
@@ -265,12 +269,182 @@ const VisualAcademics = React.memo(() => {
         </motion.div>
     );
 });
+
+const MobileVisualDigital = React.memo(() => {
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="w-full h-full flex items-center justify-center"
+        >
+            <svg viewBox="0 0 400 360" className="w-[400px] h-auto drop-shadow-sm pointer-events-none">
+                <defs>
+                    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feDropShadow dx="0" dy="0" stdDeviation="6" floodColor="#6B9F91" floodOpacity="0.4" />
+                    </filter>
+                    <filter id="shadow-md" x="-10%" y="-10%" width="120%" height="120%">
+                        <feDropShadow dx="0" dy="6" stdDeviation="8" floodColor="#000" floodOpacity="0.08" />
+                    </filter>
+                    <filter id="shadow-lg" x="-10%" y="-10%" width="120%" height="120%">
+                        <feDropShadow dx="0" dy="10" stdDeviation="15" floodColor="#000" floodOpacity="0.12" />
+                    </filter>
+                </defs>
+
+                {/* Circuit Board Trace Background */}
+                <path
+                    d="M 130 150 V 190 Q 130 200 140 200 H 180 Q 190 200 190 210 V 275 M 190 275 H 280"
+                    fill="none" stroke="#e5e7eb" strokeWidth="2" strokeDasharray="4 4"
+                />
+
+                {/* Moving Data Packet */}
+                <motion.path
+                    d="M 130 150 V 190 Q 130 200 140 200 H 180 Q 190 200 190 210 V 275 M 190 275 H 280"
+                    fill="none" stroke="#6B9F91" strokeWidth="3" filter="url(#glow)" strokeLinecap="round"
+                    initial={{ pathLength: 0.1, pathOffset: 0 }}
+                    animate={{ pathOffset: [0, 1] }}
+                    transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                    style={{ willChange: "stroke-dashoffset" }}
+                />
+
+                {/* Component 1: Code Editor (SS40 Theme) */}
+                <g transform="translate(15, 15)" filter="url(#shadow-lg)">
+                    <rect x="0" y="0" width="220" height="135" rx="8" fill="#111827" />
+                    {/* Header */}
+                    <rect x="0" y="0" width="220" height="24" rx="8" fill="#1F2937" />
+                    {/* Neutral MacOS dots */}
+                    <circle cx="15" cy="12" r="4" fill="#374151" />
+                    <circle cx="28" cy="12" r="4" fill="#4B5563" />
+                    <circle cx="41" cy="12" r="4" fill="#6B7280" />
+                    <text x="110" y="16" fontSize="9" fill="#9CA3AF" fontFamily="monospace" textAnchor="middle">api-controller.ts</text>
+
+                    {/* Code Lines - Mint & Gray Syntax */}
+                    <rect x="15" y="40" width="30" height="6" rx="3" fill="#A6CBBE" />
+                    <rect x="52" y="40" width="60" height="6" rx="3" fill="#D1D5DB" />
+
+                    <rect x="15" y="55" width="80" height="6" rx="3" fill="#6B9F91" />
+                    <rect x="100" y="55" width="40" height="6" rx="3" fill="#E5E7EB" />
+
+                    <rect x="30" y="70" width="40" height="6" rx="3" fill="#A6CBBE" />
+
+                    {/* Animated Fade Syntax */}
+                    <motion.rect
+                        x="30" y="85" width="110" height="6" rx="3" fill="#6B9F91"
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 1.5, delay: 0.5, ease: "easeOut" }}
+                    />
+                    <motion.rect
+                        x="30" y="100" width="80" height="6" rx="3" fill="#A6CBBE"
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 1.5, delay: 1.2, ease: "easeOut" }}
+                    />
+
+                    {/* Blinking Cursor */}
+                    <motion.rect
+                        x="145" y="83" width="6" height="10" fill="#6B9F91"
+                        animate={{ opacity: [1, 0, 1] }}
+                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                        style={{ willChange: "opacity" }}
+                    />
+                </g>
+
+                {/* Component 2: Dev Team Panel */}
+                <g transform="translate(195, 45)" filter="url(#shadow-md)">
+                    <rect x="0" y="0" width="145" height="75" rx="10" fill="#ffffff" stroke="#e5e7eb" strokeWidth="1" />
+                    <rect x="0" y="0" width="145" height="75" rx="10" fill="white" />
+                    {/* Sparkle mint */}
+                    <path d="M 15 15 L 17 22 L 24 24 L 17 26 L 15 33 L 13 26 L 6 24 L 13 22 Z" fill="#6B9F91" />
+                    <text x="32" y="24" fontSize="11" fontWeight="bold" fill="#111827" fontFamily="sans-serif">Dev Team</text>
+
+                    <circle cx="16" cy="42" r="5" fill="#EDF5F2" />
+                    <path d="M 13 42 L 15 44 L 19 40" fill="none" stroke="#6B9F91" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <text x="26" y="45" fontSize="9" fontWeight="bold" fill="#374151" fontFamily="sans-serif">Code Optimized</text>
+
+                    <circle cx="16" cy="58" r="5" fill="#EDF5F2" />
+                    <path d="M 13 58 L 15 60 L 19 56" fill="none" stroke="#6B9F91" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <text x="26" y="61" fontSize="9" fontWeight="bold" fill="#374151" fontFamily="sans-serif">Logic Refactored</text>
+                </g>
+
+                {/* Component 3: Build Terminal */}
+                <g transform="translate(15, 170)" filter="url(#shadow-md)">
+                    <rect x="0" y="0" width="165" height="65" rx="10" fill="#111827" />
+                    <text x="15" y="24" fontSize="10" fill="#6B9F91" fontFamily="monospace">&gt;</text>
+                    <text x="26" y="24" fontSize="10" fill="#D1D5DB" fontFamily="monospace">npm run deploy</text>
+
+                    <motion.g
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 1.5 }}
+                    >
+                        <path d="M 16 41 L 19 44 L 25 38" fill="none" stroke="#6B9F91" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        <text x="32" y="44" fontSize="10" fontWeight="bold" fill="#6B9F91" fontFamily="sans-serif">Build Successful</text>
+                        <text x="15" y="56" fontSize="8" fill="#6B7280" fontFamily="sans-serif">Deployed in 1.2s</text>
+                    </motion.g>
+                </g>
+
+                {/* Component 4: Cloud Deployment */}
+                <g transform="translate(130, 245)" filter="url(#shadow-md)">
+                    <rect x="0" y="0" width="120" height="65" rx="12" fill="#ffffff" stroke="#e5e7eb" strokeWidth="1" />
+                    <motion.g
+                        animate={{ y: [-1, 1, -1] }}
+                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                        style={{ willChange: "transform" }}
+                    >
+                        <rect x="15" y="16" width="32" height="32" rx="8" fill="#EDF5F2" />
+                        <path d="M22 31h10a3 3 0 0 0 0-6h-1A4.5 4.5 0 1 0 22 31Z" fill="none" stroke="#6B9F91" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </motion.g>
+                    {/* Live Pulser */}
+                    <circle cx="59" cy="23" r="3" fill="#6B9F91" />
+                    <motion.circle
+                        cx="59" cy="23" r="3" fill="#6B9F91"
+                        animate={{ scale: [1, 2.5], opacity: [0.8, 0] }}
+                        transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 3, ease: "easeOut" }}
+                        style={{ willChange: "transform, opacity" }}
+                    />
+                    <text x="68" y="26" fontSize="10" fontWeight="bold" fill="#111827" fontFamily="sans-serif">Live</text>
+                    <text x="55" y="40" fontSize="8" fill="#6B7280" fontFamily="sans-serif">Deployment</text>
+                    <text x="55" y="50" fontSize="8" fill="#6B7280" fontFamily="sans-serif">Successful</text>
+                </g>
+
+                {/* Component 5: Live Preview */}
+                <g transform="translate(265, 175)" filter="url(#shadow-lg)">
+                    <rect x="0" y="0" width="120" height="135" rx="10" fill="#ffffff" />
+                    <rect x="0" y="0" width="120" height="24" rx="10" fill="#F3F4F6" />
+                    <rect x="0" y="14" width="120" height="10" fill="#F3F4F6" />
+
+                    <circle cx="12" cy="12" r="3" fill="#D1D5DB" />
+                    <circle cx="21" cy="12" r="3" fill="#D1D5DB" />
+                    <circle cx="30" cy="12" r="3" fill="#D1D5DB" />
+                    <rect x="42" y="9" width="70" height="6" rx="3" fill="#ffffff" />
+
+                    {/* Website Content Mockup */}
+                    <rect x="12" y="38" width="55" height="10" rx="3" fill="#111827" />
+                    <rect x="12" y="54" width="96" height="4" rx="2" fill="#E5E7EB" />
+                    <rect x="12" y="62" width="76" height="4" rx="2" fill="#E5E7EB" />
+
+                    <rect x="12" y="74" width="45" height="45" rx="6" fill="#F9FAFB" stroke="#E5E7EB" strokeWidth="1" />
+                    <rect x="63" y="74" width="45" height="45" rx="6" fill="#EDF5F2" stroke="#6B9F91" strokeWidth="1" />
+
+                    <path d="M 75 92 L 85 92 M 80 87 L 80 97" stroke="#6B9F91" strokeWidth="2" strokeLinecap="round" />
+                </g>
+            </svg>
+        </motion.div>
+    );
+});
+MobileVisualDigital.displayName = "MobileVisualDigital";
+
 VisualDigital.displayName = "VisualDigital";
 VisualProducts.displayName = "VisualProducts";
 VisualAcademics.displayName = "VisualAcademics";
 
 const MobileSwipeCard = ({ scene, idx }: { scene: any, idx: number }) => {
-    const Visual = idx === 0 ? VisualDigital : (idx === 1 ? VisualProducts : VisualAcademics);
+    const Visual = idx === 0 ? MobileVisualDigital : (idx === 1 ? VisualProducts : VisualAcademics);
 
     return (
         <div
