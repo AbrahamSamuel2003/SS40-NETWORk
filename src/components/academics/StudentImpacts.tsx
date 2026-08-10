@@ -465,7 +465,7 @@ function BottomCTA() {
                 </h3>
 
                 <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }} className="flex flex-col sm:flex-row gap-4">
-                    <Button asChild size="lg" className="relative z-10 w-full sm:w-auto shadow-xl shadow-[#6B9F91]/20 hover:shadow-[#6B9F91]/40 bg-[#6B9F91] text-white hover:bg-[#5C8C80] transition-all duration-300">
+                    <Button asChild size="lg" className="relative z-10 w-full sm:w-auto whitespace-nowrap px-6 sm:px-8 shadow-xl shadow-[#6B9F91]/20 hover:shadow-[#6B9F91]/40 bg-[#6B9F91] text-white hover:bg-[#5C8C80] transition-all duration-300">
                         <Link href="/contact">
                             Join SS40 Academics
                         </Link>

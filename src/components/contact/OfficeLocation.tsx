@@ -42,13 +42,8 @@ export function OfficeLocation() {
 
                         <h3 className="text-xl md:text-2xl font-bold text-[#111827] mb-4">SS40 NETWORK PRIVATE LIMITED</h3>
 
-                        <address className="not-italic text-gray-500 text-base leading-relaxed mb-8 flex flex-col gap-1">
-                            <span>SS40 NETWORK PRIVATE LIMITED,</span>
-                            <span>1st Floor,</span>
-                            <span>Municipal Corporation Incubation Centre</span>
-                            <span>(Near by trade centre),</span>
-                            <span>Sree Puram,</span>
-                            <span>Tirunelveli, Tamil Nadu 627001</span>
+                        <address className="not-italic text-gray-500 text-base leading-relaxed mb-8">
+                            1st Floor, Municipal Corporation Incubation Centre (Near by trade centre), Sree Puram, Tirunelveli, Tamil Nadu 627001
                         </address>
 
                         <div className="flex items-center gap-3 md:gap-4 text-[13px] md:text-sm font-bold text-[#111827] mb-8 bg-[#EDF5F2] w-full md:w-max px-3 md:px-4 py-3 rounded-xl border border-gray-100">

@@ -31,7 +31,6 @@ export function Footer() {
                         <h4 className="text-[var(--color-heading)] font-semibold mb-6">Company</h4>
                         <ul className="flex flex-col items-center md:items-start gap-4 text-sm text-[var(--color-body-text)]">
                             <li><Link href="/" className="hover:text-[var(--color-primary)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] rounded">Home</Link></li>
-                            <li><Link href="/about" className="hover:text-[var(--color-primary)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] rounded">About</Link></li>
                             <li><Link href="/digital-solutions" className="hover:text-[var(--color-primary)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] rounded">Digital Solutions</Link></li>
                             <li><Link href="/products" className="hover:text-[var(--color-primary)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] rounded">Products</Link></li>
                             <li><Link href="/academics" className="hover:text-[var(--color-primary)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] rounded">Academics</Link></li>

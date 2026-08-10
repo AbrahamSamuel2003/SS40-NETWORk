@@ -27,7 +27,7 @@ const ICON_MAP: Record<string, React.ElementType> = {
 // --- HERO ---
 export function LegalHero({ title, description, lastUpdated }: { title: string, description: string, lastUpdated: string }) {
     return (
-        <section className="bg-white pt-32 pb-14 md:pt-40 md:pb-20 lg:pb-24 relative overflow-hidden">
+        <section className="bg-white pt-20 md:pt-24 pb-14 md:pb-20 lg:pb-24 relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-b from-[#EDF5F2] to-white pointer-events-none" />
             <Container className="relative z-10 flex flex-col items-center text-center">
                 <motion.span
@@ -90,111 +90,14 @@ export function LegalSummaryBlocks({ summaries }: { summaries: { title: string, 
 
 // --- SIDEBAR & CONTENT LAYOUT ---
 export function LegalSidebarLayout({ sections }: { sections: { id: string, title: string, content: string }[] }) {
-    const [activeSection, setActiveSection] = React.useState(sections[0].id);
-    const [mobileNavOpen, setMobileNavOpen] = React.useState(false);
-
-    React.useEffect(() => {
-        const observerOptions = {
-            root: null,
-            rootMargin: "-20% 0px -60% 0px", // triggers when element is roughly in middle of screen
-            threshold: 0
-        };
-
-        const observerCallback: IntersectionObserverCallback = (entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    setActiveSection(entry.target.id);
-                }
-            });
-        };
-
-        const observer = new IntersectionObserver(observerCallback, observerOptions);
-
-        sections.forEach((sec) => {
-            const element = document.getElementById(sec.id);
-            if (element) observer.observe(element);
-        });
-
-        return () => observer.disconnect();
-    }, [sections]);
-
-    const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
-        e.preventDefault();
-        const element = document.getElementById(id);
-        if (element) {
-            const y = element.getBoundingClientRect().top + window.scrollY;
-            window.scrollTo({
-                top: y - 100, // offset padding for fixed header
-                behavior: "smooth"
-            });
-            setMobileNavOpen(false);
-            // Updating URL hash without jumping
-            history.pushState(null, '', `#${id}`);
-        }
-    };
-
     return (
         <section className="bg-[#EDF5F2] border-t border-gray-100 py-14 md:py-20 lg:py-24 relative">
             <Container>
 
-                {/* Mobile/Tablet Navigation */}
-                <div className="lg:hidden mb-12 sticky top-24 z-30">
-                    <button
-                        onClick={() => setMobileNavOpen(!mobileNavOpen)}
-                        className="w-full bg-white border border-gray-200 rounded-xl p-4 flex items-center justify-between shadow-sm focus:outline-none"
-                    >
-                        <span className="font-bold text-[#111827] text-sm">Jump to section...</span>
-                        <motion.div animate={{ rotate: mobileNavOpen ? 180 : 0 }}>
-                            <ArrowRight className="w-4 h-4 text-[#6B9F91] rotate-90" />
-                        </motion.div>
-                    </button>
-                    {mobileNavOpen && (
-                        <motion.div
-                            initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
-                            className="absolute mt-2 w-full bg-white border border-gray-200 rounded-xl shadow-xl z-40 overflow-hidden flex flex-col"
-                        >
-                            {sections.map((sec) => (
-                                <a
-                                    key={sec.id}
-                                    href={`#${sec.id}`}
-                                    onClick={(e) => scrollToSection(e, sec.id)}
-                                    className={`text-left text-sm font-medium px-4 py-3 border-b border-gray-50 last:border-0 transition-colors ${activeSection === sec.id ? 'text-[#6B9F91] font-bold bg-[#EDF5F2]' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}
-                                >
-                                    {sec.title}
-                                </a>
-                            ))}
-                        </motion.div>
-                    )}
-                </div>
-
-                <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 relative items-start">
-
-                    {/* Sticky Sidebar (Desktop) */}
-                    <div className="w-full lg:w-1/4 sticky top-32 hidden lg:flex flex-col gap-2">
-                        <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4 ml-4">Contents</span>
-                        <nav className="flex flex-col gap-1 border-l-2 border-gray-100 relative">
-                            {sections.map((sec) => (
-                                <a
-                                    key={sec.id}
-                                    href={`#${sec.id}`}
-                                    onClick={(e) => scrollToSection(e, sec.id)}
-                                    className={`block text-left text-sm font-medium px-4 py-2.5 transition-all relative
-                                        ${activeSection === sec.id
-                                            ? 'text-[#6B9F91] bg-[#6B9F91]/5 font-bold'
-                                            : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
-                                        }`}
-                                >
-                                    {activeSection === sec.id && (
-                                        <motion.div layoutId="activeNavLine" className="absolute left-[-2px] top-0 bottom-0 w-[2px] bg-[#6B9F91]" />
-                                    )}
-                                    {sec.title}
-                                </a>
-                            ))}
-                        </nav>
-                    </div>
+                <div className="flex flex-col relative w-full items-start">
 
                     {/* Scrollable Article */}
-                    <div className="w-full lg:w-3/4 flex flex-col gap-8 md:gap-12">
+                    <div className="w-full max-w-4xl mx-auto flex flex-col gap-8 md:gap-12">
                         {sections.map((sec, idx) => (
                             <section
                                 key={sec.id}

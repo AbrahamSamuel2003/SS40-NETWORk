@@ -29,7 +29,7 @@ const ROW_2 = [
 
 export function TrustedClients() {
     return (
-        <SectionWrapper id="trusted-clients" className="bg-[#EDF5F2] relative overflow-hidden">
+        <SectionWrapper id="trusted-clients" className="bg-[#EDF5F2] relative overflow-hidden !pt-0 md:!pt-0 lg:!pt-0">
             {/* Soft Ambient Background Enhancements */}
             <div className="absolute inset-0 pointer-events-none z-0">
                 <div

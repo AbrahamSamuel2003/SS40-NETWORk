@@ -42,8 +42,9 @@ const BENEFITS = [
 export function Collaborations() {
     const [hoveredNode, setHoveredNode] = React.useState<string | null>(null);
 
-    // Provide a continuous array for infinite scrolling
-    const marqueeItems = [...INSTITUTIONS, ...INSTITUTIONS];
+    // Provide a continuous array for infinite scrolling (6x duplication to match home page marquee speed)
+    const half = [...INSTITUTIONS, ...INSTITUTIONS, ...INSTITUTIONS];
+    const marqueeItems = [...half, ...half];
     const pauseMarquee = (event: React.PointerEvent<HTMLDivElement>) => {
         if (event.pointerType === "touch") {
             event.currentTarget.classList.add("marquee-touch-paused");
@@ -82,7 +83,7 @@ export function Collaborations() {
                 </p>
 
                 {/* 1. PARTNERSHIP NETWORK */}
-                <div className="w-full max-w-[340px] sm:max-w-[420px] md:max-w-3xl mx-auto relative flex items-center justify-center mb-8 isolate">
+                <div className="w-full max-w-[340px] sm:max-w-[420px] md:max-w-[440px] mx-auto relative flex items-center justify-center mb-8 isolate">
                     {/* Square inner wrapper: nodes positioned via % so the diagram scales with container width */}
                     <div className="relative w-full aspect-square flex items-center justify-center">
 
@@ -120,7 +121,7 @@ export function Collaborations() {
                         <div className="relative z-20 flex flex-col items-center justify-center w-28 h-28 md:w-36 md:h-36 lg:w-44 lg:h-44 bg-white rounded-full shadow-[0_15px_50px_rgba(107,159,145,0.15)] border-4 border-[#EDF5F2]">
                             <div className="absolute inset-0 bg-[#6B9F91]/5 rounded-full animate-pulse -z-10" />
                             <Network className="w-8 h-8 text-[#6B9F91] mb-2" />
-                            <span className="font-extrabold text-[#111827] text-xs md:text-sm tracking-wider text-center">SS40<br />ACADEMICS</span>
+                            <span className="font-extrabold text-[#111827] text-[10px] md:text-xs tracking-wider text-center">SS40<br />ACADEMICS</span>
                         </div>
 
                         {/* Outer Nodes: positioned via % derived from SVG viewBox (400 units wide) */}
@@ -183,7 +184,7 @@ export function Collaborations() {
                         onPointerCancel={resumeMarquee}
                         onLostPointerCapture={(e) => e.currentTarget.classList.remove("marquee-touch-paused")}
                     >
-                        <div className="academic-marquee-track flex animate-[scroll-left_40s_linear_infinite] gap-6 pr-6 w-max will-change-transform">
+                        <div className="academic-marquee-track flex animate-[scroll-left_30s_linear_infinite] gap-6 pr-6 w-max will-change-transform">
                             {marqueeItems.map((inst, idx) => (
                                 <div
                                     key={`inst-${idx}`}

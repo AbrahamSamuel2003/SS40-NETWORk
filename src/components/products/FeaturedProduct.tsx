@@ -70,7 +70,7 @@ export function FeaturedProduct() {
                                 ClearInvoice helps businesses create invoices, manage billing, track expenses, and simplify financial workflows through a modern cloud-based experience.
                             </p>
 
-                            <div className="flex flex-wrap gap-2 mb-10">
+                            <div className="flex flex-wrap justify-center gap-2 mb-10">
                                 {["GST Automation", "Easy Billing", "Expense Manager"].map((chip, idx) => (
                                     <span key={idx} className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-semibold shadow-sm">
                                         {chip}

@@ -58,12 +58,14 @@ export function ClientProjects() {
 
     const scrollToMobileProject = (idx: number) => {
         if (!mobileScrollRef.current) return;
-        const container = mobileScrollRef.current;
-        const firstCard = container.querySelector('.client-project-mobile-card') as HTMLElement;
-        const cardWidth = firstCard ? firstCard.offsetWidth + 20 : container.clientWidth * 0.85 + 20; // 20px is gap-5
-        container.scrollTo({
-            left: idx * cardWidth,
-            behavior: "smooth"
+        const mobileCards = mobileScrollRef.current.querySelectorAll<HTMLElement>(".client-project-mobile-card");
+        const card = mobileCards[idx];
+        if (!card) return;
+
+        card.scrollIntoView({
+            behavior: "smooth",
+            inline: "center",
+            block: "nearest"
         });
     };
 
@@ -77,8 +79,11 @@ export function ClientProjects() {
         }, { root: mobileScrollRef.current, threshold: 0.6 });
 
         if (mobileScrollRef.current) {
-            const mobileCards = mobileScrollRef.current.querySelectorAll(".client-project-mobile-card");
+            const mobileCards = mobileScrollRef.current.querySelectorAll<HTMLElement>(".client-project-mobile-card");
             mobileCards.forEach(c => mobileObserver.observe(c));
+            requestAnimationFrame(() => {
+                mobileCards[0]?.scrollIntoView({ behavior: 'auto', inline: 'center', block: 'nearest' });
+            });
         }
 
         return () => {
@@ -87,7 +92,7 @@ export function ClientProjects() {
     }, []);
 
     return (
-        <SectionWrapper id="featured-projects" className="bg-[#EDF5F2]">
+        <SectionWrapper id="featured-projects" className="bg-[#EDF5F2] overflow-visible">
             <Container className="space-y-12 lg:space-y-16">
 
                 {/* Section Header */}
@@ -249,7 +254,7 @@ export function ClientProjects() {
                 </div>
 
                 {/* Mobile Native Horizontal Swipe Deck */}
-                <div className="flex flex-col lg:hidden w-full relative -mx-6">
+                <div className="flex flex-col lg:hidden relative overflow-visible -mx-6">
                     <div
                         ref={mobileScrollRef}
                         className="flex w-full overflow-x-auto snap-x snap-mandatory pb-8 gap-5 items-stretch [&::-webkit-scrollbar]:hidden px-6"
@@ -259,7 +264,7 @@ export function ClientProjects() {
                             <div
                                 key={`mobile-proj-${project.id}`}
                                 data-mobile-id={idx}
-                                className="client-project-mobile-card w-[85vw] sm:w-[350px] flex-shrink-0 flex flex-col bg-white rounded-2xl overflow-hidden shadow-lg shadow-gray-200/50 border border-gray-100 snap-center relative scroll-ml-6"
+                                className="client-project-mobile-card w-[82vw] sm:w-[350px] flex-shrink-0 flex flex-col bg-white rounded-3xl overflow-hidden shadow-xl shadow-gray-200/50 border border-gray-100 snap-center relative scroll-ml-6"
                             >
                                 {/* Visual Placeholder Area - fixed aspect ratio to guarantee consistent heights */}
                                 <div className="relative w-full aspect-[4/3] bg-gray-50 overflow-hidden shrink-0 flex items-center justify-center border-b border-gray-100">

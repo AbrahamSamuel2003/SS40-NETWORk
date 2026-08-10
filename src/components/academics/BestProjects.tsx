@@ -60,7 +60,7 @@ const PROJECTS = [
         title: "Nexus Analytics Platform",
         category: "Data Visualization",
         badge: "Industry Project",
-        description: "A comprehensive analytics dashboard designed to process and visualize real-time business metrics, helping local enterprises identify growth bottlenecks instantly.",
+        description: "An analytics dashboard designed to process and visualize real-time business metrics, helping enterprises identify growth bottlenecks.",
         image: null, // e.g: "/images/student-projects/nexus-screenshot.png"
         tags: [
             { icon: Building2, label: "Real-World Solution", colorClass: "bg-gray-50 text-gray-600 border-gray-200" },
@@ -72,7 +72,7 @@ const PROJECTS = [
         id: "medtrack",
         title: "MedTrack Systems",
         category: "Healthcare Mgmt",
-        description: "A smart patient appointment and record management system designed for independent medical clinics.",
+        description: "A smart appointment and record management portal providing secure, compliant digital workflows for independent medical clinics.",
         image: null,
         tags: [
             { icon: HeartPulse, label: "Healthcare", colorClass: "bg-blue-50 text-blue-700 border-blue-100" },
@@ -83,7 +83,7 @@ const PROJECTS = [
         id: "ecoscale",
         title: "EcoScale Routing",
         category: "Logistics Tech",
-        description: "An automated routing algorithm that reduces delivery fleet carbon emissions while improving daily delivery rates.",
+        description: "An automated routing algorithm that reduces fleet carbon emissions while vastly improving daily delivery efficiency and rates.",
         image: null,
         tags: [
             { icon: Sprout, label: "Sustainability", colorClass: "bg-green-50 text-green-700 border-green-100" },
@@ -106,6 +106,41 @@ const PROJECTS = [
 export function BestProjects() {
     const featuredProject = PROJECTS[0];
     const secondaryProjects = PROJECTS.slice(1);
+
+    const [activeMobileIdx, setActiveMobileIdx] = React.useState(0);
+    const mobileScrollRef = React.useRef<HTMLDivElement>(null);
+
+    const scrollToMobileProject = (idx: number) => {
+        if (!mobileScrollRef.current) return;
+        const mobileCards = mobileScrollRef.current.querySelectorAll<HTMLElement>(".project-mobile-card");
+        const card = mobileCards[idx];
+        if (!card) return;
+
+        card.scrollIntoView({
+            behavior: "smooth",
+            inline: "center",
+            block: "nearest"
+        });
+    };
+
+    React.useEffect(() => {
+        const mobileObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    setActiveMobileIdx(Number(entry.target.getAttribute("data-mobile-id")));
+                }
+            });
+        }, { root: mobileScrollRef.current, threshold: 0.6 });
+
+        if (mobileScrollRef.current) {
+            const mobileCards = mobileScrollRef.current.querySelectorAll<HTMLElement>(".project-mobile-card");
+            mobileCards.forEach(c => mobileObserver.observe(c));
+        }
+
+        return () => {
+            mobileObserver.disconnect();
+        };
+    }, []);
 
     return (
         <SectionWrapper id="best-projects" className="bg-white relative overflow-hidden">
@@ -152,7 +187,7 @@ export function BestProjects() {
                     initial="hidden"
                     whileInView="show"
                     viewport={{ once: true, margin: "-100px" }}
-                    className="flex flex-col gap-8 lg:gap-10"
+                    className="hidden md:flex flex-col gap-8 lg:gap-10"
                 >
                     {/* TOP: Featured Project (Dominant) */}
                     <motion.div variants={itemVariants} className="w-full bg-white rounded-[2rem] shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden flex flex-col lg:flex-row group">
@@ -257,6 +292,83 @@ export function BestProjects() {
 
 
                 </motion.div>
+
+                {/* Mobile Native Horizontal Swipe Deck */}
+                <div className="flex flex-col md:hidden relative overflow-visible -mx-6 mt-2">
+                    <div
+                        ref={mobileScrollRef}
+                        className="flex w-full overflow-x-auto snap-x snap-mandatory pb-4 gap-5 items-stretch [&::-webkit-scrollbar]:hidden px-6"
+                        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                    >
+                        {PROJECTS.map((project, idx) => (
+                            <div
+                                key={`mobile-proj-${project.id}`}
+                                data-mobile-id={idx}
+                                className="project-mobile-card w-[82vw] sm:w-[350px] flex-shrink-0 flex flex-col bg-white rounded-3xl overflow-hidden shadow-xl shadow-gray-200/50 border border-[var(--color-border)] snap-center relative scroll-ml-6 group"
+                            >
+                                {/* Image / Placeholder */}
+                                <div className="w-full aspect-video relative overflow-hidden bg-gray-50 border-b border-gray-100 shrink-0">
+                                    {project.image ? (
+                                        <Image
+                                            src={project.image}
+                                            alt={project.title}
+                                            fill
+                                            className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                                        />
+                                    ) : (
+                                        <ProjectPreviewPlaceholder />
+                                    )}
+                                </div>
+
+                                <div className="p-6 flex flex-col flex-1 relative z-10 text-left">
+                                    <div className="flex items-start justify-between mb-4">
+                                        <div className="flex-1 pr-2">
+                                            <h4 className="font-bold text-xl text-gray-900 leading-tight tracking-tight mb-1">{project.title}</h4>
+                                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{project.category}</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex-1 min-h-0 relative mb-5">
+                                        <p className="text-[var(--color-body-text)] text-sm leading-relaxed overflow-hidden line-clamp-4">
+                                            {project.description}
+                                        </p>
+                                    </div>
+
+                                    <div className="flex flex-wrap gap-2 mb-6">
+                                        {project.tags.map((tag, i) => {
+                                            const TagIcon = tag.icon;
+                                            return (
+                                                <span key={i} className={`text-[10px] font-bold px-2.5 py-1 rounded-md flex items-center gap-1.5 border border-transparent ${tag.colorClass}`}>
+                                                    <TagIcon className="w-3 h-3" /> <span className="truncate">{tag.label}</span>
+                                                </span>
+                                            );
+                                        })}
+                                    </div>
+
+                                    <div className="mt-auto border-t border-gray-100 pt-4 flex items-center text-[#6B9F91] font-bold text-sm group-hover:text-[#5C8C80]">
+                                        View Details <ArrowRight className="w-4 h-4 ml-auto group-hover:translate-x-1 transition-transform" />
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                        {/* End spacer so the last card doesn't hit the right screen edge */}
+                        <div className="w-[4vw] shrink-0" />
+                    </div>
+
+                    {/* Pagination Dots representation */}
+                    <div className="w-full flex justify-center items-center gap-3 mt-4 mb-2 z-10 relative">
+                        {PROJECTS.map((_, i) => (
+                            <button
+                                key={`dot-${i}`}
+                                onClick={() => scrollToMobileProject(i)}
+                                aria-label={`Scroll to project ${i + 1}`}
+                                className={`h-2.5 rounded-full transition-all duration-400 ease-out ${activeMobileIdx === i ? 'bg-[#6B9F91] w-8 shadow-sm scale-100' : 'bg-gray-300 w-2.5 hover:bg-gray-400 scale-90'} border-none cursor-pointer focus:outline-none`}
+                            />
+                        ))}
+                    </div>
+                </div>
+
+
             </Container>
         </SectionWrapper>
     );

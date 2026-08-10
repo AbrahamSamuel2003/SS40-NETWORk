@@ -12,7 +12,7 @@ const TABS = [
         label: "Placement Training",
         nodeRef: "Placement Training",
         icon: User,
-        title: "Placement Preparation",
+        title: "Placement Training",
         description: "Intensive training covering mock interviews, aptitude tests, resume building, and interview coaching to ensure placement readiness.",
         tags: ["Mock Interviews", "Aptitude", "Resume"]
     },
@@ -210,7 +210,7 @@ export function Placements() {
                         </div>
 
                         {/* Content Area */}
-                        <div className="w-full relative px-4 lg:px-0">
+                        <div className="w-full relative px-4 lg:px-0 min-h-[400px] sm:min-h-[340px] md:min-h-[280px] lg:min-h-[220px]">
                             <AnimatePresence mode="wait">
                                 {TABS.map((tab, idx) => {
                                     if (idx !== activeTab) return null;
@@ -229,7 +229,7 @@ export function Placements() {
                                                 <Icon className="w-8 h-8 text-[#6B9F91]" />
                                             </div>
                                             <div className="flex flex-col flex-1 w-full text-center md:text-left">
-                                                <h3 className="text-2xl font-extrabold text-[#111827] mb-3">{tab.title}</h3>
+                                                <h3 className="text-2xl font-extrabold text-[#111827] mb-3 leading-tight">{tab.title}</h3>
                                                 <p className="text-gray-500 text-sm xl:text-base leading-relaxed mb-6">
                                                     {tab.description}
                                                 </p>
