@@ -228,14 +228,14 @@ function FeaturedVideoArea() {
                     style={{ backgroundColor: "rgba(255, 255, 255, 0.42)" }}
                 />
 
-                <div className="relative z-10 flex flex-col w-full py-3 px-4 md:py-5 md:px-8 text-left">
-                    {/* Stars */}
-                    <div className="flex gap-1 text-[#FFC900] mb-1.5 md:mb-2">
+                <div className="relative z-10 flex flex-col w-full py-2 px-3 md:py-5 md:px-8 text-left">
+                    {/* Stars - hidden on mobile for compact overlay */}
+                    <div className="hidden md:flex gap-1 text-[#FFC900] mb-2">
                         {[1, 2, 3, 4, 5].map((i) => (
-                            <Star key={i} className="w-3 h-3 md:w-4 md:h-4 fill-current" />
+                            <Star key={i} className="w-4 h-4 fill-current" />
                         ))}
                     </div>
-                    <p className="font-medium text-[#111827] italic leading-tight text-[11px] md:text-sm line-clamp-2">
+                    <p className="font-medium text-[#111827] italic leading-tight text-[11px] md:text-sm line-clamp-1 md:line-clamp-2">
                         "{FEATURED_STORY.quote}"
                     </p>
                 </div>

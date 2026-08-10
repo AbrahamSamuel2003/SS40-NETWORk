@@ -110,7 +110,7 @@ export function Hero() {
                         >
                             <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#6B9F91]/10 to-transparent group-hover:rotate-180 transition-transform duration-1000" />
                             <Box className="w-10 h-10 text-[#6B9F91] mb-2" />
-                            <span className="text-xs font-bold text-gray-800 tracking-widest uppercase">SS40 Core</span>
+                            <span className="text-xs font-bold text-gray-800 tracking-widest uppercase">SS40 Product</span>
                         </motion.div>
 
                         {/* Node 1: Intelligence (Top Left) */}

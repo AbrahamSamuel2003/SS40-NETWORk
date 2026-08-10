@@ -72,7 +72,7 @@ export function Collaborations() {
 
                 {/* SECTION HEADER */}
                 <span className="inline-block px-3 py-1 rounded-full bg-[#6B9F91]/10 text-[#6B9F91] text-[10px] font-bold uppercase tracking-widest mb-4">
-                    UNIVERSITIES & COLLEGE COLLABORATIONS
+                    UNIVERSITIES &amp; COLLEGE COLLABORATIONS
                 </span>
                 <h2 className="text-3xl md:text-5xl font-extrabold text-[#111827] mb-4 text-center max-w-3xl leading-tight">
                     Building Strong Academic <span className="text-[#6B9F91]">Partnerships.</span>
@@ -82,89 +82,93 @@ export function Collaborations() {
                 </p>
 
                 {/* 1. PARTNERSHIP NETWORK */}
-                <div className="w-full max-w-3xl mx-auto h-[380px] md:h-[400px] relative flex items-center justify-center mb-8 isolate">
+                <div className="w-full max-w-[340px] sm:max-w-[420px] md:max-w-3xl mx-auto relative flex items-center justify-center mb-8 isolate">
+                    {/* Square inner wrapper: nodes positioned via % so the diagram scales with container width */}
+                    <div className="relative w-full aspect-square flex items-center justify-center">
 
-                    {/* SVG Connecting Lines */}
-                    <svg className="absolute inset-0 w-full h-full -z-10" viewBox="-200 -200 400 400">
-                        {NETWORK_NODES.map((node) => {
-                            const isHovered = hoveredNode === node.id;
-                            const isFaded = hoveredNode && !isHovered;
-
-                            return (
-                                <g key={`line-${node.id}`}>
-                                    <line
-                                        x1="0" y1="0" x2={node.x} y2={node.y}
-                                        stroke="#6B9F91"
-                                        strokeWidth="1.5"
-                                        strokeDasharray="4 4"
-                                        className={`transition-opacity duration-300 ${isFaded ? 'opacity-10' : 'opacity-30'}`}
-                                    />
-                                    {isHovered && (
-                                        <motion.line
+                        {/* SVG Connecting Lines */}
+                        <svg className="absolute inset-0 w-full h-full -z-10" viewBox="-200 -200 400 400" preserveAspectRatio="xMidYMid meet">
+                            {NETWORK_NODES.map((node) => {
+                                const isHovered = hoveredNode === node.id;
+                                const isFaded = hoveredNode && !isHovered;
+                                return (
+                                    <g key={`line-${node.id}`}>
+                                        <line
                                             x1="0" y1="0" x2={node.x} y2={node.y}
                                             stroke="#6B9F91"
-                                            strokeWidth="2.5"
-                                            initial={{ pathLength: 0 }}
-                                            animate={{ pathLength: 1 }}
-                                            transition={{ duration: 0.4, ease: "easeOut" }}
-                                            className="opacity-80"
+                                            strokeWidth="1.5"
+                                            strokeDasharray="4 4"
+                                            className={`transition-opacity duration-300 ${isFaded ? 'opacity-10' : 'opacity-30'}`}
                                         />
-                                    )}
-                                </g>
+                                        {isHovered && (
+                                            <motion.line
+                                                x1="0" y1="0" x2={node.x} y2={node.y}
+                                                stroke="#6B9F91"
+                                                strokeWidth="2.5"
+                                                initial={{ pathLength: 0 }}
+                                                animate={{ pathLength: 1 }}
+                                                transition={{ duration: 0.4, ease: "easeOut" }}
+                                                className="opacity-80"
+                                            />
+                                        )}
+                                    </g>
+                                )
+                            })}
+                        </svg>
+
+                        {/* Central Node */}
+                        <div className="relative z-20 flex flex-col items-center justify-center w-28 h-28 md:w-36 md:h-36 lg:w-44 lg:h-44 bg-white rounded-full shadow-[0_15px_50px_rgba(107,159,145,0.15)] border-4 border-[#EDF5F2]">
+                            <div className="absolute inset-0 bg-[#6B9F91]/5 rounded-full animate-pulse -z-10" />
+                            <Network className="w-8 h-8 text-[#6B9F91] mb-2" />
+                            <span className="font-extrabold text-[#111827] text-xs md:text-sm tracking-wider text-center">SS40<br />ACADEMICS</span>
+                        </div>
+
+                        {/* Outer Nodes: positioned via % derived from SVG viewBox (400 units wide) */}
+                        {NETWORK_NODES.map((node) => {
+                            const Icon = node.icon;
+                            const isHovered = hoveredNode === node.id;
+                            const isFaded = hoveredNode && !isHovered;
+                            return (
+                                <div
+                                    key={node.id}
+                                    className="absolute z-30"
+                                    style={{
+                                        left: `${50 + (node.x / 400) * 100}%`,
+                                        top: `${50 + (node.y / 400) * 100}%`,
+                                    }}
+                                    onMouseEnter={() => setHoveredNode(node.id)}
+                                    onMouseLeave={() => setHoveredNode(null)}
+                                >
+                                    <motion.div
+                                        className={`absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-full bg-white shadow-xl cursor-default transition-all duration-300 border-2
+                                            ${isHovered ? 'border-[#6B9F91] shadow-[#6B9F91]/20 scale-110 z-40' : 'border-gray-50 scale-100 z-30'}
+                                            ${isFaded ? 'opacity-40 grayscale blur-[1px]' : 'opacity-100'}
+                                        `}
+                                    >
+                                        <Icon className={`w-5 h-5 mb-1.5 transition-colors ${isHovered ? 'text-[#6B9F91]' : 'text-gray-400'}`} />
+                                        <span className={`text-[9px] md:text-[10px] font-bold text-center leading-tight px-2 ${isHovered ? 'text-[#111827]' : 'text-gray-500'}`}>
+                                            {node.label}
+                                        </span>
+
+                                        {/* Tooltip */}
+                                        <AnimatePresence>
+                                            {isHovered && (
+                                                <motion.div
+                                                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                    exit={{ opacity: 0, y: 5, scale: 0.95 }}
+                                                    className="absolute -bottom-10 whitespace-nowrap bg-[#111827] text-white text-[10px] font-medium px-3 py-1.5 rounded-lg shadow-lg pointer-events-none"
+                                                >
+                                                    {node.tooltip}
+                                                    <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-[#111827] transform rotate-45" />
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+                                    </motion.div>
+                                </div>
                             )
                         })}
-                    </svg>
-
-                    {/* Central Node */}
-                    <div className="relative z-20 flex flex-col items-center justify-center w-36 h-36 md:w-44 md:h-44 bg-white rounded-full shadow-[0_15px_50px_rgba(107,159,145,0.15)] border-4 border-[#EDF5F2]">
-                        <div className="absolute inset-0 bg-[#6B9F91]/5 rounded-full animate-pulse -z-10" />
-                        <Network className="w-8 h-8 text-[#6B9F91] mb-2" />
-                        <span className="font-extrabold text-[#111827] text-xs md:text-sm tracking-wider text-center">SS40<br />ACADEMICS</span>
                     </div>
-
-                    {/* Outer Nodes */}
-                    {NETWORK_NODES.map((node) => {
-                        const Icon = node.icon;
-                        const isHovered = hoveredNode === node.id;
-                        const isFaded = hoveredNode && !isHovered;
-
-                        return (
-                            <div
-                                key={node.id}
-                                className="absolute z-30"
-                                style={{ transform: `translate(${node.x}px, ${node.y}px)` }}
-                                onMouseEnter={() => setHoveredNode(node.id)}
-                                onMouseLeave={() => setHoveredNode(null)}
-                            >
-                                <motion.div
-                                    className={`relative flex flex-col items-center justify-center w-24 h-24 md:w-28 md:h-28 rounded-full bg-white shadow-xl cursor-default transition-all duration-300 border-2
-                                        ${isHovered ? 'border-[#6B9F91] shadow-[#6B9F91]/20 scale-110 z-40' : 'border-gray-50 scale-100 z-30'}
-                                        ${isFaded ? 'opacity-40 grayscale blur-[1px]' : 'opacity-100'}
-                                    `}
-                                >
-                                    <Icon className={`w-5 h-5 mb-1.5 transition-colors ${isHovered ? 'text-[#6B9F91]' : 'text-gray-400'}`} />
-                                    <span className={`text-[9px] md:text-[10px] font-bold text-center leading-tight px-2 ${isHovered ? 'text-[#111827]' : 'text-gray-500'}`}>
-                                        {node.label}
-                                    </span>
-
-                                    {/* Tooltip */}
-                                    <AnimatePresence>
-                                        {isHovered && (
-                                            <motion.div
-                                                initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                                                animate={{ opacity: 1, y: 0, scale: 1 }}
-                                                exit={{ opacity: 0, y: 5, scale: 0.95 }}
-                                                className="absolute -bottom-10 whitespace-nowrap bg-[#111827] text-white text-[10px] font-medium px-3 py-1.5 rounded-lg shadow-lg pointer-events-none"
-                                            >
-                                                {node.tooltip}
-                                                <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-[#111827] transform rotate-45" />
-                                            </motion.div>
-                                        )}
-                                    </AnimatePresence>
-                                </motion.div>
-                            </div>
-                        )
-                    })}
                 </div>
 
                 {/* 2. INSTITUTION SHOWCASE (MARQUEE) */}

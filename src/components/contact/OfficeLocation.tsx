@@ -55,7 +55,7 @@ export function OfficeLocation() {
                             <Clock className="w-5 h-5 text-[#6B9F91] shrink-0" />
                             <div className="flex flex-col min-w-0">
                                 <span className="text-gray-500 text-[10px] uppercase tracking-widest whitespace-nowrap">Office Hours</span>
-                                <span className="mt-1 md:mt-0 whitespace-nowrap">Monday – Friday: 9:30 AM – 6:30 PM</span>
+                                <span className="mt-1 md:mt-0 md:whitespace-nowrap break-words min-w-0">Monday – Friday: 9:30 AM – 6:30 PM</span>
                             </div>
                         </div>
 

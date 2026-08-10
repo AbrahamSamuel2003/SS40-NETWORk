@@ -55,9 +55,9 @@ const TABS = [
 ];
 
 const HUB_NODES = [
-    { id: "Placement Training", label: "Placement Training", x: -120, y: 0 },
+    { id: "Placement Training", label: "Placement Training", x: 72, y: -108 },
     { id: "Practical Learning", label: "Practical Learning", x: -72, y: -108 },
-    { id: "Live Projects", label: "Live Projects", x: 72, y: -108 },
+    { id: "Live Projects", label: "Live Projects", x: -120, y: 0 },
     { id: "Mentorship", label: "Mentorship", x: 120, y: 0 },
     { id: "Career Opportunities", label: "Career Opportunities", x: 0, y: 120 },
 ];
@@ -97,75 +97,90 @@ export function Placements() {
                 <div className="flex flex-col lg:grid lg:grid-cols-[1fr_1.1fr] gap-12 lg:gap-16 w-full max-w-6xl mx-auto relative items-center">
 
                     {/* Left Column: The Interactive Career Growth Hub */}
-                    <div className="relative w-full max-w-[450px] md:max-w-[540px] aspect-[4/3] mx-auto flex items-center justify-center isolate z-30 lg:order-1">
+                    <div className="relative w-full max-w-[340px] sm:max-w-[420px] md:max-w-[540px] aspect-[1/1.05] md:aspect-[4/3] mx-auto flex items-center justify-center isolate z-30 lg:order-1 pt-6 pb-6 md:p-0">
+                        {/* Perfect Square Inner Wrapper for flawless scaling alignment on all devices without breaking SVG DOM coordinates */}
+                        <div className="relative w-full max-w-full md:max-w-[400px] aspect-square flex items-center justify-center mx-auto">
 
-                        {/* SVG Connection Lines */}
-                        <svg className="absolute inset-0 w-full h-full -z-10" viewBox="-180 -180 360 360">
-                            {HUB_NODES.map((node) => {
-                                const isActive = node.id === activeNodeRef;
-                                return (
-                                    <g key={node.id}>
-                                        {/* Background dashed line */}
-                                        <line
-                                            x1="0" y1="0" x2={node.x} y2={node.y}
-                                            stroke="#6B9F91"
-                                            strokeWidth="1.5"
-                                            strokeOpacity="0.15"
-                                            strokeDasharray="4 4"
-                                        />
-                                        {/* Animated active line */}
-                                        {isActive && (
-                                            <motion.line
+                            {/* SVG Connection Lines */}
+                            <svg className="absolute inset-0 w-full h-full -z-10" viewBox="-180 -180 360 360" preserveAspectRatio="xMidYMid meet">
+                                {HUB_NODES.map((node) => {
+                                    const isActive = node.id === activeNodeRef;
+                                    return (
+                                        <g key={node.id}>
+                                            {/* Background dashed line */}
+                                            <line
                                                 x1="0" y1="0" x2={node.x} y2={node.y}
                                                 stroke="#6B9F91"
-                                                strokeWidth="2.5"
-                                                initial={{ pathLength: 0, opacity: 0 }}
-                                                animate={{ pathLength: 1, opacity: 0.8 }}
-                                                transition={{ duration: 0.6, ease: "easeOut" }}
+                                                strokeWidth="1.5"
+                                                strokeOpacity="0.15"
+                                                strokeDasharray="4 4"
                                             />
-                                        )}
-                                    </g>
+                                            {/* Animated active line */}
+                                            {isActive && (
+                                                <motion.line
+                                                    x1="0" y1="0" x2={node.x} y2={node.y}
+                                                    stroke="#6B9F91"
+                                                    strokeWidth="2.5"
+                                                    initial={{ pathLength: 0, opacity: 0 }}
+                                                    animate={{ pathLength: 1, opacity: 0.8 }}
+                                                    transition={{ duration: 0.6, ease: "easeOut" }}
+                                                />
+                                            )}
+                                        </g>
+                                    )
+                                })}
+                            </svg>
+
+                            {/* Center Node */}
+                            <motion.div
+                                className="w-32 h-32 md:w-36 md:h-36 bg-white rounded-full shadow-[0_10px_40px_rgba(107,159,145,0.15)] border-4 border-[#EDF5F2] flex flex-col items-center justify-center relative z-20"
+                            >
+                                <div className="absolute inset-0 bg-[#6B9F91]/5 rounded-full animate-pulse z-0 hidden md:block" />
+                                <TrendingUp className="w-8 h-8 text-[#6B9F91] mb-2 relative z-10" />
+                                <span className="text-xs md:text-sm font-extrabold text-[#111827] uppercase tracking-wider text-center leading-tight relative z-10">Career<br />Growth</span>
+                            </motion.div>
+
+                            {/* Orbiting Nodes: positioned via % from center, centered via -translate-1/2, float animation via a wrapping motion.div */}
+                            {HUB_NODES.map((node) => {
+                                const isActive = node.id === activeNodeRef;
+                                const tabIndex = TABS.findIndex(t => t.nodeRef === node.id);
+
+                                return (
+                                    // Outer: % position from the square center (SVG viewBox is 360 units wide)
+                                    <div
+                                        key={node.id}
+                                        className="absolute"
+                                        style={{
+                                            left: `${50 + (node.x / 360) * 100}%`,
+                                            top: `${50 + (node.y / 360) * 100}%`,
+                                        }}
+                                    >
+                                        {/* Float wrapper: only animates a small y-pixel bob, does not affect centering */}
+                                        <motion.div
+                                            className="absolute -translate-x-1/2 -translate-y-1/2"
+                                            animate={{ y: isActive ? [-4, 4, -4] : 0 }}
+                                            transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+                                        >
+                                            <button
+                                                onMouseEnter={() => tabIndex !== -1 && handleInteract(tabIndex, 'hover')}
+                                                onClick={() => tabIndex !== -1 && handleInteract(tabIndex, 'click')}
+                                                disabled={tabIndex === -1}
+                                                className={`px-3 py-1.5 md:px-4 md:py-2 rounded-full transition-all duration-300 ease-out flex items-center justify-center flex-col gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] cursor-pointer whitespace-nowrap
+                                                    ${isActive
+                                                        ? 'bg-[#6B9F91] border border-[#5C8C80] shadow-[0_4px_15px_rgba(107,159,145,0.4)] scale-[1.05] z-30'
+                                                        : 'bg-white border border-gray-100 opacity-70 shadow-md hover:opacity-100 hover:scale-[1.03] hover:shadow-lg lg:hover:bg-[#EDF5F2]/50'
+                                                    }
+                                                `}
+                                            >
+                                                <span className={`text-[9px] md:text-[10px] font-bold tracking-wide text-center transition-colors duration-300 ${isActive ? 'text-white' : 'text-gray-600'}`}>
+                                                    {node.label}
+                                                </span>
+                                            </button>
+                                        </motion.div>
+                                    </div>
                                 )
                             })}
-                        </svg>
-
-                        {/* Center Node */}
-                        <motion.div
-                            className="w-32 h-32 md:w-40 md:h-40 bg-white rounded-full shadow-[0_10px_40px_rgba(107,159,145,0.15)] border-4 border-[#EDF5F2] flex flex-col items-center justify-center relative z-20"
-                        >
-                            <div className="absolute inset-0 bg-[#6B9F91]/5 rounded-full animate-pulse z-0 hidden md:block" />
-                            <TrendingUp className="w-8 h-8 text-[#6B9F91] mb-2 relative z-10" />
-                            <span className="text-xs md:text-sm font-extrabold text-[#111827] uppercase tracking-wider text-center leading-tight relative z-10">Career<br />Growth</span>
-                        </motion.div>
-
-                        {/* Orbiting Nodes */}
-                        {HUB_NODES.map((node) => {
-                            const isActive = node.id === activeNodeRef;
-                            const tabIndex = TABS.findIndex(t => t.nodeRef === node.id);
-
-                            return (
-                                <motion.button
-                                    key={node.id}
-                                    onMouseEnter={() => tabIndex !== -1 && handleInteract(tabIndex, 'hover')}
-                                    onClick={() => tabIndex !== -1 && handleInteract(tabIndex, 'click')}
-                                    disabled={tabIndex === -1}
-                                    className={`absolute px-4 py-2 rounded-full transition-all duration-300 ease-out flex items-center justify-center flex-col gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] cursor-pointer
-                                        ${isActive ? 'bg-[#6B9F91] border border-[#5C8C80] z-30 shadow-[0_4px_15px_rgba(107,159,145,0.4)] scale-[1.05]' : 'bg-white border border-gray-100 z-10 opacity-70 shadow-md hover:opacity-100 hover:scale-[1.03] hover:shadow-lg lg:hover:bg-[#EDF5F2]/50'}
-                                    `}
-                                    style={{ x: node.x, y: node.y }}
-                                    animate={{
-                                        y: isActive ? [node.y - 4, node.y + 4, node.y - 4] : node.y
-                                    }}
-                                    transition={{
-                                        y: { repeat: Infinity, duration: 4, ease: "easeInOut" }
-                                    }}
-                                >
-                                    <span className={`text-[9px] md:text-[10px] font-bold tracking-wide text-center whitespace-nowrap transition-colors duration-300 ${isActive ? 'text-white' : 'text-gray-600'}`}>
-                                        {node.label}
-                                    </span>
-                                </motion.button>
-                            )
-                        })}
+                        </div>
                     </div>
 
                     {/* Right Column: Unified Content Container */}

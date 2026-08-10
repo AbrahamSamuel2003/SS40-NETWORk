@@ -53,6 +53,39 @@ const ADDITIONAL_PROJECTS = [
 ];
 
 export function ClientProjects() {
+    const [activeMobileIdx, setActiveMobileIdx] = React.useState(0);
+    const mobileScrollRef = React.useRef<HTMLDivElement>(null);
+
+    const scrollToMobileProject = (idx: number) => {
+        if (!mobileScrollRef.current) return;
+        const container = mobileScrollRef.current;
+        const firstCard = container.querySelector('.client-project-mobile-card') as HTMLElement;
+        const cardWidth = firstCard ? firstCard.offsetWidth + 20 : container.clientWidth * 0.85 + 20; // 20px is gap-5
+        container.scrollTo({
+            left: idx * cardWidth,
+            behavior: "smooth"
+        });
+    };
+
+    React.useEffect(() => {
+        const mobileObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    setActiveMobileIdx(Number(entry.target.getAttribute("data-mobile-id")));
+                }
+            });
+        }, { root: mobileScrollRef.current, threshold: 0.6 });
+
+        if (mobileScrollRef.current) {
+            const mobileCards = mobileScrollRef.current.querySelectorAll(".client-project-mobile-card");
+            mobileCards.forEach(c => mobileObserver.observe(c));
+        }
+
+        return () => {
+            mobileObserver.disconnect();
+        };
+    }, []);
+
     return (
         <SectionWrapper id="featured-projects" className="bg-[#EDF5F2]">
             <Container className="space-y-12 lg:space-y-16">
@@ -64,7 +97,7 @@ export function ClientProjects() {
                     description="Explore a selection of digital solutions developed to solve real business challenges across different industries."
                 />
 
-                <div className="flex flex-col gap-8 lg:gap-12">
+                <div className="hidden lg:flex flex-col gap-8 lg:gap-12">
 
                     {/* Featured Project */}
                     <motion.div
@@ -213,6 +246,99 @@ export function ClientProjects() {
                             </CardMotion>
                         ))}
                     </motion.div>
+                </div>
+
+                {/* Mobile Native Horizontal Swipe Deck */}
+                <div className="flex flex-col lg:hidden w-full relative -mx-6">
+                    <div
+                        ref={mobileScrollRef}
+                        className="flex w-full overflow-x-auto snap-x snap-mandatory pb-8 gap-5 items-stretch [&::-webkit-scrollbar]:hidden px-6"
+                        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                    >
+                        {[FEATURED_PROJECT, ...ADDITIONAL_PROJECTS].map((project, idx) => (
+                            <div
+                                key={`mobile-proj-${project.id}`}
+                                data-mobile-id={idx}
+                                className="client-project-mobile-card w-[85vw] sm:w-[350px] flex-shrink-0 flex flex-col bg-white rounded-2xl overflow-hidden shadow-lg shadow-gray-200/50 border border-gray-100 snap-center relative scroll-ml-6"
+                            >
+                                {/* Visual Placeholder Area - fixed aspect ratio to guarantee consistent heights */}
+                                <div className="relative w-full aspect-[4/3] bg-gray-50 overflow-hidden shrink-0 flex items-center justify-center border-b border-gray-100">
+                                    {project.id === "featured-1" ? (
+                                        <div className="absolute inset-0 bg-[#6B9F91]/5 flex flex-col p-4 lg:p-10 gap-3 group-hover:scale-105 transition-transform duration-700 ease-out">
+                                            <div className="w-full flex justify-between items-center bg-white/80 backdrop-blur-md p-3 rounded-lg border border-gray-200 shadow-sm">
+                                                <div className="flex items-center gap-2">
+                                                    <div className="w-6 h-6 rounded-full bg-[#6B9F91]/20" />
+                                                    <div className="w-20 h-2 bg-gray-200 rounded-full" />
+                                                </div>
+                                            </div>
+                                            <div className="flex gap-3 flex-1 min-h-0">
+                                                <div className="w-1/4 h-full bg-white/80 backdrop-blur-md rounded-lg border border-gray-200 shadow-sm p-2 flex flex-col gap-2">
+                                                    <div className="w-full h-4 bg-gray-100 rounded-md" />
+                                                    <div className="w-2/3 h-4 bg-gray-100 rounded-md" />
+                                                </div>
+                                                <div className="flex-1 h-full bg-white/80 backdrop-blur-md rounded-lg border border-gray-200 shadow-sm p-3 grid grid-cols-2 gap-2">
+                                                    <div className="bg-[#6B9F91]/10 rounded-md" />
+                                                    <div className="bg-gray-100 rounded-md" />
+                                                    <div className="bg-gray-100 rounded-md col-span-2" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ) : project.isConfidential ? (
+                                        <div className="absolute inset-0 bg-gray-100 flex flex-col items-center justify-center text-center p-6 select-none opacity-80 backdrop-blur-md">
+                                            <div className="w-12 h-12 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-400 mb-3">
+                                                <Lock className="w-6 h-6" />
+                                            </div>
+                                            <h4 className="font-bold text-gray-700 text-xs mb-1 uppercase tracking-wider">Confidential</h4>
+                                        </div>
+                                    ) : (
+                                        <div className="w-full h-full flex flex-col p-4 gap-3 bg-[#6B9F91]/5">
+                                            <div className="w-full h-1/2 flex gap-3">
+                                                <div className="w-1/3 bg-white border border-gray-200 rounded-lg shadow-sm" />
+                                                <div className="flex-1 bg-white border border-gray-200 rounded-lg shadow-sm" />
+                                            </div>
+                                            <div className="w-full h-1/2 bg-white border border-gray-200 rounded-lg shadow-sm" />
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Mobile Card Content - uses flex-1 and clamps text */}
+                                <div className="p-6 flex flex-col flex-1 text-left relative z-10">
+                                    <span className="w-max px-3 py-1 bg-gray-100 text-gray-600 text-[10px] font-bold uppercase tracking-wider rounded-md whitespace-nowrap mb-4">
+                                        {project.industry}
+                                    </span>
+
+                                    <h3 className="font-bold text-xl text-[var(--color-heading)] leading-tight mb-2 tracking-tight">
+                                        {project.title}
+                                    </h3>
+
+                                    <div className="flex-1 min-h-0 relative mb-5">
+                                        <p className="text-[var(--color-body-text)] text-sm leading-relaxed overflow-hidden line-clamp-3">
+                                            {project.description}
+                                        </p>
+                                    </div>
+
+                                    <button className="mt-auto flex items-center text-sm font-bold text-[#6B9F91] hover:text-[#588478] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] rounded-sm">
+                                        View Details
+                                        <ArrowRight className="w-4 h-4 ml-2" />
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                        {/* End spacer so the last card doesn't hit the right screen edge */}
+                        <div className="w-[4vw] shrink-0" />
+                    </div>
+
+                    {/* Pagination Dots representation */}
+                    <div className="w-full flex justify-center items-center gap-3 mt-2 mb-8 z-10 relative">
+                        {[FEATURED_PROJECT, ...ADDITIONAL_PROJECTS].map((_, i) => (
+                            <button
+                                key={`dot-${i}`}
+                                onClick={() => scrollToMobileProject(i)}
+                                aria-label={`Scroll to project ${i + 1}`}
+                                className={`h-2.5 rounded-full transition-all duration-400 ease-out ${activeMobileIdx === i ? 'bg-[#6B9F91] w-8 shadow-sm scale-100' : 'bg-gray-300 w-2.5 hover:bg-gray-400 scale-90'} border-none cursor-pointer focus:outline-none`}
+                            />
+                        ))}
+                    </div>
                 </div>
 
                 {/* Bottom CTA Card */}

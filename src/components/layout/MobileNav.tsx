@@ -57,7 +57,7 @@ export function MobileNav({ navLinks }: MobileNavProps) {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
-                                className="fixed inset-0 z-[100] bg-black/40 backdrop-blur-sm md:hidden"
+                                className="fixed inset-0 z-[100] bg-black/40 md:hidden"
                                 onClick={() => setIsOpen(false)}
                             />
                             <motion.div
@@ -65,8 +65,8 @@ export function MobileNav({ navLinks }: MobileNavProps) {
                                 initial={{ x: "100%" }}
                                 animate={{ x: 0 }}
                                 exit={{ x: "100%" }}
-                                transition={{ type: "spring", bounce: 0, duration: 0.4 }}
-                                className="fixed top-0 right-0 z-[110] h-full w-full max-w-sm bg-[var(--color-background)] shadow-xl drop-shadow-2xl md:hidden overflow-y-auto"
+                                transition={{ type: "tween", ease: "easeOut", duration: 0.28 }}
+                                className="fixed top-0 right-0 z-[110] h-full w-full max-w-sm bg-[var(--color-background)] shadow-xl md:hidden overflow-y-auto"
                             >
                                 <div className="flex items-center justify-between p-6 border-b border-[var(--color-border)]">
                                     <span className="text-xl font-bold text-[var(--color-heading)]">Menu</span>
