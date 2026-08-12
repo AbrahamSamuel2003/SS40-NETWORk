@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import type { SiteConfigData } from "@/lib/site-config";
 
 const WhatsAppIcon = ({ className }: { className?: string }) => (
     <svg
@@ -15,7 +16,7 @@ const WhatsAppIcon = ({ className }: { className?: string }) => (
     </svg>
 );
 
-export function FloatingWhatsApp() {
+export function FloatingWhatsApp({ config }: { config?: SiteConfigData | null }) {
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
@@ -25,9 +26,12 @@ export function FloatingWhatsApp() {
     // Prevent hydration mismatch on structural render
     if (!mounted) return null;
 
-    const phoneNumber = "918300591750";
-    const message = encodeURIComponent("Hello SS40 NETWORK, I'm interested in learning more about your services.");
+    const phoneNumber = config?.whatsappNumber ? config.whatsappNumber.replace(/\s+/g, '') : "918300591750";
+    const companyName = config?.companyName || "SS40 NETWORK";
+    const message = encodeURIComponent(`Hello ${companyName}, I'm interested in learning more about your services.`);
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+
+    if (!config?.whatsappNumber) return null;
 
     return (
         <motion.div

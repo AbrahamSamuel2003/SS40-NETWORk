@@ -11,50 +11,28 @@ import { CardMotion } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { slideUp, staggerContainer, hoverLift } from "@/lib/animations";
 
-// Mock Data Structure matching user constraints
-const FEATURED_PROJECT = {
-    id: "featured-1",
-    title: "Global Supply Chain Operations Platform",
-    industry: "Logistics",
-    description: "An end-to-end enterprise platform streamlining international freight tracking, warehouse distribution, and automated billing workflows into a single interface.",
-    tags: ["Enterprise Platform", "Business Automation", "Analytics"],
-    status: "Live Production",
-    isConfidential: false,
-};
-
-const ADDITIONAL_PROJECTS = [
-    {
-        id: "proj-1",
-        title: "Secure Payment Gateway Engine",
-        industry: "Finance",
-        description: "A high-frequency transaction processing system engineered for zero-latency financial operations and strict regulatory compliance.",
-        tags: ["Cloud Platform", "Digital Transformation"],
-        status: "Completed",
-        isConfidential: true,
-    },
-    {
-        id: "proj-2",
-        title: "Patient Care Telemetry Portal",
-        industry: "Healthcare",
-        description: "A secure digital interface allowing medical providers to monitor real-time patient analytics and treatment protocols.",
-        tags: ["Customer Portal", "AI Enabled"],
-        status: "Live Production",
-        isConfidential: false,
-    },
-    {
-        id: "proj-3",
-        title: "Automated Inventory Routing",
-        industry: "Retail e-Commerce",
-        description: "An intelligent routing engine that optimizes warehouse allocation based on predictive consumer demand modeling.",
-        tags: ["Workflow Solution", "Business Automation"],
-        status: "Live Production",
-        isConfidential: false,
-    }
-];
+// Mock structural classes deleted: dynamic API is now the source of truth
+import { Loader2 } from "lucide-react";
 
 export function ClientProjects() {
+    const [projects, setProjects] = React.useState<any[]>([]);
+    const [isLoading, setIsLoading] = React.useState(true);
+    const [showAll, setShowAll] = React.useState(false);
+
     const [activeMobileIdx, setActiveMobileIdx] = React.useState(0);
     const mobileScrollRef = React.useRef<HTMLDivElement>(null);
+
+    React.useEffect(() => {
+        fetch('/api/client-projects')
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    setProjects(data.data);
+                }
+                setIsLoading(false);
+            })
+            .catch(() => setIsLoading(false));
+    }, []);
 
     const scrollToMobileProject = (idx: number) => {
         if (!mobileScrollRef.current) return;
@@ -103,154 +81,216 @@ export function ClientProjects() {
                 />
 
                 <div className="hidden lg:flex flex-col gap-8 lg:gap-12">
-
-                    {/* Featured Project */}
-                    <motion.div
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true, margin: "-100px" }}
-                        variants={slideUp}
-                        className="w-full bg-white border border-[var(--color-border)] rounded-[2rem] overflow-hidden shadow-xl shadow-gray-200/50 flex flex-col lg:flex-row group"
-                    >
-                        {/* Featured Visual Placeholder */}
-                        <div className="w-full lg:w-3/5 aspect-video lg:aspect-auto bg-gray-100 relative overflow-hidden flex items-center justify-center shrink-0 min-h-[300px]">
-                            {/* Abstract Dashboard Wireframe representing the placeholder */}
-                            <div className="absolute inset-0 bg-[#6B9F91]/5 flex flex-col p-6 lg:p-10 gap-4 group-hover:scale-105 transition-transform duration-700 ease-out">
-                                <div className="w-full flex justify-between items-center bg-white/80 backdrop-blur-md p-4 rounded-xl border border-gray-200 shadow-sm">
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-8 h-8 rounded-full bg-[#6B9F91]/20" />
-                                        <div className="w-32 h-3 bg-gray-200 rounded-full" />
-                                    </div>
-                                    <div className="flex gap-2">
-                                        <div className="w-8 h-8 rounded-full bg-gray-200" />
-                                        <div className="w-8 h-8 rounded-full bg-gray-200" />
-                                    </div>
-                                </div>
-                                <div className="flex gap-4 flex-1">
-                                    <div className="w-1/4 h-full bg-white/80 backdrop-blur-md rounded-xl border border-gray-200 shadow-sm p-4 flex flex-col gap-3">
-                                        <div className="w-full h-8 bg-gray-100 rounded-md" />
-                                        <div className="w-2/3 h-8 bg-gray-100 rounded-md" />
-                                    </div>
-                                    <div className="flex-1 h-full bg-white/80 backdrop-blur-md rounded-xl border border-gray-200 shadow-sm p-4 grid grid-cols-2 gap-4">
-                                        <div className="bg-[#6B9F91]/10 rounded-lg" />
-                                        <div className="bg-gray-100 rounded-lg" />
-                                        <div className="bg-gray-100 rounded-lg col-span-2" />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="absolute inset-0 bg-gray-900/10 flex items-center justify-center z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                                <div className="bg-white/90 backdrop-blur-sm px-6 py-3 rounded-full text-sm font-bold text-gray-800 shadow-xl flex items-center gap-2">
-                                    <ImageIcon className="w-4 h-4 text-gray-500" />
-                                    Project Visual Preview
-                                </div>
-                            </div>
+                    {isLoading ? (
+                        <div className="py-20 flex justify-center items-center opacity-50">
+                            <Loader2 className="w-8 h-8 animate-spin text-[#6B9F91]" />
                         </div>
-
-                        {/* Featured Content Area */}
-                        <div className="w-full lg:w-2/5 p-8 lg:p-12 flex flex-col justify-center bg-white relative z-10 border-l border-gray-100">
-                            <div className="flex items-center justify-between gap-4 mb-4">
-                                <span className="px-3 py-1 bg-gray-100 text-gray-600 text-[10px] font-bold uppercase tracking-wider rounded-md whitespace-nowrap">
-                                    {FEATURED_PROJECT.industry}
-                                </span>
-                                <div className="flex items-center gap-1.5 text-[10px] font-bold text-[#6B9F91] uppercase tracking-wider">
-                                    <CheckCircle2 className="w-3.5 h-3.5" />
-                                    {FEATURED_PROJECT.status}
-                                </div>
-                            </div>
-
-                            <h3 className="text-2xl md:text-3xl font-bold text-[var(--color-heading)] mb-4 leading-tight">
-                                {FEATURED_PROJECT.title}
-                            </h3>
-
-                            <p className="text-[var(--color-body-text)] mb-8 leading-relaxed">
-                                {FEATURED_PROJECT.description}
-                            </p>
-
-                            <div className="flex flex-wrap gap-2 mb-10">
-                                {FEATURED_PROJECT.tags.map((tag, idx) => (
-                                    <span key={idx} className="px-3 py-1.5 bg-[#6B9F91]/10 text-[#6B9F91] rounded-lg text-xs font-semibold">
-                                        {tag}
-                                    </span>
-                                ))}
-                            </div>
-
-                            <div className="mt-auto pt-4">
-                                <Button size="lg" className="w-full sm:w-auto bg-[#6B9F91] hover:bg-[#588478] text-white shadow-lg shadow-[#6B9F91]/20">
-                                    View Case Study
-                                </Button>
-                            </div>
+                    ) : projects.length === 0 ? (
+                        <div className="py-20 flex justify-center items-center">
+                            <p className="text-gray-500">No client projects available at this time.</p>
                         </div>
-                    </motion.div>
+                    ) : (
+                        <>
+                            {(() => {
+                                const displayedProjects = showAll ? projects : projects.slice(0, 4);
+                                const featuredProject = displayedProjects[0];
+                                const additionalProjects = displayedProjects.slice(1);
 
-                    {/* Additional Projects Grid */}
-                    <motion.div
-                        variants={staggerContainer}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true, margin: "-100px" }}
-                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mt-2"
-                    >
-                        {ADDITIONAL_PROJECTS.map((project, idx) => (
-                            <CardMotion
-                                key={project.id}
-                                variants={slideUp}
-                                {...hoverLift}
-                                className={`bg-white overflow-hidden rounded-2xl flex-col group border border-[var(--color-border)] hover:border-[#6B9F91]/30 transition-all duration-300 ${idx === 2 ? 'hidden md:flex' : 'flex'}`}
-                            >
-                                {/* Grid Visual Placeholder */}
-                                <div className="relative w-full aspect-[4/3] bg-gray-50 overflow-hidden shrink-0 flex items-center justify-center border-b border-gray-100">
-                                    {project.isConfidential ? (
-                                        <div className="absolute inset-0 bg-gray-100 flex flex-col items-center justify-center text-center p-6 select-none opacity-80 backdrop-blur-md">
-                                            <div className="w-16 h-16 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-400 mb-4">
-                                                <Lock className="w-8 h-8" />
+                                return (
+                                    <>
+                                        {/* Featured Project */}
+                                        <motion.div
+                                            initial="hidden"
+                                            whileInView="visible"
+                                            viewport={{ once: true, margin: "-100px" }}
+                                            variants={slideUp}
+                                            className="w-full bg-white border border-[var(--color-border)] rounded-[2rem] overflow-hidden shadow-xl shadow-gray-200/50 flex flex-col lg:flex-row group"
+                                        >
+                                            {/* Featured Visual */}
+                                            <div className="w-full lg:w-3/5 aspect-video lg:aspect-auto bg-gray-100 relative overflow-hidden flex items-center justify-center shrink-0 min-h-[300px]">
+                                                {featuredProject.isConfidential ? (
+                                                    <div className="absolute inset-0 bg-gray-100 flex flex-col items-center justify-center text-center p-6 select-none opacity-80 backdrop-blur-md">
+                                                        <div className="w-16 h-16 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-400 mb-4">
+                                                            <Lock className="w-8 h-8" />
+                                                        </div>
+                                                        <h4 className="font-bold text-gray-700 text-sm mb-1 uppercase tracking-wider">Confidential Project</h4>
+                                                        <p className="text-xs text-gray-500">Visuals protected under corporate NDA.</p>
+                                                    </div>
+                                                ) : featuredProject.imageUrl ? (
+                                                    <img src={featuredProject.imageUrl} alt={featuredProject.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
+                                                ) : (
+                                                    <div className="absolute inset-0 bg-[#6B9F91]/5 flex flex-col p-6 lg:p-10 gap-4 group-hover:scale-105 transition-transform duration-700 ease-out">
+                                                        <div className="w-full flex justify-between items-center bg-white/80 backdrop-blur-md p-4 rounded-xl border border-gray-200 shadow-sm">
+                                                            <div className="flex items-center gap-2">
+                                                                <div className="w-8 h-8 rounded-full bg-[#6B9F91]/20" />
+                                                                <div className="w-32 h-3 bg-gray-200 rounded-full" />
+                                                            </div>
+                                                            <div className="flex gap-2">
+                                                                <div className="w-8 h-8 rounded-full bg-gray-200" />
+                                                                <div className="w-8 h-8 rounded-full bg-gray-200" />
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex gap-4 flex-1">
+                                                            <div className="w-1/4 h-full bg-white/80 backdrop-blur-md rounded-xl border border-gray-200 shadow-sm p-4 flex flex-col gap-3">
+                                                                <div className="w-full h-8 bg-gray-100 rounded-md" />
+                                                                <div className="w-2/3 h-8 bg-gray-100 rounded-md" />
+                                                            </div>
+                                                            <div className="flex-1 h-full bg-white/80 backdrop-blur-md rounded-xl border border-gray-200 shadow-sm p-4 grid grid-cols-2 gap-4">
+                                                                <div className="bg-[#6B9F91]/10 rounded-lg" />
+                                                                <div className="bg-gray-100 rounded-lg" />
+                                                                <div className="bg-gray-100 rounded-lg col-span-2" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )}
+
+                                                <div className="absolute inset-0 bg-gray-900/10 flex items-center justify-center z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                                                    <div className="bg-white/90 backdrop-blur-sm px-6 py-3 rounded-full text-sm font-bold text-gray-800 shadow-xl flex items-center gap-2">
+                                                        <ImageIcon className="w-4 h-4 text-gray-500" />
+                                                        Project Visual Preview
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <h4 className="font-bold text-gray-700 text-sm mb-1 uppercase tracking-wider">Confidential Project</h4>
-                                            <p className="text-xs text-gray-500">Visuals protected under corporate NDA.</p>
-                                        </div>
-                                    ) : (
-                                        <div className="w-full h-full flex flex-col p-4 gap-3 bg-[#6B9F91]/5 group-hover:scale-105 transition-transform duration-500">
-                                            <div className="w-full h-1/2 flex gap-3">
-                                                <div className="w-1/3 bg-white border border-gray-200 rounded-lg shadow-sm" />
-                                                <div className="flex-1 bg-white border border-gray-200 rounded-lg shadow-sm" />
+
+                                            {/* Featured Content Area */}
+                                            <div className="w-full lg:w-2/5 p-8 lg:p-12 flex flex-col justify-center bg-white relative z-10 border-l border-gray-100">
+                                                <div className="flex items-center justify-between gap-4 mb-4">
+                                                    <span className="px-3 py-1 bg-gray-100 text-gray-600 text-[10px] font-bold uppercase tracking-wider rounded-md whitespace-nowrap">
+                                                        {featuredProject.industry}
+                                                    </span>
+                                                    {featuredProject.status && (
+                                                        <div className="flex items-center gap-1.5 text-[10px] font-bold text-[#6B9F91] uppercase tracking-wider">
+                                                            <CheckCircle2 className="w-3.5 h-3.5" />
+                                                            {featuredProject.status}
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                                <h3 className="text-2xl md:text-3xl font-bold text-[var(--color-heading)] mb-4 leading-tight">
+                                                    {featuredProject.title}
+                                                </h3>
+
+                                                <p className="text-[var(--color-body-text)] mb-8 leading-relaxed line-clamp-4">
+                                                    {featuredProject.description}
+                                                </p>
+
+                                                <div className="flex flex-wrap gap-2 mb-10">
+                                                    {Array.isArray(featuredProject.tags) && featuredProject.tags.slice(0, 4).map((tag: any, idx: number) => (
+                                                        <span key={idx} className="px-3 py-1.5 bg-[#6B9F91]/10 text-[#6B9F91] rounded-lg text-xs font-semibold">
+                                                            {tag}
+                                                        </span>
+                                                    ))}
+                                                </div>
+
+                                                <div className="mt-auto pt-4">
+                                                    <Button asChild size="lg" className="w-full sm:w-auto bg-[#6B9F91] hover:bg-[#588478] text-white shadow-lg shadow-[#6B9F91]/20">
+                                                        <Link href={`/client-projects/${featuredProject.id}`}>
+                                                            View Details
+                                                        </Link>
+                                                    </Button>
+                                                </div>
                                             </div>
-                                            <div className="w-full h-1/2 bg-white border border-gray-200 rounded-lg shadow-sm" />
-                                        </div>
-                                    )}
-                                </div>
+                                        </motion.div>
+                                        {/* Additional Projects Grid */}
+                                        {
+                                            additionalProjects.length > 0 && (
+                                                <motion.div
+                                                    variants={staggerContainer}
+                                                    initial="hidden"
+                                                    whileInView="visible"
+                                                    viewport={{ once: true, margin: "-100px" }}
+                                                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mt-2"
+                                                >
+                                                    {additionalProjects.map((project: any) => (
+                                                        <CardMotion
+                                                            key={project.id}
+                                                            variants={slideUp}
+                                                            {...hoverLift}
+                                                            className="bg-white overflow-hidden rounded-2xl flex-col group border border-[var(--color-border)] hover:border-[#6B9F91]/30 transition-all duration-300 flex"
+                                                        >
+                                                            {/* Grid Visual Placeholder */}
+                                                            <div className="relative w-full aspect-[4/3] bg-gray-50 overflow-hidden shrink-0 flex items-center justify-center border-b border-gray-100">
+                                                                {project.isConfidential ? (
+                                                                    <div className="absolute inset-0 bg-gray-100 flex flex-col items-center justify-center text-center p-6 select-none opacity-80 backdrop-blur-md">
+                                                                        <div className="w-16 h-16 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-400 mb-4">
+                                                                            <Lock className="w-8 h-8" />
+                                                                        </div>
+                                                                        <h4 className="font-bold text-gray-700 text-sm mb-1 uppercase tracking-wider">Confidential Project</h4>
+                                                                        <p className="text-xs text-gray-500">Visuals protected under corporate NDA.</p>
+                                                                    </div>
+                                                                ) : project.imageUrl ? (
+                                                                    <img src={project.imageUrl} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                                                ) : (
+                                                                    <div className="w-full h-full flex flex-col p-4 gap-3 bg-[#6B9F91]/5 group-hover:scale-105 transition-transform duration-500">
+                                                                        <div className="w-full h-1/2 flex gap-3">
+                                                                            <div className="w-1/3 bg-white border border-gray-200 rounded-lg shadow-sm" />
+                                                                            <div className="flex-1 bg-white border border-gray-200 rounded-lg shadow-sm" />
+                                                                        </div>
+                                                                        <div className="w-full h-1/2 bg-white border border-gray-200 rounded-lg shadow-sm" />
+                                                                    </div>
+                                                                )}
+                                                            </div>
 
-                                {/* Grid Content Area */}
-                                <div className="p-6 md:p-8 flex flex-col flex-1">
-                                    <div className="flex items-center gap-4 mb-4">
-                                        <span className="px-3 py-1 bg-gray-100 text-gray-600 text-[10px] font-bold uppercase tracking-wider rounded-md whitespace-nowrap">
-                                            {project.industry}
-                                        </span>
-                                    </div>
+                                                            {/* Grid Content Area */}
+                                                            <div className="p-6 md:p-8 flex flex-col flex-1">
+                                                                <div className="flex items-center justify-between gap-4 mb-4">
+                                                                    <span className="px-3 py-1 bg-gray-100 text-gray-600 text-[10px] font-bold uppercase tracking-wider rounded-md whitespace-nowrap overflow-hidden text-ellipsis">
+                                                                        {project.industry}
+                                                                    </span>
+                                                                    {project.status && (
+                                                                        <div className="flex items-center gap-1 text-[10px] font-bold text-[#6B9F91] uppercase tracking-wider whitespace-nowrap overflow-hidden text-ellipsis">
+                                                                            {project.status}
+                                                                        </div>
+                                                                    )}
+                                                                </div>
 
-                                    <h3 className="font-bold text-xl text-[var(--color-heading)] leading-tight mb-3">
-                                        {project.title}
-                                    </h3>
+                                                                <h3 className="font-bold text-xl text-[var(--color-heading)] leading-tight mb-3">
+                                                                    {project.title}
+                                                                </h3>
 
-                                    <p className="text-[var(--color-body-text)] text-sm mb-6 flex-1">
-                                        {project.description}
-                                    </p>
+                                                                <p className="text-[var(--color-body-text)] text-sm mb-6 flex-1 line-clamp-3">
+                                                                    {project.description}
+                                                                </p>
 
-                                    <div className="flex flex-wrap gap-1.5 mb-8">
-                                        {project.tags.map((tag, idx) => (
-                                            <span key={idx} className="px-2 py-1 bg-[#6B9F91]/10 text-[#6B9F91] rounded text-[10px] sm:text-xs font-semibold whitespace-nowrap">
-                                                {tag}
-                                            </span>
-                                        ))}
-                                    </div>
+                                                                <div className="flex flex-wrap gap-1.5 mb-8">
+                                                                    {Array.isArray(project.tags) && project.tags.slice(0, 3).map((tag: any, idx: number) => (
+                                                                        <span key={idx} className="px-2 py-1 bg-[#6B9F91]/10 text-[#6B9F91] rounded text-[10px] sm:text-xs font-semibold whitespace-nowrap">
+                                                                            {tag}
+                                                                        </span>
+                                                                    ))}
+                                                                    {Array.isArray(project.tags) && project.tags.length > 3 && (
+                                                                        <span className="px-2 py-1 bg-[#6B9F91]/5 text-gray-500 rounded text-[10px] sm:text-xs font-semibold whitespace-nowrap">
+                                                                            +{project.tags.length - 3}
+                                                                        </span>
+                                                                    )}
+                                                                </div>
 
-                                    <button className="mt-auto flex items-center text-sm font-bold text-[#6B9F91] hover:text-[#588478] transition-colors group/btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] rounded-sm">
-                                        View Details
-                                        <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
-                                    </button>
-                                </div>
-                            </CardMotion>
-                        ))}
-                    </motion.div>
+                                                                <Link href={`/client-projects/${project.id}`} className="mt-auto flex items-center text-sm font-bold text-[#6B9F91] hover:text-[#588478] transition-colors group/btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] rounded-sm">
+                                                                    View Details
+                                                                    <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
+                                                                </Link>
+                                                            </div>
+                                                        </CardMotion>
+                                                    ))}
+                                                </motion.div>
+                                            )
+                                        }
+
+                                        {/* View More Button Logic */}
+                                        {
+                                            projects.length > 4 && !showAll && (
+                                                <div className="w-full flex justify-center mt-6">
+                                                    <Button size="lg" variant="outline" onClick={() => setShowAll(true)} className="border-[#6B9F91] text-[#6B9F91] hover:bg-[#6B9F91] hover:text-white transition-colors">
+                                                        View More Projects
+                                                    </Button>
+                                                </div>
+                                            )
+                                        }
+                                    </>
+                                );
+                            })()}
+                        </>
+                    )}
                 </div>
 
                 {/* Mobile Native Horizontal Swipe Deck */}
@@ -260,82 +300,67 @@ export function ClientProjects() {
                         className="flex w-full overflow-x-auto snap-x snap-mandatory pb-8 gap-5 items-stretch [&::-webkit-scrollbar]:hidden px-6"
                         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                     >
-                        {[FEATURED_PROJECT, ...ADDITIONAL_PROJECTS].map((project, idx) => (
-                            <div
-                                key={`mobile-proj-${project.id}`}
-                                data-mobile-id={idx}
-                                className="client-project-mobile-card w-[82vw] sm:w-[350px] flex-shrink-0 flex flex-col bg-white rounded-3xl overflow-hidden shadow-xl shadow-gray-200/50 border border-gray-100 snap-center relative scroll-ml-6"
-                            >
-                                {/* Visual Placeholder Area - fixed aspect ratio to guarantee consistent heights */}
-                                <div className="relative w-full aspect-[4/3] bg-gray-50 overflow-hidden shrink-0 flex items-center justify-center border-b border-gray-100">
-                                    {project.id === "featured-1" ? (
-                                        <div className="absolute inset-0 bg-[#6B9F91]/5 flex flex-col p-4 lg:p-10 gap-3 group-hover:scale-105 transition-transform duration-700 ease-out">
-                                            <div className="w-full flex justify-between items-center bg-white/80 backdrop-blur-md p-3 rounded-lg border border-gray-200 shadow-sm">
-                                                <div className="flex items-center gap-2">
-                                                    <div className="w-6 h-6 rounded-full bg-[#6B9F91]/20" />
-                                                    <div className="w-20 h-2 bg-gray-200 rounded-full" />
+                        {(!isLoading && projects.length > 0) && (() => {
+                            const displayedProjects = showAll ? projects : projects.slice(0, 4);
+                            return displayedProjects.map((project: any, idx: number) => (
+                                <div
+                                    key={`mobile-proj-${project.id}`}
+                                    data-mobile-id={idx}
+                                    className="client-project-mobile-card w-[82vw] sm:w-[350px] flex-shrink-0 flex flex-col bg-white rounded-3xl overflow-hidden shadow-xl shadow-gray-200/50 border border-gray-100 snap-center relative scroll-ml-6"
+                                >
+                                    {/* Visual Placeholder Area */}
+                                    <div className="relative w-full aspect-[4/3] bg-gray-50 overflow-hidden shrink-0 flex items-center justify-center border-b border-gray-100">
+                                        {project.isConfidential ? (
+                                            <div className="absolute inset-0 bg-gray-100 flex flex-col items-center justify-center text-center p-6 select-none opacity-80 backdrop-blur-md">
+                                                <div className="w-12 h-12 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-400 mb-3">
+                                                    <Lock className="w-6 h-6" />
                                                 </div>
+                                                <h4 className="font-bold text-gray-700 text-xs mb-1 uppercase tracking-wider">Confidential</h4>
                                             </div>
-                                            <div className="flex gap-3 flex-1 min-h-0">
-                                                <div className="w-1/4 h-full bg-white/80 backdrop-blur-md rounded-lg border border-gray-200 shadow-sm p-2 flex flex-col gap-2">
-                                                    <div className="w-full h-4 bg-gray-100 rounded-md" />
-                                                    <div className="w-2/3 h-4 bg-gray-100 rounded-md" />
+                                        ) : project.imageUrl ? (
+                                            <img src={project.imageUrl} alt={project.title} className="w-full h-full object-cover" />
+                                        ) : (
+                                            <div className="w-full h-full flex flex-col p-4 gap-3 bg-[#6B9F91]/5">
+                                                <div className="w-full h-1/2 flex gap-3">
+                                                    <div className="w-1/3 bg-white border border-gray-200 rounded-lg shadow-sm" />
+                                                    <div className="flex-1 bg-white border border-gray-200 rounded-lg shadow-sm" />
                                                 </div>
-                                                <div className="flex-1 h-full bg-white/80 backdrop-blur-md rounded-lg border border-gray-200 shadow-sm p-3 grid grid-cols-2 gap-2">
-                                                    <div className="bg-[#6B9F91]/10 rounded-md" />
-                                                    <div className="bg-gray-100 rounded-md" />
-                                                    <div className="bg-gray-100 rounded-md col-span-2" />
-                                                </div>
+                                                <div className="w-full h-1/2 bg-white border border-gray-200 rounded-lg shadow-sm" />
                                             </div>
-                                        </div>
-                                    ) : project.isConfidential ? (
-                                        <div className="absolute inset-0 bg-gray-100 flex flex-col items-center justify-center text-center p-6 select-none opacity-80 backdrop-blur-md">
-                                            <div className="w-12 h-12 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-400 mb-3">
-                                                <Lock className="w-6 h-6" />
-                                            </div>
-                                            <h4 className="font-bold text-gray-700 text-xs mb-1 uppercase tracking-wider">Confidential</h4>
-                                        </div>
-                                    ) : (
-                                        <div className="w-full h-full flex flex-col p-4 gap-3 bg-[#6B9F91]/5">
-                                            <div className="w-full h-1/2 flex gap-3">
-                                                <div className="w-1/3 bg-white border border-gray-200 rounded-lg shadow-sm" />
-                                                <div className="flex-1 bg-white border border-gray-200 rounded-lg shadow-sm" />
-                                            </div>
-                                            <div className="w-full h-1/2 bg-white border border-gray-200 rounded-lg shadow-sm" />
-                                        </div>
-                                    )}
-                                </div>
-
-                                {/* Mobile Card Content - uses flex-1 and clamps text */}
-                                <div className="p-6 flex flex-col flex-1 text-left relative z-10">
-                                    <span className="w-max px-3 py-1 bg-gray-100 text-gray-600 text-[10px] font-bold uppercase tracking-wider rounded-md whitespace-nowrap mb-4">
-                                        {project.industry}
-                                    </span>
-
-                                    <h3 className="font-bold text-xl text-[var(--color-heading)] leading-tight mb-2 tracking-tight">
-                                        {project.title}
-                                    </h3>
-
-                                    <div className="flex-1 min-h-0 relative mb-5">
-                                        <p className="text-[var(--color-body-text)] text-sm leading-relaxed overflow-hidden line-clamp-3">
-                                            {project.description}
-                                        </p>
+                                        )}
                                     </div>
 
-                                    <button className="mt-auto flex items-center text-sm font-bold text-[#6B9F91] hover:text-[#588478] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] rounded-sm">
-                                        View Details
-                                        <ArrowRight className="w-4 h-4 ml-2" />
-                                    </button>
+                                    {/* Mobile Card Content */}
+                                    <div className="p-6 flex flex-col flex-1 text-left relative z-10">
+                                        <span className="w-max px-3 py-1 bg-gray-100 text-gray-600 text-[10px] font-bold uppercase tracking-wider rounded-md whitespace-nowrap mb-4">
+                                            {project.industry}
+                                        </span>
+
+                                        <h3 className="font-bold text-xl text-[var(--color-heading)] leading-tight mb-2 tracking-tight">
+                                            {project.title}
+                                        </h3>
+
+                                        <div className="flex-1 min-h-0 relative mb-5">
+                                            <p className="text-[var(--color-body-text)] text-sm leading-relaxed overflow-hidden line-clamp-3">
+                                                {project.description}
+                                            </p>
+                                        </div>
+
+                                        <Link href={`/client-projects/${project.id}`} className="mt-auto flex items-center text-sm font-bold text-[#6B9F91] hover:text-[#588478] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] rounded-sm">
+                                            View Details
+                                            <ArrowRight className="w-4 h-4 ml-2" />
+                                        </Link>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            ));
+                        })()}
                         {/* End spacer so the last card doesn't hit the right screen edge */}
                         <div className="w-[4vw] shrink-0" />
                     </div>
 
                     {/* Pagination Dots representation */}
                     <div className="w-full flex justify-center items-center gap-3 mt-2 mb-8 z-10 relative">
-                        {[FEATURED_PROJECT, ...ADDITIONAL_PROJECTS].map((_, i) => (
+                        {(!isLoading && projects.length > 0) && (showAll ? projects : projects.slice(0, 4)).map((_, i) => (
                             <button
                                 key={`dot-${i}`}
                                 onClick={() => scrollToMobileProject(i)}
@@ -372,6 +397,6 @@ export function ClientProjects() {
                 </motion.div>
 
             </Container>
-        </SectionWrapper>
+        </SectionWrapper >
     );
 }

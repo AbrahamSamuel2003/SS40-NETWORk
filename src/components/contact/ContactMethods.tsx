@@ -5,35 +5,36 @@ import { motion } from "framer-motion";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
+import type { SiteConfigData } from "@/lib/site-config";
 
-const METHODS = [
-    {
-        id: "email",
-        icon: Mail,
-        title: "Email Us",
-        content: "support@ss40network.com",
-        description: "Reach out with your questions, project ideas, or collaboration requests. We typically respond within one business day.",
-        href: "mailto:support@ss40network.com"
-    },
-    {
-        id: "phone",
-        icon: Phone,
-        title: "Call Us",
-        content: "+91 83005 91750",
-        description: "Speak directly with our team for project discussions, consultations, or general enquiries.",
-        href: "tel:+918300591750"
-    },
-    {
-        id: "visit",
-        icon: MapPin,
-        title: "Visit Us",
-        content: "SS40 NETWORK PRIVATE LIMITED, 1st Floor, Municipal Corporation Incubation Centre\n(Near by trade centre), Sree Puram, Tirunelveli, Tamil Nadu 627001.",
-        description: "Serving businesses and educational institutions across India with innovative digital solutions and products.",
-        href: "#office-location"
-    }
-];
+export function ContactMethods({ config }: { config?: SiteConfigData | null }) {
+    const METHODS = [
+        ...(config?.contactEmail ? [{
+            id: "email",
+            icon: Mail,
+            title: "Email Us",
+            content: config.contactEmail,
+            description: "Reach out with your questions, project ideas, or collaboration requests. We typically respond within one business day.",
+            href: `mailto:${config.contactEmail}`
+        }] : []),
+        ...(config?.contactPhone ? [{
+            id: "phone",
+            icon: Phone,
+            title: "Call Us",
+            content: config.contactPhone,
+            description: "Speak directly with our team for project discussions, consultations, or general enquiries.",
+            href: `tel:${config.contactPhone.replace(/\s+/g, '')}`
+        }] : []),
+        ...(config?.addressText ? [{
+            id: "visit",
+            icon: MapPin,
+            title: "Visit Us",
+            content: config.addressText,
+            description: "Serving businesses and educational institutions across India with innovative digital solutions and products.",
+            href: "#office-location"
+        }] : [])
+    ];
 
-export function ContactMethods() {
     return (
         <SectionWrapper id="contact-methods" className="bg-[#EDF5F2] py-20 md:py-32">
             <Container className="max-w-6xl mx-auto">

@@ -1,35 +1,38 @@
 "use client";
 
 import * as React from "react";
-import {
-    Building2, Store, Factory, Plane, Landmark,
-    Stethoscope, GraduationCap, Code2, Cpu, Globe
-} from "lucide-react";
+import { Building2, Globe } from "lucide-react";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { cn } from "@/utils/cn";
 
-// Placeholder Companies array exactly as requested.
-const ROW_1 = [
-    { id: "1", name: "Client Organization", icon: Building2 },
-    { id: "2", name: "Global Enterprise", icon: Globe },
-    { id: "3", name: "Retail Solutions", icon: Store },
-    { id: "4", name: "Healthcare Partners", icon: Stethoscope },
-    { id: "5", name: "Tech Innovators", icon: Code2 },
-];
-
-const ROW_2 = [
-    { id: "6", name: "Logistics Hub", icon: Plane },
-    { id: "7", name: "Financial Systems", icon: Landmark },
-    { id: "8", name: "Manufacturing Co", icon: Factory },
-    { id: "9", name: "Academic Institute", icon: GraduationCap },
-    { id: "10", name: "Cloud Networks", icon: Cpu },
-];
-
 export function TrustedClients() {
+    const [logos, setLogos] = React.useState<any[]>([]);
+    const [isLoading, setIsLoading] = React.useState(true);
+
+    React.useEffect(() => {
+        fetch('/api/organization-logos?pageScope=DIGITAL_SOLUTIONS')
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.data) {
+                    setLogos(data.data);
+                }
+                setIsLoading(false);
+            })
+            .catch(() => setIsLoading(false));
+    }, []);
+
+    // Split logos into two rows for the marquee effect, or show empty arrays
+    const row1 = logos.slice(0, Math.ceil(logos.length / 2));
+    const row2 = Array.from(logos.slice(Math.ceil(logos.length / 2))); // ensure array
+
+    if (!isLoading && logos.length === 0) {
+        return null; // hide section entirely if there are no trusted clients configured for this page (fail safe)
+    }
+
     return (
-        <SectionWrapper id="trusted-clients" className="bg-[#EDF5F2] relative overflow-hidden !pt-0 md:!pt-0 lg:!pt-0">
+        <SectionWrapper id="trusted-clients" className={cn("bg-[#EDF5F2] relative overflow-hidden transition-opacity duration-500", isLoading ? "opacity-0" : "opacity-100", "!pt-0 md:!pt-0 lg:!pt-0")}>
             {/* Soft Ambient Background Enhancements */}
             <div className="absolute inset-0 pointer-events-none z-0">
                 <div
@@ -100,28 +103,54 @@ export function TrustedClients() {
                 <div className="absolute top-0 bottom-0 right-0 w-24 md:w-32 bg-gradient-to-l from-[#EDF5F2] to-transparent z-20 pointer-events-none" />
 
                 {/* ROW 1: Scroll Left */}
-                <MarqueeRow items={ROW_1} direction="left" speed={30} />
+                {row1.length > 0 && <MarqueeRow items={row1} direction="left" speed={30} />}
 
                 {/* ROW 2: Scroll Right (Hidden on Mobile as per standard behavior for cleaner layout) */}
-                <div className="hidden md:block">
-                    <MarqueeRow items={ROW_2} direction="right" speed={35} />
-                </div>
+                {row2.length > 0 && (
+                    <div className="hidden md:block">
+                        <MarqueeRow items={row2} direction="right" speed={35} />
+                    </div>
+                )}
             </div>
 
         </SectionWrapper>
     );
 }
 
+interface MarqueeItem {
+    id: string;
+    name: string;
+    logoUrl?: string; // added optional logoUrl
+}
+
 interface MarqueeRowProps {
-    items: { id: string; name: string; icon: React.ElementType }[];
+    items: MarqueeItem[];
     direction: "left" | "right";
     speed: number;
 }
 
 function MarqueeRow({ items, direction, speed }: MarqueeRowProps) {
-    // Duplicate exactly to fit -50% perfectly.
-    const half = [...items, ...items, ...items];
-    const duplicatedItems = [...half, ...half];
+    // Generate exactly enough copies so it scrolls seamlessly without breaking or changing velocity.
+    // In Products Brands.tsx, 15 items scroll in 30s (2s per item).
+    // We create a "half" array that has at least 10-15 items to ensure it covers screens, then duplicate it.
+    const getMultipliedItems = () => {
+        let copies = [];
+        const requiredMinimum = 10;
+        const loops = Math.max(3, Math.ceil(requiredMinimum / Math.max(1, items.length)));
+        for (let i = 0; i < loops; i++) {
+            copies.push(...items);
+        }
+        return copies;
+    };
+
+    const half = getMultipliedItems();
+    const duplicatedItems = [...half, ...half]; // Total items for seamless 50% translate loop
+
+    // Calculate a proportional duration to guarantee constant physical scrolling velocity
+    // 2 seconds per item is the standard set by the Brands.tsx page
+    const itemsInHalf = half.length;
+    const computedSpeed = Math.max(itemsInHalf * 2.2, 20); // slightly smoother pace
+
     const pauseMarquee = (event: React.PointerEvent<HTMLDivElement>) => {
         if (event.pointerType === "touch") {
             event.currentTarget.classList.add("marquee-touch-paused");
@@ -150,24 +179,21 @@ function MarqueeRow({ items, direction, speed }: MarqueeRowProps) {
                     "flex items-center gap-6 px-3 w-max",
                     direction === "left" ? "animate-marquee-left" : "animate-marquee-right"
                 )}
-                style={{ "--duration": `${speed}s` } as React.CSSProperties}
+                style={{ "--duration": `${computedSpeed}s` } as React.CSSProperties}
             >
-                {duplicatedItems.map((item, idx) => {
-                    const Icon = item.icon;
-                    return (
-                        <div
-                            key={`${item.id}-${idx}`}
-                            className="marquee-logo-card bg-white border border-gray-100 rounded-2xl p-4 md:p-5 w-[220px] md:w-[260px] h-[80px] md:h-[90px] flex items-center justify-start gap-4 shadow-sm transition-all duration-300 cursor-pointer overflow-hidden"
-                        >
-                            <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-[#EDF5F2] text-[#6B9F91] flex items-center justify-center shrink-0 transition-colors">
-                                <Icon className="marquee-logo-icon w-5 h-5 md:w-6 md:h-6 transition-transform duration-300" />
-                            </div>
-                            <span className="font-bold text-gray-800 text-sm md:text-base whitespace-nowrap overflow-hidden text-ellipsis w-full text-left">
-                                {item.name}
-                            </span>
-                        </div>
-                    );
-                })}
+                {duplicatedItems.map((client, idx) => (
+                    <div
+                        key={`${client.id}-${idx}`}
+                        className="marquee-logo-card group flex items-center justify-center gap-3 md:gap-4 px-6 md:px-8 py-4 border border-gray-100 rounded-2xl bg-white shadow-sm shrink-0 min-w-max transition-all duration-300"
+                    >
+                        {client.logoUrl ? (
+                            <img src={client.logoUrl} alt={client.name} className="h-8 md:h-10 object-contain max-w-[120px]" />
+                        ) : (
+                            <Building2 className="marquee-logo-icon w-6 h-6 md:w-8 md:h-8 text-[#6B9F91] shrink-0 transition-transform duration-300" />
+                        )}
+                        <span className="font-bold text-gray-700 md:text-lg tracking-tight pr-2">{client.name}</span>
+                    </div>
+                ))}
             </div>
         </div>
     );

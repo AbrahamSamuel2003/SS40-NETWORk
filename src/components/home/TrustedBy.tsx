@@ -28,7 +28,10 @@ const MIXED_ROW_2 = [
     { id: "12", name: "Nexus Systems", icon: Cpu },
 ];
 
-export function TrustedBy() {
+export function TrustedBy({ data }: { data?: any[] }) {
+    const ROW_1 = (data && data.length > 0) ? data.slice(0, Math.ceil(data.length / 2)) : MIXED_ROW_1;
+    const ROW_2 = (data && data.length > 0) ? data.slice(Math.ceil(data.length / 2)) : MIXED_ROW_2;
+
     return (
         <SectionWrapper id="trusted-by" className="bg-[#EDF5F2] relative overflow-hidden">
             {/* Soft Ambient Background Enhancements */}
@@ -105,11 +108,11 @@ export function TrustedBy() {
                 <div className="absolute top-0 bottom-0 right-0 w-24 md:w-48 bg-gradient-to-l from-[#EDF5F2] to-transparent z-20 pointer-events-none" />
 
                 {/* ROW 1: Scroll Left */}
-                <MarqueeRow items={MIXED_ROW_1} direction="left" speed={30} />
+                <MarqueeRow items={ROW_1} direction="left" speed={30} />
 
                 {/* ROW 2: Scroll Right (Hidden on Mobile) */}
                 <div className="hidden md:block">
-                    <MarqueeRow items={MIXED_ROW_2} direction="right" speed={35} />
+                    <MarqueeRow items={ROW_2} direction="right" speed={35} />
                 </div>
             </div>
 
@@ -118,7 +121,7 @@ export function TrustedBy() {
 }
 
 interface MarqueeRowProps {
-    items: { id: string; name: string; icon: React.ElementType }[];
+    items: { id: string; name: string; icon?: React.ElementType; logoUrl?: string }[];
     direction: "left" | "right";
     speed: number;
 }
@@ -162,12 +165,16 @@ function MarqueeRow({ items, direction, speed }: MarqueeRowProps) {
                     return (
                         <div
                             key={`${item.id}-${idx}`}
-                            className="marquee-logo-card bg-white border border-gray-100 rounded-2xl p-4 md:p-5 w-[240px] md:w-[280px] h-[80px] md:h-[90px] flex items-center justify-start gap-4 shadow-sm transition-all duration-300 cursor-pointer overflow-hidden"
+                            className="marquee-logo-card bg-white border border-gray-100 rounded-2xl px-4 md:px-5 py-0 min-w-[140px] md:min-w-[160px] w-max h-[80px] md:h-[90px] flex items-center justify-start gap-4 shadow-sm transition-all duration-300 cursor-pointer overflow-hidden"
                         >
-                            <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-[#EDF5F2] text-[#6B9F91] flex items-center justify-center shrink-0 transition-colors">
-                                <Icon className="marquee-logo-icon w-5 h-5 md:w-6 md:h-6 transition-transform duration-300" />
+                            <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-[#EDF5F2] text-[#6B9F91] flex items-center justify-center shrink-0 transition-colors overflow-hidden">
+                                {item.logoUrl ? (
+                                    <img src={item.logoUrl} alt={item.name} className="marquee-logo-icon w-full h-full object-contain p-1 transition-transform duration-300" />
+                                ) : Icon ? (
+                                    <Icon className="marquee-logo-icon w-5 h-5 md:w-6 md:h-6 transition-transform duration-300" />
+                                ) : null}
                             </div>
-                            <span className="font-bold text-gray-800 text-sm md:text-base whitespace-nowrap overflow-hidden text-ellipsis w-full text-left">
+                            <span className="font-bold text-gray-800 text-sm md:text-base whitespace-nowrap text-left">
                                 {item.name}
                             </span>
                         </div>

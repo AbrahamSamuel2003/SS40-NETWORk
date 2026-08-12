@@ -2,10 +2,12 @@
 
 import * as React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/utils/cn";
 import { Button } from "@/components/ui/Button";
 import { MobileNav } from "./MobileNav";
+import type { SiteConfigData } from "@/lib/site-config";
 
 const NAV_LINKS = [
     { name: "Home", href: "/" },
@@ -14,10 +16,12 @@ const NAV_LINKS = [
     { name: "Academics", href: "/academics" },
 ];
 
-export function Navbar() {
+export function Navbar({ config }: { config?: SiteConfigData | null }) {
     const [isScrolled, setIsScrolled] = React.useState(false);
     const [isHidden, setIsHidden] = React.useState(false);
     const pathname = usePathname();
+
+    const companyName = config?.companyName || "SS40 NETWORK";
 
     React.useEffect(() => {
         let lastY = window.scrollY;
@@ -102,11 +106,21 @@ export function Navbar() {
                     {/* Logo */}
                     <Link
                         href="/"
-                        className="flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] rounded-md"
-                        aria-label="SS40 NETWORK Home"
+                        className="flex items-center gap-2 md:gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] rounded-md shrink-0 py-1"
+                        aria-label={`${companyName} Home`}
                     >
-                        <span className="text-2xl font-bold tracking-tight text-[var(--color-heading)]">
-                            SS40 <span className="text-[var(--color-primary)]">NETWORK</span>
+                        {(config?.uploadedLogoUrl || config?.logoUrl) && (
+                            <Image
+                                src={(config?.uploadedLogoUrl || config?.logoUrl) as string}
+                                alt={`${companyName} Official Logo`}
+                                width={48}
+                                height={48}
+                                className="h-7 md:h-9 w-auto object-contain shrink-0 mix-blend-multiply"
+                                priority
+                            />
+                        )}
+                        <span className="text-2xl font-bold tracking-tight text-[var(--color-heading)] shrink-0 min-w-0">
+                            {companyName.replace('NETWORK', '').trim()} <span className="text-[var(--color-primary)]">{companyName.includes('NETWORK') ? 'NETWORK' : ''}</span>
                         </span>
                     </Link>
 
@@ -133,7 +147,13 @@ export function Navbar() {
                     </nav>
 
                     {/* Desktop CTA */}
-                    <div className="hidden md:flex items-center">
+                    <div className="hidden md:flex items-center gap-3">
+                        <Link
+                            href="/login"
+                            className="px-4 py-2 text-sm font-medium text-[var(--color-body-text)] hover:text-[var(--color-heading)] hover:bg-gray-100 transition-all rounded-full"
+                        >
+                            Login
+                        </Link>
                         <Button asChild size="sm" className="md:px-6">
                             <Link href="/contact">Contact Us</Link>
                         </Button>

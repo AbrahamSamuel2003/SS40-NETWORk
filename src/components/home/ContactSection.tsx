@@ -20,41 +20,42 @@ import { CardMotion } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { hoverLift, staggerContainer, slideUp, fadeIn } from "@/lib/animations";
 import { cn } from "@/utils/cn";
+import type { SiteConfigData } from "@/lib/site-config";
 
-const CONTACT_INFO = [
-    {
-        icon: Mail,
-        label: "Email",
-        value: "support@ss40network.com",
-        href: "mailto:support@ss40network.com"
-    },
-    {
-        icon: Phone,
-        label: "Phone",
-        value: "+91 83005 91750",
-        href: "tel:+918300591750"
-    },
-    {
-        icon: MapPin,
-        label: "Location",
-        value: "SS40 NETWORK PRIVATE LIMITED, 1st Floor, Municipal Corporation Incubation Centre\n(Near by trade centre), Sree Puram, Tirunelveli, Tamil Nadu 627001.",
-        href: "https://goo.gl/maps/DWiCMVGgqKi2r5188"
-    },
-    {
-        icon: MessageCircle,
-        label: "WhatsApp",
-        value: "Chat with our team",
-        href: "https://wa.me/918300591750"
-    },
-    {
-        icon: Clock,
-        label: "Business Hours",
-        value: "Monday – Friday, 9:00 AM – 6:00 PM",
-        href: null
-    }
-];
+export function ContactSection({ config }: { config?: SiteConfigData | null }) {
 
-export function ContactSection() {
+    const CONTACT_INFO = [
+        {
+            icon: Mail,
+            label: "Email",
+            value: config?.contactEmail || "support@ss40network.com",
+            href: config?.contactEmail ? `mailto:${config.contactEmail}` : null
+        },
+        {
+            icon: Phone,
+            label: "Phone",
+            value: config?.contactPhone || "+91 83005 91750",
+            href: config?.contactPhone ? `tel:${config.contactPhone.replace(/\s+/g, '')}` : null
+        },
+        {
+            icon: MapPin,
+            label: "Location",
+            value: config?.addressText || "SS40 NETWORK PRIVATE LIMITED, 1st Floor, Municipal Corporation Incubation Centre\n(Near by trade centre), Sree Puram, Tirunelveli, Tamil Nadu 627001.",
+            href: config?.googleMapsIframeUrl ? "https://goo.gl/maps/DWiCMVGgqKi2r5188" : "https://goo.gl/maps/DWiCMVGgqKi2r5188"
+        },
+        {
+            icon: MessageCircle,
+            label: "WhatsApp",
+            value: "Chat with our team",
+            href: config?.whatsappNumber ? `https://wa.me/${config.whatsappNumber.replace(/\D/g, '')}` : "https://wa.me/918300591750"
+        },
+        {
+            icon: Clock,
+            label: "Business Hours",
+            value: config?.businessHours || "Monday – Friday, 9:00 AM – 6:00 PM",
+            href: null
+        }
+    ];
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();

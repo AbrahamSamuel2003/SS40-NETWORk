@@ -1,0 +1,264 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// -----------------------------------------------------------------------------
+// GLOBAL SETTINGS 
+// -----------------------------------------------------------------------------
+
+model SiteConfig {
+  id                    Int      @id @default(1)
+  companyName           String
+  legalName             String
+  logoUrl               String?
+  uploadedLogoUrl       String?
+  contactEmail          String
+  contactPhone          String
+  whatsappNumber        String
+  addressText           String
+  businessHours         String
+  footerDescription     String
+  googleMapsIframeUrl   String?
+  urlLinkedin           String?
+  urlYoutube            String?
+  urlInstagram          String?
+  seoDefaultTitle       String
+  seoDefaultDescription String
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
+
+// -----------------------------------------------------------------------------
+// ORGANIZATION LOGOS (Marquees/Brands/Universities)
+// -----------------------------------------------------------------------------
+
+enum LogoPlacement {
+  CLIENT
+  BRAND
+  UNIVERSITY
+  PARTNER
+}
+
+model OrganizationLogo {
+  id            String         @id @default(uuid())
+  name          String
+  logoUrl       String?
+  category      String
+  placementType LogoPlacement
+  pageScope     String         @default("GLOBAL") // Ensures Home scope isolation
+  sortOrder     Int            @default(0)
+  isActive      Boolean        @default(true)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+// -----------------------------------------------------------------------------
+// DIGITAL SOLUTIONS & ACADEMICS
+// -----------------------------------------------------------------------------
+
+model Product {
+  id             String   @id @default(uuid())
+  marketingTitle String
+  badgeText      String?
+  description    String
+  productUrl     String?
+  ctaText        String?
+  tags           Json     // Array of tags
+  features       Json     // Array of feature objects
+  isFeatured     Boolean  @default(false)
+  screenshotUrl  String?
+  sortOrder      Int      @default(0)
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model ClientProject {
+  id             String   @id @default(uuid())
+  title          String
+  industry       String
+  description    String
+  status         String?
+  isConfidential Boolean  @default(false)
+  tags           Json     
+  imageUrl       String?
+  projectUrl     String?
+  caseStudy      String?
+  sortOrder      Int      @default(0)
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model StudentProject {
+  id          String   @id @default(uuid())
+  title       String
+  category    String
+  badge       String?
+  description String
+  imageUrl    String?
+  tags        Json     
+  sortOrder   Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Happimonial {
+  id           String   @id @default(uuid())
+  clientName   String
+  companyName  String
+  industry     String
+  testimonial  String
+  videoUrl     String?
+  thumbnailUrl String?
+  youtubeUrl   String?  // Optional YouTube URL; one-video-HOME rule enforced at API level
+  pageScope    String   @default("GLOBAL") // Ensures Home scope isolation
+  sortOrder    Int      @default(0)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model StudentImpact {
+  id            String   @id @default(uuid())
+  studentName   String
+  designation   String
+  quote         String
+  academicRoute String
+  videoUrl      String?
+  isFeatured    Boolean  @default(false)
+  sortOrder     Int      @default(0)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+// -----------------------------------------------------------------------------
+// LEADS (CRM Inbox)
+// -----------------------------------------------------------------------------
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  CONVERTED
+  SPAM
+}
+
+model Lead {
+  id              String     @id @default(uuid())
+  fullName        String
+  email           String
+  phone           String
+  company         String?
+  serviceInterest String
+  message         String
+  status          LeadStatus @default(NEW)
+  internalNotes   String?
+  isArchived      Boolean    @default(false)
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+}
+
+// -----------------------------------------------------------------------------
+// VISITORS & MEDIA
+// -----------------------------------------------------------------------------
+
+model Visitor {
+  id              String   @id @default(uuid())
+  sessionId       String
+  ipAddress       String?
+  userAgent       String?
+  country         String?
+  city            String?
+  deviceType      String?
+  browser         String?
+  operatingSystem String?
+  landingPage     String?
+  referrerUrl     String?
+  firstVisitedAt  DateTime @default(now())
+  lastVisitedAt   DateTime @default(now())
+  pageViews       Int      @default(1)
+  isBot           Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([sessionId])
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+  DOCUMENT
+  OTHER
+}
+
+model Media {
+  id          String    @id @default(uuid())
+  fileName    String
+  fileUrl     String
+  mimeType    String
+  fileSize    Int?
+  mediaType   MediaType
+  altText     String?
+  uploadedBy  String?
+  pageScope   String    @default("GLOBAL") // Ensures Home scope isolation
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+// -----------------------------------------------------------------------------
+// ADMIN & AUTHENTICATION
+// -----------------------------------------------------------------------------
+
+model AdminUser {
+  id           String             @id @default(uuid())
+  username     String             @unique
+  email        String             @unique
+  passwordHash String
+  fullName     String
+  isActive     Boolean            @default(true)
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  lastLoginAt  DateTime?
+
+  activityLogs AdminActivityLog[]
+}
+
+model AdminActivityLog {
+  id          String    @id @default(uuid())
+  adminUserId String
+  action      String
+  entity      String
+  entityId    String?
+  description String
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime  @default(now())
+
+  adminUser   AdminUser @relation(fields: [adminUserId], references: [id], onDelete: Restrict)
+}
+ 
+enum UserRole {
+  ADMIN
+  MEMBER
+}
+
+model User {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         UserRole @default(MEMBER)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
