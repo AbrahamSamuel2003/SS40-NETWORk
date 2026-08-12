@@ -1,9 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight, Image as ImageIcon, Lock, ShieldCheck, CheckCircle2 } from "lucide-react";
+import { ArrowRight, Image as ImageIcon, Lock, ShieldCheck, CheckCircle2, X } from "lucide-react";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -17,7 +17,7 @@ import { Loader2 } from "lucide-react";
 export function ClientProjects() {
     const [projects, setProjects] = React.useState<any[]>([]);
     const [isLoading, setIsLoading] = React.useState(true);
-    const [showAll, setShowAll] = React.useState(false);
+    const [activeModalProject, setActiveModalProject] = React.useState<any | null>(null);
 
     const [activeMobileIdx, setActiveMobileIdx] = React.useState(0);
     const mobileScrollRef = React.useRef<HTMLDivElement>(null);
@@ -92,7 +92,7 @@ export function ClientProjects() {
                     ) : (
                         <>
                             {(() => {
-                                const displayedProjects = showAll ? projects : projects.slice(0, 4);
+                                const displayedProjects = projects.slice(0, 4);
                                 const featuredProject = displayedProjects[0];
                                 const additionalProjects = displayedProjects.slice(1);
 
@@ -183,10 +183,8 @@ export function ClientProjects() {
                                                 </div>
 
                                                 <div className="mt-auto pt-4">
-                                                    <Button asChild size="lg" className="w-full sm:w-auto bg-[#6B9F91] hover:bg-[#588478] text-white shadow-lg shadow-[#6B9F91]/20">
-                                                        <Link href={`/client-projects/${featuredProject.id}`}>
-                                                            View Details
-                                                        </Link>
+                                                    <Button onClick={() => setActiveModalProject(featuredProject)} size="lg" className="w-full sm:w-auto bg-[#6B9F91] hover:bg-[#588478] text-white shadow-lg shadow-[#6B9F91]/20">
+                                                        View Details
                                                     </Button>
                                                 </div>
                                             </div>
@@ -265,10 +263,13 @@ export function ClientProjects() {
                                                                     )}
                                                                 </div>
 
-                                                                <Link href={`/client-projects/${project.id}`} className="mt-auto flex items-center text-sm font-bold text-[#6B9F91] hover:text-[#588478] transition-colors group/btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] rounded-sm">
+                                                                <button
+                                                                    onClick={() => setActiveModalProject(project)}
+                                                                    className="mt-auto flex items-center text-sm font-bold text-[#6B9F91] hover:text-[#588478] transition-colors group/btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] rounded-sm"
+                                                                >
                                                                     View Details
                                                                     <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
-                                                                </Link>
+                                                                </button>
                                                             </div>
                                                         </CardMotion>
                                                     ))}
@@ -276,16 +277,7 @@ export function ClientProjects() {
                                             )
                                         }
 
-                                        {/* View More Button Logic */}
-                                        {
-                                            projects.length > 4 && !showAll && (
-                                                <div className="w-full flex justify-center mt-6">
-                                                    <Button size="lg" variant="outline" onClick={() => setShowAll(true)} className="border-[#6B9F91] text-[#6B9F91] hover:bg-[#6B9F91] hover:text-white transition-colors">
-                                                        View More Projects
-                                                    </Button>
-                                                </div>
-                                            )
-                                        }
+                                        {/* The View All Projects button is now unified below the desktop/mobile structures */}
                                     </>
                                 );
                             })()}
@@ -301,7 +293,7 @@ export function ClientProjects() {
                         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                     >
                         {(!isLoading && projects.length > 0) && (() => {
-                            const displayedProjects = showAll ? projects : projects.slice(0, 4);
+                            const displayedProjects = projects.slice(0, 4);
                             return displayedProjects.map((project: any, idx: number) => (
                                 <div
                                     key={`mobile-proj-${project.id}`}
@@ -346,10 +338,13 @@ export function ClientProjects() {
                                             </p>
                                         </div>
 
-                                        <Link href={`/client-projects/${project.id}`} className="mt-auto flex items-center text-sm font-bold text-[#6B9F91] hover:text-[#588478] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] rounded-sm">
+                                        <button
+                                            onClick={() => setActiveModalProject(project)}
+                                            className="mt-auto flex items-center text-sm font-bold text-[#6B9F91] hover:text-[#588478] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] rounded-sm"
+                                        >
                                             View Details
                                             <ArrowRight className="w-4 h-4 ml-2" />
-                                        </Link>
+                                        </button>
                                     </div>
                                 </div>
                             ));
@@ -360,7 +355,7 @@ export function ClientProjects() {
 
                     {/* Pagination Dots representation */}
                     <div className="w-full flex justify-center items-center gap-3 mt-2 mb-8 z-10 relative">
-                        {(!isLoading && projects.length > 0) && (showAll ? projects : projects.slice(0, 4)).map((_, i) => (
+                        {(!isLoading && projects.length > 0) && projects.slice(0, 4).map((_, i) => (
                             <button
                                 key={`dot-${i}`}
                                 onClick={() => scrollToMobileProject(i)}
@@ -370,6 +365,16 @@ export function ClientProjects() {
                         ))}
                     </div>
                 </div>
+
+                {/* View All Projects Button */}
+                {projects.length > 0 && (
+                    <div className="w-full flex justify-center mt-2 mb-10">
+                        <Link href="/client-projects" className="inline-flex items-center justify-center font-bold text-lg text-[#6B9F91] hover:text-[#588478] transition-colors group">
+                            View All Projects
+                            <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                        </Link>
+                    </div>
+                )}
 
                 {/* Bottom CTA Card */}
                 <motion.div
@@ -397,6 +402,150 @@ export function ClientProjects() {
                 </motion.div>
 
             </Container>
+
+            {/* View Details Reading Modal overlay */}
+            <AnimatePresence>
+                {activeModalProject && (
+                    <ProjectModal project={activeModalProject} onClose={() => setActiveModalProject(null)} />
+                )}
+            </AnimatePresence>
         </SectionWrapper >
+    );
+}
+
+// ============================================================================
+// MODAL COMPONENT (Reuses SuccessStories interaction pattern)
+// ============================================================================
+
+function ProjectModal({ project, onClose }: { project: any, onClose: () => void }) {
+    // Lock body scroll when modal is open
+    React.useEffect(() => {
+        const originalStyle = window.getComputedStyle(document.body).overflow;
+        document.body.style.overflow = 'hidden';
+
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') onClose();
+        };
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            document.body.style.overflow = originalStyle;
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [onClose]);
+
+    // Parse tags safely from CMS JSON payload
+    let parsedTags: string[] = [];
+    try {
+        if (project.tags && typeof project.tags === 'string') {
+            parsedTags = JSON.parse(project.tags);
+        } else if (Array.isArray(project.tags)) {
+            parsedTags = project.tags as string[];
+        }
+    } catch {
+        parsedTags = [];
+    }
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4 sm:px-6">
+            {/* Backdrop */}
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={onClose}
+                className="absolute inset-0 bg-gray-900/40 backdrop-blur-sm transition-opacity"
+            />
+
+            {/* Modal Dialog */}
+            <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                transition={{ duration: 0.3, ease: [0.21, 0.47, 0.32, 0.98] }}
+                className="relative w-full max-w-2xl bg-white/95 backdrop-blur-xl border border-gray-100 shadow-2xl rounded-3xl overflow-hidden flex flex-col max-h-[80vh] md:max-h-[85vh]"
+            >
+                {/* Close Button */}
+                <button
+                    onClick={onClose}
+                    className="absolute top-4 right-4 md:top-6 md:right-6 w-10 h-10 bg-gray-100 hover:bg-gray-200 text-gray-500 hover:text-gray-900 rounded-full flex items-center justify-center transition-colors z-10 focus-visible:outline-none"
+                    aria-label="Close modal"
+                >
+                    <X className="w-5 h-5" />
+                </button>
+
+                {/* Scrollable Content Area */}
+                <div
+                    className="overflow-y-auto px-6 py-8 md:px-10 md:py-10 flex flex-col h-full [&::-webkit-scrollbar]:hidden"
+                    style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+                >
+
+                    {/* 1. Industry */}
+                    <div className="flex items-center gap-2 pr-12 mb-4">
+                        <span className="px-3 py-1 bg-[#6B9F91]/10 text-[#6B9F91] text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-md whitespace-nowrap">
+                            {project.industry}
+                        </span>
+                        {project.status && (
+                            <span className="flex items-center gap-1 text-[10px] sm:text-xs font-bold text-[#6B9F91] uppercase tracking-wider whitespace-nowrap">
+                                <CheckCircle2 className="w-3 h-3 md:w-3.5 md:h-3.5" />
+                                {project.status}
+                            </span>
+                        )}
+                    </div>
+
+                    {/* 2. Project Title */}
+                    <h2 className="text-2xl md:text-3xl lg:text-[32px] font-bold text-[var(--color-heading)] leading-tight tracking-tight mb-4 pr-6">
+                        {project.title}
+                    </h2>
+
+                    {/* 3. Short Description */}
+                    <p className="text-gray-600 font-medium text-sm md:text-base leading-relaxed mb-6">
+                        {project.description}
+                    </p>
+
+                    {/* 4. Technologies / Tags */}
+                    {parsedTags.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mb-8">
+                            {parsedTags.map((tag, idx) => (
+                                <span key={idx} className="px-2.5 py-1.5 bg-gray-100 border border-gray-200 text-gray-700 rounded-lg text-xs font-semibold">
+                                    {tag}
+                                </span>
+                            ))}
+                        </div>
+                    )}
+
+                    {/* 5. Visit Live Project (Primary CTA, top level before scroll needs) */}
+                    {project.projectUrl ? (
+                        <div className="mb-10 shrink-0">
+                            <a
+                                href={project.projectUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center justify-center h-12 px-6 rounded-full bg-[#6B9F91] text-white font-bold shadow-lg shadow-[#6B9F91]/20 hover:bg-[#588478] transition-all hover:scale-105 active:scale-95"
+                            >
+                                Visit Live Project
+                                <ArrowRight className="w-4 h-4 ml-2" />
+                            </a>
+                        </div>
+                    ) : (
+                        <div className="mb-10 shrink-0" /> // Spacer if no URL
+                    )}
+
+                    {/* 6. Case Study */}
+                    {project.caseStudy && (
+                        <div className="border-t border-gray-100 pt-8 mt-2 flex-grow">
+                            <h3 className="text-xl font-bold text-[var(--color-heading)] mb-6">
+                                Case Study Overview
+                            </h3>
+                            <div className="prose prose-sm md:prose-base prose-[#6B9F91] max-w-none text-[var(--color-body-text)]">
+                                <p className="whitespace-pre-wrap leading-relaxed">
+                                    {project.caseStudy}
+                                </p>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </motion.div>
+        </div>
     );
 }

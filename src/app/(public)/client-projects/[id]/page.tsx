@@ -42,15 +42,15 @@ export default async function ClientProjectCaseStudyPage({ params }: PageProps) 
     return (
         <div className="w-full flex-col flex bg-white min-h-screen">
             {/* Hero Section */}
-            <div className="w-full relative pt-32 pb-16 lg:pt-40 lg:pb-24 overflow-hidden bg-[#EDF5F2]">
+            <div className="w-full relative pt-24 pb-16 lg:pt-32 lg:pb-24 overflow-hidden bg-[#EDF5F2]">
                 <div className="absolute top-0 right-0 w-96 h-96 bg-[#6B9F91]/10 blur-[100px] rounded-full translate-x-1/3 -translate-y-1/3" />
                 <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#FFC900]/10 blur-[100px] rounded-full -translate-x-1/3 translate-y-1/3" />
 
                 <Container className="relative z-10 flex flex-col items-center text-center max-w-4xl">
                     <div className="w-full flex justify-center mb-8">
-                        <Link href="/digital-solutions" className="flex items-center text-sm font-bold text-[#6B9F91] hover:text-[#588478] transition-colors group">
+                        <Link href="/client-projects" className="flex items-center text-sm font-bold text-[#6B9F91] hover:text-[#588478] transition-colors group">
                             <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
-                            Back to Digital Solutions
+                            Back to All Projects
                         </Link>
                     </div>
 
@@ -95,7 +95,7 @@ export default async function ClientProjectCaseStudyPage({ params }: PageProps) 
                             rel="noopener noreferrer"
                             className="inline-flex items-center justify-center h-12 px-8 rounded-full bg-[#6B9F91] text-white font-bold shadow-lg shadow-[#6B9F91]/20 hover:bg-[#588478] transition-all hover:scale-105 active:scale-95"
                         >
-                            View Live Project
+                            Visit Live Project
                             <ExternalLink className="w-4 h-4 ml-2" />
                         </a>
                     )}
