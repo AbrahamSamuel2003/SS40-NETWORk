@@ -15,7 +15,7 @@ export async function verifyPassword(plaintext: string, hash: string): Promise<b
     return bcrypt.compare(plaintext, hash);
 }
 
-export async function createSession(userId: string, accountType: 'AdminUser' | 'User', role: 'ADMIN' | 'MEMBER') {
+export async function createSession(userId: string, accountType: 'AdminUser', role: 'ADMIN') {
     const token = await new SignJWT({ userId, accountType, role })
         .setProtectedHeader({ alg: 'HS256' })
         .setIssuedAt()
@@ -46,8 +46,8 @@ export async function getCurrentSession() {
         const { payload } = await jwtVerify(token, SECRET_KEY);
         // Handle legacy payload (only had { adminId }) vs new payload
         let userId = payload.userId as string;
-        let accountType = payload.accountType as 'AdminUser' | 'User';
-        let role = payload.role as 'ADMIN' | 'MEMBER';
+        let accountType = payload.accountType as 'AdminUser';
+        let role = payload.role as 'ADMIN';
 
         if (!userId && payload.adminId) {
             // Legacy token seamlessly upgrades in logic
@@ -73,45 +73,8 @@ export async function getCurrentAdmin() {
         });
         if (!admin || !admin.isActive) return null;
         return admin;
-    } else if (session.accountType === 'User') {
-        const user = await prisma.user.findUnique({
-            where: { id: session.userId },
-            select: { id: true, name: true, email: true, role: true },
-        });
-        // User must exist AND still be configured as ADMIN in the DB (prevents cached role attacks)
-        if (!user || user.role !== 'ADMIN') return null;
-        // Map the payload dynamically so it fulfills existing references natively
-        return {
-            id: user.id,
-            username: user.email,
-            email: user.email,
-            fullName: user.name,
-            isActive: true
-        };
     }
 
-    return null;
-}
-
-export async function getCurrentUser() {
-    const session = await getCurrentSession();
-    if (!session) return null;
-
-    if (session.accountType === 'User') {
-        const user = await prisma.user.findUnique({
-            where: { id: session.userId },
-            select: { id: true, name: true, email: true, role: true },
-        });
-        return user;
-    } else if (session.accountType === 'AdminUser') {
-        // Technically an AdminUser acts as an ADMIN
-        const admin = await prisma.adminUser.findUnique({
-            where: { id: session.userId },
-            select: { id: true, username: true, email: true, fullName: true, isActive: true },
-        });
-        if (!admin || !admin.isActive) return null;
-        return { id: admin.id, name: admin.fullName, email: admin.email, role: 'ADMIN' };
-    }
     return null;
 }
 

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useMotionValue, useSpring, useTransform, Variants, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { Play, Star, ArrowRight, Quote, ChevronUp, ChevronLeft, ChevronRight, X } from "lucide-react";
@@ -10,53 +10,32 @@ import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 
-// Data-driven placeholders specific to SS40 Academics
-const FEATURED_STORY = {
-    clientName: "David Chen",
-    company: "Software Engineer, Google",
-    quote: "Building scalable backend solutions at SS40 Academics gave me the exact architectural experience I needed to immediately contribute on day one of my new career.",
-    link: "/academics/apply",
-};
+interface StudentImpactsProps {
+    impacts?: any[];
+}
 
-const SECONDARY_STORIES = [
-    {
-        clientName: "Sarah Jenkins",
-        company: "Data Scientist",
-        quote: "The final live project totally changed how I approach data pipelines. It bridged the gap between theory and industry reality.",
-        route: "Data Science Track"
-    },
-    {
-        clientName: "Marcus Torres",
-        company: "Cloud Architect",
-        quote: "Deploying real microservices for actual clients gave me a massive edge in technical interviews and system design discussions.",
-        route: "Cloud Architecture"
-    },
-    {
-        clientName: "Priya Sharma",
-        company: "Frontend Developer",
-        quote: "The hands-on practical learning and real-world projects bridged my talent gap and directly helped me secure a top-tier UI engineering role.",
-        route: "Web Development"
-    },
-];
+export function StudentImpacts({ impacts = [] }: StudentImpactsProps) {
+    if (!impacts || impacts.length === 0) return null;
 
-// Elegant stagger entrance sequence
-const entranceStagger: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-        opacity: 1,
-        transition: {
-            staggerChildren: 0.15,
-            delayChildren: 0.1,
-        }
-    }
-};
+    const featuredStoryRaw = impacts.find(imp => imp.youtubeUrl) || impacts.find(imp => imp.isFeatured) || impacts[0];
+    const secondaryStoriesRaw = impacts.filter(imp => imp.id !== featuredStoryRaw.id && !imp.youtubeUrl);
 
-const fadeUpAnim: Variants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] } }
-};
+    const featuredStory = {
+        clientName: featuredStoryRaw.studentName,
+        company: featuredStoryRaw.designation,
+        quote: featuredStoryRaw.quote,
+        link: "/academics/apply",
+        videoUrl: featuredStoryRaw.videoUrl,
+        youtubeUrl: featuredStoryRaw.youtubeUrl
+    };
 
-export function StudentImpacts() {
+    const secondaryStories = secondaryStoriesRaw.map(imp => ({
+        clientName: imp.studentName,
+        company: imp.designation,
+        quote: imp.quote,
+        route: imp.academicRoute
+    }));
+
     // Modal state lifted here to avoid CSS perspective trapping fixed elements
     const [activeModalStory, setActiveModalStory] = useState<{
         clientName: string;
@@ -93,12 +72,14 @@ export function StudentImpacts() {
                 >
                     {/* === LEFT COLUMN (Featured Story) === */}
                     <div className="lg:col-span-2 flex flex-col relative z-20 h-full">
-                        <FeaturedVideoArea />
+                        <FeaturedVideoArea videoUrl={featuredStory.videoUrl} featuredStory={featuredStory} />
                     </div>
 
                     {/* === RIGHT COLUMN (Secondary Stories Carousel) === */}
                     <div className="lg:col-span-1 flex flex-col relative z-10 h-full">
-                        <SecondaryStoryCarousel onOpenModal={(story: any) => setActiveModalStory(story)} />
+                        {secondaryStories.length > 0 && (
+                            <SecondaryStoryCarousel stories={secondaryStories} onOpenModal={(story: any) => setActiveModalStory(story)} />
+                        )}
                     </div>
                 </motion.div>
 
@@ -117,11 +98,28 @@ export function StudentImpacts() {
     );
 }
 
+// Elegant stagger entrance sequence
+const entranceStagger: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.15,
+            delayChildren: 0.1,
+        }
+    }
+};
+
+const fadeUpAnim: Variants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] } }
+};
+
 // ============================================================================
 // MICRO-INTERACTION COMPONENTS
 // ============================================================================
 
-function FeaturedVideoArea() {
+function FeaturedVideoArea({ videoUrl, featuredStory }: { videoUrl?: string | null, featuredStory: any }) {
     const ref = useRef<HTMLDivElement>(null);
     const [isPlaying, setIsPlaying] = useState(false);
     const x = useMotionValue(0);
@@ -131,6 +129,7 @@ function FeaturedVideoArea() {
     const rotateY = useTransform(x, [-0.5, 0.5], [-2, 2]);
 
     const videoRef = useRef<HTMLVideoElement>(null);
+    const iframeRef = useRef<HTMLIFrameElement>(null);
 
     function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
         if (!ref.current || isPlaying) return;
@@ -150,6 +149,26 @@ function FeaturedVideoArea() {
         y.set(0);
     }
 
+    // ── YouTube IFrame API state listener ──────────────────────────────────
+    useEffect(() => {
+        if (!featuredStory.youtubeUrl) return;
+
+        function onMessage(event: MessageEvent) {
+            try {
+                if (!event.data || (event.origin !== 'https://www.youtube.com' && event.origin !== 'https://www.youtube-nocookie.com')) return;
+                const msg = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+                if (msg?.event === 'onStateChange' && typeof msg.info === 'number') {
+                    setIsPlaying(msg.info === 1 || msg.info === 3);
+                } else if (msg?.event === 'infoDelivery' && msg?.info?.playerState !== undefined) {
+                    setIsPlaying(msg.info.playerState === 1 || msg.info.playerState === 3);
+                }
+            } catch { }
+        }
+
+        window.addEventListener('message', onMessage);
+        return () => window.removeEventListener('message', onMessage);
+    }, [featuredStory.youtubeUrl]);
+
     return (
         <motion.div
             variants={fadeUpAnim}
@@ -162,7 +181,7 @@ function FeaturedVideoArea() {
                 transformStyle: "preserve-3d"
             }}
             onClick={() => {
-                if (!isPlaying && videoRef.current) {
+                if (!featuredStory.youtubeUrl && !isPlaying && videoRef.current) {
                     videoRef.current.play().catch((error) => {
                         console.warn("Video playback was intercepted or failed to load source:", error);
                         setIsPlaying(true);
@@ -171,18 +190,59 @@ function FeaturedVideoArea() {
             }}
             className={`relative w-full aspect-video bg-gray-100 rounded-2xl overflow-hidden flex flex-col items-center justify-center group shadow-[0_4px_20px_rgb(0,0,0,0.05)] ${isPlaying ? 'cursor-auto' : 'cursor-pointer'}`}
         >
-            {/* Native HTML5 Video Element */}
-            <video
-                ref={videoRef}
-                className="absolute inset-0 w-full h-full object-cover z-0"
-                controls={isPlaying}
-                playsInline
-                preload="metadata"
-                onPlay={() => setIsPlaying(true)}
-                onPause={() => setIsPlaying(false)}
-                onEnded={() => setIsPlaying(false)}
-                src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
-            />
+            {/* Native HTML5 Video Element (shown only when no YouTube URL) */}
+            {!featuredStory.youtubeUrl && (
+                <video
+                    ref={videoRef}
+                    className="absolute inset-0 w-full h-full object-cover z-0"
+                    controls={isPlaying}
+                    playsInline
+                    preload="metadata"
+                    onPlay={() => setIsPlaying(true)}
+                    onPause={() => setIsPlaying(false)}
+                    onEnded={() => setIsPlaying(false)}
+                    src={videoUrl || "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"}
+                />
+            )}
+
+            {/* YouTube iframe embed (shown only when youtubeUrl exists) */}
+            {featuredStory.youtubeUrl && (() => {
+                const ytUrl = featuredStory.youtubeUrl as string;
+                let videoId: string | null = null;
+                try {
+                    const parsed = new URL(ytUrl);
+                    const host = parsed.hostname.replace('www.', '');
+                    if (host === 'youtube.com' && parsed.pathname === '/watch') {
+                        videoId = parsed.searchParams.get('v');
+                    } else if (host === 'youtu.be') {
+                        videoId = parsed.pathname.slice(1).split('/')[0];
+                    } else if (host === 'youtube.com' && parsed.pathname.startsWith('/shorts/')) {
+                        videoId = parsed.pathname.split('/shorts/')[1]?.split('/')[0] || null;
+                    }
+                } catch { videoId = null; }
+
+                if (!videoId || !/^[a-zA-Z0-9_-]{11}$/.test(videoId)) return null;
+
+                return (
+                    <iframe
+                        ref={iframeRef}
+                        className="absolute inset-0 w-full h-full z-10"
+                        src={`https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1&enablejsapi=1`}
+                        title="Student Impact video"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        loading="lazy"
+                        onLoad={(e) => {
+                            try {
+                                e.currentTarget.contentWindow?.postMessage(
+                                    JSON.stringify({ event: 'listening', id: 1 }),
+                                    '*'
+                                );
+                            } catch (err) { }
+                        }}
+                    />
+                );
+            })()}
 
             {/* Ambient Thumbnail Overlay (Mockup background before play) */}
             <div className={`absolute inset-0 pointer-events-none bg-gradient-to-tr from-gray-200/55 via-gray-100/45 to-[#E8F0EE]/55 z-0 transition-opacity duration-700 ${isPlaying ? 'opacity-0' : 'opacity-55'}`} />
@@ -236,7 +296,7 @@ function FeaturedVideoArea() {
                         ))}
                     </div>
                     <p className="font-medium text-[#111827] italic leading-tight text-[11px] md:text-sm line-clamp-1 md:line-clamp-2">
-                        "{FEATURED_STORY.quote}"
+                        "{featuredStory.quote}"
                     </p>
                 </div>
             </motion.div>
@@ -244,20 +304,21 @@ function FeaturedVideoArea() {
     );
 }
 
-function SecondaryStoryCarousel({ onOpenModal }: { onOpenModal: (story: any) => void }) {
+function SecondaryStoryCarousel({ stories, onOpenModal }: { stories: any[], onOpenModal: (story: any) => void }) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isTruncated, setIsTruncated] = useState(true); // Default to assuming truncation for safety
     const quoteRef = useRef<HTMLParagraphElement>(null);
 
     // Automatic rotation
     React.useEffect(() => {
+        if (!stories || stories.length <= 1) return;
         const timer = setInterval(() => {
-            setCurrentIndex((prev) => (prev === SECONDARY_STORIES.length - 1 ? 0 : prev + 1));
+            setCurrentIndex((prev) => (prev === stories.length - 1 ? 0 : prev + 1));
         }, 3500);
         return () => clearInterval(timer);
-    }, []);
+    }, [stories]);
 
-    const story = SECONDARY_STORIES[currentIndex];
+    const story = stories[currentIndex] || stories[0];
 
     // Detect if content is overflowing (clamped) to conditionally show the "Read Full Story" button
     React.useEffect(() => {

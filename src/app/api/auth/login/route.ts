@@ -46,26 +46,6 @@ export async function POST(request: Request) {
             }
         }
 
-        // 2. Fallback to normal User table
-        const user = await prisma.user.findUnique({
-            where: { email: normalizedEmail } // users only use email
-        });
-
-        if (user && user.passwordHash && user.passwordHash !== 'UNSET_PASSWORD') {
-            const isValid = await verifyPassword(password, user.passwordHash);
-            if (isValid) {
-                await createSession(user.id, 'User', user.role);
-
-                const redirectTo = user.role === 'ADMIN' ? '/admin' : '/user';
-
-                return NextResponse.json({
-                    success: true,
-                    role: user.role,
-                    redirectTo
-                });
-            }
-        }
-
         // 3. Fail gracefully generic
         return NextResponse.json(
             { success: false, error: 'Invalid email or password.' },

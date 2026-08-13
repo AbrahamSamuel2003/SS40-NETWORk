@@ -10,7 +10,7 @@ const createPrismaClient = () => {
     const adapter = new PrismaPg(pool);
 
     return new PrismaClient({ adapter });
-};
+}; // trigger hot reload
 
 export const prisma = globalForPrisma.prisma || createPrismaClient();
 

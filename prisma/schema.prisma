@@ -66,6 +66,7 @@ model OrganizationLogo {
 
 model Product {
   id             String   @id @default(uuid())
+  name           String
   marketingTitle String
   badgeText      String?
   description    String
@@ -135,6 +136,7 @@ model StudentImpact {
   quote         String
   academicRoute String
   videoUrl      String?
+  youtubeUrl    String?
   isFeatured    Boolean  @default(false)
   sortOrder     Int      @default(0)
   isActive      Boolean  @default(true)
@@ -163,6 +165,10 @@ model Lead {
   message         String
   status          LeadStatus @default(NEW)
   internalNotes   String?
+  source          String?
+  sourcePage      String?
+  landingPage     String?
+  referrer        String?
   isArchived      Boolean    @default(false)
   createdAt       DateTime   @default(now())
   updatedAt       DateTime   @updatedAt
@@ -248,17 +254,3 @@ model AdminActivityLog {
   adminUser   AdminUser @relation(fields: [adminUserId], references: [id], onDelete: Restrict)
 }
  
-enum UserRole {
-  ADMIN
-  MEMBER
-}
-
-model User {
-  id           String   @id @default(uuid())
-  name         String
-  email        String   @unique
-  passwordHash String
-  role         UserRole @default(MEMBER)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-}

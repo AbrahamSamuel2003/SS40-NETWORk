@@ -22,13 +22,7 @@ const NETWORK_NODES = [
     { id: "res", label: "Research Partners", tooltip: "Innovation & R&D", icon: Target, x: 0, y: -130 },
 ];
 
-const INSTITUTIONS = [
-    { name: "Tech Institute of Excellence", type: "Academic Partner", logo: null },
-    { name: "Global Management College", type: "University MoU", logo: null },
-    { name: "Pioneer Engineering Academy", type: "Training Partner", logo: null },
-    { name: "Future Innovators University", type: "Research Collaborator", logo: null },
-    { name: "Apex Sciences Institute", type: "Academic Partner", logo: null },
-];
+
 
 const BENEFITS = [
     { title: "Industry Projects", description: "Students solve real business challenges.", icon: Rocket },
@@ -39,11 +33,11 @@ const BENEFITS = [
     { title: "Placement Support", description: "Strategic hiring and recruitment pipelines.", icon: Lightbulb },
 ];
 
-export function Collaborations() {
+export function Collaborations({ logos = [] }: { logos?: any[] }) {
+    if (!logos || logos.length === 0) return null;
     const [hoveredNode, setHoveredNode] = React.useState<string | null>(null);
 
-    // Provide a continuous array for infinite scrolling (6x duplication to match home page marquee speed)
-    const half = [...INSTITUTIONS, ...INSTITUTIONS, ...INSTITUTIONS];
+    const half = [...logos, ...logos, ...logos];
     const marqueeItems = [...half, ...half];
     const pauseMarquee = (event: React.PointerEvent<HTMLDivElement>) => {
         if (event.pointerType === "touch") {
@@ -192,15 +186,15 @@ export function Collaborations() {
                                 >
                                     {/* Logo Placeholder */}
                                     <div className="w-14 h-14 bg-white rounded-xl shadow-inner border border-gray-100 flex items-center justify-center shrink-0">
-                                        {inst.logo ? (
-                                            <Image src={inst.logo} alt={inst.name} width={40} height={40} className="object-contain" />
+                                        {inst.logoUrl ? (
+                                            <Image src={inst.logoUrl} alt={inst.name} width={40} height={40} className="object-contain" />
                                         ) : (
                                             <Building2 className="w-6 h-6 text-gray-300" />
                                         )}
                                     </div>
                                     <div>
                                         <h4 className="text-sm font-extrabold text-[#111827] leading-tight mb-1">{inst.name}</h4>
-                                        <p className="text-[11px] font-bold text-[#6B9F91] uppercase tracking-wider">{inst.type}</p>
+                                        <p className="text-[11px] font-bold text-[#6B9F91] uppercase tracking-wider">{inst.category}</p>
                                     </div>
                                 </div>
                             ))}

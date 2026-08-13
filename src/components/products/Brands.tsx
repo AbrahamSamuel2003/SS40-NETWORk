@@ -1,32 +1,40 @@
 "use client";
 
 import * as React from "react";
-import {
-    Building2, Store, Factory, Plane, Landmark,
-    Stethoscope, GraduationCap, Code2, Cpu, Globe
-} from "lucide-react";
+import { Building2 } from "lucide-react";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { cn } from "@/utils/cn";
 
-const ROW_1 = [
-    { id: "1", name: "Apex Logistics", icon: Plane },
-    { id: "2", name: "Horizon Retail", icon: Store },
-    { id: "3", name: "Stellar Fabrication", icon: Factory },
-    { id: "4", name: "Oasis Financial", icon: Landmark },
-    { id: "5", name: "Nova Healthcare", icon: Stethoscope },
-];
-
-const ROW_2 = [
-    { id: "6", name: "Quantum Academics", icon: GraduationCap },
-    { id: "7", name: "Vertex Tech", icon: Code2 },
-    { id: "8", name: "Nexus Systems", icon: Cpu },
-    { id: "9", name: "Global Trade Co.", icon: Globe },
-    { id: "10", name: "Summit Estates", icon: Building2 },
-];
-
 export function Brands() {
+    const [logos, setLogos] = React.useState<any[]>([]);
+    const [isLoading, setIsLoading] = React.useState(true);
+
+    React.useEffect(() => {
+        fetch('/api/organization-logos?pageScope=PRODUCTS')
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && Array.isArray(data.data)) {
+                    setLogos(data.data);
+                }
+                setIsLoading(false);
+            })
+            .catch(() => setIsLoading(false));
+    }, []);
+
+    if (isLoading || logos.length === 0) {
+        return null; // Return null effectively hiding the section if no logos are available for the Products page
+    }
+
+    // Split logos into two rows if there are enough, otherwise duplicate them or use single row
+    const halfIndex = Math.ceil(logos.length / 2);
+    const ROW_1 = logos.slice(0, halfIndex);
+    const ROW_2 = logos.slice(halfIndex);
+
+    // If we have very few logos, we might want to just repeat row 1 or keep row 2 empty.
+    const showRow2 = ROW_2.length > 0;
+
     return (
         <SectionWrapper id="brands" className="bg-[#EDF5F2] relative overflow-hidden">
 
@@ -99,12 +107,14 @@ export function Brands() {
                 <div className="absolute top-0 bottom-0 right-0 w-24 md:w-48 bg-gradient-to-l from-[#EDF5F2] to-transparent z-20 pointer-events-none" />
 
                 {/* ROW 1: Scroll Left */}
-                <MarqueeRow items={ROW_1} direction="left" speed={30} />
+                {ROW_1.length > 0 && <MarqueeRow items={ROW_1} direction="left" speed={30} />}
 
                 {/* ROW 2: Scroll Right (Hidden on Mobile) */}
-                <div className="hidden md:block">
-                    <MarqueeRow items={ROW_2} direction="right" speed={35} />
-                </div>
+                {showRow2 && (
+                    <div className="hidden md:block">
+                        <MarqueeRow items={ROW_2} direction="right" speed={35} />
+                    </div>
+                )}
             </div>
 
         </SectionWrapper>
@@ -112,14 +122,15 @@ export function Brands() {
 }
 
 interface MarqueeRowProps {
-    items: { id: string; name: string; icon: React.ElementType }[];
+    items: any[];
     direction: "left" | "right";
     speed: number;
 }
 
 function MarqueeRow({ items, direction, speed }: MarqueeRowProps) {
-    // Duplicate exactly to fit -50% perfectly.
-    const half = [...items, ...items, ...items];
+    // Duplicate exactly to fit -50% perfectly. Note: must have a robust amount of duplicates if the initial array is small
+    const expandedItems = items.length < 5 ? [...items, ...items, ...items, ...items] : items;
+    const half = [...expandedItems, ...expandedItems, ...expandedItems];
     const duplicatedItems = [...half, ...half];
     const pauseMarquee = (event: React.PointerEvent<HTMLDivElement>) => {
         if (event.pointerType === "touch") {
@@ -152,18 +163,29 @@ function MarqueeRow({ items, direction, speed }: MarqueeRowProps) {
                 style={{ "--duration": `${speed}s` } as React.CSSProperties}
             >
                 {duplicatedItems.map((item, idx) => {
-                    const Icon = item.icon;
                     return (
                         <div
                             key={`${item.id}-${idx}`}
                             className="marquee-logo-card bg-white border border-gray-100 rounded-2xl p-4 md:p-5 w-[220px] md:w-[260px] h-[80px] md:h-[90px] flex items-center justify-start gap-4 shadow-sm transition-all duration-300 cursor-pointer overflow-hidden"
+                            title={item.name}
                         >
-                            <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-[#EDF5F2] text-[#6B9F91] flex items-center justify-center shrink-0 transition-colors">
-                                <Icon className="marquee-logo-icon w-5 h-5 md:w-6 md:h-6 transition-transform duration-300" />
+                            <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-[#EDF5F2] text-[#6B9F91] overflow-hidden flex items-center justify-center shrink-0 transition-colors shrink-0">
+                                {item.logoUrl ? (
+                                    <img src={item.logoUrl} alt={item.name} className="w-full h-full object-cover p-1" />
+                                ) : (
+                                    <Building2 className="marquee-logo-icon w-5 h-5 md:w-6 md:h-6 transition-transform duration-300" />
+                                )}
                             </div>
-                            <span className="font-bold text-gray-800 text-sm md:text-base whitespace-nowrap overflow-hidden text-ellipsis w-full text-left">
-                                {item.name}
-                            </span>
+                            <div className="flex flex-col overflow-hidden max-w-[150px]">
+                                <span className="font-bold text-gray-800 text-sm md:text-base whitespace-nowrap overflow-hidden text-ellipsis w-full text-left">
+                                    {item.name}
+                                </span>
+                                {item.category && (
+                                    <span className="text-[10px] text-gray-400 font-medium uppercase tracking-wider overflow-hidden text-ellipsis whitespace-nowrap">
+                                        {item.category}
+                                    </span>
+                                )}
+                            </div>
                         </div>
                     );
                 })}

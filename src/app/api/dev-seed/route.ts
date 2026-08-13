@@ -121,6 +121,90 @@ export async function GET() {
             }
         });
 
+        // ---------------- PRODUCTS ----------------
+        await prisma.product.deleteMany({});
+        await prisma.happimonial.deleteMany({ where: { pageScope: 'PRODUCTS' } });
+
+        await prisma.product.create({
+            data: {
+                name: "ClearInvoice",
+                marketingTitle: "Smart Invoicing Built For Modern Businesses",
+                badgeText: "OUR PRODUCT",
+                productUrl: "https://invoice.ss40network.cloud/",
+                description: "ClearInvoice helps businesses create invoices, manage billing, track expenses, and simplify financial workflows through a modern cloud-based experience.",
+                tags: ["GST Automation", "Easy Billing", "Expense Manager"],
+                features: ["Automated Tax", "One-click Quotes", "Bank Sync"],
+                isActive: true,
+                isFeatured: true,
+                sortOrder: 1
+            }
+        });
+
+        await prisma.product.create({
+            data: {
+                name: "AI Insight",
+                marketingTitle: "Predictive Analytics For Everyone",
+                badgeText: "NEW",
+                productUrl: "https://ai.ss40network.cloud/",
+                description: "Leverage advanced machine learning models to forecast trends and analyze your customer behavior seamlessly and securely in real-time.",
+                tags: ["AI Tools", "Data Sync", "Safe Analytics"],
+                features: ["Predictive Models", "User Segmentation", "24/7 Insight"],
+                isActive: true,
+                isFeatured: false,
+                sortOrder: 2
+            }
+        });
+
+        await prisma.happimonial.create({
+            data: {
+                clientName: "David Lee",
+                companyName: "Nexus Logistics",
+                industry: "Supply Chain",
+                testimonial: "Reduced invoicing discrepancies to zero and recovered 15% missing revenue with ClearInvoice.",
+                isActive: true,
+                pageScope: "PRODUCTS",
+                thumbnailUrl: "https://randomuser.me/api/portraits/men/11.jpg"
+            }
+        });
+
+        await prisma.happimonial.create({
+            data: {
+                clientName: "Sarah Connor",
+                companyName: "Prime Retailers",
+                industry: "E-Commerce",
+                testimonial: "Automated our entire global multi-currency tax billing system perfectly using SS40 platforms.",
+                isActive: true,
+                pageScope: "PRODUCTS",
+                thumbnailUrl: "https://randomuser.me/api/portraits/women/42.jpg"
+            }
+        });
+
+        // PRODUCT LOGOS
+        await prisma.organizationLogo.deleteMany({ where: { pageScope: 'PRODUCTS' } });
+
+        const logoUrls = [
+            'https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg',
+            'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg',
+            'https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg',
+            'https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg',
+            'https://upload.wikimedia.org/wikipedia/commons/0/08/Cisco_logo_blue_2016.svg'
+        ];
+        const names = ["Amazon", "Google", "Microsoft", "IBM", "Cisco"];
+
+        for (let i = 0; i < logoUrls.length; i++) {
+            await prisma.organizationLogo.create({
+                data: {
+                    name: names[i],
+                    category: "Partner",
+                    placementType: "CLIENT",
+                    logoUrl: logoUrls[i],
+                    isActive: true,
+                    pageScope: "PRODUCTS"
+                }
+            });
+        }
+
+
         return NextResponse.json({ success: true, message: "Database seeded correctly!" });
     } catch (e: any) {
         return NextResponse.json({ success: false, error: e.message });

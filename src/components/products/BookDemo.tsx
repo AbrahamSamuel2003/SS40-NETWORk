@@ -83,13 +83,13 @@ export function BookDemo() {
 
                         <motion.div variants={slideUp} className="flex flex-col sm:flex-row w-full sm:w-auto gap-4">
                             <Button asChild size="lg" className="w-full sm:w-auto bg-[#6B9F91] hover:bg-[#5C8C80] text-white shadow-lg shadow-[#6B9F91]/20 group">
-                                <Link href="/contact">
+                                <Link href="/contact?source=PRODUCTS_CTA&sourcePage=/products">
                                     <CalendarCheck className="w-5 h-5 mr-2 transition-transform" />
                                     Book a Demo
                                 </Link>
                             </Button>
                             <Button asChild variant="outline" size="lg" className="w-full sm:w-auto bg-white hover:bg-gray-50 border-gray-200 text-gray-700 group">
-                                <Link href="/contact">
+                                <Link href="/contact?source=PRODUCTS_TALK_TO_EXPERT&sourcePage=/products">
                                     Talk to Expert
                                     <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                                 </Link>

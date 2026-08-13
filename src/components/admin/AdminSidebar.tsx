@@ -22,7 +22,6 @@ import {
     ChevronDown,
     Home,
     Monitor,
-    Phone,
     Database
 } from 'lucide-react';
 
@@ -93,15 +92,7 @@ const MENU_ITEMS: MenuBlock[] = [
             { name: 'Media', href: '/admin/media' }, // Reusing existing
         ]
     },
-    {
-        name: 'Contact',
-        href: '/admin/contact-group',
-        icon: Phone,
-        subItems: [
-            { name: 'Business Hours', href: '/admin/contact/business-hours' },
-            { name: 'Contact Information', href: '/admin/contact/info' },
-        ]
-    },
+
 
     { label: 'CRM' },
     {
@@ -120,11 +111,6 @@ const MENU_ITEMS: MenuBlock[] = [
         name: 'Site Config',
         href: '/admin/site-config',
         icon: Settings,
-    },
-    {
-        name: 'Users',
-        href: '/admin/users',
-        icon: Users,
     },
     {
         name: 'Activity Logs',

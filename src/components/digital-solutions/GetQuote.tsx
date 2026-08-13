@@ -141,13 +141,13 @@ export function GetQuote() {
 
                             <div className="w-full flex flex-col gap-4">
                                 <Button asChild size="lg" className="w-full bg-[#6B9F91] hover:bg-[#588478] text-white shadow-lg shadow-[#6B9F91]/20 group">
-                                    <Link href="/contact">
+                                    <Link href="/contact?source=DIGITAL_SOLUTIONS_START_PROJECT&sourcePage=/digital-solutions">
                                         Get a Free Quote
                                         <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                                     </Link>
                                 </Button>
                                 <Button asChild variant="outline" size="lg" className="w-full border-gray-200 hover:bg-gray-50">
-                                    <Link href="/contact">
+                                    <Link href="/contact?source=DIGITAL_SOLUTIONS_TALK_TO_TEAM&sourcePage=/digital-solutions">
                                         Talk to Our Team
                                     </Link>
                                 </Button>

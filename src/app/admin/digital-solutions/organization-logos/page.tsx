@@ -27,7 +27,7 @@ export default function DigitalSolutionsLogosPage() {
 
     const fetchLogos = async () => {
         try {
-            const res = await fetch('/api/admin/organization-logos?pageScope=DIGITAL_SOLUTIONS');
+            const res = await fetch('/api/admin/organization-logos?isActive=all&pageScope=DIGITAL_SOLUTIONS');
             const data = await res.json();
             if (data.success) {
                 setLogos(data.data);

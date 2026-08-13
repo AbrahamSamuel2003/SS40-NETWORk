@@ -10,7 +10,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     }
 
     if (session.role !== 'ADMIN') {
-        redirect('/user');
+        redirect('/login');
     }
 
     const adminUser = await getCurrentAdmin();

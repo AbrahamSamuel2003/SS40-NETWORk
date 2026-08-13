@@ -9,7 +9,6 @@ export default async function AdminDashboardPage() {
         studentProjectsCount,
         leadsCount,
         visitorsCount,
-        usersCount,
         activities
     ] = await Promise.all([
         prisma.product.count(),
@@ -17,7 +16,6 @@ export default async function AdminDashboardPage() {
         prisma.studentProject.count(),
         prisma.lead.count(),
         prisma.visitor.count(),
-        prisma.user.count(),
         prisma.adminActivityLog.findMany({
             take: 10,
             orderBy: { createdAt: 'desc' },
@@ -31,7 +29,6 @@ export default async function AdminDashboardPage() {
         { label: 'Student Projects', value: studentProjectsCount, icon: GraduationCap, color: 'text-purple-500' },
         { label: 'Leads', value: leadsCount, icon: Inbox, color: 'text-rose-500' },
         { label: 'Visitors', value: visitorsCount, icon: Activity, color: 'text-green-500' },
-        { label: 'Users', value: usersCount, icon: Users, color: 'text-orange-500' },
     ];
 
     return (

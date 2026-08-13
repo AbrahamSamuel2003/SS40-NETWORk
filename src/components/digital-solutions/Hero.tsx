@@ -63,7 +63,7 @@ export function Hero() {
 
                             <div className="flex flex-col sm:flex-row items-center w-full sm:w-auto gap-4">
                                 <Button asChild size="lg" className="w-full sm:w-auto shadow-lg shadow-[var(--color-primary)]/20 group">
-                                    <Link href="/contact">
+                                    <Link href="/contact?source=DIGITAL_SOLUTIONS_START_PROJECT&sourcePage=/digital-solutions">
                                         Start Your Project
                                         <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                                     </Link>

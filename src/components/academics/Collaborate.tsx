@@ -112,7 +112,7 @@ export function Collaborate() {
                     className="w-full sm:w-auto flex justify-center"
                 >
                     <Button asChild className="w-full sm:w-auto bg-[#6B9F91] text-white hover:bg-[#5C8C80] font-bold text-base px-8 py-6 rounded-full group shadow-lg shadow-[#6B9F91]/20">
-                        <Link href="/contact">
+                        <Link href="/contact?source=ACADEMICS_COLLABORATE&sourcePage=/academics">
                             Collaborate With Us
                             <motion.span className="inline-block ml-2 group-hover:translate-x-1 transition-transform">
                                 <ArrowRight className="w-5 h-5" />

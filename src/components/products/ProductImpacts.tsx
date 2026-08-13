@@ -1,42 +1,94 @@
 "use client";
 
 import * as React from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { Play, ArrowRight, Building2, Store, Factory } from "lucide-react";
+import { Play, ArrowRight, Video, X, Loader2 } from "lucide-react";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { CardMotion } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { slideUp, staggerContainer, hoverLift } from "@/lib/animations";
 
-const IMPACT_STORIES = [
-    {
-        id: "1",
-        businessName: "Nexus Logistics",
-        industry: "Supply Chain",
-        impact: "Reduced invoicing discrepancies to zero and recovered 15% missing revenue with ClearInvoice.",
-        icon: Building2,
-    },
-    {
-        id: "2",
-        businessName: "Prime Retailers",
-        industry: "Retail & E-commerce",
-        impact: "Automated their entire global multi-currency tax billing system seamlessly.",
-        icon: Store,
-    },
-    {
-        id: "3",
-        businessName: "AeroTech Manufacturing",
-        industry: "Manufacturing",
-        impact: "Simplified complex operational workflows across 4 facilities using SS40 Automation solutions.",
-        icon: Factory,
+function getYouTubeEmbedUrl(url: string) {
+    if (!url) return '';
+    try {
+        let videoId = '';
+        if (url.includes('youtu.be/')) {
+            videoId = url.split('youtu.be/')[1]?.split('?')[0];
+        } else if (url.includes('watch?v=')) {
+            videoId = url.split('watch?v=')[1]?.split('&')[0];
+        } else if (url.includes('embed/')) {
+            videoId = url.split('embed/')[1]?.split('?')[0];
+        } else if (url.includes('shorts/')) {
+            videoId = url.split('shorts/')[1]?.split('?')[0];
+        }
+
+        // Strip any remaining hashes or parameters that might have bypassed the split
+        if (videoId) {
+            videoId = videoId.split('#')[0];
+        }
+
+        return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+    } catch {
+        return url;
     }
-];
+}
 
 export function ProductImpacts() {
+    const [happimonials, setHappimonials] = React.useState<any[]>([]);
+    const [isLoading, setIsLoading] = React.useState(true);
+    const [activeMobileIdx, setActiveMobileIdx] = React.useState(0);
+    const [activeModalStory, setActiveModalStory] = React.useState<any | null>(null);
+
+    const mobileScrollRef = React.useRef<HTMLDivElement>(null);
+
+    const scrollToMobileTestimonial = (idx: number) => {
+        if (!mobileScrollRef.current) return;
+        const mobileCards = mobileScrollRef.current.querySelectorAll<HTMLElement>(".happimonial-mobile-card");
+        const card = mobileCards[idx];
+        if (!card) return;
+
+        card.scrollIntoView({
+            behavior: "smooth",
+            inline: "center",
+            block: "nearest"
+        });
+    };
+
+    React.useEffect(() => {
+        fetch('/api/happimonials?pageScope=PRODUCTS')
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) setHappimonials(data.data);
+                setIsLoading(false);
+            })
+            .catch(() => setIsLoading(false));
+
+        const mobileObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    setActiveMobileIdx(Number(entry.target.getAttribute("data-mobile-id")));
+                }
+            });
+        }, { root: mobileScrollRef.current, threshold: 0.6 });
+
+        if (mobileScrollRef.current) {
+            const mobileCards = mobileScrollRef.current.querySelectorAll<HTMLElement>(".happimonial-mobile-card");
+            mobileCards.forEach(c => mobileObserver.observe(c));
+            requestAnimationFrame(() => {
+                mobileCards[0]?.scrollIntoView({ behavior: 'auto', inline: 'center', block: 'nearest' });
+            });
+        }
+
+        return () => {
+            mobileObserver.disconnect();
+        };
+    }, []);
+
     return (
-        <SectionWrapper id="product-impacts" className="bg-white border-t border-gray-100">
+        <SectionWrapper id="product-impacts" className="bg-white border-t border-gray-100 !pb-0 md:!pb-0 lg:!pb-0">
             <Container className="space-y-16">
 
                 {/* Section Header */}
@@ -50,71 +102,244 @@ export function ProductImpacts() {
                     }
                     description="See how organizations use SS40 NETWORK products to simplify operations, improve productivity, and achieve better business outcomes."
                     align="center"
+                    className="mb-12 lg:mb-16"
                 />
 
-                {/* 3-Column Grid */}
-                <motion.div
-                    variants={staggerContainer}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, margin: "-100px" }}
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
-                >
-                    {IMPACT_STORIES.map((story) => (
+                {/* Loading / Empty State */}
+                {isLoading ? (
+                    <div className="py-20 flex justify-center items-center opacity-50">
+                        <Loader2 className="w-8 h-8 animate-spin text-[#6B9F91]" />
+                    </div>
+                ) : happimonials.length === 0 ? (
+                    <div className="py-20 flex justify-center items-center">
+                        <p className="text-gray-500">No product impact stories available yet.</p>
+                    </div>
+                ) : (
+                    <>
+                        {/* Desktop Grid */}
                         <motion.div
-                            key={story.id}
-                            variants={slideUp}
-                            {...hoverLift}
-                            className="bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl hover:shadow-[#6B9F91]/10 flex flex-col group transition-all duration-300"
+                            variants={staggerContainer}
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true, margin: "-100px" }}
+                            className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
                         >
-                            {/* Video Placeholder Box */}
-                            <div className="relative w-full aspect-video bg-gray-900 overflow-hidden flex flex-col items-center justify-center p-6">
-                                {/* Ambient Background Gradient inside Video */}
-                                <div className="absolute inset-0 bg-gradient-to-br from-[#6B9F91]/20 to-black/80 z-0 opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" />
-
-                                <motion.div
-                                    className="relative z-10 w-16 h-16 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex flex-col items-center justify-center text-white mb-4 shadow-lg group-hover:bg-[#6B9F91] group-hover:scale-110 group-hover:border-[#6B9F91] transition-all duration-300"
+                            {happimonials.slice(0, 3).map((item) => (
+                                <CardMotion
+                                    key={item.id}
+                                    variants={slideUp}
+                                    {...hoverLift}
+                                    className="bg-white overflow-hidden rounded-2xl flex flex-col group border border-[var(--color-border)] hover:border-[#6B9F91]/30 transition-all duration-300"
                                 >
-                                    <Play className="w-6 h-6 fill-current translate-x-0.5" />
-                                </motion.div>
-
-                                <p className="relative z-10 text-white/50 text-xs font-bold tracking-widest uppercase mb-1">
-                                    ▶ Product Story
-                                </p>
-                                <p className="relative z-10 text-white font-medium text-sm">
-                                    Demo Coming Soon
-                                </p>
-                            </div>
-
-                            {/* Content Context */}
-                            <div className="p-6 md:p-8 flex flex-col flex-grow">
-                                <div className="flex items-center gap-3 mb-4">
-                                    <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-[#6B9F91] border border-gray-100 shrink-0">
-                                        <story.icon className="w-5 h-5" />
+                                    <div className="relative w-full aspect-[4/3] bg-gray-100 overflow-hidden shrink-0">
+                                        {item.youtubeUrl ? (
+                                            <iframe
+                                                src={getYouTubeEmbedUrl(item.youtubeUrl)}
+                                                className="absolute inset-0 w-full h-full border-0"
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                allowFullScreen
+                                            />
+                                        ) : (
+                                            <div className="absolute inset-0 bg-gradient-to-br from-[#6B9F91]/20 to-[#6B9F91]/5 flex items-center justify-center">
+                                                <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#6B9F91 1px, transparent 1px)', backgroundSize: '16px 16px' }} />
+                                            </div>
+                                        )}
                                     </div>
-                                    <div>
-                                        <h3 className="font-bold text-gray-900 text-lg leading-tight">{story.businessName}</h3>
-                                        <p className="text-xs font-bold text-[#FFC900] uppercase tracking-wider">{story.industry}</p>
+
+                                    <div className="p-5 md:p-6 flex flex-col flex-1">
+                                        <div className="flex items-start justify-between mb-3">
+                                            <div className="flex items-center gap-3">
+                                                {item.thumbnailUrl && (
+                                                    <img src={item.thumbnailUrl} alt={item.clientName} className="w-10 h-10 rounded-full object-cover border border-gray-100 shadow-sm shrink-0" />
+                                                )}
+                                                <div>
+                                                    <h3 className="font-bold text-lg text-[var(--color-heading)] leading-tight tracking-tight">{item.clientName}</h3>
+                                                    <p className="text-sm font-medium text-gray-500 mt-0.5">{item.companyName}</p>
+                                                </div>
+                                            </div>
+                                            <span className="px-2.5 py-1 bg-[#6B9F91]/10 text-[#6B9F91] text-[10px] font-bold uppercase tracking-wider rounded whitespace-nowrap">
+                                                {item.industry}
+                                            </span>
+                                        </div>
+                                        <p className="text-[var(--color-body-text)] text-sm italic flex-1 leading-relaxed line-clamp-3 mb-4 text-gray-600">
+                                            "{item.testimonial}"
+                                        </p>
+                                        <button
+                                            onClick={() => setActiveModalStory(item)}
+                                            className="mt-auto flex items-center text-sm font-bold text-[#6B9F91] hover:text-[#588478] transition-colors group/btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] rounded-sm w-max"
+                                        >
+                                            Read More
+                                            <ArrowRight className="w-4 h-4 ml-1.5 group-hover/btn:translate-x-1 transition-transform" />
+                                        </button>
                                     </div>
-                                </div>
-
-                                <p className="text-gray-600 text-sm leading-relaxed mb-8 flex-grow">
-                                    "{story.impact}"
-                                </p>
-
-                                <button
-                                    className="flex items-center font-bold text-sm text-[#6B9F91] hover:text-[#5C8C80] group/btn transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFC900] rounded-md mt-auto"
-                                    aria-label={`Watch story for ${story.businessName}`}
-                                >
-                                    Watch Story
-                                    <ArrowRight className="ml-2 w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                                </button>
-                            </div>
+                                </CardMotion>
+                            ))}
                         </motion.div>
-                    ))}
-                </motion.div>
 
+                        {/* Mobile Swipe Deck */}
+                        <div className="flex flex-col md:hidden relative overflow-visible -mx-6 mt-2">
+                            <div
+                                ref={mobileScrollRef}
+                                className="flex w-full overflow-x-auto snap-x snap-mandatory pb-8 gap-5 items-stretch [&::-webkit-scrollbar]:hidden px-6"
+                                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                            >
+                                {!isLoading && happimonials.slice(0, 3).map((item, idx) => (
+                                    <div
+                                        key={`mobile-${item.id}`}
+                                        data-mobile-id={idx}
+                                        className="happimonial-mobile-card w-[82vw] sm:w-[350px] flex-shrink-0 flex flex-col bg-white overflow-hidden rounded-3xl snap-center relative scroll-ml-6 border border-[var(--color-border)] shadow-xl shadow-gray-200/50"
+                                    >
+                                        <div className="relative w-full aspect-[4/3] bg-gray-100 overflow-hidden shrink-0">
+                                            {item.youtubeUrl ? (
+                                                <iframe
+                                                    src={getYouTubeEmbedUrl(item.youtubeUrl)}
+                                                    className="absolute inset-0 w-full h-full border-0"
+                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                    allowFullScreen
+                                                />
+                                            ) : (
+                                                <div className="absolute inset-0 bg-gradient-to-br from-[#6B9F91]/20 to-[#6B9F91]/5 flex items-center justify-center">
+                                                    <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#6B9F91 1px, transparent 1px)', backgroundSize: '16px 16px' }} />
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div className="p-5 flex flex-col flex-1 text-left relative z-10 bg-white">
+                                            <div className="flex justify-between items-start mb-3">
+                                                <div className="flex items-center gap-3">
+                                                    {item.thumbnailUrl && (
+                                                        <img src={item.thumbnailUrl} alt={item.clientName} className="w-10 h-10 rounded-full object-cover border border-gray-100 shadow-sm shrink-0" />
+                                                    )}
+                                                    <div>
+                                                        <h3 className="font-bold text-lg text-[var(--color-heading)] leading-tight tracking-tight">{item.clientName}</h3>
+                                                        <p className="text-xs font-medium text-gray-500 mt-0.5">{item.companyName}</p>
+                                                    </div>
+                                                </div>
+                                                <span className="w-max px-2.5 py-1 bg-[#6B9F91]/10 text-[#6B9F91] text-[9px] font-bold uppercase tracking-wider rounded whitespace-nowrap">
+                                                    {item.industry}
+                                                </span>
+                                            </div>
+                                            <p className="text-[var(--color-body-text)] text-sm italic leading-relaxed line-clamp-3 mb-4 text-gray-600">
+                                                "{item.testimonial}"
+                                            </p>
+                                            <button
+                                                onClick={() => setActiveModalStory(item)}
+                                                className="mt-auto flex items-center text-sm font-bold text-[#6B9F91] hover:text-[#588478] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] rounded-sm w-max"
+                                            >
+                                                Read More
+                                                <ArrowRight className="w-4 h-4 ml-1.5" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                                <div className="w-[4vw] shrink-0" />
+                            </div>
+
+                            {!isLoading && happimonials.length > 0 && (
+                                <div className="w-full flex justify-center items-center gap-3 mt-2 mb-8 z-10 relative">
+                                    {happimonials.map((_, i) => (
+                                        <button
+                                            key={`mob-dot-${i}`}
+                                            onClick={() => scrollToMobileTestimonial(i)}
+                                            aria-label={`View testimonial ${i + 1}`}
+                                            className={`h-2.5 rounded-full transition-all duration-400 ease-out ${activeMobileIdx === i ? 'bg-[#6B9F91] w-8 shadow-sm scale-100' : 'bg-gray-300 w-2.5 hover:bg-gray-400 scale-90'} border-none cursor-pointer`}
+                                        />
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
+                        {/* View All Button */}
+                        {!isLoading && happimonials.length > 3 && (
+                            <div className="w-full flex justify-center mb-10 pb-10">
+                                <Link href="/product-impacts" className="inline-flex items-center justify-center font-bold text-lg text-[#6B9F91] hover:text-[#588478] transition-colors group">
+                                    View All Stories
+                                    <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                                </Link>
+                            </div>
+                        )}
+                    </>
+                )}
             </Container>
+
+            {/* Read More Modal Wrapper via AnimatePresence */}
+            <AnimatePresence>
+                {activeModalStory && (
+                    <ProductImpactModal story={activeModalStory} onClose={() => setActiveModalStory(null)} />
+                )}
+            </AnimatePresence>
         </SectionWrapper>
+    );
+}
+
+// --------------------------------------------------------------------------------------
+// MODAL COMPONENT (Copied structurally from Happimonials Modal logic with Products styling)
+// --------------------------------------------------------------------------------------
+
+function ProductImpactModal({ story, onClose }: { story: any; onClose: () => void }) {
+    React.useEffect(() => {
+        const originalStyle = window.getComputedStyle(document.body).overflow;
+        document.body.style.overflow = 'hidden';
+        return () => { document.body.style.overflow = originalStyle; };
+    }, []);
+
+    return (
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center px-4"
+        >
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+            <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                className="relative w-full max-w-2xl bg-white rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]"
+            >
+                <div className="p-6 md:p-8 flex-1 flex flex-col overflow-y-auto">
+                    <div className="flex justify-between items-start mb-6">
+                        <div className="flex items-center gap-4">
+                            {story.thumbnailUrl && (
+                                <img src={story.thumbnailUrl} alt={story.clientName} className="w-14 h-14 rounded-full object-cover border border-gray-100 shadow-sm shrink-0" />
+                            )}
+                            <div>
+                                <span className="inline-block px-3 py-1 bg-[#6B9F91]/10 text-[#6B9F91] text-xs font-bold uppercase tracking-wider rounded-md mb-2">
+                                    {story.industry}
+                                </span>
+                                <h3 className="text-xl md:text-2xl font-bold text-[var(--color-heading)] leading-tight">{story.clientName}</h3>
+                                <p className="text-sm md:text-base text-gray-500 font-medium mt-1">{story.companyName}</p>
+                            </div>
+                        </div>
+                        <button onClick={onClose} aria-label="Close modal" className="p-2 -mr-2 -mt-2 text-gray-400 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91]">
+                            <X className="w-5 h-5" />
+                        </button>
+                    </div>
+
+                    <div className="prose prose-sm md:prose-base prose-gray max-w-none flex-1 overflow-y-auto mb-8 pr-2">
+                        {story.youtubeUrl && (
+                            <div className="relative w-full aspect-[16/9] mb-6 rounded-xl overflow-hidden bg-gray-100 border border-gray-100 shadow-sm">
+                                <iframe
+                                    src={getYouTubeEmbedUrl(story.youtubeUrl)}
+                                    className="absolute inset-0 w-full h-full border-0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                />
+                            </div>
+                        )}
+                        <blockquote className="border-l-4 border-[#6B9F91] pl-4 italic text-gray-700 text-lg md:text-xl font-medium leading-relaxed my-0">
+                            "{story.testimonial}"
+                        </blockquote>
+                    </div>
+
+                    <div className="pt-6 border-t border-gray-100 mt-auto flex justify-end">
+                        <Button variant="outline" onClick={onClose} className="rounded-xl font-semibold">
+                            Close Story
+                        </Button>
+                    </div>
+                </div>
+            </motion.div>
+        </motion.div>
     );
 }

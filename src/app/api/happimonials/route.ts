@@ -45,6 +45,7 @@ export async function GET(request: Request) {
                 testimonial: true,
                 videoUrl: true,
                 thumbnailUrl: true,
+                youtubeUrl: true,
                 sortOrder: true
             }
         });

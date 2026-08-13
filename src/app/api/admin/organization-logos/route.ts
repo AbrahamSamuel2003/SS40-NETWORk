@@ -42,10 +42,12 @@ export async function GET(request: Request) {
 
         const where: any = {};
 
-        if (isActiveStr !== null) {
+        if (isActiveStr === 'all') {
+            // Do not restrict by active status
+        } else if (isActiveStr !== null) {
             where.isActive = isActiveStr === 'true';
         } else {
-            // Do not return inactive records unless explicitly requested
+            // Default to only return active records
             where.isActive = true;
         }
 

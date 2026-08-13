@@ -122,6 +122,34 @@ export async function PUT(request: Request, context: { params: Promise<{ id: str
             updateData.sortOrder = body.sortOrder;
         }
 
+        if (body.youtubeUrl !== undefined) {
+            if (body.youtubeUrl && String(body.youtubeUrl).trim() !== '') {
+                const { extractYouTubeVideoId } = await import('../route');
+                const videoId = extractYouTubeVideoId(String(body.youtubeUrl).trim());
+                if (!videoId) {
+                    return NextResponse.json({ success: false, error: 'Please enter a valid YouTube video URL.' }, { status: 400 });
+                }
+                updateData.youtubeUrl = `https://www.youtube.com/watch?v=${videoId}`;
+            } else {
+                updateData.youtubeUrl = null;
+            }
+        }
+
+        if (updateData.youtubeUrl !== undefined && updateData.youtubeUrl !== null) {
+            const existing = await prisma.studentImpact.findFirst({
+                where: {
+                    youtubeUrl: { not: null },
+                    id: { not: id } // exclude self
+                }
+            });
+            if (existing) {
+                return NextResponse.json({
+                    success: false,
+                    error: 'A YouTube video is already assigned to another Student Impact. Only one video is allowed.'
+                }, { status: 409 });
+            }
+        }
+
         const updatedStudentImpact = await prisma.studentImpact.update({
             where: { id },
             data: updateData

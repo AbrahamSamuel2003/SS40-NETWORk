@@ -78,46 +78,44 @@ export function OfficeLocation({ config }: { config?: SiteConfigData | null }) {
                     </div>
 
                     {/* Right: Embedded Interactive Map */}
-                    {config?.googleMapsIframeUrl && (
-                        <div className="flex-1 w-full bg-[#EDF5F2] rounded-2xl border border-gray-100 overflow-hidden relative min-h-[350px] lg:min-h-[100%] group shadow-inner">
+                    <div className="flex-1 w-full bg-[#EDF5F2] rounded-2xl border border-gray-100 overflow-hidden relative min-h-[350px] lg:min-h-[100%] group shadow-inner">
 
-                            {/* Live Google Map Iframe */}
-                            <iframe
-                                title={`${companyName} Office Location`}
-                                src={config.googleMapsIframeUrl}
-                                className="absolute inset-0 w-full h-full border-0 grayscale-[15%] contrast-[1.05]"
-                                allowFullScreen
-                                loading="lazy"
-                                referrerPolicy="no-referrer-when-downgrade"
-                            />
+                        {/* Live Google Map Iframe seamlessly generated from Admin Address */}
+                        <iframe
+                            title={`${companyName} Office Location`}
+                            src={`https://maps.google.com/maps?q=${encodeURIComponent(companyName + " " + addressText)}&t=m&z=15&output=embed&iwloc=near`}
+                            className="absolute inset-0 w-full h-full border-0 grayscale-[15%] contrast-[1.05]"
+                            allowFullScreen
+                            loading="lazy"
+                            referrerPolicy="no-referrer-when-downgrade"
+                        />
 
-                            {/* Custom Google Places Mock Overlay loosely mapping DB */}
-                            <div className="absolute top-3 left-3 md:top-4 md:left-4 bg-white rounded-md shadow-[0_2px_6px_rgba(0,0,0,0.3)] p-3 md:p-4 z-20 w-[240px] md:w-[280px] pointer-events-auto">
-                                <h4 className="text-[15px] font-semibold text-gray-900 leading-tight mb-1 flex justify-between items-start">
-                                    {companyName}
-                                    <a href="https://goo.gl/maps/DWiCMVGgqKi2r5188" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 p-1">
-                                        <ExternalLink className="w-4 h-4" />
-                                    </a>
-                                </h4>
-                                <p className="text-[12px] text-gray-600 leading-snug whitespace-pre-line">
-                                    {addressText}
-                                </p>
-                            </div>
-
-                            {/* Floating protection gradient for button */}
-                            <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#111827]/30 to-transparent pointer-events-none" />
-
-                            {/* Floating Action Button */}
-                            <div className="absolute inset-x-0 bottom-6 flex justify-center z-10 pointer-events-none">
-                                <a href="https://goo.gl/maps/DWiCMVGgqKi2r5188" target="_blank" rel="noopener noreferrer" className="pointer-events-auto">
-                                    <Button className="bg-[#111827] text-white hover:bg-[#1f2937] font-bold px-6 py-6 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.2)] hover:-translate-y-1 transition-all border border-gray-700/50 flex items-center group/btn">
-                                        <Map className="w-4 h-4 mr-2 text-[#6B9F91] group-hover/btn:text-white transition-colors" />
-                                        View on Google Maps
-                                    </Button>
+                        {/* Custom Google Places Mock Overlay */}
+                        <div className="absolute top-3 left-3 md:top-4 md:left-4 bg-white rounded-md shadow-[0_2px_6px_rgba(0,0,0,0.3)] p-3 md:p-4 z-20 w-[240px] md:w-[280px] pointer-events-auto">
+                            <h4 className="text-[15px] font-semibold text-gray-900 leading-tight mb-1 flex justify-between items-start">
+                                {companyName}
+                                <a href="https://goo.gl/maps/DWiCMVGgqKi2r5188" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 p-1">
+                                    <ExternalLink className="w-4 h-4" />
                                 </a>
-                            </div>
+                            </h4>
+                            <p className="text-[12px] text-gray-600 leading-snug whitespace-pre-line">
+                                {addressText}
+                            </p>
                         </div>
-                    )}
+
+                        {/* Floating protection gradient for button */}
+                        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#111827]/30 to-transparent pointer-events-none" />
+
+                        {/* Floating Action Button */}
+                        <div className="absolute inset-x-0 bottom-6 flex justify-center z-10 pointer-events-none">
+                            <a href={`https://maps.google.com/maps?q=${encodeURIComponent(companyName + " " + addressText)}`} target="_blank" rel="noopener noreferrer" className="pointer-events-auto">
+                                <Button className="bg-[#111827] text-white hover:bg-[#1f2937] font-bold px-6 py-6 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.2)] hover:-translate-y-1 transition-all border border-gray-700/50 flex items-center group/btn">
+                                    <Map className="w-4 h-4 mr-2 text-[#6B9F91] group-hover/btn:text-white transition-colors" />
+                                    View on Google Maps
+                                </Button>
+                            </a>
+                        </div>
+                    </div>
                 </motion.div>
             </Container>
         </SectionWrapper>

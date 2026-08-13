@@ -60,7 +60,7 @@ export function Hero() {
                                 </Link>
                             </Button>
                             <Button asChild variant="outline" size="lg" className="w-full sm:w-auto bg-white/50 backdrop-blur-sm">
-                                <Link href="/contact">
+                                <Link href="/contact?source=HOME_CONTACT_US&sourcePage=/">
                                     Contact Us
                                 </Link>
                             </Button>
