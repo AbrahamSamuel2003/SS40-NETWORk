@@ -100,13 +100,6 @@ export function MobileNav({ navLinks }: MobileNavProps) {
                                     })}
 
                                     <div className="mt-8 flex flex-col gap-4">
-                                        <Link
-                                            href="/login"
-                                            onClick={() => setIsOpen(false)}
-                                            className="px-4 py-3 text-lg font-medium text-[var(--color-heading)] hover:bg-gray-100 rounded-xl transition-colors text-center"
-                                        >
-                                            Login
-                                        </Link>
                                         <Button asChild className="w-full" size="lg" onClick={() => setIsOpen(false)}>
                                             <Link href="/contact">Contact Us</Link>
                                         </Button>

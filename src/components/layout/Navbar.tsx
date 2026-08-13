@@ -148,12 +148,6 @@ export function Navbar({ config }: { config?: SiteConfigData | null }) {
 
                     {/* Desktop CTA */}
                     <div className="hidden md:flex items-center gap-3">
-                        <Link
-                            href="/login"
-                            className="px-4 py-2 text-sm font-medium text-[var(--color-body-text)] hover:text-[var(--color-heading)] hover:bg-gray-100 transition-all rounded-full"
-                        >
-                            Login
-                        </Link>
                         <Button asChild size="sm" className="md:px-6">
                             <Link href="/contact">Contact Us</Link>
                         </Button>
