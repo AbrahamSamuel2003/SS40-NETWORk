@@ -162,6 +162,7 @@ function FeaturedVideoArea({ story }: {
     const rotateY = useTransform(mouseX, [-0.5, 0.5], [-2, 2]);
 
     const videoRef = useRef<HTMLVideoElement>(null);
+    const iframeRef = useRef<HTMLIFrameElement>(null);
 
     function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
         if (!ref.current || isPlaying) return;
