@@ -3,8 +3,9 @@ import { prisma } from '@/lib/prisma';
 import { getCurrentAdmin } from '@/lib/auth';
 import { logAdminActivity } from '@/lib/admin-activity';
 
-export async function PUT(request: Request, { params }: any) {
+export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
+        const { id } = await params;
         const admin = await getCurrentAdmin();
         if (!admin) return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
 
@@ -25,7 +26,7 @@ export async function PUT(request: Request, { params }: any) {
         if (body.isActive !== undefined) updateData.isActive = !!body.isActive;
 
         const updatedRecord = await prisma.product.update({
-            where: { id: params.id },
+            where: { id },
             data: updateData
         });
 
@@ -33,7 +34,7 @@ export async function PUT(request: Request, { params }: any) {
             adminId: admin.id,
             action: 'UPDATE',
             entity: 'Product',
-            entityId: params.id,
+            entityId: id,
             description: `Updated product: ${updatedRecord.name}`
         });
 
@@ -44,23 +45,24 @@ export async function PUT(request: Request, { params }: any) {
     }
 }
 
-export async function DELETE(request: Request, { params }: any) {
+export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
+        const { id } = await params;
         const admin = await getCurrentAdmin();
         if (!admin) return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
 
-        const record = await prisma.product.findUnique({ where: { id: params.id } });
+        const record = await prisma.product.findUnique({ where: { id } });
         if (!record) return NextResponse.json({ success: false, error: 'Record not found' }, { status: 404 });
 
         await prisma.product.delete({
-            where: { id: params.id }
+            where: { id }
         });
 
         await logAdminActivity({
             adminId: admin.id,
             action: 'DELETE',
             entity: 'Product',
-            entityId: params.id,
+            entityId: id,
             description: `Deleted product: ${record.name}`
         });
 
