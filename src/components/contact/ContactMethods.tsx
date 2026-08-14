@@ -88,40 +88,37 @@ export function ContactMethods({ config }: { config?: SiteConfigData | null }) {
                             <motion.a
                                 key={channel.id}
                                 href={channel.href}
-                                initial={{ opacity: 0, y: 10 }}
+                                initial={{ opacity: 0, y: 6 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true, margin: "-50px" }}
-                                transition={{ duration: 0.45, delay: idx * 0.08 }}
-                                className="group relative flex flex-col min-h-[110px] bg-white rounded-lg p-3 border border-gray-100 shadow-sm hover:translate-y-0.5 hover:shadow-md transition-all duration-150 overflow-hidden cursor-pointer"
+                                transition={{ duration: 0.35, delay: idx * 0.06 }}
+                                className="group relative flex items-center min-h-[92px] bg-white rounded-lg p-3 border border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_6px_18px_rgba(107,159,145,0.08)] hover:border-[#e6f3ec] transition-all duration-150 overflow-hidden cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#6B9F91]/30"
+                                role="button"
+                                aria-label={`${channel.title} — ${channel.value}`}
+                                tabIndex={0}
                             >
-                                {/* Color-coded accent bar — intensifies on hover */}
-                                <div
-                                    className="absolute top-0 left-0 right-0 h-1 opacity-40 transition-opacity duration-200"
-                                    style={{ backgroundColor: channel.accent }}
-                                />
+                                {/* Thin top accent */}
+                                <div className="absolute top-0 left-0 right-0 h-0.5 opacity-60 transition-opacity duration-200" style={{ backgroundColor: channel.accent }} />
 
-                                {/* Icon circle — colored per channel */}
-                                <div
-                                    className="w-10 h-10 rounded-md flex items-center justify-center border mb-3 transition-all duration-150 group-hover:opacity-90"
-                                    style={{
-                                        backgroundColor: `${channel.accent}10`,
-                                        borderColor: `${channel.accent}20`,
-                                    }}
-                                >
-                                    <Icon className="w-4 h-4" style={{ color: channel.accent }} />
-                                </div>
-
-                                {/* Title */}
-                                <div className="flex items-start justify-between">
-                                    <div>
-                                        <h3 className="text-xs font-medium text-gray-600 uppercase tracking-wide">{channel.title}</h3>
-                                        <p className="text-sm font-semibold text-[#111827] mt-1 break-words whitespace-pre-line" style={{ color: BRAND }}>{channel.value}</p>
+                                <div className="flex items-center gap-3 w-full">
+                                    <div className="flex-shrink-0 w-10 h-10 rounded-md flex items-center justify-center border" style={{ backgroundColor: `${channel.accent}10`, borderColor: `${channel.accent}18` }}>
+                                        <Icon className="w-4 h-4" style={{ color: channel.accent }} />
                                     </div>
-                                    <div className="ml-3 flex-shrink-0">
-                                        <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-gray-500 transition-colors" />
+
+                                    <div className="flex-1 min-w-0">
+                                        <div className="flex items-start justify-between">
+                                            <div className="truncate">
+                                                <h3 className="text-[11px] font-semibold text-gray-600 uppercase tracking-wide truncate">{channel.title}</h3>
+                                                <p className="text-lg md:text-xl font-extrabold text-[#0f172a] leading-tight truncate mt-1">{channel.value}</p>
+                                            </div>
+                                            <div className="ml-3 flex-shrink-0 mt-0.5">
+                                                <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-gray-500 transition-colors" />
+                                            </div>
+                                        </div>
+
+                                        <p className="text-gray-400 text-xs mt-2">{channel.description}</p>
                                     </div>
                                 </div>
-                                <p className="text-gray-400 text-[11px] mt-2">{channel.description}</p>
                             </motion.a>
                         );
                     })}
