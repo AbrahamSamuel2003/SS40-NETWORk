@@ -1,6 +1,11 @@
+import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { getCurrentSession, getCurrentAdmin } from '@/lib/auth';
 import { AdminLayoutClient } from '@/components/admin/AdminLayoutClient';
+
+export const metadata: Metadata = {
+    title: 'Admin',
+};
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
     const session = await getCurrentSession();
