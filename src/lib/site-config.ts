@@ -12,7 +12,6 @@ export interface SiteConfigData {
     addressText: string;
     businessHours: string;
     footerDescription: string;
-    contactSectionImageUrl: string | null;
     googleMapsIframeUrl: string | null;
     urlLinkedin: string | null;
     urlYoutube: string | null;
@@ -37,7 +36,6 @@ export async function getSiteConfig(): Promise<SiteConfigData | null> {
                 addressText: true,
                 businessHours: true,
                 footerDescription: true,
-                contactSectionImageUrl: true,
                 googleMapsIframeUrl: true,
                 urlLinkedin: true,
                 urlYoutube: true,

@@ -26,7 +26,6 @@ model SiteConfig {
   addressText            String
   businessHours          String
   footerDescription      String
-  contactSectionImageUrl String?
   googleMapsIframeUrl    String?
   urlLinkedin            String?
   urlYoutube             String?
