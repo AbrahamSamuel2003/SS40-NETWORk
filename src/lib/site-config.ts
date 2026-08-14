@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import { unstable_noStore as noStore } from 'next/cache';
+import { cache } from 'react';
 
 export interface SiteConfigData {
     companyName: string;
@@ -20,8 +21,8 @@ export interface SiteConfigData {
     seoDefaultDescription: string;
 }
 
-export async function getSiteConfig(): Promise<SiteConfigData | null> {
-    noStore(); // Fast CMS Propagation
+export const getSiteConfig = cache(async function (): Promise<SiteConfigData | null> {
+    noStore(); // Fast CMS Propagation — opt out of cross-request caching
     try {
         const config = await prisma.siteConfig.findUnique({
             where: { id: 1 },
@@ -49,4 +50,4 @@ export async function getSiteConfig(): Promise<SiteConfigData | null> {
         console.error('Error fetching site config server-side:', e);
         return null;
     }
-}
+});
