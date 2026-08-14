@@ -62,26 +62,26 @@ export function ContactMethods({ config }: { config?: SiteConfigData | null }) {
                             const Icon = method.icon;
                             return (
                                 <motion.a
-                                    href={method.href}
-                                    key={method.id}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ once: true, margin: "-50px" }}
-                                    transition={{ duration: 0.5, delay: idx * 0.1 }}
-                                    className="min-h-[220px] bg-white rounded-2xl p-8 border border-gray-100 shadow-md shadow-gray-200/40 hover:-translate-y-1 hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-300 relative overflow-hidden group flex flex-col justify-between cursor-pointer"
-                                >
-                                    <div className="absolute top-0 left-0 right-0 h-1 bg-[#6B9F91] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                            href={method.href}
+                                            key={method.id}
+                                            initial={{ opacity: 0, y: 10 }}
+                                            whileInView={{ opacity: 1, y: 0 }}
+                                            viewport={{ once: true, margin: "-50px" }}
+                                            transition={{ duration: 0.45, delay: idx * 0.08 }}
+                                            className="min-h-[140px] bg-white rounded-xl p-4 border border-gray-100 shadow-sm hover:translate-y-0.5 hover:shadow-md transition-all duration-200 relative overflow-hidden group flex items-start gap-4 cursor-pointer"
+                                        >
+                                            <div className="absolute top-0 left-0 right-0 h-1 bg-[#6B9F91] opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
 
-                                    <div className="w-14 h-14 bg-[#EDF5F2] rounded-xl flex items-center justify-center border border-gray-100 group-hover:bg-[#6B9F91]/5 group-hover:border-[#6B9F91]/20 transition-colors">
-                                        <Icon className="w-6 h-6 text-[#6B9F91]" />
-                                    </div>
+                                            <div className="w-12 h-12 bg-[#EDF5F2] rounded-lg flex items-center justify-center border border-gray-100 group-hover:bg-[#6B9F91]/5 group-hover:border-[#6B9F91]/20 transition-colors">
+                                                <Icon className="w-5 h-5 text-[#6B9F91]" />
+                                            </div>
 
-                                    <div>
-                                        <h3 className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-2">{method.title}</h3>
-                                        <p className="text-lg md:text-xl font-bold text-[#111827] mb-3 group-hover:text-[#6B9F91] transition-colors break-words">{method.content}</p>
-                                        <p className="text-gray-500 text-sm leading-relaxed">{method.description}</p>
-                                    </div>
-                                </motion.a>
+                                            <div className="flex-1">
+                                                <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">{method.title}</h3>
+                                                <p className="text-base font-semibold text-[#111827] mb-1 group-hover:text-[#6B9F91] transition-colors break-words">{method.content}</p>
+                                                <p className="text-gray-500 text-xs leading-snug">{method.description}</p>
+                                            </div>
+                                        </motion.a>
                             );
                         })}
                     </div>
@@ -90,30 +90,30 @@ export function ContactMethods({ config }: { config?: SiteConfigData | null }) {
                         const Icon = visitCard.icon;
                         return (
                             <motion.div
-                                initial={{ opacity: 0, y: 20 }}
+                                initial={{ opacity: 0, y: 10 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true, margin: "-50px" }}
-                                transition={{ duration: 0.5, delay: 0.2 }}
-                                className="min-h-[320px] bg-white rounded-2xl p-8 md:p-10 border border-gray-100 shadow-md shadow-gray-200/40 hover:-translate-y-1 hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-300 relative overflow-hidden group flex flex-col justify-center"
+                                transition={{ duration: 0.45, delay: 0.18 }}
+                                className="min-h-[180px] bg-white rounded-xl p-5 md:p-6 border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200 relative overflow-hidden group flex items-center"
                             >
-                                <div className="absolute top-0 left-0 right-0 h-1 bg-[#6B9F91] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                <div className="absolute top-0 left-0 right-0 h-1 bg-[#6B9F91] opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
 
-                                <div className="flex items-start gap-8 md:gap-12">
+                                <div className="flex items-center gap-4 w-full">
                                     <div className="flex-shrink-0">
-                                        <div className="w-16 h-16 bg-[#EDF5F2] rounded-xl flex items-center justify-center border border-gray-100 group-hover:bg-[#6B9F91]/5 group-hover:border-[#6B9F91]/20 transition-colors">
-                                            <Icon className="w-7 h-7 text-[#6B9F91]" />
+                                        <div className="w-12 h-12 bg-[#EDF5F2] rounded-lg flex items-center justify-center border border-gray-100 group-hover:bg-[#6B9F91]/5 group-hover:border-[#6B9F91]/20 transition-colors">
+                                            <Icon className="w-5 h-5 text-[#6B9F91]" />
                                         </div>
                                     </div>
 
                                     <div className="flex-1">
-                                        <h3 className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-2">{visitCard.title}</h3>
-                                        <p className="text-2xl md:text-4xl font-extrabold text-[#111827] mb-4 group-hover:text-[#6B9F91] transition-colors leading-tight">{visitCard.content}</p>
-                                        <p className="text-gray-500 text-sm md:text-base leading-relaxed max-w-2xl mb-6">{visitCard.description}</p>
+                                        <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">{visitCard.title}</h3>
+                                        <p className="text-lg md:text-xl font-bold text-[#111827] mb-1 group-hover:text-[#6B9F91] transition-colors leading-tight">{visitCard.content}</p>
+                                        <p className="text-gray-500 text-xs md:text-sm leading-snug max-w-2xl mb-3">{visitCard.description}</p>
 
-                                        <div className="flex items-center gap-3">
+                                        <div className="flex items-center gap-2">
                                             <a
                                                 href={visitCard.href}
-                                                className="inline-flex items-center px-5 py-3 bg-[#6B9F91] text-white rounded-lg font-bold text-sm hover:bg-[#588478] transition-colors"
+                                                className="inline-flex items-center px-3 py-2 bg-[#6B9F91] text-white rounded-md font-semibold text-sm hover:bg-[#588478] transition-colors"
                                             >
                                                 View Location
                                             </a>
@@ -122,7 +122,7 @@ export function ContactMethods({ config }: { config?: SiteConfigData | null }) {
                                                 href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(visitCard.content)}`}
                                                 target="_blank"
                                                 rel="noreferrer"
-                                                className="inline-flex items-center px-4 py-3 border border-gray-100 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors"
+                                                className="inline-flex items-center px-3 py-2 border border-gray-100 rounded-md text-sm font-medium hover:bg-gray-50 transition-colors"
                                             >
                                                 Open in Maps
                                             </a>
