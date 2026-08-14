@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { Hero } from "@/components/digital-solutions/Hero";
 import { WhatWeBuild } from "@/components/digital-solutions/WhatWeBuild";
@@ -8,6 +9,11 @@ const ClientProjects = dynamic(() => import("@/components/digital-solutions/Clie
 const Happimonials = dynamic(() => import("@/components/digital-solutions/Happimonials").then(mod => mod.Happimonials), { ssr: true });
 const TrustedClients = dynamic(() => import("@/components/digital-solutions/TrustedClients").then(mod => mod.TrustedClients), { ssr: true });
 const GetQuote = dynamic(() => import("@/components/digital-solutions/GetQuote").then(mod => mod.GetQuote), { ssr: true });
+
+export const metadata: Metadata = {
+    title: "Digital Solutions",
+    description: "Explore custom software, web applications, mobile apps, AI solutions, cloud platforms, and business automation from SS40 NETWORK.",
+};
 
 export default function DigitalSolutionsPage() {
     return (

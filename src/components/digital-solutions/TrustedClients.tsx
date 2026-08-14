@@ -121,6 +121,7 @@ interface MarqueeItem {
     id: string;
     name: string;
     logoUrl?: string; // added optional logoUrl
+    showTextOnCard?: boolean;
 }
 
 interface MarqueeRowProps {
@@ -184,14 +185,18 @@ function MarqueeRow({ items, direction, speed }: MarqueeRowProps) {
                 {duplicatedItems.map((client, idx) => (
                     <div
                         key={`${client.id}-${idx}`}
-                        className="marquee-logo-card group flex items-center justify-center gap-3 md:gap-4 px-6 md:px-8 py-4 border border-gray-100 rounded-2xl bg-white shadow-sm shrink-0 min-w-max transition-all duration-300"
+                        className={`marquee-logo-card group flex items-center bg-white border border-gray-100 rounded-2xl shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_10px_20px_-5px_rgba(0,0,0,0.08)] shrink-0 transition-all duration-300 cursor-pointer overflow-hidden ${client.showTextOnCard ? 'justify-start p-4 md:p-5 gap-3 md:gap-4' : 'justify-center px-6 py-4 md:px-8 md:py-6 h-[72px] md:h-[88px] w-auto'}`}
                     >
-                        {client.logoUrl ? (
-                            <img src={client.logoUrl} alt={client.name} className="h-8 md:h-10 object-contain max-w-[120px]" />
-                        ) : (
-                            <Building2 className="marquee-logo-icon w-6 h-6 md:w-8 md:h-8 text-[#6B9F91] shrink-0 transition-transform duration-300" />
+                        <div className={`flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105 ${client.showTextOnCard ? 'h-8 md:h-10 w-auto min-w-[32px] max-w-[120px]' : 'h-10 md:h-12 w-auto'}`}>
+                            {client.logoUrl ? (
+                                <img src={client.logoUrl} alt={client.showTextOnCard ? client.name : ''} className={`object-contain ${client.showTextOnCard ? 'w-full h-full' : 'w-auto h-full max-w-[160px] md:max-w-[200px]'}`} />
+                            ) : (
+                                <Building2 className="w-6 h-6 md:w-8 md:h-8 text-[#6B9F91]" />
+                            )}
+                        </div>
+                        {client.showTextOnCard && (
+                            <span className="font-bold text-gray-700 md:text-lg tracking-tight pr-2">{client.name}</span>
                         )}
-                        <span className="font-bold text-gray-700 md:text-lg tracking-tight pr-2">{client.name}</span>
                     </div>
                 ))}
             </div>

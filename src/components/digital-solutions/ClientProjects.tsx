@@ -104,7 +104,16 @@ export function ClientProjects() {
                                             whileInView="visible"
                                             viewport={{ once: true, margin: "-100px" }}
                                             variants={slideUp}
-                                            className="w-full bg-white border border-[var(--color-border)] rounded-[2rem] overflow-hidden shadow-xl shadow-gray-200/50 flex flex-col lg:flex-row group"
+                                            role="button"
+                                            tabIndex={0}
+                                            onClick={() => setActiveModalProject(featuredProject)}
+                                            onKeyDown={(e: React.KeyboardEvent) => {
+                                                if (e.key === 'Enter' || e.key === 'Space') {
+                                                    e.preventDefault();
+                                                    setActiveModalProject(featuredProject);
+                                                }
+                                            }}
+                                            className="cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 w-full bg-white border border-[var(--color-border)] rounded-[2rem] overflow-hidden shadow-xl shadow-gray-200/50 flex flex-col lg:flex-row group"
                                         >
                                             {/* Featured Visual */}
                                             <div className="w-full lg:w-3/5 aspect-video lg:aspect-auto bg-gray-100 relative overflow-hidden flex items-center justify-center shrink-0 min-h-[300px]">
@@ -182,8 +191,15 @@ export function ClientProjects() {
                                                     ))}
                                                 </div>
 
-                                                <div className="mt-auto pt-4">
-                                                    <Button onClick={() => setActiveModalProject(featuredProject)} size="lg" className="w-full sm:w-auto bg-[#6B9F91] hover:bg-[#588478] text-white shadow-lg shadow-[#6B9F91]/20">
+                                                <div className="mt-auto">
+                                                    <Button
+                                                        onClick={(e: React.MouseEvent) => {
+                                                            e.stopPropagation();
+                                                            setActiveModalProject(featuredProject);
+                                                        }}
+                                                        size="lg"
+                                                        className="w-full sm:w-auto bg-[#6B9F91] hover:bg-[#588478] text-white shadow-lg shadow-[#6B9F91]/20"
+                                                    >
                                                         View Details
                                                     </Button>
                                                 </div>
@@ -204,7 +220,16 @@ export function ClientProjects() {
                                                             key={project.id}
                                                             variants={slideUp}
                                                             {...hoverLift}
-                                                            className="bg-white overflow-hidden rounded-2xl flex-col group border border-[var(--color-border)] hover:border-[#6B9F91]/30 transition-all duration-300 flex"
+                                                            role="button"
+                                                            tabIndex={0}
+                                                            onClick={() => setActiveModalProject(project)}
+                                                            onKeyDown={(e: React.KeyboardEvent) => {
+                                                                if (e.key === 'Enter' || e.key === 'Space') {
+                                                                    e.preventDefault();
+                                                                    setActiveModalProject(project);
+                                                                }
+                                                            }}
+                                                            className="cursor-pointer bg-white overflow-hidden rounded-2xl flex-col group border border-[var(--color-border)] hover:border-[#6B9F91]/30 transition-all duration-300 flex focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2"
                                                         >
                                                             {/* Grid Visual Placeholder */}
                                                             <div className="relative w-full aspect-[4/3] bg-gray-50 overflow-hidden shrink-0 flex items-center justify-center border-b border-gray-100">
@@ -264,7 +289,10 @@ export function ClientProjects() {
                                                                 </div>
 
                                                                 <button
-                                                                    onClick={() => setActiveModalProject(project)}
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        setActiveModalProject(project);
+                                                                    }}
                                                                     className="mt-auto flex items-center text-sm font-bold text-[#6B9F91] hover:text-[#588478] transition-colors group/btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] rounded-sm"
                                                                 >
                                                                     View Details
@@ -298,7 +326,16 @@ export function ClientProjects() {
                                 <div
                                     key={`mobile-proj-${project.id}`}
                                     data-mobile-id={idx}
-                                    className="client-project-mobile-card w-[82vw] sm:w-[350px] flex-shrink-0 flex flex-col bg-white rounded-3xl overflow-hidden shadow-xl shadow-gray-200/50 border border-gray-100 snap-center relative scroll-ml-6"
+                                    role="button"
+                                    tabIndex={0}
+                                    onClick={() => setActiveModalProject(project)}
+                                    onKeyDown={(e: React.KeyboardEvent) => {
+                                        if (e.key === 'Enter' || e.key === 'Space') {
+                                            e.preventDefault();
+                                            setActiveModalProject(project);
+                                        }
+                                    }}
+                                    className="cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 client-project-mobile-card w-[82vw] sm:w-[350px] flex-shrink-0 flex flex-col bg-white rounded-3xl overflow-hidden shadow-xl shadow-gray-200/50 border border-gray-100 snap-center relative scroll-ml-6"
                                 >
                                     {/* Visual Placeholder Area */}
                                     <div className="relative w-full aspect-[4/3] bg-gray-50 overflow-hidden shrink-0 flex items-center justify-center border-b border-gray-100">
@@ -339,7 +376,10 @@ export function ClientProjects() {
                                         </div>
 
                                         <button
-                                            onClick={() => setActiveModalProject(project)}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setActiveModalProject(project);
+                                            }}
                                             className="mt-auto flex items-center text-sm font-bold text-[#6B9F91] hover:text-[#588478] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] rounded-sm"
                                         >
                                             View Details

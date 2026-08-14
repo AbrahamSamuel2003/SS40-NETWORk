@@ -353,7 +353,16 @@ function SecondaryStoryCarousel({ stories, onOpenModal }: { stories: any[], onOp
     return (
         <motion.div
             variants={fadeUpAnim}
-            className="bg-white border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_15px_35px_rgb(107,159,145,0.06)] hover:border-[#6B9F91]/20 rounded-2xl p-8 lg:p-10 flex flex-col relative overflow-hidden w-full lg:h-full lg:absolute lg:inset-0"
+            role="button"
+            tabIndex={0}
+            onClick={() => onOpenModal(story)}
+            onKeyDown={(e: React.KeyboardEvent) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    onOpenModal(story);
+                }
+            }}
+            className="cursor-pointer bg-white border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_15px_35px_rgb(107,159,145,0.06)] hover:border-[#6B9F91]/20 rounded-2xl p-8 lg:p-10 flex flex-col relative overflow-hidden w-full lg:h-full lg:absolute lg:inset-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2"
             style={{ height: '380px', minHeight: '100%' }} // Safe fallback for mobile
         >
             {/* Subtle highlight glow on hover */}
@@ -392,7 +401,10 @@ function SecondaryStoryCarousel({ stories, onOpenModal }: { stories: any[], onOp
                         <div className="h-10 shrink-0 flex items-start">
                             {isTruncated && (
                                 <button
-                                    onClick={() => onOpenModal(story)}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        onOpenModal(story);
+                                    }}
                                     className="text-sm font-bold text-[#6B9F91] hover:text-[#5C8C80] flex items-center group/read transition-colors focus-visible:outline-none"
                                 >
                                     Read Full Story

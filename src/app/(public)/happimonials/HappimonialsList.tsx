@@ -51,7 +51,16 @@ export function HappimonialsList({ initialStories }: { initialStories: any[] }) 
                                 exit={{ opacity: 0, scale: 0.9 }}
                                 transition={{ duration: 0.2 }}
                                 {...hoverLift}
-                                className="bg-white overflow-hidden rounded-2xl flex flex-col group border border-[var(--color-border)] hover:border-[#6B9F91]/30 transition-all duration-300"
+                                role="button"
+                                tabIndex={0}
+                                onClick={() => setActiveModalStory(item)}
+                                onKeyDown={(e: React.KeyboardEvent) => {
+                                    if (e.key === 'Enter' || e.key === 'Space') {
+                                        e.preventDefault();
+                                        setActiveModalStory(item);
+                                    }
+                                }}
+                                className="cursor-pointer bg-white overflow-hidden rounded-2xl flex flex-col group border border-[var(--color-border)] hover:border-[#6B9F91]/30 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2"
                             >
                                 {/* Video / Thumbnail Area (Perfect Fit 4:3) */}
                                 <div className="relative w-full aspect-[4/3] bg-gray-100 overflow-hidden shrink-0 cursor-pointer">
@@ -105,7 +114,10 @@ export function HappimonialsList({ initialStories }: { initialStories: any[] }) 
                                     </p>
 
                                     <button
-                                        onClick={() => setActiveModalStory(item)}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setActiveModalStory(item);
+                                        }}
                                         className="mt-auto flex items-center text-sm font-bold text-[#6B9F91] hover:text-[#588478] transition-colors group/btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] rounded-sm w-max"
                                     >
                                         Read More

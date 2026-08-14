@@ -172,7 +172,19 @@ export function BestProjects({ projects = [] }: BestProjectsProps) {
                             className="hidden md:flex flex-col gap-8 lg:gap-10"
                         >
                             {/* TOP: Featured Project (Dominant) */}
-                            <motion.div variants={itemVariants} className="w-full bg-white rounded-[2rem] shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden flex flex-col lg:flex-row group">
+                            <motion.div
+                                variants={itemVariants}
+                                role="button"
+                                tabIndex={0}
+                                onClick={() => setActiveModalProject(featuredProject)}
+                                onKeyDown={(e: React.KeyboardEvent) => {
+                                    if (e.key === 'Enter' || e.key === ' ') {
+                                        e.preventDefault();
+                                        setActiveModalProject(featuredProject);
+                                    }
+                                }}
+                                className="cursor-pointer w-full bg-white rounded-[2rem] shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden flex flex-col lg:flex-row group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2"
+                            >
                                 {/* Project Preview */}
                                 <div className="w-full lg:w-7/12 aspect-video lg:aspect-auto lg:h-[450px] relative overflow-hidden bg-gray-50 border-b lg:border-b-0 lg:border-r border-gray-100">
                                     {featuredProject.image || featuredProject.imageUrl ? (
@@ -216,7 +228,7 @@ export function BestProjects({ projects = [] }: BestProjectsProps) {
                                         })}
                                     </div>
 
-                                    <Button onClick={() => setActiveModalProject(featuredProject)} className="w-full sm:w-auto bg-[#111827] text-white hover:bg-gray-800 font-bold group/btn">
+                                    <Button onClick={(e: React.MouseEvent) => { e.stopPropagation(); setActiveModalProject(featuredProject); }} className="w-full sm:w-auto bg-[#111827] text-white hover:bg-gray-800 font-bold group/btn">
                                         Explore Project <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
                                     </Button>
                                 </div>
@@ -228,8 +240,16 @@ export function BestProjects({ projects = [] }: BestProjectsProps) {
                                     <motion.div
                                         key={project.id}
                                         variants={itemVariants}
+                                        role="button"
+                                        tabIndex={0}
                                         onClick={() => setActiveModalProject(project)}
-                                        className={`bg-white rounded-3xl shadow-lg shadow-gray-200/40 border border-gray-100 overflow-hidden flex-col group cursor-pointer hover:-translate-y-1 transition-transform duration-300 md:last:col-span-2 lg:last:col-span-1 ${idx === 2 ? 'hidden md:flex' : 'flex'}`}
+                                        onKeyDown={(e: React.KeyboardEvent) => {
+                                            if (e.key === 'Enter' || e.key === ' ') {
+                                                e.preventDefault();
+                                                setActiveModalProject(project);
+                                            }
+                                        }}
+                                        className={`bg-white rounded-3xl shadow-lg shadow-gray-200/40 border border-gray-100 overflow-hidden flex-col group cursor-pointer hover:-translate-y-1 transition-transform duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 md:last:col-span-2 lg:last:col-span-1 ${idx === 2 ? 'hidden md:flex' : 'flex'}`}
                                     >
 
                                         {/* Image / Placeholder */}
@@ -287,8 +307,16 @@ export function BestProjects({ projects = [] }: BestProjectsProps) {
                                     <div
                                         key={`mobile-proj-${project.id}`}
                                         data-mobile-id={idx}
+                                        role="button"
+                                        tabIndex={0}
                                         onClick={() => setActiveModalProject(project)}
-                                        className="project-mobile-card w-[82vw] sm:w-[350px] flex-shrink-0 flex flex-col bg-white rounded-3xl overflow-hidden shadow-xl shadow-gray-200/50 border border-[var(--color-border)] snap-center relative scroll-ml-6 group cursor-pointer"
+                                        onKeyDown={(e: React.KeyboardEvent) => {
+                                            if (e.key === 'Enter' || e.key === ' ') {
+                                                e.preventDefault();
+                                                setActiveModalProject(project);
+                                            }
+                                        }}
+                                        className="project-mobile-card cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 w-[82vw] sm:w-[350px] flex-shrink-0 flex flex-col bg-white rounded-3xl overflow-hidden shadow-xl shadow-gray-200/50 border border-[var(--color-border)] snap-center relative scroll-ml-6 group"
                                     >
                                         {/* Image / Placeholder */}
                                         <div className="w-full aspect-video relative overflow-hidden bg-gray-50 border-b border-gray-100 shrink-0">

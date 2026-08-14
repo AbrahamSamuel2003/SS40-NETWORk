@@ -128,7 +128,16 @@ export function Happimonials() {
                                     key={item.id}
                                     variants={slideUp}
                                     {...hoverLift}
-                                    className="bg-white overflow-hidden rounded-2xl flex flex-col group border border-[var(--color-border)] hover:border-[#6B9F91]/30 transition-all duration-300"
+                                    role="button"
+                                    tabIndex={0}
+                                    onClick={() => setActiveModalStory(item)}
+                                    onKeyDown={(e: React.KeyboardEvent) => {
+                                        if (e.key === 'Enter' || e.key === 'Space') {
+                                            e.preventDefault();
+                                            setActiveModalStory(item);
+                                        }
+                                    }}
+                                    className="cursor-pointer bg-white overflow-hidden rounded-2xl flex flex-col group border border-[var(--color-border)] hover:border-[#6B9F91]/30 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2"
                                 >
                                     {/* Video / Thumbnail Area (Optimized Spacing: full width, no padding, taller 4:3 fit) */}
                                     <div className="relative w-full aspect-[4/3] bg-gray-100 overflow-hidden shrink-0 cursor-pointer">
@@ -182,7 +191,10 @@ export function Happimonials() {
                                         </p>
 
                                         <button
-                                            onClick={() => setActiveModalStory(item)}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setActiveModalStory(item);
+                                            }}
                                             className="mt-auto flex items-center text-sm font-bold text-[#6B9F91] hover:text-[#588478] transition-colors group/btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] rounded-sm w-max"
                                         >
                                             Read More
@@ -204,7 +216,16 @@ export function Happimonials() {
                                     <div
                                         key={`mobile-${item.id}`}
                                         data-mobile-id={idx}
-                                        className="happimonial-mobile-card w-[82vw] sm:w-[350px] flex-shrink-0 flex flex-col bg-white overflow-hidden rounded-3xl snap-center relative scroll-ml-6 border border-[var(--color-border)] shadow-xl shadow-gray-200/50"
+                                        role="button"
+                                        tabIndex={0}
+                                        onClick={() => setActiveModalStory(item)}
+                                        onKeyDown={(e: React.KeyboardEvent) => {
+                                            if (e.key === 'Enter' || e.key === 'Space') {
+                                                e.preventDefault();
+                                                setActiveModalStory(item);
+                                            }
+                                        }}
+                                        className="cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 happimonial-mobile-card w-[82vw] sm:w-[350px] flex-shrink-0 flex flex-col bg-white overflow-hidden rounded-3xl snap-center relative scroll-ml-6 border border-[var(--color-border)] shadow-xl shadow-gray-200/50"
                                     >
                                         {/* Video Area (Optimized spacing: taller 4:3 fit) */}
                                         <div className="relative w-full aspect-[4/3] bg-gray-100 overflow-hidden shrink-0">
@@ -255,7 +276,10 @@ export function Happimonials() {
                                             </p>
 
                                             <button
-                                                onClick={() => setActiveModalStory(item)}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setActiveModalStory(item);
+                                                }}
                                                 className="mt-auto flex items-center text-sm font-bold text-[#6B9F91] hover:text-[#588478] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] rounded-sm w-max"
                                             >
                                                 Read More
@@ -284,7 +308,7 @@ export function Happimonials() {
 
                         {/* View All Button */}
                         {!isLoading && happimonials.length > 3 && (
-                            <div className="w-full flex justify-center mt-2 mb-10">
+                            <div className="w-full flex justify-center mt-8 md:mt-12 md:mb-6 mb-4">
                                 <Link href="/happimonials" className="inline-flex items-center justify-center font-bold text-lg text-[#6B9F91] hover:text-[#588478] transition-colors group">
                                     View All Stories
                                     <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -405,3 +429,4 @@ function HappimonialModal({ story, onClose }: { story: any, onClose: () => void 
         </div>
     );
 }
+

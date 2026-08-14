@@ -52,7 +52,8 @@ export async function GET(request: Request) {
                 logoUrl: true,
                 category: true,
                 placementType: true,
-                sortOrder: true
+                sortOrder: true,
+                showTextOnCard: true
             }
         });
 

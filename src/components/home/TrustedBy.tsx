@@ -121,7 +121,7 @@ export function TrustedBy({ data }: { data?: any[] }) {
 }
 
 interface MarqueeRowProps {
-    items: { id: string; name: string; icon?: React.ElementType; logoUrl?: string }[];
+    items: { id: string; name: string; icon?: React.ElementType; logoUrl?: string; showTextOnCard?: boolean }[];
     direction: "left" | "right";
     speed: number;
 }
@@ -165,18 +165,21 @@ function MarqueeRow({ items, direction, speed }: MarqueeRowProps) {
                     return (
                         <div
                             key={`${item.id}-${idx}`}
-                            className="marquee-logo-card bg-white border border-gray-100 rounded-2xl px-4 md:px-5 py-0 min-w-[140px] md:min-w-[160px] w-max h-[80px] md:h-[90px] flex items-center justify-start gap-4 shadow-sm transition-all duration-300 cursor-pointer overflow-hidden"
+                            className={`bg-white border border-gray-100 rounded-2xl flex items-center shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_10px_20px_-5px_rgba(0,0,0,0.08)] transition-all duration-300 cursor-pointer overflow-hidden group ${item.showTextOnCard ? 'p-4 md:p-5 w-max h-[80px] md:h-[90px] justify-start gap-4' : 'px-6 py-4 md:px-8 md:py-6 h-[80px] md:h-[90px] w-auto shrink-0 justify-center'}`}
                         >
-                            <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-[#EDF5F2] text-[#6B9F91] flex items-center justify-center shrink-0 transition-colors overflow-hidden">
+                            <div className={`flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105 ${item.showTextOnCard ? 'w-10 h-10 md:w-12 md:h-12' : 'h-10 md:h-12 w-auto min-w-[40px]'}`}>
                                 {item.logoUrl ? (
-                                    <img src={item.logoUrl} alt={item.name} className="marquee-logo-icon w-full h-full object-contain p-1 transition-transform duration-300" />
+                                    <img src={item.logoUrl} alt={item.showTextOnCard ? item.name : ''} className={`object-contain ${item.showTextOnCard ? 'w-full h-full' : 'w-auto h-full max-w-[160px] md:max-w-[200px]'}`} />
                                 ) : Icon ? (
-                                    <Icon className="marquee-logo-icon w-5 h-5 md:w-6 md:h-6 transition-transform duration-300" />
+                                    <Icon className="w-6 h-6 md:w-8 md:h-8 text-[#6B9F91]" />
                                 ) : null}
                             </div>
-                            <span className="font-bold text-gray-800 text-sm md:text-base whitespace-nowrap text-left">
-                                {item.name}
-                            </span>
+
+                            {item.showTextOnCard && (
+                                <span className="font-bold text-gray-800 text-sm md:text-base whitespace-nowrap text-left pr-2">
+                                    {item.name}
+                                </span>
+                            )}
                         </div>
                     );
                 })}

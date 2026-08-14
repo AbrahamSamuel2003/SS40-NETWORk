@@ -1,0 +1,11 @@
+
+> ss40-network@0.1.0 dev
+> next dev -H 0.0.0.0
+
+▲ Next.js 16.3.0 (Turbopack)
+- Local:         http://localhost:3001
+- Network:       http://0.0.0.0:3001
+- Environments: .env
+✓ Ready in 10.6s
+✓ Running next.config.ts took 395ms
+[?25h

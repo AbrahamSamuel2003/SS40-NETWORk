@@ -182,20 +182,24 @@ export function Collaborations({ logos = [] }: { logos?: any[] }) {
                             {marqueeItems.map((inst, idx) => (
                                 <div
                                     key={`inst-${idx}`}
-                                    className="academic-marquee-card w-[280px] md:w-[320px] bg-[#EDF5F2] rounded-2xl p-6 border border-gray-100 shadow-sm flex items-center gap-4 shrink-0 transition-all"
+                                    className={`academic-marquee-card bg-white rounded-2xl border border-gray-100 shadow-[0_1px_3px_rgb(0,0,0,0.05)] hover:shadow-[0_10px_20px_-5px_rgb(0,0,0,0.08)] flex items-center shrink-0 transition-all cursor-pointer group ${inst.showTextOnCard ? 'p-4 md:p-5 gap-4 w-max h-[80px] md:h-[90px]' : 'px-6 py-4 md:px-8 md:py-6 h-[80px] md:h-[90px] w-auto justify-center'}`}
                                 >
                                     {/* Logo Placeholder */}
-                                    <div className="w-14 h-14 bg-white rounded-xl shadow-inner border border-gray-100 flex items-center justify-center shrink-0">
+                                    <div className={`flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105 ${inst.showTextOnCard ? 'w-12 h-12 md:w-14 md:h-14 bg-[#EDF5F2] rounded-xl border border-gray-100/50' : 'h-10 md:h-12 w-auto'}`}>
                                         {inst.logoUrl ? (
-                                            <Image src={inst.logoUrl} alt={inst.name} width={40} height={40} className="object-contain" />
+                                            <Image src={inst.logoUrl} alt={inst.showTextOnCard ? inst.name : ''} width={200} height={60} className={`object-contain ${inst.showTextOnCard ? 'w-full h-full p-1' : 'w-auto h-full max-w-[160px] md:max-w-[200px]'}`} />
                                         ) : (
-                                            <Building2 className="w-6 h-6 text-gray-300" />
+                                            <Building2 className={`text-[#6B9F91] transition-transform duration-300 ${inst.showTextOnCard ? 'w-6 h-6' : 'w-8 h-8 md:w-10 md:h-10'}`} />
                                         )}
                                     </div>
-                                    <div>
-                                        <h4 className="text-sm font-extrabold text-[#111827] leading-tight mb-1">{inst.name}</h4>
-                                        <p className="text-[11px] font-bold text-[#6B9F91] uppercase tracking-wider">{inst.category}</p>
-                                    </div>
+                                    {inst.showTextOnCard && (
+                                        <div className="flex flex-col overflow-hidden max-w-[200px] pr-2">
+                                            <h4 className="text-sm font-extrabold text-[#111827] leading-tight mb-1 whitespace-nowrap overflow-hidden text-ellipsis">{inst.name}</h4>
+                                            {inst.category && (
+                                                <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider overflow-hidden text-ellipsis whitespace-nowrap">{inst.category}</p>
+                                            )}
+                                        </div>
+                                    )}
                                 </div>
                             ))}
                         </div>

@@ -26,36 +26,32 @@ export default async function ProductImpactsPage() {
     return (
         <div className="w-full flex-col flex bg-white min-h-screen">
             {/* Hero / Header Section designed natively for SS40 NETWORK */}
-            <div className="w-full relative pt-24 pb-16 lg:pt-32 lg:pb-24 overflow-hidden bg-white">
+            <div className="w-full relative pt-24 pb-8 lg:pt-28 lg:pb-10 overflow-hidden bg-white">
                 <div className="absolute top-0 right-0 w-96 h-96 bg-[#6B9F91]/10 blur-[100px] rounded-full translate-x-1/3 -translate-y-1/3" />
                 <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#FFC900]/10 blur-[100px] rounded-full -translate-x-1/3 translate-y-1/3" />
 
                 <Container className="relative z-10 flex flex-col items-center text-center max-w-4xl">
-                    <div className="w-full flex justify-center mb-8">
+                    <div className="w-full flex justify-center mb-6">
                         <Link href="/products" className="flex items-center text-sm font-bold text-[#6B9F91] hover:text-[#588478] transition-colors group">
                             <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
                             Back to Products
                         </Link>
                     </div>
 
-                    <div className="flex items-center justify-center mb-6">
-                        <span className="px-5 py-2 bg-white text-[#6B9F91] text-xs font-bold uppercase tracking-widest rounded-full shadow-sm border border-[#6B9F91]/10">
+                    <div className="flex items-center justify-center mb-4">
+                        <span className="px-5 py-1.5 bg-white text-[#6B9F91] text-xs font-bold uppercase tracking-widest rounded-full shadow-sm border border-[#6B9F91]/10">
                             Product Impacts
                         </span>
                     </div>
 
-                    <h1 className="text-4xl md:text-5xl border-transparent lg:text-5xl font-bold text-[var(--color-heading)] mb-6 leading-tight tracking-tight">
-                        Real Businesses. Real Product Success.
+                    <h1 className="text-3xl md:text-4xl border-transparent lg:text-5xl font-bold text-[var(--color-heading)] mb-4 leading-tight tracking-tight">
+                        Real Stories. Real Business Impact.
                     </h1>
-
-                    <p className="text-lg md:text-xl text-[var(--color-body-text)] max-w-2xl mx-auto leading-relaxed">
-                        Discover how organizations across various industries have transformed their operations and achieved incredible results using SS40 NETWORK products.
-                    </p>
                 </Container>
             </div>
 
             {/* List Section */}
-            <Container className="py-16 lg:py-24 max-w-7xl">
+            <Container className="pt-8 pb-16 lg:pt-12 lg:pb-24 max-w-7xl">
                 <HappimonialsList initialStories={stories} />
             </Container>
         </div>

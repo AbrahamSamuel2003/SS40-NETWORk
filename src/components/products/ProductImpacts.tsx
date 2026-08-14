@@ -129,7 +129,16 @@ export function ProductImpacts() {
                                     key={item.id}
                                     variants={slideUp}
                                     {...hoverLift}
-                                    className="bg-white overflow-hidden rounded-2xl flex flex-col group border border-[var(--color-border)] hover:border-[#6B9F91]/30 transition-all duration-300"
+                                    role="button"
+                                    tabIndex={0}
+                                    onClick={() => setActiveModalStory(item)}
+                                    onKeyDown={(e: React.KeyboardEvent) => {
+                                        if (e.key === 'Enter' || e.key === 'Space') {
+                                            e.preventDefault();
+                                            setActiveModalStory(item);
+                                        }
+                                    }}
+                                    className="cursor-pointer bg-white overflow-hidden rounded-2xl flex flex-col group border border-[var(--color-border)] hover:border-[#6B9F91]/30 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2"
                                 >
                                     <div className="relative w-full aspect-[4/3] bg-gray-100 overflow-hidden shrink-0">
                                         {item.youtubeUrl ? (
@@ -165,7 +174,10 @@ export function ProductImpacts() {
                                             "{item.testimonial}"
                                         </p>
                                         <button
-                                            onClick={() => setActiveModalStory(item)}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setActiveModalStory(item);
+                                            }}
                                             className="mt-auto flex items-center text-sm font-bold text-[#6B9F91] hover:text-[#588478] transition-colors group/btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] rounded-sm w-max"
                                         >
                                             Read More
@@ -187,7 +199,16 @@ export function ProductImpacts() {
                                     <div
                                         key={`mobile-${item.id}`}
                                         data-mobile-id={idx}
-                                        className="happimonial-mobile-card w-[82vw] sm:w-[350px] flex-shrink-0 flex flex-col bg-white overflow-hidden rounded-3xl snap-center relative scroll-ml-6 border border-[var(--color-border)] shadow-xl shadow-gray-200/50"
+                                        role="button"
+                                        tabIndex={0}
+                                        onClick={() => setActiveModalStory(item)}
+                                        onKeyDown={(e: React.KeyboardEvent) => {
+                                            if (e.key === 'Enter' || e.key === 'Space') {
+                                                e.preventDefault();
+                                                setActiveModalStory(item);
+                                            }
+                                        }}
+                                        className="cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 happimonial-mobile-card w-[82vw] sm:w-[350px] flex-shrink-0 flex flex-col bg-white overflow-hidden rounded-3xl snap-center relative scroll-ml-6 border border-[var(--color-border)] shadow-xl shadow-gray-200/50"
                                     >
                                         <div className="relative w-full aspect-[4/3] bg-gray-100 overflow-hidden shrink-0">
                                             {item.youtubeUrl ? (
@@ -222,7 +243,10 @@ export function ProductImpacts() {
                                                 "{item.testimonial}"
                                             </p>
                                             <button
-                                                onClick={() => setActiveModalStory(item)}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setActiveModalStory(item);
+                                                }}
                                                 className="mt-auto flex items-center text-sm font-bold text-[#6B9F91] hover:text-[#588478] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] rounded-sm w-max"
                                             >
                                                 Read More
@@ -250,7 +274,7 @@ export function ProductImpacts() {
 
                         {/* View All Button */}
                         {!isLoading && happimonials.length > 3 && (
-                            <div className="w-full flex justify-center mb-10 pb-10">
+                            <div className="w-full flex justify-center mt-8 md:mt-12 md:mb-6 mb-4">
                                 <Link href="/product-impacts" className="inline-flex items-center justify-center font-bold text-lg text-[#6B9F91] hover:text-[#588478] transition-colors group">
                                     View All Stories
                                     <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />

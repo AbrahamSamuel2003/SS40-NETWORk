@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { Hero } from "@/components/products/Hero";
 import { FeaturedProduct } from "@/components/products/FeaturedProduct";
@@ -6,6 +7,11 @@ import { FeaturedProduct } from "@/components/products/FeaturedProduct";
 const ProductImpacts = dynamic(() => import("@/components/products/ProductImpacts").then(mod => mod.ProductImpacts), { ssr: true });
 const Brands = dynamic(() => import("@/components/products/Brands").then(mod => mod.Brands), { ssr: true });
 const BookDemo = dynamic(() => import("@/components/products/BookDemo").then(mod => mod.BookDemo), { ssr: true });
+
+export const metadata: Metadata = {
+    title: "Products",
+    description: "Discover SS40 NETWORK products built to simplify workflows, improve efficiency, and support business growth.",
+};
 
 export default function ProductsPage() {
     return (

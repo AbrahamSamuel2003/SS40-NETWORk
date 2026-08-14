@@ -18,6 +18,7 @@ export default function DigitalSolutionsLogosPage() {
     const [placementType, setPlacementType] = useState('CLIENT');
     const [logoUrl, setLogoUrl] = useState('');
     const [isActive, setIsActive] = useState(true);
+    const [showTextOnCard, setShowTextOnCard] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
 
@@ -49,6 +50,7 @@ export default function DigitalSolutionsLogosPage() {
             setPlacementType(logo.placementType);
             setLogoUrl(logo.logoUrl || '');
             setIsActive(logo.isActive);
+            setShowTextOnCard(logo.showTextOnCard || false);
         } else {
             setEditingId(null);
             setName('');
@@ -56,6 +58,7 @@ export default function DigitalSolutionsLogosPage() {
             setPlacementType('CLIENT');
             setLogoUrl('');
             setIsActive(true);
+            setShowTextOnCard(false);
         }
         setErrorMsg('');
         setIsModalOpen(true);
@@ -103,6 +106,7 @@ export default function DigitalSolutionsLogosPage() {
             placementType,
             logoUrl,
             isActive,
+            showTextOnCard,
             pageScope: 'DIGITAL_SOLUTIONS'
         };
 
@@ -283,6 +287,17 @@ export default function DigitalSolutionsLogosPage() {
                                             <div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${isActive ? 'translate-x-4' : 'translate-x-0'}`}></div>
                                         </div>
                                         <span className="text-sm font-medium text-white/80">Active Configuration</span>
+                                    </label>
+                                </div>
+
+                                <div className="pt-2">
+                                    <label className="flex items-center gap-3 cursor-pointer group">
+                                        <div className="relative">
+                                            <input type="checkbox" checked={showTextOnCard} onChange={e => setShowTextOnCard(e.target.checked)} className="sr-only" />
+                                            <div className={`w-10 h-6 rounded-full transition-colors ${showTextOnCard ? 'bg-[var(--color-primary)]' : 'bg-white/10 group-hover:bg-white/20'}`}></div>
+                                            <div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${showTextOnCard ? 'translate-x-4' : 'translate-x-0'}`}></div>
+                                        </div>
+                                        <span className="text-sm font-medium text-white/80">Show text on card</span>
                                     </label>
                                 </div>
                             </form>

@@ -100,7 +100,7 @@ export async function POST(request: Request) {
 
         const body = await request.json();
 
-        let { name, category, placementType, logoUrl, sortOrder, isActive, pageScope } = body;
+        let { name, category, placementType, logoUrl, sortOrder, isActive, pageScope, showTextOnCard } = body;
 
         name = name?.trim();
         category = category?.trim();
@@ -154,6 +154,15 @@ export async function POST(request: Request) {
             );
         }
 
+        if (showTextOnCard === undefined || showTextOnCard === null) {
+            showTextOnCard = false;
+        } else if (typeof showTextOnCard !== 'boolean') {
+            return NextResponse.json(
+                { success: false, error: 'showTextOnCard must be a boolean' },
+                { status: 400 }
+            );
+        }
+
         const logo = await prisma.organizationLogo.create({
             data: {
                 name,
@@ -162,7 +171,8 @@ export async function POST(request: Request) {
                 logoUrl: logoUrl || null,
                 pageScope: pageScope || 'GLOBAL',
                 sortOrder,
-                isActive
+                isActive,
+                showTextOnCard
             }
         });
 

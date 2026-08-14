@@ -9,6 +9,7 @@ import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
+import { YouTubeResumeThumbnailPlayer } from "@/components/ui/YouTubeResumeThumbnailPlayer";
 
 // Data-driven placeholders specific to SS40 NETWORK wings
 const FEATURED_STORY = {
@@ -68,9 +69,7 @@ export function SuccessStories({ data }: { data?: any[] }) {
         link: "/digital-solutions",
         youtubeUrl: featuredStory.youtubeUrl,
         videoUrl: featuredStory.videoUrl || null,
-        thumbnailUrl: featuredStory.youtubeUrl
-            ? null                                      // NEVER show avatar behind YouTube player
-            : (featuredStory.thumbnailUrl || null)
+        thumbnailUrl: featuredStory.thumbnailUrl || null
     } : null;
 
     // Modal state lifted here to avoid CSS perspective trapping fixed elements
@@ -163,7 +162,6 @@ function FeaturedVideoArea({ story }: {
     const rotateY = useTransform(mouseX, [-0.5, 0.5], [-2, 2]);
 
     const videoRef = useRef<HTMLVideoElement>(null);
-    const iframeRef = useRef<HTMLIFrameElement>(null);
 
     function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
         if (!ref.current || isPlaying) return;
@@ -404,7 +402,26 @@ function SecondaryStoryCarousel({ stories, onOpenModal }: { stories: any[], onOp
     return (
         <motion.div
             variants={fadeUpAnim}
-            className="bg-white border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_15px_35px_rgb(107,159,145,0.06)] hover:border-[#6B9F91]/20 rounded-2xl p-8 lg:p-10 flex flex-col relative overflow-hidden w-full lg:h-full lg:absolute lg:inset-0"
+            role="button"
+            tabIndex={0}
+            onClick={() => onOpenModal({
+                clientName: story.clientName,
+                company,
+                quote,
+                route
+            })}
+            onKeyDown={(e: React.KeyboardEvent) => {
+                if (e.key === 'Enter' || e.key === 'Space') {
+                    e.preventDefault();
+                    onOpenModal({
+                        clientName: story.clientName,
+                        company,
+                        quote,
+                        route
+                    });
+                }
+            }}
+            className="cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 bg-white border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_15px_35px_rgb(107,159,145,0.06)] hover:border-[#6B9F91]/20 rounded-2xl p-8 lg:p-10 flex flex-col relative overflow-hidden w-full lg:h-full lg:absolute lg:inset-0"
             // We use absolute positioning on desktop to force it to exactly match the left video container's height
             style={{ height: '380px', minHeight: '100%' }} // Safe fallback for mobile
         >
@@ -444,12 +461,15 @@ function SecondaryStoryCarousel({ stories, onOpenModal }: { stories: any[], onOp
                         <div className="h-10 shrink-0 flex items-start">
                             {isTruncated && (
                                 <button
-                                    onClick={() => onOpenModal({
-                                        clientName: story.clientName,
-                                        company,
-                                        quote,
-                                        route
-                                    })}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        onOpenModal({
+                                            clientName: story.clientName,
+                                            company,
+                                            quote,
+                                            route
+                                        });
+                                    }}
                                     className="text-sm font-bold text-[#6B9F91] hover:text-[#5C8C80] flex items-center group/read transition-colors focus-visible:outline-none"
                                 >
                                     Read Full Story

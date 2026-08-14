@@ -19,6 +19,7 @@ export async function GET() {
                 addressText: true,
                 businessHours: true,
                 footerDescription: true,
+                contactSectionImageUrl: true,
                 googleMapsIframeUrl: true,
                 urlLinkedin: true,
                 urlYoutube: true,

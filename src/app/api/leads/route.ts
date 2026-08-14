@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { sendLeadAcknowledgementEmail } from '@/lib/mail';
 
 const isValidEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -57,6 +58,19 @@ export async function POST(request: Request) {
                 referrer: (referrer && typeof referrer === 'string' && referrer.trim() !== '') ? referrer.trim() : null,
             }
         });
+
+        try {
+            await sendLeadAcknowledgementEmail({
+                fullName: newLead.fullName,
+                email: newLead.email,
+            });
+        } catch (emailError) {
+            console.error('Lead saved, but acknowledgement email failed:', {
+                leadId: newLead.id,
+                email: newLead.email,
+                error: emailError,
+            });
+        }
 
         // Do not return internal IDs or notes to the public
         return NextResponse.json({

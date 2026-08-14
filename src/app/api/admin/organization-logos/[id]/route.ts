@@ -100,7 +100,7 @@ export async function PUT(
         }
 
         const body = await request.json();
-        let { name, category, placementType, logoUrl, sortOrder, isActive, pageScope } = body;
+        let { name, category, placementType, logoUrl, sortOrder, isActive, pageScope, showTextOnCard } = body;
 
         const updateData: any = {};
 
@@ -169,6 +169,16 @@ export async function PUT(
 
         if (pageScope !== undefined) {
             updateData.pageScope = String(pageScope).trim();
+        }
+
+        if (showTextOnCard !== undefined) {
+            if (typeof showTextOnCard !== 'boolean') {
+                return NextResponse.json(
+                    { success: false, error: 'showTextOnCard must be a boolean' },
+                    { status: 400 }
+                );
+            }
+            updateData.showTextOnCard = showTextOnCard;
         }
 
         const updated = await prisma.organizationLogo.update({

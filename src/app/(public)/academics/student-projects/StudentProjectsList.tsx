@@ -82,8 +82,16 @@ export function StudentProjectsList({ initialProjects }: { initialProjects: any[
                         <motion.div
                             key={project.id}
                             variants={itemVariants}
-                            className="bg-white rounded-3xl shadow-lg shadow-gray-200/40 border border-gray-100 overflow-hidden flex-col group cursor-pointer hover:-translate-y-1 transition-transform duration-300 flex"
+                            role="button"
+                            tabIndex={0}
                             onClick={() => setActiveModalProject(project)}
+                            onKeyDown={(e: React.KeyboardEvent) => {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                    e.preventDefault();
+                                    setActiveModalProject(project);
+                                }
+                            }}
+                            className="bg-white rounded-3xl shadow-lg shadow-gray-200/40 border border-gray-100 overflow-hidden flex-col group cursor-pointer hover:-translate-y-1 transition-transform duration-300 flex focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2"
                         >
                             {/* Image / Placeholder */}
                             <div className="w-full aspect-[4/3] relative overflow-hidden bg-gray-50 border-b border-gray-100">

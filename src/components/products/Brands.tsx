@@ -166,26 +166,29 @@ function MarqueeRow({ items, direction, speed }: MarqueeRowProps) {
                     return (
                         <div
                             key={`${item.id}-${idx}`}
-                            className="marquee-logo-card bg-white border border-gray-100 rounded-2xl p-4 md:p-5 w-[220px] md:w-[260px] h-[80px] md:h-[90px] flex items-center justify-start gap-4 shadow-sm transition-all duration-300 cursor-pointer overflow-hidden"
+                            className={`bg-white border border-gray-100 rounded-2xl flex items-center shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_10px_20px_-5px_rgba(0,0,0,0.08)] transition-all duration-300 cursor-pointer overflow-hidden group ${item.showTextOnCard ? 'p-4 md:p-5 w-max h-[80px] md:h-[90px] justify-start gap-4' : 'px-6 py-4 md:px-8 md:py-6 h-[80px] md:h-[90px] w-auto shrink-0 justify-center'}`}
                             title={item.name}
                         >
-                            <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-[#EDF5F2] text-[#6B9F91] overflow-hidden flex items-center justify-center shrink-0 transition-colors shrink-0">
+                            <div className={`flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105 ${item.showTextOnCard ? 'w-10 h-10 md:w-12 md:h-12' : 'h-10 md:h-12 w-auto'}`}>
                                 {item.logoUrl ? (
-                                    <img src={item.logoUrl} alt={item.name} className="w-full h-full object-cover p-1" />
+                                    <img src={item.logoUrl} alt={item.showTextOnCard ? item.name : ''} className={`object-contain ${item.showTextOnCard ? 'w-full h-full' : 'w-auto h-full max-w-[160px] md:max-w-[200px]'}`} />
                                 ) : (
-                                    <Building2 className="marquee-logo-icon w-5 h-5 md:w-6 md:h-6 transition-transform duration-300" />
+                                    <Building2 className="w-5 h-5 md:w-6 md:h-6 text-[#6B9F91]" />
                                 )}
                             </div>
-                            <div className="flex flex-col overflow-hidden max-w-[150px]">
-                                <span className="font-bold text-gray-800 text-sm md:text-base whitespace-nowrap overflow-hidden text-ellipsis w-full text-left">
-                                    {item.name}
-                                </span>
-                                {item.category && (
-                                    <span className="text-[10px] text-gray-400 font-medium uppercase tracking-wider overflow-hidden text-ellipsis whitespace-nowrap">
-                                        {item.category}
+
+                            {item.showTextOnCard && (
+                                <div className="flex flex-col overflow-hidden max-w-[150px] pr-2">
+                                    <span className="font-bold text-gray-800 text-sm md:text-base whitespace-nowrap overflow-hidden text-ellipsis w-full text-left">
+                                        {item.name}
                                     </span>
-                                )}
-                            </div>
+                                    {item.category && (
+                                        <span className="text-[10px] text-gray-400 font-medium uppercase tracking-wider overflow-hidden text-ellipsis whitespace-nowrap">
+                                            {item.category}
+                                        </span>
+                                    )}
+                                </div>
+                            )}
                         </div>
                     );
                 })}

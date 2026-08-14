@@ -19,7 +19,7 @@ const isValidEmail = (email: string) => {
     return emailRegex.test(email);
 };
 
-export async function GET(request: Request) {
+export async function GET() {
     try {
         const admin = await getCurrentAdmin();
         if (!admin) {
@@ -78,6 +78,7 @@ export async function PUT(request: Request) {
             addressText,
             businessHours,
             footerDescription,
+            contactSectionImageUrl,
             googleMapsIframeUrl,
             urlLinkedin,
             urlYoutube,
@@ -117,6 +118,7 @@ export async function PUT(request: Request) {
 
         const urlFields = [
             logoUrl,
+            contactSectionImageUrl,
             googleMapsIframeUrl,
             urlLinkedin,
             urlYoutube,
@@ -143,6 +145,7 @@ export async function PUT(request: Request) {
                 addressText: addressText.trim(),
                 businessHours: businessHours.trim(),
                 footerDescription: footerDescription.trim(),
+                contactSectionImageUrl: contactSectionImageUrl ? contactSectionImageUrl.trim() : null,
                 googleMapsIframeUrl: googleMapsIframeUrl ? googleMapsIframeUrl.trim() : null,
                 uploadedLogoUrl: uploadedLogoUrl ? uploadedLogoUrl.trim() : null,
                 urlLinkedin: urlLinkedin ? urlLinkedin.trim() : null,

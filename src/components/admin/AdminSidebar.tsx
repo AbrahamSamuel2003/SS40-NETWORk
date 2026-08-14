@@ -56,7 +56,6 @@ const MENU_ITEMS: MenuBlock[] = [
         subItems: [
             { name: 'Logos', href: '/admin/home/logos' },
             { name: 'Happimonials', href: '/admin/home/happimonials' },
-            { name: 'Media', href: '/admin/home/media' },
         ]
     },
     {
@@ -67,7 +66,6 @@ const MENU_ITEMS: MenuBlock[] = [
             { name: 'Client Projects', href: '/admin/digital-solutions/client-projects' }, // Existing
             { name: 'Happimonials', href: '/admin/digital-solutions/happimonials' }, // Existing
             { name: 'Organization Logos', href: '/admin/digital-solutions/organization-logos' }, // Existing
-            { name: 'Media', href: '/admin/media' }, // Reusing media feature
         ]
     },
     {
@@ -78,7 +76,6 @@ const MENU_ITEMS: MenuBlock[] = [
             { name: 'Products', href: '/admin/products' }, // Existing
             { name: 'Product Testimonials', href: '/admin/products/testimonials' },
             { name: 'Product Logos', href: '/admin/products/logos' },
-            { name: 'Product Media', href: '/admin/products/media' },
         ]
     },
     {
@@ -89,10 +86,13 @@ const MENU_ITEMS: MenuBlock[] = [
             { name: 'Student Projects', href: '/admin/student-projects' }, // Existing
             { name: 'Student Impacts', href: '/admin/student-impacts' }, // Existing
             { name: 'Academic Partner Logos', href: '/admin/academics/logos' },
-            { name: 'Media', href: '/admin/media' }, // Reusing existing
         ]
     },
-
+    {
+        name: 'Media',
+        href: '/admin/media',
+        icon: ImageIcon,
+    },
 
     { label: 'CRM' },
     {

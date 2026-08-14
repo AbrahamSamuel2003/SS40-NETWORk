@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { Hero } from "@/components/home/Hero";
 import { About } from "@/components/home/About";
@@ -10,6 +11,11 @@ const SuccessStories = dynamic(() => import("@/components/home/SuccessStories").
 const InteractiveImpactShowcase = dynamic(() => import("@/components/home/InteractiveImpactShowcase").then(mod => mod.InteractiveImpactShowcase), { ssr: true });
 const TrustedBy = dynamic(() => import("@/components/home/TrustedBy").then(mod => mod.TrustedBy), { ssr: true });
 const ContactSection = dynamic(() => import("@/components/home/ContactSection").then(mod => mod.ContactSection), { ssr: true });
+
+export const metadata: Metadata = {
+  title: "Home",
+  description: "SS40 NETWORK - Premium Digital Solutions, IT Services, and Academics for forward-thinking businesses.",
+};
 
 export default async function Home() {
   const config = await getSiteConfig();

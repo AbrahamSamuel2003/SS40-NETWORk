@@ -15,25 +15,26 @@ datasource db {
 // -----------------------------------------------------------------------------
 
 model SiteConfig {
-  id                    Int      @id @default(1)
-  companyName           String
-  legalName             String
-  logoUrl               String?
-  uploadedLogoUrl       String?
-  contactEmail          String
-  contactPhone          String
-  whatsappNumber        String
-  addressText           String
-  businessHours         String
-  footerDescription     String
-  googleMapsIframeUrl   String?
-  urlLinkedin           String?
-  urlYoutube            String?
-  urlInstagram          String?
-  seoDefaultTitle       String
-  seoDefaultDescription String
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
+  id                     Int      @id @default(1)
+  companyName            String
+  legalName              String
+  logoUrl                String?
+  uploadedLogoUrl        String?
+  contactEmail           String
+  contactPhone           String
+  whatsappNumber         String
+  addressText            String
+  businessHours          String
+  footerDescription      String
+  contactSectionImageUrl String?
+  googleMapsIframeUrl    String?
+  urlLinkedin            String?
+  urlYoutube             String?
+  urlInstagram           String?
+  seoDefaultTitle        String
+  seoDefaultDescription  String
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
 }
 
 // -----------------------------------------------------------------------------
@@ -48,16 +49,17 @@ enum LogoPlacement {
 }
 
 model OrganizationLogo {
-  id            String         @id @default(uuid())
-  name          String
-  logoUrl       String?
-  category      String
-  placementType LogoPlacement
-  pageScope     String         @default("GLOBAL") // Ensures Home scope isolation
-  sortOrder     Int            @default(0)
-  isActive      Boolean        @default(true)
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+  id             String        @id @default(uuid())
+  name           String
+  logoUrl        String?
+  category       String
+  placementType  LogoPlacement
+  pageScope      String        @default("GLOBAL") // Ensures Home scope isolation
+  sortOrder      Int           @default(0)
+  isActive       Boolean       @default(true)
+  showTextOnCard Boolean       @default(false)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
 }
 
 // -----------------------------------------------------------------------------
@@ -72,8 +74,8 @@ model Product {
   description    String
   productUrl     String?
   ctaText        String?
-  tags           Json     // Array of tags
-  features       Json     // Array of feature objects
+  tags           Json // Array of tags
+  features       Json // Array of feature objects
   isFeatured     Boolean  @default(false)
   screenshotUrl  String?
   sortOrder      Int      @default(0)
@@ -89,7 +91,7 @@ model ClientProject {
   description    String
   status         String?
   isConfidential Boolean  @default(false)
-  tags           Json     
+  tags           Json
   imageUrl       String?
   projectUrl     String?
   caseStudy      String?
@@ -106,7 +108,7 @@ model StudentProject {
   badge       String?
   description String
   imageUrl    String?
-  tags        Json     
+  tags        Json
   sortOrder   Int      @default(0)
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
@@ -121,7 +123,7 @@ model Happimonial {
   testimonial  String
   videoUrl     String?
   thumbnailUrl String?
-  youtubeUrl   String?  // Optional YouTube URL; one-video-HOME rule enforced at API level
+  youtubeUrl   String? // Optional YouTube URL; one-video-HOME rule enforced at API level
   pageScope    String   @default("GLOBAL") // Ensures Home scope isolation
   sortOrder    Int      @default(0)
   isActive     Boolean  @default(true)
@@ -208,18 +210,18 @@ enum MediaType {
 }
 
 model Media {
-  id          String    @id @default(uuid())
-  fileName    String
-  fileUrl     String
-  mimeType    String
-  fileSize    Int?
-  mediaType   MediaType
-  altText     String?
-  uploadedBy  String?
-  pageScope   String    @default("GLOBAL") // Ensures Home scope isolation
-  isActive    Boolean   @default(true)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id         String    @id @default(uuid())
+  fileName   String
+  fileUrl    String
+  mimeType   String
+  fileSize   Int?
+  mediaType  MediaType
+  altText    String?
+  uploadedBy String?
+  pageScope  String    @default("GLOBAL") // Ensures Home scope isolation
+  isActive   Boolean   @default(true)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
 }
 
 // -----------------------------------------------------------------------------
@@ -227,21 +229,21 @@ model Media {
 // -----------------------------------------------------------------------------
 
 model AdminUser {
-  id           String             @id @default(uuid())
-  username     String             @unique
-  email        String             @unique
+  id           String    @id @default(uuid())
+  username     String    @unique
+  email        String    @unique
   passwordHash String
   fullName     String
-  isActive     Boolean            @default(true)
-  createdAt    DateTime           @default(now())
-  updatedAt    DateTime           @updatedAt
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
   lastLoginAt  DateTime?
 
   activityLogs AdminActivityLog[]
 }
 
 model AdminActivityLog {
-  id          String    @id @default(uuid())
+  id          String   @id @default(uuid())
   adminUserId String
   action      String
   entity      String
@@ -249,8 +251,7 @@ model AdminActivityLog {
   description String
   ipAddress   String?
   userAgent   String?
-  createdAt   DateTime  @default(now())
+  createdAt   DateTime @default(now())
 
-  adminUser   AdminUser @relation(fields: [adminUserId], references: [id], onDelete: Restrict)
+  adminUser AdminUser @relation(fields: [adminUserId], references: [id], onDelete: Restrict)
 }
- 

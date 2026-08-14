@@ -14,6 +14,7 @@ import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
+import { SectionHeading } from "@/components/ui/SectionHeading";
 import { hoverLift, slideUp, staggerContainer } from "@/lib/animations";
 
 export function FeaturedProduct() {
@@ -38,7 +39,20 @@ export function FeaturedProduct() {
     return (
         <SectionWrapper id="featured-product" className="bg-[#EDF5F2]">
             <Container className="space-y-24">
-                {products.map((product, pIdx) => {
+                {/* Section Header */}
+                <SectionHeading
+                    badge="OUR PRODUCTS"
+                    title={
+                        <>
+                            Innovative Tools.<br />
+                            Built for <span className="text-[#2DD4BF]">Real Impact.</span>
+                        </>
+                    }
+                    description="Discover our flagship products designed to simplify operations, supercharge productivity, and deliver measurable results for your business."
+                    align="center"
+                />
+
+                {(products.length > 2 ? products.slice(0, 2) : products).map((product, pIdx) => {
                     const isEven = pIdx % 2 === 0;
                     const tags = Array.isArray(product.tags) ? product.tags : [];
                     const features = Array.isArray(product.features) ? product.features : [];
@@ -122,7 +136,24 @@ export function FeaturedProduct() {
                         </div>
                     );
                 })}
+                {products.length > 2 && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="flex justify-center pt-8"
+                    >
+                        <Button asChild size="lg" variant="outline" className="rounded-full shadow-sm hover:bg-[#6B9F91] hover:text-white hover:border-[#6B9F91] transition-colors">
+                            <Link href="/products/all-products">
+                                View All Products <ArrowRight className="ml-2 w-4 h-4" />
+                            </Link>
+                        </Button>
+                    </motion.div>
+                )}
             </Container>
         </SectionWrapper>
     );
 }
+
+
+

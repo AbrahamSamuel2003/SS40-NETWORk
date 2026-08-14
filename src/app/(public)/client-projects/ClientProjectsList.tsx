@@ -44,7 +44,16 @@ export function ClientProjectsList({ initialProjects }: { initialProjects: any[]
                                 exit={{ opacity: 0, scale: 0.9 }}
                                 transition={{ duration: 0.2 }}
                                 {...hoverLift}
-                                className="bg-white overflow-hidden rounded-2xl flex-col group border border-[var(--color-border)] hover:border-[#6B9F91]/30 transition-all duration-300 flex"
+                                role="button"
+                                tabIndex={0}
+                                onClick={() => setActiveModalProject(project)}
+                                onKeyDown={(e: React.KeyboardEvent) => {
+                                    if (e.key === 'Enter' || e.key === 'Space') {
+                                        e.preventDefault();
+                                        setActiveModalProject(project);
+                                    }
+                                }}
+                                className="cursor-pointer bg-white overflow-hidden rounded-2xl flex-col group border border-[var(--color-border)] hover:border-[#6B9F91]/30 transition-all duration-300 flex focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2"
                             >
                                 {/* Grid Visual Placeholder */}
                                 <div className="relative w-full aspect-[4/3] bg-gray-50 overflow-hidden shrink-0 flex items-center justify-center border-b border-gray-100">
@@ -93,7 +102,10 @@ export function ClientProjectsList({ initialProjects }: { initialProjects: any[]
 
                                     {/* Open Modal Button */}
                                     <button
-                                        onClick={() => setActiveModalProject(project)}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setActiveModalProject(project);
+                                        }}
                                         className="mt-auto flex items-center text-sm font-bold text-[#6B9F91] hover:text-[#588478] transition-colors group/btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] rounded-sm"
                                     >
                                         View Details
