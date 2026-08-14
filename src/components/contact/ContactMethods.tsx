@@ -2,7 +2,7 @@
 
 import type { ComponentType, CSSProperties } from "react";
 import { motion } from "framer-motion";
-import { Mail, Phone, ArrowRight } from "lucide-react";
+import { Mail, Phone, MapPin, ArrowRight } from "lucide-react";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
 import type { SiteConfigData } from "@/lib/site-config";
@@ -14,6 +14,7 @@ const BRAND = "#6B9F91";
 const ACCENTS: Record<string, string> = {
     email: BRAND,
     phone: BRAND,
+    visit: "#F59E0B",
 };
 
 interface ContactChannel {
@@ -49,6 +50,14 @@ export function ContactMethods({ config }: { config?: SiteConfigData | null }) {
     ];
 
     // Only show cards that actually have content
+        const visitCard = config?.addressText ? {
+            icon: MapPin,
+            title: "Visit Us",
+            content: config.addressText,
+            description: "Serving businesses and educational institutions across India with innovative digital solutions and products.",
+            href: "#office-location",
+            imageUrl: config.contactSectionImageUrl,
+        } : null;
     const visible = channels.filter((c) => c.value && c.value.trim() !== "");
 
     return (
