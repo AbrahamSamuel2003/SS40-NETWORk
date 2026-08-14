@@ -10,9 +10,10 @@ import type { SiteConfigData } from "@/lib/site-config";
 /* Per-channel accent colors for intuitive at-a-glance scanning.
    teal  → email (brand green) | blue → phone (communication)
    amber → location (directions)                                       */
+const BRAND = "#6B9F91";
 const ACCENTS: Record<string, string> = {
-    email: "#6B9F91",
-    phone: "#3B82F6",
+    email: BRAND,
+    phone: BRAND,
 };
 
 interface ContactChannel {
@@ -71,7 +72,7 @@ export function ContactMethods({ config }: { config?: SiteConfigData | null }) {
                 </div>
 
                 {/* CHANNEL CARDS — equal-width grid; every card is a full-card link */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 lg:gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 lg:gap-6">
                     {visible.map((channel, idx) => {
                         const Icon = channel.icon;
                         return (
@@ -82,7 +83,7 @@ export function ContactMethods({ config }: { config?: SiteConfigData | null }) {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true, margin: "-50px" }}
                                 transition={{ duration: 0.45, delay: idx * 0.08 }}
-                                className="group relative flex flex-col min-h-[160px] bg-white rounded-xl p-6 border border-gray-100 shadow-sm hover:translate-y-0.5 hover:shadow-md transition-all duration-200 overflow-hidden cursor-pointer"
+                                className="group relative flex flex-col min-h-[110px] bg-white rounded-lg p-3 border border-gray-100 shadow-sm hover:translate-y-0.5 hover:shadow-md transition-all duration-150 overflow-hidden cursor-pointer"
                             >
                                 {/* Color-coded accent bar — intensifies on hover */}
                                 <div
@@ -92,35 +93,26 @@ export function ContactMethods({ config }: { config?: SiteConfigData | null }) {
 
                                 {/* Icon circle — colored per channel */}
                                 <div
-                                    className="w-12 h-12 rounded-lg flex items-center justify-center border mb-4 transition-all duration-200 group-hover:opacity-75"
+                                    className="w-10 h-10 rounded-md flex items-center justify-center border mb-3 transition-all duration-150 group-hover:opacity-90"
                                     style={{
                                         backgroundColor: `${channel.accent}10`,
                                         borderColor: `${channel.accent}20`,
                                     }}
                                 >
-                                    <Icon className="w-5 h-5" style={{ color: channel.accent }} />
+                                    <Icon className="w-4 h-4" style={{ color: channel.accent }} />
                                 </div>
 
                                 {/* Title */}
-                                <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
-                                    {channel.title}
-                                </h3>
-
-                                {/* Value (email / phone / address) */}
-                                <p
-                                    className="text-sm font-semibold break-words whitespace-pre-line mb-2"
-                                    style={{ color: channel.accent }}
-                                >
-                                    {channel.value}
-                                </p>
-
-                                {/* Description + chevron */}
-                                <div className="mt-auto flex items-center justify-between">
-                                    <p className="text-gray-500 text-xs leading-snug">
-                                        {channel.description}
-                                    </p>
-                                    <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-gray-500 transition-colors" />
+                                <div className="flex items-start justify-between">
+                                    <div>
+                                        <h3 className="text-xs font-medium text-gray-600 uppercase tracking-wide">{channel.title}</h3>
+                                        <p className="text-sm font-semibold text-[#111827] mt-1 break-words whitespace-pre-line" style={{ color: BRAND }}>{channel.value}</p>
+                                    </div>
+                                    <div className="ml-3 flex-shrink-0">
+                                        <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-gray-500 transition-colors" />
+                                    </div>
                                 </div>
+                                <p className="text-gray-400 text-[11px] mt-2">{channel.description}</p>
                             </motion.a>
                         );
                     })}
