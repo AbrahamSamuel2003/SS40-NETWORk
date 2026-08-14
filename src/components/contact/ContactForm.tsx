@@ -118,31 +118,31 @@ export function ContactForm() {
     };
 
     return (
-        <SectionWrapper id="contact-form" className="bg-white py-20 md:py-32 relative overflow-hidden">
+        <SectionWrapper id="contact-form" className="bg-white py-16 md:py-24 relative overflow-hidden">
             <Container className="max-w-7xl mx-auto">
 
                 {/* HEADINGS */}
-                <div className="mb-16 text-center md:text-left flex flex-col items-center md:items-start">
+                <div className="mb-10 sm:mb-12 text-center flex flex-col items-center">
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}
-                        className="text-3xl md:text-5xl font-extrabold text-[#111827] mb-6 tracking-tight"
+                        className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#111827] mb-3 tracking-tight"
                     >
                         Send Us a <span className="text-[#6B9F91]">Message</span>
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }}
-                        className="text-gray-500 text-base md:text-lg max-w-2xl leading-relaxed font-medium"
+                        className="text-gray-500 text-sm sm:text-base max-w-xl mx-auto leading-relaxed font-medium"
                     >
                         Tell us about your idea, project, or partnership opportunity. Our team will get back to you with the right guidance.
                     </motion.p>
                 </div>
 
-                <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
+                <div className="flex flex-col lg:flex-row gap-8 lg:gap-14">
 
                     {/* LEFT: FORM OR SUCCESS STATE */}
                     <motion.div
                         initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}
-                        className="w-full lg:w-2/3 bg-white border border-gray-100 rounded-3xl p-6 md:p-10 shadow-xl shadow-gray-200/40 relative overflow-hidden"
+                        className="w-full lg:w-2/3 bg-white border border-gray-100 rounded-3xl p-5 md:p-7 shadow-xl shadow-gray-200/40 relative overflow-hidden"
                     >
                         {/* Soft background glow within the form card */}
                         <div className="absolute -top-32 -left-32 w-64 h-64 bg-[#6B9F91]/5 blur-[80px] rounded-full pointer-events-none" />
@@ -179,7 +179,7 @@ export function ContactForm() {
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, y: -10 }}
                                     transition={{ duration: 0.4 }}
-                                    className="relative z-10 flex flex-col gap-6"
+                                    className="relative z-10 flex flex-col gap-4"
                                     onSubmit={handleSubmit}
                                 >
                                     <AnimatePresence>
@@ -199,31 +199,31 @@ export function ContactForm() {
                                         )}
                                     </AnimatePresence>
 
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <div className="flex flex-col gap-2">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div className="flex flex-col gap-1.5">
                                             <label htmlFor="fullName" className="text-sm font-bold text-[#111827]">Full Name</label>
-                                            <input required disabled={status === "submitting"} type="text" id="fullName" value={formData.fullName} onChange={handleChange} className="w-full bg-[#EDF5F2] border border-gray-200 rounded-xl px-4 py-4 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 placeholder:text-gray-400 disabled:opacity-50" placeholder="Full Name" />
+                                            <input required disabled={status === "submitting"} type="text" id="fullName" value={formData.fullName} onChange={handleChange} className="w-full bg-[#EDF5F2] border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 placeholder:text-gray-400 disabled:opacity-50 text-sm" placeholder="Full Name" />
                                         </div>
-                                        <div className="flex flex-col gap-2">
+                                        <div className="flex flex-col gap-1.5">
                                             <label htmlFor="email" className="text-sm font-bold text-[#111827]">Email Address</label>
-                                            <input required disabled={status === "submitting"} type="email" id="email" value={formData.email} onChange={handleChange} className="w-full bg-[#EDF5F2] border border-gray-200 rounded-xl px-4 py-4 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 placeholder:text-gray-400 disabled:opacity-50" placeholder="Email Address" />
+                                            <input required disabled={status === "submitting"} type="email" id="email" value={formData.email} onChange={handleChange} className="w-full bg-[#EDF5F2] border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 placeholder:text-gray-400 disabled:opacity-50 text-sm" placeholder="Email Address" />
                                         </div>
                                     </div>
 
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <div className="flex flex-col gap-2">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div className="flex flex-col gap-1.5">
                                             <label htmlFor="phone" className="text-sm font-bold text-[#111827]">Phone Number</label>
-                                            <input required disabled={status === "submitting"} type="tel" id="phone" value={formData.phone} onChange={handleChange} className="w-full bg-[#EDF5F2] border border-gray-200 rounded-xl px-4 py-4 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 placeholder:text-gray-400 disabled:opacity-50" placeholder="Mobile Number" />
+                                            <input required disabled={status === "submitting"} type="tel" id="phone" value={formData.phone} onChange={handleChange} className="w-full bg-[#EDF5F2] border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 placeholder:text-gray-400 disabled:opacity-50 text-sm" placeholder="Mobile Number" />
                                         </div>
-                                        <div className="flex flex-col gap-2">
+                                        <div className="flex flex-col gap-1.5">
                                             <label htmlFor="company" className="text-sm font-bold text-[#111827]">Company / Institution <span className="text-gray-400 font-normal">(Optional)</span></label>
-                                            <input disabled={status === "submitting"} type="text" id="company" value={formData.company} onChange={handleChange} className="w-full bg-[#EDF5F2] border border-gray-200 rounded-xl px-4 py-4 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 placeholder:text-gray-400 disabled:opacity-50" placeholder="Company Name (Optional)" />
+                                            <input disabled={status === "submitting"} type="text" id="company" value={formData.company} onChange={handleChange} className="w-full bg-[#EDF5F2] border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 placeholder:text-gray-400 disabled:opacity-50 text-sm" placeholder="Company Name (Optional)" />
                                         </div>
                                     </div>
 
-                                    <div className="flex flex-col gap-2">
+                                    <div className="flex flex-col gap-1.5">
                                         <label htmlFor="serviceInterest" className="text-sm font-bold text-[#111827]">Interested In</label>
-                                        <select required disabled={status === "submitting"} id="serviceInterest" value={formData.serviceInterest} onChange={handleChange} className="w-full bg-[#EDF5F2] border border-gray-200 rounded-xl px-4 py-4 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 appearance-none disabled:opacity-50">
+                                        <select required disabled={status === "submitting"} id="serviceInterest" value={formData.serviceInterest} onChange={handleChange} className="w-full bg-[#EDF5F2] border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 appearance-none disabled:opacity-50 text-sm">
                                             <option value="" disabled>Select an option</option>
                                             {INTEREST_OPTIONS.map((opt) => (
                                                 <option key={opt} value={opt}>{opt}</option>
@@ -231,13 +231,13 @@ export function ContactForm() {
                                         </select>
                                     </div>
 
-                                    <div className="flex flex-col gap-2">
+                                    <div className="flex flex-col gap-1.5">
                                         <label htmlFor="message" className="text-sm font-bold text-[#111827]">Message</label>
-                                        <textarea required disabled={status === "submitting"} id="message" value={formData.message} onChange={handleChange} rows={5} className="w-full bg-[#EDF5F2] border border-gray-200 rounded-xl px-4 py-4 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 placeholder:text-gray-400 resize-none disabled:opacity-50" placeholder="Project Message"></textarea>
+                                        <textarea required disabled={status === "submitting"} id="message" value={formData.message} onChange={handleChange} rows={4} className="w-full bg-[#EDF5F2] border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 placeholder:text-gray-400 resize-none disabled:opacity-50 text-sm" placeholder="Project Message"></textarea>
                                     </div>
 
-                                    <motion.div whileHover={{ scale: status !== "submitting" ? 1.01 : 1 }} whileTap={{ scale: status !== "submitting" ? 0.98 : 1 }} className="mt-4">
-                                        <Button disabled={status === "submitting"} type="submit" className="w-full sm:w-auto bg-[#6B9F91] text-white hover:bg-[#5C8C80] font-bold text-base px-10 py-6 rounded-full group shadow-lg shadow-[#6B9F91]/20 disabled:opacity-70 transition-all duration-300 min-w-[200px]">
+                                    <motion.div whileHover={{ scale: status !== "submitting" ? 1.01 : 1 }} whileTap={{ scale: status !== "submitting" ? 0.98 : 1 }} className="mt-2">
+                                        <Button disabled={status === "submitting"} type="submit" className="w-full sm:w-auto bg-[#6B9F91] text-white hover:bg-[#5C8C80] font-bold text-sm px-8 py-3 rounded-full group shadow-lg shadow-[#6B9F91]/20 disabled:opacity-70 transition-all duration-300 min-w-[180px]">
                                             {status === "submitting" ? (
                                                 <span className="flex items-center justify-center gap-2">
                                                     <div className="w-4 h-4 rounded-full border-2 border-white items-center justify-center border-t-transparent animate-spin"></div>
@@ -262,14 +262,14 @@ export function ContactForm() {
                     </motion.div>
 
                     {/* RIGHT: HELPFUL INFORMATION */}
-                    <div className="w-full lg:w-1/3 flex flex-col gap-6">
+                    <div className="w-full lg:w-1/3 flex flex-col gap-4">
                         {HELPFUL_INFO.map((info, idx) => {
                             const Icon = info.icon;
                             return (
                                 <motion.div
                                     key={idx}
                                     initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.3 + idx * 0.1 }}
-                                    className="bg-[#EDF5F2] rounded-2xl p-6 md:p-8 border border-gray-100 flex items-start gap-4 hover:shadow-lg hover:shadow-gray-200/50 hover:-translate-y-1 transition-all duration-300"
+                                    className="bg-[#EDF5F2] rounded-2xl p-4 md:p-5 border border-gray-100 flex items-start gap-3 hover:shadow-lg hover:shadow-gray-200/50 hover:-translate-y-1 transition-all duration-300"
                                 >
                                     <div className="w-12 h-12 rounded-xl bg-white border border-gray-200 flex items-center justify-center shrink-0">
                                         <Icon className="w-5 h-5 text-[#6B9F91]" />

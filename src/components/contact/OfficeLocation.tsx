@@ -14,20 +14,20 @@ export function OfficeLocation({ config }: { config?: SiteConfigData | null }) {
     const businessHours = config?.businessHours || "Monday – Friday: 9:30 AM – 6:30 PM";
 
     return (
-        <SectionWrapper id="office-location" className="bg-[#EDF5F2] py-20 md:py-32">
+        <SectionWrapper id="office-location" className="bg-[#EDF5F2] py-16 md:py-24">
             <Container className="max-w-6xl mx-auto flex flex-col items-center">
 
                 {/* HEADINGS */}
-                <div className="text-center mb-16">
+                <div className="text-center mb-10 sm:mb-12">
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}
-                        className="text-3xl md:text-5xl font-extrabold text-[#111827] mb-6 tracking-tight"
+                        className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#111827] mb-3 tracking-tight"
                     >
                         Visit Our <span className="text-[#6B9F91]">Office</span>
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }}
-                        className="text-gray-500 text-base md:text-lg max-w-2xl mx-auto leading-relaxed font-medium"
+                        className="text-gray-500 text-sm sm:text-base max-w-xl mx-auto leading-relaxed font-medium"
                     >
                         Meet our team or connect with us for business discussions and collaborations.
                     </motion.p>
