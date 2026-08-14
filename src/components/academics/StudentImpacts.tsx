@@ -9,6 +9,7 @@ import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
+import { getYouTubeThumbnailUrl, getYouTubeVideoId } from "@/components/ui/YouTubeResumeThumbnailPlayer";
 
 interface StudentImpactsProps {
     impacts?: any[];
@@ -131,6 +132,18 @@ function FeaturedVideoArea({ videoUrl, featuredStory }: { videoUrl?: string | nu
     const videoRef = useRef<HTMLVideoElement>(null);
     const iframeRef = useRef<HTMLIFrameElement>(null);
 
+    const videoId = featuredStory.youtubeUrl ? getYouTubeVideoId(featuredStory.youtubeUrl) : null;
+    const resolvedThumbnail = getYouTubeThumbnailUrl(featuredStory.youtubeUrl || "", null);
+
+    function postPlayerCommand(func: string) {
+        try {
+            iframeRef.current?.contentWindow?.postMessage(
+                JSON.stringify({ event: 'command', func, args: [] }),
+                '*'
+            );
+        } catch { }
+    }
+
     function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
         if (!ref.current || isPlaying) return;
         const rect = ref.current.getBoundingClientRect();
@@ -169,6 +182,25 @@ function FeaturedVideoArea({ videoUrl, featuredStory }: { videoUrl?: string | nu
         return () => window.removeEventListener('message', onMessage);
     }, [featuredStory.youtubeUrl]);
 
+    const handleTogglePlay = () => {
+        if (featuredStory.youtubeUrl) {
+            if (!isPlaying) {
+                postPlayerCommand('playVideo');
+                setIsPlaying(true);
+            }
+        } else if (videoRef.current) {
+            if (!isPlaying) {
+                videoRef.current.play().catch((error) => {
+                    console.warn("Video playback was intercepted or failed to load source:", error);
+                    setIsPlaying(true);
+                });
+            } else {
+                videoRef.current.pause();
+                setIsPlaying(false);
+            }
+        }
+    };
+
     return (
         <motion.div
             variants={fadeUpAnim}
@@ -180,14 +212,7 @@ function FeaturedVideoArea({ videoUrl, featuredStory }: { videoUrl?: string | nu
                 rotateY: isPlaying ? 0 : rotateY,
                 transformStyle: "preserve-3d"
             }}
-            onClick={() => {
-                if (!featuredStory.youtubeUrl && !isPlaying && videoRef.current) {
-                    videoRef.current.play().catch((error) => {
-                        console.warn("Video playback was intercepted or failed to load source:", error);
-                        setIsPlaying(true);
-                    });
-                }
-            }}
+            onClick={handleTogglePlay}
             className={`relative w-full aspect-video bg-gray-100 rounded-2xl overflow-hidden flex flex-col items-center justify-center group shadow-[0_4px_20px_rgb(0,0,0,0.05)] ${isPlaying ? 'cursor-auto' : 'cursor-pointer'}`}
         >
             {/* Native HTML5 Video Element (shown only when no YouTube URL) */}
@@ -206,62 +231,51 @@ function FeaturedVideoArea({ videoUrl, featuredStory }: { videoUrl?: string | nu
             )}
 
             {/* YouTube iframe embed (shown only when youtubeUrl exists) */}
-            {featuredStory.youtubeUrl && (() => {
-                const ytUrl = featuredStory.youtubeUrl as string;
-                let videoId: string | null = null;
-                try {
-                    const parsed = new URL(ytUrl);
-                    const host = parsed.hostname.replace('www.', '');
-                    if (host === 'youtube.com' && parsed.pathname === '/watch') {
-                        videoId = parsed.searchParams.get('v');
-                    } else if (host === 'youtu.be') {
-                        videoId = parsed.pathname.slice(1).split('/')[0];
-                    } else if (host === 'youtube.com' && parsed.pathname.startsWith('/shorts/')) {
-                        videoId = parsed.pathname.split('/shorts/')[1]?.split('/')[0] || null;
-                    }
-                } catch { videoId = null; }
-
-                if (!videoId || !/^[a-zA-Z0-9_-]{11}$/.test(videoId)) return null;
-
-                return (
-                    <iframe
-                        ref={iframeRef}
-                        className="absolute inset-0 w-full h-full z-10"
-                        src={`https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1&enablejsapi=1`}
-                        title="Student Impact video"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                        loading="lazy"
-                        onLoad={(e) => {
-                            try {
-                                e.currentTarget.contentWindow?.postMessage(
-                                    JSON.stringify({ event: 'listening', id: 1 }),
-                                    '*'
-                                );
-                            } catch (err) { }
-                        }}
-                    />
-                );
-            })()}
+            {featuredStory.youtubeUrl && videoId && (
+                <iframe
+                    ref={iframeRef}
+                    className="absolute inset-0 w-full h-full z-0"
+                    src={`https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1&enablejsapi=1&playsinline=1`}
+                    title="Student Impact video"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    loading="lazy"
+                    onLoad={(e) => {
+                        try {
+                            e.currentTarget.contentWindow?.postMessage(
+                                JSON.stringify({ event: 'listening', id: 1 }),
+                                '*'
+                            );
+                        } catch (err) { }
+                    }}
+                />
+            )}
 
             {/* Ambient Thumbnail Overlay (Mockup background before play) */}
-            <div className={`absolute inset-0 pointer-events-none bg-gradient-to-tr from-gray-200/55 via-gray-100/45 to-[#E8F0EE]/55 z-0 transition-opacity duration-700 ${isPlaying ? 'opacity-0' : 'opacity-55'}`} />
+            <div className={`absolute inset-0 pointer-events-none bg-gradient-to-tr from-gray-200/55 via-gray-100/45 to-[#E8F0EE]/55 z-10 transition-opacity duration-500 ${isPlaying ? 'opacity-0' : 'opacity-55'}`} />
+            {resolvedThumbnail && (
+                <img
+                    src={resolvedThumbnail}
+                    alt={featuredStory.clientName || ""}
+                    className={`absolute inset-0 w-full h-full object-cover z-10 transition-opacity duration-500 ${isPlaying ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+                />
+            )}
             <motion.div
-                className={`absolute inset-0 pointer-events-none bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-12 z-0 transition-opacity duration-700 ${isPlaying ? 'opacity-0' : 'opacity-100'}`}
+                className={`absolute inset-0 pointer-events-none bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-12 z-10 transition-opacity duration-500 ${isPlaying ? 'opacity-0' : 'opacity-100'}`}
                 animate={{ x: ["-200%", "200%"] }}
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", repeatDelay: 4 }}
             />
-            <div className={`absolute inset-0 pointer-events-none opacity-[0.03] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PHBhdGggZD0iTTAgMGg0MHY0MEgwek0yMCAyMGMxMS0xMSAxMS0xMSAxMS0xMSBMMSAxWiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMTExODI3IiBzdHJva2Utd2lkdGg9IjEuNSIvPjwvc3ZnPg==')] mix-blend-multiply z-0 transition-opacity duration-700 ${isPlaying ? 'opacity-0' : 'opacity-100'}`} />
+            <div className={`absolute inset-0 pointer-events-none opacity-[0.03] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PHBhdGggZD0iTTAgMGg0MHY0MEgwek0yMCAyMGMxMS0xMSAxMS0xMSAxMS0xMSBMMSAxWiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMTExODI3IiBzdHJva2Utd2lkdGg9IjEuNSIvPjwvc3ZnPg==')] mix-blend-multiply z-10 transition-opacity duration-500 ${isPlaying ? 'opacity-0' : 'opacity-100'}`} />
 
-            {/* Premium Play Button - Visual indicator only */}
+            {/* Premium Play Button */}
             <motion.button
                 animate={{
                     opacity: isPlaying ? 0 : 1,
                     scale: isPlaying ? 0.8 : 1,
-                    pointerEvents: "none"
+                    pointerEvents: isPlaying ? "none" : "auto"
                 }}
                 style={{ translateZ: 20 }}
-                className="relative z-10 w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/90 backdrop-blur-sm shadow-[0_8px_30px_rgb(107,159,145,0.2)] flex items-center justify-center text-[#6B9F91] transition-all duration-500 ease-out border border-white focus-visible:outline-none"
+                className="relative z-20 w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/90 backdrop-blur-sm shadow-[0_8px_30px_rgb(107,159,145,0.2)] flex items-center justify-center text-[#6B9F91] transition-all duration-500 ease-out border border-white focus-visible:outline-none"
                 aria-label="Play testimonial video"
             >
                 <Play className="w-6 h-6 md:w-8 md:h-8 ml-1 fill-current drop-shadow-sm" />

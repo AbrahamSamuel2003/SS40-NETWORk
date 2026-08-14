@@ -166,7 +166,7 @@ function MarqueeRow({ items, direction, speed }: MarqueeRowProps) {
                     return (
                         <div
                             key={`${item.id}-${idx}`}
-                            className={`bg-white border border-gray-100 rounded-2xl flex items-center shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_10px_20px_-5px_rgba(0,0,0,0.08)] transition-all duration-300 cursor-pointer overflow-hidden group ${item.showTextOnCard ? 'p-4 md:p-5 w-max h-[80px] md:h-[90px] justify-start gap-4' : 'px-6 py-4 md:px-8 md:py-6 h-[80px] md:h-[90px] w-auto shrink-0 justify-center'}`}
+                            className={`marquee-logo-card bg-white border border-gray-100 rounded-2xl flex items-center shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_10px_20px_-5px_rgba(0,0,0,0.08)] transition-all duration-300 cursor-pointer overflow-hidden group ${item.showTextOnCard ? 'p-4 md:p-5 w-max h-[80px] md:h-[90px] justify-start gap-4' : 'px-6 py-4 md:px-8 md:py-6 h-[80px] md:h-[90px] w-auto shrink-0 justify-center'}`}
                             title={item.name}
                         >
                             <div className={`flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105 ${item.showTextOnCard ? 'w-10 h-10 md:w-12 md:h-12' : 'h-10 md:h-12 w-auto'}`}>

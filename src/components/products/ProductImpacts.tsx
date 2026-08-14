@@ -9,6 +9,7 @@ import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { CardMotion } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
+import { YouTubeResumeThumbnailPlayer } from "@/components/ui/YouTubeResumeThumbnailPlayer";
 import { slideUp, staggerContainer, hoverLift } from "@/lib/animations";
 
 function getYouTubeEmbedUrl(url: string) {
@@ -142,11 +143,11 @@ export function ProductImpacts() {
                                 >
                                     <div className="relative w-full aspect-[4/3] bg-gray-100 overflow-hidden shrink-0">
                                         {item.youtubeUrl ? (
-                                            <iframe
-                                                src={getYouTubeEmbedUrl(item.youtubeUrl)}
-                                                className="absolute inset-0 w-full h-full border-0"
-                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                allowFullScreen
+                                            <YouTubeResumeThumbnailPlayer
+                                                youtubeUrl={item.youtubeUrl}
+                                                title={item.clientName}
+                                                className="w-full h-full"
+                                                iframeClassName="absolute inset-0 w-full h-full border-0 z-0"
                                             />
                                         ) : (
                                             <div className="absolute inset-0 bg-gradient-to-br from-[#6B9F91]/20 to-[#6B9F91]/5 flex items-center justify-center">
@@ -212,11 +213,11 @@ export function ProductImpacts() {
                                     >
                                         <div className="relative w-full aspect-[4/3] bg-gray-100 overflow-hidden shrink-0">
                                             {item.youtubeUrl ? (
-                                                <iframe
-                                                    src={getYouTubeEmbedUrl(item.youtubeUrl)}
-                                                    className="absolute inset-0 w-full h-full border-0"
-                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                    allowFullScreen
+                                                <YouTubeResumeThumbnailPlayer
+                                                    youtubeUrl={item.youtubeUrl}
+                                                    title={item.clientName}
+                                                    className="w-full h-full"
+                                                    iframeClassName="absolute inset-0 w-full h-full border-0 z-0"
                                                 />
                                             ) : (
                                                 <div className="absolute inset-0 bg-gradient-to-br from-[#6B9F91]/20 to-[#6B9F91]/5 flex items-center justify-center">
@@ -344,11 +345,11 @@ function ProductImpactModal({ story, onClose }: { story: any; onClose: () => voi
                     <div className="prose prose-sm md:prose-base prose-gray max-w-none flex-1 overflow-y-auto mb-8 pr-2">
                         {story.youtubeUrl && (
                             <div className="relative w-full aspect-[16/9] mb-6 rounded-xl overflow-hidden bg-gray-100 border border-gray-100 shadow-sm">
-                                <iframe
-                                    src={getYouTubeEmbedUrl(story.youtubeUrl)}
-                                    className="absolute inset-0 w-full h-full border-0"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowFullScreen
+                                <YouTubeResumeThumbnailPlayer
+                                    youtubeUrl={story.youtubeUrl}
+                                    title={story.clientName}
+                                    className="w-full h-full"
+                                    iframeClassName="absolute inset-0 w-full h-full border-0 z-0"
                                 />
                             </div>
                         )}

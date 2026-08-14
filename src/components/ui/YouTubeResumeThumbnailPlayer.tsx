@@ -38,10 +38,11 @@ export function getYouTubeVideoId(url: string) {
 }
 
 export function getYouTubeThumbnailUrl(url: string, fallback?: string | null) {
-    if (fallback) return fallback;
-
     const videoId = getYouTubeVideoId(url);
-    return videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : null;
+    if (videoId) {
+        return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+    }
+    return fallback || null;
 }
 
 export function YouTubeResumeThumbnailPlayer({

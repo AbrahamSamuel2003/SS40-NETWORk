@@ -9,6 +9,7 @@ import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { CardMotion } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
+import { YouTubeResumeThumbnailPlayer } from "@/components/ui/YouTubeResumeThumbnailPlayer";
 import { slideUp, staggerContainer, hoverLift } from "@/lib/animations";
 
 import { Loader2 } from "lucide-react";
@@ -142,11 +143,11 @@ export function Happimonials() {
                                     {/* Video / Thumbnail Area (Optimized Spacing: full width, no padding, taller 4:3 fit) */}
                                     <div className="relative w-full aspect-[4/3] bg-gray-100 overflow-hidden shrink-0 cursor-pointer">
                                         {item.youtubeUrl ? (
-                                            <iframe
-                                                src={getYouTubeEmbedUrl(item.youtubeUrl)}
-                                                className="absolute inset-0 w-full h-full border-0"
-                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                allowFullScreen
+                                            <YouTubeResumeThumbnailPlayer
+                                                youtubeUrl={item.youtubeUrl}
+                                                title={item.clientName}
+                                                className="w-full h-full"
+                                                iframeClassName="absolute inset-0 w-full h-full border-0 z-0"
                                             />
                                         ) : item.thumbnailUrl ? (
                                             <>
@@ -230,11 +231,11 @@ export function Happimonials() {
                                         {/* Video Area (Optimized spacing: taller 4:3 fit) */}
                                         <div className="relative w-full aspect-[4/3] bg-gray-100 overflow-hidden shrink-0">
                                             {item.youtubeUrl ? (
-                                                <iframe
-                                                    src={getYouTubeEmbedUrl(item.youtubeUrl)}
-                                                    className="absolute inset-0 w-full h-full border-0"
-                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                    allowFullScreen
+                                                <YouTubeResumeThumbnailPlayer
+                                                    youtubeUrl={item.youtubeUrl}
+                                                    title={item.clientName}
+                                                    className="w-full h-full"
+                                                    iframeClassName="absolute inset-0 w-full h-full border-0 z-0"
                                                 />
                                             ) : item.thumbnailUrl ? (
                                                 <>
@@ -412,11 +413,11 @@ function HappimonialModal({ story, onClose }: { story: any, onClose: () => void 
                     <div className="prose prose-sm md:prose-base max-w-none text-gray-700">
                         {story.youtubeUrl && (
                             <div className="relative w-full aspect-[16/9] mb-6 rounded-xl overflow-hidden bg-gray-100 border border-gray-100 shadow-sm">
-                                <iframe
-                                    src={getYouTubeEmbedUrl(story.youtubeUrl)}
-                                    className="absolute inset-0 w-full h-full border-0"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowFullScreen
+                                <YouTubeResumeThumbnailPlayer
+                                    youtubeUrl={story.youtubeUrl}
+                                    title={story.clientName}
+                                    className="w-full h-full"
+                                    iframeClassName="absolute inset-0 w-full h-full border-0 z-0"
                                 />
                             </div>
                         )}
