@@ -33,11 +33,23 @@ export function FeaturedProduct() {
             .catch(() => setIsLoading(false));
     }, []);
 
+    React.useEffect(() => {
+        if (!isLoading && typeof window !== 'undefined' && (window.location.hash === '#featured-product' || window.location.hash === '#view-all-featured-products')) {
+            const hashId = window.location.hash.substring(1);
+            const el = document.getElementById(hashId);
+            if (el) {
+                setTimeout(() => {
+                    el.scrollIntoView({ behavior: 'smooth' });
+                }, 100);
+            }
+        }
+    }, [isLoading]);
+
     if (isLoading) return null;
     if (products.length === 0) return null;
 
     return (
-        <SectionWrapper id="featured-product" className="bg-[#EDF5F2]">
+        <SectionWrapper id="featured-product" className="bg-[#EDF5F2] scroll-mt-24">
             <Container className="space-y-24">
                 {/* Section Header */}
                 <SectionHeading
@@ -138,10 +150,11 @@ export function FeaturedProduct() {
                 })}
                 {products.length > 2 && (
                     <motion.div
+                        id="view-all-featured-products"
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="flex justify-center pt-8"
+                        className="flex justify-center pt-8 scroll-mt-24"
                     >
                         <Button asChild size="lg" variant="outline" className="rounded-full shadow-sm hover:bg-[#6B9F91] hover:text-white hover:border-[#6B9F91] transition-colors">
                             <Link href="/products/all-products">

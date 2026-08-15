@@ -128,7 +128,8 @@ interface MarqueeRowProps {
 
 function MarqueeRow({ items, direction, speed }: MarqueeRowProps) {
     // Duplicate exactly to fit -50% perfectly.
-    const half = [...items, ...items, ...items];
+    const expandedItems = items.length < 5 ? [...items, ...items, ...items, ...items] : items;
+    const half = [...expandedItems, ...expandedItems, ...expandedItems];
     const duplicatedItems = [...half, ...half];
     const pauseMarquee = (event: React.PointerEvent<HTMLDivElement>) => {
         if (event.pointerType === "touch") {
@@ -165,11 +166,15 @@ function MarqueeRow({ items, direction, speed }: MarqueeRowProps) {
                     return (
                         <div
                             key={`${item.id}-${idx}`}
-                            className={`marquee-logo-card bg-white border border-gray-100 rounded-2xl flex items-center shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_10px_20px_-5px_rgba(0,0,0,0.08)] transition-all duration-300 cursor-pointer overflow-hidden group ${item.showTextOnCard ? 'p-4 md:p-5 w-max h-[80px] md:h-[90px] justify-start gap-4' : 'px-6 py-4 md:px-8 md:py-6 h-[80px] md:h-[90px] w-auto shrink-0 justify-center'}`}
+                            className={`marquee-logo-card bg-white border border-gray-100 rounded-2xl flex items-center shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_10px_20px_-5px_rgba(0,0,0,0.08)] transition-all duration-300 cursor-pointer overflow-hidden group ${
+                                item.showTextOnCard
+                                    ? 'p-4 md:p-5 w-max h-[80px] md:h-[90px] justify-start gap-4'
+                                    : 'px-4 py-2.5 md:px-5 md:py-3 h-auto min-h-[56px] md:min-h-[64px] w-auto shrink-0 justify-center'
+                            }`}
                         >
-                            <div className={`flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105 ${item.showTextOnCard ? 'w-10 h-10 md:w-12 md:h-12' : 'h-10 md:h-12 w-auto min-w-[40px]'}`}>
+                            <div className={`flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105 ${item.showTextOnCard ? 'w-10 h-10 md:w-12 md:h-12' : 'h-8 md:h-10 w-auto min-w-[32px]'}`}>
                                 {item.logoUrl ? (
-                                    <img src={item.logoUrl} alt={item.showTextOnCard ? item.name : ''} className={`object-contain ${item.showTextOnCard ? 'w-full h-full' : 'w-auto h-full max-w-[160px] md:max-w-[200px]'}`} />
+                                    <img src={item.logoUrl} alt={item.showTextOnCard ? item.name : ''} className={`object-contain ${item.showTextOnCard ? 'w-full h-full' : 'w-auto h-full max-w-[140px] md:max-w-[180px]'}`} />
                                 ) : Icon ? (
                                     <Icon className="w-6 h-6 md:w-8 md:h-8 text-[#6B9F91]" />
                                 ) : null}

@@ -32,7 +32,7 @@ export default async function AllHappimonialsPage() {
 
                 <Container className="relative z-10 flex flex-col items-center text-center max-w-4xl">
                     <div className="w-full flex justify-center mb-6">
-                        <Link href="/digital-solutions" className="flex items-center text-sm font-bold text-[#6B9F91] hover:text-[#588478] transition-colors group">
+                        <Link href="/digital-solutions#happimonials" className="flex items-center text-sm font-bold text-[#6B9F91] hover:text-[#588478] transition-colors group">
                             <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
                             Back to Digital Solutions
                         </Link>
@@ -49,12 +49,12 @@ export default async function AllHappimonialsPage() {
                     </h1>
 
                     <p className="text-base md:text-lg text-[var(--color-body-text)] max-w-2xl mx-auto leading-relaxed">
-                        Stories from organizations that worked with SS40 NETWORK.
+                        Read verified feedback and success stories from companies that built their future with SS40 NETWORK.
                     </p>
                 </Container>
             </div>
 
-            {/* List Section */}
+            {/* List and Tabs Section */}
             <Container className="pt-8 pb-16 lg:pt-12 lg:pb-24 max-w-7xl">
                 <HappimonialsList initialStories={stories} />
             </Container>

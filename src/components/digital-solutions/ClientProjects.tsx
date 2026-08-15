@@ -69,8 +69,20 @@ export function ClientProjects() {
         };
     }, []);
 
+    React.useEffect(() => {
+        if (!isLoading && typeof window !== 'undefined' && (window.location.hash === '#featured-projects' || window.location.hash === '#view-all-projects')) {
+            const hashId = window.location.hash.substring(1);
+            const el = document.getElementById(hashId);
+            if (el) {
+                setTimeout(() => {
+                    el.scrollIntoView({ behavior: 'smooth' });
+                }, 100);
+            }
+        }
+    }, [isLoading]);
+
     return (
-        <SectionWrapper id="featured-projects" className="bg-[#EDF5F2] overflow-visible">
+        <SectionWrapper id="featured-projects" className="bg-[#EDF5F2] overflow-visible scroll-mt-24">
             <Container className="space-y-12 lg:space-y-16">
 
                 {/* Section Header */}
@@ -408,7 +420,7 @@ export function ClientProjects() {
 
                 {/* View All Projects Button */}
                 {projects.length > 0 && (
-                    <div className="w-full flex justify-center mt-2 mb-10">
+                    <div id="view-all-projects" className="w-full flex justify-center mt-2 mb-10 scroll-mt-24">
                         <Link href="/client-projects" className="inline-flex items-center justify-center font-bold text-lg text-[#6B9F91] hover:text-[#588478] transition-colors group">
                             View All Projects
                             <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />

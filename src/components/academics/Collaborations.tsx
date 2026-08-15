@@ -37,7 +37,8 @@ export function Collaborations({ logos = [] }: { logos?: any[] }) {
     if (!logos || logos.length === 0) return null;
     const [hoveredNode, setHoveredNode] = React.useState<string | null>(null);
 
-    const half = [...logos, ...logos, ...logos];
+    const expandedItems = logos.length < 5 ? [...logos, ...logos, ...logos, ...logos] : logos;
+    const half = [...expandedItems, ...expandedItems, ...expandedItems];
     const marqueeItems = [...half, ...half];
     const pauseMarquee = (event: React.PointerEvent<HTMLDivElement>) => {
         if (event.pointerType === "touch") {
@@ -182,14 +183,19 @@ export function Collaborations({ logos = [] }: { logos?: any[] }) {
                             {marqueeItems.map((inst, idx) => (
                                 <div
                                     key={`inst-${idx}`}
-                                    className={`academic-marquee-card bg-white rounded-2xl border border-gray-100 shadow-[0_1px_3px_rgb(0,0,0,0.05)] hover:shadow-[0_10px_20px_-5px_rgb(0,0,0,0.08)] flex items-center shrink-0 transition-all cursor-pointer group ${inst.showTextOnCard ? 'p-4 md:p-5 gap-4 w-max h-[80px] md:h-[90px]' : 'px-6 py-4 md:px-8 md:py-6 h-[80px] md:h-[90px] w-auto justify-center'}`}
+                                    className={`academic-marquee-card bg-white rounded-2xl border border-gray-100 shadow-[0_1px_3px_rgb(0,0,0,0.05)] hover:shadow-[0_10px_20px_-5px_rgb(0,0,0,0.08)] flex items-center shrink-0 transition-all cursor-pointer group ${
+                                        inst.showTextOnCard
+                                            ? 'p-4 md:p-5 gap-4 w-max h-[80px] md:h-[90px] justify-start'
+                                            : 'px-4 py-2.5 md:px-5 md:py-3 h-auto min-h-[56px] md:min-h-[64px] w-auto justify-center'
+                                    }`}
+                                    title={inst.name}
                                 >
                                     {/* Logo Placeholder */}
-                                    <div className={`flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105 ${inst.showTextOnCard ? 'w-12 h-12 md:w-14 md:h-14 bg-[#EDF5F2] rounded-xl border border-gray-100/50' : 'h-10 md:h-12 w-auto'}`}>
+                                    <div className={`flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105 ${inst.showTextOnCard ? 'w-10 h-10 md:w-12 md:h-12' : 'h-8 md:h-10 w-auto min-w-[32px]'}`}>
                                         {inst.logoUrl ? (
-                                            <Image src={inst.logoUrl} alt={inst.showTextOnCard ? inst.name : ''} width={200} height={60} className={`object-contain ${inst.showTextOnCard ? 'w-full h-full p-1' : 'w-auto h-full max-w-[160px] md:max-w-[200px]'}`} />
+                                            <img src={inst.logoUrl} alt={inst.showTextOnCard ? inst.name : ''} className={`object-contain ${inst.showTextOnCard ? 'w-full h-full' : 'w-auto h-full max-w-[140px] md:max-w-[180px]'}`} />
                                         ) : (
-                                            <Building2 className={`text-[#6B9F91] transition-transform duration-300 ${inst.showTextOnCard ? 'w-6 h-6' : 'w-8 h-8 md:w-10 md:h-10'}`} />
+                                            <Building2 className="w-6 h-6 md:w-8 md:h-8 text-[#6B9F91]" />
                                         )}
                                     </div>
                                     {inst.showTextOnCard && (

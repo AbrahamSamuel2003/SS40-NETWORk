@@ -131,26 +131,9 @@ interface MarqueeRowProps {
 }
 
 function MarqueeRow({ items, direction, speed }: MarqueeRowProps) {
-    // Generate exactly enough copies so it scrolls seamlessly without breaking or changing velocity.
-    // In Products Brands.tsx, 15 items scroll in 30s (2s per item).
-    // We create a "half" array that has at least 10-15 items to ensure it covers screens, then duplicate it.
-    const getMultipliedItems = () => {
-        let copies = [];
-        const requiredMinimum = 10;
-        const loops = Math.max(3, Math.ceil(requiredMinimum / Math.max(1, items.length)));
-        for (let i = 0; i < loops; i++) {
-            copies.push(...items);
-        }
-        return copies;
-    };
-
-    const half = getMultipliedItems();
-    const duplicatedItems = [...half, ...half]; // Total items for seamless 50% translate loop
-
-    // Calculate a proportional duration to guarantee constant physical scrolling velocity
-    // 2 seconds per item is the standard set by the Brands.tsx page
-    const itemsInHalf = half.length;
-    const computedSpeed = Math.max(itemsInHalf * 2.2, 20); // slightly smoother pace
+    const expandedItems = items.length < 5 ? [...items, ...items, ...items, ...items] : items;
+    const half = [...expandedItems, ...expandedItems, ...expandedItems];
+    const duplicatedItems = [...half, ...half];
 
     const pauseMarquee = (event: React.PointerEvent<HTMLDivElement>) => {
         if (event.pointerType === "touch") {
@@ -180,16 +163,21 @@ function MarqueeRow({ items, direction, speed }: MarqueeRowProps) {
                     "flex items-center gap-6 px-3 w-max",
                     direction === "left" ? "animate-marquee-left" : "animate-marquee-right"
                 )}
-                style={{ "--duration": `${computedSpeed}s` } as React.CSSProperties}
+                style={{ "--duration": `${speed}s` } as React.CSSProperties}
             >
                 {duplicatedItems.map((client, idx) => (
                     <div
                         key={`${client.id}-${idx}`}
-                        className={`marquee-logo-card group flex items-center bg-white border border-gray-100 rounded-2xl shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_10px_20px_-5px_rgba(0,0,0,0.08)] shrink-0 transition-all duration-300 cursor-pointer overflow-hidden ${client.showTextOnCard ? 'justify-start p-4 md:p-5 gap-3 md:gap-4' : 'justify-center px-6 py-4 md:px-8 md:py-6 h-[72px] md:h-[88px] w-auto'}`}
+                        className={`marquee-logo-card group flex items-center bg-white border border-gray-100 rounded-2xl shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_10px_20px_-5px_rgba(0,0,0,0.08)] shrink-0 transition-all duration-300 cursor-pointer overflow-hidden ${
+                            client.showTextOnCard
+                                ? 'justify-start p-4 md:p-5 gap-3 md:gap-4 w-max h-[80px] md:h-[90px]'
+                                : 'px-4 py-2.5 md:px-5 md:py-3 h-auto min-h-[56px] md:min-h-[64px] w-auto shrink-0 justify-center'
+                        }`}
+                        title={client.name}
                     >
-                        <div className={`flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105 ${client.showTextOnCard ? 'h-8 md:h-10 w-auto min-w-[32px] max-w-[120px]' : 'h-10 md:h-12 w-auto'}`}>
+                        <div className={`flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105 ${client.showTextOnCard ? 'h-8 md:h-10 w-auto min-w-[32px] max-w-[120px]' : 'h-8 md:h-10 w-auto min-w-[32px]'}`}>
                             {client.logoUrl ? (
-                                <img src={client.logoUrl} alt={client.showTextOnCard ? client.name : ''} className={`object-contain ${client.showTextOnCard ? 'w-full h-full' : 'w-auto h-full max-w-[160px] md:max-w-[200px]'}`} />
+                                <img src={client.logoUrl} alt={client.showTextOnCard ? client.name : ''} className={`object-contain ${client.showTextOnCard ? 'w-full h-full' : 'w-auto h-full max-w-[140px] md:max-w-[180px]'}`} />
                             ) : (
                                 <Building2 className="w-6 h-6 md:w-8 md:h-8 text-[#6B9F91]" />
                             )}

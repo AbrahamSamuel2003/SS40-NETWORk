@@ -83,9 +83,7 @@ export function Happimonials() {
         if (mobileScrollRef.current) {
             const mobileCards = mobileScrollRef.current.querySelectorAll<HTMLElement>(".happimonial-mobile-card");
             mobileCards.forEach(c => mobileObserver.observe(c));
-            requestAnimationFrame(() => {
-                mobileCards[0]?.scrollIntoView({ behavior: 'auto', inline: 'center', block: 'nearest' });
-            });
+            mobileScrollRef.current.scrollLeft = 0;
         }
 
         return () => {
@@ -93,8 +91,37 @@ export function Happimonials() {
         };
     }, []);
 
+    React.useEffect(() => {
+        const scrollToTarget = () => {
+            if (typeof window !== 'undefined') {
+                const hash = window.location.hash;
+                if (hash === '#happimonials' || hash === '#view-all-happimonials') {
+                    const hashId = hash.substring(1);
+                    const el = document.getElementById(hashId);
+                    if (el) {
+                        el.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            }
+        };
+
+        if (!isLoading) {
+            scrollToTarget();
+            const t1 = setTimeout(scrollToTarget, 100);
+            const t2 = setTimeout(scrollToTarget, 350);
+            const t3 = setTimeout(scrollToTarget, 700);
+            const t4 = setTimeout(scrollToTarget, 1200);
+            return () => {
+                clearTimeout(t1);
+                clearTimeout(t2);
+                clearTimeout(t3);
+                clearTimeout(t4);
+            };
+        }
+    }, [isLoading]);
+
     return (
-        <SectionWrapper id="happimonials" className="bg-white !pb-0 md:!pb-0 lg:!pb-0">
+        <SectionWrapper id="happimonials" className="bg-white !pb-0 md:!pb-0 lg:!pb-0 scroll-mt-24">
             <Container>
 
                 {/* Section Header */}
@@ -309,7 +336,7 @@ export function Happimonials() {
 
                         {/* View All Button */}
                         {!isLoading && happimonials.length > 3 && (
-                            <div className="w-full flex justify-center mt-8 md:mt-12 md:mb-6 mb-4">
+                            <div id="view-all-happimonials" className="w-full flex justify-center mt-8 md:mt-12 md:mb-6 mb-4 scroll-mt-24">
                                 <Link href="/happimonials" className="inline-flex items-center justify-center font-bold text-lg text-[#6B9F91] hover:text-[#588478] transition-colors group">
                                     View All Stories
                                     <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />

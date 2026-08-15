@@ -122,8 +122,20 @@ export function BestProjects({ projects = [] }: BestProjectsProps) {
         };
     }, []);
 
+    React.useEffect(() => {
+        if (typeof window !== 'undefined' && (window.location.hash === '#best-projects' || window.location.hash === '#view-all-student-projects')) {
+            const hashId = window.location.hash.substring(1);
+            const el = document.getElementById(hashId);
+            if (el) {
+                setTimeout(() => {
+                    el.scrollIntoView({ behavior: 'smooth' });
+                }, 100);
+            }
+        }
+    }, []);
+
     return (
-        <SectionWrapper id="best-projects" className="bg-white relative overflow-hidden">
+        <SectionWrapper id="best-projects" className="bg-white relative overflow-hidden scroll-mt-24">
             {activeProjects.length === 0 ? null : (
                 <>
 
@@ -382,7 +394,7 @@ export function BestProjects({ projects = [] }: BestProjectsProps) {
 
                         {/* Read More Button if more than 4 projects exist */}
                         {activeProjects.length > 4 && (
-                            <div className="w-full flex justify-center mt-12 mb-4 relative z-20">
+                            <div id="view-all-student-projects" className="w-full flex justify-center mt-12 mb-4 relative z-20 scroll-mt-24">
                                 <Link href="/academics/student-projects" className="inline-flex items-center justify-center font-bold text-lg text-[#6B9F91] hover:text-[#588478] transition-colors group">
                                     View All Projects
                                     <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />

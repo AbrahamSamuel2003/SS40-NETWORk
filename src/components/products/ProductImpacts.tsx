@@ -88,8 +88,20 @@ export function ProductImpacts() {
         };
     }, []);
 
+    React.useEffect(() => {
+        if (!isLoading && typeof window !== 'undefined' && (window.location.hash === '#product-impacts' || window.location.hash === '#view-all-product-impacts')) {
+            const hashId = window.location.hash.substring(1);
+            const el = document.getElementById(hashId);
+            if (el) {
+                setTimeout(() => {
+                    el.scrollIntoView({ behavior: 'smooth' });
+                }, 100);
+            }
+        }
+    }, [isLoading]);
+
     return (
-        <SectionWrapper id="product-impacts" className="bg-white border-t border-gray-100 !pb-0 md:!pb-0 lg:!pb-0">
+        <SectionWrapper id="product-impacts" className="bg-white border-t border-gray-100 !pb-0 md:!pb-0 lg:!pb-0 scroll-mt-24">
             <Container className="space-y-16">
 
                 {/* Section Header */}
@@ -275,7 +287,7 @@ export function ProductImpacts() {
 
                         {/* View All Button */}
                         {!isLoading && happimonials.length > 3 && (
-                            <div className="w-full flex justify-center mt-8 md:mt-12 md:mb-6 mb-4">
+                            <div id="view-all-product-impacts" className="w-full flex justify-center mt-8 md:mt-12 md:mb-6 mb-4 scroll-mt-24">
                                 <Link href="/product-impacts" className="inline-flex items-center justify-center font-bold text-lg text-[#6B9F91] hover:text-[#588478] transition-colors group">
                                     View All Stories
                                     <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />

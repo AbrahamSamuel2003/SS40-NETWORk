@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, CloudIcon, CheckCircle2, X } from "lucide-react";
+import { ArrowRight, ArrowLeft, CloudIcon, CheckCircle2, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CardMotion } from "@/components/ui/Card";
 import { hoverLift, slideUp } from "@/lib/animations";
@@ -41,6 +41,14 @@ export function AllProductsDisplay() {
             <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#2DD4BF]/5 blur-[100px] rounded-full pointer-events-none" />
 
             <Container className="relative z-10 w-full">
+                {/* Back to Products Navigation */}
+                <div className="w-full flex justify-center mb-6">
+                    <Link href="/products#featured-product" className="flex items-center text-sm font-bold text-[#6B9F91] hover:text-[#588478] transition-colors group">
+                        <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
+                        Back to Products
+                    </Link>
+                </div>
+
                 {/* Common Heading Block */}
                 <div className="w-full flex flex-col justify-center mb-10 md:mb-16 gap-4 text-center items-center">
                     <h2 className="text-3xl lg:text-4xl font-bold text-[var(--color-heading)] tracking-tight relative text-center">

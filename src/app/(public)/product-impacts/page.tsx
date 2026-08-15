@@ -32,7 +32,7 @@ export default async function ProductImpactsPage() {
 
                 <Container className="relative z-10 flex flex-col items-center text-center max-w-4xl">
                     <div className="w-full flex justify-center mb-6">
-                        <Link href="/products" className="flex items-center text-sm font-bold text-[#6B9F91] hover:text-[#588478] transition-colors group">
+                        <Link href="/products#product-impacts" className="flex items-center text-sm font-bold text-[#6B9F91] hover:text-[#588478] transition-colors group">
                             <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
                             Back to Products
                         </Link>
