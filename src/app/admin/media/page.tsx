@@ -85,16 +85,16 @@ export default function GlobalMediaPage() {
         setTimeout(() => setCopiedId(null), 2000);
     };
 
-    if (isLoading) return <div className="p-12 text-center text-white"><div className="animate-spin rounded-full h-8 w-8 mx-auto border-t-2 border-b-2 border-white"></div></div>;
+    if (isLoading) return <div className="p-12 text-center text-[#111827]"><div className="animate-spin rounded-full h-8 w-8 mx-auto border-t-2 border-b-2 border-gray-200"></div></div>;
 
     return (
         <div className="max-w-6xl mx-auto pb-12">
             <div className="mb-8 flex justify-between items-end">
                 <div>
-                    <h2 className="text-2xl font-bold tracking-tight text-white mb-2">Central Media Library</h2>
-                    <p className="text-white/60">Upload and manage reusable media assets for all CMS sections.</p>
+                    <h2 className="text-2xl font-bold tracking-tight text-[#111827] mb-2">Central Media Library</h2>
+                    <p className="text-[#6B7280]">Upload and manage reusable media assets for all CMS sections.</p>
                 </div>
-                <label className={`cursor-pointer bg-[var(--color-primary)] hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-2 ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}>
+                <label className={`cursor-pointer bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-2 ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}>
                     <Upload className="w-4 h-4" /> {isUploading ? 'Uploading...' : 'Upload Media'}
                     <input type="file" onChange={handleUpload} className="hidden" disabled={isUploading} />
                 </label>
@@ -102,33 +102,33 @@ export default function GlobalMediaPage() {
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {mediaItems.length === 0 ? (
-                    <div className="col-span-full border border-dashed border-white/20 rounded-xl p-12 text-center">
-                        <Upload className="w-12 h-12 text-white/20 mx-auto mb-4" />
-                        <h3 className="text-white font-medium mb-1">No Media Uploaded</h3>
-                        <p className="text-white/40 text-sm">Upload media elements to use across the entire platform.</p>
+                    <div className="col-span-full border border-dashed border-gray-200/20 rounded-xl p-12 text-center">
+                        <Upload className="w-12 h-12 text-[#111827]/20 mx-auto mb-4" />
+                        <h3 className="text-[#111827] font-medium mb-1">No Media Uploaded</h3>
+                        <p className="text-[#9CA3AF] text-sm">Upload media elements to use across the entire platform.</p>
                     </div>
                 ) : (
                     mediaItems.map(media => (
-                        <div key={media.id} className="bg-[#111111] border border-white/10 rounded-xl overflow-hidden group flex flex-col">
-                            <div className="aspect-video bg-black/50 border-b border-white/10 flex items-center justify-center p-4 relative">
+                        <div key={media.id} className="admin-card overflow-hidden group flex flex-col">
+                            <div className="aspect-video bg-white border-b border-gray-200 flex items-center justify-center p-4 relative">
                                 {media.mediaType === 'IMAGE' ? (
                                     <img src={media.fileUrl} alt={media.fileName} className="max-w-full max-h-full object-contain" />
                                 ) : media.mediaType === 'VIDEO' ? (
                                     <video src={media.fileUrl} className="max-w-full max-h-full" controls={false} />
                                 ) : (
-                                    <div className="text-white/40 font-bold uppercase tracking-widest">{media.mediaType}</div>
+                                    <div className="text-[#9CA3AF] font-bold uppercase tracking-widest">{media.mediaType}</div>
                                 )}
                             </div>
                             <div className="p-4 flex flex-col flex-1">
-                                <div className="text-sm font-medium text-white truncate max-w-full" title={media.fileName}>{media.fileName}</div>
-                                <div className="text-xs text-white/40 mt-1 flex-1">{media.mimeType} · {(media.fileSize / 1024 / 1024).toFixed(2)} MB</div>
+                                <div className="text-sm font-medium text-[#111827] truncate max-w-full" title={media.fileName}>{media.fileName}</div>
+                                <div className="text-xs text-[#9CA3AF] mt-1 flex-1">{media.mimeType} · {(media.fileSize / 1024 / 1024).toFixed(2)} MB</div>
 
                                 <div className="flex justify-between items-center mt-4">
-                                    <button onClick={() => handleCopy(media.fileUrl, media.id)} className="text-blue-400 hover:text-blue-300 text-xs font-medium flex items-center gap-1.5 transition-colors">
+                                    <button onClick={() => handleCopy(media.fileUrl, media.id)} className="text-[#6B9F91] hover:text-[#5C8C80] text-xs font-medium flex items-center gap-1.5 transition-colors">
                                         {copiedId === media.id ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                                         {copiedId === media.id ? 'Copied' : 'Copy URL'}
                                     </button>
-                                    <button onClick={() => handleDelete(media.id, media.fileName)} className="text-white/20 hover:text-red-500 transition-colors p-1.5">
+                                    <button onClick={() => handleDelete(media.id, media.fileName)} className="text-[#111827]/20 hover:text-[#B91C1C] transition-colors p-1.5">
                                         <Trash2 className="w-4 h-4" />
                                     </button>
                                 </div>

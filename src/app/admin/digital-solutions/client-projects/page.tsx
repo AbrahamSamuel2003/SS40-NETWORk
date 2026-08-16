@@ -158,23 +158,23 @@ export default function ClientProjectsPage() {
         }
     };
 
-    if (isLoading) return <div className="p-12 text-center text-white"><div className="animate-spin rounded-full h-8 w-8 mx-auto border-t-2 border-b-2 border-white"></div></div>;
+    if (isLoading) return <div className="p-12 text-center text-[#111827]"><div className="animate-spin rounded-full h-8 w-8 mx-auto border-t-2 border-b-2 border-gray-200"></div></div>;
 
     return (
         <div className="max-w-6xl mx-auto pb-12">
             <div className="mb-8 flex justify-between items-end">
                 <div>
-                    <h2 className="text-2xl font-bold tracking-tight text-white mb-2">Client Projects</h2>
-                    <p className="text-white/60">Manage digital solution projects and their case studies.</p>
+                    <h2 className="text-2xl font-bold tracking-tight text-[#111827] mb-2">Client Projects</h2>
+                    <p className="text-[#6B7280]">Manage digital solution projects and their case studies.</p>
                 </div>
-                <button onClick={() => handleOpenModal()} className="bg-[var(--color-primary)] hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-2">
+                <button onClick={() => handleOpenModal()} className="bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-2">
                     <Plus className="w-4 h-4" /> Add Project
                 </button>
             </div>
 
-            <div className="bg-[#111111] border border-white/10 rounded-xl overflow-hidden">
-                <table className="w-full text-left text-sm text-white/80">
-                    <thead className="bg-white/5 border-b border-white/10 text-white">
+            <div className="admin-card overflow-hidden">
+                <table className="w-full text-left text-sm text-[#374151]">
+                    <thead className="bg-[#EDF5F2]/70 border-b border-gray-200 text-[#111827]">
                         <tr>
                             <th className="p-4 font-medium">Image</th>
                             <th className="p-4 font-medium">Project</th>
@@ -183,49 +183,49 @@ export default function ClientProjectsPage() {
                             <th className="p-4 font-medium text-right">Actions</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-white/5">
+                    <tbody className="divide-y divide-gray-100">
                         {projects.length === 0 ? (
-                            <tr><td colSpan={5} className="p-8 text-center text-white/40">No projects found.</td></tr>
+                            <tr><td colSpan={5} className="p-8 text-center text-[#9CA3AF]">No projects found.</td></tr>
                         ) : (
                             projects.map(item => (
-                                <tr key={item.id} className="hover:bg-white/[0.02]">
+                                <tr key={item.id} className="hover:bg-[#EDF5F2]/50">
                                     <td className="p-4 w-20">
                                         {item.imageUrl ? (
                                             <div className="w-12 h-12 rounded overflow-hidden shrink-0"><img src={item.imageUrl} alt="" className="w-full h-full object-cover" /></div>
                                         ) : (
-                                            <div className="w-12 h-12 rounded bg-white/10 flex items-center justify-center shrink-0 uppercase font-bold text-white/40">{item.title.charAt(0)}</div>
+                                            <div className="w-12 h-12 rounded bg-[#EDF5F2] flex items-center justify-center shrink-0 uppercase font-bold text-[#9CA3AF]">{item.title.charAt(0)}</div>
                                         )}
                                     </td>
                                     <td className="p-4 font-medium">
-                                        <div className="text-white">{item.title}</div>
-                                        <div className="text-white/40 text-xs truncate max-w-xs">{item.description}</div>
+                                        <div className="text-[#111827]">{item.title}</div>
+                                        <div className="text-[#9CA3AF] text-xs truncate max-w-xs">{item.description}</div>
                                         {item.projectUrl && (
                                             <div className="mt-1">
-                                                <a href={item.projectUrl} target="_blank" rel="noreferrer" className="text-[10px] text-blue-400 hover:underline">{item.projectUrl}</a>
+                                                <a href={item.projectUrl} target="_blank" rel="noreferrer" className="text-[10px] text-[#6B9F91] hover:underline">{item.projectUrl}</a>
                                             </div>
                                         )}
                                     </td>
                                     <td className="p-4">
-                                        <div className="text-white text-xs mb-1">{item.industry}</div>
+                                        <div className="text-[#111827] text-xs mb-1">{item.industry}</div>
                                         <div className="flex flex-wrap gap-1">
                                             {Array.isArray(item.tags) && item.tags.slice(0, 3).map((tag: string, i: number) => (
-                                                <span key={i} className="text-[10px] bg-white/10 px-1.5 py-0.5 rounded text-white/60">{tag}</span>
+                                                <span key={i} className="text-[10px] bg-[#EDF5F2] px-1.5 py-0.5 rounded text-[#6B7280]">{tag}</span>
                                             ))}
                                             {Array.isArray(item.tags) && item.tags.length > 3 && (
-                                                <span className="text-[10px] text-white/40">+{item.tags.length - 3}</span>
+                                                <span className="text-[10px] text-[#9CA3AF]">+{item.tags.length - 3}</span>
                                             )}
                                         </div>
                                     </td>
                                     <td className="p-4 text-center">
-                                        <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-semibold ${item.isActive ? 'bg-green-500/10 text-green-400 border border-green-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}`}>
+                                        <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-semibold ${item.isActive ? 'bg-[#6B9F91]/10 text-[#6B9F91] border border-[#6B9F91]/20' : 'bg-[#FEE2E2] text-[#B91C1C] border border-[#FCA5A5]'}`}>
                                             {item.isActive ? 'Active' : 'Inactive'}
                                         </span>
                                     </td>
                                     <td className="p-4 text-right">
-                                        <button onClick={() => handleOpenModal(item)} className="text-white/40 hover:text-white p-2 transition-colors">
+                                        <button onClick={() => handleOpenModal(item)} className="text-[#9CA3AF] hover:text-[#111827] p-2 transition-colors">
                                             <Edit2 className="w-4 h-4" />
                                         </button>
-                                        <button onClick={() => handleDelete(item.id)} className="text-red-500/50 hover:text-red-500 p-2 transition-colors">
+                                        <button onClick={() => handleDelete(item.id)} className="text-[#B91C1C]/50 hover:text-[#B91C1C] p-2 transition-colors">
                                             <Trash2 className="w-4 h-4" />
                                         </button>
                                     </td>
@@ -237,33 +237,33 @@ export default function ClientProjectsPage() {
             </div>
 
             {isModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-                    <div className="bg-[#111111] border border-white/10 rounded-xl w-full max-w-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
-                        <div className="p-5 border-b border-white/10 flex justify-between items-center bg-black/20">
-                            <h3 className="text-lg font-bold text-white">{editingId ? 'Edit Project' : 'Add Project'}</h3>
-                            <button onClick={() => setIsModalOpen(false)} className="text-white/40 hover:text-white"><X className="w-5 h-5" /></button>
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#111827]/40 backdrop-blur-sm">
+                    <div className="admin-card w-full max-w-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+                        <div className="p-5 border-b border-gray-200 flex justify-between items-center bg-[#EDF5F2]/70">
+                            <h3 className="text-lg font-bold text-[#111827]">{editingId ? 'Edit Project' : 'Add Project'}</h3>
+                            <button onClick={() => setIsModalOpen(false)} className="text-[#9CA3AF] hover:text-[#111827]"><X className="w-5 h-5" /></button>
                         </div>
                         <div className="p-6 overflow-y-auto w-full custom-scrollbar">
-                            {errorMsg && <div className="mb-4 text-sm text-red-400 bg-red-400/10 p-3 rounded-lg border border-red-500/50 flex gap-2"><AlertCircle className="w-4 h-4 mt-0.5 shrink-0" /> {errorMsg}</div>}
+                            {errorMsg && <div className="mb-4 text-sm text-[#B91C1C] bg-[#FEE2E2] p-3 rounded-lg border border-[#FCA5A5] flex gap-2"><AlertCircle className="w-4 h-4 mt-0.5 shrink-0" /> {errorMsg}</div>}
 
                             <form id="projectForm" onSubmit={handleSave} className="space-y-5">
                                 <div className="grid grid-cols-2 gap-4">
-                                    <div><label className="block text-sm text-white/80 mb-1.5">Project Title *</label><input required value={title} onChange={e => setTitle(e.target.value)} className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-2 text-white" /></div>
-                                    <div><label className="block text-sm text-white/80 mb-1.5">Industry *</label><input required value={industry} onChange={e => setIndustry(e.target.value)} className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-2 text-white" /></div>
+                                    <div><label className="block text-sm text-[#374151] mb-1.5">Project Title *</label><input required value={title} onChange={e => setTitle(e.target.value)} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-[#111827]" /></div>
+                                    <div><label className="block text-sm text-[#374151] mb-1.5">Industry *</label><input required value={industry} onChange={e => setIndustry(e.target.value)} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-[#111827]" /></div>
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-4">
-                                    <div><label className="block text-sm text-white/80 mb-1.5">Tags (comma separated) *</label><input required value={tagsInput} onChange={e => setTagsInput(e.target.value)} className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-2 text-white" placeholder="React, Node.js, Next.js..." /></div>
-                                    <div><label className="block text-sm text-white/80 mb-1.5">Status (optional)</label><input value={status} onChange={e => setStatus(e.target.value)} className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-2 text-white" placeholder="e.g. Completed, Ongoing" /></div>
+                                    <div><label className="block text-sm text-[#374151] mb-1.5">Tags (comma separated) *</label><input required value={tagsInput} onChange={e => setTagsInput(e.target.value)} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-[#111827]" placeholder="React, Node.js, Next.js..." /></div>
+                                    <div><label className="block text-sm text-[#374151] mb-1.5">Status (optional)</label><input value={status} onChange={e => setStatus(e.target.value)} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-[#111827]" placeholder="e.g. Completed, Ongoing" /></div>
                                 </div>
 
-                                <div><label className="block text-sm text-white/80 mb-1.5">Short Description *</label><textarea required rows={2} value={description} onChange={e => setDescription(e.target.value)} className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-2 text-white resize-none" placeholder="Brief summary for the project card..." /></div>
+                                <div><label className="block text-sm text-[#374151] mb-1.5">Short Description *</label><textarea required rows={2} value={description} onChange={e => setDescription(e.target.value)} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-[#111827] resize-none" placeholder="Brief summary for the project card..." /></div>
 
                                 <div>
-                                    <label className="block text-sm text-white/80 mb-1.5">Project Image (Media Library)</label>
+                                    <label className="block text-sm text-[#374151] mb-1.5">Project Image (Media Library)</label>
                                     <div className="flex gap-4">
-                                        <input value={imageUrl} onChange={e => setImageUrl(e.target.value)} className="flex-1 bg-black/50 border border-white/10 rounded-lg px-4 py-2 text-white" placeholder="URL..." />
-                                        <label className={`cursor-pointer shrink-0 bg-white/5 hover:bg-white/10 text-white px-4 py-2 rounded-lg text-sm transition-colors flex items-center gap-2 ${isUploading ? 'opacity-50' : ''}`}>
+                                        <input value={imageUrl} onChange={e => setImageUrl(e.target.value)} className="flex-1 bg-white border border-gray-200 rounded-lg px-4 py-2 text-[#111827]" placeholder="URL..." />
+                                        <label className={`cursor-pointer shrink-0 bg-[#EDF5F2]/70 hover:bg-[#EDF5F2] text-[#111827] px-4 py-2 rounded-lg text-sm transition-colors flex items-center gap-2 ${isUploading ? 'opacity-50' : ''}`}>
                                             <Upload className="w-4 h-4" /> Upload
                                             <input type="file" accept="image/*" onChange={handleUpload} className="hidden" />
                                         </label>
@@ -271,34 +271,34 @@ export default function ClientProjectsPage() {
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm text-white/80 mb-1.5">Live Project URL</label>
-                                    <input value={projectUrl} onChange={e => setProjectUrl(e.target.value)} className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-white/20" placeholder="https://" />
+                                    <label className="block text-sm text-[#374151] mb-1.5">Live Project URL</label>
+                                    <input value={projectUrl} onChange={e => setProjectUrl(e.target.value)} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-[#111827] placeholder:text-[#9CA3AF]" placeholder="https://" />
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm text-white/80 mb-1.5">Case Study Content</label>
-                                    <textarea rows={8} value={caseStudy} onChange={e => setCaseStudy(e.target.value)} className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-2 text-white resize-y" placeholder="Detailed case study breakdown..." />
+                                    <label className="block text-sm text-[#374151] mb-1.5">Case Study Content</label>
+                                    <textarea rows={8} value={caseStudy} onChange={e => setCaseStudy(e.target.value)} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-[#111827] resize-y" placeholder="Detailed case study breakdown..." />
                                 </div>
 
-                                <div className="pt-2 flex flex-wrap gap-6 border-t border-white/5 mt-4">
+                                <div className="pt-2 flex flex-wrap gap-6 border-t border-gray-100 mt-4">
                                     <label className="flex items-center gap-3 cursor-pointer group pt-2">
-                                        <div className="relative"><input type="checkbox" checked={isActive} onChange={e => setIsActive(e.target.checked)} className="sr-only" /><div className={`w-10 h-6 rounded-full transition-colors ${isActive ? 'bg-[var(--color-primary)]' : 'bg-white/10'}`}></div><div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${isActive ? 'translate-x-4' : 'translate-x-0'}`}></div></div>
-                                        <span className="text-sm font-medium text-white/80">Active</span>
+                                        <div className="relative"><input type="checkbox" checked={isActive} onChange={e => setIsActive(e.target.checked)} className="sr-only" /><div className={`w-10 h-6 rounded-full transition-colors ${isActive ? 'bg-[#6B9F91]' : 'bg-[#EDF5F2]'}`}></div><div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${isActive ? 'translate-x-4' : 'translate-x-0'}`}></div></div>
+                                        <span className="text-sm font-medium text-[#374151]">Active</span>
                                     </label>
                                     <label className="flex items-center gap-3 cursor-pointer group pt-2">
-                                        <div className="relative"><input type="checkbox" checked={isConfidential} onChange={e => setIsConfidential(e.target.checked)} className="sr-only" /><div className={`w-10 h-6 rounded-full transition-colors ${isConfidential ? 'bg-orange-500' : 'bg-white/10'}`}></div><div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${isConfidential ? 'translate-x-4' : 'translate-x-0'}`}></div></div>
-                                        <span className="text-sm font-medium text-white/80">Confidential</span>
+                                        <div className="relative"><input type="checkbox" checked={isConfidential} onChange={e => setIsConfidential(e.target.checked)} className="sr-only" /><div className={`w-10 h-6 rounded-full transition-colors ${isConfidential ? 'bg-[#FFC900]' : 'bg-[#EDF5F2]'}`}></div><div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${isConfidential ? 'translate-x-4' : 'translate-x-0'}`}></div></div>
+                                        <span className="text-sm font-medium text-[#374151]">Confidential</span>
                                     </label>
                                     <div className="flex items-center gap-3 pt-2">
-                                        <span className="text-sm font-medium text-white/80">Sort Order</span>
-                                        <input type="number" value={sortOrder} onChange={e => setSortOrder(parseInt(e.target.value) || 0)} className="w-20 bg-black/50 border border-white/10 rounded-lg px-2 py-1 text-white text-center" />
+                                        <span className="text-sm font-medium text-[#374151]">Sort Order</span>
+                                        <input type="number" value={sortOrder} onChange={e => setSortOrder(parseInt(e.target.value) || 0)} className="w-20 bg-white border border-gray-200 rounded-lg px-2 py-1 text-[#111827] text-center" />
                                     </div>
                                 </div>
                             </form>
                         </div>
-                        <div className="p-5 border-t border-white/10 flex justify-end gap-3 bg-black/20">
-                            <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 rounded-lg text-white/60 hover:bg-white/5">Cancel</button>
-                            <button type="submit" form="projectForm" disabled={isSaving} className="bg-[var(--color-primary)] hover:bg-blue-600 text-white px-6 py-2 rounded-lg disabled:opacity-50">Save Project</button>
+                        <div className="p-5 border-t border-gray-200 flex justify-end gap-3 bg-[#EDF5F2]/70">
+                            <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 rounded-lg text-[#6B7280] hover:bg-[#EDF5F2]/70">Cancel</button>
+                            <button type="submit" form="projectForm" disabled={isSaving} className="bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-6 py-2 rounded-lg disabled:opacity-50">Save Project</button>
                         </div>
                     </div>
                 </div>

@@ -25,25 +25,25 @@ export function AdminTopbar({ adminName, onMenuClick }: TopbarProps) {
     };
 
     return (
-        <header className="h-16 flex items-center justify-between px-4 lg:px-8 bg-[#0a0a0a] border-b border-white/10 shrink-0 sticky top-0 z-30">
+        <header className="h-16 flex items-center justify-between px-4 lg:px-8 bg-white/90 backdrop-blur-xl border-b border-gray-200/80 shrink-0 sticky top-0 z-30 shadow-sm">
             <div className="flex items-center gap-4">
                 <button
                     onClick={onMenuClick}
-                    className="p-2 -ml-2 lg:hidden text-white/70 hover:text-white hover:bg-white/10 rounded-md transition-colors"
+                    className="p-2 -ml-2 lg:hidden text-[#111827]/70 hover:text-[#111827] hover:bg-[#EDF5F2] rounded-md transition-colors"
                 >
                     <Menu size={24} />
                 </button>
-                <h1 className="text-lg lg:text-xl font-semibold text-white truncate">
+                <h1 className="text-lg lg:text-xl font-bold text-[#111827] truncate">
                     {pageTitle}
                 </h1>
             </div>
             <div className="flex items-center gap-4">
-                <span className="hidden sm:block text-sm text-white/70">
-                    Hello, <strong className="text-white font-medium">{adminName}</strong>
+                <span className="hidden sm:block text-sm text-[#6B7280]">
+                    Hello, <strong className="text-[#111827] font-semibold">{adminName}</strong>
                 </span>
                 <button
                     onClick={handleLogout}
-                    className="hidden sm:flex items-center gap-2 text-sm text-white/50 hover:text-white transition-colors"
+                    className="hidden sm:flex items-center gap-2 text-sm text-[#6B7280] hover:text-[#111827] transition-colors"
                 >
                     <LogOut size={16} />
                     Logout

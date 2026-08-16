@@ -6,12 +6,12 @@ import { useRouter } from 'next/navigation';
 
 const COLOR_OPTIONS = {
     'Gray': 'bg-gray-50 text-gray-600 border-gray-200',
-    'Blue': 'bg-blue-50 text-blue-700 border-blue-100',
-    'Purple': 'bg-purple-50 text-purple-700 border-purple-100',
-    'Green': 'bg-green-50 text-green-700 border-green-100',
+    'Blue': 'bg-[#6B9F91]/10 text-[#6B9F91] border-[#6B9F91]/20',
+    'Purple': 'bg-[#EDF5F2] text-[#5C8C80] border-[#6B9F91]/20',
+    'Green': 'bg-[#6B9F91]/10 text-[#6B9F91] border-[#6B9F91]/20',
     'Amber': 'bg-amber-50 text-amber-700 border-amber-100',
-    'Indigo': 'bg-indigo-50 text-indigo-700 border-indigo-100',
-    'Rose': 'bg-rose-50 text-rose-700 border-rose-100'
+    'Indigo': 'bg-[#EDF5F2] text-[#111827] border-gray-200',
+    'Rose': 'bg-[#FFC900]/15 text-[#92400E] border-[#FFC900]/30'
 };
 
 const ICON_OPTIONS = [
@@ -209,7 +209,7 @@ export default function StudentProjectsPage() {
     if (isLoading) {
         return (
             <div className="flex items-center justify-center p-12">
-                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white"></div>
+                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-200"></div>
             </div>
         );
     }
@@ -218,20 +218,20 @@ export default function StudentProjectsPage() {
         <div className="max-w-6xl mx-auto pb-12 pt-8">
             <div className="mb-8 flex justify-between items-end">
                 <div>
-                    <h2 className="text-2xl font-bold tracking-tight text-white mb-2">Student Projects</h2>
-                    <p className="text-white/60">Manage student projects displayed in the Academics section.</p>
+                    <h2 className="text-2xl font-bold tracking-tight text-[#111827] mb-2">Student Projects</h2>
+                    <p className="text-[#6B7280]">Manage student projects displayed in the Academics section.</p>
                 </div>
                 <button
                     onClick={() => handleOpenModal()}
-                    className="bg-[var(--color-primary)] hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium text-sm transition-colors flex items-center gap-2"
+                    className="bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-4 py-2 rounded-lg font-medium text-sm transition-colors flex items-center gap-2"
                 >
                     <Plus className="w-4 h-4" /> Add Project
                 </button>
             </div>
 
-            <div className="bg-[#111111] border border-white/10 rounded-xl overflow-hidden">
-                <table className="w-full text-left text-sm text-white/80 whitespace-nowrap">
-                    <thead className="bg-white/5 border-b border-white/10 text-white">
+            <div className="admin-card overflow-hidden">
+                <table className="w-full text-left text-sm text-[#374151] whitespace-nowrap">
+                    <thead className="bg-[#EDF5F2]/70 border-b border-gray-200 text-[#111827]">
                         <tr>
                             <th className="p-4 font-medium">Image</th>
                             <th className="p-4 font-medium">Title</th>
@@ -241,42 +241,42 @@ export default function StudentProjectsPage() {
                             <th className="p-4 font-medium text-right">Actions</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-white/5">
+                    <tbody className="divide-y divide-gray-100">
                         {projects.length === 0 ? (
                             <tr>
-                                <td colSpan={6} className="p-8 text-center text-white/40">No student projects found.</td>
+                                <td colSpan={6} className="p-8 text-center text-[#9CA3AF]">No student projects found.</td>
                             </tr>
                         ) : (
                             projects.map(proj => (
-                                <tr key={proj.id} className="hover:bg-white/[0.02] transition-colors">
+                                <tr key={proj.id} className="hover:bg-[#EDF5F2]/50 transition-colors">
                                     <td className="p-4">
                                         {proj.imageUrl ? (
-                                            <div className="w-16 h-10 bg-white/10 rounded overflow-hidden flex items-center justify-center">
+                                            <div className="w-16 h-10 bg-[#EDF5F2] rounded overflow-hidden flex items-center justify-center">
                                                 <img src={proj.imageUrl} alt={proj.title} className="max-w-full max-h-full object-cover" />
                                             </div>
                                         ) : (
-                                            <div className="w-16 h-10 bg-white/5 rounded flex items-center justify-center text-[10px] text-white/40">N/A</div>
+                                            <div className="w-16 h-10 bg-[#EDF5F2]/70 rounded flex items-center justify-center text-[10px] text-[#9CA3AF]">N/A</div>
                                         )}
                                     </td>
                                     <td className="p-4 font-medium">{proj.title}</td>
-                                    <td className="p-4 text-white/60">{proj.category}</td>
-                                    <td className="p-4 text-white/60">{proj.sortOrder}</td>
+                                    <td className="p-4 text-[#6B7280]">{proj.category}</td>
+                                    <td className="p-4 text-[#6B7280]">{proj.sortOrder}</td>
                                     <td className="p-4">
                                         {proj.isActive ? (
-                                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-green-500/10 text-green-500">
+                                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#6B9F91]/10 text-[#6B9F91]">
                                                 <CheckCircle2 className="w-3 h-3" /> ACTIVE
                                             </span>
                                         ) : (
-                                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-white/5 text-white/40">
+                                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#EDF5F2]/70 text-[#9CA3AF]">
                                                 INACTIVE
                                             </span>
                                         )}
                                     </td>
                                     <td className="p-4 text-right">
-                                        <button onClick={() => handleOpenModal(proj)} className="text-white/40 hover:text-white p-2 transition-colors">
+                                        <button onClick={() => handleOpenModal(proj)} className="text-[#9CA3AF] hover:text-[#111827] p-2 transition-colors">
                                             <Edit2 className="w-4 h-4" />
                                         </button>
-                                        <button onClick={() => handleDelete(proj.id)} className="text-red-500/50 hover:text-red-500 p-2 transition-colors">
+                                        <button onClick={() => handleDelete(proj.id)} className="text-[#B91C1C]/50 hover:text-[#B91C1C] p-2 transition-colors">
                                             <Trash2 className="w-4 h-4" />
                                         </button>
                                     </td>
@@ -289,18 +289,18 @@ export default function StudentProjectsPage() {
 
             {/* Modal */}
             {isModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-hidden">
-                    <div className="bg-[#111111] border border-white/10 rounded-xl w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col max-h-[95vh]">
-                        <div className="p-5 border-b border-white/10 flex items-center justify-between shrink-0">
-                            <h3 className="text-lg font-bold text-white">{editingId ? 'Edit Student Project' : 'Add Student Project'}</h3>
-                            <button onClick={handleCloseModal} className="text-white/40 hover:text-white transition-colors">
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#111827]/40 backdrop-blur-sm overflow-hidden">
+                    <div className="admin-card w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col max-h-[95vh]">
+                        <div className="p-5 border-b border-gray-200 flex items-center justify-between shrink-0">
+                            <h3 className="text-lg font-bold text-[#111827]">{editingId ? 'Edit Student Project' : 'Add Student Project'}</h3>
+                            <button onClick={handleCloseModal} className="text-[#9CA3AF] hover:text-[#111827] transition-colors">
                                 <X className="w-5 h-5" />
                             </button>
                         </div>
 
                         <div className="p-5 overflow-y-auto flex-1 custom-scrollbar">
                             {errorMsg && (
-                                <div className="mb-4 bg-red-500/10 border border-red-500/50 text-red-400 p-3 rounded-lg text-sm flex gap-2">
+                                <div className="mb-4 bg-[#FEE2E2] border border-[#FCA5A5] text-[#B91C1C] p-3 rounded-lg text-sm flex gap-2">
                                     <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" /> {errorMsg}
                                 </div>
                             )}
@@ -308,36 +308,36 @@ export default function StudentProjectsPage() {
                             <form id="projForm" onSubmit={handleSave} className="space-y-6">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-sm font-medium text-white/80 mb-2">Project Title *</label>
-                                        <input required type="text" value={title} onChange={e => setTitle(e.target.value)} className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-2.5 text-white placeholder-white/30 focus:outline-none focus:border-[var(--color-primary)]" />
+                                        <label className="block text-sm font-medium text-[#374151] mb-2">Project Title *</label>
+                                        <input required type="text" value={title} onChange={e => setTitle(e.target.value)} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#6B9F91]" />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-white/80 mb-2">Category *</label>
-                                        <input required type="text" value={category} placeholder="e.g. Data Visualization" onChange={e => setCategory(e.target.value)} className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-[var(--color-primary)]" />
+                                        <label className="block text-sm font-medium text-[#374151] mb-2">Category *</label>
+                                        <input required type="text" value={category} placeholder="e.g. Data Visualization" onChange={e => setCategory(e.target.value)} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] focus:outline-none focus:border-[#6B9F91]" />
                                     </div>
                                 </div>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-sm font-medium text-white/80 mb-2">Badge Text</label>
-                                        <input type="text" value={badge} placeholder="e.g. Industry Project" onChange={e => setBadge(e.target.value)} className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-[var(--color-primary)]" />
+                                        <label className="block text-sm font-medium text-[#374151] mb-2">Badge Text</label>
+                                        <input type="text" value={badge} placeholder="e.g. Industry Project" onChange={e => setBadge(e.target.value)} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] focus:outline-none focus:border-[#6B9F91]" />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-white/80 mb-2">Sort Order</label>
-                                        <input type="number" required value={sortOrder} onChange={e => setSortOrder(Number(e.target.value))} className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-[var(--color-primary)]" />
+                                        <label className="block text-sm font-medium text-[#374151] mb-2">Sort Order</label>
+                                        <input type="number" required value={sortOrder} onChange={e => setSortOrder(Number(e.target.value))} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] focus:outline-none focus:border-[#6B9F91]" />
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-white/80 mb-2">Description *</label>
-                                    <textarea required value={description} onChange={e => setDescription(e.target.value)} rows={3} className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-[var(--color-primary)]"></textarea>
+                                    <label className="block text-sm font-medium text-[#374151] mb-2">Description *</label>
+                                    <textarea required value={description} onChange={e => setDescription(e.target.value)} rows={3} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] focus:outline-none focus:border-[#6B9F91]"></textarea>
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-white/80 mb-2">Project Image</label>
+                                    <label className="block text-sm font-medium text-[#374151] mb-2">Project Image</label>
                                     <div className="flex gap-4 items-center">
-                                        <input type="text" value={imageUrl} onChange={e => setImageUrl(e.target.value)} placeholder="/uploads/... or https://..." className="flex-1 bg-black/50 border border-white/10 rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-[var(--color-primary)]" />
-                                        <label className={`cursor-pointer shrink-0 bg-white/5 hover:bg-white/10 text-white px-4 py-2.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${isUploading ? 'opacity-50' : ''}`}>
+                                        <input type="text" value={imageUrl} onChange={e => setImageUrl(e.target.value)} placeholder="/uploads/... or https://..." className="flex-1 bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] text-sm focus:outline-none focus:border-[#6B9F91]" />
+                                        <label className={`cursor-pointer shrink-0 bg-[#EDF5F2]/70 hover:bg-[#EDF5F2] text-[#111827] px-4 py-2.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${isUploading ? 'opacity-50' : ''}`}>
                                             <Upload className="w-4 h-4" /> {isUploading ? '...' : 'Upload Image'}
                                             <input type="file" accept="image/*" onChange={handleUpload} className="hidden" disabled={isUploading} />
                                         </label>
@@ -345,18 +345,18 @@ export default function StudentProjectsPage() {
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-white/80 mb-2">Project Tags</label>
-                                    <div className="bg-black/50 border border-white/10 rounded-lg p-4">
+                                    <label className="block text-sm font-medium text-[#374151] mb-2">Project Tags</label>
+                                    <div className="bg-white border border-gray-200 rounded-lg p-4">
                                         {/* Existing tags display */}
                                         <div className="flex flex-wrap gap-2 mb-4">
                                             {tags.length === 0 ? (
-                                                <span className="text-white/30 text-xs italic">No tags added yet.</span>
+                                                <span className="text-[#9CA3AF] text-xs italic">No tags added yet.</span>
                                             ) : (
                                                 tags.map((t, idx) => (
-                                                    <div key={idx} className="bg-white/5 border border-white/10 rounded-md py-1 px-2.5 text-xs text-white/80 flex items-center gap-2">
+                                                    <div key={idx} className="bg-[#EDF5F2]/70 border border-gray-200 rounded-md py-1 px-2.5 text-xs text-[#374151] flex items-center gap-2">
                                                         <span>{t.icon}</span>
                                                         <span>{t.label}</span>
-                                                        <button type="button" onClick={() => handleRemoveTag(idx)} className="text-red-400 hover:text-red-300 ml-1">
+                                                        <button type="button" onClick={() => handleRemoveTag(idx)} className="text-[#B91C1C] hover:text-[#991B1B] ml-1">
                                                             <X className="w-3 h-3" />
                                                         </button>
                                                     </div>
@@ -365,25 +365,25 @@ export default function StudentProjectsPage() {
                                         </div>
 
                                         {/* Tag Builder UI */}
-                                        <div className="flex gap-2 items-end pt-3 border-t border-white/10">
+                                        <div className="flex gap-2 items-end pt-3 border-t border-gray-200">
                                             <div className="flex-1">
-                                                <input type="text" value={tagLabel} onChange={e => setTagLabel(e.target.value)} placeholder="Tag Label (e.g. Automation)" className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-[var(--color-primary)]" />
+                                                <input type="text" value={tagLabel} onChange={e => setTagLabel(e.target.value)} placeholder="Tag Label (e.g. Automation)" className="w-full bg-[#EDF5F2]/70 border border-gray-200 rounded-lg px-3 py-2 text-[#111827] text-sm focus:outline-none focus:border-[#6B9F91]" />
                                             </div>
                                             <div className="w-32">
-                                                <select title="Icon" value={tagIcon} onChange={e => setTagIcon(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-[var(--color-primary)]">
+                                                <select title="Icon" value={tagIcon} onChange={e => setTagIcon(e.target.value)} className="w-full bg-[#EDF5F2]/70 border border-gray-200 rounded-lg px-3 py-2 text-[#111827] text-sm focus:outline-none focus:border-[#6B9F91]">
                                                     {ICON_OPTIONS.map(opt => (
                                                         <option key={opt} value={opt}>{opt}</option>
                                                     ))}
                                                 </select>
                                             </div>
                                             <div className="w-32">
-                                                <select title="Color" value={tagColor} onChange={e => setTagColor(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-[var(--color-primary)]">
+                                                <select title="Color" value={tagColor} onChange={e => setTagColor(e.target.value)} className="w-full bg-[#EDF5F2]/70 border border-gray-200 rounded-lg px-3 py-2 text-[#111827] text-sm focus:outline-none focus:border-[#6B9F91]">
                                                     {Object.entries(COLOR_OPTIONS).map(([name, cls]) => (
                                                         <option key={name} value={cls}>{name}</option>
                                                     ))}
                                                 </select>
                                             </div>
-                                            <button type="button" onClick={handleAddTag} className="bg-white/10 hover:bg-white/20 text-white px-3 py-2 rounded-lg text-sm transition-colors font-medium flex items-center shrink-0">
+                                            <button type="button" onClick={handleAddTag} className="bg-[#EDF5F2] hover:bg-[#EDF5F2] text-[#111827] px-3 py-2 rounded-lg text-sm transition-colors font-medium flex items-center shrink-0">
                                                 <Plus className="w-4 h-4 mr-1" /> Add
                                             </button>
                                         </div>
@@ -394,18 +394,18 @@ export default function StudentProjectsPage() {
                                     <label className="flex items-center gap-3 cursor-pointer group">
                                         <div className="relative">
                                             <input type="checkbox" checked={isActive} onChange={e => setIsActive(e.target.checked)} className="sr-only" />
-                                            <div className={`w-10 h-6 rounded-full transition-colors ${isActive ? 'bg-[var(--color-primary)]' : 'bg-white/10 group-hover:bg-white/20'}`}></div>
+                                            <div className={`w-10 h-6 rounded-full transition-colors ${isActive ? 'bg-[#6B9F91]' : 'bg-[#EDF5F2] group-hover:bg-[#EDF5F2]'}`}></div>
                                             <div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${isActive ? 'translate-x-4' : 'translate-x-0'}`}></div>
                                         </div>
-                                        <span className="text-sm font-medium text-white/80">Active Configuration</span>
+                                        <span className="text-sm font-medium text-[#374151]">Active Configuration</span>
                                     </label>
                                 </div>
                             </form>
                         </div>
 
-                        <div className="p-5 border-t border-white/10 bg-black/30 flex justify-end gap-3 shrink-0">
-                            <button type="button" onClick={handleCloseModal} className="px-4 py-2 rounded-lg text-white/60 hover:text-white hover:bg-white/5 font-medium transition-colors">Cancel</button>
-                            <button form="projForm" type="submit" disabled={isSaving} className="bg-[var(--color-primary)] hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-medium transition-colors disabled:opacity-50">
+                        <div className="p-5 border-t border-gray-200 bg-[#EDF5F2]/70 flex justify-end gap-3 shrink-0">
+                            <button type="button" onClick={handleCloseModal} className="px-4 py-2 rounded-lg text-[#6B7280] hover:text-[#111827] hover:bg-[#EDF5F2]/70 font-medium transition-colors">Cancel</button>
+                            <button form="projForm" type="submit" disabled={isSaving} className="bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-6 py-2 rounded-lg font-medium transition-colors disabled:opacity-50">
                                 {isSaving ? 'Saving...' : 'Save Project'}
                             </button>
                         </div>

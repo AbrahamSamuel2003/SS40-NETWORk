@@ -168,7 +168,7 @@ export function AdminSidebar({ adminName, isOpen, setIsOpen }: SidebarProps) {
             {/* Mobile Overlay */}
             {isOpen && (
                 <div
-                    className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+                    className="fixed inset-0 z-40 bg-[#111827]/40 backdrop-blur-sm lg:hidden"
                     onClick={() => setIsOpen(false)}
                 />
             )}
@@ -176,27 +176,27 @@ export function AdminSidebar({ adminName, isOpen, setIsOpen }: SidebarProps) {
             {/* Sidebar */}
             <aside
                 className={cn(
-                    "fixed inset-y-0 left-0 z-50 w-64 bg-[#0a0a0a] border-r border-white/10 text-white flex flex-col transition-transform duration-300 lg:translate-x-0 hidden-scrollbar",
+                    "fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 text-[#111827] flex flex-col transition-transform duration-300 lg:translate-x-0 hidden-scrollbar shadow-xl shadow-gray-200/60",
                     isOpen ? "translate-x-0" : "-translate-x-full"
                 )}
             >
                 {/* Header */}
-                <div className="h-16 flex items-center justify-between px-6 border-b border-white/10 shrink-0">
-                    <span className="text-xl font-bold tracking-tight text-white">
-                        SS40 <span className="text-[var(--color-primary)]">CMS</span>
+                <div className="h-16 flex items-center justify-between px-6 border-b border-gray-200 shrink-0">
+                    <span className="text-xl font-extrabold tracking-tight text-[#111827]">
+                        SS40 <span className="text-[#6B9F91]">CMS</span>
                     </span>
-                    <button onClick={() => setIsOpen(false)} className="p-1 lg:hidden text-white/50 hover:text-white">
+                    <button onClick={() => setIsOpen(false)} className="p-1 lg:hidden text-[#6B7280] hover:text-[#111827]">
                         <X size={20} />
                     </button>
                 </div>
 
                 {/* Nav Links */}
-                <div className="flex-1 overflow-y-auto py-4 scrollbar-thin scrollbar-thumb-white/10">
+                <div className="flex-1 overflow-y-auto py-4 scrollbar-thin scrollbar-thumb-[#6B9F91]/20">
                     <nav className="space-y-1 px-3">
                         {MENU_ITEMS.map((item, idx) => {
                             if ('label' in item) {
                                 return (
-                                    <div key={`label-${idx}`} className="pt-4 pb-2 px-3 text-xs font-semibold text-white/40 tracking-wider">
+                                    <div key={`label-${idx}`} className="pt-4 pb-2 px-3 text-xs font-bold text-[#6B7280] tracking-wider">
                                         {item.label}
                                     </div>
                                 );
@@ -220,12 +220,12 @@ export function AdminSidebar({ adminName, isOpen, setIsOpen }: SidebarProps) {
                                             className={cn(
                                                 "w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-colors",
                                                 isActiveGroup && !isExpanded
-                                                    ? "bg-white/5 text-white"
-                                                    : "text-white/60 hover:bg-white/5 hover:text-white"
+                                                    ? "bg-[#6B9F91]/10 text-[#111827]"
+                                                    : "text-[#6B7280] hover:bg-[#EDF5F2] hover:text-[#111827]"
                                             )}
                                         >
                                             <div className="flex items-center gap-3">
-                                                <Icon size={18} className={isActiveGroup ? "text-[var(--color-primary)] opacity-100" : "opacity-75"} />
+                                                <Icon size={18} className={isActiveGroup ? "text-[#6B9F91] opacity-100" : "opacity-75"} />
                                                 {item.name}
                                             </div>
                                             <ChevronDown size={16} className={cn("transition-transform duration-200", isExpanded ? "rotate-180" : "rotate-0")} />
@@ -249,8 +249,8 @@ export function AdminSidebar({ adminName, isOpen, setIsOpen }: SidebarProps) {
                                                             className={cn(
                                                                 "flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors",
                                                                 isSubActive
-                                                                    ? "bg-[var(--color-primary)]/10 text-[var(--color-primary)] font-medium"
-                                                                    : "text-white/50 hover:text-white hover:bg-white/5"
+                                                                    ? "bg-[#6B9F91]/10 text-[#6B9F91] font-semibold"
+                                                                    : "text-[#6B7280] hover:text-[#111827] hover:bg-[#EDF5F2]"
                                                             )}
                                                         >
                                                             {sub.name}
@@ -273,11 +273,11 @@ export function AdminSidebar({ adminName, isOpen, setIsOpen }: SidebarProps) {
                                     className={cn(
                                         "flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors",
                                         isActive
-                                            ? "bg-white/10 text-white font-medium"
-                                            : "text-white/60 hover:bg-white/5 hover:text-white"
+                                            ? "bg-[#6B9F91]/10 text-[#111827] font-semibold"
+                                            : "text-[#6B7280] hover:bg-[#EDF5F2] hover:text-[#111827]"
                                     )}
                                 >
-                                    <Icon size={18} className={isActive ? "text-[var(--color-primary)]" : "opacity-75"} />
+                                    <Icon size={18} className={isActive ? "text-[#6B9F91]" : "opacity-75"} />
                                     {item.name}
                                 </Link>
                             );
@@ -286,14 +286,14 @@ export function AdminSidebar({ adminName, isOpen, setIsOpen }: SidebarProps) {
                 </div>
 
                 {/* Footer / User Area */}
-                <div className="p-4 border-t border-white/10 flex items-center justify-between shrink-0 bg-[#0a0a0a]">
+                <div className="p-4 border-t border-gray-200 flex items-center justify-between shrink-0 bg-[#EDF5F2]/70">
                     <div className="flex flex-col min-w-0">
-                        <span className="text-sm font-medium text-white truncate">{adminName}</span>
-                        <span className="text-xs text-white/50 truncate">Administrator</span>
+                        <span className="text-sm font-semibold text-[#111827] truncate">{adminName}</span>
+                        <span className="text-xs text-[#6B7280] truncate">Administrator</span>
                     </div>
                     <button
                         onClick={handleLogout}
-                        className="p-2 text-white/50 hover:text-white hover:bg-white/10 rounded-md transition-colors"
+                        className="p-2 text-[#6B7280] hover:text-[#111827] hover:bg-white rounded-md transition-colors"
                         title="Logout"
                     >
                         <LogOut size={18} />
