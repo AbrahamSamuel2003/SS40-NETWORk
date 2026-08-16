@@ -4,7 +4,7 @@ import * as React from "react";
 import { useRef, useState, useEffect } from "react";
 import { motion, useMotionValue, useSpring, useTransform, Variants, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { Play, Star, ArrowRight, Quote, ChevronUp, ChevronLeft, ChevronRight, X } from "lucide-react";
+import { Play, Pause, Star, ArrowRight, Quote, ChevronUp, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -321,16 +321,21 @@ function FeaturedVideoArea({ videoUrl, featuredStory }: { videoUrl?: string | nu
 function SecondaryStoryCarousel({ stories, onOpenModal }: { stories: any[], onOpenModal: (story: any) => void }) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isTruncated, setIsTruncated] = useState(true); // Default to assuming truncation for safety
+    const [isPaused, setIsPaused] = useState(false);
     const quoteRef = useRef<HTMLParagraphElement>(null);
 
-    // Automatic rotation
+    const goPrev = () => setCurrentIndex((prev) => (prev === 0 ? stories.length - 1 : prev - 1));
+    const goNext = () => setCurrentIndex((prev) => (prev === stories.length - 1 ? 0 : prev + 1));
+
+    // Automatic rotation — paused on hover, interaction, or manual toggle
     React.useEffect(() => {
         if (!stories || stories.length <= 1) return;
+        if (isPaused) return;
         const timer = setInterval(() => {
             setCurrentIndex((prev) => (prev === stories.length - 1 ? 0 : prev + 1));
         }, 3500);
         return () => clearInterval(timer);
-    }, [stories]);
+    }, [stories, isPaused]);
 
     const story = stories[currentIndex] || stories[0];
 
@@ -369,18 +374,55 @@ function SecondaryStoryCarousel({ stories, onOpenModal }: { stories: any[], onOp
             variants={fadeUpAnim}
             role="button"
             tabIndex={0}
-            onClick={() => onOpenModal(story)}
+            onClick={() => !isPaused && onOpenModal(story)}
             onKeyDown={(e: React.KeyboardEvent) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
                     onOpenModal(story);
                 }
             }}
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
             className="cursor-pointer bg-white border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_15px_35px_rgb(107,159,145,0.06)] hover:border-[#6B9F91]/20 rounded-2xl p-8 lg:p-10 flex flex-col relative overflow-hidden w-full lg:h-full lg:absolute lg:inset-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2"
-            style={{ height: '380px', minHeight: '100%' }} // Safe fallback for mobile
+            style={{ height: 'clamp(300px, 78vh, 380px)', minHeight: '100%' }} // Responsive height for small screens
         >
             {/* Subtle highlight glow on hover */}
             <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-[#6B9F91]/0 to-transparent group-hover:via-[#6B9F91]/40 transition-all duration-700 ease-out" />
+
+            {/* Navigation Controls: Prev / Play-Pause / Next — always visible for user control */}
+            <div className="absolute top-2 right-2 z-20 flex items-center gap-1 bg-white/80 backdrop-blur-sm rounded-full border border-gray-100 shadow-sm">
+                <button
+                    onClick={(e) => { e.stopPropagation(); goPrev(); }}
+                    aria-label="Previous story"
+                    className="w-7 h-7 rounded-full hover:bg-gray-100 text-gray-600 hover:text-[#6B9F91] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] flex items-center justify-center"
+                >
+                    <ChevronLeft className="w-4 h-4" />
+                </button>
+                <button
+                    onClick={(e) => { e.stopPropagation(); setIsPaused(!isPaused); }}
+                    aria-label={isPaused ? "Resume auto-rotation" : "Pause auto-rotation"}
+                    className="w-7 h-7 rounded-full hover:bg-gray-100 text-gray-600 hover:text-[#6B9F91] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] flex items-center justify-center"
+                >
+                    {isPaused ? <Play className="w-3.5 h-3.5" /> : <Pause className="w-3.5 h-3.5" />}
+                </button>
+                {stories.length > 1 && (
+                    <button
+                        onClick={(e) => { e.stopPropagation(); goNext(); }}
+                        aria-label="Next story"
+                        className="w-7 h-7 rounded-full hover:bg-gray-100 text-gray-600 hover:text-[#6B9F91] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] flex items-center justify-center"
+                    >
+                        <ChevronRight className="w-4 h-4" />
+                    </button>
+                )}
+            </div>
+
+            {/* Pause indicator dot — shows when auto-rotation is paused */}
+            <div
+                className={`absolute top-2 left-2 z-10 h-2 w-2 rounded-full transition-all duration-300 ${
+                    isPaused ? 'bg-[#6B9F91] scale-100 opacity-100' : 'bg-gray-300 scale-75 opacity-60'
+                }`}
+                aria-label={isPaused ? "Paused" : "Auto-rotating"}
+            />
 
             <div className="flex-1 relative flex flex-col h-full min-h-0">
                 <AnimatePresence mode="wait">

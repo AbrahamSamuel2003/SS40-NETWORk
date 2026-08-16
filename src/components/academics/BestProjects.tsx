@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/Button";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { X } from "lucide-react";
 import Link from "next/link";
+import { scrollChildIntoContainer } from "@/utils/scroll";
 
 // Stagger animation variants
 const containerVariants: Variants = {
@@ -96,31 +97,51 @@ export function BestProjects({ projects = [] }: BestProjectsProps) {
         const card = mobileCards[idx];
         if (!card) return;
 
-        card.scrollIntoView({
-            behavior: "smooth",
-            inline: "center",
-            block: "nearest"
-        });
+        scrollChildIntoContainer(mobileScrollRef.current, card, "smooth");
     };
 
-    React.useEffect(() => {
-        const mobileObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    setActiveMobileIdx(Number(entry.target.getAttribute("data-mobile-id")));
-                }
-            });
-        }, { root: mobileScrollRef.current, threshold: 0.6 });
+    // Scroll-based active index tracking: reliably determines which card is closest
+    // to the horizontal center of the scroll container. This is more robust than
+    // IntersectionObserver with a high threshold, because during scroll the user
+    // passes through a gap where neither card reaches the threshold.
+    const updateActiveMobileIdx = React.useCallback(() => {
+        if (!mobileScrollRef.current) return;
+        const mobileCards = mobileScrollRef.current.querySelectorAll<HTMLElement>(".project-mobile-card");
+        if (mobileCards.length === 0) return;
 
-        if (mobileScrollRef.current) {
-            const mobileCards = mobileScrollRef.current.querySelectorAll<HTMLElement>(".project-mobile-card");
-            mobileCards.forEach(c => mobileObserver.observe(c));
-        }
+        const containerRect = mobileScrollRef.current.getBoundingClientRect();
+        const containerCenter = containerRect.left + containerRect.width / 2;
+
+        let closestIdx = 0;
+        let minDistance = Infinity;
+
+        mobileCards.forEach((card, idx) => {
+            const cardRect = card.getBoundingClientRect();
+            const cardCenter = cardRect.left + cardRect.width / 2;
+            const distance = Math.abs(containerCenter - cardCenter);
+            if (distance < minDistance) {
+                minDistance = distance;
+                closestIdx = idx;
+            }
+        });
+
+        setActiveMobileIdx(closestIdx);
+    }, []);
+
+    React.useEffect(() => {
+        const container = mobileScrollRef.current;
+        if (!container) return;
+
+        // Set initial active index immediately after mount
+        updateActiveMobileIdx();
+
+        // Use scroll event for reliable, real-time dot updates
+        container.addEventListener("scroll", updateActiveMobileIdx, { passive: true });
 
         return () => {
-            mobileObserver.disconnect();
+            container.removeEventListener("scroll", updateActiveMobileIdx);
         };
-    }, []);
+    }, [updateActiveMobileIdx]);
 
     React.useEffect(() => {
         if (typeof window !== 'undefined' && (window.location.hash === '#best-projects' || window.location.hash === '#view-all-student-projects')) {
@@ -328,7 +349,7 @@ export function BestProjects({ projects = [] }: BestProjectsProps) {
                                                 setActiveModalProject(project);
                                             }
                                         }}
-                                        className="project-mobile-card cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 w-[82vw] sm:w-[350px] flex-shrink-0 flex flex-col bg-white rounded-3xl overflow-hidden shadow-xl shadow-gray-200/50 border border-[var(--color-border)] snap-center relative scroll-ml-6 group"
+                                        className="project-mobile-card cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 w-[clamp(280px,85vw,350px)] flex-shrink-0 flex flex-col bg-white rounded-3xl overflow-hidden shadow-xl shadow-gray-200/50 border border-[var(--color-border)] snap-center relative scroll-ml-6 group"
                                     >
                                         {/* Image / Placeholder */}
                                         <div className="w-full aspect-video relative overflow-hidden bg-gray-50 border-b border-gray-100 shrink-0">

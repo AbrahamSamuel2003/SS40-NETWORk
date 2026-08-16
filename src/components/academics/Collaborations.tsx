@@ -36,24 +36,17 @@ const BENEFITS = [
 export function Collaborations({ logos = [] }: { logos?: any[] }) {
     if (!logos || logos.length === 0) return null;
     const [hoveredNode, setHoveredNode] = React.useState<string | null>(null);
+    const [isMarqueePaused, setIsMarqueePaused] = React.useState(false);
 
     const expandedItems = logos.length < 5 ? [...logos, ...logos, ...logos, ...logos] : logos;
     const half = [...expandedItems, ...expandedItems, ...expandedItems];
     const marqueeItems = [...half, ...half];
-    const pauseMarquee = (event: React.PointerEvent<HTMLDivElement>) => {
-        if (event.pointerType === "touch") {
-            event.currentTarget.classList.add("marquee-touch-paused");
-            event.currentTarget.setPointerCapture(event.pointerId);
-        }
-    };
-    const resumeMarquee = (event: React.PointerEvent<HTMLDivElement>) => {
-        if (event.pointerType === "touch") {
-            event.currentTarget.classList.remove("marquee-touch-paused");
-            if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-                event.currentTarget.releasePointerCapture(event.pointerId);
-            }
-        }
-    };
+
+    // State-based pause/resume instead of class toggling — reliable across all browsers
+    const handlePointerDown = () => setIsMarqueePaused(true);
+    const handlePointerUp = () => setIsMarqueePaused(false);
+    const handleMouseEnter = () => setIsMarqueePaused(true);
+    const handleMouseLeave = () => setIsMarqueePaused(false);
 
     return (
         <SectionWrapper id="collaborations" className="bg-white relative overflow-hidden pb-8 md:pb-12">
@@ -174,12 +167,16 @@ export function Collaborations({ logos = [] }: { logos?: any[] }) {
 
                     <div
                         className="academic-marquee-row flex overflow-hidden group touch-pan-y select-none"
-                        onPointerDown={pauseMarquee}
-                        onPointerUp={resumeMarquee}
-                        onPointerCancel={resumeMarquee}
-                        onLostPointerCapture={(e) => e.currentTarget.classList.remove("marquee-touch-paused")}
+                        onPointerDown={handlePointerDown}
+                        onPointerUp={handlePointerUp}
+                        onPointerCancel={handlePointerUp}
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
                     >
-                        <div className="academic-marquee-track flex animate-[scroll-left_30s_linear_infinite] gap-6 pr-6 w-max will-change-transform">
+                        <div
+                            className="academic-marquee-track flex animate-[scroll-left_30s_linear_infinite] gap-6 pr-6 w-max will-change-transform"
+                            style={{ animationPlayState: isMarqueePaused ? 'paused' : 'running' }}
+                        >
                             {marqueeItems.map((inst, idx) => (
                                 <div
                                     key={`inst-${idx}`}
@@ -257,19 +254,9 @@ export function Collaborations({ logos = [] }: { logos?: any[] }) {
                     0% { transform: translateX(0); }
                     100% { transform: translateX(calc(-50% - 12px)); } /* accounting for gap */
                 }
-                @media (hover: hover) and (pointer: fine) {
-                    .academic-marquee-row:hover .academic-marquee-track {
-                        animation-play-state: paused !important;
-                    }
-                    .academic-marquee-card:hover {
-                        transform: translateY(-0.25rem);
-                        box-shadow: 0 10px 15px -3px rgb(229 231 235 / 0.5), 0 4px 6px -4px rgb(229 231 235 / 0.5);
-                    }
-                }
-                @media (hover: none), (pointer: coarse) {
-                    .marquee-touch-paused .academic-marquee-track {
-                        animation-play-state: paused !important;
-                    }
+                .academic-marquee-card:hover {
+                    transform: translateY(-0.25rem);
+                    box-shadow: 0 10px 15px -3px rgb(229 231 235 / 0.5), 0 4px 6px -4px rgb(229 231 235 / 0.5);
                 }
             `}} />
         </SectionWrapper>

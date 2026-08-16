@@ -10,6 +10,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { CardMotion } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { slideUp, staggerContainer, hoverLift } from "@/lib/animations";
+import { scrollChildIntoContainer } from "@/utils/scroll";
 
 // Mock structural classes deleted: dynamic API is now the source of truth
 import { Loader2 } from "lucide-react";
@@ -21,6 +22,7 @@ export function ClientProjects() {
 
     const [activeMobileIdx, setActiveMobileIdx] = React.useState(0);
     const mobileScrollRef = React.useRef<HTMLDivElement>(null);
+    const displayedProjects = React.useMemo(() => projects.slice(0, 4), [projects]);
 
     React.useEffect(() => {
         fetch('/api/client-projects')
@@ -40,34 +42,58 @@ export function ClientProjects() {
         const card = mobileCards[idx];
         if (!card) return;
 
-        card.scrollIntoView({
-            behavior: "smooth",
-            inline: "center",
-            block: "nearest"
-        });
+        scrollChildIntoContainer(mobileScrollRef.current, card, "smooth");
     };
 
-    React.useEffect(() => {
-        const mobileObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    setActiveMobileIdx(Number(entry.target.getAttribute("data-mobile-id")));
-                }
-            });
-        }, { root: mobileScrollRef.current, threshold: 0.6 });
+    // Scroll-based active index tracking: reliably determines which card is closest
+    // to the horizontal center of the scroll container. This is more robust than
+    // IntersectionObserver with a high threshold, because during scroll the user
+    // passes through a gap where neither card reaches the threshold.
+    const updateActiveMobileIdx = React.useCallback(() => {
+        if (!mobileScrollRef.current) return;
+        const mobileCards = mobileScrollRef.current.querySelectorAll<HTMLElement>(".client-project-mobile-card");
+        if (mobileCards.length === 0) return;
 
-        if (mobileScrollRef.current) {
-            const mobileCards = mobileScrollRef.current.querySelectorAll<HTMLElement>(".client-project-mobile-card");
-            mobileCards.forEach(c => mobileObserver.observe(c));
-            requestAnimationFrame(() => {
-                mobileCards[0]?.scrollIntoView({ behavior: 'auto', inline: 'center', block: 'nearest' });
-            });
-        }
+        const containerRect = mobileScrollRef.current.getBoundingClientRect();
+        const containerCenter = containerRect.left + containerRect.width / 2;
+
+        let closestIdx = 0;
+        let minDistance = Infinity;
+
+        mobileCards.forEach((card, idx) => {
+            const cardRect = card.getBoundingClientRect();
+            const cardCenter = cardRect.left + cardRect.width / 2;
+            const distance = Math.abs(containerCenter - cardCenter);
+            if (distance < minDistance) {
+                minDistance = distance;
+                closestIdx = idx;
+            }
+        });
+
+        setActiveMobileIdx(closestIdx);
+    }, []);
+
+    React.useEffect(() => {
+        if (isLoading || displayedProjects.length === 0) return;
+
+        setActiveMobileIdx(0);
+
+        const container = mobileScrollRef.current;
+        if (!container) return;
+
+        // Reset horizontal position only — never use scrollIntoView (it scrolls the page)
+        container.scrollLeft = 0;
+
+        // Set initial active index immediately after mount
+        updateActiveMobileIdx();
+
+        // Use scroll event for reliable, real-time dot updates
+        container.addEventListener("scroll", updateActiveMobileIdx, { passive: true });
 
         return () => {
-            mobileObserver.disconnect();
+            container.removeEventListener("scroll", updateActiveMobileIdx);
         };
-    }, []);
+    }, [isLoading, displayedProjects.length, updateActiveMobileIdx]);
 
     React.useEffect(() => {
         if (!isLoading && typeof window !== 'undefined' && (window.location.hash === '#featured-projects' || window.location.hash === '#view-all-projects')) {
@@ -104,7 +130,6 @@ export function ClientProjects() {
                     ) : (
                         <>
                             {(() => {
-                                const displayedProjects = projects.slice(0, 4);
                                 const featuredProject = displayedProjects[0];
                                 const additionalProjects = displayedProjects.slice(1);
 
@@ -332,9 +357,16 @@ export function ClientProjects() {
                         className="flex w-full overflow-x-auto snap-x snap-mandatory pb-8 gap-5 items-stretch [&::-webkit-scrollbar]:hidden px-6"
                         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                     >
-                        {(!isLoading && projects.length > 0) && (() => {
-                            const displayedProjects = projects.slice(0, 4);
-                            return displayedProjects.map((project: any, idx: number) => (
+                        {isLoading ? (
+                            <div className="w-full py-16 flex justify-center items-center opacity-50">
+                                <Loader2 className="w-8 h-8 animate-spin text-[#6B9F91]" />
+                            </div>
+                        ) : projects.length === 0 ? (
+                            <div className="w-full py-16 flex justify-center items-center px-6">
+                                <p className="text-gray-500 text-center">No client projects available at this time.</p>
+                            </div>
+                        ) : (
+                            displayedProjects.map((project: any, idx: number) => (
                                 <div
                                     key={`mobile-proj-${project.id}`}
                                     data-mobile-id={idx}
@@ -347,7 +379,7 @@ export function ClientProjects() {
                                             setActiveModalProject(project);
                                         }
                                     }}
-                                    className="cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 client-project-mobile-card w-[82vw] sm:w-[350px] flex-shrink-0 flex flex-col bg-white rounded-3xl overflow-hidden shadow-xl shadow-gray-200/50 border border-gray-100 snap-center relative scroll-ml-6"
+                                    className="cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 client-project-mobile-card w-[clamp(280px,85vw,350px)] flex-shrink-0 flex flex-col bg-white rounded-3xl overflow-hidden shadow-xl shadow-gray-200/50 border border-gray-100 snap-center relative scroll-ml-6"
                                 >
                                     {/* Visual Placeholder Area */}
                                     <div className="relative w-full aspect-[4/3] bg-gray-50 overflow-hidden shrink-0 flex items-center justify-center border-b border-gray-100">
@@ -399,15 +431,15 @@ export function ClientProjects() {
                                         </button>
                                     </div>
                                 </div>
-                            ));
-                        })()}
+                            ))
+                        )}
                         {/* End spacer so the last card doesn't hit the right screen edge */}
-                        <div className="w-[4vw] shrink-0" />
+                        {!isLoading && projects.length > 0 && <div className="w-[4vw] shrink-0" />}
                     </div>
 
                     {/* Pagination Dots representation */}
                     <div className="w-full flex justify-center items-center gap-3 mt-2 mb-8 z-10 relative">
-                        {(!isLoading && projects.length > 0) && projects.slice(0, 4).map((_, i) => (
+                        {(!isLoading && displayedProjects.length > 1) && displayedProjects.map((_, i) => (
                             <button
                                 key={`dot-${i}`}
                                 onClick={() => scrollToMobileProject(i)}
