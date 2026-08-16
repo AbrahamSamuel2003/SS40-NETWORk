@@ -75,7 +75,7 @@ export function Hero() {
                     </div>
 
                     {/* Right Column - The Constellation (50%) */}
-                    <div className="w-full lg:w-1/2 relative flex justify-center items-center min-h-[450px] lg:min-h-[500px]">
+                    <div className="w-full lg:w-1/2 relative flex justify-center items-center min-h-[340px] sm:min-h-[450px] lg:min-h-[500px]">
 
                         {/* Connecting SVG Lines */}
                         <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0 }}>
@@ -106,10 +106,10 @@ export function Hero() {
                             initial={{ scale: 0 }}
                             animate={{ scale: 1 }}
                             transition={{ type: "spring", duration: 1.5, bounce: 0.4 }}
-                            className="relative z-10 w-32 h-32 md:w-40 md:h-40 rounded-full bg-white shadow-[0_0_60px_-15px_rgba(107,159,145,0.4)] border-4 border-[#6B9F91]/20 flex flex-col items-center justify-center group"
+                            className="relative z-10 w-28 h-28 sm:w-32 sm:h-32 md:w-40 md:h-40 rounded-full bg-white shadow-[0_0_60px_-15px_rgba(107,159,145,0.4)] border-4 border-[#6B9F91]/20 flex flex-col items-center justify-center group"
                         >
                             <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#6B9F91]/10 to-transparent group-hover:rotate-180 transition-transform duration-1000" />
-                            <Box className="w-10 h-10 text-[#6B9F91] mb-2" />
+                            <Box className="w-8 h-8 sm:w-10 sm:h-10 text-[#6B9F91] mb-2" />
                             <span className="text-[10px] font-bold text-gray-800 tracking-widest uppercase sm:text-xs">SS40 Product</span>
                         </motion.div>
 
@@ -124,12 +124,12 @@ export function Hero() {
                             }}
                             className="absolute top-[10%] left-[10%] md:top-[15%] md:left-[15%] z-20"
                         >
-                            <div className="bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-gray-100 flex items-center gap-4">
-                                <div className="w-10 h-10 rounded-full bg-[#FFC900]/10 flex items-center justify-center text-[#FFC900]">
+                            <div className="bg-white/90 backdrop-blur-md p-3 sm:p-4 rounded-2xl shadow-xl border border-gray-100 flex items-center gap-3 sm:gap-4">
+                                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#FFC900]/10 flex items-center justify-center text-[#FFC900] shrink-0">
                                     <Sparkles className="w-5 h-5" />
                                 </div>
                                 <div>
-                                    <p className="text-sm font-bold text-gray-900 leading-tight">Intelligence</p>
+                                    <p className="text-xs sm:text-sm font-bold text-gray-900 leading-tight">Intelligence</p>
                                     <p className="text-[10px] text-gray-500 font-medium">AI Automation</p>
                                 </div>
                             </div>
@@ -146,12 +146,12 @@ export function Hero() {
                             }}
                             className="absolute top-[15%] right-[5%] md:top-[20%] md:right-[10%] z-20"
                         >
-                            <div className="bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-gray-100 flex items-center gap-4">
-                                <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-500">
+                            <div className="bg-white/90 backdrop-blur-md p-3 sm:p-4 rounded-2xl shadow-xl border border-gray-100 flex items-center gap-3 sm:gap-4">
+                                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-500 shrink-0">
                                     <Database className="w-5 h-5" />
                                 </div>
                                 <div>
-                                    <p className="text-sm font-bold text-gray-900 leading-tight">Data Sync</p>
+                                    <p className="text-xs sm:text-sm font-bold text-gray-900 leading-tight">Data Sync</p>
                                     <p className="text-[10px] text-gray-500 font-medium">Zero Latency</p>
                                 </div>
                             </div>
@@ -168,12 +168,12 @@ export function Hero() {
                             }}
                             className="absolute bottom-[20%] left-[5%] md:bottom-[25%] md:left-[5%] z-20"
                         >
-                            <div className="bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-gray-100 flex items-center gap-4">
-                                <div className="w-10 h-10 rounded-full bg-[#6B9F91]/10 flex items-center justify-center text-[#6B9F91]">
+                            <div className="bg-white/90 backdrop-blur-md p-3 sm:p-4 rounded-2xl shadow-xl border border-gray-100 flex items-center gap-3 sm:gap-4">
+                                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#6B9F91]/10 flex items-center justify-center text-[#6B9F91] shrink-0">
                                     <Cloud className="w-5 h-5" />
                                 </div>
                                 <div>
-                                    <p className="text-sm font-bold text-gray-900 leading-tight">Cloud Native</p>
+                                    <p className="text-xs sm:text-sm font-bold text-gray-900 leading-tight">Cloud Native</p>
                                     <p className="text-[10px] text-gray-500 font-medium">99.9% Uptime</p>
                                 </div>
                             </div>
@@ -190,12 +190,12 @@ export function Hero() {
                             }}
                             className="absolute bottom-[15%] right-[5%] md:bottom-[15%] md:right-[15%] z-20"
                         >
-                            <div className="bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-gray-100 flex items-center gap-4">
-                                <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600">
+                            <div className="bg-white/90 backdrop-blur-md p-3 sm:p-4 rounded-2xl shadow-xl border border-gray-100 flex items-center gap-3 sm:gap-4">
+                                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 shrink-0">
                                     <Shield className="w-5 h-5" />
                                 </div>
                                 <div>
-                                    <p className="text-sm font-bold text-gray-900 leading-tight">Enterprise</p>
+                                    <p className="text-xs sm:text-sm font-bold text-gray-900 leading-tight">Enterprise</p>
                                     <p className="text-[10px] text-gray-500 font-medium">End-to-End Secure</p>
                                 </div>
                             </div>

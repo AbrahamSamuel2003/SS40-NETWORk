@@ -171,7 +171,7 @@ export function BookDemo() {
                                     <span className="text-[10px] font-bold text-[#6B9F91] uppercase tracking-wider mb-1">Typical Demo Duration</span>
                                     <span className="font-bold text-[#111827] flex items-center gap-2 md:group-hover/duration:text-[#6B9F91] transition-colors duration-200">
                                         <Clock className="w-4 h-4 text-gray-500 md:group-hover/duration:text-[#6B9F91] transition-colors duration-200" />
-                                        <span className="inline-block text-gray-900 md:group-hover/duration:scale-105 origin-left md:group-hover/duration:text-[#6B9F91] transition-colors duration-200 md:transition-transform md:duration-300">30–45 Minutes</span>
+                                        <span className="inline-block text-gray-900 md:group-hover/duration:scale-105 origin-left md:group-hover/duration:text-[#6B9F91] transition-colors duration-200 md:transition-transform md:duration-300">30-45 Minutes</span>
                                     </span>
                                 </div>
                                 <div className="flex -space-x-2">

@@ -106,7 +106,7 @@ export function Navbar({ config }: { config?: SiteConfigData | null }) {
                     {/* Logo */}
                     <Link
                         href="/"
-                        className="flex items-center gap-2 md:gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] rounded-md shrink-0 py-1"
+                        className="flex items-center gap-2 md:gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] rounded-md shrink-0 min-w-0 py-1"
                         aria-label={`${companyName} Home`}
                     >
                         {(config?.uploadedLogoUrl || config?.logoUrl) && (
@@ -119,7 +119,7 @@ export function Navbar({ config }: { config?: SiteConfigData | null }) {
                                 priority
                             />
                         )}
-                        <span className="text-2xl font-bold tracking-tight text-[var(--color-heading)] shrink-0 min-w-0">
+                        <span className="text-xl md:text-2xl font-bold tracking-tight text-[var(--color-heading)] shrink-0 min-w-0 truncate max-w-[180px] sm:max-w-none">
                             {companyName.replace('NETWORK', '').trim()} <span className="text-[var(--color-primary)]">{companyName.includes('NETWORK') ? 'NETWORK' : ''}</span>
                         </span>
                     </Link>

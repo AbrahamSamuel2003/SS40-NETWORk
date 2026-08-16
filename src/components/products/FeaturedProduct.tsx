@@ -8,7 +8,8 @@ import {
     CheckCircle2,
     ShieldCheck,
     CloudIcon,
-    BadgeCheck
+    BadgeCheck,
+    Loader2
 } from "lucide-react";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
@@ -20,6 +21,18 @@ import { hoverLift, slideUp, staggerContainer } from "@/lib/animations";
 export function FeaturedProduct() {
     const [products, setProducts] = React.useState<any[]>([]);
     const [isLoading, setIsLoading] = React.useState(true);
+    const displayedProducts = React.useMemo(() => {
+        const featured = products.filter(product => product.isFeatured);
+        const source = featured.length > 0 ? featured : products;
+        const seenNames = new Set<string>();
+
+        return source.filter(product => {
+            const key = String(product.name || product.id).trim().toLowerCase();
+            if (seenNames.has(key)) return false;
+            seenNames.add(key);
+            return true;
+        }).slice(0, 2);
+    }, [products]);
 
     React.useEffect(() => {
         fetch('/api/products')
@@ -45,7 +58,17 @@ export function FeaturedProduct() {
         }
     }, [isLoading]);
 
-    if (isLoading) return null;
+    if (isLoading) {
+        return (
+            <SectionWrapper id="featured-product" className="bg-[#EDF5F2] scroll-mt-24">
+                <Container>
+                    <div className="py-20 flex justify-center items-center opacity-50">
+                        <Loader2 className="w-8 h-8 animate-spin text-[#6B9F91]" />
+                    </div>
+                </Container>
+            </SectionWrapper>
+        );
+    }
     if (products.length === 0) return null;
 
     return (
@@ -64,7 +87,7 @@ export function FeaturedProduct() {
                     align="center"
                 />
 
-                {(products.length > 2 ? products.slice(0, 2) : products).map((product, pIdx) => {
+                {displayedProducts.map((product, pIdx) => {
                     const isEven = pIdx % 2 === 0;
                     const tags = Array.isArray(product.tags) ? product.tags : [];
                     const features = Array.isArray(product.features) ? product.features : [];
@@ -101,11 +124,22 @@ export function FeaturedProduct() {
                                         </p>
 
                                         {tags.length > 0 && (
-                                            <div className="flex flex-wrap justify-center lg:justify-start gap-2 mb-10">
+                                            <div className="flex flex-wrap justify-center lg:justify-start gap-2 mb-6">
                                                 {tags.map((chip: string, idx: number) => (
                                                     <span key={idx} className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-semibold shadow-sm">
                                                         {chip}
                                                     </span>
+                                                ))}
+                                            </div>
+                                        )}
+
+                                        {features.length > 0 && (
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-10 w-full max-w-lg">
+                                                {features.slice(0, 4).map((feature: string, idx: number) => (
+                                                    <div key={idx} className="flex items-center justify-center lg:justify-start gap-2 text-sm font-semibold text-gray-700">
+                                                        <BadgeCheck className="w-4 h-4 text-[#2DD4BF] shrink-0" />
+                                                        <span>{feature}</span>
+                                                    </div>
                                                 ))}
                                             </div>
                                         )}
@@ -148,7 +182,7 @@ export function FeaturedProduct() {
                         </div>
                     );
                 })}
-                {products.length > 2 && (
+                {products.length > displayedProducts.length && (
                     <motion.div
                         id="view-all-featured-products"
                         initial={{ opacity: 0, y: 20 }}
@@ -156,11 +190,10 @@ export function FeaturedProduct() {
                         viewport={{ once: true }}
                         className="flex justify-center pt-8 scroll-mt-24"
                     >
-                        <Button asChild size="lg" variant="outline" className="rounded-full shadow-sm hover:bg-[#6B9F91] hover:text-white hover:border-[#6B9F91] transition-colors">
-                            <Link href="/products/all-products">
-                                View All Products <ArrowRight className="ml-2 w-4 h-4" />
-                            </Link>
-                        </Button>
+                        <Link href="/products/all-products" className="inline-flex items-center justify-center font-bold text-lg text-[#6B9F91] hover:text-[#588478] transition-colors group">
+                            View All Products
+                            <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                        </Link>
                     </motion.div>
                 )}
             </Container>

@@ -131,7 +131,7 @@ export function DevelopmentLifecycle() {
                                                     Step 0{idx + 1}
                                                 </span>
                                                 <span className={cn(
-                                                    "text-sm md:text-base font-bold transition-colors whitespace-nowrap",
+                                                    "text-sm md:text-[13px] lg:text-base font-bold transition-colors leading-tight md:min-h-8 lg:min-h-0 flex items-center justify-center",
                                                     isActive ? "text-[var(--color-heading)]" : "text-gray-500"
                                                 )}>
                                                     {stage.title}

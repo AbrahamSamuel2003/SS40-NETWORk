@@ -23,8 +23,8 @@ export function Brands() {
             .catch(() => setIsLoading(false));
     }, []);
 
-    if (isLoading || logos.length === 0) {
-        return null; // Return null effectively hiding the section if no logos are available for the Products page
+    if (!isLoading && logos.length === 0) {
+        return null; // Hide section entirely if there are no logos configured for the Products page (fail safe)
     }
 
     // Split logos into two rows if there are enough, otherwise duplicate them or use single row
@@ -36,7 +36,12 @@ export function Brands() {
     const showRow2 = ROW_2.length > 0;
 
     return (
-        <SectionWrapper id="brands" className="bg-[#EDF5F2] relative overflow-hidden">
+        <SectionWrapper id="brands" className="bg-[#EDF5F2] relative overflow-hidden transition-opacity duration-500" data-loading={isLoading}>
+        <style dangerouslySetInnerHTML={{
+            __html: `
+            [data-loading="true"] { opacity: 0; pointer-events: none; }
+            [data-loading="false"] { opacity: 1; }
+        `}} />
 
             {/* Soft Ambient Background Enhancements */}
             <div className="absolute inset-0 pointer-events-none z-0">
@@ -109,12 +114,8 @@ export function Brands() {
                 {/* ROW 1: Scroll Left */}
                 {ROW_1.length > 0 && <MarqueeRow items={ROW_1} direction="left" speed={30} />}
 
-                {/* ROW 2: Scroll Right (Hidden on Mobile) */}
-                {showRow2 && (
-                    <div className="hidden md:block">
-                        <MarqueeRow items={ROW_2} direction="right" speed={35} />
-                    </div>
-                )}
+                {/* ROW 2: Scroll Right (Visible on all screen sizes) */}
+                {showRow2 && <MarqueeRow items={ROW_2} direction="right" speed={35} />}
             </div>
 
         </SectionWrapper>

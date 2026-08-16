@@ -430,9 +430,9 @@ function SecondaryStoryCarousel({ stories, onOpenModal }: { stories: any[], onOp
                     });
                 }
             }}
-            className="cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 bg-white border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_15px_35px_rgb(107,159,145,0.06)] hover:border-[#6B9F91]/20 rounded-2xl p-8 lg:p-10 flex flex-col relative overflow-hidden w-full lg:h-full lg:absolute lg:inset-0"
-            // We use absolute positioning on desktop to force it to exactly match the left video container's height
-            style={{ height: '380px', minHeight: '100%' }} // Safe fallback for mobile
+            className="cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 bg-white border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_15px_35px_rgb(107,159,145,0.06)] hover:border-[#6B9F91]/20 rounded-2xl p-6 sm:p-8 lg:p-10 flex flex-col relative overflow-hidden w-full lg:h-full lg:absolute lg:inset-0"
+            // Desktop: absolute inset to match video container height. Mobile: natural height.
+            style={{ minHeight: '320px' }}
         >
             {/* Subtle highlight glow on hover */}
             <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-[#6B9F91]/0 to-transparent group-hover:via-[#6B9F91]/40 transition-all duration-700 ease-out" />
@@ -602,7 +602,7 @@ function BottomCTA() {
             variants={fadeUpAnim}
             className="flex flex-col items-center justify-center text-center pt-8 lg:pt-10"
         >
-            <div className="relative bg-white border border-gray-100 rounded-[2rem] p-12 lg:p-16 w-full max-w-4xl mx-auto flex flex-col items-center shadow-[0_8px_40px_rgb(0,0,0,0.03)] overflow-hidden group">
+            <div className="relative bg-white border border-gray-100 rounded-[2rem] p-6 sm:p-8 md:p-12 lg:p-16 w-full max-w-4xl mx-auto flex flex-col items-center shadow-[0_8px_40px_rgb(0,0,0,0.03)] overflow-hidden group">
 
                 {/* Ambient Soft Glow Background */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[#6B9F91]/5 blur-3xl rounded-full opacity-50 group-hover:opacity-100 transition-opacity duration-1000" />

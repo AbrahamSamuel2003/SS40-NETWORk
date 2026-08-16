@@ -622,8 +622,8 @@ export function InteractiveImpactShowcase() {
                     {SCENES.map((scene, idx) => (
                         <MobileSwipeCard key={`mobile-card-${idx}`} scene={scene} idx={idx} />
                     ))}
-                    {/* End spacer so the last card doesn't hit the right screen edge */}
-                    <div className="w-[4vw] shrink-0" />
+                    {/* End spacer: larger on mobile so the last card sits clear of the screen edge */}
+                    <div className="w-[10vw] sm:w-[4vw] shrink-0" />
                 </div>
 
                 {/* Pagination Dots representation */}

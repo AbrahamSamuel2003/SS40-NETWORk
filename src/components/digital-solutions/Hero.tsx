@@ -78,7 +78,7 @@ export function Hero() {
                     </div>
 
                     {/* Right Column - Mockup (50%) */}
-                    <div className="w-full lg:w-1/2 relative flex justify-center lg:justify-end min-h-[450px]">
+                    <div className="w-full lg:w-1/2 relative flex justify-center lg:justify-end min-h-[320px] sm:min-h-[450px]">
 
                         {/* Main Application Mockup */}
                         <motion.div
@@ -94,8 +94,8 @@ export function Hero() {
                                     <div className="w-3 h-3 rounded-full bg-yellow-400" />
                                     <div className="w-3 h-3 rounded-full bg-green-400" />
                                 </div>
-                                <div className="ml-4 w-48 h-5 bg-white rounded-md border border-[var(--color-border)] flex items-center px-2">
-                                    <div className="w-32 h-2.5 bg-gray-100 rounded-sm" />
+                                <div className="ml-4 w-32 sm:w-48 h-5 bg-white rounded-md border border-[var(--color-border)] flex items-center px-2">
+                                    <div className="w-20 sm:w-32 h-2.5 bg-gray-100 rounded-sm" />
                                 </div>
                             </div>
 

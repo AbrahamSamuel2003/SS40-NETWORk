@@ -11,6 +11,7 @@ import { CardMotion } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { YouTubeResumeThumbnailPlayer } from "@/components/ui/YouTubeResumeThumbnailPlayer";
 import { slideUp, staggerContainer, hoverLift } from "@/lib/animations";
+import { scrollChildIntoContainer } from "@/utils/scroll";
 
 import { Loader2 } from "lucide-react";
 
@@ -49,6 +50,7 @@ export function Happimonials() {
     const [activeModalStory, setActiveModalStory] = React.useState<any | null>(null);
 
     const mobileScrollRef = React.useRef<HTMLDivElement>(null);
+    const displayedHappimonials = React.useMemo(() => happimonials.slice(0, 3), [happimonials]);
 
     const scrollToMobileTestimonial = (idx: number) => {
         if (!mobileScrollRef.current) return;
@@ -56,11 +58,7 @@ export function Happimonials() {
         const card = mobileCards[idx];
         if (!card) return;
 
-        card.scrollIntoView({
-            behavior: "smooth",
-            inline: "center",
-            block: "nearest"
-        });
+        scrollChildIntoContainer(mobileScrollRef.current, card, "smooth");
     };
 
     React.useEffect(() => {
@@ -71,6 +69,12 @@ export function Happimonials() {
                 setIsLoading(false);
             })
             .catch(() => setIsLoading(false));
+    }, []);
+
+    React.useEffect(() => {
+        if (isLoading || displayedHappimonials.length === 0) return;
+
+        setActiveMobileIdx(0);
 
         const mobileObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -89,7 +93,7 @@ export function Happimonials() {
         return () => {
             mobileObserver.disconnect();
         };
-    }, []);
+    }, [isLoading, displayedHappimonials.length]);
 
     React.useEffect(() => {
         const scrollToTarget = () => {
@@ -158,7 +162,10 @@ export function Happimonials() {
                                     {...hoverLift}
                                     role="button"
                                     tabIndex={0}
-                                    onClick={() => setActiveModalStory(item)}
+                                    onClick={(e) => {
+                                        if ((e.target as HTMLElement).closest("[data-video-player]")) return;
+                                        setActiveModalStory(item);
+                                    }}
                                     onKeyDown={(e: React.KeyboardEvent) => {
                                         if (e.key === 'Enter' || e.key === 'Space') {
                                             e.preventDefault();
@@ -170,12 +177,14 @@ export function Happimonials() {
                                     {/* Video / Thumbnail Area (Optimized Spacing: full width, no padding, taller 4:3 fit) */}
                                     <div className="relative w-full aspect-[4/3] bg-gray-100 overflow-hidden shrink-0 cursor-pointer">
                                         {item.youtubeUrl ? (
-                                            <YouTubeResumeThumbnailPlayer
-                                                youtubeUrl={item.youtubeUrl}
-                                                title={item.clientName}
-                                                className="w-full h-full"
-                                                iframeClassName="absolute inset-0 w-full h-full border-0 z-0"
-                                            />
+                                            <div data-video-player className="w-full h-full">
+                                                <YouTubeResumeThumbnailPlayer
+                                                    youtubeUrl={item.youtubeUrl}
+                                                    title={item.clientName}
+                                                    className="w-full h-full"
+                                                    iframeClassName="absolute inset-0 w-full h-full border-0 z-0"
+                                                />
+                                            </div>
                                         ) : item.thumbnailUrl ? (
                                             <>
                                                 <img src={item.thumbnailUrl} alt={item.clientName} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
@@ -240,13 +249,16 @@ export function Happimonials() {
                                 className="flex w-full overflow-x-auto snap-x snap-mandatory pb-8 gap-5 items-stretch [&::-webkit-scrollbar]:hidden px-6"
                                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                             >
-                                {!isLoading && happimonials.slice(0, 3).map((item, idx) => (
+                                {!isLoading && displayedHappimonials.map((item, idx) => (
                                     <div
                                         key={`mobile-${item.id}`}
                                         data-mobile-id={idx}
                                         role="button"
                                         tabIndex={0}
-                                        onClick={() => setActiveModalStory(item)}
+                                        onClick={(e) => {
+                                            if ((e.target as HTMLElement).closest("[data-video-player]")) return;
+                                            setActiveModalStory(item);
+                                        }}
                                         onKeyDown={(e: React.KeyboardEvent) => {
                                             if (e.key === 'Enter' || e.key === 'Space') {
                                                 e.preventDefault();
@@ -258,12 +270,14 @@ export function Happimonials() {
                                         {/* Video Area (Optimized spacing: taller 4:3 fit) */}
                                         <div className="relative w-full aspect-[4/3] bg-gray-100 overflow-hidden shrink-0">
                                             {item.youtubeUrl ? (
-                                                <YouTubeResumeThumbnailPlayer
-                                                    youtubeUrl={item.youtubeUrl}
-                                                    title={item.clientName}
-                                                    className="w-full h-full"
-                                                    iframeClassName="absolute inset-0 w-full h-full border-0 z-0"
-                                                />
+                                                <div data-video-player className="w-full h-full">
+                                                    <YouTubeResumeThumbnailPlayer
+                                                        youtubeUrl={item.youtubeUrl}
+                                                        title={item.clientName}
+                                                        className="w-full h-full"
+                                                        iframeClassName="absolute inset-0 w-full h-full border-0 z-0"
+                                                    />
+                                                </div>
                                             ) : item.thumbnailUrl ? (
                                                 <>
                                                     <img src={item.thumbnailUrl} alt={item.clientName} className="absolute inset-0 w-full h-full object-cover" />
@@ -320,9 +334,9 @@ export function Happimonials() {
                             </div>
 
                             {/* Pagination Dots */}
-                            {!isLoading && happimonials.length > 0 && (
+                            {!isLoading && displayedHappimonials.length > 1 && (
                                 <div className="w-full flex justify-center items-center gap-3 mt-2 mb-8 z-10 relative">
-                                    {happimonials.map((_, i) => (
+                                    {displayedHappimonials.map((_, i) => (
                                         <button
                                             key={`mob-dot-${i}`}
                                             onClick={() => scrollToMobileTestimonial(i)}
