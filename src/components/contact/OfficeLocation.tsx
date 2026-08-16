@@ -14,14 +14,14 @@ export function OfficeLocation({ config }: { config?: SiteConfigData | null }) {
     const businessHours = config?.businessHours || "Monday – Friday: 9:30 AM – 6:30 PM";
 
     return (
-        <SectionWrapper id="office-location" className="bg-[#EDF5F2] py-16 md:py-24">
+        <SectionWrapper id="office-location" className="bg-[#EDF5F2] py-12 md:py-16">
             <Container className="max-w-6xl mx-auto flex flex-col items-center">
 
                 {/* HEADINGS */}
-                <div className="text-center mb-10 sm:mb-12">
+                <div className="text-center mb-4 sm:mb-6">
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}
-                        className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#111827] mb-3 tracking-tight"
+                        className="text-xl sm:text-2xl md:text-3xl font-extrabold text-[#111827] mb-3 tracking-tight"
                     >
                         Visit Our <span className="text-[#6B9F91]">Office</span>
                     </motion.h2>
@@ -36,22 +36,22 @@ export function OfficeLocation({ config }: { config?: SiteConfigData | null }) {
                 {/* LOCATION CARD */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}
-                    className="w-full bg-white rounded-3xl border border-gray-100 shadow-xl shadow-gray-200/50 p-6 md:p-10 lg:p-12 flex flex-col lg:flex-row gap-12"
+                    className="w-full bg-white rounded-2xl border border-gray-100 shadow-xl shadow-gray-200/50 p-4 md:p-6 lg:p-8 flex flex-col lg:flex-row gap-6"
                 >
 
                     {/* Left: Info */}
                     <div className="flex-1 flex flex-col">
-                        <div className="w-16 h-16 bg-[#EDF5F2] rounded-2xl flex items-center justify-center border border-gray-100 mb-8">
-                            <MapPin className="w-8 h-8 text-[#6B9F91]" />
+                        <div className="w-12 h-12 bg-[#EDF5F2] rounded-2xl flex items-center justify-center border border-gray-100 mb-4">
+                            <MapPin className="w-6 h-6 text-[#6B9F91]" />
                         </div>
 
                         <h3 className="text-xl md:text-2xl font-bold text-[#111827] mb-4">{companyName}</h3>
 
-                        <address className="not-italic text-gray-500 text-base leading-relaxed mb-8 whitespace-pre-line">
+                        <address className="not-italic text-gray-500 text-base leading-relaxed mb-4 whitespace-pre-line">
                             {addressText}
                         </address>
 
-                        <div className="flex items-center gap-3 md:gap-4 text-[13px] md:text-sm font-bold text-[#111827] mb-8 bg-[#EDF5F2] w-full md:w-max px-3 md:px-4 py-3 rounded-xl border border-gray-100">
+                        <div className="flex items-center gap-3 md:gap-4 text-[13px] md:text-sm font-bold text-[#111827] mb-4 bg-[#EDF5F2] w-full md:w-max px-3 md:px-4 py-3 rounded-xl border border-gray-100">
                             <Clock className="w-5 h-5 text-[#6B9F91] shrink-0" />
                             <div className="flex flex-col min-w-0">
                                 <span className="text-gray-500 text-[10px] uppercase tracking-widest whitespace-nowrap">Office Hours</span>
@@ -61,14 +61,14 @@ export function OfficeLocation({ config }: { config?: SiteConfigData | null }) {
 
                         <div className="flex flex-wrap gap-4 mt-auto">
                             <a href="https://goo.gl/maps/DWiCMVGgqKi2r5188" target="_blank" rel="noopener noreferrer">
-                                <Button className="bg-[#6B9F91] text-white hover:bg-[#5C8C80] font-bold px-6 py-6 rounded-xl group shadow-md shadow-[#6B9F91]/20">
+                                <Button className="bg-[#6B9F91] text-white hover:bg-[#5C8C80] font-bold px-5 py-3 rounded-xl group shadow-md shadow-[#6B9F91]/20">
                                     <Navigation className="w-4 h-4 mr-2 group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform" />
                                     Get Directions
                                 </Button>
                             </a>
                             {config?.contactPhone && (
                                 <a href={`tel:${config.contactPhone.replace(/\s+/g, '')}`}>
-                                    <Button variant="outline" className="bg-transparent border-gray-200 text-[#111827] hover:bg-gray-50 font-bold px-6 py-6 rounded-xl group">
+                                    <Button variant="outline" className="bg-transparent border-gray-200 text-[#111827] hover:bg-gray-50 font-bold px-5 py-3 rounded-xl group">
                                         <Phone className="w-4 h-4 mr-2 text-[#6B9F91]" />
                                         Call Now
                                     </Button>
@@ -78,7 +78,7 @@ export function OfficeLocation({ config }: { config?: SiteConfigData | null }) {
                     </div>
 
                     {/* Right: Embedded Interactive Map */}
-                    <div className="flex-1 w-full bg-[#EDF5F2] rounded-2xl border border-gray-100 overflow-hidden relative min-h-[350px] lg:min-h-[100%] group shadow-inner">
+                    <div className="flex-1 w-full bg-[#EDF5F2] rounded-2xl border border-gray-100 overflow-hidden relative min-h-[280px] lg:min-h-[100%] group shadow-inner">
 
                         {/* Live Google Map Iframe seamlessly generated from Admin Address */}
                         <iframe
@@ -109,7 +109,7 @@ export function OfficeLocation({ config }: { config?: SiteConfigData | null }) {
                         {/* Floating Action Button */}
                         <div className="absolute inset-x-0 bottom-6 flex justify-center z-10 pointer-events-none">
                             <a href={`https://maps.google.com/maps?q=${encodeURIComponent(companyName + " " + addressText)}`} target="_blank" rel="noopener noreferrer" className="pointer-events-auto">
-                                <Button className="bg-[#111827] text-white hover:bg-[#1f2937] font-bold px-6 py-6 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.2)] hover:-translate-y-1 transition-all border border-gray-700/50 flex items-center group/btn">
+                                <Button className="bg-[#111827] text-white hover:bg-[#1f2937] font-bold px-5 py-3 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.2)] hover:-translate-y-1 transition-all border border-gray-700/50 flex items-center group/btn">
                                     <Map className="w-4 h-4 mr-2 text-[#6B9F91] group-hover/btn:text-white transition-colors" />
                                     View on Google Maps
                                 </Button>

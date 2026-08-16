@@ -118,14 +118,14 @@ export function ContactForm() {
     };
 
     return (
-        <SectionWrapper id="contact-form" className="bg-white py-16 md:py-24 relative overflow-hidden">
+        <SectionWrapper id="contact-form" className="bg-white py-12 md:py-16 relative overflow-hidden">
             <Container className="max-w-7xl mx-auto">
 
                 {/* HEADINGS */}
-                <div className="mb-10 sm:mb-12 text-center flex flex-col items-center">
+                <div className="mb-4 sm:mb-6 text-center flex flex-col items-center">
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}
-                        className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#111827] mb-3 tracking-tight"
+                        className="text-xl sm:text-2xl md:text-3xl font-extrabold text-[#111827] mb-3 tracking-tight"
                     >
                         Send Us a <span className="text-[#6B9F91]">Message</span>
                     </motion.h2>
@@ -137,12 +137,12 @@ export function ContactForm() {
                     </motion.p>
                 </div>
 
-                <div className="flex flex-col lg:flex-row gap-8 lg:gap-14">
+                <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
 
                     {/* LEFT: FORM OR SUCCESS STATE */}
                     <motion.div
                         initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}
-                        className="w-full lg:w-2/3 bg-white border border-gray-100 rounded-3xl p-5 md:p-7 shadow-xl shadow-gray-200/40 relative overflow-hidden"
+                        className="w-full lg:w-2/3 bg-white border border-gray-100 rounded-3xl p-4 md:p-5 shadow-xl shadow-gray-200/40 relative overflow-hidden"
                     >
                         {/* Soft background glow within the form card */}
                         <div className="absolute -top-32 -left-32 w-64 h-64 bg-[#6B9F91]/5 blur-[80px] rounded-full pointer-events-none" />
@@ -155,19 +155,19 @@ export function ContactForm() {
                                     animate={{ opacity: 1, scale: 1, y: 0 }}
                                     exit={{ opacity: 0, scale: 0.95, y: -10 }}
                                     transition={{ duration: 0.4 }}
-                                    className="relative z-10 flex flex-col items-center justify-center text-center py-10 md:py-20"
+                                    className="relative z-10 flex flex-col items-center justify-center text-center py-8 md:py-12"
                                 >
-                                    <div className="w-20 h-20 bg-[#EDF5F2] rounded-full flex items-center justify-center mb-6 border border-[#6B9F91]/20 shadow-inner">
+                                    <div className="w-16 h-16 bg-[#EDF5F2] rounded-full flex items-center justify-center mb-4 border border-[#6B9F91]/20 shadow-inner">
                                         <CheckCircle2 className="w-10 h-10 text-[#6B9F91]" />
                                     </div>
                                     <h3 className="text-2xl md:text-3xl font-extrabold text-[#111827] mb-4">Message Sent Successfully</h3>
-                                    <p className="text-gray-500 text-base md:text-lg max-w-md mx-auto mb-10 leading-relaxed font-medium">
+                                    <p className="text-gray-500 text-base md:text-lg max-w-md mx-auto mb-6 leading-relaxed font-medium">
                                         Thank you for reaching out to SS40 NETWORK. We've received your message and our team will get back to you soon.
                                     </p>
                                     <Button
                                         onClick={() => setStatus("idle")}
                                         variant="outline"
-                                        className="border-gray-200 text-gray-700 font-bold hover:bg-gray-50 px-8 py-6 rounded-full shadow-sm"
+                                        className="border-gray-200 text-gray-700 font-bold hover:bg-gray-50 px-6 py-4 rounded-full shadow-sm"
                                     >
                                         Send Another Message
                                     </Button>
@@ -237,7 +237,7 @@ export function ContactForm() {
                                     </div>
 
                                     <motion.div whileHover={{ scale: status !== "submitting" ? 1.01 : 1 }} whileTap={{ scale: status !== "submitting" ? 0.98 : 1 }} className="mt-2">
-                                        <Button disabled={status === "submitting"} type="submit" className="w-full sm:w-auto bg-[#6B9F91] text-white hover:bg-[#5C8C80] font-bold text-sm px-8 py-3 rounded-full group shadow-lg shadow-[#6B9F91]/20 disabled:opacity-70 transition-all duration-300 min-w-[180px]">
+                                        <Button disabled={status === "submitting"} type="submit" className="w-full sm:w-auto bg-[#6B9F91] text-white hover:bg-[#5C8C80] font-bold text-sm px-6 py-4 rounded-full group shadow-lg shadow-[#6B9F91]/20 disabled:opacity-70 transition-all duration-300 min-w-[180px]">
                                             {status === "submitting" ? (
                                                 <span className="flex items-center justify-center gap-2">
                                                     <div className="w-4 h-4 rounded-full border-2 border-white items-center justify-center border-t-transparent animate-spin"></div>
@@ -262,16 +262,16 @@ export function ContactForm() {
                     </motion.div>
 
                     {/* RIGHT: HELPFUL INFORMATION */}
-                    <div className="w-full lg:w-1/3 flex flex-col gap-4">
+                    <div className="w-full lg:w-1/3 flex flex-col gap-2">
                         {HELPFUL_INFO.map((info, idx) => {
                             const Icon = info.icon;
                             return (
                                 <motion.div
                                     key={idx}
                                     initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.3 + idx * 0.1 }}
-                                    className="bg-[#EDF5F2] rounded-2xl p-4 md:p-5 border border-gray-100 flex items-start gap-3 hover:shadow-lg hover:shadow-gray-200/50 hover:-translate-y-1 transition-all duration-300"
+                                    className="bg-[#EDF5F2] rounded-2xl p-3 md:p-4 border border-gray-100 flex items-start gap-2 hover:shadow-lg hover:shadow-gray-200/50 hover:-translate-y-1 transition-all duration-300"
                                 >
-                                    <div className="w-12 h-12 rounded-xl bg-white border border-gray-200 flex items-center justify-center shrink-0">
+                                    <div className="w-10 h-10 rounded-xl bg-white border border-gray-200 flex items-center justify-center shrink-0">
                                         <Icon className="w-5 h-5 text-[#6B9F91]" />
                                     </div>
                                     <div>

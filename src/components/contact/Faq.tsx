@@ -37,13 +37,13 @@ export function Faq() {
     };
 
     return (
-        <SectionWrapper id="faq" className="bg-white py-20 md:py-32">
+        <SectionWrapper id="faq" className="bg-white py-12 md:py-16">
             <Container className="max-w-4xl mx-auto flex flex-col items-center">
 
-                <div className="text-center mb-16">
+                <div className="text-center mb-10">
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}
-                        className="text-3xl md:text-5xl font-extrabold text-[#111827] tracking-tight"
+                        className="text-2xl md:text-3xl font-extrabold text-[#111827] tracking-tight"
                     >
                         Frequently Asked <span className="text-[#6B9F91]">Questions</span>
                     </motion.h2>
@@ -60,7 +60,7 @@ export function Faq() {
                             >
                                 <button
                                     onClick={() => toggleFaq(idx)}
-                                    className="w-full flex items-center justify-between p-6 md:p-8 text-left focus:outline-none"
+                                    className="w-full flex items-center justify-between p-4 md:p-6 text-left focus:outline-none"
                                 >
                                     <span className={`font-bold text-base md:text-lg transition-colors pr-8 ${isOpen ? 'text-[#6B9F91]' : 'text-[#111827]'}`}>
                                         {faq.question}
@@ -78,7 +78,7 @@ export function Faq() {
                                             exit={{ height: 0, opacity: 0 }}
                                             transition={{ duration: 0.3, ease: "easeInOut" }}
                                         >
-                                            <div className="px-6 md:px-8 pb-6 md:pb-8 text-gray-500 text-sm md:text-base leading-relaxed border-t border-gray-50 pt-4">
+                                            <div className="px-4 md:px-6 pb-4 md:pb-6 text-gray-500 text-sm md:text-base leading-relaxed border-t border-gray-50 pt-4">
                                                 {faq.answer}
                                             </div>
                                         </motion.div>

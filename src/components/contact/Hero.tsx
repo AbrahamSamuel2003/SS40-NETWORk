@@ -3,7 +3,7 @@
 import * as React from "react";
 import { motion } from "framer-motion";
 import { ArrowDown, PhoneCall, Mail, Phone, Video, HelpCircle, Network } from "lucide-react";
-import { HERO_SPACING_CLASSES, cn } from "@/utils/cn";
+import { cn } from "@/utils/cn";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 
@@ -17,7 +17,7 @@ const NODES = [
 
 export function Hero() {
     return (
-        <section id="contact-hero" className={cn("relative w-full overflow-hidden bg-white border-b border-gray-100", HERO_SPACING_CLASSES)}>
+        <section id="contact-hero" className={cn("relative w-full overflow-hidden bg-white border-b border-gray-100 pt-8 pb-12 lg:pt-12 lg:pb-24 lg:min-h-[min(65vh,600px)] flex items-center")}>
 
             {/* Ambient Background Elements */}
             <div className="absolute inset-0 pointer-events-none z-0">
@@ -46,13 +46,13 @@ export function Hero() {
             </div>
 
             <Container className="relative z-10 w-full">
-                <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-8">
+                <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-6">
 
                     {/* LEFT: CONTENT */}
                     <div className="w-full lg:w-1/2 flex flex-col text-center lg:text-left z-20">
                         <motion.div
                             initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
-                            className="mb-6"
+                            className="mb-4"
                         >
                             <span className="inline-block px-3 py-1.5 rounded-full bg-[#6B9F91]/10 text-[#6B9F91] border border-[#6B9F91]/20 text-[10px] font-bold uppercase tracking-widest">
                                 CONTACT US
@@ -61,14 +61,14 @@ export function Hero() {
 
                         <motion.h1
                             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }}
-                            className="text-[clamp(40px,5vw,56px)] font-bold text-[#111827] leading-[1.1] tracking-tight mb-6 max-w-2xl"
+                            className="text-[clamp(30px,5vw,40px)] font-bold text-[#111827] leading-[1.1] tracking-tight mb-4 max-w-2xl"
                         >
                             Let's Build Something <br className="hidden lg:block" /> Meaningful <span className="text-[#6B9F91]">Together.</span>
                         </motion.h1>
 
                         <motion.p
                             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}
-                            className="text-lg md:text-xl text-[#6B7280] mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed"
+                            className="text-base md:text-lg text-[#6B7280] mb-5 max-w-xl mx-auto lg:mx-0 leading-relaxed"
                         >
                             Whether you're looking for digital solutions, exploring our products, or interested in academic collaborations, our team is ready to help you take the next step.
                         </motion.p>
@@ -81,7 +81,7 @@ export function Hero() {
                                 onClick={() => {
                                     document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' });
                                 }}
-                                className="w-full sm:w-auto bg-[#6B9F91] text-white hover:bg-[#5C8C80] font-bold text-base px-8 py-6 rounded-full group shadow-lg shadow-[#6B9F91]/20"
+                                className="w-full sm:w-auto bg-[#6B9F91] text-white hover:bg-[#5C8C80] font-bold text-base px-6 py-4 rounded-full group shadow-lg shadow-[#6B9F91]/20"
                             >
                                 Get in Touch
                                 <ArrowDown className="w-4 h-4 ml-2 group-hover:translate-y-1 transition-transform" />
@@ -90,7 +90,7 @@ export function Hero() {
                             <a href="tel:+918300591750" className="w-full sm:w-auto">
                                 <Button
                                     variant="outline"
-                                    className="w-full bg-[#EDF5F2] border-gray-200 text-[#111827] hover:bg-gray-50 hover:border-gray-300 font-bold text-base px-8 py-6 rounded-full group transition-all"
+                                    className="w-full bg-[#EDF5F2] border-gray-200 text-[#111827] hover:bg-gray-50 hover:border-gray-300 font-bold text-base px-6 py-4 rounded-full group transition-all"
                                 >
                                     <PhoneCall className="w-4 h-4 mr-2 text-[#6B9F91]" />
                                     Call Us
@@ -100,7 +100,7 @@ export function Hero() {
                     </div>
 
                     {/* RIGHT: VISUAL COMMUNICATION HUB */}
-                    <div className="w-full lg:w-1/2 flex justify-center items-center h-[350px] md:h-[450px] relative">
+                    <div className="w-full lg:w-1/2 flex justify-center items-center h-[260px] md:h-[340px] relative">
 
                         <div className="relative w-full max-w-[400px] aspect-square flex items-center justify-center">
 
@@ -149,7 +149,7 @@ export function Hero() {
                                                 scale: { duration: 0.5, type: "spring", delay: 0.6 + i * 0.2 },
                                                 y: { repeat: Infinity, duration: 4 + i, ease: "easeInOut", delay: node.delay }
                                             }}
-                                            className="relative flex flex-col items-center justify-center w-[72px] h-[72px] md:w-20 md:h-20 rounded-2xl bg-white shadow-xl shadow-gray-200/50 border border-gray-100"
+                                            className="relative flex flex-col items-center justify-center w-16 h-16 rounded-2xl bg-white shadow-xl shadow-gray-200/50 border border-gray-100"
                                         >
                                             <Icon className="w-5 h-5 text-[#6B9F91] mb-1" />
                                             <span className="text-[9px] md:text-[10px] font-bold text-[#111827]">{node.label}</span>
