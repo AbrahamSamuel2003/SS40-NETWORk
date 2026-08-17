@@ -79,10 +79,15 @@ export async function POST(request: Request) {
             { status: 401 }
         );
 
-    } catch (error) {
+    } catch (error: any) {
         console.error('Login error:', error);
         return NextResponse.json(
-            { success: false, error: 'Internal server error.' },
+            { 
+                success: false, 
+                error: 'Internal server error.',
+                details: error?.message || String(error),
+                stack: error?.stack
+            },
             { status: 500 }
         );
     }
