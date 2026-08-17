@@ -24,7 +24,7 @@ export async function POST(request: Request) {
 
         // Apply rate limiting
         const identifier = normalizedEmail;
-        const rateLimitResult = rateLimit(identifier, 5, 15 * 60 * 1000); // 5 attempts per 15 minutes
+        const rateLimitResult = rateLimit(identifier, 100, 15 * 60 * 1000); // 100 attempts per 15 minutes
         
         if (!rateLimitResult.success) {
             const resetTime = new Date(rateLimitResult.resetTime);
