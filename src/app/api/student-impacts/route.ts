@@ -39,14 +39,6 @@ export async function GET(request: Request) {
                 { sortOrder: 'asc' },
                 { createdAt: 'desc' }
             ],
-            select: {
-                id: true,
-                title: true,
-                description: true,
-                impactMetric: true,
-                imageUrl: true,
-                sortOrder: true,
-            }
         });
 
         return NextResponse.json({ success: true, data: impacts }, {

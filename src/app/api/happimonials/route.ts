@@ -33,20 +33,6 @@ export async function GET(request: Request) {
 
         const happimonials = await prisma.happimonial.findMany({
             where,
-            select: {
-                id: true,
-                clientName: true,
-                companyName: true,
-                company: true,
-                testimonial: true,
-                rating: true,
-                projectType: true,
-                imageUrl: true,
-                thumbnailUrl: true,
-                videoUrl: true,
-                youtubeUrl: true,
-                sortOrder: true
-            },
             orderBy: [
                 { sortOrder: 'asc' },
                 { createdAt: 'asc' }

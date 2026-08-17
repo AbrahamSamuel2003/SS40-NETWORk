@@ -42,14 +42,6 @@ export async function GET(request: Request) {
 
         const logos = await prisma.organizationLogo.findMany({
             where,
-            select: {
-                id: true,
-                name: true,
-                logoUrl: true,
-                websiteUrl: true,
-                pageScope: true,
-                sortOrder: true,
-            },
             orderBy: [
                 { sortOrder: 'asc' },
                 { createdAt: 'desc' }
