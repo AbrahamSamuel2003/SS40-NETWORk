@@ -22,21 +22,7 @@ export async function POST(request: Request) {
 
         const normalizedEmail = email.trim().toLowerCase();
 
-        // Apply rate limiting
-        const identifier = normalizedEmail;
-        const rateLimitResult = rateLimit(identifier, 100, 15 * 60 * 1000); // 100 attempts per 15 minutes
-        
-        if (!rateLimitResult.success) {
-            const resetTime = new Date(rateLimitResult.resetTime);
-            return NextResponse.json(
-                { 
-                    success: false, 
-                    error: 'Too many login attempts. Please try again later.',
-                    resetTime: resetTime.toISOString()
-                },
-                { status: 429 }
-            );
-        }
+
 
         // 1. Check AdminUser first
         const adminUser = await prisma.adminUser.findFirst({

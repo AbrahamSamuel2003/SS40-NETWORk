@@ -21,21 +21,7 @@ export async function POST(request: Request) {
             );
         }
 
-        // Apply rate limiting
         const normalizedIdentifier = identifier.trim().toLowerCase();
-        const rateLimitResult = rateLimit(normalizedIdentifier, 100, 15 * 60 * 1000); // 100 attempts per 15 minutes
-        
-        if (!rateLimitResult.success) {
-            const resetTime = new Date(rateLimitResult.resetTime);
-            return NextResponse.json(
-                { 
-                    success: false, 
-                    error: 'Too many login attempts. Please try again later.',
-                    resetTime: resetTime.toISOString()
-                },
-                { status: 429 }
-            );
-        }
 
         // Attempt to find by email or username
         const adminUser = await prisma.adminUser.findFirst({
