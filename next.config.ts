@@ -1,5 +1,4 @@
 import type { NextConfig } from "next";
-import { withTailwind } from "@tailwindcss/next";
 
 const nextConfig: NextConfig = {
   // Allow mobile devices on the local network to safely connect in dev mode
@@ -67,4 +66,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withTailwind(nextConfig);
+export default nextConfig;
