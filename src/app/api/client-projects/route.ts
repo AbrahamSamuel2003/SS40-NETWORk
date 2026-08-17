@@ -33,26 +33,26 @@ export async function GET(request: Request) {
 
         const projects = await prisma.clientProject.findMany({
             where,
-            orderBy: [
-                { sortOrder: 'asc' },
-                { createdAt: 'asc' }
-            ],
             select: {
                 id: true,
                 title: true,
-                industry: true,
                 description: true,
-                status: true,
-                isConfidential: true,
-                tags: true,
+                technologies: true,
                 imageUrl: true,
                 projectUrl: true,
-                caseStudy: true,
-                sortOrder: true
-            }
+                sortOrder: true,
+            },
+            orderBy: [
+                { sortOrder: 'asc' },
+                { createdAt: 'asc' }
+            ]
         });
 
-        return NextResponse.json({ success: true, data: projects }, { status: 200 });
+        return NextResponse.json({ success: true, data: projects }, {
+            headers: {
+                'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+            }
+        });
     } catch (error) {
         console.error('Error fetching client projects:', error);
         return NextResponse.json({ success: false, error: 'Failed to fetch client projects' }, { status: 500 });

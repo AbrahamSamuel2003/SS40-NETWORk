@@ -28,14 +28,14 @@ export async function GET() {
             }
         });
 
-        if (!config) {
-            return NextResponse.json({ success: false, error: 'Site configuration not found' }, { status: 404 });
-        }
-
-        return NextResponse.json({ success: true, data: config }, { status: 200 });
+        return NextResponse.json({ success: true, data: config }, {
+            headers: {
+                'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=120',
+            }
+        });
     } catch (error) {
-        console.error('Error fetching site configuration:', error);
-        return NextResponse.json({ success: false, error: 'Failed to fetch site configuration' }, { status: 500 });
+        console.error('Error fetching site config:', error);
+        return NextResponse.json({ success: false, error: 'Failed to fetch site config' }, { status: 500 });
     }
 }
 

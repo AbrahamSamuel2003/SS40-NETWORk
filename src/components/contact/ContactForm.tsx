@@ -4,7 +4,7 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import { useSearchParams, usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Clock, Briefcase, GraduationCap, ArrowRight, CheckCircle2, AlertCircle } from "lucide-react";
+import { Clock, Briefcase, GraduationCap, ArrowRight, CheckCircle2, AlertCircle, ChevronDown } from "lucide-react";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
@@ -223,12 +223,15 @@ export function ContactForm() {
 
                                     <div className="flex flex-col gap-1.5">
                                         <label htmlFor="serviceInterest" className="text-sm font-bold text-[#111827]">Interested In</label>
-                                        <select required disabled={status === "submitting"} id="serviceInterest" value={formData.serviceInterest} onChange={handleChange} className="w-full bg-[#EDF5F2] border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 appearance-none disabled:opacity-50 text-sm">
-                                            <option value="" disabled>Select an option</option>
-                                            {INTEREST_OPTIONS.map((opt) => (
-                                                <option key={opt} value={opt}>{opt}</option>
-                                            ))}
-                                        </select>
+                                        <div className="relative">
+                                            <select required disabled={status === "submitting"} id="serviceInterest" value={formData.serviceInterest} onChange={handleChange} className="w-full bg-[#EDF5F2] border border-gray-200 rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 appearance-none disabled:opacity-50 text-sm cursor-pointer">
+                                                <option value="" disabled>Select an option</option>
+                                                {INTEREST_OPTIONS.map((opt) => (
+                                                    <option key={opt} value={opt}>{opt}</option>
+                                                ))}
+                                            </select>
+                                            <ChevronDown className="w-4 h-4 text-gray-500 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+                                        </div>
                                     </div>
 
                                     <div className="flex flex-col gap-1.5">

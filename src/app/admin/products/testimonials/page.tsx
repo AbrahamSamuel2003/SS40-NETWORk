@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit2, Trash2, CheckCircle2, AlertCircle, Upload, X } from 'lucide-react';
+import { Plus, Edit2, Trash2, CheckCircle2, AlertCircle, Upload, X, Image as ImageIcon } from 'lucide-react';
+import { MediaSelectorModal } from '@/components/admin/MediaSelectorModal';
 
 export default function ProductTestimonialsPage() {
     const [happimonials, setHappimonials] = useState<any[]>([]);
@@ -21,6 +22,7 @@ export default function ProductTestimonialsPage() {
     const [isActive, setIsActive] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
+    const [isMediaSelectorOpen, setIsMediaSelectorOpen] = useState(false);
 
     useEffect(() => {
         fetchData();
@@ -155,112 +157,166 @@ export default function ProductTestimonialsPage() {
             </div>
 
             <div className="admin-card overflow-hidden">
-                <table className="w-full text-left text-sm text-[#374151]">
-                    <thead className="bg-[#EDF5F2]/70 border-b border-gray-200 text-[#111827]">
-                        <tr>
-                            <th className="p-4 font-medium">Avatar</th>
-                            <th className="p-4 font-medium">Client Info</th>
-                            <th className="p-4 font-medium text-left">Testimonial</th>
-                            <th className="p-4 font-medium text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100">
-                        {happimonials.length === 0 ? (
-                            <tr><td colSpan={4} className="p-8 text-center text-[#9CA3AF]">No product testimonials found.</td></tr>
-                        ) : (
-                            happimonials.map(item => (
-                                <tr key={item.id} className="hover:bg-[#EDF5F2]/50">
-                                    <td className="p-4">
-                                        {item.thumbnailUrl ? (
-                                            <div className="w-10 h-10 rounded-full overflow-hidden shrink-0"><img src={item.thumbnailUrl} alt="" className="w-full h-full object-cover" /></div>
-                                        ) : (
-                                            <div className="w-10 h-10 rounded-full bg-[#EDF5F2] flex items-center justify-center shrink-0 uppercase font-bold text-[#9CA3AF]">{item.clientName.charAt(0)}</div>
-                                        )}
-                                    </td>
-                                    <td className="p-4 font-medium">
-                                        <div className="text-[#111827]">{item.clientName}</div>
-                                        <div className="text-[#9CA3AF] text-xs">{item.companyName} · {item.industry}</div>
-                                        {item.youtubeUrl && (
-                                            <div className="mt-1">
-                                                <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-[#B91C1C] bg-[#FEE2E2] border border-[#FCA5A5] rounded px-1.5 py-0.5">
-                                                    ▶ YouTube
-                                                </span>
-                                            </div>
-                                        )}
-                                    </td>
-                                    <td className="p-4 text-[#6B7280] text-xs max-w-sm truncate">{item.testimonial}</td>
-                                    <td className="p-4 text-right">
-                                        <button onClick={() => handleOpenModal(item)} className="text-[#9CA3AF] hover:text-[#111827] p-2 transition-colors">
+                {/* ── MOBILE CARD GRID (hidden on sm+) ── */}
+                <div className="sm:hidden">
+                    {happimonials.length === 0 ? (
+                        <div className="p-8 text-center text-[#9CA3AF]">No product testimonials found.</div>
+                    ) : (
+                        <div className="grid grid-cols-2 gap-3 p-3">
+                            {happimonials.map(item => (
+                                <div key={item.id} className="admin-card p-3 flex flex-col gap-2 rounded-xl">
+                                    <div className="flex items-start justify-between gap-1">
+                                        <span className="font-semibold text-[#111827] text-sm leading-tight line-clamp-2">{item.clientName}</span>
+                                        <button onClick={() => handleOpenModal(item)} className="shrink-0 p-1 text-[#9CA3AF] hover:text-[#111827]">
                                             <Edit2 className="w-4 h-4" />
                                         </button>
-                                        <button onClick={() => handleDelete(item.id)} className="text-[#B91C1C]/50 hover:text-[#B91C1C] p-2 transition-colors">
-                                            <Trash2 className="w-4 h-4" />
+                                    </div>
+                                    <p className="text-[#6B7280] text-xs leading-snug line-clamp-1">{item.companyName} · {item.industry}</p>
+                                    <p className="text-[#9CA3AF] text-[10px] leading-snug line-clamp-2">{item.testimonial}</p>
+                                    <div className="mt-auto pt-1 flex items-center justify-between">
+                                        <span className="inline-flex px-2 py-0.5 rounded text-[10px] font-semibold bg-[#6B9F91]/10 text-[#6B9F91] border border-[#6B9F91]/20">• Story</span>
+                                        <button onClick={() => handleDelete(item.id)} className="text-[#B91C1C]/50 hover:text-[#B91C1C] p-1">
+                                            <Trash2 className="w-3.5 h-3.5" />
                                         </button>
-                                    </td>
-                                </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                {/* ── DESKTOP TABLE (hidden on mobile) ── */}
+                <div className="hidden sm:block overflow-x-auto w-full touch-auto">
+                    <table className="w-full text-left text-sm text-[#374151] min-w-[600px]">
+                        <thead className="bg-[#EDF5F2]/70 border-b border-gray-200 text-[#111827]">
+                            <tr>
+                                <th className="p-4 font-medium min-w-[80px] hidden sm:table-cell">Avatar</th>
+                                <th className="p-4 font-medium min-w-[150px]">Client Info</th>
+                                <th className="p-4 font-medium text-left min-w-[200px] hidden sm:table-cell">Testimonial</th>
+                                <th className="p-4 font-medium text-right min-w-[120px]">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-100">
+                            {happimonials.length === 0 ? (
+                                <tr><td colSpan={4} className="p-8 text-center text-[#9CA3AF]">No product testimonials found.</td></tr>
+                            ) : (
+                                happimonials.map(item => (
+                                    <tr key={item.id} className="hover:bg-[#EDF5F2]/50">
+                                        <td className="p-4 hidden sm:table-cell">
+                                            {item.thumbnailUrl ? (
+                                                <div className="w-10 h-10 rounded-full overflow-hidden shrink-0"><img src={item.thumbnailUrl} alt="" className="w-full h-full object-cover" /></div>
+                                            ) : (
+                                                <div className="w-10 h-10 rounded-full bg-[#EDF5F2] flex items-center justify-center shrink-0 uppercase font-bold text-[#9CA3AF]">{item.clientName.charAt(0)}</div>
+                                            )}
+                                        </td>
+                                        <td className="p-4 font-medium">
+                                            <div className="text-[#111827]">{item.clientName}</div>
+                                            <div className="text-[#9CA3AF] text-xs">{item.companyName} · {item.industry}</div>
+                                            {item.youtubeUrl && (
+                                                <div className="mt-1">
+                                                    <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-[#B91C1C] bg-[#FEE2E2] border border-[#FCA5A5] rounded px-1.5 py-0.5">
+                                                        ▶ YouTube
+                                                    </span>
+                                                </div>
+                                            )}
+                                        </td>
+                                        <td className="p-4 text-[#6B7280] text-xs max-w-sm truncate hidden sm:table-cell">{item.testimonial}</td>
+                                        <td className="p-3">
+                                            <div className="grid grid-cols-2 gap-1.5 w-fit ml-auto">
+                                                <button onClick={() => handleOpenModal(item)} className="px-3 py-1 rounded border border-gray-300 text-[#374151] text-xs font-medium hover:bg-[#EDF5F2]/70 hover:border-[#6B9F91] transition-colors whitespace-nowrap">Edit</button>
+                                                <button onClick={() => handleDelete(item.id)} className="px-3 py-1 rounded border border-[#FCA5A5] text-[#B91C1C] text-xs font-medium hover:bg-red-50 transition-colors whitespace-nowrap">Delete</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#111827]/40 backdrop-blur-sm">
-                    <div className="admin-card w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
-                        <div className="p-5 border-b border-gray-200 flex justify-between items-center bg-[#EDF5F2]/70">
-                            <h3 className="text-lg font-bold text-[#111827]">{editingId ? 'Edit Success Story' : 'Add Success Story'}</h3>
-                            <button onClick={() => setIsModalOpen(false)} className="text-[#9CA3AF] hover:text-[#111827]"><X className="w-5 h-5" /></button>
+                    <div className="admin-card w-full max-w-xl overflow-hidden shadow-2xl flex flex-col max-h-[88vh]">
+                        <div className="px-4 py-3 border-b border-gray-200 flex justify-between items-center bg-[#EDF5F2]/80 shrink-0">
+                            <div>
+                                <h3 className="text-sm font-bold text-[#111827]">{editingId ? 'Edit Success Story' : 'Add Success Story'}</h3>
+                                <p className="text-[10px] text-[#9CA3AF] mt-0.5">Products testimonials</p>
+                            </div>
+                            <button onClick={() => setIsModalOpen(false)} className="text-[#9CA3AF] hover:text-[#111827] p-1"><X className="w-4 h-4" /></button>
                         </div>
-                        <div className="p-6 overflow-y-auto w-full custom-scrollbar">
-                            {errorMsg && <div className="mb-4 text-sm text-[#B91C1C] bg-[#FEE2E2] p-3 rounded-lg border border-[#FCA5A5] flex gap-2"><AlertCircle className="w-4 h-4 mt-0.5 shrink-0" /> {errorMsg}</div>}
+                        <div className="p-4 overflow-y-auto w-full custom-scrollbar">
+                            {errorMsg && <div className="mb-3 text-xs text-[#B91C1C] bg-[#FEE2E2] px-3 py-2 rounded border border-[#FCA5A5] flex gap-2"><AlertCircle className="w-3.5 h-3.5 mt-0.5 shrink-0" /> {errorMsg}</div>}
 
-                            <form id="happimonialForm" onSubmit={handleSave} className="space-y-5">
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div><label className="block text-sm text-[#374151] mb-1.5">Client Name *</label><input required value={clientName} onChange={e => setClientName(e.target.value)} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-[#111827]" /></div>
-                                    <div><label className="block text-sm text-[#374151] mb-1.5">Company Name *</label><input required value={companyName} onChange={e => setCompanyName(e.target.value)} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-[#111827]" /></div>
+                            <form id="happimonialForm" onSubmit={handleSave} className="space-y-3">
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div><label className="block text-xs font-medium text-[#374151] mb-1">Client Name *</label><input required value={clientName} onChange={e => setClientName(e.target.value)} className="w-full bg-white border border-gray-200 rounded-md px-3 py-1.5 text-sm text-[#111827] focus:outline-none focus:border-[#6B9F91]" /></div>
+                                    <div><label className="block text-xs font-medium text-[#374151] mb-1">Company Name *</label><input required value={companyName} onChange={e => setCompanyName(e.target.value)} className="w-full bg-white border border-gray-200 rounded-md px-3 py-1.5 text-sm text-[#111827] focus:outline-none focus:border-[#6B9F91]" /></div>
                                 </div>
-                                <div><label className="block text-sm text-[#374151] mb-1.5">Industry Category *</label><input required value={industry} onChange={e => setIndustry(e.target.value)} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-[#111827]" /></div>
+                                <div><label className="block text-xs font-medium text-[#374151] mb-1">Industry Category *</label><input required value={industry} onChange={e => setIndustry(e.target.value)} className="w-full bg-white border border-gray-200 rounded-md px-3 py-1.5 text-sm text-[#111827] focus:outline-none focus:border-[#6B9F91]" /></div>
 
-                                <div><label className="block text-sm text-[#374151] mb-1.5">Testimonial Quote *</label><textarea required rows={4} value={testimonial} onChange={e => setTestimonial(e.target.value)} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-[#111827] resize-none" /></div>
+                                <div><label className="block text-xs font-medium text-[#374151] mb-1">Testimonial Quote *</label><textarea required rows={3} value={testimonial} onChange={e => setTestimonial(e.target.value)} className="w-full bg-white border border-gray-200 rounded-md px-3 py-1.5 text-sm text-[#111827] resize-none focus:outline-none focus:border-[#6B9F91]" /></div>
 
                                 <div>
-                                    <label className="block text-sm text-[#374151] mb-1.5">Avatar / Thumbnail Image</label>
-                                    <div className="flex gap-4">
-                                        <input value={thumbnailUrl} onChange={e => setThumbnailUrl(e.target.value)} className="flex-1 bg-white border border-gray-200 rounded-lg px-4 py-2 text-[#111827]" placeholder="URL..." />
-                                        <label className={`cursor-pointer shrink-0 bg-[#EDF5F2]/70 hover:bg-[#EDF5F2] text-[#111827] px-4 py-2 rounded-lg text-sm transition-colors flex items-center gap-2 ${isUploading ? 'opacity-50' : ''}`}>
-                                            <Upload className="w-4 h-4" /> Upload
-                                            <input type="file" accept="image/*" onChange={handleUpload} className="hidden" />
-                                        </label>
+                                    <label className="block text-xs font-medium text-[#374151] mb-1">Avatar / Thumbnail Image</label>
+                                    <div className="flex flex-col gap-2">
+                                        <input value={thumbnailUrl} onChange={e => setThumbnailUrl(e.target.value)} className="w-full bg-white border border-gray-200 rounded-md px-3 py-1.5 text-sm text-[#111827] focus:outline-none focus:border-[#6B9F91]" placeholder="URL..." />
+                                        
+                                        {thumbnailUrl && (
+                                            <div className="relative w-24 h-24 bg-gray-50 rounded-lg overflow-hidden border border-gray-200 group">
+                                                <img src={thumbnailUrl} alt="Thumbnail" className="w-full h-full object-cover" />
+                                                <button type="button" onClick={() => setThumbnailUrl('')} className="absolute top-1 right-1 bg-white/90 p-1 rounded-full text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity hover:text-red-500 shadow-sm">
+                                                    <X className="w-3 h-3" />
+                                                </button>
+                                            </div>
+                                        )}
+                                        
+                                        <div className="flex flex-wrap gap-2">
+                                            <label className={`cursor-pointer bg-[#EDF5F2]/70 hover:bg-[#EDF5F2] text-[#111827] px-3 py-1.5 rounded-md text-xs font-medium transition-colors flex items-center gap-1.5 ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}>
+                                                <Upload className="w-3.5 h-3.5" /> {isUploading ? 'Uploading...' : 'Upload Local File'}
+                                                <input type="file" accept="image/*" onChange={handleUpload} className="hidden" disabled={isUploading} />
+                                            </label>
+                                            <button type="button" onClick={() => setIsMediaSelectorOpen(true)} className="cursor-pointer bg-[#EDF5F2]/70 hover:bg-[#EDF5F2] text-[#111827] px-3 py-1.5 rounded-md text-xs font-medium transition-colors flex items-center gap-1.5">
+                                                <ImageIcon className="w-3.5 h-3.5 text-[#6B9F91]" /> Select from Media
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm text-[#374151] mb-1.5">
-                                        YouTube Video URL
-                                        <span className="ml-2 text-[#9CA3AF] text-xs font-normal">(optional)</span>
+                                    <label className="block text-xs font-medium text-[#374151] mb-1">
+                                        YouTube URL <span className="text-[#9CA3AF] font-normal">(optional)</span>
                                     </label>
-                                    <input
-                                        value={youtubeUrl}
-                                        onChange={e => setYoutubeUrl(e.target.value)}
-                                        className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-[#111827] placeholder:text-[#9CA3AF]"
-                                        placeholder="https://www.youtube.com/watch?v=..."
-                                    />
-                                    <p className="mt-1 text-xs text-[#9CA3AF]">Supports youtube.com/watch, youtu.be, and youtube.com/shorts links.</p>
+                                    <input value={youtubeUrl} onChange={e => setYoutubeUrl(e.target.value)} className="w-full bg-white border border-gray-200 rounded-md px-3 py-1.5 text-sm text-[#111827] focus:outline-none focus:border-[#6B9F91] placeholder:text-[#9CA3AF]" placeholder="https://www.youtube.com/watch?v=..." />
+                                    <p className="mt-1 text-[10px] text-[#9CA3AF]">Supports youtube.com/watch, youtu.be, and youtube.com/shorts links.</p>
                                 </div>
-                                <div className="pt-3">
-                                    <label className="flex items-center gap-3 cursor-pointer group">
-                                        <div className="relative"><input type="checkbox" checked={isActive} onChange={e => setIsActive(e.target.checked)} className="sr-only" /><div className={`w-10 h-6 rounded-full transition-colors ${isActive ? 'bg-[#6B9F91]' : 'bg-[#EDF5F2]'}`}></div><div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${isActive ? 'translate-x-4' : 'translate-x-0'}`}></div></div>
-                                        <span className="text-sm font-medium text-[#374151]">Active</span>
-                                    </label>
-                                </div>
+
+                                <label className="flex items-center gap-2.5 cursor-pointer pt-1 border-t border-gray-100">
+                                    <div className="relative shrink-0">
+                                        <input type="checkbox" checked={isActive} onChange={e => setIsActive(e.target.checked)} className="sr-only" />
+                                        <div className={`w-8 h-5 rounded-full transition-colors ${isActive ? 'bg-[#6B9F91]' : 'bg-[#EDF5F2]'}`}></div>
+                                        <div className={`absolute top-0.5 left-0.5 bg-white w-4 h-4 rounded-full transition-transform ${isActive ? 'translate-x-3' : 'translate-x-0'}`}></div>
+                                    </div>
+                                    <span className="text-xs font-medium text-[#374151]">Active</span>
+                                </label>
                             </form>
                         </div>
-                        <div className="p-5 border-t border-gray-200 flex justify-end gap-3 bg-[#EDF5F2]/70">
-                            <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 rounded-lg text-[#6B7280] hover:bg-[#EDF5F2]/70">Cancel</button>
-                            <button type="submit" form="happimonialForm" disabled={isSaving} className="bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-6 py-2 rounded-lg disabled:opacity-50">Save Testimonial</button>
+                        <div className="px-4 py-2.5 border-t border-gray-200 flex justify-end gap-2 bg-[#EDF5F2]/50 shrink-0">
+                            <button type="button" onClick={() => setIsModalOpen(false)} className="px-3 py-1.5 rounded-md text-xs text-[#6B7280] hover:bg-[#EDF5F2]/70 font-medium">Cancel</button>
+                            <button type="submit" form="happimonialForm" disabled={isSaving} className="bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-5 py-1.5 rounded-md text-xs font-medium disabled:opacity-50">Save Testimonial</button>
                         </div>
                     </div>
                 </div>
+            )}
+
+            {isMediaSelectorOpen && (
+                <MediaSelectorModal
+                    onClose={() => setIsMediaSelectorOpen(false)}
+                    onSelect={(url) => {
+                        setThumbnailUrl(url);
+                        setIsMediaSelectorOpen(false);
+                    }}
+                />
             )}
         </div>
     )

@@ -10,13 +10,29 @@ import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { getYouTubeThumbnailUrl, getYouTubeVideoId } from "@/components/ui/YouTubeResumeThumbnailPlayer";
+import { StoryGridSkeleton } from "@/components/ui/Skeleton";
 
 interface StudentImpactsProps {
     impacts?: any[];
 }
 
 export function StudentImpacts({ impacts = [] }: StudentImpactsProps) {
-    if (!impacts || impacts.length === 0) return null;
+    if (!impacts || impacts.length === 0) {
+        return (
+            <SectionWrapper id="student-impact" className="bg-[#EDF5F2] overflow-hidden">
+                <Container className="space-y-12 lg:space-y-16">
+                    <div>
+                        <SectionHeading
+                            badge="Student Impact"
+                            title="From Learning to Professional Success."
+                            description="Discover how our students build practical skills, complete real-world projects, and prepare for successful careers through hands-on architecture."
+                        />
+                    </div>
+                    <StoryGridSkeleton />
+                </Container>
+            </SectionWrapper>
+        );
+    }
 
     const featuredStoryRaw = impacts.find(imp => imp.youtubeUrl) || impacts.find(imp => imp.isFeatured) || impacts[0];
     const secondaryStoriesRaw = impacts.filter(imp => imp.id !== featuredStoryRaw.id && !imp.youtubeUrl);

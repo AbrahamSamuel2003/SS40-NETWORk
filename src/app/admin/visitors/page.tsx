@@ -99,16 +99,50 @@ export default function VisitorsPage() {
             </div>
 
             <div className="admin-card overflow-hidden shadow-sm">
-                <div className="overflow-x-auto w-full">
-                    <table className="w-full text-left text-sm text-[#374151] whitespace-nowrap">
+                {/* ── MOBILE CARD GRID (hidden on sm+) ── */}
+                <div className="sm:hidden">
+                    {isLoading ? (
+                        <div className="p-8 text-center text-[#9CA3AF]">
+                            <div className="animate-spin rounded-full h-6 w-6 mx-auto border-t-2 border-b-2 border-gray-200 mb-2"></div>
+                            Fetching visitors securely...
+                        </div>
+                    ) : visitors.length === 0 ? (
+                        <div className="p-8 text-center text-[#9CA3AF]">No tracked visitors match your query.</div>
+                    ) : (
+                        <div className="grid grid-cols-2 gap-3 p-3">
+                            {visitors.map(item => (
+                                <div key={item.id} className="admin-card p-3 flex flex-col gap-2 rounded-xl">
+                                    <div className="flex items-start justify-between gap-1">
+                                        <span className="font-semibold text-[#111827] text-xs leading-tight line-clamp-2 font-mono">{item.sessionId.substring(0, 10)}…</span>
+                                        <button onClick={() => handleOpenModal(item)} className="shrink-0 p-1 text-[#6B9F91]">
+                                            <Eye className="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                    <p className="text-[#6B7280] text-[10px] leading-snug line-clamp-1">{item.deviceType || 'Unknown'} · {item.browser || 'Unknown'}</p>
+                                    <p className="text-[#9CA3AF] text-[10px] leading-snug line-clamp-1">{item.landingPage || 'Direct'}</p>
+                                    <div className="mt-auto pt-1 flex items-center justify-between">
+                                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-[#EDF5F2]/70 text-[#111827] border border-gray-200">• {item.pageViews} views</span>
+                                        <button onClick={() => handleDelete(item.id)} className="text-[#B91C1C]/50 hover:text-[#B91C1C] p-1">
+                                            <Trash2 className="w-3.5 h-3.5" />
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                {/* ── DESKTOP TABLE (hidden on mobile) ── */}
+                <div className="hidden sm:block overflow-x-auto w-full touch-auto">
+                    <table className="w-full text-left text-sm text-[#374151] min-w-[600px]">
                         <thead className="bg-[#EDF5F2]/70 border-b border-gray-200 text-[#111827]">
                             <tr>
-                                <th className="p-4 font-medium">Session ID</th>
-                                <th className="p-4 font-medium">Platform / OS</th>
-                                <th className="p-4 font-medium">Location</th>
-                                <th className="p-4 font-medium text-center">Views</th>
-                                <th className="p-4 font-medium">Last Visited</th>
-                                <th className="p-4 font-medium text-right">Actions</th>
+                                <th className="p-4 font-medium min-w-[180px]">Session ID</th>
+                                <th className="p-4 font-medium min-w-[150px] hidden sm:table-cell">Platform / OS</th>
+                                <th className="p-4 font-medium min-w-[120px] hidden md:table-cell">Location</th>
+                                <th className="p-4 font-medium text-center min-w-[100px]">Views</th>
+                                <th className="p-4 font-medium min-w-[120px] hidden sm:table-cell">Last Visited</th>
+                                <th className="p-4 font-medium text-right min-w-[120px]">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100">
@@ -135,11 +169,11 @@ export default function VisitorsPage() {
                                             </div>
                                             <div className="text-[#9CA3AF] text-[10px] mt-1 truncate max-w-[150px]">{item.landingPage || 'Direct'}</div>
                                         </td>
-                                        <td className="p-4">
+                                        <td className="p-4 hidden sm:table-cell">
                                             <div className="text-[#111827] text-xs font-semibold">{item.deviceType || 'Unknown Device'}</div>
                                             <div className="text-[#6B7280] text-[11px] mt-0.5">{item.browser || 'Unknown'} • {item.operatingSystem || 'N/A'}</div>
                                         </td>
-                                        <td className="p-4 relative">
+                                        <td className="p-4 hidden md:table-cell">
                                             <div className="text-[#111827] text-xs flex items-center gap-1.5"><Globe className="w-3.5 h-3.5 opacity-60" /> {formatLocation(item.city, item.country)}</div>
                                             {item.ipAddress && <div className="text-[#9CA3AF] text-[10px] font-mono mt-1">{item.ipAddress}</div>}
                                         </td>
@@ -148,17 +182,15 @@ export default function VisitorsPage() {
                                                 {item.pageViews}
                                             </span>
                                         </td>
-                                        <td className="p-4 text-xs text-[#6B7280]">
+                                        <td className="p-4 text-xs text-[#6B7280] hidden sm:table-cell">
                                             {new Date(item.lastVisitedAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
                                             <div className="text-[10px] text-[#9CA3AF]">{new Date(item.lastVisitedAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}</div>
                                         </td>
-                                        <td className="p-4 text-right">
-                                            <button onClick={() => handleOpenModal(item)} className="text-[#6B9F91] hover:text-[#6B9F91] p-2 transition-colors">
-                                                <Eye className="w-4 h-4" />
-                                            </button>
-                                            <button onClick={() => handleDelete(item.id)} className="text-[#B91C1C]/50 hover:text-[#B91C1C] p-2 transition-colors ml-1">
-                                                <Trash2 className="w-4 h-4" />
-                                            </button>
+                                        <td className="p-3">
+                                            <div className="grid grid-cols-2 gap-1.5 w-fit ml-auto">
+                                                <button onClick={() => handleOpenModal(item)} className="px-3 py-1 rounded border border-[#6B9F91] text-[#6B9F91] text-xs font-medium hover:bg-[#6B9F91]/10 transition-colors whitespace-nowrap">View</button>
+                                                <button onClick={() => handleDelete(item.id)} className="px-3 py-1 rounded border border-[#FCA5A5] text-[#B91C1C] text-xs font-medium hover:bg-red-50 transition-colors whitespace-nowrap">Delete</button>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))
@@ -190,78 +222,124 @@ export default function VisitorsPage() {
 
             {isModalOpen && visitorData && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#111827]/40 backdrop-blur-sm">
-                    <div className="admin-card w-full max-w-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
-                        <div className="p-5 border-b border-gray-200 flex justify-between items-center bg-[#EDF5F2]/70">
-                            <h3 className="text-lg font-bold text-[#111827] flex items-center gap-2">
-                                <Shield className="w-5 h-5 text-[#6B9F91]" />
-                                Visitor Integrity Details
-                            </h3>
-                            <button onClick={() => setIsModalOpen(false)} className="text-[#9CA3AF] hover:text-[#111827]"><X className="w-5 h-5" /></button>
-                        </div>
-                        <div className="p-6 overflow-y-auto w-full custom-scrollbar grid grid-cols-1 md:grid-cols-2 gap-8">
-
-                            {/* Detailed Information Grid */}
-                            <div className="space-y-6">
+                    <div className="admin-card w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col max-h-[88vh]">
+                        <div className="px-4 py-3 border-b border-gray-200 flex justify-between items-center bg-[#EDF5F2]/80 shrink-0">
+                            <div className="flex items-center gap-2">
+                                <Shield className="w-4 h-4 text-[#6B9F91]" />
                                 <div>
-                                    <h4 className="text-[#111827] font-medium mb-4 border-b border-gray-200 pb-2">Session Identity</h4>
-                                    <div className="space-y-3 text-sm">
-                                        <div><span className="text-[#9CA3AF] block text-xs">Session ID</span><span className="text-[#111827]/90 font-mono text-[11px] break-all">{visitorData.sessionId}</span></div>
-                                        <div>
-                                            <span className="text-[#9CA3AF] block text-xs">Bot Trajectory</span>
+                                    <h3 className="text-sm font-bold text-[#111827]">Visitor Integrity Details</h3>
+                                    <p className="text-[10px] text-[#9CA3AF] mt-0.5">Session inspection report</p>
+                                </div>
+                            </div>
+                            <button onClick={() => setIsModalOpen(false)} className="text-[#9CA3AF] hover:text-[#111827] p-1"><X className="w-4 h-4" /></button>
+                        </div>
+
+                        <div className="p-4 overflow-y-auto w-full custom-scrollbar">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                                {/* Session Identity */}
+                                <div className="bg-[#EDF5F2]/40 rounded-md border border-gray-100 overflow-hidden">
+                                    <div className="px-3 py-2 bg-[#EDF5F2]/70 border-b border-gray-200">
+                                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B9F91]">Session Identity</span>
+                                    </div>
+                                    <div className="divide-y divide-gray-100">
+                                        <div className="px-3 py-2">
+                                            <span className="text-[10px] text-[#9CA3AF] block">Session ID</span>
+                                            <span className="text-[#111827] font-mono text-[11px] break-all">{visitorData.sessionId}</span>
+                                        </div>
+                                        <div className="px-3 py-2">
+                                            <span className="text-[10px] text-[#9CA3AF] block">Bot Trajectory</span>
                                             {visitorData.isBot ? (
-                                                <span className="text-[#92400E] bg-[#FFC900]/15 px-2 py-0.5 rounded text-xs font-semibold">BOT DETECTED</span>
+                                                <span className="text-[#92400E] bg-[#FFC900]/15 px-2 py-0.5 rounded text-[10px] font-bold">BOT DETECTED</span>
                                             ) : (
-                                                <span className="text-[#6B9F91] bg-[#6B9F91]/10 px-2 py-0.5 rounded text-xs font-semibold">ORGANIC VISITOR</span>
+                                                <span className="text-[#6B9F91] bg-[#6B9F91]/10 px-2 py-0.5 rounded text-[10px] font-bold">ORGANIC VISITOR</span>
                                             )}
                                         </div>
-                                        <div><span className="text-[#9CA3AF] block text-xs">IP Address</span><span className="text-[#111827]/90 font-mono text-xs">{visitorData.ipAddress || 'Unavailable'}</span></div>
+                                        <div className="px-3 py-2">
+                                            <span className="text-[10px] text-[#9CA3AF] block">IP Address</span>
+                                            <span className="text-[#111827] font-mono text-xs">{visitorData.ipAddress || 'Unavailable'}</span>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div>
-                                    <h4 className="text-[#111827] font-medium mb-4 border-b border-gray-200 pb-2">Hardware / Geography</h4>
-                                    <div className="space-y-3 text-sm">
-                                        <div><span className="text-[#9CA3AF] block text-xs">Device Class</span><span className="text-[#111827]/90">{visitorData.deviceType || 'Unknown'}</span></div>
-                                        <div><span className="text-[#9CA3AF] block text-xs">Browser Engine</span><span className="text-[#111827]/90">{visitorData.browser || 'Unknown'}</span></div>
-                                        <div><span className="text-[#9CA3AF] block text-xs">Operating System</span><span className="text-[#111827]/90">{visitorData.operatingSystem || 'N/A'}</span></div>
-                                        <div><span className="text-[#9CA3AF] block text-xs">Geographic Location</span><span className="text-[#111827]/90">{formatLocation(visitorData.city, visitorData.country)}</span></div>
+                                {/* Hardware / Geography */}
+                                <div className="bg-[#EDF5F2]/40 rounded-md border border-gray-100 overflow-hidden">
+                                    <div className="px-3 py-2 bg-[#EDF5F2]/70 border-b border-gray-200">
+                                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B9F91]">Hardware / Geography</span>
+                                    </div>
+                                    <div className="divide-y divide-gray-100">
+                                        <div className="px-3 py-2">
+                                            <span className="text-[10px] text-[#9CA3AF] block">Device Class</span>
+                                            <span className="text-[#111827] text-xs">{visitorData.deviceType || 'Unknown'}</span>
+                                        </div>
+                                        <div className="px-3 py-2">
+                                            <span className="text-[10px] text-[#9CA3AF] block">Browser Engine</span>
+                                            <span className="text-[#111827] text-xs">{visitorData.browser || 'Unknown'}</span>
+                                        </div>
+                                        <div className="px-3 py-2">
+                                            <span className="text-[10px] text-[#9CA3AF] block">Operating System</span>
+                                            <span className="text-[#111827] text-xs">{visitorData.operatingSystem || 'N/A'}</span>
+                                        </div>
+                                        <div className="px-3 py-2">
+                                            <span className="text-[10px] text-[#9CA3AF] block">Geographic Location</span>
+                                            <span className="text-[#111827] text-xs">{formatLocation(visitorData.city, visitorData.country)}</span>
+                                        </div>
                                     </div>
                                 </div>
+
+                                {/* Interactivity Logs */}
+                                <div className="bg-[#EDF5F2]/40 rounded-md border border-gray-100 overflow-hidden">
+                                    <div className="px-3 py-2 bg-[#EDF5F2]/70 border-b border-gray-200">
+                                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B9F91]">Interactivity Logs</span>
+                                    </div>
+                                    <div className="divide-y divide-gray-100">
+                                        <div className="px-3 py-2">
+                                            <span className="text-[10px] text-[#9CA3AF] block">Landing Path</span>
+                                            <span className="text-[#111827] font-mono text-[11px]">{visitorData.landingPage || '/'}</span>
+                                        </div>
+                                        <div className="px-3 py-2">
+                                            <span className="text-[10px] text-[#9CA3AF] block">Referrer Origin</span>
+                                            <span className="text-[#6B9F91] break-all text-xs">{visitorData.referrerUrl || 'Direct / None'}</span>
+                                        </div>
+                                        <div className="px-3 py-2">
+                                            <span className="text-[10px] text-[#9CA3AF] block">Total Page Views</span>
+                                            <span className="text-[#111827] font-bold text-base">{visitorData.pageViews}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Timestamps */}
+                                <div className="bg-[#EDF5F2]/40 rounded-md border border-gray-100 overflow-hidden">
+                                    <div className="px-3 py-2 bg-[#EDF5F2]/70 border-b border-gray-200">
+                                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B9F91]">Timestamps</span>
+                                    </div>
+                                    <div className="divide-y divide-gray-100">
+                                        <div className="px-3 py-2">
+                                            <span className="text-[10px] text-[#9CA3AF] block">Initial Contact</span>
+                                            <span className="text-[#111827] text-xs">{new Date(visitorData.firstVisitedAt).toLocaleString('en-GB')}</span>
+                                        </div>
+                                        <div className="px-3 py-2">
+                                            <span className="text-[10px] text-[#9CA3AF] block">Last Sighted</span>
+                                            <span className="text-[#111827] text-xs">{new Date(visitorData.lastVisitedAt).toLocaleString('en-GB')}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* User-Agent */}
+                                <div className="md:col-span-2 bg-[#EDF5F2]/40 rounded-md border border-gray-100 overflow-hidden">
+                                    <div className="px-3 py-2 bg-[#EDF5F2]/70 border-b border-gray-200">
+                                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B9F91]">Raw User-Agent Blob</span>
+                                    </div>
+                                    <div className="px-3 py-2">
+                                        <span className="text-[#6B7280] text-[10px] break-all font-mono leading-relaxed">{visitorData.userAgent || 'No user agent signature captured.'}</span>
+                                    </div>
+                                </div>
+
                             </div>
-
-                            <div className="space-y-6">
-                                <div>
-                                    <h4 className="text-[#111827] font-medium mb-4 border-b border-gray-200 pb-2">Interactivity Logs</h4>
-                                    <div className="space-y-3 text-sm">
-                                        <div><span className="text-[#9CA3AF] block text-xs">Landing Path</span><span className="text-[#111827]/90 font-mono text-[11px]">{visitorData.landingPage || '/'}</span></div>
-                                        <div><span className="text-[#9CA3AF] block text-xs">Referrer Origin</span><span className="text-[#111827]/90 break-all text-xs text-[#6B9F91]">{visitorData.referrerUrl || 'Direct / None'}</span></div>
-                                        <div><span className="text-[#9CA3AF] block text-xs">Total Page Views Recorded</span><span className="text-[#111827]/90 font-bold text-lg">{visitorData.pageViews}</span></div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <h4 className="text-[#111827] font-medium mb-4 border-b border-gray-200 pb-2">Timestamps</h4>
-                                    <div className="space-y-3 text-sm">
-                                        <div><span className="text-[#9CA3AF] block text-xs">Initial Contact</span><span className="text-[#111827]/90 text-xs">
-                                            {new Date(visitorData.firstVisitedAt).toLocaleString('en-GB')}
-                                        </span></div>
-                                        <div><span className="text-[#9CA3AF] block text-xs">Last Sighted</span><span className="text-[#111827]/90 text-xs">
-                                            {new Date(visitorData.lastVisitedAt).toLocaleString('en-GB')}
-                                        </span></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="md:col-span-2">
-                                <h4 className="text-[#111827] font-medium mb-2 border-b border-gray-200 pb-2 text-sm">Raw User-Agent Blob</h4>
-                                <div className="bg-[#EDF5F2]/70 p-3 rounded text-[#6B7280] text-[10px] break-all font-mono leading-relaxed border border-gray-100">
-                                    {visitorData.userAgent || 'No user agent signature captured.'}
-                                </div>
-                            </div>
-
                         </div>
-                        <div className="p-5 border-t border-gray-200 flex justify-end gap-3 bg-[#EDF5F2]/70 mt-auto shrink-0">
-                            <button type="button" onClick={() => setIsModalOpen(false)} className="px-6 py-2 rounded-lg bg-[#EDF5F2] text-[#111827] hover:bg-[#EDF5F2] transition-colors">Close Inspection</button>
+
+                        <div className="px-4 py-2.5 border-t border-gray-200 flex justify-end bg-[#EDF5F2]/50 shrink-0">
+                            <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-1.5 rounded-md text-xs font-medium bg-[#EDF5F2] text-[#111827] hover:bg-[#EDF5F2]/80 transition-colors">Close Inspection</button>
                         </div>
                     </div>
                 </div>

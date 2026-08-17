@@ -1,11 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
+import NextImage from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Play, ArrowRight, X } from "lucide-react";
 import { CardMotion } from "@/components/ui/Card";
 import { YouTubeResumeThumbnailPlayer } from "@/components/ui/YouTubeResumeThumbnailPlayer";
 import { hoverLift, slideUp } from "@/lib/animations";
+import { CardGridSkeleton } from "@/components/ui/Skeleton";
 
 function getYouTubeEmbedUrl(url: string) {
     if (!url) return '';
@@ -33,10 +35,7 @@ export function HappimonialsList({ initialStories }: { initialStories: any[] }) 
     return (
         <div className="w-full">
             {initialStories.length === 0 ? (
-                <div className="py-24 text-center flex flex-col items-center justify-center">
-                    <h3 className="text-xl font-bold text-gray-800 mb-2">No Stories Found</h3>
-                    <p className="text-gray-500">There are no client stories available at this time.</p>
-                </div>
+                <CardGridSkeleton count={6} columns={3} />
             ) : (
                 <motion.div
                     layout
@@ -74,7 +73,16 @@ export function HappimonialsList({ initialStories }: { initialStories: any[] }) 
                                         />
                                     ) : item.thumbnailUrl ? (
                                         <>
-                                            <img src={item.thumbnailUrl} alt={item.clientName} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
+                                            <div className="relative w-full h-full">
+                                                <NextImage 
+                                                    src={item.thumbnailUrl} 
+                                                    alt={item.clientName} 
+                                                    fill
+                                                    className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                                    loading="lazy"
+                                                />
+                                            </div>
                                             <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-900/10 group-hover:bg-gray-900/30 transition-colors duration-300">
                                                 <div className="w-16 h-16 rounded-full bg-white/90 backdrop-blur-md shadow-xl flex items-center justify-center text-[#6B9F91] group-hover:scale-110 group-hover:bg-[#6B9F91] group-hover:text-white transition-all duration-300 ease-out z-10 mb-4">
                                                     <Play className="w-6 h-6 ml-1 fill-current" />
@@ -98,7 +106,15 @@ export function HappimonialsList({ initialStories }: { initialStories: any[] }) 
                                     <div className="flex items-start justify-between mb-3">
                                         <div className="flex items-center gap-3">
                                             {item.thumbnailUrl && (
-                                                <img src={item.thumbnailUrl} alt={item.clientName} className="w-10 h-10 rounded-full object-cover border border-gray-100 shadow-sm shrink-0" />
+                                                <div className="relative w-10 h-10 rounded-full overflow-hidden shrink-0">
+                                                    <NextImage 
+                                                        src={item.thumbnailUrl} 
+                                                        alt={item.clientName} 
+                                                        fill
+                                                        className="object-cover"
+                                                        sizes="40px"
+                                                    />
+                                                </div>
                                             )}
                                             <div>
                                                 <h3 className="font-bold text-lg text-[var(--color-heading)] leading-tight tracking-tight">{item.clientName}</h3>
@@ -188,7 +204,15 @@ function HappimonialModal({ story, onClose }: { story: any, onClose: () => void 
                 >
                     <div className="flex items-center gap-4 mb-8 shrink-0 pb-6 border-b border-gray-100">
                         {story.thumbnailUrl ? (
-                            <img src={story.thumbnailUrl} alt={story.clientName} className="w-14 h-14 rounded-full object-cover border border-gray-100 shadow-sm shrink-0" />
+                            <div className="relative w-14 h-14 rounded-full overflow-hidden shrink-0">
+                                <NextImage 
+                                    src={story.thumbnailUrl} 
+                                    alt={story.clientName} 
+                                    fill
+                                    className="object-cover"
+                                    sizes="56px"
+                                />
+                            </div>
                         ) : (
                             <div className="w-14 h-14 shrink-0 rounded-full bg-gradient-to-tr from-gray-200 to-gray-100 p-[2px]">
                                 <div className="w-full h-full bg-white rounded-full flex items-center justify-center">

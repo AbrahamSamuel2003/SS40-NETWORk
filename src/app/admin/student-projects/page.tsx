@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit2, Trash2, CheckCircle2, AlertCircle, Upload, X, Tag } from 'lucide-react';
+import { Plus, Edit2, Trash2, CheckCircle2, AlertCircle, Upload, X, Tag, Image as ImageIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { MediaSelectorModal } from '@/components/admin/MediaSelectorModal';
 
 const COLOR_OPTIONS = {
     'Gray': 'bg-gray-50 text-gray-600 border-gray-200',
@@ -52,6 +53,7 @@ export default function StudentProjectsPage() {
 
     const [isSaving, setIsSaving] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
+    const [isMediaSelectorOpen, setIsMediaSelectorOpen] = useState(false);
 
     useEffect(() => {
         fetchProjects();
@@ -230,61 +232,89 @@ export default function StudentProjectsPage() {
             </div>
 
             <div className="admin-card overflow-hidden">
-                <table className="w-full text-left text-sm text-[#374151] whitespace-nowrap">
-                    <thead className="bg-[#EDF5F2]/70 border-b border-gray-200 text-[#111827]">
-                        <tr>
-                            <th className="p-4 font-medium">Image</th>
-                            <th className="p-4 font-medium">Title</th>
-                            <th className="p-4 font-medium">Category</th>
-                            <th className="p-4 font-medium">Order</th>
-                            <th className="p-4 font-medium">Status</th>
-                            <th className="p-4 font-medium text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100">
-                        {projects.length === 0 ? (
-                            <tr>
-                                <td colSpan={6} className="p-8 text-center text-[#9CA3AF]">No student projects found.</td>
-                            </tr>
-                        ) : (
-                            projects.map(proj => (
-                                <tr key={proj.id} className="hover:bg-[#EDF5F2]/50 transition-colors">
-                                    <td className="p-4">
-                                        {proj.imageUrl ? (
-                                            <div className="w-16 h-10 bg-[#EDF5F2] rounded overflow-hidden flex items-center justify-center">
-                                                <img src={proj.imageUrl} alt={proj.title} className="max-w-full max-h-full object-cover" />
-                                            </div>
-                                        ) : (
-                                            <div className="w-16 h-10 bg-[#EDF5F2]/70 rounded flex items-center justify-center text-[10px] text-[#9CA3AF]">N/A</div>
-                                        )}
-                                    </td>
-                                    <td className="p-4 font-medium">{proj.title}</td>
-                                    <td className="p-4 text-[#6B7280]">{proj.category}</td>
-                                    <td className="p-4 text-[#6B7280]">{proj.sortOrder}</td>
-                                    <td className="p-4">
-                                        {proj.isActive ? (
-                                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#6B9F91]/10 text-[#6B9F91]">
-                                                <CheckCircle2 className="w-3 h-3" /> ACTIVE
-                                            </span>
-                                        ) : (
-                                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#EDF5F2]/70 text-[#9CA3AF]">
-                                                INACTIVE
-                                            </span>
-                                        )}
-                                    </td>
-                                    <td className="p-4 text-right">
-                                        <button onClick={() => handleOpenModal(proj)} className="text-[#9CA3AF] hover:text-[#111827] p-2 transition-colors">
+                {/* ── MOBILE CARD GRID (hidden on sm+) ── */}
+                <div className="sm:hidden">
+                    {projects.length === 0 ? (
+                        <div className="p-8 text-center text-[#9CA3AF]">No student projects found.</div>
+                    ) : (
+                        <div className="grid grid-cols-2 gap-3 p-3">
+                            {projects.map(proj => (
+                                <div key={proj.id} className="admin-card p-3 flex flex-col gap-2 rounded-xl">
+                                    <div className="flex items-start justify-between gap-1">
+                                        <span className="font-semibold text-[#111827] text-sm leading-tight line-clamp-2">{proj.title}</span>
+                                        <button onClick={() => handleOpenModal(proj)} className="shrink-0 p-1 text-[#9CA3AF] hover:text-[#111827]">
                                             <Edit2 className="w-4 h-4" />
                                         </button>
-                                        <button onClick={() => handleDelete(proj.id)} className="text-[#B91C1C]/50 hover:text-[#B91C1C] p-2 transition-colors">
-                                            <Trash2 className="w-4 h-4" />
+                                    </div>
+                                    <p className="text-[#6B7280] text-xs leading-snug line-clamp-1">{proj.category}</p>
+                                    <div className="mt-auto pt-1 flex items-center justify-between">
+                                        <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-semibold ${proj.isActive ? 'bg-[#6B9F91]/10 text-[#6B9F91] border border-[#6B9F91]/20' : 'bg-[#EDF5F2]/70 text-[#9CA3AF]'}`}>• {proj.isActive ? 'ACTIVE' : 'INACTIVE'}</span>
+                                        <button onClick={() => handleDelete(proj.id)} className="text-[#B91C1C]/50 hover:text-[#B91C1C] p-1">
+                                            <Trash2 className="w-3.5 h-3.5" />
                                         </button>
-                                    </td>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                {/* ── DESKTOP TABLE (hidden on mobile) ── */}
+                <div className="hidden sm:block overflow-x-auto w-full touch-auto">
+                    <table className="w-full text-left text-sm text-[#374151] min-w-[600px]">
+                        <thead className="bg-[#EDF5F2]/70 border-b border-gray-200 text-[#111827]">
+                            <tr>
+                                <th className="p-4 font-medium min-w-[100px] hidden sm:table-cell">Image</th>
+                                <th className="p-4 font-medium min-w-[150px]">Title</th>
+                                <th className="p-4 font-medium min-w-[120px] hidden sm:table-cell">Category</th>
+                                <th className="p-4 font-medium min-w-[80px] hidden md:table-cell">Order</th>
+                                <th className="p-4 font-medium min-w-[100px]">Status</th>
+                                <th className="p-4 font-medium text-right min-w-[120px]">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-100">
+                            {projects.length === 0 ? (
+                                <tr>
+                                    <td colSpan={6} className="p-8 text-center text-[#9CA3AF]">No student projects found.</td>
                                 </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
+                            ) : (
+                                projects.map(proj => (
+                                    <tr key={proj.id} className="hover:bg-[#EDF5F2]/50 transition-colors">
+                                        <td className="p-4 hidden sm:table-cell">
+                                            {proj.imageUrl ? (
+                                                <div className="w-16 h-10 bg-[#EDF5F2] rounded overflow-hidden flex items-center justify-center">
+                                                    <img src={proj.imageUrl} alt={proj.title} className="max-w-full max-h-full object-cover" />
+                                                </div>
+                                            ) : (
+                                                <div className="w-16 h-10 bg-[#EDF5F2]/70 rounded flex items-center justify-center text-[10px] text-[#9CA3AF]">N/A</div>
+                                            )}
+                                        </td>
+                                        <td className="p-4 font-medium">{proj.title}</td>
+                                        <td className="p-4 text-[#6B7280] hidden sm:table-cell">{proj.category}</td>
+                                        <td className="p-4 text-[#6B7280] hidden md:table-cell">{proj.sortOrder}</td>
+                                        <td className="p-4">
+                                            {proj.isActive ? (
+                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#6B9F91]/10 text-[#6B9F91]">
+                                                    <CheckCircle2 className="w-3 h-3" /> ACTIVE
+                                                </span>
+                                            ) : (
+                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#EDF5F2]/70 text-[#9CA3AF]">
+                                                    INACTIVE
+                                                </span>
+                                            )}
+                                        </td>
+                                        <td className="p-3">
+                                            <div className="grid grid-cols-2 gap-1.5 w-fit ml-auto">
+                                                <button onClick={() => handleOpenModal(proj)} className="px-3 py-1 rounded border border-gray-300 text-[#374151] text-xs font-medium hover:bg-[#EDF5F2]/70 hover:border-[#6B9F91] transition-colors whitespace-nowrap">Edit</button>
+                                                <button onClick={() => handleDelete(proj.id)} className="px-3 py-1 rounded border border-[#FCA5A5] text-[#B91C1C] text-xs font-medium hover:bg-red-50 transition-colors whitespace-nowrap">Delete</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             {/* Modal */}
@@ -335,12 +365,27 @@ export default function StudentProjectsPage() {
 
                                 <div>
                                     <label className="block text-sm font-medium text-[#374151] mb-2">Project Image</label>
-                                    <div className="flex gap-4 items-center">
-                                        <input type="text" value={imageUrl} onChange={e => setImageUrl(e.target.value)} placeholder="/uploads/... or https://..." className="flex-1 bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] text-sm focus:outline-none focus:border-[#6B9F91]" />
-                                        <label className={`cursor-pointer shrink-0 bg-[#EDF5F2]/70 hover:bg-[#EDF5F2] text-[#111827] px-4 py-2.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${isUploading ? 'opacity-50' : ''}`}>
-                                            <Upload className="w-4 h-4" /> {isUploading ? '...' : 'Upload Image'}
-                                            <input type="file" accept="image/*" onChange={handleUpload} className="hidden" disabled={isUploading} />
-                                        </label>
+                                    <div className="flex flex-col gap-3">
+                                        <input type="text" value={imageUrl} onChange={e => setImageUrl(e.target.value)} placeholder="/uploads/... or https://..." className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] text-sm focus:outline-none focus:border-[#6B9F91]" />
+                                        
+                                        {imageUrl && (
+                                            <div className="relative w-full max-w-sm aspect-video bg-gray-50 rounded-lg overflow-hidden border border-gray-200 group">
+                                                <img src={imageUrl} alt="Image Preview" className="w-full h-full object-contain" />
+                                                <button type="button" onClick={() => setImageUrl('')} className="absolute top-2 right-2 bg-white/90 p-1.5 rounded-full text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity hover:text-red-500 shadow-sm">
+                                                    <X className="w-4 h-4" />
+                                                </button>
+                                            </div>
+                                        )}
+                                        
+                                        <div className="flex flex-wrap gap-3">
+                                            <label className={`cursor-pointer bg-[#EDF5F2]/70 hover:bg-[#EDF5F2] text-[#111827] px-4 py-2.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}>
+                                                <Upload className="w-4 h-4" /> {isUploading ? 'Uploading...' : 'Upload Local File'}
+                                                <input type="file" accept="image/*" onChange={handleUpload} className="hidden" disabled={isUploading} />
+                                            </label>
+                                            <button type="button" onClick={() => setIsMediaSelectorOpen(true)} className="cursor-pointer bg-[#EDF5F2]/70 hover:bg-[#EDF5F2] text-[#111827] px-4 py-2.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+                                                <ImageIcon className="w-4 h-4 text-[#6B9F91]" /> Select from Media
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -411,6 +456,16 @@ export default function StudentProjectsPage() {
                         </div>
                     </div>
                 </div>
+            )}
+
+            {isMediaSelectorOpen && (
+                <MediaSelectorModal
+                    onClose={() => setIsMediaSelectorOpen(false)}
+                    onSelect={(url) => {
+                        setImageUrl(url);
+                        setIsMediaSelectorOpen(false);
+                    }}
+                />
             )}
         </div>
     );

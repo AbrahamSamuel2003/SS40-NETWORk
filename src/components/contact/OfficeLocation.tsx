@@ -84,21 +84,21 @@ export function OfficeLocation({ config }: { config?: SiteConfigData | null }) {
                         <iframe
                             title={`${companyName} Office Location`}
                             src={`https://maps.google.com/maps?q=${encodeURIComponent(companyName + " " + addressText)}&t=m&z=15&output=embed&iwloc=near`}
-                            className="absolute inset-0 w-full h-full border-0 grayscale-[15%] contrast-[1.05]"
+                            className="absolute inset-0 w-full h-full border-0 grayscale-[15%] contrast-[1.05] pointer-events-none lg:pointer-events-auto"
                             allowFullScreen
                             loading="lazy"
                             referrerPolicy="no-referrer-when-downgrade"
                         />
 
                         {/* Custom Google Places Mock Overlay */}
-                        <div className="absolute top-3 left-3 md:top-4 md:left-4 bg-white rounded-md shadow-[0_2px_6px_rgba(0,0,0,0.3)] p-3 md:p-4 z-20 w-[240px] md:w-[280px] pointer-events-auto">
-                            <h4 className="text-[15px] font-semibold text-gray-900 leading-tight mb-1 flex justify-between items-start">
+                        <div className="absolute top-3 left-3 right-3 sm:right-auto md:top-4 md:left-4 bg-white rounded-md shadow-[0_2px_6px_rgba(0,0,0,0.3)] p-3 md:p-4 z-20 w-auto sm:w-[260px] md:w-[280px] pointer-events-auto">
+                            <h4 className="text-[14px] md:text-[15px] font-semibold text-gray-900 leading-tight mb-1 flex justify-between items-start">
                                 {companyName}
-                                <a href="https://goo.gl/maps/DWiCMVGgqKi2r5188" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 p-1">
+                                <a href="https://goo.gl/maps/DWiCMVGgqKi2r5188" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 p-1 shrink-0 ml-2">
                                     <ExternalLink className="w-4 h-4" />
                                 </a>
                             </h4>
-                            <p className="text-[12px] text-gray-600 leading-snug whitespace-pre-line">
+                            <p className="text-[11px] md:text-[12px] text-gray-600 leading-snug whitespace-pre-line">
                                 {addressText}
                             </p>
                         </div>

@@ -42,22 +42,25 @@ export async function GET(request: Request) {
 
         const logos = await prisma.organizationLogo.findMany({
             where,
-            orderBy: [
-                { sortOrder: 'asc' },
-                { createdAt: 'asc' }
-            ],
             select: {
                 id: true,
                 name: true,
                 logoUrl: true,
-                category: true,
-                placementType: true,
+                websiteUrl: true,
+                pageScope: true,
                 sortOrder: true,
-                showTextOnCard: true
-            }
+            },
+            orderBy: [
+                { sortOrder: 'asc' },
+                { createdAt: 'desc' }
+            ],
         });
 
-        return NextResponse.json({ success: true, data: logos }, { status: 200 });
+        return NextResponse.json({ success: true, data: logos }, {
+            headers: {
+                'Cache-Control': 'public, s-maxage=600, stale-while-revalidate=1200',
+            }
+        });
     } catch (error) {
         console.error('Error fetching organization logos:', error);
         return NextResponse.json({ success: false, error: 'Failed to fetch organization logos' }, { status: 500 });

@@ -37,21 +37,23 @@ export async function GET(request: Request) {
             where,
             orderBy: [
                 { sortOrder: 'asc' },
-                { createdAt: 'asc' }
+                { createdAt: 'desc' }
             ],
             select: {
                 id: true,
-                studentName: true,
-                designation: true,
-                quote: true,
-                academicRoute: true,
-                videoUrl: true,
-                isFeatured: true,
-                sortOrder: true
+                title: true,
+                description: true,
+                impactMetric: true,
+                imageUrl: true,
+                sortOrder: true,
             }
         });
 
-        return NextResponse.json({ success: true, data: impacts }, { status: 200 });
+        return NextResponse.json({ success: true, data: impacts }, {
+            headers: {
+                'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+            }
+        });
     } catch (error) {
         console.error('Error fetching student impacts:', error);
         return NextResponse.json({ success: false, error: 'Failed to fetch student impacts' }, { status: 500 });

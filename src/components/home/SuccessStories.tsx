@@ -10,6 +10,7 @@ import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { YouTubeResumeThumbnailPlayer, getYouTubeThumbnailUrl, getYouTubeVideoId } from "@/components/ui/YouTubeResumeThumbnailPlayer";
+import { StoryGridSkeleton } from "@/components/ui/Skeleton";
 
 // Data-driven placeholders specific to SS40 NETWORK wings
 const FEATURED_STORY = {
@@ -52,6 +53,23 @@ const fadeUpAnim: Variants = {
 };
 
 export function SuccessStories({ data }: { data?: any[] }) {
+    if (data && data.length === 0) {
+        return (
+            <SectionWrapper id="success-stories" className="bg-[#EDF5F2] overflow-hidden">
+                <Container className="space-y-12 lg:space-y-16">
+                    <div>
+                        <SectionHeading
+                            badge="Success Stories"
+                            title="Built on trust. Driven by results."
+                            description="Real partnerships. Real outcomes. Discover how SS40 NETWORK helps businesses and learners grow through technology, products, and education."
+                        />
+                    </div>
+                    <StoryGridSkeleton />
+                </Container>
+            </SectionWrapper>
+        );
+    }
+
     // Featured = the one HOME story that has a youtubeUrl.
     // All other stories (no youtubeUrl) go to the secondary carousel.
     const featuredStory = (data && data.find((s: any) => s.youtubeUrl)) || null;

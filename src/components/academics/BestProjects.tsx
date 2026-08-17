@@ -12,6 +12,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { X } from "lucide-react";
 import Link from "next/link";
 import { scrollChildIntoContainer } from "@/utils/scroll";
+import { CardGridSkeleton } from "@/components/ui/Skeleton";
 
 // Stagger animation variants
 const containerVariants: Variants = {
@@ -88,6 +89,29 @@ export function BestProjects({ projects = [] }: BestProjectsProps) {
     const featuredProject = displayedProjects[0];
     const secondaryProjects = displayedProjects.slice(1);
 
+    if (activeProjects.length === 0) {
+        return (
+            <SectionWrapper id="best-projects" className="bg-white relative overflow-hidden scroll-mt-24">
+                <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+                    <div
+                        className="absolute inset-0 opacity-[0.03] mix-blend-multiply"
+                        style={{ backgroundImage: 'radial-gradient(#6B9F91 2px, transparent 2px)', backgroundSize: '40px 40px' }}
+                    />
+                </div>
+                <Container className="relative z-20">
+                    <SectionHeading
+                        badge="BEST STUDENT PROJECTS"
+                        title={<>Ideas Built Into <span className="text-[#6B9F91]">Reality.</span></>}
+                        description="Explore innovative projects created by students through hands-on learning, mentorship, and real-world challenges."
+                        align="center"
+                        className="mb-16 lg:mb-20"
+                    />
+                    <CardGridSkeleton count={3} columns={3} />
+                </Container>
+            </SectionWrapper>
+        );
+    }
+
     const [activeMobileIdx, setActiveMobileIdx] = React.useState(0);
     const mobileScrollRef = React.useRef<HTMLDivElement>(null);
 
@@ -157,8 +181,7 @@ export function BestProjects({ projects = [] }: BestProjectsProps) {
 
     return (
         <SectionWrapper id="best-projects" className="bg-white relative overflow-hidden scroll-mt-24">
-            {activeProjects.length === 0 ? null : (
-                <>
+            <>
 
                     {/* Ambient Background & Floating Geometry */}
                     <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
@@ -425,7 +448,6 @@ export function BestProjects({ projects = [] }: BestProjectsProps) {
 
                     </Container>
                 </>
-            )}
 
             {/* Read Details Modal overlay */}
             <AnimatePresence>

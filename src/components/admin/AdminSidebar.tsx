@@ -73,7 +73,7 @@ const MENU_ITEMS: MenuBlock[] = [
         href: '/admin/products-group',
         icon: Package,
         subItems: [
-            { name: 'Products', href: '/admin/products' }, // Existing
+            { name: 'Products', href: '/admin/products', exact: true }, // Existing
             { name: 'Product Testimonials', href: '/admin/products/testimonials' },
             { name: 'Product Logos', href: '/admin/products/logos' },
         ]
@@ -177,7 +177,7 @@ export function AdminSidebar({ adminName, isOpen, setIsOpen }: SidebarProps) {
             <aside
                 className={cn(
                     "fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 text-[#111827] flex flex-col transition-transform duration-300 lg:translate-x-0 hidden-scrollbar shadow-xl shadow-gray-200/60",
-                    isOpen ? "translate-x-0" : "-translate-x-full"
+                    isOpen ? "translate-x-0 pointer-events-auto" : "-translate-x-full pointer-events-none lg:pointer-events-auto"
                 )}
             >
                 {/* Header */}

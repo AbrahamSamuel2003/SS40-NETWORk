@@ -30,21 +30,26 @@ export async function GET(request: Request) {
             where,
             orderBy: [
                 { sortOrder: 'asc' },
-                { createdAt: 'asc' }
+                { createdAt: 'desc' }
             ],
             select: {
                 id: true,
                 title: true,
-                category: true,
-                badge: true,
                 description: true,
+                studentName: true,
+                university: true,
                 imageUrl: true,
+                projectUrl: true,
                 tags: true,
-                sortOrder: true
+                sortOrder: true,
             }
         });
 
-        return NextResponse.json({ success: true, data: projects }, { status: 200 });
+        return NextResponse.json({ success: true, data: projects }, {
+            headers: {
+                'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+            }
+        });
     } catch (error) {
         console.error('Error fetching student projects:', error);
         return NextResponse.json({ success: false, error: 'Failed to fetch student projects' }, { status: 500 });

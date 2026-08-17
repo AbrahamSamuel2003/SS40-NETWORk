@@ -8,6 +8,7 @@ import { CardMotion } from "@/components/ui/Card";
 import { hoverLift, slideUp } from "@/lib/animations";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
+import { CardGridSkeleton } from "@/components/ui/Skeleton";
 
 export function AllProductsDisplay() {
     const [products, setProducts] = useState<any[]>([]);
@@ -26,13 +27,7 @@ export function AllProductsDisplay() {
             .catch(() => setIsLoading(false));
     }, []);
 
-    if (isLoading) {
-        return (
-            <SectionWrapper className="bg-[#EDF5F2] min-h-[60vh] flex items-center justify-center">
-                <div className="w-10 h-10 border-4 border-[#6B9F91] border-t-transparent rounded-full animate-spin mx-auto" />
-            </SectionWrapper>
-        );
-    }
+
 
     return (
         <SectionWrapper className="bg-[#EDF5F2] min-h-screen pt-32 pb-24 relative overflow-hidden">
@@ -59,14 +54,8 @@ export function AllProductsDisplay() {
                 </div>
 
                 {/* Grid Area */}
-                {products.length === 0 ? (
-                    <div className="py-24 text-center flex flex-col items-center justify-center">
-                        <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center mb-4 border border-gray-100 shadow-sm">
-                            <CloudIcon className="w-8 h-8 text-gray-300" />
-                        </div>
-                        <h3 className="text-xl font-bold text-gray-800 mb-2">No Products Found</h3>
-                        <p className="text-gray-500">There are currently no active products to display.</p>
-                    </div>
+                {isLoading || products.length === 0 ? (
+                    <CardGridSkeleton count={6} columns={3} />
                 ) : (
                     <motion.div
                         layout

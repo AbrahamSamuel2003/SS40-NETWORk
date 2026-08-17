@@ -12,6 +12,7 @@ import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
+import { LogoMarqueeSkeleton } from "@/components/ui/Skeleton";
 
 // --- Data ---
 const NETWORK_NODES = [
@@ -34,7 +35,24 @@ const BENEFITS = [
 ];
 
 export function Collaborations({ logos = [] }: { logos?: any[] }) {
-    if (!logos || logos.length === 0) return null;
+    if (!logos || logos.length === 0) {
+        return (
+            <SectionWrapper id="collaborations" className="bg-white relative overflow-hidden pb-8 md:pb-12">
+                <Container className="relative z-10 flex flex-col items-center">
+                    <span className="inline-block px-3 py-1 rounded-full bg-[#6B9F91]/10 text-[#6B9F91] text-[10px] font-bold uppercase tracking-widest mb-4">
+                        UNIVERSITIES &amp; COLLEGE COLLABORATIONS
+                    </span>
+                    <h2 className="text-3xl md:text-5xl font-extrabold text-[#111827] mb-4 text-center max-w-3xl leading-tight">
+                        Building Strong Academic <span className="text-[#6B9F91]">Partnerships.</span>
+                    </h2>
+                    <p className="text-gray-500 text-sm md:text-lg max-w-2xl mx-auto text-center leading-relaxed mb-10">
+                        Collaborating with educational institutions to create practical learning experiences, industry exposure, and career opportunities.
+                    </p>
+                    <LogoMarqueeSkeleton count={6} title="" />
+                </Container>
+            </SectionWrapper>
+        );
+    }
     const [hoveredNode, setHoveredNode] = React.useState<string | null>(null);
     const [isMarqueePaused, setIsMarqueePaused] = React.useState(false);
 

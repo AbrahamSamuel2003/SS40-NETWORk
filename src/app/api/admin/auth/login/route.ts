@@ -1,10 +1,16 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { verifyPassword, createAdminSession } from '@/lib/auth';
+import { verifyPassword, createAdminSession, validateJwtSecret, isAccountLocked, recordFailedLogin, resetFailedLoginAttempts } from '@/lib/auth';
 import { logAdminActivity } from '@/lib/admin-activity';
+import { rateLimit } from '@/lib/rate-limiter';
 
 export async function POST(request: Request) {
     try {
+        // Validate JWT secret configuration
+        if (!validateJwtSecret()) {
+            console.error('JWT secret not properly configured');
+        }
+
         const body = await request.json();
         const { identifier, password } = body;
 
@@ -15,10 +21,26 @@ export async function POST(request: Request) {
             );
         }
 
+        // Apply rate limiting
+        const normalizedIdentifier = identifier.trim().toLowerCase();
+        const rateLimitResult = rateLimit(normalizedIdentifier, 5, 15 * 60 * 1000); // 5 attempts per 15 minutes
+        
+        if (!rateLimitResult.success) {
+            const resetTime = new Date(rateLimitResult.resetTime);
+            return NextResponse.json(
+                { 
+                    success: false, 
+                    error: 'Too many login attempts. Please try again later.',
+                    resetTime: resetTime.toISOString()
+                },
+                { status: 429 }
+            );
+        }
+
         // Attempt to find by email or username
         const adminUser = await prisma.adminUser.findFirst({
             where: {
-                OR: [{ email: identifier }, { username: identifier }],
+                OR: [{ email: normalizedIdentifier }, { username: normalizedIdentifier }],
             },
         });
 
@@ -29,9 +51,24 @@ export async function POST(request: Request) {
             );
         }
 
+        // Check if account is locked
+        const lockStatus = await isAccountLocked(adminUser.id);
+        if (lockStatus.locked) {
+            return NextResponse.json(
+                { 
+                    success: false, 
+                    error: 'Account is temporarily locked due to too many failed login attempts. Please try again later.',
+                    unlockTime: lockStatus.unlockTime?.toISOString()
+                },
+                { status: 423 }
+            );
+        }
+
         const isValid = await verifyPassword(password, adminUser.passwordHash);
 
         if (!isValid) {
+            // Record failed login attempt
+            await recordFailedLogin(adminUser.id);
             return NextResponse.json(
                 { success: false, error: 'Invalid credentials or inactive account' },
                 { status: 401 }
@@ -39,6 +76,9 @@ export async function POST(request: Request) {
         }
 
         // Authenticated correctly
+        // Reset failed login attempts on successful login
+        await resetFailedLoginAttempts(adminUser.id);
+        
         await createAdminSession(adminUser.id);
 
         // Update lastLoginAt

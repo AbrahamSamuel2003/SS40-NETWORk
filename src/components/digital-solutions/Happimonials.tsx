@@ -12,8 +12,7 @@ import { Button } from "@/components/ui/Button";
 import { YouTubeResumeThumbnailPlayer } from "@/components/ui/YouTubeResumeThumbnailPlayer";
 import { slideUp, staggerContainer, hoverLift } from "@/lib/animations";
 import { scrollChildIntoContainer } from "@/utils/scroll";
-
-import { Loader2 } from "lucide-react";
+import { CardGridSkeleton } from "@/components/ui/Skeleton";
 
 const HAPPIMONIALS_DATA = []; // Removed: using dynamic API data now
 
@@ -137,14 +136,8 @@ export function Happimonials() {
                 />
 
                 {/* Loading / Empty State */}
-                {isLoading ? (
-                    <div className="py-20 flex justify-center items-center opacity-50">
-                        <Loader2 className="w-8 h-8 animate-spin text-[#6B9F91]" />
-                    </div>
-                ) : happimonials.length === 0 ? (
-                    <div className="py-20 flex justify-center items-center">
-                        <p className="text-gray-500">No client stories available yet.</p>
-                    </div>
+                {isLoading || happimonials.length === 0 ? (
+                    <CardGridSkeleton count={3} columns={3} />
                 ) : (
                     <>
                         {/* Grid */}

@@ -37,7 +37,7 @@ export function Faq() {
     };
 
     return (
-        <SectionWrapper id="faq" className="bg-white py-12 md:py-16">
+        <SectionWrapper id="faq" className="bg-[#EDF5F2] py-12 md:py-16">
             <Container className="max-w-4xl mx-auto flex flex-col items-center">
 
                 <div className="text-center mb-10">

@@ -23,13 +23,52 @@ export async function createSession(userId: string, accountType: 'AdminUser', ro
         .sign(SECRET_KEY);
 
     const cookieStore = await cookies();
+    const isProduction = process.env.NODE_ENV === 'production';
+    
     cookieStore.set('admin_session', token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
+        secure: isProduction,
+        sameSite: isProduction ? 'strict' : 'lax',
         maxAge: 60 * 60 * 24, // 24 hours
         path: '/',
+        // Additional security headers
+        ...(isProduction && {
+            domain: process.env.COOKIE_DOMAIN, // Set custom domain in production
+        })
     });
+}
+
+export async function refreshSessionIfNeeded() {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('admin_session')?.value;
+    if (!token) return false;
+
+    try {
+        const { payload } = await jwtVerify(token, SECRET_KEY, {
+            currentDate: new Date(), // Use current date for validation
+        });
+
+        // Check if token is expiring within 1 hour (3600 seconds)
+        const exp = payload.exp ? payload.exp * 1000 : 0;
+        const now = Date.now();
+        const timeUntilExpiry = exp - now;
+        const oneHour = 60 * 60 * 1000;
+
+        if (timeUntilExpiry < oneHour && timeUntilExpiry > 0) {
+            // Token is expiring soon, refresh it
+            const userId = payload.userId as string || (payload.adminId as string);
+            const accountType = payload.accountType as 'AdminUser' || 'AdminUser';
+            const role = payload.role as 'ADMIN' || 'ADMIN';
+            
+            if (userId) {
+                await createSession(userId, accountType, role);
+                return true;
+            }
+        }
+        return false;
+    } catch {
+        return false;
+    }
 }
 
 // Preserve for existing flows if needed, but redirects to the new unified session
@@ -60,6 +99,87 @@ export async function getCurrentSession() {
     } catch {
         return null;
     }
+}
+
+// Validate JWT secret is properly configured
+export function validateJwtSecret(): boolean {
+    const secret = process.env.JWT_SECRET;
+    if (!secret) {
+        console.warn('JWT_SECRET not configured, using fallback (not recommended for production)');
+        return false;
+    }
+    if (secret === 'ss40-network-fallback-secret-key-development') {
+        console.warn('Using fallback JWT secret, please set JWT_SECRET in production');
+        return false;
+    }
+    if (secret.length < 32) {
+        console.warn('JWT_SECRET is too short, should be at least 32 characters');
+        return false;
+    }
+    return true;
+}
+
+// Check if account is locked due to too many failed attempts
+export async function isAccountLocked(userId: string): Promise<{ locked: boolean; unlockTime?: Date }> {
+    const admin = await prisma.adminUser.findUnique({
+        where: { id: userId },
+        select: { failedLoginAttempts: true, lockUntil: true }
+    });
+    
+    if (!admin) return { locked: false };
+    
+    // Check if lock has expired
+    if (admin.lockUntil && admin.lockUntil > new Date()) {
+        return { locked: true, unlockTime: admin.lockUntil };
+    }
+    
+    // Reset failed attempts if lock has expired
+    if (admin.lockUntil && admin.lockUntil <= new Date() && admin.failedLoginAttempts > 0) {
+        await prisma.adminUser.update({
+            where: { id: userId },
+            data: { failedLoginAttempts: 0, lockUntil: null }
+        });
+    }
+    
+    return { locked: false };
+}
+
+// Record failed login attempt
+export async function recordFailedLogin(userId: string): Promise<void> {
+    const admin = await prisma.adminUser.findUnique({
+        where: { id: userId },
+        select: { failedLoginAttempts: true }
+    });
+    
+    if (!admin) return;
+    
+    const newAttempts = (admin.failedLoginAttempts || 0) + 1;
+    const maxAttempts = 5; // Lock after 5 failed attempts
+    
+    if (newAttempts >= maxAttempts) {
+        // Lock account for 30 minutes
+        const lockUntil = new Date(Date.now() + 30 * 60 * 1000);
+        await prisma.adminUser.update({
+            where: { id: userId },
+            data: { 
+                failedLoginAttempts: newAttempts,
+                lockUntil: lockUntil
+            }
+        });
+    } else {
+        await prisma.adminUser.update({
+            where: { id: userId },
+            data: { failedLoginAttempts: newAttempts }
+        });
+    }
+}
+
+// Reset failed login attempts on successful login
+export async function resetFailedLoginAttempts(userId: string): Promise<void> {
+    await prisma.adminUser.update({
+        where: { id: userId },
+        data: { failedLoginAttempts: 0, lockUntil: null }
+    });
 }
 
 export async function getCurrentAdmin() {

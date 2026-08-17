@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit2, Trash2, CheckCircle2, AlertCircle, Upload, X, Star } from 'lucide-react';
+import { Plus, Edit2, Trash2, CheckCircle2, AlertCircle, Upload, X, Star, Image as ImageIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { MediaSelectorModal } from '@/components/admin/MediaSelectorModal';
 
 export default function StudentImpactsPage() {
     const router = useRouter();
@@ -25,6 +26,7 @@ export default function StudentImpactsPage() {
 
     const [isSaving, setIsSaving] = useState(false);
     const [isUploadingMedia, setIsUploadingMedia] = useState(false);
+    const [isMediaSelectorOpen, setIsMediaSelectorOpen] = useState(false);
 
     useEffect(() => {
         fetchImpacts();
@@ -187,61 +189,89 @@ export default function StudentImpactsPage() {
             </div>
 
             <div className="admin-card overflow-hidden">
-                <table className="w-full text-left text-sm text-[#374151] whitespace-nowrap">
-                    <thead className="bg-[#EDF5F2]/70 border-b border-gray-200 text-[#111827]">
-                        <tr>
-                            <th className="p-4 font-medium">Student Name</th>
-                            <th className="p-4 font-medium">Route / Designation</th>
-                            <th className="p-4 font-medium">Featured</th>
-                            <th className="p-4 font-medium">Order</th>
-                            <th className="p-4 font-medium">Status</th>
-                            <th className="p-4 font-medium text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100">
-                        {impacts.length === 0 ? (
-                            <tr>
-                                <td colSpan={6} className="p-8 text-center text-[#9CA3AF]">No student impacts found.</td>
-                            </tr>
-                        ) : (
-                            impacts.map(imp => (
-                                <tr key={imp.id} className="hover:bg-[#EDF5F2]/50 transition-colors">
-                                    <td className="p-4 font-medium">{imp.studentName}</td>
-                                    <td className="p-4 text-[#6B7280]">{imp.academicRoute} <span className="opacity-50">· {imp.designation}</span></td>
-                                    <td className="p-4">
-                                        {imp.isFeatured ? (
-                                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-500">
-                                                <Star className="w-3 h-3 fill-current" /> YES
-                                            </span>
-                                        ) : (
-                                            <span className="text-[#9CA3AF] text-xs">NO</span>
-                                        )}
-                                    </td>
-                                    <td className="p-4 text-[#6B7280]">{imp.sortOrder}</td>
-                                    <td className="p-4">
-                                        {imp.isActive ? (
-                                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#6B9F91]/10 text-[#6B9F91]">
-                                                <CheckCircle2 className="w-3 h-3" /> ACTIVE
-                                            </span>
-                                        ) : (
-                                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#EDF5F2]/70 text-[#9CA3AF]">
-                                                INACTIVE
-                                            </span>
-                                        )}
-                                    </td>
-                                    <td className="p-4 text-right">
-                                        <button onClick={() => handleOpenModal(imp)} className="text-[#9CA3AF] hover:text-[#111827] p-2 transition-colors">
+                {/* ── MOBILE CARD GRID (hidden on sm+) ── */}
+                <div className="sm:hidden">
+                    {impacts.length === 0 ? (
+                        <div className="p-8 text-center text-[#9CA3AF]">No student impacts found.</div>
+                    ) : (
+                        <div className="grid grid-cols-2 gap-3 p-3">
+                            {impacts.map(imp => (
+                                <div key={imp.id} className="admin-card p-3 flex flex-col gap-2 rounded-xl">
+                                    <div className="flex items-start justify-between gap-1">
+                                        <span className="font-semibold text-[#111827] text-sm leading-tight line-clamp-2">{imp.studentName}</span>
+                                        <button onClick={() => handleOpenModal(imp)} className="shrink-0 p-1 text-[#9CA3AF] hover:text-[#111827]">
                                             <Edit2 className="w-4 h-4" />
                                         </button>
-                                        <button onClick={() => handleDelete(imp.id)} className="text-[#B91C1C]/50 hover:text-[#B91C1C] p-2 transition-colors">
-                                            <Trash2 className="w-4 h-4" />
+                                    </div>
+                                    <p className="text-[#6B7280] text-xs leading-snug line-clamp-1">{imp.academicRoute} · {imp.designation}</p>
+                                    <div className="mt-auto pt-1 flex items-center justify-between">
+                                        <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-semibold ${imp.isActive ? 'bg-[#6B9F91]/10 text-[#6B9F91] border border-[#6B9F91]/20' : 'bg-[#EDF5F2]/70 text-[#9CA3AF]'}`}>• {imp.isActive ? 'ACTIVE' : 'INACTIVE'}</span>
+                                        <button onClick={() => handleDelete(imp.id)} className="text-[#B91C1C]/50 hover:text-[#B91C1C] p-1">
+                                            <Trash2 className="w-3.5 h-3.5" />
                                         </button>
-                                    </td>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                {/* ── DESKTOP TABLE (hidden on mobile) ── */}
+                <div className="hidden sm:block overflow-x-auto w-full touch-auto">
+                    <table className="w-full text-left text-sm text-[#374151] min-w-[600px]">
+                        <thead className="bg-[#EDF5F2]/70 border-b border-gray-200 text-[#111827]">
+                            <tr>
+                                <th className="p-4 font-medium min-w-[150px]">Student Name</th>
+                                <th className="p-4 font-medium min-w-[150px] hidden sm:table-cell">Route / Designation</th>
+                                <th className="p-4 font-medium min-w-[100px] hidden md:table-cell">Featured</th>
+                                <th className="p-4 font-medium min-w-[80px] hidden md:table-cell">Order</th>
+                                <th className="p-4 font-medium min-w-[100px]">Status</th>
+                                <th className="p-4 font-medium text-right min-w-[120px]">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-100">
+                            {impacts.length === 0 ? (
+                                <tr>
+                                    <td colSpan={6} className="p-8 text-center text-[#9CA3AF]">No student impacts found.</td>
                                 </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
+                            ) : (
+                                impacts.map(imp => (
+                                    <tr key={imp.id} className="hover:bg-[#EDF5F2]/50 transition-colors">
+                                        <td className="p-4 font-medium">{imp.studentName}</td>
+                                        <td className="p-4 text-[#6B7280] hidden sm:table-cell">{imp.academicRoute} <span className="opacity-50">· {imp.designation}</span></td>
+                                        <td className="p-4 hidden md:table-cell">
+                                            {imp.isFeatured ? (
+                                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-500">
+                                                    <Star className="w-3 h-3 fill-current" /> YES
+                                                </span>
+                                            ) : (
+                                                <span className="text-[#9CA3AF] text-xs">NO</span>
+                                            )}
+                                        </td>
+                                        <td className="p-4 text-[#6B7280] hidden md:table-cell">{imp.sortOrder}</td>
+                                        <td className="p-4">
+                                            {imp.isActive ? (
+                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#6B9F91]/10 text-[#6B9F91]">
+                                                    <CheckCircle2 className="w-3 h-3" /> ACTIVE
+                                                </span>
+                                            ) : (
+                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#EDF5F2]/70 text-[#9CA3AF]">
+                                                    INACTIVE
+                                                </span>
+                                            )}
+                                        </td>
+                                        <td className="p-3">
+                                            <div className="grid grid-cols-2 gap-1.5 w-fit ml-auto">
+                                                <button onClick={() => handleOpenModal(imp)} className="px-3 py-1 rounded border border-gray-300 text-[#374151] text-xs font-medium hover:bg-[#EDF5F2]/70 hover:border-[#6B9F91] transition-colors whitespace-nowrap">Edit</button>
+                                                <button onClick={() => handleDelete(imp.id)} className="px-3 py-1 rounded border border-[#FCA5A5] text-[#B91C1C] text-xs font-medium hover:bg-red-50 transition-colors whitespace-nowrap">Delete</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             {/* Modal */}
@@ -292,12 +322,27 @@ export default function StudentImpactsPage() {
 
                                 <div>
                                     <label className="block text-sm font-medium text-[#374151] mb-2">Local Video URL (Alternative to YouTube)</label>
-                                    <div className="flex gap-4 items-center">
-                                        <input type="text" value={videoUrl} onChange={e => setVideoUrl(e.target.value)} placeholder="https://..." className="flex-1 bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] text-sm focus:outline-none focus:border-[#6B9F91]" />
-                                        <label className={`cursor-pointer shrink-0 bg-[#EDF5F2]/70 hover:bg-[#EDF5F2] text-[#111827] px-4 py-2.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${isUploadingMedia ? 'opacity-50' : ''}`}>
-                                            <Upload className="w-4 h-4" /> {isUploadingMedia ? '...' : 'Upload Media'}
-                                            <input type="file" accept="video/mp4,video/webm" onChange={handleUploadMedia} className="hidden" disabled={isUploadingMedia} />
-                                        </label>
+                                    <div className="flex flex-col gap-3">
+                                        <input type="text" value={videoUrl} onChange={e => setVideoUrl(e.target.value)} placeholder="https://..." className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] text-sm focus:outline-none focus:border-[#6B9F91]" />
+                                        
+                                        {videoUrl && (
+                                            <div className="relative w-full max-w-sm aspect-video bg-gray-50 rounded-lg overflow-hidden border border-gray-200 group">
+                                                <video src={videoUrl} className="w-full h-full object-contain" />
+                                                <button type="button" onClick={() => setVideoUrl('')} className="absolute top-2 right-2 bg-white/90 p-1.5 rounded-full text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity hover:text-red-500 shadow-sm">
+                                                    <X className="w-4 h-4" />
+                                                </button>
+                                            </div>
+                                        )}
+                                        
+                                        <div className="flex flex-wrap gap-3">
+                                            <label className={`cursor-pointer bg-[#EDF5F2]/70 hover:bg-[#EDF5F2] text-[#111827] px-4 py-2.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${isUploadingMedia ? 'opacity-50 pointer-events-none' : ''}`}>
+                                                <Upload className="w-4 h-4" /> {isUploadingMedia ? 'Uploading...' : 'Upload Local File'}
+                                                <input type="file" accept="video/mp4,video/webm" onChange={handleUploadMedia} className="hidden" disabled={isUploadingMedia} />
+                                            </label>
+                                            <button type="button" onClick={() => setIsMediaSelectorOpen(true)} className="cursor-pointer bg-[#EDF5F2]/70 hover:bg-[#EDF5F2] text-[#111827] px-4 py-2.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+                                                <ImageIcon className="w-4 h-4 text-[#6B9F91]" /> Select from Media
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -339,6 +384,16 @@ export default function StudentImpactsPage() {
                         </div>
                     </div>
                 </div>
+            )}
+
+            {isMediaSelectorOpen && (
+                <MediaSelectorModal
+                    onClose={() => setIsMediaSelectorOpen(false)}
+                    onSelect={(url) => {
+                        setVideoUrl(url);
+                        setIsMediaSelectorOpen(false);
+                    }}
+                />
             )}
         </div>
     );

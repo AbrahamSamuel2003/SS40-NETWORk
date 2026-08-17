@@ -13,7 +13,7 @@ import { slideUp, staggerContainer, hoverLift } from "@/lib/animations";
 import { scrollChildIntoContainer } from "@/utils/scroll";
 
 // Mock structural classes deleted: dynamic API is now the source of truth
-import { Loader2 } from "lucide-react";
+import { CardGridSkeleton } from "@/components/ui/Skeleton";
 
 export function ClientProjects() {
     const [projects, setProjects] = React.useState<any[]>([]);
@@ -35,6 +35,21 @@ export function ClientProjects() {
             })
             .catch(() => setIsLoading(false));
     }, []);
+
+    if (isLoading || projects.length === 0) {
+        return (
+            <SectionWrapper id="featured-projects" className="bg-[#EDF5F2] overflow-visible scroll-mt-24">
+                <Container className="space-y-12 lg:space-y-16">
+                    <SectionHeading
+                        badge="Client Projects"
+                        title="Solutions That Drive Business Growth"
+                        description="Explore a selection of digital solutions developed to solve real business challenges across different industries."
+                    />
+                    <CardGridSkeleton count={3} columns={3} />
+                </Container>
+            </SectionWrapper>
+        );
+    }
 
     const scrollToMobileProject = (idx: number) => {
         if (!mobileScrollRef.current) return;
@@ -119,16 +134,7 @@ export function ClientProjects() {
                 />
 
                 <div className="hidden lg:flex flex-col gap-8 lg:gap-12">
-                    {isLoading ? (
-                        <div className="py-20 flex justify-center items-center opacity-50">
-                            <Loader2 className="w-8 h-8 animate-spin text-[#6B9F91]" />
-                        </div>
-                    ) : projects.length === 0 ? (
-                        <div className="py-20 flex justify-center items-center">
-                            <p className="text-gray-500">No client projects available at this time.</p>
-                        </div>
-                    ) : (
-                        <>
+                    <>
                             {(() => {
                                 const featuredProject = displayedProjects[0];
                                 const additionalProjects = displayedProjects.slice(1);
@@ -347,7 +353,6 @@ export function ClientProjects() {
                                 );
                             })()}
                         </>
-                    )}
                 </div>
 
                 {/* Mobile Native Horizontal Swipe Deck */}
@@ -357,15 +362,7 @@ export function ClientProjects() {
                         className="flex w-full overflow-x-auto snap-x snap-mandatory pb-8 gap-5 items-stretch [&::-webkit-scrollbar]:hidden px-6"
                         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                     >
-                        {isLoading ? (
-                            <div className="w-full py-16 flex justify-center items-center opacity-50">
-                                <Loader2 className="w-8 h-8 animate-spin text-[#6B9F91]" />
-                            </div>
-                        ) : projects.length === 0 ? (
-                            <div className="w-full py-16 flex justify-center items-center px-6">
-                                <p className="text-gray-500 text-center">No client projects available at this time.</p>
-                            </div>
-                        ) : (
+                        {
                             displayedProjects.map((project: any, idx: number) => (
                                 <div
                                     key={`mobile-proj-${project.id}`}
@@ -432,7 +429,7 @@ export function ClientProjects() {
                                     </div>
                                 </div>
                             ))
-                        )}
+                        }
                         {/* End spacer so the last card doesn't hit the right screen edge */}
                         {!isLoading && projects.length > 0 && <div className="w-[4vw] shrink-0" />}
                     </div>

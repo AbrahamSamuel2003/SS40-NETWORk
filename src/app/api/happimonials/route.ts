@@ -33,24 +33,31 @@ export async function GET(request: Request) {
 
         const happimonials = await prisma.happimonial.findMany({
             where,
-            orderBy: [
-                { sortOrder: 'asc' },
-                { createdAt: 'asc' }
-            ],
             select: {
                 id: true,
                 clientName: true,
                 companyName: true,
-                industry: true,
+                company: true,
                 testimonial: true,
-                videoUrl: true,
+                rating: true,
+                projectType: true,
+                imageUrl: true,
                 thumbnailUrl: true,
+                videoUrl: true,
                 youtubeUrl: true,
                 sortOrder: true
-            }
+            },
+            orderBy: [
+                { sortOrder: 'asc' },
+                { createdAt: 'asc' }
+            ]
         });
 
-        return NextResponse.json({ success: true, data: happimonials }, { status: 200 });
+        return NextResponse.json({ success: true, data: happimonials }, {
+            headers: {
+                'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+            }
+        });
     } catch (error) {
         console.error('Error fetching happimonials:', error);
         return NextResponse.json({ success: false, error: 'Failed to fetch happimonials' }, { status: 500 });

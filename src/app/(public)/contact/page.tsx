@@ -23,8 +23,8 @@ export default async function ContactPage() {
         <div className="w-full flex-col flex">
             <Hero />
             <ContactMethods config={config} />
-            <ContactForm />
             <OfficeLocation config={config} />
+            <ContactForm />
             <Faq />
         </div>
     );

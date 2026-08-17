@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Menu, LogOut } from 'lucide-react';
+import { Menu, LogOut, Home } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 
 interface TopbarProps {
@@ -37,7 +37,15 @@ export function AdminTopbar({ adminName, onMenuClick }: TopbarProps) {
                     {pageTitle}
                 </h1>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
+                <a
+                    href="/"
+                    className="flex items-center gap-2 text-sm text-[#6B7280] hover:text-[#6B9F91] transition-colors px-3 py-2 rounded-md hover:bg-[#EDF5F2]"
+                    title="Home"
+                >
+                    <Home size={16} />
+                    <span className="hidden sm:inline">Home</span>
+                </a>
                 <span className="hidden sm:block text-sm text-[#6B7280]">
                     Hello, <strong className="text-[#111827] font-semibold">{adminName}</strong>
                 </span>

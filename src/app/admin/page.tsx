@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma';
-import { Activity, Package, Briefcase, GraduationCap, Inbox } from 'lucide-react';
+import { Activity, Package, Briefcase, GraduationCap, Inbox, Image } from 'lucide-react';
 
 export default async function AdminDashboardPage() {
     const [
@@ -8,6 +8,7 @@ export default async function AdminDashboardPage() {
         studentProjectsCount,
         leadsCount,
         visitorsCount,
+        mediaCount,
         activities
     ] = await Promise.all([
         prisma.product.count(),
@@ -15,6 +16,7 @@ export default async function AdminDashboardPage() {
         prisma.studentProject.count(),
         prisma.lead.count(),
         prisma.visitor.count(),
+        prisma.media.count(),
         prisma.adminActivityLog.findMany({
             take: 10,
             orderBy: { createdAt: 'desc' },
@@ -28,6 +30,7 @@ export default async function AdminDashboardPage() {
         { label: 'Student Projects', value: studentProjectsCount, icon: GraduationCap, color: 'text-[#6B9F91]' },
         { label: 'Leads', value: leadsCount, icon: Inbox, color: 'text-[#FFC900]' },
         { label: 'Visitors', value: visitorsCount, icon: Activity, color: 'text-[#6B9F91]' },
+        { label: 'Media', value: mediaCount, icon: Image, color: 'text-[#6B9F91]' },
     ];
 
     return (
@@ -42,7 +45,7 @@ export default async function AdminDashboardPage() {
                 <p className="admin-page-description">High-level summary of your platform&apos;s content and engagement.</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
                 {stats.map((stat, idx) => {
                     const Icon = stat.icon;
                     return (

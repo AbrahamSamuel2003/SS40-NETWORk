@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit2, Trash2, AlertCircle, Upload, X } from 'lucide-react';
+import { Plus, Edit2, Trash2, AlertCircle, Upload, X, Image as ImageIcon } from 'lucide-react';
+import { MediaSelectorModal } from '@/components/admin/MediaSelectorModal';
 
 export default function ClientProjectsPage() {
     const [projects, setProjects] = useState<any[]>([]);
@@ -27,6 +28,7 @@ export default function ClientProjectsPage() {
 
     const [isSaving, setIsSaving] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
+    const [isMediaSelectorOpen, setIsMediaSelectorOpen] = useState(false);
 
     useEffect(() => {
         fetchData();
@@ -173,67 +175,96 @@ export default function ClientProjectsPage() {
             </div>
 
             <div className="admin-card overflow-hidden">
-                <table className="w-full text-left text-sm text-[#374151]">
-                    <thead className="bg-[#EDF5F2]/70 border-b border-gray-200 text-[#111827]">
-                        <tr>
-                            <th className="p-4 font-medium">Image</th>
-                            <th className="p-4 font-medium">Project</th>
-                            <th className="p-4 font-medium">Industry / Tags</th>
-                            <th className="p-4 font-medium text-center">Status</th>
-                            <th className="p-4 font-medium text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100">
-                        {projects.length === 0 ? (
-                            <tr><td colSpan={5} className="p-8 text-center text-[#9CA3AF]">No projects found.</td></tr>
-                        ) : (
-                            projects.map(item => (
-                                <tr key={item.id} className="hover:bg-[#EDF5F2]/50">
-                                    <td className="p-4 w-20">
-                                        {item.imageUrl ? (
-                                            <div className="w-12 h-12 rounded overflow-hidden shrink-0"><img src={item.imageUrl} alt="" className="w-full h-full object-cover" /></div>
-                                        ) : (
-                                            <div className="w-12 h-12 rounded bg-[#EDF5F2] flex items-center justify-center shrink-0 uppercase font-bold text-[#9CA3AF]">{item.title.charAt(0)}</div>
-                                        )}
-                                    </td>
-                                    <td className="p-4 font-medium">
-                                        <div className="text-[#111827]">{item.title}</div>
-                                        <div className="text-[#9CA3AF] text-xs truncate max-w-xs">{item.description}</div>
-                                        {item.projectUrl && (
-                                            <div className="mt-1">
-                                                <a href={item.projectUrl} target="_blank" rel="noreferrer" className="text-[10px] text-[#6B9F91] hover:underline">{item.projectUrl}</a>
-                                            </div>
-                                        )}
-                                    </td>
-                                    <td className="p-4">
-                                        <div className="text-[#111827] text-xs mb-1">{item.industry}</div>
-                                        <div className="flex flex-wrap gap-1">
-                                            {Array.isArray(item.tags) && item.tags.slice(0, 3).map((tag: string, i: number) => (
-                                                <span key={i} className="text-[10px] bg-[#EDF5F2] px-1.5 py-0.5 rounded text-[#6B7280]">{tag}</span>
-                                            ))}
-                                            {Array.isArray(item.tags) && item.tags.length > 3 && (
-                                                <span className="text-[10px] text-[#9CA3AF]">+{item.tags.length - 3}</span>
-                                            )}
-                                        </div>
-                                    </td>
-                                    <td className="p-4 text-center">
-                                        <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-semibold ${item.isActive ? 'bg-[#6B9F91]/10 text-[#6B9F91] border border-[#6B9F91]/20' : 'bg-[#FEE2E2] text-[#B91C1C] border border-[#FCA5A5]'}`}>
-                                            {item.isActive ? 'Active' : 'Inactive'}
-                                        </span>
-                                    </td>
-                                    <td className="p-4 text-right">
-                                        <button onClick={() => handleOpenModal(item)} className="text-[#9CA3AF] hover:text-[#111827] p-2 transition-colors">
+                {/* ── MOBILE CARD GRID (hidden on sm+) ── */}
+                <div className="sm:hidden">
+                    {projects.length === 0 ? (
+                        <div className="p-8 text-center text-[#9CA3AF]">No projects found.</div>
+                    ) : (
+                        <div className="grid grid-cols-2 gap-3 p-3">
+                            {projects.map(item => (
+                                <div key={item.id} className="admin-card p-3 flex flex-col gap-2 rounded-xl">
+                                    <div className="flex items-start justify-between gap-1">
+                                        <span className="font-semibold text-[#111827] text-sm leading-tight line-clamp-2">{item.title}</span>
+                                        <button onClick={() => handleOpenModal(item)} className="shrink-0 p-1 text-[#9CA3AF] hover:text-[#111827]">
                                             <Edit2 className="w-4 h-4" />
                                         </button>
-                                        <button onClick={() => handleDelete(item.id)} className="text-[#B91C1C]/50 hover:text-[#B91C1C] p-2 transition-colors">
-                                            <Trash2 className="w-4 h-4" />
+                                    </div>
+                                    <p className="text-[#6B7280] text-xs leading-snug line-clamp-1">{item.industry}</p>
+                                    <p className="text-[#9CA3AF] text-[10px] leading-snug line-clamp-2">{item.description}</p>
+                                    <div className="mt-auto pt-1 flex items-center justify-between">
+                                        <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-semibold ${item.isActive ? 'bg-[#6B9F91]/10 text-[#6B9F91] border border-[#6B9F91]/20' : 'bg-[#FEE2E2] text-[#B91C1C] border border-[#FCA5A5]'}`}>• {item.isActive ? 'Active' : 'Inactive'}</span>
+                                        <button onClick={() => handleDelete(item.id)} className="text-[#B91C1C]/50 hover:text-[#B91C1C] p-1">
+                                            <Trash2 className="w-3.5 h-3.5" />
                                         </button>
-                                    </td>
-                                </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                {/* ── DESKTOP TABLE (hidden on mobile) ── */}
+                <div className="hidden sm:block overflow-x-auto w-full touch-auto">
+                    <table className="w-full text-left text-sm text-[#374151] min-w-[600px]">
+                        <thead className="bg-[#EDF5F2]/70 border-b border-gray-200 text-[#111827]">
+                            <tr>
+                                <th className="p-4 font-medium min-w-[80px] hidden sm:table-cell">Image</th>
+                                <th className="p-4 font-medium min-w-[150px]">Project</th>
+                                <th className="p-4 font-medium min-w-[150px] hidden sm:table-cell">Industry / Tags</th>
+                                <th className="p-4 font-medium text-center min-w-[100px]">Status</th>
+                                <th className="p-4 font-medium text-right min-w-[120px]">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-100">
+                            {projects.length === 0 ? (
+                                <tr><td colSpan={5} className="p-8 text-center text-[#9CA3AF]">No projects found.</td></tr>
+                            ) : (
+                                projects.map(item => (
+                                    <tr key={item.id} className="hover:bg-[#EDF5F2]/50">
+                                        <td className="p-4 w-20 hidden sm:table-cell">
+                                            {item.imageUrl ? (
+                                                <div className="w-12 h-12 rounded overflow-hidden shrink-0"><img src={item.imageUrl} alt="" className="w-full h-full object-cover" /></div>
+                                            ) : (
+                                                <div className="w-12 h-12 rounded bg-[#EDF5F2] flex items-center justify-center shrink-0 uppercase font-bold text-[#9CA3AF]">{item.title.charAt(0)}</div>
+                                            )}
+                                        </td>
+                                        <td className="p-4 font-medium">
+                                            <div className="text-[#111827]">{item.title}</div>
+                                            <div className="text-[#9CA3AF] text-xs truncate max-w-xs">{item.description}</div>
+                                            {item.projectUrl && (
+                                                <div className="mt-1">
+                                                    <a href={item.projectUrl} target="_blank" rel="noreferrer" className="text-[10px] text-[#6B9F91] hover:underline">{item.projectUrl}</a>
+                                                </div>
+                                            )}
+                                        </td>
+                                        <td className="p-4 hidden sm:table-cell">
+                                            <div className="text-[#111827] text-xs mb-1">{item.industry}</div>
+                                            <div className="flex flex-wrap gap-1">
+                                                {Array.isArray(item.tags) && item.tags.slice(0, 3).map((tag: string, i: number) => (
+                                                    <span key={i} className="text-[10px] bg-[#EDF5F2] px-1.5 py-0.5 rounded text-[#6B7280]">{tag}</span>
+                                                ))}
+                                                {Array.isArray(item.tags) && item.tags.length > 3 && (
+                                                    <span className="text-[10px] text-[#9CA3AF]">+{item.tags.length - 3}</span>
+                                                )}
+                                            </div>
+                                        </td>
+                                        <td className="p-4 text-center">
+                                            <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-semibold ${item.isActive ? 'bg-[#6B9F91]/10 text-[#6B9F91] border border-[#6B9F91]/20' : 'bg-[#FEE2E2] text-[#B91C1C] border border-[#FCA5A5]'}`}>
+                                                {item.isActive ? 'Active' : 'Inactive'}
+                                            </span>
+                                        </td>
+                                        <td className="p-3">
+                                            <div className="grid grid-cols-2 gap-1.5 w-fit ml-auto">
+                                                <button onClick={() => handleOpenModal(item)} className="px-3 py-1 rounded border border-gray-300 text-[#374151] text-xs font-medium hover:bg-[#EDF5F2]/70 hover:border-[#6B9F91] transition-colors whitespace-nowrap">Edit</button>
+                                                <button onClick={() => handleDelete(item.id)} className="px-3 py-1 rounded border border-[#FCA5A5] text-[#B91C1C] text-xs font-medium hover:bg-red-50 transition-colors whitespace-nowrap">Delete</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             {isModalOpen && (
@@ -264,9 +295,12 @@ export default function ClientProjectsPage() {
                                     <div className="flex gap-4">
                                         <input value={imageUrl} onChange={e => setImageUrl(e.target.value)} className="flex-1 bg-white border border-gray-200 rounded-lg px-4 py-2 text-[#111827]" placeholder="URL..." />
                                         <label className={`cursor-pointer shrink-0 bg-[#EDF5F2]/70 hover:bg-[#EDF5F2] text-[#111827] px-4 py-2 rounded-lg text-sm transition-colors flex items-center gap-2 ${isUploading ? 'opacity-50' : ''}`}>
-                                            <Upload className="w-4 h-4" /> Upload
-                                            <input type="file" accept="image/*" onChange={handleUpload} className="hidden" />
+                                            <Upload className="w-4 h-4" /> Upload Local File
+                                            <input type="file" accept="image/*" onChange={handleUpload} className="hidden" disabled={isUploading} />
                                         </label>
+                                        <button type="button" onClick={() => setIsMediaSelectorOpen(true)} className="cursor-pointer shrink-0 bg-[#EDF5F2]/70 hover:bg-[#EDF5F2] text-[#111827] px-4 py-2 rounded-lg text-sm transition-colors flex items-center gap-2">
+                                            <ImageIcon className="w-4 h-4 text-[#6B9F91]" /> Select from Media
+                                        </button>
                                     </div>
                                 </div>
 
@@ -302,6 +336,16 @@ export default function ClientProjectsPage() {
                         </div>
                     </div>
                 </div>
+            )}
+
+            {isMediaSelectorOpen && (
+                <MediaSelectorModal
+                    onClose={() => setIsMediaSelectorOpen(false)}
+                    onSelect={(url) => {
+                        setImageUrl(url);
+                        setIsMediaSelectorOpen(false);
+                    }}
+                />
             )}
         </div>
     );

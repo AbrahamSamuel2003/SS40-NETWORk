@@ -2,10 +2,12 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import NextImage from "next/image";
 import { ArrowLeft, ArrowRight, Building2, ShieldCheck, Lock, CheckCircle2, X, ExternalLink } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CardMotion } from "@/components/ui/Card";
 import { hoverLift, slideUp } from "@/lib/animations";
+import { CardGridSkeleton } from "@/components/ui/Skeleton";
 
 export function ClientProjectsList({ initialProjects }: { initialProjects: any[] }) {
     const [activeModalProject, setActiveModalProject] = useState<any | null>(null);
@@ -22,13 +24,7 @@ export function ClientProjectsList({ initialProjects }: { initialProjects: any[]
 
             {/* Grid Area */}
             {initialProjects.length === 0 ? (
-                <div className="py-24 text-center flex flex-col items-center justify-center">
-                    <div className="w-20 h-20 rounded-full bg-gray-50 flex items-center justify-center mb-4 border border-gray-100">
-                        <Building2 className="w-8 h-8 text-gray-300" />
-                    </div>
-                    <h3 className="text-xl font-bold text-gray-800 mb-2">No Projects Found</h3>
-                    <p className="text-gray-500">There are no client projects available at this time.</p>
-                </div>
+                <CardGridSkeleton count={6} columns={3} />
             ) : (
                 <motion.div
                     layout
@@ -66,7 +62,16 @@ export function ClientProjectsList({ initialProjects }: { initialProjects: any[]
                                             <p className="text-xs text-gray-500">Visuals protected under corporate NDA.</p>
                                         </div>
                                     ) : project.imageUrl ? (
-                                        <img src={project.imageUrl} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                        <div className="relative w-full h-full">
+                                            <NextImage 
+                                                src={project.imageUrl} 
+                                                alt={project.title} 
+                                                fill
+                                                className="object-cover group-hover:scale-105 transition-transform duration-500"
+                                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                                loading="lazy"
+                                            />
+                                        </div>
                                     ) : (
                                         <div className="w-full h-full flex flex-col p-4 gap-3 bg-[#6B9F91]/5 group-hover:scale-105 transition-transform duration-500">
                                             <div className="w-full h-1/2 flex gap-3">

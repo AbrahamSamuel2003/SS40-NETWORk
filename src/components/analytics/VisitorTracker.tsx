@@ -2,40 +2,40 @@
 
 import { useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
+import * as React from 'react';
 
-export function VisitorTracker() {
-    const pathname = usePathname();
-    const hasTrackedInitial = useRef(false);
+export const VisitorTracker = React.memo(function VisitorTracker() {
+  const pathname = usePathname();
+  const lastTrackedPath = useRef<string | null>(null);
 
-    useEffect(() => {
-        // Prevent double tracking in React Strict Mode on mount
-        if (!hasTrackedInitial.current) {
-            hasTrackedInitial.current = true;
-        }
+  useEffect(() => {
+    // Skip tracking for admin and API routes
+    if (pathname.startsWith('/admin') || pathname.startsWith('/api')) {
+      return;
+    }
 
-        const trackPath = async () => {
-            // Avoid tracking admin or api routes
-            if (pathname.startsWith('/admin') || pathname.startsWith('/api')) {
-                return;
-            }
+    // Prevent double tracking in React Strict Mode
+    if (lastTrackedPath.current === pathname) {
+      return;
+    }
 
-            try {
-                await fetch('/api/visitors', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        currentPath: pathname,
-                        referrer: document.referrer || null
-                    }) // Note: IP, UserAgent, etc are captured securely on the backend
-                });
-            } catch (err) {
-                // Silently fail, tracking should not disrupt UX
-                console.error('Visitor tracking error:', err);
-            }
-        };
+    lastTrackedPath.current = pathname;
 
-        trackPath();
-    }, [pathname]);
+    // Track visitor using sendBeacon for non-blocking
+    const data = JSON.stringify({ path: pathname });
+    const blob = new Blob([data], { type: 'application/json' });
+    
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon('/api/visitors', blob);
+    } else {
+      fetch('/api/visitors', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: data,
+        keepalive: true,
+      }).catch(console.error);
+    }
+  }, [pathname]);
 
-    return null; // Totally headless
-}
+  return null; // Headless component
+});

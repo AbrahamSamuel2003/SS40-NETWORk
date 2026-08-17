@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit2, Trash2, CheckCircle2, AlertCircle, Upload, X } from 'lucide-react';
+import { Plus, Edit2, Trash2, CheckCircle2, AlertCircle, Upload, X, Image as ImageIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { MediaSelectorModal } from '@/components/admin/MediaSelectorModal';
 
 export default function AcademicPartnerLogosPage() {
     const router = useRouter();
@@ -23,6 +24,7 @@ export default function AcademicPartnerLogosPage() {
 
     const [isSaving, setIsSaving] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
+    const [isMediaSelectorOpen, setIsMediaSelectorOpen] = useState(false);
 
     useEffect(() => {
         fetchLogos();
@@ -179,61 +181,89 @@ export default function AcademicPartnerLogosPage() {
             </div>
 
             <div className="admin-card overflow-hidden">
-                <table className="w-full text-left text-sm text-[#374151]">
-                    <thead className="bg-[#EDF5F2]/70 border-b border-gray-200 text-[#111827]">
-                        <tr>
-                            <th className="p-4 font-medium">Logo</th>
-                            <th className="p-4 font-medium">Institution Name</th>
-                            <th className="p-4 font-medium">Type</th>
-                            <th className="p-4 font-medium">Order</th>
-                            <th className="p-4 font-medium">Status</th>
-                            <th className="p-4 font-medium text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100">
-                        {logos.length === 0 ? (
-                            <tr>
-                                <td colSpan={6} className="p-8 text-center text-[#9CA3AF]">No academic partners found.</td>
-                            </tr>
-                        ) : (
-                            logos.map(logo => (
-                                <tr key={logo.id} className="hover:bg-[#EDF5F2]/50 transition-colors">
-                                    <td className="p-4">
-                                        {logo.logoUrl ? (
-                                            <div className="w-12 h-12 bg-[#EDF5F2] rounded overflow-hidden flex items-center justify-center">
-                                                <img src={logo.logoUrl} alt={logo.name} className="max-w-full max-h-full object-contain p-1" />
-                                            </div>
-                                        ) : (
-                                            <div className="w-12 h-12 bg-[#EDF5F2]/70 rounded flex items-center justify-center text-xs text-[#9CA3AF]">N/A</div>
-                                        )}
-                                    </td>
-                                    <td className="p-4 font-medium">{logo.name}</td>
-                                    <td className="p-4 text-[#6B7280]">{logo.category}</td>
-                                    <td className="p-4 text-[#6B7280]">{logo.sortOrder}</td>
-                                    <td className="p-4">
-                                        {logo.isActive ? (
-                                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#6B9F91]/10 text-[#6B9F91]">
-                                                <CheckCircle2 className="w-3 h-3" /> ACTIVE
-                                            </span>
-                                        ) : (
-                                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#EDF5F2]/70 text-[#9CA3AF]">
-                                                INACTIVE
-                                            </span>
-                                        )}
-                                    </td>
-                                    <td className="p-4 text-right">
-                                        <button onClick={() => handleOpenModal(logo)} className="text-[#9CA3AF] hover:text-[#111827] p-2 transition-colors">
+                {/* ── MOBILE CARD GRID (hidden on sm+) ── */}
+                <div className="sm:hidden">
+                    {logos.length === 0 ? (
+                        <div className="p-8 text-center text-[#9CA3AF]">No academic partners found.</div>
+                    ) : (
+                        <div className="grid grid-cols-2 gap-3 p-3">
+                            {logos.map(logo => (
+                                <div key={logo.id} className="admin-card p-3 flex flex-col gap-2 rounded-xl">
+                                    <div className="flex items-start justify-between gap-1">
+                                        <span className="font-semibold text-[#111827] text-sm leading-tight line-clamp-2">{logo.name}</span>
+                                        <button onClick={() => handleOpenModal(logo)} className="shrink-0 p-1 text-[#9CA3AF] hover:text-[#111827]">
                                             <Edit2 className="w-4 h-4" />
                                         </button>
-                                        <button onClick={() => handleDelete(logo.id)} className="text-[#B91C1C]/50 hover:text-[#B91C1C] p-2 transition-colors">
-                                            <Trash2 className="w-4 h-4" />
+                                    </div>
+                                    <p className="text-[#6B7280] text-xs leading-snug line-clamp-1">{logo.category}</p>
+                                    <div className="mt-auto pt-1 flex items-center justify-between">
+                                        <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-semibold ${logo.isActive ? 'bg-[#6B9F91]/10 text-[#6B9F91] border border-[#6B9F91]/20' : 'bg-[#EDF5F2]/70 text-[#9CA3AF]'}`}>• {logo.isActive ? 'ACTIVE' : 'INACTIVE'}</span>
+                                        <button onClick={() => handleDelete(logo.id)} className="text-[#B91C1C]/50 hover:text-[#B91C1C] p-1">
+                                            <Trash2 className="w-3.5 h-3.5" />
                                         </button>
-                                    </td>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                {/* ── DESKTOP TABLE (hidden on mobile) ── */}
+                <div className="hidden sm:block overflow-x-auto w-full touch-auto">
+                    <table className="w-full text-left text-sm text-[#374151] min-w-[600px]">
+                        <thead className="bg-[#EDF5F2]/70 border-b border-gray-200 text-[#111827]">
+                            <tr>
+                                <th className="p-4 font-medium min-w-[80px] hidden sm:table-cell">Logo</th>
+                                <th className="p-4 font-medium min-w-[150px]">Institution Name</th>
+                                <th className="p-4 font-medium min-w-[100px] hidden sm:table-cell">Type</th>
+                                <th className="p-4 font-medium min-w-[80px] hidden md:table-cell">Order</th>
+                                <th className="p-4 font-medium min-w-[100px]">Status</th>
+                                <th className="p-4 font-medium text-right min-w-[120px]">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-100">
+                            {logos.length === 0 ? (
+                                <tr>
+                                    <td colSpan={6} className="p-8 text-center text-[#9CA3AF]">No academic partners found.</td>
                                 </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
+                            ) : (
+                                logos.map(logo => (
+                                    <tr key={logo.id} className="hover:bg-[#EDF5F2]/50 transition-colors">
+                                        <td className="p-4 hidden sm:table-cell">
+                                            {logo.logoUrl ? (
+                                                <div className="w-12 h-12 bg-[#EDF5F2] rounded overflow-hidden flex items-center justify-center">
+                                                    <img src={logo.logoUrl} alt={logo.name} className="max-w-full max-h-full object-contain p-1" />
+                                                </div>
+                                            ) : (
+                                                <div className="w-12 h-12 bg-[#EDF5F2]/70 rounded flex items-center justify-center text-xs text-[#9CA3AF]">N/A</div>
+                                            )}
+                                        </td>
+                                        <td className="p-4 font-medium">{logo.name}</td>
+                                        <td className="p-4 text-[#6B7280] hidden sm:table-cell">{logo.category}</td>
+                                        <td className="p-4 text-[#6B7280] hidden md:table-cell">{logo.sortOrder}</td>
+                                        <td className="p-4">
+                                            {logo.isActive ? (
+                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#6B9F91]/10 text-[#6B9F91]">
+                                                    <CheckCircle2 className="w-3 h-3" /> ACTIVE
+                                                </span>
+                                            ) : (
+                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#EDF5F2]/70 text-[#9CA3AF]">
+                                                    INACTIVE
+                                                </span>
+                                            )}
+                                        </td>
+                                        <td className="p-3">
+                                            <div className="grid grid-cols-2 gap-1.5 w-fit ml-auto">
+                                                <button onClick={() => handleOpenModal(logo)} className="px-3 py-1 rounded border border-gray-300 text-[#374151] text-xs font-medium hover:bg-[#EDF5F2]/70 hover:border-[#6B9F91] transition-colors whitespace-nowrap">Edit</button>
+                                                <button onClick={() => handleDelete(logo.id)} className="px-3 py-1 rounded border border-[#FCA5A5] text-[#B91C1C] text-xs font-medium hover:bg-red-50 transition-colors whitespace-nowrap">Delete</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             {/* Modal */}
@@ -286,12 +316,16 @@ export default function AcademicPartnerLogosPage() {
                                                 <img src={logoUrl} alt="Preview" className="max-w-full max-h-full object-contain" />
                                             </div>
                                         )}
-                                        <div className="flex-1">
-                                            <label className={`cursor-pointer inline-flex items-center gap-2 bg-[#EDF5F2]/70 hover:bg-[#EDF5F2] border border-gray-200 text-[#111827] px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${isUploading ? 'opacity-50' : ''}`}>
-                                                <Upload className="w-4 h-4" /> {isUploading ? 'Uploading...' : 'Upload Image'}
+                                        <div className="flex-1 flex gap-2 items-center flex-wrap">
+                                            <input type="text" value={logoUrl} onChange={e => setLogoUrl(e.target.value)} placeholder="/uploads/... or https://..." className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-[#111827] focus:outline-none focus:border-[#6B9F91] mb-1" />
+                                            <label className={`cursor-pointer inline-flex items-center gap-2 bg-[#EDF5F2]/70 hover:bg-[#EDF5F2] border border-gray-200 text-[#111827] px-4 py-2 rounded-lg text-sm font-medium transition-colors ${isUploading ? 'opacity-50' : ''}`}>
+                                                <Upload className="w-4 h-4" /> {isUploading ? 'Uploading...' : 'Upload Local File'}
                                                 <input type="file" accept="image/*" onChange={handleUpload} className="hidden" disabled={isUploading} />
                                             </label>
-                                            <p className="text-[#9CA3AF] text-[10px] mt-1.5">* Prefer SVG, PNG or WebP with transparent backgrounds.</p>
+                                            <button type="button" onClick={() => setIsMediaSelectorOpen(true)} className="cursor-pointer inline-flex items-center gap-2 bg-[#EDF5F2]/70 hover:bg-[#EDF5F2] border border-gray-200 text-[#111827] px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                                <ImageIcon className="w-4 h-4 text-[#6B9F91]" /> Select from Media
+                                            </button>
+                                            <p className="text-[#9CA3AF] text-[10px] w-full mt-1">* Prefer SVG, PNG or WebP with transparent backgrounds.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -328,6 +362,16 @@ export default function AcademicPartnerLogosPage() {
                         </div>
                     </div>
                 </div>
+            )}
+
+            {isMediaSelectorOpen && (
+                <MediaSelectorModal
+                    onClose={() => setIsMediaSelectorOpen(false)}
+                    onSelect={(url) => {
+                        setLogoUrl(url);
+                        setIsMediaSelectorOpen(false);
+                    }}
+                />
             )}
         </div>
     );

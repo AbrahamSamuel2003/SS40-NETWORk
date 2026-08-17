@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import NextImage from "next/image";
 import {
     Building2, Store, Factory, Plane, Landmark,
     Stethoscope, GraduationCap, Code2, Cpu, Globe, Library, Rocket, Network
@@ -9,6 +10,7 @@ import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { cn } from "@/utils/cn";
+import { LogoMarqueeSkeleton } from "@/components/ui/Skeleton";
 
 const MIXED_ROW_1 = [
     { id: "1", name: "Global Enterprise", icon: Globe },
@@ -29,6 +31,36 @@ const MIXED_ROW_2 = [
 ];
 
 export function TrustedBy({ data }: { data?: any[] }) {
+    if (data && data.length === 0) {
+        return (
+            <SectionWrapper id="trusted-by" className="bg-[#EDF5F2] relative overflow-hidden">
+                {/* Soft Ambient Background Enhancements */}
+                <div className="absolute inset-0 pointer-events-none z-0">
+                    <div
+                        className="absolute inset-0 opacity-[0.02] mix-blend-multiply"
+                        style={{ backgroundImage: 'linear-gradient(#6B9F91 1px, transparent 1px), linear-gradient(90deg, #6B9F91 1px, transparent 1px)', backgroundSize: '40px 40px' }}
+                    />
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-[#6B9F91]/5 blur-[120px] rounded-full" />
+                </div>
+
+                <Container className="relative z-10">
+                    <div className="text-center mb-12 lg:mb-20">
+                        <span className="inline-block px-3 py-1 rounded-full bg-[#6B9F91]/10 text-[#6B9F91] text-[10px] font-bold uppercase tracking-widest mb-4">
+                            OUR PARTNERS & CLIENTS
+                        </span>
+                        <h2 className="text-3xl md:text-5xl font-extrabold text-[#111827] mb-4">
+                            Trusted by Businesses, Institutions & Partners
+                        </h2>
+                        <p className="text-gray-500 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
+                            Organizations that trust SS40 NETWORK across digital solutions, products, and industry-focused academics.
+                        </p>
+                    </div>
+                    <LogoMarqueeSkeleton count={6} title="" />
+                </Container>
+            </SectionWrapper>
+        );
+    }
+
     const ROW_1 = (data && data.length > 0) ? data.slice(0, Math.ceil(data.length / 2)) : MIXED_ROW_1;
     const ROW_2 = (data && data.length > 0) ? data.slice(Math.ceil(data.length / 2)) : MIXED_ROW_2;
 
@@ -174,7 +206,15 @@ function MarqueeRow({ items, direction, speed }: MarqueeRowProps) {
                         >
                             <div className={`flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105 ${item.showTextOnCard ? 'w-10 h-10 md:w-12 md:h-12' : 'h-8 md:h-10 w-auto min-w-[32px]'}`}>
                                 {item.logoUrl ? (
-                                    <img src={item.logoUrl} alt={item.showTextOnCard ? item.name : ''} className={`object-contain ${item.showTextOnCard ? 'w-full h-full' : 'w-auto h-full max-w-[140px] md:max-w-[180px]'}`} />
+                                    <div className={`relative ${item.showTextOnCard ? 'w-full h-full' : 'w-auto h-full max-w-[140px] md:max-w-[180px]'}`}>
+                                        <NextImage 
+                                            src={item.logoUrl} 
+                                            alt={item.showTextOnCard ? item.name : ''} 
+                                            fill
+                                            className="object-contain"
+                                            sizes={item.showTextOnCard ? "48px" : "(max-width: 768px) 140px, 180px"}
+                                        />
+                                    </div>
                                 ) : Icon ? (
                                     <Icon className="w-6 h-6 md:w-8 md:h-8 text-[#6B9F91]" />
                                 ) : null}

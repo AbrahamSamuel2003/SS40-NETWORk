@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { hoverLift, slideUp, staggerContainer } from "@/lib/animations";
+import { FeaturedProductSkeleton } from "@/components/ui/Skeleton";
 
 export function FeaturedProduct() {
     const [products, setProducts] = React.useState<any[]>([]);
@@ -58,18 +59,27 @@ export function FeaturedProduct() {
         }
     }, [isLoading]);
 
-    if (isLoading) {
+    if (isLoading || products.length === 0) {
         return (
             <SectionWrapper id="featured-product" className="bg-[#EDF5F2] scroll-mt-24">
-                <Container>
-                    <div className="py-20 flex justify-center items-center opacity-50">
-                        <Loader2 className="w-8 h-8 animate-spin text-[#6B9F91]" />
-                    </div>
+                <Container className="space-y-24">
+                    {/* Section Header */}
+                    <SectionHeading
+                        badge="OUR PRODUCTS"
+                        title={
+                            <>
+                                Innovative Tools.<br />
+                                Built for <span className="text-[#2DD4BF]">Real Impact.</span>
+                            </>
+                        }
+                        description="Discover our flagship products designed to simplify operations, supercharge productivity, and deliver measurable results for your business."
+                        align="center"
+                    />
+                    <FeaturedProductSkeleton />
                 </Container>
             </SectionWrapper>
         );
     }
-    if (products.length === 0) return null;
 
     return (
         <SectionWrapper id="featured-product" className="bg-[#EDF5F2] scroll-mt-24">

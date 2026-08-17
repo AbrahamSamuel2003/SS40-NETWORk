@@ -4,7 +4,7 @@ import * as React from 'react';
 import { AdminSidebar } from './AdminSidebar';
 import { AdminTopbar } from './AdminTopbar';
 
-export function AdminLayoutClient({
+export const AdminLayoutClient = React.memo(function AdminLayoutClient({
     children,
     adminName
 }: {
@@ -32,4 +32,4 @@ export function AdminLayoutClient({
             </div>
         </div>
     );
-}
+});

@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit2, Trash2, AlertCircle, X, ExternalLink } from 'lucide-react';
+import { Plus, Edit2, Trash2, AlertCircle, X, ExternalLink, Upload, Image as ImageIcon } from 'lucide-react';
+import { MediaSelectorModal } from '@/components/admin/MediaSelectorModal';
 
 export default function ManagedProductsPage() {
     const [products, setProducts] = useState<any[]>([]);
@@ -20,6 +21,9 @@ export default function ManagedProductsPage() {
     const [isActive, setIsActive] = useState(true);
     const [isFeatured, setIsFeatured] = useState(false); // Kept since it's in our DB model
     const [sortOrder, setSortOrder] = useState(0);
+    const [screenshotUrl, setScreenshotUrl] = useState('');
+    const [isMediaSelectorOpen, setIsMediaSelectorOpen] = useState(false);
+    const [isUploading, setIsUploading] = useState(false);
 
     const [isSaving, setIsSaving] = useState(false);
 
@@ -52,6 +56,7 @@ export default function ManagedProductsPage() {
             setProductUrl(item.productUrl || '');
             setDescription(item.description || '');
             setTagsInput(Array.isArray(item.tags) ? item.tags.join(', ') : '');
+            setScreenshotUrl(item.screenshotUrl || '');
             setIsActive(item.isActive ?? true);
             setIsFeatured(item.isFeatured ?? false);
             setSortOrder(item.sortOrder || 0);
@@ -63,12 +68,32 @@ export default function ManagedProductsPage() {
             setProductUrl('');
             setDescription('');
             setTagsInput('');
+            setScreenshotUrl('');
             setIsActive(true);
             setIsFeatured(false);
             setSortOrder(0);
         }
         setErrorMsg('');
         setIsModalOpen(true);
+    };
+
+    const handleUploadLocal = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (!e.target.files?.length) return;
+        setIsUploading(true);
+        try {
+            const formData = new FormData();
+            formData.append('file', e.target.files[0]);
+            const res = await fetch('/api/admin/media/upload', { method: 'POST', body: formData });
+            const data = await res.json();
+            if (data.success) {
+                setScreenshotUrl(data.data.url);
+            } else {
+                alert('Upload failed');
+            }
+        } finally {
+            setIsUploading(false);
+            if (e.target) e.target.value = '';
+        }
     };
 
     const handleSave = async (e: React.FormEvent) => {
@@ -85,6 +110,7 @@ export default function ManagedProductsPage() {
             productUrl,
             description,
             tags,
+            screenshotUrl,
             isActive,
             isFeatured,
             sortOrder
@@ -141,141 +167,205 @@ export default function ManagedProductsPage() {
             </div>
 
             <div className="admin-card overflow-hidden">
-                <table className="w-full text-left text-sm text-[#374151]">
-                    <thead className="bg-[#EDF5F2]/70 border-b border-gray-200 text-[#111827]">
-                        <tr>
-                            <th className="p-4 font-medium">Product Details</th>
-                            <th className="p-4 font-medium">Marketing Title</th>
-                            <th className="p-4 font-medium">Tags</th>
-                            <th className="p-4 font-medium text-center">Status</th>
-                            <th className="p-4 font-medium text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100">
-                        {products.length === 0 ? (
-                            <tr><td colSpan={5} className="p-8 text-center text-[#9CA3AF]">No products found.</td></tr>
-                        ) : (
-                            products.map(item => (
-                                <tr key={item.id} className="hover:bg-[#EDF5F2]/50">
-                                    <td className="p-4 font-medium">
-                                        <div className="text-[#111827]">{item.name}</div>
-                                        <div className="text-[#9CA3AF] text-xs truncate max-w-xs">{item.description}</div>
-                                        {item.productUrl && (
-                                            <div className="mt-1">
-                                                <a href={item.productUrl} target="_blank" rel="noreferrer" className="text-[10px] text-[#6B9F91] hover:underline flex items-center gap-1">
-                                                    <ExternalLink className="w-3 h-3" /> URL Link
-                                                </a>
-                                            </div>
-                                        )}
-                                    </td>
-                                    <td className="p-4">
-                                        <div className="text-[#111827] text-xs mb-1">{item.marketingTitle}</div>
-                                        {item.badgeText && (
-                                            <span className="text-[10px] font-bold tracking-widest uppercase bg-[#EDF5F2] px-1.5 py-0.5 rounded text-[#6B7280]">{item.badgeText}</span>
-                                        )}
-                                    </td>
-                                    <td className="p-4">
-                                        <div className="flex flex-wrap gap-1">
-                                            {Array.isArray(item.tags) && item.tags.slice(0, 3).map((tag: string, i: number) => (
-                                                <span key={i} className="text-[10px] bg-[#EDF5F2] px-1.5 py-0.5 rounded text-[#6B7280]">{tag}</span>
-                                            ))}
-                                            {Array.isArray(item.tags) && item.tags.length > 3 && (
-                                                <span className="text-[10px] text-[#9CA3AF]">+{item.tags.length - 3}</span>
-                                            )}
-                                        </div>
-                                    </td>
-                                    <td className="p-4 text-center">
-                                        <div className="flex flex-col items-center gap-1.5">
-                                            <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-semibold ${item.isActive ? 'bg-[#6B9F91]/10 text-[#6B9F91] border border-[#6B9F91]/20' : 'bg-[#FEE2E2] text-[#B91C1C] border border-[#FCA5A5]'}`}>
-                                                {item.isActive ? 'Active' : 'Inactive'}
-                                            </span>
-                                            {item.isFeatured && (
-                                                <span className="inline-flex px-2 py-0.5 rounded text-[10px] font-semibold bg-yellow-500/10 text-yellow-500 border border-yellow-500/20">
-                                                    Featured
-                                                </span>
-                                            )}
-                                        </div>
-                                    </td>
-                                    <td className="p-4 text-right">
-                                        <button onClick={() => handleOpenModal(item)} className="text-[#9CA3AF] hover:text-[#111827] p-2 transition-colors">
+                {/* ── MOBILE CARD GRID (hidden on sm+) ── */}
+                <div className="sm:hidden">
+                    {products.length === 0 ? (
+                        <div className="p-8 text-center text-[#9CA3AF]">No products found.</div>
+                    ) : (
+                        <div className="grid grid-cols-2 gap-3 p-3">
+                            {products.map(item => (
+                                <div key={item.id} className="admin-card p-3 flex flex-col gap-2 rounded-xl">
+                                    <div className="flex items-start justify-between gap-1">
+                                        <span className="font-semibold text-[#111827] text-sm leading-tight line-clamp-2">{item.name}</span>
+                                        <button onClick={() => handleOpenModal(item)} className="shrink-0 p-1 text-[#9CA3AF] hover:text-[#111827]">
                                             <Edit2 className="w-4 h-4" />
                                         </button>
-                                        <button onClick={() => handleDelete(item.id)} className="text-[#B91C1C]/50 hover:text-[#B91C1C] p-2 transition-colors">
-                                            <Trash2 className="w-4 h-4" />
+                                    </div>
+                                    <p className="text-[#6B7280] text-xs leading-snug line-clamp-2">{item.description}</p>
+                                    <div className="mt-auto pt-1 flex items-center justify-between">
+                                        <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-semibold ${item.isActive ? 'bg-[#6B9F91]/10 text-[#6B9F91] border border-[#6B9F91]/20' : 'bg-[#FEE2E2] text-[#B91C1C] border border-[#FCA5A5]'}`}>• {item.isActive ? 'Active' : 'Inactive'}</span>
+                                        <button onClick={() => handleDelete(item.id)} className="text-[#B91C1C]/50 hover:text-[#B91C1C] p-1">
+                                            <Trash2 className="w-3.5 h-3.5" />
                                         </button>
-                                    </td>
-                                </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                {/* ── DESKTOP TABLE (hidden on mobile) ── */}
+                <div className="hidden sm:block overflow-x-auto w-full touch-auto">
+                    <table className="w-full text-left text-sm text-[#374151] min-w-[600px]">
+                        <thead className="bg-[#EDF5F2]/70 border-b border-gray-200 text-[#111827]">
+                            <tr>
+                                <th className="p-4 font-medium min-w-[180px]">Product Details</th>
+                                <th className="p-4 font-medium min-w-[150px] hidden sm:table-cell">Marketing Title</th>
+                                <th className="p-4 font-medium min-w-[120px] hidden md:table-cell">Tags</th>
+                                <th className="p-4 font-medium text-center min-w-[100px]">Status</th>
+                                <th className="p-4 font-medium text-right min-w-[120px]">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-100">
+                            {products.length === 0 ? (
+                                <tr><td colSpan={5} className="p-8 text-center text-[#9CA3AF]">No products found.</td></tr>
+                            ) : (
+                                products.map(item => (
+                                    <tr key={item.id} className="hover:bg-[#EDF5F2]/50">
+                                        <td className="p-4 font-medium">
+                                            <div className="text-[#111827]">{item.name}</div>
+                                            <div className="text-[#9CA3AF] text-xs truncate max-w-xs">{item.description}</div>
+                                            {item.productUrl && (
+                                                <div className="mt-1">
+                                                    <a href={item.productUrl} target="_blank" rel="noreferrer" className="text-[10px] text-[#6B9F91] hover:underline flex items-center gap-1">
+                                                        <ExternalLink className="w-3 h-3" /> URL Link
+                                                    </a>
+                                                </div>
+                                            )}
+                                        </td>
+                                        <td className="p-4 hidden sm:table-cell">
+                                            <div className="text-[#111827] text-xs mb-1">{item.marketingTitle}</div>
+                                            {item.badgeText && (
+                                                <span className="text-[10px] font-bold tracking-widest uppercase bg-[#EDF5F2] px-1.5 py-0.5 rounded text-[#6B7280]">{item.badgeText}</span>
+                                            )}
+                                        </td>
+                                        <td className="p-4 hidden md:table-cell">
+                                            <div className="flex flex-wrap gap-1">
+                                                {Array.isArray(item.tags) && item.tags.slice(0, 3).map((tag: string, i: number) => (
+                                                    <span key={i} className="text-[10px] bg-[#EDF5F2] px-1.5 py-0.5 rounded text-[#6B7280]">{tag}</span>
+                                                ))}
+                                                {Array.isArray(item.tags) && item.tags.length > 3 && (
+                                                    <span className="text-[10px] text-[#9CA3AF]">+{item.tags.length - 3}</span>
+                                                )}
+                                            </div>
+                                        </td>
+                                        <td className="p-4 text-center">
+                                            <div className="flex flex-col items-center gap-1.5">
+                                                <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-semibold ${item.isActive ? 'bg-[#6B9F91]/10 text-[#6B9F91] border border-[#6B9F91]/20' : 'bg-[#FEE2E2] text-[#B91C1C] border border-[#FCA5A5]'}`}>
+                                                    {item.isActive ? 'Active' : 'Inactive'}
+                                                </span>
+                                                {item.isFeatured && (
+                                                    <span className="inline-flex px-2 py-0.5 rounded text-[10px] font-semibold bg-yellow-500/10 text-yellow-500 border border-yellow-500/20">
+                                                        Featured
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </td>
+                                        <td className="p-3">
+                                            <div className="grid grid-cols-2 gap-1.5 w-fit ml-auto">
+                                                <button onClick={() => handleOpenModal(item)} className="px-3 py-1 rounded border border-gray-300 text-[#374151] text-xs font-medium hover:bg-[#EDF5F2]/70 hover:border-[#6B9F91] transition-colors whitespace-nowrap">Edit</button>
+                                                <button onClick={() => handleDelete(item.id)} className="px-3 py-1 rounded border border-[#FCA5A5] text-[#B91C1C] text-xs font-medium hover:bg-red-50 transition-colors whitespace-nowrap">Delete</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#111827]/40 backdrop-blur-sm">
-                    <div className="admin-card w-full max-w-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
-                        <div className="p-5 border-b border-gray-200 flex justify-between items-center bg-[#EDF5F2]/70">
-                            <h3 className="text-lg font-bold text-[#111827]">{editingId ? 'Edit Product' : 'Add Product'}</h3>
-                            <button onClick={() => setIsModalOpen(false)} className="text-[#9CA3AF] hover:text-[#111827]"><X className="w-5 h-5" /></button>
+                    <div className="admin-card w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col max-h-[88vh]">
+                        <div className="px-4 py-3 border-b border-gray-200 flex justify-between items-center bg-[#EDF5F2]/80 shrink-0">
+                            <div>
+                                <h3 className="text-sm font-bold text-[#111827]">{editingId ? 'Edit Product' : 'Add Product'}</h3>
+                                <p className="text-[10px] text-[#9CA3AF] mt-0.5">Fill in the product details below</p>
+                            </div>
+                            <button onClick={() => setIsModalOpen(false)} className="text-[#9CA3AF] hover:text-[#111827] p-1"><X className="w-4 h-4" /></button>
                         </div>
-                        <div className="p-6 overflow-y-auto w-full custom-scrollbar">
-                            {errorMsg && <div className="mb-4 text-sm text-[#B91C1C] bg-[#FEE2E2] p-3 rounded-lg border border-[#FCA5A5] flex gap-2"><AlertCircle className="w-4 h-4 mt-0.5 shrink-0" /> {errorMsg}</div>}
+                        <div className="p-4 overflow-y-auto w-full custom-scrollbar">
+                            {errorMsg && <div className="mb-3 text-xs text-[#B91C1C] bg-[#FEE2E2] px-3 py-2 rounded border border-[#FCA5A5] flex gap-2"><AlertCircle className="w-3.5 h-3.5 mt-0.5 shrink-0" /> {errorMsg}</div>}
 
-                            <form id="productForm" onSubmit={handleSave} className="space-y-5">
-                                <div className="grid grid-cols-2 gap-4">
+                            <form id="productForm" onSubmit={handleSave} className="space-y-3">
+                                <div className="grid grid-cols-2 gap-3">
                                     <div>
-                                        <label className="block text-sm text-[#374151] mb-1.5">Product Name *</label>
-                                        <input required value={name} onChange={e => setName(e.target.value)} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-[#111827]" placeholder="e.g. ClearInvoice" />
+                                        <label className="block text-xs font-medium text-[#374151] mb-1">Product Name *</label>
+                                        <input required value={name} onChange={e => setName(e.target.value)} className="w-full bg-white border border-gray-200 rounded-md px-3 py-1.5 text-sm text-[#111827] focus:outline-none focus:border-[#6B9F91]" placeholder="e.g. ClearInvoice" />
                                     </div>
                                     <div>
-                                        <label className="block text-sm text-[#374151] mb-1.5">Marketing Title *</label>
-                                        <input required value={marketingTitle} onChange={e => setMarketingTitle(e.target.value)} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-[#111827]" placeholder="Smart Invoicing Built For Modern Businesses" />
+                                        <label className="block text-xs font-medium text-[#374151] mb-1">Marketing Title *</label>
+                                        <input required value={marketingTitle} onChange={e => setMarketingTitle(e.target.value)} className="w-full bg-white border border-gray-200 rounded-md px-3 py-1.5 text-sm text-[#111827] focus:outline-none focus:border-[#6B9F91]" placeholder="Smart Invoicing Built For Modern Businesses" />
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-2 gap-3">
                                     <div>
-                                        <label className="block text-sm text-[#374151] mb-1.5">Badge Text (optional)</label>
-                                        <input value={badgeText} onChange={e => setBadgeText(e.target.value)} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-[#111827]" placeholder="e.g. OUR PRODUCT" />
+                                        <label className="block text-xs font-medium text-[#374151] mb-1">Badge Text <span className="text-[#9CA3AF] font-normal">(optional)</span></label>
+                                        <input value={badgeText} onChange={e => setBadgeText(e.target.value)} className="w-full bg-white border border-gray-200 rounded-md px-3 py-1.5 text-sm text-[#111827] focus:outline-none focus:border-[#6B9F91]" placeholder="e.g. OUR PRODUCT" />
                                     </div>
                                     <div>
-                                        <label className="block text-sm text-[#374151] mb-1.5">Live URL (optional)</label>
-                                        <input value={productUrl} onChange={e => setProductUrl(e.target.value)} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-[#111827] placeholder:text-[#9CA3AF]" placeholder="https://" />
+                                        <label className="block text-xs font-medium text-[#374151] mb-1">Live URL <span className="text-[#9CA3AF] font-normal">(optional)</span></label>
+                                        <input value={productUrl} onChange={e => setProductUrl(e.target.value)} className="w-full bg-white border border-gray-200 rounded-md px-3 py-1.5 text-sm text-[#111827] focus:outline-none focus:border-[#6B9F91] placeholder:text-[#9CA3AF]" placeholder="https://" />
                                     </div>
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm text-[#374151] mb-1.5">Tags (comma separated)</label>
-                                    <input value={tagsInput} onChange={e => setTagsInput(e.target.value)} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-[#111827]" placeholder="Tax, Billing, Software..." />
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm text-[#374151] mb-1.5">Description *</label>
-                                    <textarea required rows={4} value={description} onChange={e => setDescription(e.target.value)} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-[#111827] resize-y" placeholder="Brief product summary..." />
+                                    <label className="block text-xs font-medium text-[#374151] mb-1">Tags <span className="text-[#9CA3AF] font-normal">(comma separated)</span></label>
+                                    <input value={tagsInput} onChange={e => setTagsInput(e.target.value)} className="w-full bg-white border border-gray-200 rounded-md px-3 py-1.5 text-sm text-[#111827] focus:outline-none focus:border-[#6B9F91]" placeholder="Tax, Billing, Software..." />
                                 </div>
 
-                                <div className="pt-2 flex flex-wrap gap-6 border-t border-gray-100 mt-4">
-                                    <label className="flex items-center gap-3 cursor-pointer group pt-2">
-                                        <div className="relative"><input type="checkbox" checked={isActive} onChange={e => setIsActive(e.target.checked)} className="sr-only" /><div className={`w-10 h-6 rounded-full transition-colors ${isActive ? 'bg-[#6B9F91]' : 'bg-[#EDF5F2]'}`}></div><div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${isActive ? 'translate-x-4' : 'translate-x-0'}`}></div></div>
-                                        <span className="text-sm font-medium text-[#374151]">Active</span>
+                                <div>
+                                    <label className="block text-xs font-medium text-[#374151] mb-1">Description *</label>
+                                    <textarea required rows={3} value={description} onChange={e => setDescription(e.target.value)} className="w-full bg-white border border-gray-200 rounded-md px-3 py-1.5 text-sm text-[#111827] resize-y focus:outline-none focus:border-[#6B9F91]" placeholder="Brief product summary..." />
+                                </div>
+
+                                <div>
+                                    <label className="block text-xs font-medium text-[#374151] mb-2">Product Screenshot</label>
+                                    {screenshotUrl && (
+                                        <div className="relative w-full aspect-video bg-gray-50 rounded-lg overflow-hidden border border-gray-200 mb-3 group">
+                                            <img src={screenshotUrl} alt="Screenshot" className="w-full h-full object-contain" />
+                                            <button type="button" onClick={() => setScreenshotUrl('')} className="absolute top-2 right-2 bg-white/90 p-1.5 rounded-full text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity hover:text-red-500 shadow-sm">
+                                                <X className="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                    )}
+                                    <div className="flex flex-wrap gap-2">
+                                        <label className={`flex-1 flex items-center justify-center gap-2 border border-gray-200 bg-white hover:bg-gray-50 rounded-lg px-4 py-2 cursor-pointer transition-colors ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}>
+                                            <Upload className="w-4 h-4 text-gray-500" />
+                                            <span className="text-xs font-medium text-[#374151]">{isUploading ? 'Uploading...' : 'Upload Local File'}</span>
+                                            <input type="file" accept="image/*" onChange={handleUploadLocal} className="hidden" disabled={isUploading} />
+                                        </label>
+                                        <button type="button" onClick={() => setIsMediaSelectorOpen(true)} className="flex-1 flex items-center justify-center gap-2 border border-[#6B9F91]/30 bg-[#EDF5F2]/50 hover:bg-[#EDF5F2] rounded-lg px-4 py-2 transition-colors">
+                                            <ImageIcon className="w-4 h-4 text-[#6B9F91]" />
+                                            <span className="text-xs font-medium text-[#111827]">Select from Media</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-wrap items-center gap-x-5 gap-y-2 pt-2 border-t border-gray-100">
+                                    <label className="flex items-center gap-2 cursor-pointer">
+                                        <div className="relative shrink-0"><input type="checkbox" checked={isActive} onChange={e => setIsActive(e.target.checked)} className="sr-only" /><div className={`w-8 h-5 rounded-full transition-colors ${isActive ? 'bg-[#6B9F91]' : 'bg-[#EDF5F2]'}`}></div><div className={`absolute top-0.5 left-0.5 bg-white w-4 h-4 rounded-full transition-transform ${isActive ? 'translate-x-3' : 'translate-x-0'}`}></div></div>
+                                        <span className="text-xs font-medium text-[#374151]">Active</span>
                                     </label>
-                                    <label className="flex items-center gap-3 cursor-pointer group pt-2">
-                                        <div className="relative"><input type="checkbox" checked={isFeatured} onChange={e => setIsFeatured(e.target.checked)} className="sr-only" /><div className={`w-10 h-6 rounded-full transition-colors ${isFeatured ? 'bg-yellow-500' : 'bg-[#EDF5F2]'}`}></div><div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${isFeatured ? 'translate-x-4' : 'translate-x-0'}`}></div></div>
-                                        <span className="text-sm font-medium text-[#374151]">Featured</span>
+                                    <label className="flex items-center gap-2 cursor-pointer">
+                                        <div className="relative shrink-0"><input type="checkbox" checked={isFeatured} onChange={e => setIsFeatured(e.target.checked)} className="sr-only" /><div className={`w-8 h-5 rounded-full transition-colors ${isFeatured ? 'bg-yellow-500' : 'bg-[#EDF5F2]'}`}></div><div className={`absolute top-0.5 left-0.5 bg-white w-4 h-4 rounded-full transition-transform ${isFeatured ? 'translate-x-3' : 'translate-x-0'}`}></div></div>
+                                        <span className="text-xs font-medium text-[#374151]">Featured</span>
                                     </label>
-                                    <div className="flex items-center gap-3 pt-2">
-                                        <span className="text-sm font-medium text-[#374151]">Sort Order</span>
-                                        <input type="number" value={sortOrder} onChange={e => setSortOrder(parseInt(e.target.value) || 0)} className="w-20 bg-white border border-gray-200 rounded-lg px-2 py-1 text-[#111827] text-center" />
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-xs font-medium text-[#374151]">Sort Order</span>
+                                        <input type="number" value={sortOrder} onChange={e => setSortOrder(parseInt(e.target.value) || 0)} className="w-16 bg-white border border-gray-200 rounded-md px-2 py-1 text-sm text-[#111827] text-center focus:outline-none focus:border-[#6B9F91]" />
                                     </div>
                                 </div>
                             </form>
                         </div>
-                        <div className="p-5 border-t border-gray-200 flex justify-end gap-3 bg-[#EDF5F2]/70">
-                            <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 rounded-lg text-[#6B7280] hover:bg-[#EDF5F2]/70">Cancel</button>
-                            <button type="submit" form="productForm" disabled={isSaving} className="bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-6 py-2 rounded-lg disabled:opacity-50">Save Product</button>
+                        <div className="px-4 py-2.5 border-t border-gray-200 flex justify-end gap-2 bg-[#EDF5F2]/50 shrink-0">
+                            <button type="button" onClick={() => setIsModalOpen(false)} className="px-3 py-1.5 rounded-md text-xs text-[#6B7280] hover:bg-[#EDF5F2]/70 font-medium">Cancel</button>
+                            <button type="submit" form="productForm" disabled={isSaving} className="bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-5 py-1.5 rounded-md text-xs font-medium disabled:opacity-50">Save Product</button>
                         </div>
                     </div>
                 </div>
+            )}
+
+            {isMediaSelectorOpen && (
+                <MediaSelectorModal
+                    onClose={() => setIsMediaSelectorOpen(false)}
+                    onSelect={(url) => {
+                        setScreenshotUrl(url);
+                        setIsMediaSelectorOpen(false);
+                    }}
+                />
             )}
         </div>
     );

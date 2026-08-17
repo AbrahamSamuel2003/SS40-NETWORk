@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { PageWrapper } from '@/components/layout/PageWrapper';
+import { Navbar } from '@/components/layout/Navbar';
+import { Footer } from '@/components/layout/Footer';
 import { FloatingWhatsApp } from '@/components/ui/FloatingWhatsApp';
 import { getSiteConfig } from '@/lib/site-config';
 
@@ -7,7 +8,11 @@ export default async function PublicLayout({ children }: { children: React.React
     const config = await getSiteConfig();
     return (
         <>
-            <PageWrapper>{children}</PageWrapper>
+            <Navbar config={config} />
+            <main className="flex-grow flex flex-col">
+                {children}
+            </main>
+            <Footer />
             <FloatingWhatsApp config={config} />
         </>
     );

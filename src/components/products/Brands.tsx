@@ -6,6 +6,7 @@ import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { cn } from "@/utils/cn";
+import { LogoMarqueeSkeleton } from "@/components/ui/Skeleton";
 
 export function Brands() {
     const [logos, setLogos] = React.useState<any[]>([]);
@@ -23,8 +24,20 @@ export function Brands() {
             .catch(() => setIsLoading(false));
     }, []);
 
-    if (!isLoading && logos.length === 0) {
-        return null; // Hide section entirely if there are no logos configured for the Products page (fail safe)
+    if (isLoading || logos.length === 0) {
+        return (
+            <SectionWrapper id="brands" className="bg-[#EDF5F2] relative overflow-hidden pb-8 md:pb-12">
+                <Container className="relative z-10">
+                    <SectionHeading
+                        badge="TRUSTED BY BUSINESSES"
+                        title="Growing with Organizations Across Industries"
+                        description="Businesses choose SS40 NETWORK products to improve efficiency, simplify operations, and support sustainable growth."
+                        className="mb-12 lg:mb-20"
+                    />
+                    <LogoMarqueeSkeleton count={6} title="" />
+                </Container>
+            </SectionWrapper>
+        );
     }
 
     // Split logos into two rows if there are enough, otherwise duplicate them or use single row
@@ -36,12 +49,7 @@ export function Brands() {
     const showRow2 = ROW_2.length > 0;
 
     return (
-        <SectionWrapper id="brands" className="bg-[#EDF5F2] relative overflow-hidden transition-opacity duration-500" data-loading={isLoading}>
-        <style dangerouslySetInnerHTML={{
-            __html: `
-            [data-loading="true"] { opacity: 0; pointer-events: none; }
-            [data-loading="false"] { opacity: 1; }
-        `}} />
+        <SectionWrapper id="brands" className="bg-[#EDF5F2] relative overflow-hidden">
 
             {/* Soft Ambient Background Enhancements */}
             <div className="absolute inset-0 pointer-events-none z-0">

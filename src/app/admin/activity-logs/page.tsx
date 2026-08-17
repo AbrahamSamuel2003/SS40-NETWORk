@@ -129,15 +129,46 @@ export default function ActivityLogsPage() {
             </div>
 
             <div className="admin-card overflow-hidden shadow-sm">
-                <div className="overflow-x-auto w-full">
-                    <table className="w-full text-left text-sm text-[#374151] whitespace-nowrap">
+                {/* ── MOBILE CARD GRID (hidden on sm+) ── */}
+                <div className="sm:hidden">
+                    {isLoading ? (
+                        <div className="p-8 text-center text-[#9CA3AF]">
+                            <div className="animate-spin rounded-full h-6 w-6 mx-auto border-t-2 border-b-2 border-gray-200 mb-2"></div>
+                            Fetching immutable records...
+                        </div>
+                    ) : logs.length === 0 ? (
+                        <div className="p-8 text-center text-[#9CA3AF]">No activity has been recorded yet.</div>
+                    ) : (
+                        <div className="grid grid-cols-2 gap-3 p-3">
+                            {logs.map(item => (
+                                <div key={item.id} className="admin-card p-3 flex flex-col gap-2 rounded-xl">
+                                    <div className="flex items-start justify-between gap-1">
+                                        <span className="font-semibold text-[#111827] text-sm leading-tight line-clamp-2">{item.description}</span>
+                                        <button onClick={() => handleOpenModal(item)} className="shrink-0 p-1 text-[#6B9F91]">
+                                            <Eye className="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                    <p className="text-[#6B7280] text-[10px] leading-snug line-clamp-1">{item.adminUser?.fullName || 'System Event'}</p>
+                                    <div className="mt-auto pt-1 flex items-center justify-between">
+                                        <span className="inline-flex px-2 py-0.5 rounded text-[10px] font-bold tracking-wide uppercase bg-[#EDF5F2]/70 text-[#374151] border border-gray-200">• {item.action}</span>
+                                        <span className="text-[#9CA3AF] text-[10px]">{new Date(item.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}</span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                {/* ── DESKTOP TABLE (hidden on mobile) ── */}
+                <div className="hidden sm:block overflow-x-auto w-full touch-auto">
+                    <table className="w-full text-left text-sm text-[#374151] min-w-[600px]">
                         <thead className="bg-[#EDF5F2]/70 border-b border-gray-200 text-[#111827]">
                             <tr>
-                                <th className="p-4 font-medium">Date / Time</th>
-                                <th className="p-4 font-medium">Admin</th>
-                                <th className="p-4 font-medium">Action</th>
-                                <th className="p-4 font-medium">Description</th>
-                                <th className="p-4 font-medium text-right">Details</th>
+                                <th className="p-4 font-medium min-w-[150px]">Date / Time</th>
+                                <th className="p-4 font-medium min-w-[150px] hidden sm:table-cell">Admin</th>
+                                <th className="p-4 font-medium min-w-[100px]">Action</th>
+                                <th className="p-4 font-medium min-w-[200px]">Description</th>
+                                <th className="p-4 font-medium text-right min-w-[100px]">Details</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100">
@@ -163,7 +194,7 @@ export default function ActivityLogsPage() {
                                                 <span className="text-[#6B7280]">{new Date(item.createdAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}</span>
                                             </div>
                                         </td>
-                                        <td className="p-4 flex flex-col">
+                                        <td className="p-4 hidden sm:table-cell">
                                             <span className="font-medium text-[#111827] text-xs truncate max-w-[150px]">{item.adminUser?.fullName || 'System Event'}</span>
                                             <span className="text-[#9CA3AF] text-[10px] truncate max-w-[150px]">{item.adminUser?.email || '-'}</span>
                                         </td>
@@ -177,14 +208,10 @@ export default function ActivityLogsPage() {
                                                 {item.description}
                                             </div>
                                         </td>
-                                        <td className="p-4 text-right">
-                                            <button
-                                                onClick={() => handleOpenModal(item)}
-                                                className="text-[#6B9F91] hover:text-[#6B9F91] p-2 transition-colors flex items-center justify-end gap-1 w-full"
-                                            >
-                                                <Eye className="w-4 h-4" />
-                                                <span className="text-xs">View</span>
-                                            </button>
+                                        <td className="p-3">
+                                            <div className="flex justify-end">
+                                                <button onClick={() => handleOpenModal(item)} className="px-3 py-1 rounded border border-[#6B9F91] text-[#6B9F91] text-xs font-medium hover:bg-[#6B9F91]/10 transition-colors whitespace-nowrap">View</button>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))
@@ -218,84 +245,109 @@ export default function ActivityLogsPage() {
 
             {isModalOpen && logData && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#111827]/40 backdrop-blur-sm shadow-2xl">
-                    <div className="admin-card w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
-                        <div className="p-5 border-b border-gray-200 flex justify-between items-center bg-[#EDF5F2]/70">
-                            <h3 className="text-lg font-bold text-[#111827] flex items-center gap-2">
-                                <Activity className="w-5 h-5 text-[#6B9F91] opacity-80" />
-                                Audit Log Details
-                            </h3>
-                            <button onClick={() => setIsModalOpen(false)} className="text-[#9CA3AF] hover:text-[#111827] transition-colors">
-                                <X className="w-5 h-5" />
-                            </button>
-                        </div>
-                        <div className="p-6 overflow-y-auto w-full custom-scrollbar space-y-6">
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="admin-card w-full max-w-xl overflow-hidden shadow-2xl flex flex-col max-h-[88vh]">
+                        <div className="px-4 py-3 border-b border-gray-200 flex justify-between items-center bg-[#EDF5F2]/80 shrink-0">
+                            <div className="flex items-center gap-2">
+                                <Activity className="w-4 h-4 text-[#6B9F91] opacity-80" />
                                 <div>
-                                    <h4 className="text-[#9CA3AF] text-[10px] font-bold uppercase tracking-wider mb-1 flex items-center gap-1">Date & Time</h4>
-                                    <div className="text-[#111827] text-sm">
-                                        {new Date(logData.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })} at{' '}
-                                        <span className="text-[#374151]">{new Date(logData.createdAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</span>
+                                    <h3 className="text-sm font-bold text-[#111827]">Audit Log Details</h3>
+                                    <p className="text-[10px] text-[#9CA3AF] mt-0.5">Read-only inspection record</p>
+                                </div>
+                            </div>
+                            <button onClick={() => setIsModalOpen(false)} className="text-[#9CA3AF] hover:text-[#111827] p-1 transition-colors"><X className="w-4 h-4" /></button>
+                        </div>
+
+                        <div className="p-4 overflow-y-auto w-full custom-scrollbar space-y-3">
+
+                            {/* Top meta grid */}
+                            <div className="grid grid-cols-2 gap-3">
+                                <div className="bg-[#EDF5F2]/40 rounded-md border border-gray-100 overflow-hidden">
+                                    <div className="px-3 py-1.5 bg-[#EDF5F2]/70 border-b border-gray-200">
+                                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B9F91]">Date &amp; Time</span>
+                                    </div>
+                                    <div className="px-3 py-2">
+                                        <div className="text-[#111827] text-xs font-medium">
+                                            {new Date(logData.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+                                        </div>
+                                        <div className="text-[#6B7280] text-[11px]">
+                                            {new Date(logData.createdAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div>
-                                    <h4 className="text-[#9CA3AF] text-[10px] font-bold uppercase tracking-wider mb-1">Administrator</h4>
-                                    <div className="text-[#111827] text-sm font-medium">{logData.adminUser?.fullName || 'System Event'}</div>
-                                    <div className="text-[#6B7280] text-xs font-mono">{logData.adminUser?.email || '-'}</div>
+                                <div className="bg-[#EDF5F2]/40 rounded-md border border-gray-100 overflow-hidden">
+                                    <div className="px-3 py-1.5 bg-[#EDF5F2]/70 border-b border-gray-200">
+                                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B9F91]">Administrator</span>
+                                    </div>
+                                    <div className="px-3 py-2">
+                                        <div className="text-[#111827] text-xs font-medium">{logData.adminUser?.fullName || 'System Event'}</div>
+                                        <div className="text-[#6B7280] text-[11px] font-mono">{logData.adminUser?.email || '-'}</div>
+                                    </div>
                                 </div>
 
-                                <div>
-                                    <h4 className="text-[#9CA3AF] text-[10px] font-bold uppercase tracking-wider mb-1">Action Code</h4>
-                                    <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold tracking-wide uppercase bg-[#6B9F91]/10 text-[#6B9F91] border border-[#6B9F91]/20">
-                                        {logData.action}
-                                    </span>
+                                <div className="bg-[#EDF5F2]/40 rounded-md border border-gray-100 overflow-hidden">
+                                    <div className="px-3 py-1.5 bg-[#EDF5F2]/70 border-b border-gray-200">
+                                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B9F91]">Action Code</span>
+                                    </div>
+                                    <div className="px-3 py-2">
+                                        <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold tracking-wide uppercase bg-[#6B9F91]/10 text-[#6B9F91] border border-[#6B9F91]/20">
+                                            {logData.action}
+                                        </span>
+                                    </div>
                                 </div>
 
-                                <div>
-                                    <h4 className="text-[#9CA3AF] text-[10px] font-bold uppercase tracking-wider mb-1">Entity Context</h4>
-                                    <div className="text-[#111827] text-sm font-semibold">{logData.entity}</div>
+                                <div className="bg-[#EDF5F2]/40 rounded-md border border-gray-100 overflow-hidden">
+                                    <div className="px-3 py-1.5 bg-[#EDF5F2]/70 border-b border-gray-200">
+                                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B9F91]">Entity Context</span>
+                                    </div>
+                                    <div className="px-3 py-2">
+                                        <div className="text-[#111827] text-xs font-semibold">{logData.entity}</div>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div className="border-t border-gray-200 pt-6 space-y-6">
-                                <div>
-                                    <h4 className="text-[#9CA3AF] text-[10px] font-bold uppercase tracking-wider mb-2">Immutable Description</h4>
-                                    <div className="bg-[#EDF5F2]/70 border border-gray-200 p-4 rounded-lg text-[#111827]/90 text-sm leading-relaxed whitespace-pre-wrap">
-                                        {logData.description}
+                            {/* Description */}
+                            <div className="bg-[#EDF5F2]/40 rounded-md border border-gray-100 overflow-hidden">
+                                <div className="px-3 py-1.5 bg-[#EDF5F2]/70 border-b border-gray-200">
+                                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B9F91]">Immutable Description</span>
+                                </div>
+                                <div className="px-3 py-2">
+                                    <p className="text-[#111827]/90 text-xs leading-relaxed whitespace-pre-wrap">{logData.description}</p>
+                                </div>
+                            </div>
+
+                            {/* Target ID + Network */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <div className="bg-[#EDF5F2]/40 rounded-md border border-gray-100 overflow-hidden">
+                                    <div className="px-3 py-1.5 bg-[#EDF5F2]/70 border-b border-gray-200">
+                                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B9F91]">Target Entity ID</span>
+                                    </div>
+                                    <div className="px-3 py-2">
+                                        <span className="text-[#111827]/90 font-mono text-[11px] break-all">{logData.entityId || 'N/A'}</span>
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-2">
-                                    <div>
-                                        <h4 className="text-[#9CA3AF] text-[10px] font-bold uppercase tracking-wider mb-1">Target Entity ID</h4>
-                                        <div className="text-[#111827]/90 font-mono text-xs break-all bg-white p-2 rounded border border-gray-100 inline-block">
-                                            {logData.entityId || 'N/A'}
+                                {(logData.ipAddress || logData.userAgent) && (
+                                    <div className="bg-[#EDF5F2]/40 rounded-md border border-gray-100 overflow-hidden">
+                                        <div className="px-3 py-1.5 bg-[#EDF5F2]/70 border-b border-gray-200">
+                                            <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B9F91]">Network Signature</span>
                                         </div>
-                                    </div>
-
-                                    {(logData.ipAddress || logData.userAgent) && (
-                                        <div>
-                                            <h4 className="text-[#9CA3AF] text-[10px] font-bold uppercase tracking-wider mb-1">Network Signature</h4>
-                                            <div className="text-[#6B7280] font-mono text-[10px] break-all leading-tight max-h-[80px] overflow-y-auto custom-scrollbar pr-2">
+                                        <div className="px-3 py-2 max-h-[72px] overflow-y-auto custom-scrollbar">
+                                            <div className="text-[#6B7280] font-mono text-[10px] break-all leading-tight">
                                                 {logData.ipAddress && <div><span className="text-[#9CA3AF]">IP:</span> {logData.ipAddress}</div>}
                                                 {logData.userAgent && <div className="mt-1"><span className="text-[#9CA3AF]">Agent:</span> {logData.userAgent}</div>}
                                             </div>
                                         </div>
-                                    )}
-                                </div>
+                                    </div>
+                                )}
                             </div>
 
                         </div>
-                        <div className="p-5 border-t border-gray-200 flex justify-end gap-3 bg-[#EDF5F2]/70 mt-auto shrink-0">
-                            <button
-                                type="button"
-                                onClick={() => setIsModalOpen(false)}
-                                className="px-6 py-2 rounded-lg bg-[#EDF5F2] text-[#111827] hover:bg-[#EDF5F2] transition-colors font-medium text-sm"
-                            >
+
+                        <div className="px-4 py-2.5 border-t border-gray-200 flex justify-end bg-[#EDF5F2]/50 shrink-0">
+                            <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-1.5 rounded-md text-xs font-medium bg-[#EDF5F2] text-[#111827] hover:bg-[#EDF5F2]/80 transition-colors">
                                 Close Audit Record
                             </button>
-                            {/* Strictly Read-Only Mode Maintained: No Mutations */}
                         </div>
                     </div>
                 </div>

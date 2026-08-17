@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Edit2, Trash2, AlertCircle, X, Search, Filter } from 'lucide-react';
+import { Edit2, Trash2, AlertCircle, X, Search } from 'lucide-react';
 
 export default function LeadsPage() {
     const [leads, setLeads] = useState<any[]>([]);
@@ -172,16 +172,50 @@ export default function LeadsPage() {
             </div>
 
             <div className="admin-card overflow-hidden">
-                <div className="overflow-x-auto w-full">
-                    <table className="w-full text-left text-sm text-[#374151] whitespace-nowrap">
+                {/* ── MOBILE CARD GRID (hidden on sm+) ── */}
+                <div className="sm:hidden">
+                    {isLoading ? (
+                        <div className="p-8 text-center text-[#9CA3AF]">
+                            <div className="animate-spin rounded-full h-6 w-6 mx-auto border-t-2 border-b-2 border-gray-200 mb-2"></div>
+                            Loading leads...
+                        </div>
+                    ) : leads.length === 0 ? (
+                        <div className="p-8 text-center text-[#9CA3AF]">No leads found.</div>
+                    ) : (
+                        <div className="grid grid-cols-2 gap-3 p-3">
+                            {leads.map(item => (
+                                <div key={item.id} className="admin-card p-3 flex flex-col gap-2 rounded-xl">
+                                    <div className="flex items-start justify-between gap-1">
+                                        <span className="font-semibold text-[#111827] text-sm leading-tight line-clamp-2">{item.fullName}</span>
+                                        <button onClick={() => handleOpenModal(item)} className="shrink-0 p-1 text-[#6B9F91]">
+                                            <Edit2 className="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                    <p className="text-[#6B7280] text-xs leading-snug line-clamp-1">{item.email}</p>
+                                    <p className="text-[#9CA3AF] text-[10px] leading-snug line-clamp-1">{item.serviceInterest || 'General'}</p>
+                                    <div className="mt-auto pt-1 flex items-center justify-between">
+                                        <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-semibold ${getStatusColor(item.status)}`}>• {item.status}</span>
+                                        <button onClick={() => handleDelete(item.id)} className="text-[#B91C1C]/50 hover:text-[#B91C1C] p-1">
+                                            <Trash2 className="w-3.5 h-3.5" />
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                {/* ── DESKTOP TABLE (hidden on mobile) ── */}
+                <div className="hidden sm:block overflow-x-auto w-full touch-auto">
+                    <table className="w-full text-left text-sm text-[#374151] min-w-[600px]">
                         <thead className="bg-[#EDF5F2]/70 border-b border-gray-200 text-[#111827]">
                             <tr>
-                                <th className="p-4 font-medium">Contact</th>
-                                <th className="p-4 font-medium">Service Interest</th>
-                                <th className="p-4 font-medium">Source</th>
-                                <th className="p-4 font-medium">Date</th>
-                                <th className="p-4 font-medium text-center">Status</th>
-                                <th className="p-4 font-medium text-right">Actions</th>
+                                <th className="p-4 font-medium min-w-[180px]">Contact</th>
+                                <th className="p-4 font-medium min-w-[150px] hidden sm:table-cell">Service Interest</th>
+                                <th className="p-4 font-medium min-w-[120px] hidden md:table-cell">Source</th>
+                                <th className="p-4 font-medium min-w-[120px] hidden md:table-cell">Date</th>
+                                <th className="p-4 font-medium text-center min-w-[100px]">Status</th>
+                                <th className="p-4 font-medium text-right min-w-[120px]">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100">
@@ -202,13 +236,13 @@ export default function LeadsPage() {
                                             <div className="text-[#6B7280] text-xs">{item.email}</div>
                                             <div className="text-[#9CA3AF] text-xs">{item.phone} {item.company ? `• ${item.company}` : ''}</div>
                                         </td>
-                                        <td className="p-4">
+                                        <td className="p-4 hidden sm:table-cell">
                                             <div className="text-[#111827] text-xs max-w-xs truncate">{item.serviceInterest}</div>
                                         </td>
-                                        <td className="p-4">
+                                        <td className="p-4 hidden md:table-cell">
                                             <div className="text-[#374151] text-xs">{item.source || 'Unknown'}</div>
                                         </td>
-                                        <td className="p-4 text-xs text-[#6B7280]">
+                                        <td className="p-4 text-xs text-[#6B7280] hidden md:table-cell">
                                             {new Date(item.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
                                         </td>
                                         <td className="p-4 text-center">
@@ -219,13 +253,11 @@ export default function LeadsPage() {
                                                 <div className="mt-1"><span className="text-[10px] text-[#9CA3AF] border border-gray-200 px-1.5 rounded">Archived</span></div>
                                             )}
                                         </td>
-                                        <td className="p-4 text-right">
-                                            <button onClick={() => handleOpenModal(item)} className="text-[#6B9F91] hover:text-[#6B9F91] p-2 transition-colors">
-                                                View
-                                            </button>
-                                            <button onClick={() => handleDelete(item.id)} className="text-[#B91C1C]/50 hover:text-[#B91C1C] p-2 transition-colors ml-2">
-                                                <Trash2 className="w-4 h-4" />
-                                            </button>
+                                        <td className="p-3">
+                                            <div className="grid grid-cols-2 gap-1.5 w-fit ml-auto">
+                                                <button onClick={() => handleOpenModal(item)} className="px-3 py-1 rounded border border-[#6B9F91] text-[#6B9F91] text-xs font-medium hover:bg-[#6B9F91]/10 transition-colors whitespace-nowrap">View</button>
+                                                <button onClick={() => handleDelete(item.id)} className="px-3 py-1 rounded border border-[#FCA5A5] text-[#B91C1C] text-xs font-medium hover:bg-red-50 transition-colors whitespace-nowrap">Delete</button>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))
@@ -257,96 +289,90 @@ export default function LeadsPage() {
 
             {isModalOpen && leadData && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#111827]/40 backdrop-blur-sm">
-                    <div className="admin-card w-full max-w-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
-                        <div className="p-5 border-b border-gray-200 flex justify-between items-center bg-[#EDF5F2]/70">
-                            <h3 className="text-lg font-bold text-[#111827]">Lead Details</h3>
-                            <button onClick={() => setIsModalOpen(false)} className="text-[#9CA3AF] hover:text-[#111827]"><X className="w-5 h-5" /></button>
+                    <div className="admin-card w-full max-w-3xl overflow-hidden shadow-2xl flex flex-col max-h-[88vh]">
+                        {/* Header */}
+                        <div className="px-4 py-3 border-b border-gray-200 flex justify-between items-center bg-[#EDF5F2]/80 shrink-0">
+                            <div>
+                                <h3 className="text-sm font-bold text-[#111827]">Lead Details</h3>
+                                <p className="text-[10px] text-[#9CA3AF] mt-0.5">{leadData.fullName} · {leadData.email}</p>
+                            </div>
+                            <button onClick={() => setIsModalOpen(false)} className="text-[#9CA3AF] hover:text-[#111827] p-1"><X className="w-4 h-4" /></button>
                         </div>
-                        <div className="p-6 overflow-y-auto w-full custom-scrollbar grid grid-cols-1 md:grid-cols-2 gap-8">
-                            <div className="space-y-6">
+
+                        {/* Body */}
+                        <div className="p-4 overflow-y-auto w-full custom-scrollbar grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {/* LEFT — Read-only data */}
+                            <div className="space-y-4">
+                                {/* Client Info */}
                                 <div>
-                                    <h4 className="text-[#111827] font-medium mb-4 border-b border-gray-200 pb-2">Client Information</h4>
-                                    <div className="space-y-3 text-sm">
-                                        <div><span className="text-[#9CA3AF] block text-xs">Name</span><span className="text-[#111827]/90">{leadData.fullName}</span></div>
-                                        <div><span className="text-[#9CA3AF] block text-xs">Email</span><span className="text-[#111827]/90">{leadData.email}</span></div>
-                                        <div><span className="text-[#9CA3AF] block text-xs">Phone</span><span className="text-[#111827]/90">{leadData.phone}</span></div>
-                                        <div><span className="text-[#9CA3AF] block text-xs">Company</span><span className="text-[#111827]/90">{leadData.company || 'N/A'}</span></div>
+                                    <p className="text-[10px] font-bold uppercase tracking-wider text-[#9CA3AF] pb-1 border-b border-gray-100 mb-2">Client Information</p>
+                                    <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
+                                        <div><span className="text-[#9CA3AF] block text-[10px]">Name</span><span className="text-[#111827]">{leadData.fullName}</span></div>
+                                        <div><span className="text-[#9CA3AF] block text-[10px]">Phone</span><span className="text-[#111827]">{leadData.phone}</span></div>
+                                        <div className="col-span-2"><span className="text-[#9CA3AF] block text-[10px]">Email</span><span className="text-[#111827]">{leadData.email}</span></div>
+                                        <div className="col-span-2"><span className="text-[#9CA3AF] block text-[10px]">Company</span><span className="text-[#111827]">{leadData.company || 'N/A'}</span></div>
                                     </div>
                                 </div>
 
+                                {/* Request */}
                                 <div>
-                                    <h4 className="text-[#111827] font-medium mb-4 border-b border-gray-200 pb-2">Request Information</h4>
-                                    <div className="space-y-3 text-sm">
-                                        <div><span className="text-[#9CA3AF] block text-xs">Service</span><span className="text-[#111827]/90">{leadData.serviceInterest}</span></div>
+                                    <p className="text-[10px] font-bold uppercase tracking-wider text-[#9CA3AF] pb-1 border-b border-gray-100 mb-2">Request</p>
+                                    <div className="space-y-2 text-xs">
+                                        <div><span className="text-[#9CA3AF] block text-[10px]">Service</span><span className="text-[#111827]">{leadData.serviceInterest}</span></div>
                                         <div>
-                                            <span className="text-[#9CA3AF] block text-xs mb-1">Message</span>
-                                            <div className="bg-[#EDF5F2]/70 p-3 rounded text-[#374151] whitespace-pre-wrap text-xs">
-                                                {leadData.message}
-                                            </div>
+                                            <span className="text-[#9CA3AF] block text-[10px] mb-1">Message</span>
+                                            <div className="bg-[#EDF5F2]/70 px-2.5 py-2 rounded text-[#374151] whitespace-pre-wrap text-xs leading-relaxed max-h-28 overflow-y-auto">{leadData.message}</div>
                                         </div>
                                     </div>
                                 </div>
 
+                                {/* Attribution */}
                                 <div>
-                                    <h4 className="text-[#111827] font-medium mb-4 border-b border-gray-200 pb-2">Attribution</h4>
-                                    <div className="space-y-3 text-sm">
-                                        <div><span className="text-[#9CA3AF] block text-xs">Source</span><span className="text-[#111827]/90">{leadData.source || 'N/A'}</span></div>
-                                        <div><span className="text-[#9CA3AF] block text-xs">Source Page</span><span className="text-[#111827]/90">{leadData.sourcePage || 'N/A'}</span></div>
-                                        <div><span className="text-[#9CA3AF] block text-xs">Landing Page</span><span className="text-[#111827]/90">{leadData.landingPage || 'N/A'}</span></div>
-                                        <div><span className="text-[#9CA3AF] block text-xs">Referrer</span><span className="text-[#111827]/90 break-all">{leadData.referrer || 'N/A'}</span></div>
-                                        <div><span className="text-[#9CA3AF] block text-xs">Created At</span><span className="text-[#111827]/90">
-                                            {new Date(leadData.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
-                                        </span></div>
+                                    <p className="text-[10px] font-bold uppercase tracking-wider text-[#9CA3AF] pb-1 border-b border-gray-100 mb-2">Attribution</p>
+                                    <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
+                                        <div><span className="text-[#9CA3AF] block text-[10px]">Source</span><span className="text-[#111827]">{leadData.source || 'N/A'}</span></div>
+                                        <div><span className="text-[#9CA3AF] block text-[10px]">Source Page</span><span className="text-[#111827]">{leadData.sourcePage || 'N/A'}</span></div>
+                                        <div className="col-span-2"><span className="text-[#9CA3AF] block text-[10px]">Landing Page</span><span className="text-[#111827]">{leadData.landingPage || 'N/A'}</span></div>
+                                        <div className="col-span-2"><span className="text-[#9CA3AF] block text-[10px]">Created</span><span className="text-[#111827]">{new Date(leadData.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span></div>
                                     </div>
                                 </div>
                             </div>
 
-                            <form id="leadForm" onSubmit={handleSave} className="space-y-6">
+                            {/* RIGHT — CRM edit */}
+                            <form id="leadForm" onSubmit={handleSave} className="space-y-3">
+                                <p className="text-[10px] font-bold uppercase tracking-wider text-[#9CA3AF] pb-1 border-b border-gray-100">CRM Management</p>
+                                {errorMsg && <div className="text-xs text-[#B91C1C] bg-[#FEE2E2] px-3 py-2 rounded border border-[#FCA5A5] flex gap-2"><AlertCircle className="w-3.5 h-3.5 mt-0.5 shrink-0" /> {errorMsg}</div>}
+
                                 <div>
-                                    <h4 className="text-[#111827] font-medium mb-4 border-b border-gray-200 pb-2">CRM Management</h4>
-                                    {errorMsg && <div className="mb-4 text-sm text-[#B91C1C] bg-[#FEE2E2] p-3 rounded-lg border border-[#FCA5A5] flex gap-2"><AlertCircle className="w-4 h-4 mt-0.5 shrink-0" /> {errorMsg}</div>}
-
-                                    <div className="space-y-4">
-                                        <div>
-                                            <label className="block text-sm text-[#374151] mb-1.5">Status</label>
-                                            <select
-                                                value={status}
-                                                onChange={e => setStatus(e.target.value)}
-                                                className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-[#111827]"
-                                            >
-                                                <option value="NEW">New</option>
-                                                <option value="CONTACTED">Contacted</option>
-                                                <option value="CONVERTED">Converted</option>
-                                                <option value="SPAM">Spam</option>
-                                            </select>
-                                        </div>
-
-                                        <div>
-                                            <label className="block text-sm text-[#374151] mb-1.5">Internal Notes (Private)</label>
-                                            <textarea
-                                                rows={5}
-                                                value={internalNotes}
-                                                onChange={e => setInternalNotes(e.target.value)}
-                                                className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-[#111827] resize-y"
-                                                placeholder="Add internal notes about this lead..."
-                                            />
-                                        </div>
-
-                                        <label className="flex items-center gap-3 cursor-pointer group pt-2">
-                                            <div className="relative">
-                                                <input type="checkbox" checked={isArchived} onChange={e => setIsArchived(e.target.checked)} className="sr-only" />
-                                                <div className={`w-10 h-6 rounded-full transition-colors ${isArchived ? 'bg-[#FFC900]' : 'bg-[#EDF5F2]'}`}></div>
-                                                <div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${isArchived ? 'translate-x-4' : 'translate-x-0'}`}></div>
-                                            </div>
-                                            <span className="text-sm font-medium text-[#374151]">Archived Record</span>
-                                        </label>
-                                    </div>
+                                    <label className="block text-xs font-medium text-[#374151] mb-1">Status</label>
+                                    <select value={status} onChange={e => setStatus(e.target.value)} className="w-full bg-white border border-gray-200 rounded-md px-3 py-1.5 text-sm text-[#111827] focus:outline-none focus:border-[#6B9F91]">
+                                        <option value="NEW">New</option>
+                                        <option value="CONTACTED">Contacted</option>
+                                        <option value="CONVERTED">Converted</option>
+                                        <option value="SPAM">Spam</option>
+                                    </select>
                                 </div>
+
+                                <div>
+                                    <label className="block text-xs font-medium text-[#374151] mb-1">Internal Notes <span className="text-[#9CA3AF] font-normal">(private)</span></label>
+                                    <textarea rows={3} value={internalNotes} onChange={e => setInternalNotes(e.target.value)} className="w-full bg-white border border-gray-200 rounded-md px-3 py-1.5 text-sm text-[#111827] resize-y focus:outline-none focus:border-[#6B9F91]" placeholder="Add internal notes about this lead..." />
+                                </div>
+
+                                <label className="flex items-center gap-2.5 cursor-pointer pt-1">
+                                    <div className="relative shrink-0">
+                                        <input type="checkbox" checked={isArchived} onChange={e => setIsArchived(e.target.checked)} className="sr-only" />
+                                        <div className={`w-8 h-5 rounded-full transition-colors ${isArchived ? 'bg-[#FFC900]' : 'bg-[#EDF5F2]'}`}></div>
+                                        <div className={`absolute top-0.5 left-0.5 bg-white w-4 h-4 rounded-full transition-transform ${isArchived ? 'translate-x-3' : 'translate-x-0'}`}></div>
+                                    </div>
+                                    <span className="text-xs font-medium text-[#374151]">Archived Record</span>
+                                </label>
                             </form>
                         </div>
-                        <div className="p-5 border-t border-gray-200 flex justify-end gap-3 bg-[#EDF5F2]/70 mt-auto shrink-0">
-                            <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 rounded-lg text-[#6B7280] hover:bg-[#EDF5F2]/70">Close</button>
-                            <button type="submit" form="leadForm" disabled={isSaving} className="bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-6 py-2 rounded-lg disabled:opacity-50">Save Changes</button>
+
+                        {/* Footer */}
+                        <div className="px-4 py-2.5 border-t border-gray-200 flex justify-end gap-2 bg-[#EDF5F2]/50 shrink-0">
+                            <button type="button" onClick={() => setIsModalOpen(false)} className="px-3 py-1.5 rounded-md text-xs text-[#6B7280] hover:bg-[#EDF5F2]/70 font-medium">Close</button>
+                            <button type="submit" form="leadForm" disabled={isSaving} className="bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-5 py-1.5 rounded-md text-xs font-medium disabled:opacity-50">Save Changes</button>
                         </div>
                     </div>
                 </div>
