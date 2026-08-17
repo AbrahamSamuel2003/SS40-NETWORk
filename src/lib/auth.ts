@@ -24,18 +24,21 @@ export async function createSession(userId: string, accountType: 'AdminUser', ro
 
     const cookieStore = await cookies();
     const isProduction = process.env.NODE_ENV === 'production';
+    const secure = isProduction && process.env.COOKIE_SECURE === 'true';
     
-    cookieStore.set('admin_session', token, {
+    const cookieOptions: any = {
         httpOnly: true,
-        secure: isProduction,
-        sameSite: isProduction ? 'strict' : 'lax',
+        secure: secure,
+        sameSite: 'lax',
         maxAge: 60 * 60 * 24, // 24 hours
         path: '/',
-        // Additional security headers
-        ...(isProduction && {
-            domain: process.env.COOKIE_DOMAIN, // Set custom domain in production
-        })
-    });
+    };
+
+    if (process.env.COOKIE_DOMAIN) {
+        cookieOptions.domain = process.env.COOKIE_DOMAIN;
+    }
+
+    cookieStore.set('admin_session', token, cookieOptions);
 }
 
 export async function refreshSessionIfNeeded() {
