@@ -101,7 +101,7 @@ export function FeaturedProduct() {
                     const isEven = pIdx % 2 === 0;
                     const tags = Array.isArray(product.tags) ? product.tags : [];
                     const features = Array.isArray(product.features) ? product.features : [];
-                    const badgeSource = features.length > 0 ? features : tags;
+                    const badgeSource = tags;
 
                     return (
                         <div key={product.id} className="w-full">
@@ -254,12 +254,13 @@ export function FeaturedProduct() {
                                               <div className="w-12" /> {/* Spacer */}
                                           </div>
 
-                                          <div className="flex-grow flex items-center justify-center p-2.5 bg-gray-50/20">
+                                          <div className="flex-grow flex items-center justify-center p-3 relative bg-gradient-to-br from-slate-900 via-emerald-950/70 to-zinc-950 overflow-hidden">
+                                              <div className="absolute top-0 right-0 w-36 h-36 bg-[#2DD4BF]/20 blur-[35px] rounded-full pointer-events-none" />
                                               {product.screenshotUrl ? (
                                                   <img 
                                                       src={product.screenshotUrl} 
                                                       alt={product.name} 
-                                                      className="w-full h-full object-contain select-none transition-all duration-300" 
+                                                      className="w-full h-full object-contain select-none transition-all duration-300 filter drop-shadow-[0_12px_24px_rgba(0,0,0,0.3)]" 
                                                   />
                                               ) : (
                                                   <div className="flex flex-col items-center justify-center text-gray-400 gap-4 p-8 text-center select-none">
@@ -290,9 +291,9 @@ export function FeaturedProduct() {
                                                       y: [0, -4, 0],
                                                       transition: { repeat: Infinity, duration: 4.5, ease: "easeInOut", delay: 0.1 }
                                                   }}
-                                                  className="absolute top-2 left-2 bg-[#0F766E]/5 backdrop-blur-md border border-[#2DD4BF]/25 px-3.5 py-2.5 rounded-2xl shadow-xl text-xs font-bold text-[#0F766E] flex items-center gap-2"
+                                                  className="absolute top-2 left-2 bg-white border border-gray-150 px-2.5 py-1.5 rounded-xl shadow-lg text-[10px] font-bold text-gray-700 flex items-center gap-1.5 select-none"
                                               >
-                                                  <BadgeCheck className="w-4 h-4 text-[#2DD4BF]" />
+                                                  <BadgeCheck className="w-3.5 h-3.5 text-[#2DD4BF]" />
                                                   <span>{badgeSource[0]}</span>
                                               </motion.div>
                                           )}
@@ -315,9 +316,9 @@ export function FeaturedProduct() {
                                                       y: [0, 4, 0],
                                                       transition: { repeat: Infinity, duration: 4, ease: "easeInOut", delay: 0.2 }
                                                   }}
-                                                  className="absolute top-4 right-2 bg-[#0F766E]/5 backdrop-blur-md border border-[#2DD4BF]/25 px-3.5 py-2.5 rounded-2xl shadow-xl text-xs font-bold text-[#0F766E] flex items-center gap-2"
+                                                  className="absolute top-4 right-2 bg-white border border-gray-150 px-2.5 py-1.5 rounded-xl shadow-lg text-[10px] font-bold text-gray-700 flex items-center gap-1.5 select-none"
                                               >
-                                                  <BadgeCheck className="w-4 h-4 text-[#2DD4BF]" />
+                                                  <BadgeCheck className="w-3.5 h-3.5 text-[#2DD4BF]" />
                                                   <span>{badgeSource[1]}</span>
                                               </motion.div>
                                           )}
@@ -340,9 +341,9 @@ export function FeaturedProduct() {
                                                       y: [0, 4, 0],
                                                       transition: { repeat: Infinity, duration: 4.2, ease: "easeInOut", delay: 0.3 }
                                                   }}
-                                                  className="absolute bottom-4 left-2 bg-[#0F766E]/5 backdrop-blur-md border border-[#2DD4BF]/25 px-3.5 py-2.5 rounded-2xl shadow-xl text-xs font-bold text-[#0F766E] flex items-center gap-2"
+                                                  className="absolute bottom-4 left-2 bg-white border border-gray-150 px-2.5 py-1.5 rounded-xl shadow-lg text-[10px] font-bold text-gray-700 flex items-center gap-1.5 select-none"
                                               >
-                                                  <BadgeCheck className="w-4 h-4 text-[#2DD4BF]" />
+                                                  <BadgeCheck className="w-3.5 h-3.5 text-[#2DD4BF]" />
                                                   <span>{badgeSource[2]}</span>
                                               </motion.div>
                                           )}
@@ -365,9 +366,9 @@ export function FeaturedProduct() {
                                                      y: [0, -4, 0],
                                                      transition: { repeat: Infinity, duration: 4.8, ease: "easeInOut", delay: 0.4 }
                                                   }}
-                                                  className="absolute bottom-2 right-2 bg-[#0F766E]/5 backdrop-blur-md border border-[#2DD4BF]/25 px-3.5 py-2.5 rounded-2xl shadow-xl text-xs font-bold text-[#0F766E] flex items-center gap-2"
+                                                  className="absolute bottom-2 right-2 bg-white border border-gray-150 px-2.5 py-1.5 rounded-xl shadow-lg text-[10px] font-bold text-gray-700 flex items-center gap-1.5 select-none"
                                               >
-                                                  <BadgeCheck className="w-4 h-4 text-[#2DD4BF]" />
+                                                  <BadgeCheck className="w-3.5 h-3.5 text-[#2DD4BF]" />
                                                   <span>{badgeSource[3]}</span>
                                               </motion.div>
                                           )}
