@@ -93,7 +93,6 @@ export default function RootLayout({
       "latitude": 8.7139, // Approx Tirunelveli coordinates
       "longitude": 77.7567
     },
-    "url": "https://www.ss40network.com",
     "sameAs": [
       // Add social media links here
     ],
