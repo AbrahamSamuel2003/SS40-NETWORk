@@ -32,7 +32,7 @@ export function proxy(request: NextRequest) {
 
 export const config = {
     matcher: [
-        // Match all paths except static files, API routes that don't need auth, and public routes
-        '/((?!api/auth|_next/static|_next/image|favicon.ico|public).*)',
+        // Match all paths except static files, API routes that don't need auth, public routes, and uploads
+        '/((?!api/auth|_next/static|_next/image|favicon.ico|public|uploads).*)',
     ],
 };
