@@ -17,7 +17,7 @@ import {
     Bot,
     TerminalSquare,
     ChevronDown,
-    LayoutDashboard, Users, BarChart2, Settings, Lock, Map, LayoutTemplate, MousePointer2, Search, User, Heart, Home, Compass, Plus, ArrowRightLeft, HardDrive, Zap, CheckCircle2, CloudUpload
+    LayoutDashboard, Users, BarChart2, Settings, Lock, Map, LayoutTemplate, MousePointer2, Search, User, Heart, Home, Compass, Plus, ArrowRightLeft, HardDrive, Zap, CheckCircle2, CloudUpload, ShoppingBag, Star
 } from "lucide-react";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
@@ -73,6 +73,41 @@ const SOLUTIONS = [
 export function WhatWeBuild() {
     const [activeId, setActiveId] = React.useState<string>(SOLUTIONS[0].id);
     const [expandedId, setExpandedId] = React.useState<string | null>(SOLUTIONS[0].id);
+
+    // Option 1: Mobile E-Commerce Carousel States
+    const shoes = [
+        { color: "from-[#2DD4BF] to-[#0F766E]", name: "SS40 Speed Runner", price: "$120.00" },
+        { color: "from-[#F43F5E] to-[#BE123C]", name: "SS40 Trail Blazer", price: "$129.00" },
+        { color: "from-[#3B82F6] to-[#1D4ED8]", name: "SS40 Quantum Float", price: "$115.00" },
+    ];
+    const sizes = [8, 9, 10, 11];
+    const [shoeIndex, setShoeIndex] = React.useState(0);
+    const [activeSize, setActiveSize] = React.useState(9);
+    const [cartCount, setCartCount] = React.useState(0);
+    const [buttonState, setButtonState] = React.useState<'idle' | 'added'>('idle');
+
+    React.useEffect(() => {
+        if (activeId !== "mobile") return;
+
+        const interval = setInterval(() => {
+            // Trigger "Add to Cart" click
+            setButtonState('added');
+            setCartCount(prev => prev + 1);
+
+            // Reset button state and transition to next shoe after visual delay
+            setTimeout(() => {
+                setButtonState('idle');
+                setShoeIndex(prev => (prev + 1) % shoes.length);
+                setActiveSize(prev => {
+                    const nextIdx = (sizes.indexOf(prev) + 1) % sizes.length;
+                    return sizes[nextIdx];
+                });
+            }, 1200);
+
+        }, 3500);
+
+        return () => clearInterval(interval);
+    }, [activeId]);
 
     const handleTopicClick = (id: string) => {
         if (expandedId === id) {
@@ -337,71 +372,196 @@ export function WhatWeBuild() {
                                         transition={{ duration: 0.2, ease: "easeOut" }}
                                         className="relative z-10 w-full h-full flex items-center justify-center gap-6"
                                     >
-                                        <div className="relative w-48 h-[380px] bg-white rounded-[2rem] shadow-xl border-[6px] border-gray-900 overflow-hidden hidden md:flex flex-col opacity-50 scale-90 translate-x-8">
+                                        {/* Back Phone Card (Left) */}
+                                        <div className="relative w-48 h-[380px] bg-white rounded-[2rem] shadow-xl border-[6px] border-gray-900 overflow-hidden hidden md:flex flex-col opacity-40 scale-90 translate-x-12 transition-all duration-300">
                                             <div className="h-6 w-full bg-gray-900 rounded-b-xl flex items-center justify-center shrink-0"><div className="w-10 h-1 bg-gray-700 rounded-full" /></div>
-                                            <div className="flex-1 p-4 flex flex-col gap-3"><div className="w-full h-1/2 bg-gray-100 rounded-xl" /><div className="w-full flex-1 bg-gray-50 rounded-xl" /></div>
+                                            <div className="flex-1 p-4 flex flex-col gap-3 bg-gray-50/50">
+                                                <div className="w-full h-2/3 bg-gray-100 rounded-2xl flex flex-col p-4 justify-between">
+                                                    <div className="w-10 h-3 bg-gray-200 rounded-full" />
+                                                    <div className="w-full h-20 bg-gray-200/50 rounded-xl" />
+                                                </div>
+                                                <div className="w-full flex-1 bg-white rounded-2xl border border-gray-100 p-3 flex flex-col gap-2">
+                                                    <div className="w-1/2 h-2 bg-gray-200 rounded-full" />
+                                                    <div className="w-full h-3 bg-gray-100 rounded-md" />
+                                                </div>
+                                            </div>
                                         </div>
 
+                                        {/* Main Active Phone (Center) */}
                                         <div className="relative w-56 md:w-64 h-[420px] md:h-[480px] bg-white rounded-[2.5rem] shadow-2xl border-[8px] border-gray-900 overflow-hidden flex flex-col z-20">
                                             <div className="h-6 w-full bg-gray-900 mb-2 flex items-center justify-center shrink-0 rounded-b-xl"><div className="w-12 h-1.5 bg-gray-700 rounded-full" /></div>
 
                                             {/* Header */}
-                                            <div className="px-4 py-2 flex justify-between items-center bg-white border-b border-gray-50">
-                                                <div className="flex flex-col gap-1">
-                                                    <div className="w-16 h-2 bg-gray-200 rounded-full" />
-                                                    <span className="text-[10px] font-black text-[#111827]">Welcome back</span>
-                                                </div>
-                                                <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center relative border border-gray-200">
-                                                    <User className="w-4 h-4 text-gray-500" />
-                                                    <div className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full" />
-                                                </div>
-                                            </div>
-
-                                            {/* Scrollable Content */}
-                                            <div className="p-4 flex-1 overflow-hidden space-y-4 bg-gray-50/50">
-                                                {/* Search Bar */}
-                                                <div className="w-full h-10 bg-white border border-gray-200 rounded-xl flex items-center px-3 gap-2 shadow-sm">
-                                                    <Search className="w-4 h-4 text-gray-400" />
-                                                    <div className="w-24 h-2 bg-gray-100 rounded-full" />
-                                                </div>
-
-                                                {/* Hero Card */}
-                                                <div className="w-full h-32 bg-[#6B9F91]/10 border border-[#6B9F91]/20 rounded-2xl p-4 flex flex-col justify-end relative overflow-hidden">
-                                                    <div className="absolute -top-10 -right-10 w-24 h-24 bg-[#6B9F91]/20 rounded-full" />
-                                                    <div className="w-1/2 h-3 bg-white rounded-sm mb-2 relative z-10" />
-                                                    <div className="w-3/4 h-5 bg-[#6B9F91] rounded-md relative z-10" />
-                                                </div>
-
-                                                {/* List Items */}
-                                                <div className="w-full h-16 bg-white rounded-xl border border-gray-100 shadow-sm flex items-center p-3 gap-3">
-                                                    <div className="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center"><Heart className="w-4 h-4 text-red-400" /></div>
-                                                    <div className="flex flex-col flex-1 gap-1.5"><div className="w-1/2 h-2 bg-gray-200 rounded-full" /><div className="w-1/3 h-2 bg-gray-100 rounded-full" /></div>
-                                                    <div className="w-8 h-4 bg-gray-200 rounded-full flex items-center px-0.5"><div className="w-3 h-3 bg-white rounded-full shadow-sm" /></div>
-                                                </div>
-
-                                                <div className="w-full h-16 bg-white rounded-xl border border-gray-100 shadow-sm flex items-center p-3 gap-3">
-                                                    <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center"><LayoutTemplate className="w-4 h-4 text-blue-400" /></div>
-                                                    <div className="flex flex-col flex-1 gap-1.5"><div className="w-1/2 h-2 bg-gray-200 rounded-full" /><div className="w-1/3 h-2 bg-gray-100 rounded-full" /></div>
-                                                    <div className="w-8 h-4 bg-[#6B9F91] rounded-full flex items-center justify-end px-0.5"><div className="w-3 h-3 bg-white rounded-full shadow-sm" /></div>
+                                            <div className="px-4 py-2.5 flex justify-between items-center bg-white border-b border-gray-100 shrink-0">
+                                                <span className="text-[11px] font-black tracking-wider text-gray-800">KICKS CO.</span>
+                                                <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center relative border border-gray-100">
+                                                    <ShoppingBag className="w-4 h-4 text-gray-600" />
+                                                    <AnimatePresence>
+                                                        {cartCount > 0 && (
+                                                            <motion.span
+                                                                key={cartCount}
+                                                                initial={{ scale: 0.5, opacity: 0 }}
+                                                                animate={{ scale: 1, opacity: 1 }}
+                                                                className="absolute -top-1 -right-1 w-4.5 h-4.5 rounded-full bg-[#10B981] text-white text-[8px] font-bold flex items-center justify-center shadow-sm"
+                                                            >
+                                                                {cartCount}
+                                                            </motion.span>
+                                                        )}
+                                                    </AnimatePresence>
                                                 </div>
                                             </div>
 
-                                            {/* FAB */}
-                                            <div className="absolute bottom-20 right-4 w-12 h-12 bg-[#111827] rounded-full shadow-lg flex items-center justify-center z-30">
-                                                <Plus className="w-6 h-6 text-white" />
+                                            {/* Screen Body */}
+                                            <div className="p-3.5 flex-1 flex flex-col gap-3 overflow-hidden bg-gray-50/50 relative">
+                                                
+                                                {/* Sneaker Visual Area (Carousel) */}
+                                                <div className="relative w-full aspect-square max-h-[150px] md:max-h-[180px] rounded-2xl overflow-hidden shrink-0 flex items-center justify-center shadow-inner bg-white border border-gray-100">
+                                                    <AnimatePresence mode="wait">
+                                                        <motion.div
+                                                            key={shoeIndex}
+                                                            initial={{ x: 80, opacity: 0, scale: 0.9 }}
+                                                            animate={{ x: 0, opacity: 1, scale: 1 }}
+                                                            exit={{ x: -80, opacity: 0, scale: 0.9 }}
+                                                            transition={{ type: "spring", stiffness: 180, damping: 18 }}
+                                                            className={cn("absolute inset-2 rounded-xl bg-gradient-to-br flex items-center justify-center p-3", shoes[shoeIndex].color)}
+                                                        >
+                                                            {/* Stock Tag */}
+                                                            <div className="absolute top-2 right-2 bg-white/95 shadow-sm rounded-full px-2 py-0.5 flex items-center gap-1.5">
+                                                                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                                                                <span className="text-[7px] font-bold text-gray-700">Only 2 left</span>
+                                                            </div>
+
+                                                            {/* Custom CSS Stylized Sneaker Icon */}
+                                                            <div className="relative w-28 h-14 flex items-center justify-center mt-3">
+                                                                <div className="absolute inset-0 bg-white/10 rounded-full blur-xl scale-75 animate-pulse" />
+                                                                <motion.div
+                                                                    initial={{ rotate: -15, scale: 0.8 }}
+                                                                    animate={{ rotate: -10, scale: 1 }}
+                                                                    transition={{ delay: 0.1, type: "spring", stiffness: 200 }}
+                                                                    className="w-24 h-12 relative"
+                                                                >
+                                                                    {/* Sole */}
+                                                                    <div className="absolute bottom-0 left-0 right-0 h-2 bg-white rounded-full shadow-sm" />
+                                                                    {/* Shoe Upper */}
+                                                                    <div className="absolute bottom-2 left-1.5 right-1.5 top-0 bg-white/95 rounded-t-[1.8rem] rounded-b-[0.3rem] border-t-2 border-white flex flex-col justify-between overflow-hidden shadow-md">
+                                                                        <div className="absolute top-1 left-4 w-12 h-6 border-l-[4px] border-b-[4px] border-[#6B9F91]/25 rounded-bl-[1rem] rotate-12" />
+                                                                        <div className="absolute -top-1 right-2 w-6 h-3 bg-white/80 rounded-t-full rotate-[30deg]" />
+                                                                    </div>
+                                                                </motion.div>
+                                                            </div>
+                                                        </motion.div>
+                                                    </AnimatePresence>
+                                                </div>
+
+                                                {/* Info Header */}
+                                                <div className="flex flex-col shrink-0">
+                                                    <div className="flex justify-between items-start">
+                                                        <motion.h4 
+                                                            key={shoeIndex}
+                                                            initial={{ opacity: 0, y: 5 }}
+                                                            animate={{ opacity: 1, y: 0 }}
+                                                            className="text-xs font-black text-gray-800"
+                                                        >
+                                                            {shoes[shoeIndex].name}
+                                                        </motion.h4>
+                                                        <div className="flex items-center gap-0.5 text-amber-500 shrink-0">
+                                                            <Star className="w-2.5 h-2.5 fill-amber-400 stroke-amber-400" />
+                                                            <span className="text-[8px] font-bold text-gray-600">4.9</span>
+                                                        </div>
+                                                    </div>
+                                                    <motion.span 
+                                                        key={`price-${shoeIndex}`}
+                                                        initial={{ opacity: 0 }}
+                                                        animate={{ opacity: 1 }}
+                                                        className="text-[10px] font-bold text-[#6B9F91] mt-0.5"
+                                                    >
+                                                        {shoes[shoeIndex].price}
+                                                    </motion.span>
+                                                </div>
+
+                                                {/* Sizes Grid */}
+                                                <div className="flex flex-col gap-1.5 shrink-0">
+                                                    <span className="text-[8px] font-bold text-gray-400 uppercase tracking-wider">Select Size (US)</span>
+                                                    <div className="flex justify-between gap-1.5">
+                                                        {sizes.map((size) => {
+                                                            const isSelected = size === activeSize;
+                                                            return (
+                                                                <motion.div
+                                                                    key={size}
+                                                                    animate={isSelected ? { scale: [1, 1.12, 1] } : {}}
+                                                                    transition={{ duration: 0.3 }}
+                                                                    className={cn(
+                                                                        "flex-1 py-1 rounded-lg text-[9px] font-bold text-center border transition-all duration-300",
+                                                                        isSelected 
+                                                                            ? "border-[#6B9F91] bg-[#6B9F91]/10 text-[#6B9F91] shadow-sm shadow-[#6B9F91]/5" 
+                                                                            : "border-gray-200 bg-white text-gray-500"
+                                                                    )}
+                                                                >
+                                                                    {size}
+                                                                </motion.div>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                </div>
+
+                                                {/* Add to Cart Button */}
+                                                <div className="mt-auto shrink-0">
+                                                    <motion.button
+                                                        animate={buttonState === 'added' ? { scale: [1, 0.97, 1.03, 1] } : {}}
+                                                        transition={{ duration: 0.3 }}
+                                                        className={cn(
+                                                            "w-full py-2.5 rounded-xl flex items-center justify-center gap-1.5 font-bold text-[10px] text-white shadow-sm transition-all duration-300 focus:outline-none",
+                                                            buttonState === 'added'
+                                                                ? "bg-[#10B981] hover:bg-[#059669] shadow-[#10B981]/15"
+                                                                : "bg-gray-900 hover:bg-gray-800 shadow-gray-900/10"
+                                                        )}
+                                                    >
+                                                        <AnimatePresence mode="wait">
+                                                            {buttonState === 'added' ? (
+                                                                <motion.span
+                                                                    key="added"
+                                                                    initial={{ y: 6, opacity: 0 }}
+                                                                    animate={{ y: 0, opacity: 1 }}
+                                                                    exit={{ y: -6, opacity: 0 }}
+                                                                    transition={{ duration: 0.15 }}
+                                                                    className="flex items-center gap-1"
+                                                                >
+                                                                    <CheckCircle2 className="w-3.5 h-3.5 text-white" />
+                                                                    Added!
+                                                                </motion.span>
+                                                            ) : (
+                                                                <motion.span
+                                                                    key="cart"
+                                                                    initial={{ y: 6, opacity: 0 }}
+                                                                    animate={{ y: 0, opacity: 1 }}
+                                                                    exit={{ y: -6, opacity: 0 }}
+                                                                    transition={{ duration: 0.15 }}
+                                                                    className="flex items-center gap-1"
+                                                                >
+                                                                    <ShoppingBag className="w-3.5 h-3.5 text-white" />
+                                                                    Add to Cart
+                                                                </motion.span>
+                                                            )}
+                                                        </AnimatePresence>
+                                                    </motion.button>
+                                                </div>
                                             </div>
 
-                                            {/* Bottom Navigation */}
-                                            <div className="h-16 bg-white border-t border-gray-100 flex items-center justify-around px-2 relative z-30">
-                                                <div className="flex flex-col items-center gap-1 text-[#6B9F91]"><Home className="w-5 h-5" /><div className="w-1 h-1 rounded-full bg-[#6B9F91]" /></div>
-                                                <div className="flex flex-col items-center gap-1 text-gray-400"><Compass className="w-5 h-5" /></div>
-                                                <div className="flex flex-col items-center gap-1 text-gray-400"><User className="w-5 h-5" /></div>
+                                            {/* Bottom Navigation Bar */}
+                                            <div className="h-14 bg-white border-t border-gray-100 flex items-center justify-around px-2 relative z-30 shrink-0">
+                                                <div className="flex flex-col items-center gap-0.5 text-[#6B9F91]"><Home className="w-4 h-4" /><div className="w-0.5 h-0.5 rounded-full bg-[#6B9F91]" /></div>
+                                                <div className="flex flex-col items-center gap-0.5 text-gray-400"><Compass className="w-4 h-4" /></div>
+                                                <div className="flex flex-col items-center gap-0.5 text-gray-400"><User className="w-4 h-4" /></div>
                                             </div>
                                         </div>
 
-                                        <div className="relative w-48 h-[380px] bg-white rounded-[2rem] shadow-xl border-[6px] border-gray-900 overflow-hidden hidden md:flex flex-col opacity-50 scale-90 -translate-x-8">
+                                        {/* Back Phone Card (Right) */}
+                                        <div className="relative w-48 h-[380px] bg-white rounded-[2rem] shadow-xl border-[6px] border-gray-900 overflow-hidden hidden md:flex flex-col opacity-40 scale-90 -translate-x-12 transition-all duration-300">
                                             <div className="h-6 w-full bg-gray-900 rounded-b-xl flex items-center justify-center shrink-0"><div className="w-10 h-1 bg-gray-700 rounded-full" /></div>
-                                            <div className="flex-1 p-4 flex flex-col gap-3"><div className="w-full h-1/3 bg-[#6B9F91]/20 rounded-xl" /><div className="w-full flex-1 bg-gray-50 rounded-xl" /></div>
+                                            <div className="flex-1 p-4 flex flex-col gap-3 bg-gray-50/50">
+                                                <div className="w-full h-1/3 bg-[#6B9F91]/25 rounded-2xl" />
+                                                <div className="w-full flex-1 bg-white rounded-2xl border border-gray-100 p-3" />
+                                            </div>
                                         </div>
                                     </motion.div>
                                 )}
