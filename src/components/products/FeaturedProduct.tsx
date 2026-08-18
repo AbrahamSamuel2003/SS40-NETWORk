@@ -209,16 +209,22 @@ export function FeaturedProduct() {
                                               <rect width="100%" height="100%" fill={`url(#stage-grid-${product.id})`} />
                                           </svg>
 
-                                          {/* Tiny Particles */}
-                                          <motion.div 
-                                              animate={{ rotate: 360 }} 
-                                              transition={{ duration: 40, repeat: Infinity, ease: "linear" }} 
-                                              className="absolute w-full h-full"
+                                          {/* Outer circle — slow clockwise */}
+                                          <motion.div
+                                              animate={{ rotate: 360 }}
+                                              transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+                                              className="absolute w-[85%] h-[85%]"
                                           >
-                                              <span className="absolute top-[20%] left-[15%] w-1 h-1 rounded-full bg-[#2DD4BF]/25" />
-                                              <span className="absolute top-[30%] right-[25%] w-1.5 h-1.5 rounded-full bg-[#6B9F91]/20" />
-                                              <span className="absolute bottom-[20%] left-[30%] w-1 h-1 rounded-full bg-[#2DD4BF]/30" />
-                                              <span className="absolute bottom-[35%] right-[15%] w-1.5 h-1.5 rounded-full bg-[#6B9F91]/25" />
+                                              <span className="absolute top-0 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-[#2DD4BF]/60" />
+                                          </motion.div>
+
+                                          {/* Inner circle — counter-clockwise */}
+                                          <motion.div
+                                              animate={{ rotate: -360 }}
+                                              transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                                              className="absolute w-[50%] h-[50%]"
+                                          >
+                                              <span className="absolute top-0 left-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-[#6B9F91]/60" />
                                           </motion.div>
                                       </div>
 
