@@ -249,10 +249,10 @@ export function FeaturedProduct() {
                                                <div className="absolute top-[-10%] right-[-10%] w-40 h-40 bg-[#99F6E4]/40 blur-[30px] rounded-full pointer-events-none" />
                                                
                                                {/* Abstract vector hills / ocean waves */}
-                                               <svg className="absolute bottom-0 left-0 w-full h-[40%] opacity-[0.35] text-[#A7F3D0]/60 pointer-events-none select-none" viewBox="0 0 1440 320" fill="currentColor" preserveAspectRatio="none">
+                                               <svg className="absolute bottom-0 left-0 w-full h-[55%] opacity-[0.70] pointer-events-none select-none" style={{color:'#6EE7B7'}} viewBox="0 0 1440 320" fill="currentColor" preserveAspectRatio="none">
                                                    <path d="M0,192L48,197.3C96,203,192,213,288,192C384,171,480,117,576,117C672,117,768,171,864,186.7C960,203,1056,181,1152,154.7C1248,128,1344,96,1392,80L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z" />
                                                </svg>
-                                               <svg className="absolute bottom-0 left-0 w-full h-[30%] opacity-[0.25] text-[#93C5FD]/50 pointer-events-none select-none" viewBox="0 0 1440 320" fill="currentColor" preserveAspectRatio="none">
+                                               <svg className="absolute bottom-0 left-0 w-full h-[40%] opacity-[0.55] pointer-events-none select-none" style={{color:'#93C5FD'}} viewBox="0 0 1440 320" fill="currentColor" preserveAspectRatio="none">
                                                    <path d="M0,96L48,112C96,128,192,160,288,154.7C384,149,480,107,576,112C672,117,768,171,864,197.3C960,224,1056,224,1152,202.7C1248,181,1344,139,1392,117L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z" />
                                                </svg>
 
