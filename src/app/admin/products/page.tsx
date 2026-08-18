@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { Plus, Edit2, Trash2, AlertCircle, X, ExternalLink, Upload, Image as ImageIcon } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Plus, Edit2, Trash2, AlertCircle, X, ExternalLink, Upload, Image as ImageIcon, ZoomIn, ZoomOut, Check, RefreshCw } from 'lucide-react';
 import { MediaSelectorModal } from '@/components/admin/MediaSelectorModal';
 
 export default function ManagedProductsPage() {
@@ -24,8 +24,79 @@ export default function ManagedProductsPage() {
     const [screenshotUrl, setScreenshotUrl] = useState('');
     const [isMediaSelectorOpen, setIsMediaSelectorOpen] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
-
     const [isSaving, setIsSaving] = useState(false);
+
+    // Image Cropper States
+    const [editorImage, setEditorImage] = useState<string | null>(null);
+    const [zoom, setZoom] = useState(1);
+    const [position, setPosition] = useState({ x: 0, y: 0 });
+    const [isDragging, setIsDragging] = useState(false);
+    const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+    const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+    // Redraw canvas on changes
+    useEffect(() => {
+        if (!editorImage || !canvasRef.current) return;
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
+        const img = new Image();
+        img.crossOrigin = 'anonymous'; // prevent tainted canvas issues
+        img.onload = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw image relative to current zoom and drag position
+            const w = img.width * zoom;
+            const h = img.height * zoom;
+            ctx.drawImage(img, position.x, position.y, w, h);
+        };
+        img.src = editorImage;
+    }, [editorImage, zoom, position]);
+
+    const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
+        setIsDragging(true);
+        setDragStart({ x: e.clientX - position.x, y: e.clientY - position.y });
+    };
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+        if (!isDragging) return;
+        setPosition({
+            x: e.clientX - dragStart.x,
+            y: e.clientY - dragStart.y
+        });
+    };
+
+    const handleMouseUp = () => {
+        setIsDragging(false);
+    };
+
+    const handleApplyCrop = () => {
+        if (!canvasRef.current) return;
+        setIsUploading(true);
+        canvasRef.current.toBlob(async (blob) => {
+            if (!blob) {
+                setIsUploading(false);
+                return;
+            }
+            try {
+                const formData = new FormData();
+                formData.append('file', blob, 'cropped-product.png');
+                const res = await fetch('/api/admin/media/upload', { method: 'POST', body: formData });
+                const data = await res.json();
+                if (data.success) {
+                    setScreenshotUrl(data.data.url);
+                    setEditorImage(null); // Hide editor
+                } else {
+                    alert('Failed to save cropped image.');
+                }
+            } catch (e) {
+                alert('Upload error.');
+            } finally {
+                setIsUploading(false);
+            }
+        }, 'image/png');
+    };
 
     useEffect(() => {
         fetchData();
@@ -86,7 +157,9 @@ export default function ManagedProductsPage() {
             const res = await fetch('/api/admin/media/upload', { method: 'POST', body: formData });
             const data = await res.json();
             if (data.success) {
-                setScreenshotUrl(data.data.url);
+                setEditorImage(data.data.url);
+                setZoom(1);
+                setPosition({ x: 0, y: 0 });
             } else {
                 alert('Upload failed');
             }
@@ -312,15 +385,60 @@ export default function ManagedProductsPage() {
                                 </div>
 
                                 <div>
-                                    <label className="block text-xs font-medium text-[#374151] mb-2">Product Screenshot</label>
-                                    {screenshotUrl && (
-                                        <div className="relative w-full aspect-video bg-gray-50 rounded-lg overflow-hidden border border-gray-200 mb-3 group">
-                                            <img src={screenshotUrl} alt="Screenshot" className="w-full h-full object-contain" />
-                                            <button type="button" onClick={() => setScreenshotUrl('')} className="absolute top-2 right-2 bg-white/90 p-1.5 rounded-full text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity hover:text-red-500 shadow-sm">
-                                                <X className="w-4 h-4" />
-                                            </button>
+                                    <label className="block text-xs font-medium text-[#374151] mb-1">Product Screenshot</label>
+                                    <p className="text-[10px] text-[#9CA3AF] mb-2">Fits standard aspect ratio 16:11 on website. You can edit/crop below after selection.</p>
+                                    
+                                    {/* Crop Editor Canvas Workspace */}
+                                    {editorImage && (
+                                        <div className="border border-[#6B9F91]/40 rounded-xl p-3 bg-[#EDF5F2]/20 mb-3 space-y-3">
+                                            <div className="flex justify-between items-center">
+                                                <span className="text-[10px] font-bold text-[#6B9F91] uppercase tracking-wider">Image Editor (Ratio: 16:11)</span>
+                                            </div>
+                                            <div className="flex items-center justify-center bg-gray-900 rounded-lg overflow-hidden relative cursor-move">
+                                                <canvas 
+                                                    ref={canvasRef} 
+                                                    width={480} 
+                                                    height={330} 
+                                                    onMouseDown={handleMouseDown}
+                                                    onMouseMove={handleMouseMove}
+                                                    onMouseUp={handleMouseUp}
+                                                    onMouseLeave={handleMouseUp}
+                                                    className="max-w-full aspect-[16/11] object-contain border border-gray-800"
+                                                />
+                                                <div className="absolute bottom-2 left-2 right-2 flex justify-between bg-black/60 backdrop-blur-sm p-1.5 rounded-lg">
+                                                    <span className="text-[9px] text-white flex items-center">Drag image to position crop</span>
+                                                    <div className="flex items-center gap-2">
+                                                        <button type="button" onClick={() => setZoom(z => Math.max(0.2, z - 0.1))} className="p-1 hover:bg-white/10 rounded text-white" title="Zoom Out"><ZoomOut className="w-3.5 h-3.5" /></button>
+                                                        <span className="text-[9px] text-white font-mono">{Math.round(zoom * 100)}%</span>
+                                                        <button type="button" onClick={() => setZoom(z => Math.min(5, z + 0.1))} className="p-1 hover:bg-white/10 rounded text-white" title="Zoom In"><ZoomIn className="w-3.5 h-3.5" /></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="flex gap-2">
+                                                <button type="button" onClick={handleApplyCrop} disabled={isUploading} className="flex-1 flex items-center justify-center gap-1.5 bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] py-1.5 rounded-lg text-xs font-medium disabled:opacity-50">
+                                                    <Check className="w-3.5 h-3.5" /> {isUploading ? 'Saving...' : 'Apply & Save Crop'}
+                                                </button>
+                                                <button type="button" onClick={() => setEditorImage(null)} className="px-3 bg-white hover:bg-gray-50 border border-gray-200 text-gray-500 rounded-lg text-xs font-medium">
+                                                    Cancel
+                                                </button>
+                                            </div>
                                         </div>
                                     )}
+
+                                    {screenshotUrl && !editorImage && (
+                                        <div className="relative w-full aspect-[16/11] bg-gray-50 rounded-lg overflow-hidden border border-gray-200 mb-3 group flex items-center justify-center">
+                                            <img src={screenshotUrl} alt="Screenshot" className="w-full h-full object-contain p-2" />
+                                            <div className="absolute top-2 right-2 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <button type="button" onClick={() => { setEditorImage(screenshotUrl); setZoom(1); setPosition({ x: 0, y: 0 }); }} className="bg-white/90 p-1.5 rounded-full text-gray-500 hover:text-[#6B9F91] shadow-sm" title="Edit / Recrop">
+                                                    <RefreshCw className="w-3.5 h-3.5" />
+                                                </button>
+                                                <button type="button" onClick={() => setScreenshotUrl('')} className="bg-white/90 p-1.5 rounded-full text-gray-500 hover:text-red-500 shadow-sm" title="Delete">
+                                                    <X className="w-3.5 h-3.5" />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )}
+
                                     <div className="flex flex-wrap gap-2">
                                         <label className={`flex-1 flex items-center justify-center gap-2 border border-gray-200 bg-white hover:bg-gray-50 rounded-lg px-4 py-2 cursor-pointer transition-colors ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}>
                                             <Upload className="w-4 h-4 text-gray-500" />
@@ -362,7 +480,9 @@ export default function ManagedProductsPage() {
                 <MediaSelectorModal
                     onClose={() => setIsMediaSelectorOpen(false)}
                     onSelect={(url) => {
-                        setScreenshotUrl(url);
+                        setEditorImage(url);
+                        setZoom(1);
+                        setPosition({ x: 0, y: 0 });
                         setIsMediaSelectorOpen(false);
                     }}
                 />

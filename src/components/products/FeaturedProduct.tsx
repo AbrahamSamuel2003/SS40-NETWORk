@@ -177,7 +177,7 @@ export function FeaturedProduct() {
                                         className="relative z-10 w-full max-w-[650px] aspect-[16/11] bg-white rounded-2xl shadow-2xl shadow-gray-300/50 border border-gray-200 flex flex-col overflow-hidden items-center justify-center"
                                     >
                                         {product.screenshotUrl ? (
-                                            <img src={product.screenshotUrl} alt={product.name} className="w-full h-full object-cover" />
+                                            <img src={product.screenshotUrl} alt={product.name} className="w-full h-full object-contain p-2 bg-gray-50/50" />
                                         ) : (
                                             <div className="flex flex-col items-center justify-center text-gray-400 gap-4 p-8 text-center">
                                                 <CloudIcon className="w-16 h-16 opacity-20" />
