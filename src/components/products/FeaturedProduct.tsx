@@ -244,7 +244,7 @@ export function FeaturedProduct() {
                                               <div className="w-12" /> {/* Spacer */}
                                           </div>
 
-                                          <div className="flex-grow flex items-center justify-center p-3.5 relative bg-gradient-to-tr from-[#E0F2FE] via-[#EDF5F2] to-[#CCFBF1] overflow-hidden">
+                                          <div className="flex-grow flex items-center justify-center p-1 relative bg-gradient-to-tr from-[#E0F2FE] via-[#EDF5F2] to-[#CCFBF1] overflow-hidden">
                                                {/* Light Sun/Halo glow */}
                                                <div className="absolute top-[-10%] right-[-10%] w-40 h-40 bg-[#99F6E4]/40 blur-[30px] rounded-full pointer-events-none" />
                                                
