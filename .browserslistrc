@@ -1,0 +1,6 @@
+# Targets modern browsers only to drop legacy Next.js polyfills and reduce main-thread JS execution.
+>0.3%
+not dead
+not op_mini all
+not IE 11
+last 2 versions

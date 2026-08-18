@@ -469,13 +469,13 @@ const MobileSwipeCard = ({ scene, idx }: { scene: any, idx: number }) => {
                     0{idx + 1}
                 </div>
                 <h3 className="text-2xl font-black text-[#111827] tracking-tight mb-2">{scene.title}</h3>
-                <p className="text-gray-500 text-sm leading-snug mb-5 shrink-0 line-clamp-2">{scene.description}</p>
+                <p className="text-gray-600 text-sm leading-snug mb-5 shrink-0 line-clamp-2">{scene.description}</p>
 
                 <div className="flex flex-col gap-2">
                     {scene.cards.map((card: any, i: number) => (
                         <div key={i} className="flex flex-col gap-1 p-3 bg-gray-50/70 rounded-xl border border-gray-100 shrink-0">
                             <span className="text-[#111827] font-bold text-sm tracking-tight">{card.title}</span>
-                            <p className="text-gray-500 text-xs leading-relaxed opacity-90">{card.text}</p>
+                            <p className="text-gray-600 text-xs leading-relaxed">{card.text}</p>
                         </div>
                     ))}
                 </div>
@@ -554,7 +554,7 @@ export function InteractiveImpactShowcase() {
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }}
-                        className="text-gray-500 text-lg md:text-xl font-medium max-w-2xl mx-auto"
+                        className="text-gray-600 text-lg md:text-xl font-medium max-w-2xl mx-auto"
                     >
                         One Vision. Three Ways We Build the Future.
                     </motion.p>
@@ -590,7 +590,7 @@ export function InteractiveImpactShowcase() {
                                         0{idx + 1}
                                     </div>
                                     <h3 className="text-4xl font-black text-[#111827] tracking-tight mb-6">{scene.title}</h3>
-                                    <p className="text-gray-500 text-lg leading-relaxed mb-10">{scene.description}</p>
+                                    <p className="text-gray-600 text-lg leading-relaxed mb-10">{scene.description}</p>
 
                                     <div className="flex flex-col gap-6">
                                         {scene.cards.map((card, i) => (
@@ -601,7 +601,7 @@ export function InteractiveImpactShowcase() {
                                                     </div>
                                                     <span className="text-[#111827] font-bold text-lg tracking-wide">{card.title}</span>
                                                 </div>
-                                                <p className="text-gray-500 text-sm leading-relaxed pl-11">{card.text}</p>
+                                                <p className="text-gray-600 text-sm leading-relaxed pl-11">{card.text}</p>
                                             </div>
                                         ))}
                                     </div>
@@ -633,8 +633,10 @@ export function InteractiveImpactShowcase() {
                             key={`dot-${i}`}
                             onClick={() => scrollToMobileScene(i)}
                             aria-label={`Scroll to scene ${i + 1}`}
-                            className={`h-2.5 rounded-full transition-all duration-400 ease-out ${activeMobileIdx === i ? 'bg-[#6B9F91] w-8 shadow-sm scale-100' : 'bg-gray-300 w-2.5 hover:bg-gray-400 scale-90'} border-none cursor-pointer focus:outline-none`}
-                        />
+                            className="p-3 focus:outline-none min-w-[44px] min-h-[44px] flex items-center justify-center touch-manipulation cursor-pointer"
+                        >
+                            <div className={`h-2.5 rounded-full transition-all duration-400 ease-out ${activeMobileIdx === i ? 'bg-[#6B9F91] w-8 shadow-sm scale-100' : 'bg-gray-300 w-2.5 hover:bg-gray-400 scale-90'} border-none`} />
+                        </button>
                     ))}
                 </div>
             </div>

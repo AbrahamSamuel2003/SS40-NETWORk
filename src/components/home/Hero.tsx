@@ -45,7 +45,7 @@ export function Hero() {
                         <h1 className="text-[clamp(40px,5vw,56px)] font-bold text-[var(--color-heading)] leading-[1.1] tracking-tight mb-6">
                             One Company.<br />
                             Three Business Wings.<br />
-                            <span className="text-[var(--color-primary)]">Endless Possibilities.</span>
+                            <span className="text-[var(--color-primary-hover)]">Endless Possibilities.</span>
                         </h1>
 
                         <p className="text-lg md:text-xl text-[var(--color-body-text)] mb-10 max-w-xl leading-relaxed">
