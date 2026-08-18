@@ -39,21 +39,49 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     // Dynamic client projects from DB
     let projectEntries: MetadataRoute.Sitemap = [];
-    try {
-        const projects = await prisma.clientProject.findMany({
-            where: { isActive: true },
-            select: { id: true, updatedAt: true },
-        });
+    let studentProjectEntries: MetadataRoute.Sitemap = [];
+    let productEntries: MetadataRoute.Sitemap = [];
 
-        projectEntries = projects.map((project) => ({
+    try {
+        const [clientProjects, studentProjects, products] = await Promise.all([
+            prisma.clientProject.findMany({
+                where: { isActive: true },
+                select: { id: true, updatedAt: true },
+            }),
+            prisma.studentProject.findMany({
+                where: { isActive: true },
+                select: { id: true, updatedAt: true },
+            }),
+            prisma.product.findMany({
+                where: { isActive: true },
+                select: { id: true, updatedAt: true },
+            })
+        ]);
+
+        projectEntries = clientProjects.map((project) => ({
             url: `${baseUrl}/client-projects/${project.id}`,
             lastModified: project.updatedAt,
             changeFrequency: 'monthly' as const,
             priority: 0.6,
         }));
+
+        studentProjectEntries = studentProjects.map((project) => ({
+            url: `${baseUrl}/academics/student-projects/${project.id}`,
+            lastModified: project.updatedAt,
+            changeFrequency: 'monthly' as const,
+            priority: 0.6,
+        }));
+
+        productEntries = products.map((product) => ({
+            url: `${baseUrl}/products/${product.id}`,
+            lastModified: product.updatedAt,
+            changeFrequency: 'monthly' as const,
+            priority: 0.8,
+        }));
+
     } catch (error) {
         console.error('Failed to generate dynamic sitemap entries:', error);
     }
 
-    return [...staticEntries, ...projectEntries];
+    return [...staticEntries, ...projectEntries, ...studentProjectEntries, ...productEntries];
 }

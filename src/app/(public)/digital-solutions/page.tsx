@@ -11,8 +11,8 @@ const TrustedClients = dynamic(() => import("@/components/digital-solutions/Trus
 const GetQuote = dynamic(() => import("@/components/digital-solutions/GetQuote").then(mod => mod.GetQuote), { ssr: true });
 
 export const metadata: Metadata = {
-    title: "Digital Solutions",
-    description: "Explore custom software, web applications, mobile apps, AI solutions, cloud platforms, and business automation from SS40 NETWORK.",
+    title: "Custom Software & Web Development in Tirunelveli",
+    description: "Best IT Company in Tirunelveli offering custom software, web applications, mobile apps, AI solutions, and business automation from SS40 NETWORK.",
 };
 
 export default function DigitalSolutionsPage() {
