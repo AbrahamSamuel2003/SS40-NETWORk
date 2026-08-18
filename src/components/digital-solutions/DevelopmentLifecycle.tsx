@@ -279,82 +279,134 @@ export function DevelopmentLifecycle() {
                                     <motion.div
                                         key="design"
                                         initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} transition={{ duration: 0.4 }}
-                                        className="relative z-10 w-full max-w-[450px] aspect-[16/10] bg-white border border-gray-200 rounded-2xl shadow-2xl overflow-hidden flex flex-col"
+                                        className="relative z-10 w-full max-w-[500px] aspect-[16/11] bg-white border border-gray-200 rounded-3xl shadow-2xl overflow-hidden flex flex-col"
                                     >
-                                        {/* Editor Top Bar */}
-                                        <div className="h-10 bg-gray-50 flex items-center px-4 justify-between border-b border-gray-200 shrink-0">
+                                        {/* Editor Header */}
+                                        <div className="h-11 bg-gray-50 flex items-center px-5 justify-between border-b border-gray-200 shrink-0">
                                             <div className="flex items-center gap-2">
                                                 <Palette className="w-4 h-4 text-[#6B9F91]" />
-                                                <span className="text-[10px] font-bold text-gray-400 font-mono">Workspace / Prototype_v1</span>
+                                                <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest font-mono">Creative Suite / UI_UX_Layout</span>
                                             </div>
                                             <div className="flex gap-1.5">
-                                                <div className="w-2.5 h-2.5 rounded-full bg-red-400" />
-                                                <div className="w-2.5 h-2.5 rounded-full bg-yellow-400" />
-                                                <div className="w-2.5 h-2.5 rounded-full bg-green-400" />
+                                                <span className="w-2.5 h-2.5 rounded-full bg-red-400" />
+                                                <span className="w-2.5 h-2.5 rounded-full bg-yellow-400" />
+                                                <span className="w-2.5 h-2.5 rounded-full bg-green-400" />
                                             </div>
                                         </div>
 
-                                        {/* Main Editor Work Area */}
-                                        <div className="flex-grow flex overflow-hidden">
-                                            {/* Layers Panel */}
-                                            <div className="w-1/4 bg-gray-50 border-r border-gray-200 p-3 hidden sm:flex flex-col gap-2 shrink-0">
-                                                <span className="text-[8px] font-bold text-gray-400 uppercase tracking-wider">Layers</span>
-                                                <div className="flex flex-col gap-1.5 text-left">
-                                                    <div className="text-[9px] font-bold text-gray-700 bg-gray-200/50 p-1 rounded">Frame: Mobile</div>
-                                                    <div className="text-[9px] font-medium text-gray-500 pl-3">↳ Top Banner</div>
-                                                    <div className="text-[9px] font-bold text-[#6B9F91] pl-3 flex items-center gap-1">↳ Card Component <PenTool className="w-2.5 h-2.5" /></div>
-                                                    <div className="text-[9px] font-medium text-gray-500 pl-3">↳ Primary CTA</div>
-                                                </div>
-                                            </div>
+                                        {/* Live Layout Canvas */}
+                                        <div className="flex-grow bg-[#F8FAFC] relative overflow-hidden flex items-center justify-center p-6 sm:p-10">
+                                            {/* Blueprint Grid Backdrop */}
+                                            <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1.5px,transparent_1.5px)] [background-size:24px_24px] opacity-60" />
 
-                                            {/* Live Canvas Area */}
-                                            <div className="flex-grow bg-[#F3F4F6] relative p-4 flex items-center justify-center overflow-hidden">
-                                                {/* Grid dots backdrop */}
-                                                <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-70" />
-                                                
-                                                {/* Mobile screen canvas */}
-                                                <div className="relative w-44 h-40 bg-white rounded-xl border border-gray-200 shadow-md flex flex-col p-3 gap-2 overflow-hidden z-10">
-                                                    {/* Screen Mock Items */}
-                                                    <div className="w-8 h-3 rounded bg-gray-100" />
-                                                    <div className="w-full h-8 bg-gray-50 rounded border border-gray-100 p-1 flex items-center gap-1.5">
-                                                        <div className="w-4 h-4 rounded-full bg-[#6B9F91]/20 shrink-0" />
-                                                        <div className="w-16 h-2 rounded bg-gray-200" />
+                                            {/* Stack of Floating Canvas Layers */}
+                                            <div className="relative w-full h-full flex items-center justify-center">
+
+                                                {/* LAYER 1: Wireframe / Skeleton Grid (Bottom-Left) */}
+                                                <motion.div 
+                                                    animate={{ y: [0, -8, 0], x: [0, 4, 0] }}
+                                                    transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
+                                                    className="absolute w-44 bg-white/70 border-2 border-dashed border-teal-300 rounded-xl p-3 shadow-md z-10 -translate-x-16 -translate-y-10 scale-95 flex flex-col gap-2 pointer-events-none"
+                                                >
+                                                    <span className="text-[8px] font-bold text-teal-600 bg-teal-50 px-1.5 py-0.5 rounded w-max">UX Wireframe</span>
+                                                    <div className="w-full h-12 border border-dashed border-gray-300 rounded flex items-center justify-center text-gray-300 text-[10px] bg-gray-50/50">
+                                                        [Image Placeholder]
+                                                    </div>
+                                                    <div className="space-y-1">
+                                                        <div className="w-2/3 h-2 bg-gray-200 rounded" />
+                                                        <div className="w-full h-1.5 bg-gray-100 rounded" />
+                                                        <div className="w-1/2 h-1.5 bg-gray-100 rounded" />
+                                                    </div>
+                                                </motion.div>
+
+                                                {/* LAYER 2: Design Tokens & Palette (Middle-Right) */}
+                                                <motion.div 
+                                                    animate={{ y: [0, 8, 0], x: [0, -4, 0] }}
+                                                    transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut" }}
+                                                    className="absolute w-44 bg-white/90 border border-gray-200 rounded-xl p-3 shadow-lg z-20 translate-x-16 translate-y-12 scale-95 flex flex-col gap-2.5 pointer-events-none"
+                                                >
+                                                    <span className="text-[8px] font-bold text-purple-600 bg-purple-50 px-1.5 py-0.5 rounded w-max">Design System (UI)</span>
+                                                    
+                                                    {/* Color chips */}
+                                                    <div className="flex gap-2">
+                                                        <div className="w-5 h-5 rounded-full bg-[#0F766E] shadow-sm animate-pulse" />
+                                                        <div className="w-5 h-5 rounded-full bg-[#6B9F91] shadow-sm" />
+                                                        <div className="w-5 h-5 rounded-full bg-[#2DD4BF] shadow-sm" />
                                                     </div>
                                                     
-                                                    {/* Animated Card Component transitions from Outline to Gradient */}
-                                                    <motion.div 
-                                                        animate={{ backgroundColor: ["#ffffff", "#EDF5F2", "#ffffff"], borderColor: ["#e5e7eb", "#6B9F91", "#e5e7eb"] }}
-                                                        transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-                                                        className="w-full h-12 rounded border p-1.5 flex flex-col justify-between"
-                                                    >
-                                                        <div className="w-2/3 h-1.5 rounded bg-gray-200" />
-                                                        <div className="w-full h-1 bg-gray-100" />
-                                                        <div className="w-1/2 h-1 bg-gray-100" />
-                                                    </motion.div>
-                                                </div>
+                                                    {/* Typography pills */}
+                                                    <div className="space-y-1">
+                                                        <div className="text-[9px] font-black text-gray-800 tracking-tight">Display Bold</div>
+                                                        <div className="text-[8px] font-mono text-gray-400">Inter / 700 / Medium</div>
+                                                    </div>
 
-                                                {/* Bezier curve drawing paths */}
-                                                <svg className="absolute inset-0 w-full h-full z-20 pointer-events-none" viewBox="0 0 250 160">
+                                                    {/* Button Component States */}
+                                                    <div className="w-full bg-[#6B9F91] text-white py-1 rounded text-center text-[8px] font-bold shadow-sm shadow-[#6B9F91]/20">
+                                                        Active Button
+                                                    </div>
+                                                </motion.div>
+
+                                                {/* LAYER 3: Finished Prototype UI Card (Top Floating Center) */}
+                                                <motion.div 
+                                                    animate={{ y: [0, -12, 0] }}
+                                                    transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+                                                    whileHover={{ scale: 1.05 }}
+                                                    className="absolute w-48 bg-white border border-gray-100 rounded-2xl p-3.5 shadow-2xl shadow-gray-400/40 z-30 flex flex-col gap-2.5 cursor-pointer"
+                                                >
+                                                    <div className="flex justify-between items-center">
+                                                        <span className="text-[8px] font-bold text-[#6B9F91] bg-[#EDF5F2] px-1.5 py-0.5 rounded">High-Fi Prototype</span>
+                                                        <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-ping" />
+                                                    </div>
+
+                                                    {/* Product preview */}
+                                                    <div className="w-full h-24 rounded-lg bg-gradient-to-br from-[#EDF5F2] to-gray-50 relative flex items-center justify-center overflow-hidden">
+                                                        {/* Vector drawing overlay */}
+                                                        <svg className="w-full h-full absolute inset-0 z-0 opacity-40" viewBox="0 0 100 100">
+                                                            <path d="M 10 50 Q 50 10 90 50" fill="none" stroke="#2DD4BF" strokeWidth="2" />
+                                                        </svg>
+                                                        
+                                                        {/* Sneaker dynamic shape */}
+                                                        <motion.div
+                                                            animate={{ rotate: [0, 4, 0], scale: [1, 1.05, 1] }}
+                                                            transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+                                                            className="w-16 h-16 text-[#6B9F91] drop-shadow-md z-10"
+                                                        >
+                                                            <PenTool className="w-full h-full rotate-45" />
+                                                        </motion.div>
+                                                    </div>
+
+                                                    <div className="space-y-1">
+                                                        <div className="text-[10px] font-black text-gray-800">ClearVision SaaS UI</div>
+                                                        <div className="text-[8px] font-semibold text-gray-400">Logical workflows • High Engagement</div>
+                                                    </div>
+
+                                                    <div className="flex justify-between items-center pt-1 border-t border-gray-100">
+                                                        <span className="text-[9px] font-black text-gray-800">Status: Complete</span>
+                                                        <span className="text-[8px] font-bold text-teal-600 flex items-center gap-1 hover:underline">
+                                                            Tap to Test <ArrowRight className="w-2.5 h-2.5" />
+                                                        </span>
+                                                    </div>
+                                                </motion.div>
+
+                                                {/* Drawing Bezier Path vector lines overlapping */}
+                                                <svg className="absolute inset-0 w-full h-full z-40 pointer-events-none overflow-visible" viewBox="0 0 250 160">
                                                     <motion.path 
-                                                        d="M 30,120 Q 125,10 220,120"
+                                                        d="M 20,40 Q 125,-10 230,40 T 20,40"
                                                         fill="none"
-                                                        stroke="#6B9F91"
+                                                        stroke="url(#gradient-line)"
                                                         strokeWidth="2.5"
                                                         strokeLinecap="round"
                                                         initial={{ pathLength: 0 }}
                                                         animate={{ pathLength: 1 }}
-                                                        transition={{ duration: 3, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }}
+                                                        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                                                     />
-                                                    {/* Anchor point dots */}
-                                                    <circle cx="30" cy="120" r="3.5" fill="#ffffff" stroke="#6B9F91" strokeWidth="2" />
-                                                    <circle cx="220" cy="120" r="3.5" fill="#ffffff" stroke="#6B9F91" strokeWidth="2" />
                                                     
-                                                    {/* Animated Bezier Handle */}
-                                                    <motion.circle 
-                                                        animate={{ x: [30, 125, 220, 125, 30], y: [120, 65, 120, 65, 120] }}
-                                                        transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
-                                                        r="4.5" fill="#6B9F91"
-                                                    />
+                                                    <defs>
+                                                        <linearGradient id="gradient-line" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                            <stop offset="0%" stopColor="#6B9F91" />
+                                                            <stop offset="100%" stopColor="#2DD4BF" />
+                                                        </linearGradient>
+                                                    </defs>
                                                 </svg>
                                             </div>
                                         </div>
