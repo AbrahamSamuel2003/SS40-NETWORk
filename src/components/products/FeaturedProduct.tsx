@@ -196,29 +196,163 @@ export function FeaturedProduct() {
                                      </motion.div>
                                  </div>
 
-                                {/* Image Column */}
-                                <div className="w-full lg:w-[55%] relative flex justify-center min-h-[400px]">
-                                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[120%] bg-[#DFE9D4]/40 blur-[80px] rounded-full z-0" />
+                                 <motion.div 
+                                     initial="hidden"
+                                     whileInView="visible"
+                                     whileHover="hover"
+                                     viewport={{ once: true, margin: "-100px" }}
+                                     className="w-full lg:w-[55%] relative flex justify-center items-center min-h-[420px]"
+                                 >
+                                     {/* Subtle Stage Background */}
+                                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] z-0 pointer-events-none select-none overflow-visible flex items-center justify-center">
+                                         {/* Restrained radial glow */}
+                                         <div className="absolute w-[80%] h-[80%] bg-[radial-gradient(ellipse_at_center,rgba(45,212,191,0.06)_0%,transparent_70%)] blur-[40px] rounded-full" />
+                                         
+                                         {/* Mini SVG Grid pattern */}
+                                         <svg className="absolute w-full h-full opacity-[0.03]" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+                                             <defs>
+                                                 <pattern id={`stage-grid-${product.id}`} width="24" height="24" patternUnits="userSpaceOnUse">
+                                                     <path d="M 24 0 L 0 0 0 24" fill="none" stroke="currentColor" strokeWidth="1"/>
+                                                 </pattern>
+                                             </defs>
+                                             <rect width="100%" height="100%" fill={`url(#stage-grid-${product.id})`} />
+                                         </svg>
 
-                                    <motion.div
-                                        initial={{ opacity: 0, x: isEven ? 40 : -40 }}
-                                        whileInView={{ opacity: 1, x: 0 }}
-                                        viewport={{ once: true, margin: "-100px" }}
-                                        transition={{ duration: 0.8, ease: "easeOut" }}
-                                        className="relative z-10 w-full max-w-[650px] aspect-[16/11] flex flex-col overflow-hidden items-center justify-center"
-                                    >
-                                        {product.screenshotUrl ? (
-                                            <img src={product.screenshotUrl} alt={product.name} className="w-full h-full object-contain" />
-                                        ) : (
-                                            <div className="flex flex-col items-center justify-center text-gray-400 gap-4 p-8 text-center">
-                                                <CloudIcon className="w-16 h-16 opacity-20" />
-                                                <p>No screenshot available for {product.name}</p>
-                                            </div>
-                                        )}
-                                    </motion.div>
+                                         {/* Tiny Particles */}
+                                         <motion.div 
+                                             animate={{ rotate: 360 }} 
+                                             transition={{ duration: 40, repeat: Infinity, ease: "linear" }} 
+                                             className="absolute w-full h-full"
+                                         >
+                                             <span className="absolute top-[20%] left-[15%] w-1 h-1 rounded-full bg-[#2DD4BF]/25" />
+                                             <span className="absolute top-[30%] right-[25%] w-1.5 h-1.5 rounded-full bg-[#6B9F91]/20" />
+                                             <span className="absolute bottom-[20%] left-[30%] w-1 h-1 rounded-full bg-[#2DD4BF]/30" />
+                                             <span className="absolute bottom-[35%] right-[15%] w-1.5 h-1.5 rounded-full bg-[#6B9F91]/25" />
+                                         </motion.div>
+                                     </div>
 
-                                    {/* Ambient floating elements can go here if needed in future */}
-                                </div>
+                                     {/* Main Product Screenshot */}
+                                     <motion.div
+                                         variants={{
+                                             hidden: { opacity: 0, scale: 0.96, y: 30 },
+                                             visible: { opacity: 1, scale: 1, y: 0, transition: { type: "spring", stiffness: 90, damping: 15, duration: 0.8 } },
+                                             hover: { y: -2, transition: { duration: 0.3 } }
+                                         }}
+                                         className="relative z-10 w-full max-w-[550px] aspect-[16/11] bg-white/40 backdrop-blur-sm border border-emerald-950/10 rounded-2xl shadow-xl hover:shadow-2xl hover:border-emerald-500/25 transition-all duration-300 flex items-center justify-center p-3"
+                                     >
+                                         {product.screenshotUrl ? (
+                                             <img src={product.screenshotUrl} alt={product.name} className="w-full h-full object-contain rounded-xl select-none" />
+                                         ) : (
+                                             <div className="flex flex-col items-center justify-center text-gray-400 gap-4 p-8 text-center select-none">
+                                                 <CloudIcon className="w-16 h-16 opacity-20" />
+                                                 <p>No screenshot available for {product.name}</p>
+                                             </div>
+                                         )}
+                                     </motion.div>
+
+                                     {/* Floating Perimeter Cards */}
+                                     <div className="absolute inset-0 z-20 pointer-events-none hidden md:block">
+                                         {/* Top-Left */}
+                                         {features[0] && (
+                                             <motion.div
+                                                 variants={{
+                                                     hidden: { opacity: 0, scale: 0.8, x: -10, y: -10 },
+                                                     visible: { 
+                                                         opacity: 1, 
+                                                         scale: 1, 
+                                                         x: 0, 
+                                                         y: 0, 
+                                                         transition: { delay: 0.1, duration: 0.5, type: "spring" } 
+                                                     },
+                                                     hover: { x: -4, y: -4, transition: { duration: 0.3 } }
+                                                 }}
+                                                 animate={{
+                                                     y: [0, -4, 0],
+                                                     transition: { repeat: Infinity, duration: 4.5, ease: "easeInOut", delay: 0.1 }
+                                                 }}
+                                                 className="absolute top-2 left-2 bg-white/95 backdrop-blur-md px-3.5 py-2.5 rounded-2xl border border-gray-100 shadow-xl text-xs font-bold text-gray-700 flex items-center gap-2"
+                                             >
+                                                 <BadgeCheck className="w-4 h-4 text-[#2DD4BF]" />
+                                                 <span>{features[0]}</span>
+                                             </motion.div>
+                                         )}
+
+                                         {/* Top-Right */}
+                                         {features[1] && (
+                                             <motion.div
+                                                 variants={{
+                                                     hidden: { opacity: 0, scale: 0.8, x: 10, y: -10 },
+                                                     visible: { 
+                                                         opacity: 1, 
+                                                         scale: 1, 
+                                                         x: 0, 
+                                                         y: 0, 
+                                                         transition: { delay: 0.2, duration: 0.5, type: "spring" } 
+                                                     },
+                                                     hover: { x: 4, y: -4, transition: { duration: 0.3 } }
+                                                 }}
+                                                 animate={{
+                                                     y: [0, 4, 0],
+                                                     transition: { repeat: Infinity, duration: 4, ease: "easeInOut", delay: 0.2 }
+                                                 }}
+                                                 className="absolute top-4 right-2 bg-white/95 backdrop-blur-md px-3.5 py-2.5 rounded-2xl border border-gray-100 shadow-xl text-xs font-bold text-gray-700 flex items-center gap-2"
+                                             >
+                                                 <BadgeCheck className="w-4 h-4 text-[#2DD4BF]" />
+                                                 <span>{features[1]}</span>
+                                             </motion.div>
+                                         )}
+
+                                         {/* Bottom-Left */}
+                                         {features[2] && (
+                                             <motion.div
+                                                 variants={{
+                                                     hidden: { opacity: 0, scale: 0.8, x: -10, y: 10 },
+                                                     visible: { 
+                                                         opacity: 1, 
+                                                         scale: 1, 
+                                                         x: 0, 
+                                                         y: 0, 
+                                                         transition: { delay: 0.3, duration: 0.5, type: "spring" } 
+                                                     },
+                                                     hover: { x: -4, y: 4, transition: { duration: 0.3 } }
+                                                 }}
+                                                 animate={{
+                                                     y: [0, 4, 0],
+                                                     transition: { repeat: Infinity, duration: 4.2, ease: "easeInOut", delay: 0.3 }
+                                                 }}
+                                                 className="absolute bottom-4 left-2 bg-white/95 backdrop-blur-md px-3.5 py-2.5 rounded-2xl border border-gray-100 shadow-xl text-xs font-bold text-gray-700 flex items-center gap-2"
+                                             >
+                                                 <BadgeCheck className="w-4 h-4 text-[#2DD4BF]" />
+                                                 <span>{features[2]}</span>
+                                             </motion.div>
+                                         )}
+
+                                         {/* Bottom-Right */}
+                                         {features[3] && (
+                                             <motion.div
+                                                 variants={{
+                                                     hidden: { opacity: 0, scale: 0.8, x: 10, y: 10 },
+                                                     visible: { 
+                                                         opacity: 1, 
+                                                         scale: 1, 
+                                                         x: 0, 
+                                                         y: 0, 
+                                                         transition: { delay: 0.4, duration: 0.5, type: "spring" } 
+                                                     },
+                                                     hover: { x: 4, y: 4, transition: { duration: 0.3 } }
+                                                 }}
+                                                 animate={{
+                                                     y: [0, -4, 0],
+                                                     transition: { repeat: Infinity, duration: 4.8, ease: "easeInOut", delay: 0.4 }
+                                                 }}
+                                                 className="absolute bottom-2 right-2 bg-white/95 backdrop-blur-md px-3.5 py-2.5 rounded-2xl border border-gray-100 shadow-xl text-xs font-bold text-gray-700 flex items-center gap-2"
+                                             >
+                                                 <BadgeCheck className="w-4 h-4 text-[#2DD4BF]" />
+                                                 <span>{features[3]}</span>
+                                             </motion.div>
+                                         )}
+                                     </div>
+                                 </motion.div>
                             </div>
                         </div>
                     );
