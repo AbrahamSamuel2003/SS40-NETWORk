@@ -449,6 +449,12 @@ export default function ManagedProductsPage() {
                                             <ImageIcon className="w-4 h-4 text-[#6B9F91]" />
                                             <span className="text-xs font-medium text-[#111827]">Select from Media</span>
                                         </button>
+                                        {screenshotUrl && !editorImage && (
+                                            <button type="button" onClick={() => { setEditorImage(screenshotUrl); setZoom(1); setPosition({ x: 0, y: 0 }); }} className="flex-1 flex items-center justify-center gap-2 border border-blue-200 bg-blue-50/50 hover:bg-blue-50 text-blue-600 rounded-lg px-4 py-2 transition-colors">
+                                                <RefreshCw className="w-4 h-4" />
+                                                <span className="text-xs font-medium">Edit / Recrop</span>
+                                            </button>
+                                        )}
                                     </div>
                                 </div>
 
