@@ -107,63 +107,94 @@ export function FeaturedProduct() {
                             {/* Top Section Layout (Two Columns) */}
                             <div className={`flex flex-col gap-12 lg:gap-16 items-center ${isEven ? 'lg:flex-row' : 'lg:flex-row-reverse'}`}>
 
-                                {/* Text Column */}
-                                <div className="w-full lg:w-[45%] flex flex-col text-center lg:text-left items-center lg:items-start">
-                                    <motion.div
-                                        initial="hidden"
-                                        whileInView="visible"
-                                        viewport={{ once: true, margin: "-100px" }}
-                                        variants={slideUp}
-                                        className="flex flex-col items-center lg:items-start"
-                                    >
-                                        {(product.badgeText || product.isFeatured) && (
-                                            <Badge className="mb-4 rounded-md uppercase tracking-widest text-[10px] font-bold bg-[#2DD4BF]/15 text-[#0F766E]">
-                                                {product.badgeText || "FEATURED PRODUCT"}
-                                            </Badge>
-                                        )}
-
-                                        <div className="mb-8 border-l-4 border-[#2DD4BF] pl-4 lg:border-l-4 lg:pl-4 border-l-0 pl-0 border-b-4 pb-2 lg:border-b-0 lg:pb-0 inline-block">
-                                            <h4 className="text-[#2DD4BF] font-mono text-sm tracking-widest font-bold mb-2 uppercase">{product.name}</h4>
-                                            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#111827] leading-tight tracking-tight">
-                                                {product.marketingTitle}
-                                            </h2>
-                                        </div>
-
-                                        <p className="text-lg text-gray-600 mb-8 leading-relaxed max-w-lg">
-                                            {product.description}
-                                        </p>
-
-                                        {tags.length > 0 && (
-                                            <div className="flex flex-wrap justify-center lg:justify-start gap-2 mb-6">
-                                                {tags.map((chip: string, idx: number) => (
-                                                    <span key={idx} className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-semibold shadow-sm">
-                                                        {chip}
-                                                    </span>
-                                                ))}
-                                            </div>
-                                        )}
-
-                                        {features.length > 0 && (
-                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-10 w-full max-w-lg">
-                                                {features.slice(0, 4).map((feature: string, idx: number) => (
-                                                    <div key={idx} className="flex items-center justify-center lg:justify-start gap-2 text-sm font-semibold text-gray-700">
-                                                        <BadgeCheck className="w-4 h-4 text-[#2DD4BF] shrink-0" />
-                                                        <span>{feature}</span>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        )}
-
-                                        {product.productUrl && (
-                                            <Button asChild size="lg" className="w-full sm:w-auto bg-[#2DD4BF] hover:bg-[#14b8a6] text-white shadow-lg shadow-[#2DD4BF]/20 rounded-xl group">
-                                                <a href={product.productUrl} target="_blank" rel="noopener noreferrer">
-                                                    {product.ctaText || `Start using ${product.name}`}
-                                                    <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                                                </a>
-                                            </Button>
-                                        )}
-                                    </motion.div>
-                                </div>
+                                 {/* Text Column */}
+                                 <div className="w-full lg:w-[45%] flex flex-col text-center lg:text-left items-center lg:items-start">
+                                     <motion.div
+                                         initial="hidden"
+                                         whileInView="visible"
+                                         viewport={{ once: true, margin: "-100px" }}
+                                         variants={slideUp}
+                                         className="flex flex-col items-center lg:items-start"
+                                     >
+                                         {(product.badgeText || product.isFeatured) && (
+                                             <Badge className="mb-4 rounded-md uppercase tracking-widest text-[10px] font-bold bg-[#2DD4BF]/15 text-[#0F766E]">
+                                                 {product.badgeText || "FEATURED PRODUCT"}
+                                             </Badge>
+                                         )}
+ 
+                                         <div className="mb-6 flex flex-col items-center lg:items-start w-full">
+                                             <div className="flex items-center gap-2 mb-2">
+                                                 <span className="w-4 h-0.5 bg-[#2DD4BF]" />
+                                                 <h4 className="text-[#0F766E] font-mono text-xs tracking-[0.2em] font-extrabold uppercase">{product.name}</h4>
+                                             </div>
+                                             {(() => {
+                                                 const title = product.marketingTitle || "";
+                                                 const parts = title.split(/[:|]/);
+                                                 if (parts.length > 1) {
+                                                     return (
+                                                         <>
+                                                             <h2 className="text-3xl md:text-4xl lg:text-[44px] font-black text-[#111827] leading-tight tracking-tight">
+                                                                 {parts[0].trim()}
+                                                             </h2>
+                                                             <p className="text-sm md:text-base font-bold bg-gradient-to-r from-[#0F766E] to-[#2DD4BF] bg-clip-text text-transparent mt-2 uppercase tracking-widest">
+                                                                 {parts.slice(1).join(":").trim()}
+                                                             </p>
+                                                         </>
+                                                     );
+                                                 }
+                                                 const words = title.split(' ');
+                                                 if (words.length > 2) {
+                                                     const lastWord = words.pop();
+                                                     const secondLastWord = words.pop();
+                                                     return (
+                                                         <h2 className="text-3xl md:text-4xl lg:text-[44px] font-black text-[#111827] leading-tight tracking-tight">
+                                                             {words.join(' ')} <span className="bg-gradient-to-r from-[#0F766E] to-[#2DD4BF] bg-clip-text text-transparent">{secondLastWord} {lastWord}</span>
+                                                         </h2>
+                                                     );
+                                                 }
+                                                 return (
+                                                     <h2 className="text-3xl md:text-4xl lg:text-[44px] font-black text-[#111827] leading-tight tracking-tight">
+                                                         {title}
+                                                     </h2>
+                                                 );
+                                             })()}
+                                         </div>
+ 
+                                         <p className="text-base md:text-lg text-gray-600/95 mb-8 leading-relaxed max-w-lg font-medium text-center lg:text-left">
+                                             {product.description}
+                                         </p>
+ 
+                                         {tags.length > 0 && (
+                                             <div className="flex flex-wrap justify-center lg:justify-start gap-2 mb-6">
+                                                 {tags.map((chip: string, idx: number) => (
+                                                     <span key={idx} className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-semibold shadow-sm">
+                                                         {chip}
+                                                     </span>
+                                                 ))}
+                                             </div>
+                                         )}
+ 
+                                         {features.length > 0 && (
+                                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-8 w-full max-w-lg text-left">
+                                                 {features.slice(0, 4).map((feature: string, idx: number) => (
+                                                     <div key={idx} className="flex items-start gap-2.5 p-3.5 bg-white/70 border border-gray-200/50 rounded-xl shadow-sm hover:shadow-md hover:border-[#2DD4BF]/20 transition-all duration-300">
+                                                         <BadgeCheck className="w-5 h-5 text-[#2DD4BF] shrink-0 mt-0.5" />
+                                                         <span className="text-xs md:text-sm font-semibold text-gray-700 leading-snug">{feature}</span>
+                                                     </div>
+                                                 ))}
+                                             </div>
+                                         )}
+ 
+                                         {product.productUrl && (
+                                             <Button asChild size="lg" className="w-full sm:w-auto bg-[#2DD4BF] hover:bg-[#14b8a6] text-white shadow-lg shadow-[#2DD4BF]/20 rounded-xl group">
+                                                 <a href={product.productUrl} target="_blank" rel="noopener noreferrer">
+                                                     {product.ctaText || `Start using ${product.name}`}
+                                                     <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                                                 </a>
+                                             </Button>
+                                         )}
+                                     </motion.div>
+                                 </div>
 
                                 {/* Image Column */}
                                 <div className="w-full lg:w-[55%] relative flex justify-center min-h-[400px]">
