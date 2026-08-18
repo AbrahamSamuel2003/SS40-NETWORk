@@ -244,21 +244,31 @@ export function FeaturedProduct() {
                                               <div className="w-12" /> {/* Spacer */}
                                           </div>
 
-                                          <div className="flex-grow flex items-center justify-center p-3 relative bg-gradient-to-br from-slate-900 via-emerald-950/70 to-zinc-950 overflow-hidden">
-                                              <div className="absolute top-0 right-0 w-36 h-36 bg-[#2DD4BF]/20 blur-[35px] rounded-full pointer-events-none" />
-                                              {product.screenshotUrl ? (
-                                                  <img 
-                                                      src={product.screenshotUrl} 
-                                                      alt={product.name} 
-                                                      className="w-full h-full object-contain select-none transition-all duration-300 filter drop-shadow-[0_12px_24px_rgba(0,0,0,0.3)]" 
-                                                  />
-                                              ) : (
-                                                  <div className="flex flex-col items-center justify-center text-gray-400 gap-4 p-8 text-center select-none">
-                                                      <CloudIcon className="w-16 h-16 opacity-20" />
-                                                      <p>No screenshot available for {product.name}</p>
-                                                  </div>
-                                              )}
-                                          </div>
+                                          <div className="flex-grow flex items-center justify-center p-3.5 relative bg-gradient-to-tr from-[#E0F2FE] via-[#EDF5F2] to-[#CCFBF1] overflow-hidden">
+                                               {/* Light Sun/Halo glow */}
+                                               <div className="absolute top-[-10%] right-[-10%] w-40 h-40 bg-[#99F6E4]/40 blur-[30px] rounded-full pointer-events-none" />
+                                               
+                                               {/* Abstract vector hills / ocean waves */}
+                                               <svg className="absolute bottom-0 left-0 w-full h-[40%] opacity-[0.35] text-[#A7F3D0]/60 pointer-events-none select-none" viewBox="0 0 1440 320" fill="currentColor" preserveAspectRatio="none">
+                                                   <path d="M0,192L48,197.3C96,203,192,213,288,192C384,171,480,117,576,117C672,117,768,171,864,186.7C960,203,1056,181,1152,154.7C1248,128,1344,96,1392,80L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z" />
+                                               </svg>
+                                               <svg className="absolute bottom-0 left-0 w-full h-[30%] opacity-[0.25] text-[#93C5FD]/50 pointer-events-none select-none" viewBox="0 0 1440 320" fill="currentColor" preserveAspectRatio="none">
+                                                   <path d="M0,96L48,112C96,128,192,160,288,154.7C384,149,480,107,576,112C672,117,768,171,864,197.3C960,224,1056,224,1152,202.7C1248,181,1344,139,1392,117L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z" />
+                                               </svg>
+
+                                               {product.screenshotUrl ? (
+                                                   <img 
+                                                       src={product.screenshotUrl} 
+                                                       alt={product.name} 
+                                                       className="w-full h-full object-contain select-none transition-all duration-300 relative z-10 filter drop-shadow-[0_12px_24px_rgba(15,118,110,0.15)]" 
+                                                   />
+                                               ) : (
+                                                   <div className="flex flex-col items-center justify-center text-gray-400 gap-4 p-8 text-center select-none relative z-10">
+                                                       <CloudIcon className="w-16 h-16 opacity-20" />
+                                                       <p>No screenshot available for {product.name}</p>
+                                                   </div>
+                                               )}
+                                           </div>
                                       </motion.div>
 
                                       {/* Floating Perimeter Cards */}
