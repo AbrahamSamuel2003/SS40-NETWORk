@@ -12,7 +12,8 @@ import {
     CheckCircle2,
     Palette,
     Terminal,
-    Search
+    Search,
+    ArrowRight
 } from "lucide-react";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
