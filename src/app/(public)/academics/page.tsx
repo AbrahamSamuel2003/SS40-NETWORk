@@ -11,8 +11,8 @@ const Collaborations = dynamic(() => import("@/components/academics/Collaboratio
 const Collaborate = dynamic(() => import("@/components/academics/Collaborate").then(mod => mod.Collaborate), { ssr: true });
 
 export const metadata = {
-    title: "Academics",
-    description: "Empowering the next generation of engineers with real-world skills, industry projects, and career-launching placements.",
+    title: "IT Training & Academic Projects in Tirunelveli",
+    description: "Master modern web development, AI, and software engineering with industry-grade academic training and final-year student projects at SS40 NETWORK.",
 };
 
 export const revalidate = 0; // Dynamic route

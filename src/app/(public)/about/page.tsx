@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "About",
-    description: "Learn about SS40 NETWORK, our digital solutions, products, and academic collaboration programs.",
+    title: "About Us | Leading Tech Service Provider in Tirunelveli",
+    description: "Learn about SS40 NETWORK, Tirunelveli's premier tech agency dedicated to empowering businesses with innovative software and enterprise solutions.",
 };
 
 export default function AboutPage() {

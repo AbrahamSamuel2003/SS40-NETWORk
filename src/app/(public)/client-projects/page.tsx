@@ -7,8 +7,8 @@ import { Container } from "@/components/ui/Container";
 import { ClientProjectsList } from "./ClientProjectsList";
 
 export const metadata: Metadata = {
-    title: "Client Projects",
-    description: "Explore real client projects and digital solutions delivered by SS40 NETWORK.",
+    title: "Our Portfolio | Custom Web & App Development Success",
+    description: "Discover how SS40 NETWORK has transformed businesses globally with scalable web apps, mobile applications, and AI integrations.",
 };
 
 export const revalidate = 0; // Dynamic route

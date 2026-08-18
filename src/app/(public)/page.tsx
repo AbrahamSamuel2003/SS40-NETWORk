@@ -13,8 +13,8 @@ const TrustedBy = dynamic(() => import("@/components/home/TrustedBy").then(mod =
 const ContactSection = dynamic(() => import("@/components/home/ContactSection").then(mod => mod.ContactSection), { ssr: true });
 
 export const metadata: Metadata = {
-  title: "Home",
-  description: "SS40 NETWORK - Premium Digital Solutions, IT Services, and Academics for forward-thinking businesses.",
+  title: "Top IT Company in Tirunelveli | Web & AI Development",
+  description: "SS40 NETWORK is the leading IT company in Tirunelveli, Tamil Nadu. We specialize in custom software development, web applications, AI solutions, and IT training.",
 };
 
 export default async function Home() {

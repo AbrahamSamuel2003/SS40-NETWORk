@@ -13,8 +13,8 @@ const Faq = dynamic(() => import("@/components/contact/Faq").then(mod => mod.Faq
 import { getSiteConfig } from "@/lib/site-config";
 
 export const metadata = {
-    title: "Contact Us",
-    description: "Connect with SS40 NETWORK to explore digital solutions, academic collaborations, and innovative products.",
+    title: "Contact Top Software Developers in Tirunelveli",
+    description: "Get in touch with SS40 NETWORK for custom web development, AI software, or enterprise IT solutions. Located in Tirunelveli, Tamil Nadu.",
 };
 
 export default async function ContactPage() {
