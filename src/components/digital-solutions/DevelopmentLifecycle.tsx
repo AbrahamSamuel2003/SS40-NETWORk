@@ -213,19 +213,64 @@ export function DevelopmentLifecycle() {
                                     <motion.div
                                         key="discovery"
                                         initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} transition={{ duration: 0.4 }}
-                                        className="relative z-10 w-full max-w-[400px] h-[250px] flex items-center justify-center"
+                                        className="relative z-10 w-full max-w-[450px] aspect-[16/11] flex items-center justify-center"
                                     >
-                                        <div className="w-3/4 h-48 bg-white border border-gray-200 rounded-xl shadow-lg -rotate-6 absolute left-4 p-4 space-y-3 flex flex-col justify-end">
-                                            <div className="w-full h-2 bg-gray-100 rounded-full" />
-                                            <div className="w-5/6 h-2 bg-gray-100 rounded-full" />
+                                        <svg className="w-full h-full absolute inset-0 z-0 overflow-visible" viewBox="0 0 450 310">
+                                            {/* Pulse connection lines */}
+                                            <motion.line x1="225" y1="155" x2="80" y2="80" stroke="#6B9F91" strokeWidth="2" strokeDasharray="6, 6" initial={{ strokeDashoffset: 0 }} animate={{ strokeDashoffset: -20 }} transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }} />
+                                            <motion.line x1="225" y1="155" x2="370" y2="70" stroke="#2DD4BF" strokeWidth="2" strokeDasharray="6, 6" initial={{ strokeDashoffset: 0 }} animate={{ strokeDashoffset: 20 }} transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }} />
+                                            <motion.line x1="225" y1="155" x2="90" y2="220" stroke="#6B9F91" strokeWidth="2" strokeDasharray="6, 6" initial={{ strokeDashoffset: 0 }} animate={{ strokeDashoffset: -20 }} transition={{ repeat: Infinity, duration: 2, ease: "linear" }} />
+                                            <motion.line x1="225" y1="155" x2="350" y2="230" stroke="#2DD4BF" strokeWidth="2" strokeDasharray="6, 6" initial={{ strokeDashoffset: 0 }} animate={{ strokeDashoffset: 20 }} transition={{ repeat: Infinity, duration: 2, ease: "linear" }} />
+                                        </svg>
+
+                                        {/* Satellite Nodes */}
+                                        <motion.div 
+                                            animate={{ y: [0, -6, 0] }} transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+                                            className="absolute top-10 left-6 bg-white border border-gray-200/80 px-3.5 py-2 rounded-xl shadow-lg flex items-center gap-2"
+                                        >
+                                            <span className="w-2.5 h-2.5 rounded-full bg-[#6B9F91] animate-ping shrink-0" />
+                                            <span className="text-xs font-bold text-gray-700 whitespace-nowrap">Market Research</span>
+                                        </motion.div>
+
+                                        <motion.div 
+                                            animate={{ y: [0, 8, 0] }} transition={{ repeat: Infinity, duration: 3.5, ease: "easeInOut" }}
+                                            className="absolute top-8 right-6 bg-white border border-gray-200/80 px-3.5 py-2 rounded-xl shadow-lg flex items-center gap-2"
+                                        >
+                                            <span className="w-2.5 h-2.5 rounded-full bg-[#2DD4BF] animate-pulse shrink-0" />
+                                            <span className="text-xs font-bold text-gray-700 whitespace-nowrap">User Personas</span>
+                                        </motion.div>
+
+                                        <motion.div 
+                                            animate={{ y: [0, -8, 0] }} transition={{ repeat: Infinity, duration: 3.2, ease: "easeInOut" }}
+                                            className="absolute bottom-12 left-10 bg-white border border-gray-200/80 px-3.5 py-2 rounded-xl shadow-lg flex items-center gap-2"
+                                        >
+                                            <span className="w-2.5 h-2.5 rounded-full bg-[#2DD4BF] shrink-0" />
+                                            <span className="text-xs font-bold text-gray-700 whitespace-nowrap">Tech Architecture</span>
+                                        </motion.div>
+
+                                        <motion.div 
+                                            animate={{ y: [0, 6, 0] }} transition={{ repeat: Infinity, duration: 2.8, ease: "easeInOut" }}
+                                            className="absolute bottom-10 right-10 bg-white border border-gray-200/80 px-3.5 py-2 rounded-xl shadow-lg flex items-center gap-2"
+                                        >
+                                            <span className="w-2.5 h-2.5 rounded-full bg-[#6B9F91] shrink-0" />
+                                            <span className="text-xs font-bold text-gray-700 whitespace-nowrap">Project Backlog</span>
+                                        </motion.div>
+
+                                        {/* Central Discovery Core */}
+                                        <div className="relative z-10 w-28 h-28 rounded-full bg-white border border-gray-100 flex items-center justify-center shadow-2xl">
+                                            <motion.div 
+                                                animate={{ scale: [1, 1.08, 1] }} 
+                                                transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
+                                                className="absolute inset-1 rounded-full bg-[#6B9F91]/5 border border-[#6B9F91]/20" 
+                                            />
+                                            <motion.div 
+                                                animate={{ rotate: 360 }} 
+                                                transition={{ repeat: Infinity, duration: 15, ease: "linear" }}
+                                                className="w-16 h-16 rounded-full bg-gradient-to-tr from-[#6B9F91] to-[#2DD4BF] text-white flex items-center justify-center shadow-lg"
+                                            >
+                                                <Compass className="w-8 h-8" />
+                                            </motion.div>
                                         </div>
-                                        <div className="w-3/4 h-48 bg-white border border-gray-200 rounded-xl shadow-xl rotate-3 absolute right-4 p-4 space-y-3">
-                                            <div className="w-1/2 h-4 bg-gray-200 rounded-md mb-2" />
-                                            <div className="w-full h-2 bg-gray-100 rounded-full" />
-                                            <div className="w-full h-2 bg-gray-100 rounded-full" />
-                                            <div className="w-3/4 h-2 bg-gray-100 rounded-full" />
-                                        </div>
-                                        <div className="absolute top-10 right-10 w-16 h-16 rounded-full bg-[#FFC900] shadow-xl flex items-center justify-center text-white"><Compass className="w-8 h-8" /></div>
                                     </motion.div>
                                 )}
 
@@ -234,16 +279,84 @@ export function DevelopmentLifecycle() {
                                     <motion.div
                                         key="design"
                                         initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} transition={{ duration: 0.4 }}
-                                        className="relative z-10 w-full max-w-[450px] aspect-[16/9] bg-white border border-gray-200 rounded-2xl shadow-xl overflow-hidden flex flex-col"
+                                        className="relative z-10 w-full max-w-[450px] aspect-[16/10] bg-white border border-gray-200 rounded-2xl shadow-2xl overflow-hidden flex flex-col"
                                     >
-                                        <div className="h-8 bg-gray-100 flex items-center px-4 gap-4 border-b border-gray-200">
-                                            <Palette className="w-4 h-4 text-gray-500" />
-                                            <div className="w-24 h-2 bg-gray-200 rounded" />
+                                        {/* Editor Top Bar */}
+                                        <div className="h-10 bg-gray-50 flex items-center px-4 justify-between border-b border-gray-200 shrink-0">
+                                            <div className="flex items-center gap-2">
+                                                <Palette className="w-4 h-4 text-[#6B9F91]" />
+                                                <span className="text-[10px] font-bold text-gray-400 font-mono">Workspace / Prototype_v1</span>
+                                            </div>
+                                            <div className="flex gap-1.5">
+                                                <div className="w-2.5 h-2.5 rounded-full bg-red-400" />
+                                                <div className="w-2.5 h-2.5 rounded-full bg-yellow-400" />
+                                                <div className="w-2.5 h-2.5 rounded-full bg-green-400" />
+                                            </div>
                                         </div>
-                                        <div className="flex-1 p-6 grid grid-cols-6 grid-rows-4 gap-4 opacity-70">
-                                            <div className="col-span-2 row-span-4 bg-gray-100 rounded border-2 border-dashed border-gray-300" />
-                                            <div className="col-span-4 row-span-1 bg-[#6B9F91]/20 rounded border-2 border-[#6B9F91]/40 flex items-center justify-center"><div className="w-8 h-2 bg-white rounded" /></div>
-                                            <div className="col-span-4 row-span-3 bg-gray-50 rounded border-2 border-dashed border-gray-300" />
+
+                                        {/* Main Editor Work Area */}
+                                        <div className="flex-grow flex overflow-hidden">
+                                            {/* Layers Panel */}
+                                            <div className="w-1/4 bg-gray-50 border-r border-gray-200 p-3 hidden sm:flex flex-col gap-2 shrink-0">
+                                                <span className="text-[8px] font-bold text-gray-400 uppercase tracking-wider">Layers</span>
+                                                <div className="flex flex-col gap-1.5 text-left">
+                                                    <div className="text-[9px] font-bold text-gray-700 bg-gray-200/50 p-1 rounded">Frame: Mobile</div>
+                                                    <div className="text-[9px] font-medium text-gray-500 pl-3">↳ Top Banner</div>
+                                                    <div className="text-[9px] font-bold text-[#6B9F91] pl-3 flex items-center gap-1">↳ Card Component <PenTool className="w-2.5 h-2.5" /></div>
+                                                    <div className="text-[9px] font-medium text-gray-500 pl-3">↳ Primary CTA</div>
+                                                </div>
+                                            </div>
+
+                                            {/* Live Canvas Area */}
+                                            <div className="flex-grow bg-[#F3F4F6] relative p-4 flex items-center justify-center overflow-hidden">
+                                                {/* Grid dots backdrop */}
+                                                <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-70" />
+                                                
+                                                {/* Mobile screen canvas */}
+                                                <div className="relative w-44 h-40 bg-white rounded-xl border border-gray-200 shadow-md flex flex-col p-3 gap-2 overflow-hidden z-10">
+                                                    {/* Screen Mock Items */}
+                                                    <div className="w-8 h-3 rounded bg-gray-100" />
+                                                    <div className="w-full h-8 bg-gray-50 rounded border border-gray-100 p-1 flex items-center gap-1.5">
+                                                        <div className="w-4 h-4 rounded-full bg-[#6B9F91]/20 shrink-0" />
+                                                        <div className="w-16 h-2 rounded bg-gray-200" />
+                                                    </div>
+                                                    
+                                                    {/* Animated Card Component transitions from Outline to Gradient */}
+                                                    <motion.div 
+                                                        animate={{ backgroundColor: ["#ffffff", "#EDF5F2", "#ffffff"], borderColor: ["#e5e7eb", "#6B9F91", "#e5e7eb"] }}
+                                                        transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+                                                        className="w-full h-12 rounded border p-1.5 flex flex-col justify-between"
+                                                    >
+                                                        <div className="w-2/3 h-1.5 rounded bg-gray-200" />
+                                                        <div className="w-full h-1 bg-gray-100" />
+                                                        <div className="w-1/2 h-1 bg-gray-100" />
+                                                    </motion.div>
+                                                </div>
+
+                                                {/* Bezier curve drawing paths */}
+                                                <svg className="absolute inset-0 w-full h-full z-20 pointer-events-none" viewBox="0 0 250 160">
+                                                    <motion.path 
+                                                        d="M 30,120 Q 125,10 220,120"
+                                                        fill="none"
+                                                        stroke="#6B9F91"
+                                                        strokeWidth="2.5"
+                                                        strokeLinecap="round"
+                                                        initial={{ pathLength: 0 }}
+                                                        animate={{ pathLength: 1 }}
+                                                        transition={{ duration: 3, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }}
+                                                    />
+                                                    {/* Anchor point dots */}
+                                                    <circle cx="30" cy="120" r="3.5" fill="#ffffff" stroke="#6B9F91" strokeWidth="2" />
+                                                    <circle cx="220" cy="120" r="3.5" fill="#ffffff" stroke="#6B9F91" strokeWidth="2" />
+                                                    
+                                                    {/* Animated Bezier Handle */}
+                                                    <motion.circle 
+                                                        animate={{ x: [30, 125, 220, 125, 30], y: [120, 65, 120, 65, 120] }}
+                                                        transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
+                                                        r="4.5" fill="#6B9F91"
+                                                    />
+                                                </svg>
+                                            </div>
                                         </div>
                                     </motion.div>
                                 )}
