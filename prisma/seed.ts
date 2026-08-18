@@ -25,7 +25,26 @@ async function main() {
         },
     });
 
-    console.log(`Seed finished. Setup admin account: ${admin.email}`);
+    // Seed default SiteConfig
+    const config = await prisma.siteConfig.upsert({
+        where: { id: 1 },
+        update: {}, // Do nothing if it already exists
+        create: {
+            id: 1,
+            companyName: 'SS40 NETWORK',
+            legalName: 'SS40 NETWORK Private Limited',
+            contactEmail: 'support@ss40network.com',
+            contactPhone: '+91 1234567890',
+            whatsappNumber: '+91 1234567890',
+            addressText: 'Bangalore, India',
+            businessHours: '9:00 AM - 6:00 PM',
+            footerDescription: 'Empowering your digital growth.',
+            seoDefaultTitle: 'SS40 NETWORK | Tech & Academics',
+            seoDefaultDescription: 'Premium digital solutions, IT services, and academics.',
+        },
+    });
+
+    console.log(`Seed finished. Setup admin account: ${admin.email} and SiteConfig ID: ${config.id}`);
 }
 
 main()
