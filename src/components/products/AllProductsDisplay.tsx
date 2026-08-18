@@ -77,7 +77,7 @@ export function AllProductsDisplay() {
                                     {/* Grid Visual Placeholder */}
                                     <div className="relative w-full aspect-[16/10] bg-gray-50 overflow-hidden shrink-0 flex items-center justify-center border-b border-gray-100">
                                         {product.screenshotUrl ? (
-                                            <img src={product.screenshotUrl} alt={product.name} className="w-full h-full object-contain p-2 bg-gray-50/50 transition-transform duration-500" />
+                                            <img src={product.screenshotUrl} alt={`${product.name} - Software Solution by SS40 NETWORK Tirunelveli`} className="w-full h-full object-contain p-2 bg-gray-50/50 transition-transform duration-500" />
                                         ) : (
                                             <div className="w-full h-full flex flex-col items-center justify-center p-4 gap-3 bg-[#6B9F91]/5 group-hover:scale-105 transition-transform duration-500">
                                                 <CloudIcon className="w-12 h-12 text-gray-300 opacity-50" />

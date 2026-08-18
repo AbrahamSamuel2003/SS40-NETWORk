@@ -5,12 +5,49 @@ import Link from "next/link";
 import { ArrowLeft, ExternalLink, ShieldCheck, CheckCircle2 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 
+import type { Metadata, ResolvingMetadata } from "next";
+
 export const revalidate = 0; // Dynamic route to ensure fresh CMS data
 
 interface PageProps {
     params: Promise<{
         id: string;
     }>;
+}
+
+export async function generateMetadata(
+    { params }: PageProps,
+    parent: ResolvingMetadata
+): Promise<Metadata> {
+    const { id } = await params;
+    const project = await prisma.clientProject.findUnique({
+        where: { id: id, isActive: true },
+        select: { title: true, description: true, imageUrl: true }
+    });
+
+    if (!project) return { title: "Project Not Found" };
+
+    const previousImages = (await parent).openGraph?.images || [];
+
+    return {
+        title: `${project.title} | SS40 NETWORK`,
+        description: project.description,
+        alternates: {
+            canonical: `/client-projects/${id}`,
+        },
+        openGraph: {
+            title: `${project.title} | SS40 NETWORK`,
+            description: project.description,
+            url: `https://www.ss40network.com/client-projects/${id}`,
+            images: project.imageUrl ? [project.imageUrl, ...previousImages] : previousImages,
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: `${project.title} | SS40 NETWORK`,
+            description: project.description,
+            images: project.imageUrl ? [project.imageUrl] : [],
+        },
+    };
 }
 
 export default async function ClientProjectCaseStudyPage({ params }: PageProps) {

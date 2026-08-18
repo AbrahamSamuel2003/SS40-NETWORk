@@ -265,7 +265,7 @@ export function FeaturedProduct() {
                                                {product.screenshotUrl ? (
                                                    <img 
                                                        src={product.screenshotUrl} 
-                                                       alt={product.name} 
+                                                       alt={`${product.name} - Featured Custom Software Solution by SS40 NETWORK Tirunelveli`} 
                                                        className="w-full h-full object-contain select-none transition-all duration-300 relative z-10 filter drop-shadow-[0_12px_24px_rgba(15,118,110,0.15)]" 
                                                    />
                                                ) : (
