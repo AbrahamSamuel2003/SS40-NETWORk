@@ -389,26 +389,8 @@ export function DevelopmentLifecycle() {
                                                     </div>
                                                 </motion.div>
 
-                                                {/* Drawing Bezier Path vector lines overlapping */}
-                                                <svg className="absolute inset-0 w-full h-full z-40 pointer-events-none overflow-visible" viewBox="0 0 250 160">
-                                                    <motion.path 
-                                                        d="M 20,40 Q 125,-10 230,40 T 20,40"
-                                                        fill="none"
-                                                        stroke="url(#gradient-line)"
-                                                        strokeWidth="2.5"
-                                                        strokeLinecap="round"
-                                                        initial={{ pathLength: 0 }}
-                                                        animate={{ pathLength: 1 }}
-                                                        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                                                    />
-                                                    
-                                                    <defs>
-                                                        <linearGradient id="gradient-line" x1="0%" y1="0%" x2="100%" y2="100%">
-                                                            <stop offset="0%" stopColor="#6B9F91" />
-                                                            <stop offset="100%" stopColor="#2DD4BF" />
-                                                        </linearGradient>
-                                                    </defs>
-                                                </svg>
+                                                {/* Ambient Pulse Glow Highlight behind Prototype Card */}
+                                                <div className="absolute w-[180px] h-[180px] bg-[#2DD4BF]/20 blur-[50px] rounded-full z-0 animate-pulse pointer-events-none" />
                                             </div>
                                         </div>
                                     </motion.div>
