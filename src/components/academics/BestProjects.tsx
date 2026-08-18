@@ -242,7 +242,7 @@ export function BestProjects({ projects = [] }: BestProjectsProps) {
                                 className="cursor-pointer w-full bg-white rounded-[2rem] shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden flex flex-col lg:flex-row group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2"
                             >
                                 {/* Project Preview */}
-                                <div className="w-full lg:w-7/12 aspect-video lg:aspect-auto lg:h-[450px] relative overflow-hidden bg-gray-50 border-b lg:border-b-0 lg:border-r border-gray-100">
+                                <div className="w-full lg:w-7/12 aspect-video lg:aspect-auto min-h-[350px] relative overflow-hidden bg-gray-50 border-b lg:border-b-0 lg:border-r border-gray-100 flex-grow">
                                     {featuredProject.image || featuredProject.imageUrl ? (
                                         <Image
                                             src={featuredProject.image || featuredProject.imageUrl}
@@ -256,39 +256,39 @@ export function BestProjects({ projects = [] }: BestProjectsProps) {
                                 </div>
 
                                 {/* Content */}
-                                <div className="w-full lg:w-5/12 p-8 lg:p-12 flex flex-col bg-white">
-                                    <div className="mb-6 flex justify-between items-start gap-4">
+                                <div className="w-full lg:w-5/12 p-6 lg:p-8 flex flex-col bg-white">
+                                    <div className="mb-4 flex justify-between items-start gap-4">
                                         {featuredProject.badge && (
                                             <Badge className="bg-[#6B9F91]/10 text-[#6B9F91] hover:bg-[#6B9F91]/20 border-none font-bold uppercase tracking-wider text-[10px]">
                                                 {featuredProject.badge}
                                             </Badge>
                                         )}
-                                        <Blocks className="w-6 h-6 text-gray-300 ml-auto" />
+                                        <Blocks className="w-6 h-6 text-gray-300 ml-auto shrink-0" />
                                     </div>
 
-                                    <h3 className="text-3xl font-bold text-gray-900 mb-2 leading-tight">{featuredProject.title}</h3>
-                                    <p className="text-sm font-semibold text-[#FFC900] uppercase tracking-widest mb-4">{featuredProject.category}</p>
+                                    <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-2 leading-tight">{featuredProject.title}</h3>
+                                    <p className="text-xs font-semibold text-[#FFC900] uppercase tracking-widest mb-3">{featuredProject.category}</p>
 
-                                    <p className="text-gray-600 text-base leading-relaxed mb-8 flex-grow">
+                                    <p className="text-gray-600 text-sm lg:text-base leading-relaxed mb-5 overflow-hidden line-clamp-3">
                                         {featuredProject.description}
                                     </p>
 
-                                    <div className="flex flex-wrap gap-2 mb-8">
+                                    <div className="flex flex-wrap gap-2 mb-6 mt-auto">
                                         {Array.isArray(featuredProject.tags) && featuredProject.tags.map((tag: any, i: number) => (
-                                            <span key={i} className="text-[11px] font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 whitespace-nowrap border bg-[#EDF5F2] text-[#0F766E] border-[#6B9F91]/20">
+                                            <span key={i} className="text-[10px] lg:text-[11px] font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 whitespace-nowrap border bg-[#EDF5F2] text-[#0F766E] border-[#6B9F91]/20">
                                                 {typeof tag === 'string' ? tag : tag.label}
                                             </span>
                                         ))}
                                     </div>
 
                                     {featuredProject.projectUrl ? (
-                                        <a href={featuredProject.projectUrl} target="_blank" rel="noopener noreferrer">
+                                        <a href={featuredProject.projectUrl} target="_blank" rel="noopener noreferrer" className="mt-auto">
                                             <Button className="w-full sm:w-auto bg-[#111827] text-white hover:bg-gray-800 font-bold group/btn">
                                                 Explore Project <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
                                             </Button>
                                         </a>
                                     ) : (
-                                        <Button onClick={(e: React.MouseEvent) => { e.stopPropagation(); setActiveModalProject(featuredProject); }} className="w-full sm:w-auto bg-[#111827] text-white hover:bg-gray-800 font-bold group/btn">
+                                        <Button onClick={(e: React.MouseEvent) => { e.stopPropagation(); setActiveModalProject(featuredProject); }} className="w-full sm:w-auto bg-[#111827] text-white hover:bg-gray-800 font-bold group/btn mt-auto">
                                             Explore Project <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
                                         </Button>
                                     )}
