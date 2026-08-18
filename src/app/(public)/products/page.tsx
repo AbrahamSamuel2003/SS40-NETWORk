@@ -15,6 +15,9 @@ export const metadata: Metadata = {
 };
 
 export default function ProductsPage() {
+    return (
+        <div className="w-full flex-col flex">
+            {/* Above the fold (Critical Path) */}
             <Hero />
             <FeaturedProduct />
 
