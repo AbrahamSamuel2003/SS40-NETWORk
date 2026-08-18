@@ -113,6 +113,13 @@ export async function PUT(request: Request, context: { params: Promise<{ id: str
             updateData.imageUrl = (body.imageUrl && typeof body.imageUrl === 'string' && body.imageUrl.trim() !== '') ? body.imageUrl.trim() : null;
         }
 
+        if (body.projectUrl !== undefined) {
+            if (!isValidUrlPath(body.projectUrl)) {
+                return NextResponse.json({ success: false, error: 'projectUrl must be a valid absolute or relative URL' }, { status: 400 });
+            }
+            updateData.projectUrl = (body.projectUrl && typeof body.projectUrl === 'string' && body.projectUrl.trim() !== '') ? body.projectUrl.trim() : null;
+        }
+
         if (body.isActive !== undefined) {
             if (typeof body.isActive !== 'boolean') {
                 return NextResponse.json({ success: false, error: 'isActive must be a strict boolean' }, { status: 400 });

@@ -88,6 +88,7 @@ export async function POST(request: Request) {
             badge,
             description,
             imageUrl,
+            projectUrl,
             tags,
             sortOrder,
             isActive
@@ -115,6 +116,10 @@ export async function POST(request: Request) {
             return NextResponse.json({ success: false, error: 'imageUrl must be a valid absolute or relative URL' }, { status: 400 });
         }
 
+        if (projectUrl !== undefined && !isValidUrlPath(projectUrl)) {
+            return NextResponse.json({ success: false, error: 'projectUrl must be a valid absolute or relative URL' }, { status: 400 });
+        }
+
         if (isActive !== undefined && typeof isActive !== 'boolean') {
             return NextResponse.json({ success: false, error: 'isActive must be a strict boolean' }, { status: 400 });
         }
@@ -131,6 +136,7 @@ export async function POST(request: Request) {
                 tags,
                 badge: (badge && String(badge).trim() !== '') ? String(badge).trim() : null,
                 imageUrl: (imageUrl && String(imageUrl).trim() !== '') ? String(imageUrl).trim() : null,
+                projectUrl: (projectUrl && String(projectUrl).trim() !== '') ? String(projectUrl).trim() : null,
                 sortOrder: sortOrder ?? 0,
                 isActive: isActive ?? true
             }

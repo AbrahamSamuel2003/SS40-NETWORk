@@ -274,19 +274,24 @@ export function BestProjects({ projects = [] }: BestProjectsProps) {
                                     </p>
 
                                     <div className="flex flex-wrap gap-2 mb-8">
-                                        {Array.isArray(featuredProject.tags) && featuredProject.tags.map((tag: any, i: number) => {
-                                            const TagIcon = getIcon(tag.icon);
-                                            return (
-                                                <span key={i} className={`text-[11px] font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 whitespace-nowrap border ${tag.colorClass}`}>
-                                                    <TagIcon className="w-3 h-3" /> {tag.label}
-                                                </span>
-                                            );
-                                        })}
+                                        {Array.isArray(featuredProject.tags) && featuredProject.tags.map((tag: any, i: number) => (
+                                            <span key={i} className="text-[11px] font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 whitespace-nowrap border bg-[#EDF5F2] text-[#0F766E] border-[#6B9F91]/20">
+                                                {typeof tag === 'string' ? tag : tag.label}
+                                            </span>
+                                        ))}
                                     </div>
 
-                                    <Button onClick={(e: React.MouseEvent) => { e.stopPropagation(); setActiveModalProject(featuredProject); }} className="w-full sm:w-auto bg-[#111827] text-white hover:bg-gray-800 font-bold group/btn">
-                                        Explore Project <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
-                                    </Button>
+                                    {featuredProject.projectUrl ? (
+                                        <a href={featuredProject.projectUrl} target="_blank" rel="noopener noreferrer">
+                                            <Button className="w-full sm:w-auto bg-[#111827] text-white hover:bg-gray-800 font-bold group/btn">
+                                                Explore Project <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
+                                            </Button>
+                                        </a>
+                                    ) : (
+                                        <Button onClick={(e: React.MouseEvent) => { e.stopPropagation(); setActiveModalProject(featuredProject); }} className="w-full sm:w-auto bg-[#111827] text-white hover:bg-gray-800 font-bold group/btn">
+                                            Explore Project <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
+                                        </Button>
+                                    )}
                                 </div>
                             </motion.div>
 
@@ -403,14 +408,11 @@ export function BestProjects({ projects = [] }: BestProjectsProps) {
                                             </div>
 
                                             <div className="flex flex-wrap gap-2 mb-6">
-                                                {Array.isArray(project.tags) && project.tags.map((tag: any, i: number) => {
-                                                    const TagIcon = getIcon(tag.icon);
-                                                    return (
-                                                        <span key={i} className={`text-[10px] font-bold px-2.5 py-1 rounded-md flex items-center gap-1.5 border border-transparent ${tag.colorClass}`}>
-                                                            <TagIcon className="w-3 h-3" /> <span className="truncate">{tag.label}</span>
-                                                        </span>
-                                                    );
-                                                })}
+                                                {Array.isArray(project.tags) && project.tags.map((tag: any, i: number) => (
+                                                    <span key={i} className="text-[10px] font-bold px-2.5 py-1 rounded-md flex items-center gap-1.5 border border-transparent bg-[#EDF5F2] text-[#0F766E] border-[#6B9F91]/20">
+                                                        <span className="truncate">{typeof tag === 'string' ? tag : tag.label}</span>
+                                                    </span>
+                                                ))}
                                             </div>
 
                                             <button onClick={(e) => { e.stopPropagation(); setActiveModalProject(project); }} className="mt-auto border-t border-gray-100 pt-4 flex items-center text-[#6B9F91] font-bold text-sm group-hover:text-[#5C8C80] w-full text-left focus:outline-none">
@@ -566,15 +568,23 @@ export function StudentProjectModal({ project, onClose }: { project: any, onClos
 
                         {/* Tags */}
                         <div className="flex flex-wrap gap-2 mb-8 mt-auto">
-                            {parsedTags.map((tag: any, i: number) => {
-                                const TagIcon = getIcon(tag.icon);
-                                return (
-                                    <span key={i} className={`text-xs md:text-sm font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 border ${tag.colorClass}`}>
-                                        <TagIcon className="w-3.5 h-3.5" /> {tag.label}
-                                    </span>
-                                );
-                            })}
+                            {parsedTags.map((tag: any, i: number) => (
+                                <span key={i} className="text-xs md:text-sm font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 border bg-[#EDF5F2] text-[#0F766E] border-[#6B9F91]/20">
+                                    {typeof tag === 'string' ? tag : tag.label}
+                                </span>
+                            ))}
                         </div>
+
+                        {project.projectUrl && (
+                            <a 
+                                href={project.projectUrl} 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                className="inline-flex items-center justify-center w-full py-4 bg-[#6B9F91] text-white font-bold rounded-xl hover:bg-[#5C8C80] transition-colors"
+                            >
+                                Explore Project
+                            </a>
+                        )}
                     </div>
                 </div>
             </motion.div>

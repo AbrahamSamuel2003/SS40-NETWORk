@@ -107,6 +107,7 @@ model StudentProject {
   badge       String?
   description String
   imageUrl    String?
+  projectUrl  String?
   tags        Json
   sortOrder   Int      @default(0)
   isActive    Boolean  @default(true)

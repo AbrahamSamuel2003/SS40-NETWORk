@@ -1,32 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit2, Trash2, CheckCircle2, AlertCircle, Upload, X, Tag, Image as ImageIcon } from 'lucide-react';
+import { Plus, Edit2, Trash2, CheckCircle2, AlertCircle, Upload, X, Image as ImageIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { MediaSelectorModal } from '@/components/admin/MediaSelectorModal';
-
-const COLOR_OPTIONS = {
-    'Gray': 'bg-gray-50 text-gray-600 border-gray-200',
-    'Blue': 'bg-[#6B9F91]/10 text-[#6B9F91] border-[#6B9F91]/20',
-    'Purple': 'bg-[#EDF5F2] text-[#5C8C80] border-[#6B9F91]/20',
-    'Green': 'bg-[#6B9F91]/10 text-[#6B9F91] border-[#6B9F91]/20',
-    'Amber': 'bg-amber-50 text-amber-700 border-amber-100',
-    'Indigo': 'bg-[#EDF5F2] text-[#111827] border-gray-200',
-    'Rose': 'bg-[#FFC900]/15 text-[#92400E] border-[#FFC900]/30'
-};
-
-const ICON_OPTIONS = [
-    'Building2',
-    'Sparkles',
-    'Lightbulb',
-    'Target',
-    'HeartPulse',
-    'Sprout',
-    'Blocks',
-    'Monitor',
-    'LayoutDashboard',
-    'Box'
-];
 
 export default function StudentProjectsPage() {
     const router = useRouter();
@@ -42,14 +19,10 @@ export default function StudentProjectsPage() {
     const [badge, setBadge] = useState('');
     const [description, setDescription] = useState('');
     const [imageUrl, setImageUrl] = useState('');
+    const [projectUrl, setProjectUrl] = useState('');
+    const [tagsInput, setTagsInput] = useState('');
     const [sortOrder, setSortOrder] = useState(0);
     const [isActive, setIsActive] = useState(true);
-    const [tags, setTags] = useState<any[]>([]);
-
-    // Tag Builder states
-    const [tagLabel, setTagLabel] = useState('');
-    const [tagIcon, setTagIcon] = useState(ICON_OPTIONS[0]);
-    const [tagColor, setTagColor] = useState(Object.values(COLOR_OPTIONS)[0]);
 
     const [isSaving, setIsSaving] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
@@ -83,9 +56,12 @@ export default function StudentProjectsPage() {
             setBadge(proj.badge || '');
             setDescription(proj.description || '');
             setImageUrl(proj.imageUrl || '');
+            setProjectUrl(proj.projectUrl || '');
+            // Support both old object-array tags and new string-array tags
+            const rawTags = Array.isArray(proj.tags) ? proj.tags : [];
+            setTagsInput(rawTags.map((t: any) => typeof t === 'string' ? t : t.label).join(', '));
             setSortOrder(proj.sortOrder);
             setIsActive(proj.isActive);
-            setTags(Array.isArray(proj.tags) ? proj.tags : []);
         } else {
             setEditingId(null);
             setTitle('');
@@ -93,15 +69,11 @@ export default function StudentProjectsPage() {
             setBadge('');
             setDescription('');
             setImageUrl('');
+            setProjectUrl('');
+            setTagsInput('');
             setSortOrder(0);
             setIsActive(true);
-            setTags([]);
         }
-
-        // Reset tag builder
-        setTagLabel('');
-        setTagIcon(ICON_OPTIONS[0]);
-        setTagColor(Object.values(COLOR_OPTIONS)[0]);
 
         setErrorMsg('');
         setIsModalOpen(true);
@@ -138,24 +110,14 @@ export default function StudentProjectsPage() {
         }
     };
 
-    const handleAddTag = () => {
-        if (!tagLabel.trim()) return;
-        setTags([...tags, {
-            label: tagLabel.trim(),
-            icon: tagIcon,
-            colorClass: tagColor
-        }]);
-        setTagLabel('');
-    };
 
-    const handleRemoveTag = (index: number) => {
-        setTags(tags.filter((_, i) => i !== index));
-    };
 
     const handleSave = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSaving(true);
         setErrorMsg('');
+
+        const tags = tagsInput.split(',').map(t => t.trim()).filter(t => t !== '');
 
         const payload = {
             title,
@@ -163,6 +125,7 @@ export default function StudentProjectsPage() {
             badge: badge.trim() ? badge : null,
             description,
             imageUrl: imageUrl.trim() ? imageUrl : null,
+            projectUrl: projectUrl.trim() ? projectUrl : null,
             sortOrder: Number(sortOrder),
             isActive,
             tags
@@ -390,49 +353,36 @@ export default function StudentProjectsPage() {
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-[#374151] mb-2">Project Tags</label>
-                                    <div className="bg-white border border-gray-200 rounded-lg p-4">
-                                        {/* Existing tags display */}
-                                        <div className="flex flex-wrap gap-2 mb-4">
-                                            {tags.length === 0 ? (
-                                                <span className="text-[#9CA3AF] text-xs italic">No tags added yet.</span>
-                                            ) : (
-                                                tags.map((t, idx) => (
-                                                    <div key={idx} className="bg-[#EDF5F2]/70 border border-gray-200 rounded-md py-1 px-2.5 text-xs text-[#374151] flex items-center gap-2">
-                                                        <span>{t.icon}</span>
-                                                        <span>{t.label}</span>
-                                                        <button type="button" onClick={() => handleRemoveTag(idx)} className="text-[#B91C1C] hover:text-[#991B1B] ml-1">
-                                                            <X className="w-3 h-3" />
-                                                        </button>
-                                                    </div>
-                                                ))
-                                            )}
-                                        </div>
+                                    <label className="block text-sm font-medium text-[#374151] mb-2">Project URL (optional)</label>
+                                    <input
+                                        type="url"
+                                        value={projectUrl}
+                                        onChange={e => setProjectUrl(e.target.value)}
+                                        placeholder="https://github.com/student/project"
+                                        className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#6B9F91]"
+                                    />
+                                    <p className="text-xs text-[#9CA3AF] mt-1">This URL is used for the &quot;Explore Project&quot; button on the frontend.</p>
+                                </div>
 
-                                        {/* Tag Builder UI */}
-                                        <div className="flex gap-2 items-end pt-3 border-t border-gray-200">
-                                            <div className="flex-1">
-                                                <input type="text" value={tagLabel} onChange={e => setTagLabel(e.target.value)} placeholder="Tag Label (e.g. Automation)" className="w-full bg-[#EDF5F2]/70 border border-gray-200 rounded-lg px-3 py-2 text-[#111827] text-sm focus:outline-none focus:border-[#6B9F91]" />
-                                            </div>
-                                            <div className="w-32">
-                                                <select title="Icon" value={tagIcon} onChange={e => setTagIcon(e.target.value)} className="w-full bg-[#EDF5F2]/70 border border-gray-200 rounded-lg px-3 py-2 text-[#111827] text-sm focus:outline-none focus:border-[#6B9F91]">
-                                                    {ICON_OPTIONS.map(opt => (
-                                                        <option key={opt} value={opt}>{opt}</option>
-                                                    ))}
-                                                </select>
-                                            </div>
-                                            <div className="w-32">
-                                                <select title="Color" value={tagColor} onChange={e => setTagColor(e.target.value)} className="w-full bg-[#EDF5F2]/70 border border-gray-200 rounded-lg px-3 py-2 text-[#111827] text-sm focus:outline-none focus:border-[#6B9F91]">
-                                                    {Object.entries(COLOR_OPTIONS).map(([name, cls]) => (
-                                                        <option key={name} value={cls}>{name}</option>
-                                                    ))}
-                                                </select>
-                                            </div>
-                                            <button type="button" onClick={handleAddTag} className="bg-[#EDF5F2] hover:bg-[#EDF5F2] text-[#111827] px-3 py-2 rounded-lg text-sm transition-colors font-medium flex items-center shrink-0">
-                                                <Plus className="w-4 h-4 mr-1" /> Add
-                                            </button>
+                                <div>
+                                    <label className="block text-sm font-medium text-[#374151] mb-2">Project Tags</label>
+                                    <input
+                                        type="text"
+                                        value={tagsInput}
+                                        onChange={e => setTagsInput(e.target.value)}
+                                        placeholder="e.g. React, Node.js, AI, Data Analysis"
+                                        className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#6B9F91]"
+                                    />
+                                    <p className="text-xs text-[#9CA3AF] mt-1">Comma-separated. e.g. &quot;Python, Machine Learning, Flask&quot;</p>
+                                    {tagsInput && (
+                                        <div className="flex flex-wrap gap-2 mt-2">
+                                            {tagsInput.split(',').map(t => t.trim()).filter(t => t).map((tag, idx) => (
+                                                <span key={idx} className="inline-flex items-center gap-1 px-2.5 py-1 bg-[#EDF5F2] border border-[#6B9F91]/20 rounded-lg text-xs font-semibold text-[#0F766E]">
+                                                    {tag}
+                                                </span>
+                                            ))}
                                         </div>
-                                    </div>
+                                    )}
                                 </div>
 
                                 <div className="pt-2">
