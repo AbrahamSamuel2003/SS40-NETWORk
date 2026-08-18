@@ -36,21 +36,6 @@ export function ClientProjects() {
             .catch(() => setIsLoading(false));
     }, []);
 
-    if (isLoading || projects.length === 0) {
-        return (
-            <SectionWrapper id="featured-projects" className="bg-[#EDF5F2] overflow-visible scroll-mt-24">
-                <Container className="space-y-12 lg:space-y-16">
-                    <SectionHeading
-                        badge="Client Projects"
-                        title="Solutions That Drive Business Growth"
-                        description="Explore a selection of digital solutions developed to solve real business challenges across different industries."
-                    />
-                    <CardGridSkeleton count={3} columns={3} />
-                </Container>
-            </SectionWrapper>
-        );
-    }
-
     const scrollToMobileProject = (idx: number) => {
         if (!mobileScrollRef.current) return;
         const mobileCards = mobileScrollRef.current.querySelectorAll<HTMLElement>(".client-project-mobile-card");
@@ -121,6 +106,21 @@ export function ClientProjects() {
             }
         }
     }, [isLoading]);
+
+    if (isLoading || projects.length === 0) {
+        return (
+            <SectionWrapper id="featured-projects" className="bg-[#EDF5F2] overflow-visible scroll-mt-24">
+                <Container className="space-y-12 lg:space-y-16">
+                    <SectionHeading
+                        badge="Client Projects"
+                        title="Solutions That Drive Business Growth"
+                        description="Explore a selection of digital solutions developed to solve real business challenges across different industries."
+                    />
+                    <CardGridSkeleton count={3} columns={3} />
+                </Container>
+            </SectionWrapper>
+        );
+    }
 
     return (
         <SectionWrapper id="featured-projects" className="bg-[#EDF5F2] overflow-visible scroll-mt-24">
