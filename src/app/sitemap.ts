@@ -29,9 +29,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         else if (['/products', '/digital-solutions', '/academics'].includes(route)) priority = 0.9;
         else if (['/client-projects', '/contact', '/about'].includes(route)) priority = 0.8;
 
+        // Advanced SEO: Get real file modification time instead of faking new Date()
+        let lastModified = new Date();
+        try {
+            const fs = require('fs');
+            const path = require('path');
+            // Resolve the physical file path. Handle root '' vs named routes
+            const routePath = route === '' ? 'page.tsx' : `${route}/page.tsx`;
+            // Note: In production, process.cwd() is the root of the project
+            const fullPath = path.join(process.cwd(), 'src', 'app', '(public)', routePath);
+            if (fs.existsSync(fullPath)) {
+                const stats = fs.statSync(fullPath);
+                lastModified = stats.mtime;
+            }
+        } catch (e) {
+            // Fallback to current date if file system read fails (e.g., in some serverless environments)
+        }
+
         return {
             url: `${baseUrl}${route}`,
-            lastModified: new Date(),
+            lastModified,
             changeFrequency: 'weekly' as const,
             priority,
         };
