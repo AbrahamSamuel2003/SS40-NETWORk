@@ -236,12 +236,16 @@ export function FeaturedProduct() {
                                          variants={{
                                              hidden: { opacity: 0, scale: 0.96, y: 30 },
                                              visible: { opacity: 1, scale: 1, y: 0, transition: { type: "spring", stiffness: 90, damping: 15, duration: 0.8 } },
-                                             hover: { y: -2, transition: { duration: 0.3 } }
+                                             hover: { y: -6, transition: { duration: 0.3 } }
                                          }}
-                                         className="relative z-10 w-full max-w-[550px] aspect-[16/11] bg-white/40 backdrop-blur-sm border border-emerald-950/10 rounded-2xl shadow-xl hover:shadow-2xl hover:border-emerald-500/25 transition-all duration-300 flex items-center justify-center p-3"
+                                         className="relative z-10 w-full max-w-[500px] aspect-[16/11] flex items-center justify-center pointer-events-none"
                                      >
                                          {product.screenshotUrl ? (
-                                             <img src={product.screenshotUrl} alt={product.name} className="w-full h-full object-contain rounded-xl select-none" />
+                                             <img 
+                                                 src={product.screenshotUrl} 
+                                                 alt={product.name} 
+                                                 className="w-full h-full object-contain select-none filter drop-shadow-[0_20px_35px_rgba(15,118,110,0.18)] transition-all duration-300" 
+                                             />
                                          ) : (
                                              <div className="flex flex-col items-center justify-center text-gray-400 gap-4 p-8 text-center select-none">
                                                  <CloudIcon className="w-16 h-16 opacity-20" />
@@ -264,13 +268,13 @@ export function FeaturedProduct() {
                                                          y: 0, 
                                                          transition: { delay: 0.1, duration: 0.5, type: "spring" } 
                                                      },
-                                                     hover: { x: -4, y: -4, transition: { duration: 0.3 } }
+                                                     hover: { x: -6, y: -6, transition: { duration: 0.3 } }
                                                  }}
                                                  animate={{
                                                      y: [0, -4, 0],
                                                      transition: { repeat: Infinity, duration: 4.5, ease: "easeInOut", delay: 0.1 }
                                                  }}
-                                                 className="absolute top-2 left-2 bg-white/95 backdrop-blur-md px-3.5 py-2.5 rounded-2xl border border-gray-100 shadow-xl text-xs font-bold text-gray-700 flex items-center gap-2"
+                                                 className="absolute top-2 left-2 bg-[#0F766E]/5 backdrop-blur-md border border-[#2DD4BF]/25 px-3.5 py-2.5 rounded-2xl shadow-xl text-xs font-bold text-[#0F766E] flex items-center gap-2"
                                              >
                                                  <BadgeCheck className="w-4 h-4 text-[#2DD4BF]" />
                                                  <span>{features[0]}</span>
@@ -289,13 +293,13 @@ export function FeaturedProduct() {
                                                          y: 0, 
                                                          transition: { delay: 0.2, duration: 0.5, type: "spring" } 
                                                      },
-                                                     hover: { x: 4, y: -4, transition: { duration: 0.3 } }
+                                                     hover: { x: 6, y: -6, transition: { duration: 0.3 } }
                                                  }}
                                                  animate={{
                                                      y: [0, 4, 0],
                                                      transition: { repeat: Infinity, duration: 4, ease: "easeInOut", delay: 0.2 }
                                                  }}
-                                                 className="absolute top-4 right-2 bg-white/95 backdrop-blur-md px-3.5 py-2.5 rounded-2xl border border-gray-100 shadow-xl text-xs font-bold text-gray-700 flex items-center gap-2"
+                                                 className="absolute top-4 right-2 bg-[#0F766E]/5 backdrop-blur-md border border-[#2DD4BF]/25 px-3.5 py-2.5 rounded-2xl shadow-xl text-xs font-bold text-[#0F766E] flex items-center gap-2"
                                              >
                                                  <BadgeCheck className="w-4 h-4 text-[#2DD4BF]" />
                                                  <span>{features[1]}</span>
@@ -314,13 +318,13 @@ export function FeaturedProduct() {
                                                          y: 0, 
                                                          transition: { delay: 0.3, duration: 0.5, type: "spring" } 
                                                      },
-                                                     hover: { x: -4, y: 4, transition: { duration: 0.3 } }
+                                                     hover: { x: -6, y: 6, transition: { duration: 0.3 } }
                                                  }}
                                                  animate={{
                                                      y: [0, 4, 0],
                                                      transition: { repeat: Infinity, duration: 4.2, ease: "easeInOut", delay: 0.3 }
                                                  }}
-                                                 className="absolute bottom-4 left-2 bg-white/95 backdrop-blur-md px-3.5 py-2.5 rounded-2xl border border-gray-100 shadow-xl text-xs font-bold text-gray-700 flex items-center gap-2"
+                                                 className="absolute bottom-4 left-2 bg-[#0F766E]/5 backdrop-blur-md border border-[#2DD4BF]/25 px-3.5 py-2.5 rounded-2xl shadow-xl text-xs font-bold text-[#0F766E] flex items-center gap-2"
                                              >
                                                  <BadgeCheck className="w-4 h-4 text-[#2DD4BF]" />
                                                  <span>{features[2]}</span>
@@ -339,13 +343,13 @@ export function FeaturedProduct() {
                                                          y: 0, 
                                                          transition: { delay: 0.4, duration: 0.5, type: "spring" } 
                                                      },
-                                                     hover: { x: 4, y: 4, transition: { duration: 0.3 } }
+                                                     hover: { x: 6, y: 6, transition: { duration: 0.3 } }
                                                  }}
                                                  animate={{
                                                      y: [0, -4, 0],
                                                      transition: { repeat: Infinity, duration: 4.8, ease: "easeInOut", delay: 0.4 }
                                                  }}
-                                                 className="absolute bottom-2 right-2 bg-white/95 backdrop-blur-md px-3.5 py-2.5 rounded-2xl border border-gray-100 shadow-xl text-xs font-bold text-gray-700 flex items-center gap-2"
+                                                 className="absolute bottom-2 right-2 bg-[#0F766E]/5 backdrop-blur-md border border-[#2DD4BF]/25 px-3.5 py-2.5 rounded-2xl shadow-xl text-xs font-bold text-[#0F766E] flex items-center gap-2"
                                              >
                                                  <BadgeCheck className="w-4 h-4 text-[#2DD4BF]" />
                                                  <span>{features[3]}</span>
