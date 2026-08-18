@@ -62,7 +62,7 @@ export function FeaturedProduct() {
     if (isLoading || products.length === 0) {
         return (
             <SectionWrapper id="featured-product" className="bg-[#EDF5F2] scroll-mt-24">
-                <Container className="space-y-24">
+                <Container className="space-y-12 lg:space-y-24">
                     {/* Section Header */}
                     <SectionHeading
                         badge="OUR PRODUCTS"
@@ -83,7 +83,7 @@ export function FeaturedProduct() {
 
     return (
         <SectionWrapper id="featured-product" className="bg-[#EDF5F2] scroll-mt-24">
-            <Container className="space-y-24">
+            <Container className="space-y-12 lg:space-y-24">
                 {/* Section Header */}
                 <SectionHeading
                     badge="OUR PRODUCTS"
@@ -106,7 +106,7 @@ export function FeaturedProduct() {
                     return (
                         <div key={product.id} className="w-full">
                             {/* Top Section Layout (Two Columns) */}
-                            <div className={`flex flex-col gap-12 lg:gap-16 items-center ${isEven ? 'lg:flex-row' : 'lg:flex-row-reverse'}`}>
+                            <div className={`flex flex-col gap-6 lg:gap-16 items-center ${isEven ? 'lg:flex-row' : 'lg:flex-row-reverse'}`}>
 
                                  {/* Text Column */}
                                  <div className="w-full lg:w-[45%] flex flex-col text-center lg:text-left items-center lg:items-start">
@@ -192,7 +192,7 @@ export function FeaturedProduct() {
                                       whileInView="visible"
                                       whileHover="hover"
                                       viewport={{ once: true, margin: "-100px" }}
-                                      className="w-full lg:w-[55%] relative flex justify-center items-center min-h-[420px]"
+                                      className="w-full lg:w-[55%] relative flex justify-center items-center min-h-[280px] lg:min-h-[420px]"
                                   >
                                       {/* Subtle Stage Background */}
                                       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] z-0 pointer-events-none select-none overflow-visible flex items-center justify-center">
