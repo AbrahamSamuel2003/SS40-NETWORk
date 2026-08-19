@@ -44,5 +44,13 @@
   },
   "prisma": {
     "seed": "npx tsx prisma/seed.ts"
-  }
+  },
+  "browserslist": [
+    ">0.3%",
+    "defaults",
+    "not ie 11",
+    "not dead",
+    "not op_mini all",
+    "not safari < 14"
+  ]
 }
