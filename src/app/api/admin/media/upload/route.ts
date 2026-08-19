@@ -20,7 +20,7 @@ export async function POST(request: Request) {
         const arrayBuffer = await file.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
 
-        const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'media');
+        const uploadDir = path.join(process.cwd(), 'storage', 'uploads', 'media');
         try {
             await fs.access(uploadDir);
         } catch {
@@ -36,7 +36,7 @@ export async function POST(request: Request) {
 
         await fs.writeFile(filePath, buffer);
 
-        const fileUrl = `/uploads/media/${fileName}`;
+        const fileUrl = `/api/uploads/media/${fileName}`;
         return NextResponse.json({
             success: true,
             data: {

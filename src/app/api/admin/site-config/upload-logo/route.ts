@@ -24,7 +24,7 @@ export async function POST(request: Request) {
         const arrayBuffer = await file.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
 
-        const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'logos');
+        const uploadDir = path.join(process.cwd(), 'storage', 'uploads', 'logos');
         try {
             await fs.access(uploadDir);
         } catch {
@@ -37,7 +37,7 @@ export async function POST(request: Request) {
 
         await fs.writeFile(filePath, buffer);
 
-        const fileUrl = `/uploads/logos/${fileName}`;
+        const fileUrl = `/api/uploads/logos/${fileName}`;
         return NextResponse.json({ success: true, url: fileUrl }, { status: 200 });
     } catch (error) {
         console.error('Error uploading logo:', error);
