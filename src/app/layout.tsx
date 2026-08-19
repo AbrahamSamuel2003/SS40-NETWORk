@@ -36,6 +36,9 @@ export async function generateMetadata(): Promise<Metadata> {
     alternates: {
       canonical: "/",
     },
+    icons: {
+      icon: config?.uploadedLogoUrl || config?.logoUrl || "/icon.jpg",
+    },
     openGraph: {
       title: defaultTitle,
       description: defaultDesc,
