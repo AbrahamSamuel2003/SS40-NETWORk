@@ -149,10 +149,12 @@ export function Happimonials() {
                             className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
                         >
                             {happimonials.slice(0, 3).map((item) => (
-                                <CardMotion
+                                <motion.div
                                     key={item.id}
                                     variants={slideUp}
-                                    {...hoverLift}
+                                    whileHover={{ y: -6, scale: 1.015, boxShadow: "0 20px 40px -8px rgba(107,159,145,0.18), 0 8px 16px -4px rgba(107,159,145,0.10)" }}
+                                    whileTap={{ scale: 0.98, y: -2 }}
+                                    transition={{ type: "spring", stiffness: 350, damping: 22 }}
                                     role="button"
                                     tabIndex={0}
                                     onClick={(e) => {
@@ -165,10 +167,10 @@ export function Happimonials() {
                                             setActiveModalStory(item);
                                         }
                                     }}
-                                    className="cursor-pointer bg-white overflow-hidden rounded-2xl flex flex-col group border border-[var(--color-border)] hover:border-[#6B9F91]/30 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2"
+                                    className="cursor-pointer bg-white rounded-2xl flex flex-col group border border-[var(--color-border)] hover:border-[#6B9F91]/40 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 overflow-hidden"
                                 >
-                                    {/* Video / Thumbnail Area (Optimized Spacing: full width, no padding, taller 4:3 fit) */}
-                                    <div className="relative w-full aspect-[4/3] bg-gray-100 overflow-hidden shrink-0 cursor-pointer">
+                                    {/* Video: flushed to top/left/right of card with matching rounded corners */}
+                                    <div className="relative w-full aspect-video bg-gray-900 shrink-0">
                                         {item.youtubeUrl ? (
                                             <div data-video-player className="w-full h-full">
                                                 <YouTubeResumeThumbnailPlayer
@@ -182,56 +184,55 @@ export function Happimonials() {
                                             <>
                                                 <img src={item.thumbnailUrl} alt={item.clientName} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
                                                 <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-900/10 group-hover:bg-gray-900/30 transition-colors duration-300">
-                                                    <div className="w-16 h-16 rounded-full bg-white/90 backdrop-blur-md shadow-xl flex items-center justify-center text-[#6B9F91] group-hover:scale-110 group-hover:bg-[#6B9F91] group-hover:text-white transition-all duration-300 ease-out z-10 mb-4">
+                                                    <div className="w-14 h-14 rounded-full bg-white/90 backdrop-blur-md shadow-xl flex items-center justify-center text-[#6B9F91] group-hover:scale-110 group-hover:bg-[#6B9F91] group-hover:text-white transition-all duration-300 ease-out z-10">
                                                         <Play className="w-6 h-6 ml-1 fill-current" />
-                                                    </div>
-                                                    <div className="text-center z-10">
-                                                        <p className="text-xs font-bold text-gray-900 bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full inline-block shadow-md uppercase tracking-wider">
-                                                            Client Story
-                                                        </p>
                                                     </div>
                                                 </div>
                                             </>
                                         ) : (
-                                            <div className="absolute inset-0 bg-gradient-to-br from-[#6B9F91]/20 to-[#6B9F91]/5 group-hover:scale-105 transition-transform duration-700 ease-out flex items-center justify-center">
+                                            <div className="absolute inset-0 bg-gradient-to-br from-[#6B9F91]/20 to-[#6B9F91]/5 flex items-center justify-center">
                                                 <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#6B9F91 1px, transparent 1px)', backgroundSize: '16px 16px' }} />
                                             </div>
                                         )}
                                     </div>
 
-                                    {/* Content Area (Reduced padding, tight spacing) */}
+                                    {/* Content Area */}
                                     <div className="p-5 md:p-6 flex flex-col flex-1">
-                                        <div className="flex items-start justify-between mb-3">
-                                            <div className="flex items-center gap-3">
-                                                {item.thumbnailUrl && (
-                                                    <img src={item.thumbnailUrl} alt={item.clientName} className="w-10 h-10 rounded-full object-cover border border-gray-100 shadow-sm shrink-0" />
-                                                )}
-                                                <div>
-                                                    <h3 className="font-bold text-lg text-[var(--color-heading)] leading-tight tracking-tight">{item.clientName}</h3>
-                                                    <p className="text-sm font-medium text-gray-500 mt-0.5">{item.companyName}</p>
-                                                </div>
-                                            </div>
-                                            <span className="px-2.5 py-1 bg-[#6B9F91]/10 text-[#6B9F91] text-[10px] font-bold uppercase tracking-wider rounded whitespace-nowrap">
-                                                {item.industry}
-                                            </span>
-                                        </div>
+                                        {/* Large quote mark */}
+                                        <span className="text-5xl font-serif leading-none text-[#6B9F91]/20 select-none mb-1">&ldquo;</span>
 
-                                        <p className="text-[var(--color-body-text)] text-sm italic flex-1 leading-relaxed line-clamp-3 mb-4 text-gray-600">
-                                            "{item.testimonial}"
+                                        <p className="text-[var(--color-body-text)] text-sm italic flex-1 leading-relaxed line-clamp-3 mb-5 text-gray-600 -mt-2">
+                                            {item.testimonial}
                                         </p>
 
-                                        <button
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                setActiveModalStory(item);
-                                            }}
-                                            className="mt-auto flex items-center text-sm font-bold text-[#6B9F91] hover:text-[#588478] transition-colors group/btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] rounded-sm w-max"
-                                        >
-                                            Read More
-                                            <ArrowRight className="w-4 h-4 ml-1.5 group-hover/btn:translate-x-1 transition-transform" />
-                                        </button>
+                                        {/* Client signature row */}
+                                        <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between gap-3">
+                                            <div className="flex items-center gap-2.5 min-w-0">
+                                                {item.thumbnailUrl && (
+                                                    <img src={item.thumbnailUrl} alt={item.clientName} className="w-8 h-8 rounded-full object-cover border border-gray-100 shadow-sm shrink-0" />
+                                                )}
+                                                <div className="min-w-0">
+                                                    <p className="font-bold text-sm text-[var(--color-heading)] leading-tight truncate">{item.clientName}</p>
+                                                    <p className="text-[11px] font-medium text-gray-400 truncate">{item.companyName}</p>
+                                                </div>
+                                            </div>
+                                            <div className="flex items-center gap-2 shrink-0">
+                                                <span className="px-2 py-0.5 bg-[#6B9F91]/10 text-[#6B9F91] text-[9px] font-bold uppercase tracking-wider rounded whitespace-nowrap">
+                                                    {item.industry}
+                                                </span>
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setActiveModalStory(item);
+                                                    }}
+                                                    className="flex items-center text-xs font-bold text-[#6B9F91] hover:text-[#588478] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] rounded-sm"
+                                                >
+                                                    <ArrowRight className="w-4 h-4" />
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
-                                </CardMotion>
+                                </motion.div>
                             ))}
                         </motion.div>
 

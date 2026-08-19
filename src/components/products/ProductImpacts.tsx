@@ -136,10 +136,12 @@ export function ProductImpacts() {
                             className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
                         >
                             {displayedImpacts.map((item) => (
-                                <CardMotion
+                                <motion.div
                                     key={item.id}
                                     variants={slideUp}
-                                    {...hoverLift}
+                                    whileHover={{ y: -6, scale: 1.015, boxShadow: "0 20px 40px -8px rgba(107,159,145,0.18), 0 8px 16px -4px rgba(107,159,145,0.10)" }}
+                                    whileTap={{ scale: 0.98, y: -2 }}
+                                    transition={{ type: "spring", stiffness: 350, damping: 22 }}
                                     role="button"
                                     tabIndex={0}
                                     onClick={(e) => {
@@ -152,9 +154,10 @@ export function ProductImpacts() {
                                             setActiveModalStory(item);
                                         }
                                     }}
-                                    className="cursor-pointer bg-white overflow-hidden rounded-2xl flex flex-col group border border-[var(--color-border)] hover:border-[#6B9F91]/30 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2"
+                                    className="cursor-pointer bg-white rounded-2xl flex flex-col group border border-[var(--color-border)] hover:border-[#6B9F91]/40 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 overflow-hidden"
                                 >
-                                    <div className="relative w-full aspect-[4/3] bg-gray-100 overflow-hidden shrink-0">
+                                    {/* Video: flushed to top/left/right of card with matching rounded corners */}
+                                    <div className="relative w-full aspect-video bg-gray-900 shrink-0">
                                         {item.youtubeUrl ? (
                                             <div data-video-player className="w-full h-full">
                                                 <YouTubeResumeThumbnailPlayer
@@ -167,40 +170,48 @@ export function ProductImpacts() {
                                         ) : (
                                             <div className="absolute inset-0 bg-gradient-to-br from-[#6B9F91]/20 to-[#6B9F91]/5 flex items-center justify-center">
                                                 <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#6B9F91 1px, transparent 1px)', backgroundSize: '16px 16px' }} />
+                                                <Video className="w-10 h-10 text-[#6B9F91]/40" />
                                             </div>
                                         )}
                                     </div>
 
+                                    {/* Content */}
                                     <div className="p-5 md:p-6 flex flex-col flex-1">
-                                        <div className="flex items-start justify-between mb-3">
-                                            <div className="flex items-center gap-3">
+                                        {/* Large quote mark for visual richness */}
+                                        <span className="text-5xl font-serif leading-none text-[#6B9F91]/20 select-none mb-1">&ldquo;</span>
+
+                                        <p className="text-[var(--color-body-text)] text-sm italic flex-1 leading-relaxed line-clamp-3 mb-5 text-gray-600 -mt-2">
+                                            {item.testimonial}
+                                        </p>
+
+                                        {/* Client signature row */}
+                                        <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between gap-3">
+                                            <div className="flex items-center gap-2.5 min-w-0">
                                                 {item.thumbnailUrl && (
-                                                    <img src={item.thumbnailUrl} alt={item.clientName} className="w-10 h-10 rounded-full object-cover border border-gray-100 shadow-sm shrink-0" />
+                                                    <img src={item.thumbnailUrl} alt={item.clientName} className="w-8 h-8 rounded-full object-cover border border-gray-100 shadow-sm shrink-0" />
                                                 )}
-                                                <div>
-                                                    <h3 className="font-bold text-lg text-[var(--color-heading)] leading-tight tracking-tight">{item.clientName}</h3>
-                                                    <p className="text-sm font-medium text-gray-500 mt-0.5">{item.companyName}</p>
+                                                <div className="min-w-0">
+                                                    <p className="font-bold text-sm text-[var(--color-heading)] leading-tight truncate">{item.clientName}</p>
+                                                    <p className="text-[11px] font-medium text-gray-400 truncate">{item.companyName}</p>
                                                 </div>
                                             </div>
-                                            <span className="px-2.5 py-1 bg-[#6B9F91]/10 text-[#6B9F91] text-[10px] font-bold uppercase tracking-wider rounded whitespace-nowrap">
-                                                {item.industry}
-                                            </span>
+                                            <div className="flex items-center gap-2 shrink-0">
+                                                <span className="px-2 py-0.5 bg-[#6B9F91]/10 text-[#6B9F91] text-[9px] font-bold uppercase tracking-wider rounded whitespace-nowrap">
+                                                    {item.industry}
+                                                </span>
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setActiveModalStory(item);
+                                                    }}
+                                                    className="flex items-center text-xs font-bold text-[#6B9F91] hover:text-[#588478] transition-colors group/btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] rounded-sm"
+                                                >
+                                                    <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" />
+                                                </button>
+                                            </div>
                                         </div>
-                                        <p className="text-[var(--color-body-text)] text-sm italic flex-1 leading-relaxed line-clamp-3 mb-4 text-gray-600">
-                                            "{item.testimonial}"
-                                        </p>
-                                        <button
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                setActiveModalStory(item);
-                                            }}
-                                            className="mt-auto flex items-center text-sm font-bold text-[#6B9F91] hover:text-[#588478] transition-colors group/btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] rounded-sm w-max"
-                                        >
-                                            Read More
-                                            <ArrowRight className="w-4 h-4 ml-1.5 group-hover/btn:translate-x-1 transition-transform" />
-                                        </button>
                                     </div>
-                                </CardMotion>
+                                </motion.div>
                             ))}
                         </motion.div>
 
@@ -229,7 +240,8 @@ export function ProductImpacts() {
                                         }}
                                         className="cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 happimonial-mobile-card w-[82vw] sm:w-[350px] flex-shrink-0 flex flex-col bg-white overflow-hidden rounded-3xl snap-center relative scroll-ml-6 border border-[var(--color-border)] shadow-xl shadow-gray-200/50"
                                     >
-                                        <div className="relative w-full aspect-[4/3] bg-gray-100 overflow-hidden shrink-0">
+                                        {/* Video: flushed to top/left/right of card with matching rounded corners */}
+                                        <div className="relative w-full aspect-video bg-gray-900 shrink-0">
                                             {item.youtubeUrl ? (
                                                 <div data-video-player className="w-full h-full">
                                                     <YouTubeResumeThumbnailPlayer
@@ -242,37 +254,44 @@ export function ProductImpacts() {
                                             ) : (
                                                 <div className="absolute inset-0 bg-gradient-to-br from-[#6B9F91]/20 to-[#6B9F91]/5 flex items-center justify-center">
                                                     <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#6B9F91 1px, transparent 1px)', backgroundSize: '16px 16px' }} />
+                                                    <Video className="w-10 h-10 text-[#6B9F91]/40" />
                                                 </div>
                                             )}
                                         </div>
+
+                                        {/* Content */}
                                         <div className="p-5 flex flex-col flex-1 text-left relative z-10 bg-white">
-                                            <div className="flex justify-between items-start mb-3">
-                                                <div className="flex items-center gap-3">
+                                            {/* Large quote mark */}
+                                            <span className="text-5xl font-serif leading-none text-[#6B9F91]/20 select-none mb-1">&ldquo;</span>
+                                            <p className="text-[var(--color-body-text)] text-sm italic leading-relaxed line-clamp-3 mb-4 text-gray-600 -mt-2">
+                                                {item.testimonial}
+                                            </p>
+                                            {/* Client signature row */}
+                                            <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between gap-2">
+                                                <div className="flex items-center gap-2.5 min-w-0">
                                                     {item.thumbnailUrl && (
-                                                        <img src={item.thumbnailUrl} alt={item.clientName} className="w-10 h-10 rounded-full object-cover border border-gray-100 shadow-sm shrink-0" />
+                                                        <img src={item.thumbnailUrl} alt={item.clientName} className="w-8 h-8 rounded-full object-cover border border-gray-100 shadow-sm shrink-0" />
                                                     )}
-                                                    <div>
-                                                        <h3 className="font-bold text-lg text-[var(--color-heading)] leading-tight tracking-tight">{item.clientName}</h3>
-                                                        <p className="text-xs font-medium text-gray-500 mt-0.5">{item.companyName}</p>
+                                                    <div className="min-w-0">
+                                                        <p className="font-bold text-sm text-[var(--color-heading)] leading-tight truncate">{item.clientName}</p>
+                                                        <p className="text-[11px] font-medium text-gray-400 truncate">{item.companyName}</p>
                                                     </div>
                                                 </div>
-                                                <span className="w-max px-2.5 py-1 bg-[#6B9F91]/10 text-[#6B9F91] text-[9px] font-bold uppercase tracking-wider rounded whitespace-nowrap">
-                                                    {item.industry}
-                                                </span>
+                                                <div className="flex items-center gap-2 shrink-0">
+                                                    <span className="w-max px-2 py-0.5 bg-[#6B9F91]/10 text-[#6B9F91] text-[9px] font-bold uppercase tracking-wider rounded whitespace-nowrap">
+                                                        {item.industry}
+                                                    </span>
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setActiveModalStory(item);
+                                                        }}
+                                                        className="flex items-center text-xs font-bold text-[#6B9F91] hover:text-[#588478] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] rounded-sm"
+                                                    >
+                                                        <ArrowRight className="w-4 h-4" />
+                                                    </button>
+                                                </div>
                                             </div>
-                                            <p className="text-[var(--color-body-text)] text-sm italic leading-relaxed line-clamp-3 mb-4 text-gray-600">
-                                                "{item.testimonial}"
-                                            </p>
-                                            <button
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    setActiveModalStory(item);
-                                                }}
-                                                className="mt-auto flex items-center text-sm font-bold text-[#6B9F91] hover:text-[#588478] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] rounded-sm w-max"
-                                            >
-                                                Read More
-                                                <ArrowRight className="w-4 h-4 ml-1.5" />
-                                            </button>
                                         </div>
                                     </div>
                                 ))}
