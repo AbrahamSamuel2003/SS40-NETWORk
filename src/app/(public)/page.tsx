@@ -14,8 +14,8 @@ const ContactSection = dynamic(() => import("@/components/home/ContactSection").
 const About = dynamic(() => import("@/components/home/About").then(mod => mod.About), { ssr: true });
 
 export const metadata: Metadata = {
-  title: "Top IT Company in Tirunelveli | Web & AI Development",
-  description: "SS40 NETWORK is the leading IT company in Tirunelveli, Tamil Nadu. We specialize in custom software development, web applications, AI solutions, and IT training.",
+  title: "SS40 NETWORK PRIVATE LIMITED - Top IT Company in Tirunelveli",
+  description: "SS40 NETWORK PRIVATE LIMITED is the leading IT company in Tirunelveli, Tamil Nadu. We specialize in custom software development, web applications, AI solutions, and IT training.",
 };
 
 export default async function Home() {
@@ -32,8 +32,47 @@ export default async function Home() {
     })
   ]);
 
+  const sitelinksSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "itemListElement": [
+      {
+        "@type": "SiteNavigationElement",
+        "position": 1,
+        "name": "Digital Solutions",
+        "description": "Premium Web Development, Mobile Apps, and AI Solutions",
+        "url": "https://www.ss40network.com/digital-solutions"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "position": 2,
+        "name": "Products",
+        "description": "Explore our innovative software products and tools.",
+        "url": "https://www.ss40network.com/products"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "position": 3,
+        "name": "Academics",
+        "description": "Tech training, internships, and student project guidance.",
+        "url": "https://www.ss40network.com/academics"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "position": 4,
+        "name": "Contact Us",
+        "description": "Get in touch with SS40 NETWORK PRIVATE LIMITED.",
+        "url": "https://www.ss40network.com/contact"
+      }
+    ]
+  };
+
   return (
     <div className="w-full flex-col flex">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(sitelinksSchema) }}
+      />
       {/* Above the fold (Critical Path LCP) */}
       <Hero />
       <About />

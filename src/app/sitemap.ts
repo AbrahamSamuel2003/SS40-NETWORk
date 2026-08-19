@@ -58,6 +58,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     let projectEntries: MetadataRoute.Sitemap = [];
     let studentProjectEntries: MetadataRoute.Sitemap = [];
     let productEntries: MetadataRoute.Sitemap = [];
+    let happimonialEntries: MetadataRoute.Sitemap = [];
 
     try {
         const clientProjects = await prisma.clientProject.findMany({
@@ -72,9 +73,45 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             priority: 0.6,
         }));
 
+        const studentProjects = await prisma.studentProject.findMany({
+            where: { isActive: true },
+            select: { id: true, updatedAt: true },
+        });
+
+        studentProjectEntries = studentProjects.map((project) => ({
+            url: `${baseUrl}/academics/student-projects/${project.id}`,
+            lastModified: project.updatedAt,
+            changeFrequency: 'monthly' as const,
+            priority: 0.6,
+        }));
+
+        const products = await prisma.product.findMany({
+            where: { isActive: true },
+            select: { id: true, updatedAt: true },
+        });
+
+        productEntries = products.map((product) => ({
+            url: `${baseUrl}/products/${product.id}`,
+            lastModified: product.updatedAt,
+            changeFrequency: 'weekly' as const,
+            priority: 0.7,
+        }));
+
+        const happimonials = await prisma.happimonial.findMany({
+            where: { isActive: true },
+            select: { id: true, updatedAt: true },
+        });
+
+        happimonialEntries = happimonials.map((item) => ({
+            url: `${baseUrl}/happimonials/${item.id}`,
+            lastModified: item.updatedAt,
+            changeFrequency: 'monthly' as const,
+            priority: 0.5,
+        }));
+
     } catch (error) {
         console.error('Failed to generate dynamic sitemap entries:', error);
     }
 
-    return [...staticEntries, ...projectEntries];
+    return [...staticEntries, ...projectEntries, ...studentProjectEntries, ...productEntries, ...happimonialEntries];
 }
