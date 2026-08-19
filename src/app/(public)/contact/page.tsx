@@ -1,3 +1,4 @@
+import * as React from "react";
 import dynamic from "next/dynamic";
 import { Hero } from "@/components/contact/Hero";
 import { ContactMethods } from "@/components/contact/ContactMethods";
@@ -24,7 +25,9 @@ export default async function ContactPage() {
             <Hero />
             <ContactMethods config={config} />
             <OfficeLocation config={config} />
-            <ContactForm />
+            <React.Suspense fallback={<div className="py-20 text-center text-gray-500">Loading form...</div>}>
+                <ContactForm />
+            </React.Suspense>
             <Faq />
         </div>
     );

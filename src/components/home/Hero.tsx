@@ -24,23 +24,17 @@ export function Hero() {
                 <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-10">
 
                     {/* Left Column - Content */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.7, ease: "easeOut" }}
-                        className="w-full lg:w-[55%] flex flex-col items-center lg:items-start text-center lg:text-left"
+                    <div
+                        className="w-full lg:w-[55%] flex flex-col items-center lg:items-start text-center lg:text-left animate-fade-in"
                     >
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: 0.2, duration: 0.5 }}
+                        <div
                             className="mb-8"
                         >
                             <Badge variant="primary" className="py-1.5 px-4 rounded-full flex items-center gap-2">
                                 <Sparkles className="w-4 h-4" />
                                 <span>The Future of Enterprise Tech</span>
                             </Badge>
-                        </motion.div>
+                        </div>
 
                         <h1 className="text-[clamp(40px,5vw,56px)] font-bold text-[var(--color-heading)] leading-[1.1] tracking-tight mb-6">
                             One Company.<br />
@@ -65,7 +59,7 @@ export function Hero() {
                                 </Link>
                             </Button>
                         </div>
-                    </motion.div>
+                    </div>
 
                     {/* Right Column - Dashboard Mockup & Floating Cards */}
                     {/* Hidden on mobile completely for a cleaner layout */}

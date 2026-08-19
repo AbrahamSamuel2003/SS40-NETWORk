@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { Hero } from "@/components/home/Hero";
-import { About } from "@/components/home/About";
+// import { About } from "@/components/home/About";
 import { getSiteConfig } from "@/lib/site-config";
 import { prisma } from "@/lib/prisma";
 
@@ -11,6 +11,7 @@ const SuccessStories = dynamic(() => import("@/components/home/SuccessStories").
 const InteractiveImpactShowcase = dynamic(() => import("@/components/home/InteractiveImpactShowcase").then(mod => mod.InteractiveImpactShowcase), { ssr: true });
 const TrustedBy = dynamic(() => import("@/components/home/TrustedBy").then(mod => mod.TrustedBy), { ssr: true });
 const ContactSection = dynamic(() => import("@/components/home/ContactSection").then(mod => mod.ContactSection), { ssr: true });
+const About = dynamic(() => import("@/components/home/About").then(mod => mod.About), { ssr: true });
 
 export const metadata: Metadata = {
   title: "Top IT Company in Tirunelveli | Web & AI Development",

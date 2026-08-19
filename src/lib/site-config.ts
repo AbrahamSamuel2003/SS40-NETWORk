@@ -1,6 +1,5 @@
 import { prisma } from '@/lib/prisma';
-import { unstable_noStore as noStore } from 'next/cache';
-import { cache } from 'react';
+import { unstable_cache } from 'next/cache';
 
 export interface SiteConfigData {
     companyName: string;
@@ -21,33 +20,36 @@ export interface SiteConfigData {
     seoDefaultDescription: string;
 }
 
-export const getSiteConfig = cache(async function (): Promise<SiteConfigData | null> {
-    noStore(); // Fast CMS Propagation — opt out of cross-request caching
-    try {
-        const config = await prisma.siteConfig.findUnique({
-            where: { id: 1 },
-            select: {
-                companyName: true,
-                legalName: true,
-                logoUrl: true,
-                uploadedLogoUrl: true,
-                contactEmail: true,
-                contactPhone: true,
-                whatsappNumber: true,
-                addressText: true,
-                businessHours: true,
-                footerDescription: true,
-                googleMapsIframeUrl: true,
-                urlLinkedin: true,
-                urlYoutube: true,
-                urlInstagram: true,
-                seoDefaultTitle: true,
-                seoDefaultDescription: true,
-            }
-        });
-        return config;
-    } catch (e) {
-        console.error('Error fetching site config server-side:', e);
-        return null;
-    }
-});
+export const getSiteConfig = unstable_cache(
+    async function (): Promise<SiteConfigData | null> {
+        try {
+            const config = await prisma.siteConfig.findUnique({
+                where: { id: 1 },
+                select: {
+                    companyName: true,
+                    legalName: true,
+                    logoUrl: true,
+                    uploadedLogoUrl: true,
+                    contactEmail: true,
+                    contactPhone: true,
+                    whatsappNumber: true,
+                    addressText: true,
+                    businessHours: true,
+                    footerDescription: true,
+                    googleMapsIframeUrl: true,
+                    urlLinkedin: true,
+                    urlYoutube: true,
+                    urlInstagram: true,
+                    seoDefaultTitle: true,
+                    seoDefaultDescription: true,
+                }
+            });
+            return config;
+        } catch (e) {
+            console.error('Error fetching site config server-side:', e);
+            return null;
+        }
+    },
+    ['site-config'],
+    { tags: ['site-config'], revalidate: 3600 }
+);
