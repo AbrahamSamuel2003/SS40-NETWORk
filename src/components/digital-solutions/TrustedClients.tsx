@@ -6,6 +6,7 @@ import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { cn } from "@/utils/cn";
+import { shuffleArray } from "@/utils/shuffle";
 
 export function TrustedClients() {
     const [logos, setLogos] = React.useState<any[]>([]);
@@ -23,9 +24,8 @@ export function TrustedClients() {
             .catch(() => setIsLoading(false));
     }, []);
 
-    // Split logos into two rows for the marquee effect, or show empty arrays
-    const row1 = logos.slice(0, Math.ceil(logos.length / 2));
-    const row2 = Array.from(logos.slice(Math.ceil(logos.length / 2))); // ensure array
+    const row1 = React.useMemo(() => shuffleArray(logos), [logos]);
+    const row2 = React.useMemo(() => shuffleArray(logos), [logos]);
 
     if (!isLoading && logos.length === 0) {
         return null; // hide section entirely if there are no trusted clients configured for this page (fail safe)
@@ -103,14 +103,10 @@ export function TrustedClients() {
                 <div className="absolute top-0 bottom-0 right-0 w-24 md:w-32 bg-gradient-to-l from-[#EDF5F2] to-transparent z-20 pointer-events-none" />
 
                 {/* ROW 1: Scroll Left */}
-                {row1.length > 0 && <MarqueeRow items={row1} direction="left" speed={30} />}
+                {row1.length > 0 && <MarqueeRow items={row1} direction="left" speed={35} />}
 
-                {/* ROW 2: Scroll Right (Hidden on Mobile as per standard behavior for cleaner layout) */}
-                {row2.length > 0 && (
-                    <div className="hidden md:block">
-                        <MarqueeRow items={row2} direction="right" speed={35} />
-                    </div>
-                )}
+                {/* ROW 2: Scroll Right (Visible on all screens) */}
+                {row2.length > 0 && <MarqueeRow items={row2} direction="right" speed={40} />}
             </div>
 
         </SectionWrapper>
@@ -160,7 +156,7 @@ function MarqueeRow({ items, direction, speed }: MarqueeRowProps) {
         >
             <div
                 className={cn(
-                    "flex items-center gap-6 px-3 w-max",
+                    "flex items-center gap-4 sm:gap-6 px-3 w-max",
                     direction === "left" ? "animate-marquee-left" : "animate-marquee-right"
                 )}
                 style={{ "--duration": `${speed}s` } as React.CSSProperties}
@@ -168,22 +164,34 @@ function MarqueeRow({ items, direction, speed }: MarqueeRowProps) {
                 {duplicatedItems.map((client, idx) => (
                     <div
                         key={`${client.id}-${idx}`}
-                        className={`marquee-logo-card group flex items-center bg-white border border-gray-100 rounded-2xl shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_10px_20px_-5px_rgba(0,0,0,0.08)] shrink-0 transition-all duration-300 cursor-pointer overflow-hidden ${
+                        className={`marquee-logo-card group flex items-center bg-white border border-gray-100 rounded-2xl shadow-[0_2px_8px_-3px_rgba(0,0,0,0.05)] hover:shadow-[0_10px_20px_-5px_rgba(0,0,0,0.08)] shrink-0 transition-all duration-300 cursor-pointer overflow-hidden ${
                             client.showTextOnCard
-                                ? 'justify-start p-4 md:p-5 gap-3 md:gap-4 w-max h-[80px] md:h-[90px]'
-                                : 'px-4 py-2.5 md:px-5 md:py-3 h-auto min-h-[56px] md:min-h-[64px] w-auto shrink-0 justify-center'
+                                ? 'p-3 sm:p-4 gap-3 sm:gap-4 w-max h-[64px] sm:h-[72px] md:h-[80px] justify-start'
+                                : 'px-4 py-2 sm:px-5 sm:py-2.5 h-[64px] sm:h-[72px] md:h-[80px] w-auto justify-center'
                         }`}
                         title={client.name}
                     >
-                        <div className={`flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105 ${client.showTextOnCard ? 'h-8 md:h-10 w-auto min-w-[32px] max-w-[120px]' : 'h-8 md:h-10 w-auto min-w-[32px]'}`}>
+                        <div className={`flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105 ${
+                            client.showTextOnCard 
+                                ? 'w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12' 
+                                : 'h-11 sm:h-12 md:h-14 w-auto min-w-[36px]'
+                        }`}>
                             {client.logoUrl ? (
-                                <img src={client.logoUrl} alt={client.showTextOnCard ? client.name : ''} className={`object-contain ${client.showTextOnCard ? 'w-full h-full' : 'w-auto h-full max-w-[140px] md:max-w-[180px]'}`} />
+                                <img 
+                                    src={client.logoUrl} 
+                                    alt={client.showTextOnCard ? client.name : ''} 
+                                    className={`object-contain ${
+                                        client.showTextOnCard 
+                                            ? 'w-full h-full' 
+                                            : 'w-auto h-full max-w-[160px] sm:max-w-[200px] md:max-w-[240px]'
+                                    }`} 
+                                />
                             ) : (
-                                <Building2 className="w-6 h-6 md:w-8 md:h-8 text-[#6B9F91]" />
+                                <Building2 className="w-7 h-7 sm:w-8 sm:h-8 text-[#6B9F91]" />
                             )}
                         </div>
                         {client.showTextOnCard && (
-                            <span className="font-bold text-gray-700 md:text-lg tracking-tight pr-2">{client.name}</span>
+                            <span className="font-bold text-gray-700 text-sm sm:text-base tracking-tight pr-2">{client.name}</span>
                         )}
                     </div>
                 ))}

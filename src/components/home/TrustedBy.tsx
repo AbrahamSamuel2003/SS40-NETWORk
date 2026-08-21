@@ -1,15 +1,14 @@
 "use client";
 
 import * as React from "react";
-import NextImage from "next/image";
 import {
     Building2, Store, Factory, Plane, Landmark,
-    Stethoscope, GraduationCap, Code2, Cpu, Globe, Library, Rocket, Network
+    Stethoscope, GraduationCap, Code2, Cpu, Globe, Library, Rocket
 } from "lucide-react";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
-import { SectionHeading } from "@/components/ui/SectionHeading";
 import { cn } from "@/utils/cn";
+import { shuffleArray } from "@/utils/shuffle";
 import { LogoMarqueeSkeleton } from "@/components/ui/Skeleton";
 
 const MIXED_ROW_1 = [
@@ -31,6 +30,27 @@ const MIXED_ROW_2 = [
 ];
 
 export function TrustedBy({ data }: { data?: any[] }) {
+    const hasAdminLogos = Boolean(data && data.length > 0);
+
+    const [rows, setRows] = React.useState(() => ({
+        row1: hasAdminLogos ? data! : MIXED_ROW_1,
+        row2: hasAdminLogos ? data! : MIXED_ROW_2,
+    }));
+
+    React.useEffect(() => {
+        if (hasAdminLogos) {
+            setRows({
+                row1: shuffleArray(data!),
+                row2: shuffleArray(data!),
+            });
+        } else {
+            setRows({
+                row1: MIXED_ROW_1,
+                row2: MIXED_ROW_2,
+            });
+        }
+    }, [data, hasAdminLogos]);
+
     if (data && data.length === 0) {
         return (
             <SectionWrapper id="trusted-by" className="bg-[#EDF5F2] relative overflow-hidden">
@@ -60,9 +80,6 @@ export function TrustedBy({ data }: { data?: any[] }) {
             </SectionWrapper>
         );
     }
-
-    const ROW_1 = (data && data.length > 0) ? data.slice(0, Math.ceil(data.length / 2)) : MIXED_ROW_1;
-    const ROW_2 = (data && data.length > 0) ? data.slice(Math.ceil(data.length / 2)) : MIXED_ROW_2;
 
     return (
         <SectionWrapper id="trusted-by" className="bg-[#EDF5F2] relative overflow-hidden">
@@ -140,12 +157,10 @@ export function TrustedBy({ data }: { data?: any[] }) {
                 <div className="absolute top-0 bottom-0 right-0 w-24 md:w-48 bg-gradient-to-l from-[#EDF5F2] to-transparent z-20 pointer-events-none" />
 
                 {/* ROW 1: Scroll Left */}
-                <MarqueeRow items={ROW_1} direction="left" speed={30} />
+                <MarqueeRow items={rows.row1} direction="left" speed={35} />
 
-                {/* ROW 2: Scroll Right (Hidden on Mobile) */}
-                <div className="hidden md:block">
-                    <MarqueeRow items={ROW_2} direction="right" speed={35} />
-                </div>
+                {/* ROW 2: Scroll Right (Visible on all screens) */}
+                <MarqueeRow items={rows.row2} direction="right" speed={40} />
             </div>
 
         </SectionWrapper>
@@ -188,7 +203,7 @@ function MarqueeRow({ items, direction, speed }: MarqueeRowProps) {
         >
             <div
                 className={cn(
-                    "flex items-center gap-6 px-3 w-max",
+                    "flex items-center gap-4 sm:gap-6 px-3 w-max",
                     direction === "left" ? "animate-marquee-left" : "animate-marquee-right"
                 )}
                 style={{ "--duration": `${speed}s` } as React.CSSProperties}
@@ -198,30 +213,37 @@ function MarqueeRow({ items, direction, speed }: MarqueeRowProps) {
                     return (
                         <div
                             key={`${item.id}-${idx}`}
-                            className={`marquee-logo-card bg-white border border-gray-100 rounded-2xl flex items-center shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_10px_20px_-5px_rgba(0,0,0,0.08)] transition-all duration-300 cursor-pointer overflow-hidden group ${
+                            className={`marquee-logo-card bg-white border border-gray-100 rounded-2xl flex items-center shadow-[0_2px_8px_-3px_rgba(0,0,0,0.05)] hover:shadow-[0_10px_20px_-5px_rgba(0,0,0,0.08)] transition-all duration-300 cursor-pointer overflow-hidden group shrink-0 ${
                                 item.showTextOnCard
-                                    ? 'p-4 md:p-5 w-max h-[80px] md:h-[90px] justify-start gap-4'
-                                    : 'px-4 py-2.5 md:px-5 md:py-3 h-auto min-h-[56px] md:min-h-[64px] w-auto shrink-0 justify-center'
+                                    ? 'p-3 sm:p-4 gap-3 sm:gap-4 w-max h-[64px] sm:h-[72px] md:h-[80px] justify-start'
+                                    : 'px-4 py-2 sm:px-5 sm:py-2.5 h-[64px] sm:h-[72px] md:h-[80px] w-auto justify-center'
                             }`}
+                            title={item.name}
                         >
-                            <div className={`flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105 ${item.showTextOnCard ? 'w-10 h-10 md:w-12 md:h-12' : 'h-8 md:h-10 w-auto min-w-[32px]'}`}>
+                            <div className={`flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105 ${
+                                item.showTextOnCard 
+                                    ? 'w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12' 
+                                    : 'h-11 sm:h-12 md:h-14 w-auto min-w-[36px]'
+                            }`}>
                                 {item.logoUrl ? (
-                                    <div className={`relative ${item.showTextOnCard ? 'w-full h-full' : 'w-auto h-full max-w-[140px] md:max-w-[180px]'}`}>
-                                        <NextImage 
-                                            src={item.logoUrl} 
-                                            alt={item.showTextOnCard ? item.name : ''} 
-                                            fill
-                                            className="object-contain"
-                                            sizes={item.showTextOnCard ? "48px" : "(max-width: 768px) 140px, 180px"}
-                                        />
-                                    </div>
+                                    <img 
+                                        src={item.logoUrl} 
+                                        alt={item.showTextOnCard ? item.name : (item.name || 'Partner Logo')} 
+                                        className={`object-contain ${
+                                            item.showTextOnCard 
+                                                ? 'w-full h-full' 
+                                                : 'w-auto h-full max-w-[160px] sm:max-w-[200px] md:max-w-[240px]'
+                                        }`} 
+                                    />
                                 ) : Icon ? (
-                                    <Icon className="w-6 h-6 md:w-8 md:h-8 text-[#6B9F91]" />
-                                ) : null}
+                                    <Icon className="w-7 h-7 sm:w-8 sm:h-8 text-[#6B9F91]" />
+                                ) : (
+                                    <Building2 className="w-7 h-7 sm:w-8 sm:h-8 text-[#6B9F91]" />
+                                )}
                             </div>
 
                             {item.showTextOnCard && (
-                                <span className="font-bold text-gray-800 text-sm md:text-base whitespace-nowrap text-left pr-2">
+                                <span className="font-bold text-gray-800 text-sm sm:text-base whitespace-nowrap text-left pr-2">
                                     {item.name}
                                 </span>
                             )}

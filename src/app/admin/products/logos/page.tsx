@@ -164,8 +164,8 @@ export default function ProductLogosPage() {
         <div className="max-w-6xl mx-auto pb-12">
             <div className="mb-8 flex justify-between items-end">
                 <div>
-                    <h2 className="text-2xl font-bold tracking-tight text-[#111827] mb-2">Product Logos</h2>
-                    <p className="text-[#6B7280]">Manage partner and client organization logos for the Products section.</p>
+                    <h2 className="text-2xl font-bold tracking-tight text-[#111827] mb-2">Product Client Logos</h2>
+                    <p className="text-[#6B7280]">Manage client organization logos for the Products section.</p>
                 </div>
                 <button
                     onClick={() => handleOpenModal()}
@@ -252,7 +252,7 @@ export default function ProductLogosPage() {
                                             </span>
                                         </td>
                                         <td className="p-3">
-                                            <div className="grid grid-cols-2 gap-1.5 w-fit ml-auto">
+                                            <div className="flex flex-col xl:flex-row gap-1.5 justify-end ml-auto shrink-0">
                                                 <button onClick={() => handleOpenModal(logo)} className="px-3 py-1 rounded border border-gray-300 text-[#374151] text-xs font-medium hover:bg-[#EDF5F2]/70 hover:border-[#6B9F91] transition-colors whitespace-nowrap">Edit</button>
                                                 <button onClick={() => handleDelete(logo.id)} className="px-3 py-1 rounded border border-[#FCA5A5] text-[#B91C1C] text-xs font-medium hover:bg-red-50 transition-colors whitespace-nowrap">Delete</button>
                                             </div>
@@ -271,7 +271,7 @@ export default function ProductLogosPage() {
                         <div className="px-4 py-3 border-b border-gray-200 flex justify-between items-center bg-[#EDF5F2]/80 shrink-0">
                             <div>
                                 <h3 className="text-sm font-bold text-[#111827]">{editingId ? 'Edit Logo' : 'Add Logo'}</h3>
-                                <p className="text-[10px] text-[#9CA3AF] mt-0.5">Products page logos</p>
+                                <p className="text-[10px] text-[#9CA3AF] mt-0.5">Products page client logos</p>
                             </div>
                             <button onClick={handleCloseModal} className="text-[#9CA3AF] hover:text-[#111827] p-1"><X className="w-4 h-4" /></button>
                         </div>

@@ -26,7 +26,7 @@ export const AdminLayoutClient = React.memo(function AdminLayoutClient({
                     adminName={adminName}
                     onMenuClick={() => setIsSidebarOpen(true)}
                 />
-                <main className="flex-1 overflow-x-hidden p-4 lg:p-8">
+                <main className="flex-1 overflow-x-clip p-4 lg:p-8">
                     {children}
                 </main>
             </div>

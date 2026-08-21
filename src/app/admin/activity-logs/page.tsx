@@ -79,7 +79,8 @@ export default function ActivityLogsPage() {
                 )}
             </div>
 
-            <div className="mb-6 flex flex-col lg:flex-row gap-4 items-center justify-between">
+            {/* Sticky Search & Filters Controls (Pins right below top navigation) */}
+            <div className="sticky top-16 z-20 bg-[#EDF5F2]/95 backdrop-blur-md pb-4 pt-2 mb-4 border-b border-gray-200/80 flex flex-col lg:flex-row gap-3 items-center justify-between">
                 <div className="relative w-full lg:w-96">
                     <Search className="w-5 h-5 absolute left-3 top-2.5 text-[#9CA3AF]" />
                     <input
@@ -92,7 +93,7 @@ export default function ActivityLogsPage() {
                     />
                 </div>
 
-                <div className="flex gap-4 w-full lg:w-auto overflow-x-auto custom-scrollbar pb-1 lg:pb-0">
+                <div className="flex gap-3 w-full lg:w-auto overflow-x-auto custom-scrollbar pb-1 lg:pb-0">
                     <div className="flex items-center gap-2 admin-card rounded-lg px-3 flex-shrink-0">
                         <Filter className="w-4 h-4 text-[#9CA3AF]" />
                         <select
@@ -128,12 +129,13 @@ export default function ActivityLogsPage() {
                 </div>
             </div>
 
+            {/* Logs Container */}
             <div className="admin-card overflow-hidden shadow-sm">
-                {/* ── MOBILE CARD GRID (hidden on sm+) ── */}
+                {/* ── MOBILE VIEW: Single-column Feed (hidden on sm+) ── */}
                 <div className="sm:hidden">
                     {isLoading ? (
                         <div className="p-8 text-center text-[#9CA3AF]">
-                            <div className="animate-spin rounded-full h-6 w-6 mx-auto border-t-2 border-b-2 border-gray-200 mb-2"></div>
+                            <div className="animate-spin rounded-full h-6 w-6 mx-auto border-t-2 border-b-2 border-[#6B9F91] mb-2"></div>
                             Fetching immutable records...
                         </div>
                     ) : logs.length === 0 ? (
@@ -141,17 +143,38 @@ export default function ActivityLogsPage() {
                     ) : (
                         <div className="grid grid-cols-2 gap-3 p-3">
                             {logs.map(item => (
-                                <div key={item.id} className="admin-card p-3 flex flex-col gap-2 rounded-xl">
-                                    <div className="flex items-start justify-between gap-1">
-                                        <span className="font-semibold text-[#111827] text-sm leading-tight line-clamp-2">{item.description}</span>
-                                        <button onClick={() => handleOpenModal(item)} className="shrink-0 p-1 text-[#6B9F91]">
-                                            <Eye className="w-4 h-4" />
+                                <div key={item.id} className="admin-card p-3.5 flex flex-col gap-2 rounded-xl bg-white border border-gray-200/90 shadow-xs">
+                                    <div className="flex items-start justify-between gap-2">
+                                        <div className="min-w-0 flex-1">
+                                            <h4 className="font-bold text-[#111827] text-xs leading-snug break-words">
+                                                {item.description}
+                                            </h4>
+                                        </div>
+                                        <button 
+                                            onClick={() => handleOpenModal(item)} 
+                                            className="shrink-0 px-2 py-1 rounded-md text-[11px] font-semibold text-[#6B9F91] hover:bg-[#6B9F91]/10 flex items-center gap-1 border border-[#6B9F91]/30 transition-colors"
+                                        >
+                                            <Eye className="w-3.5 h-3.5" /> View
                                         </button>
                                     </div>
-                                    <p className="text-[#6B7280] text-[10px] leading-snug line-clamp-1">{item.adminUser?.fullName || 'System Event'}</p>
-                                    <div className="mt-auto pt-1 flex items-center justify-between">
-                                        <span className="inline-flex px-2 py-0.5 rounded text-[10px] font-bold tracking-wide uppercase bg-[#EDF5F2]/70 text-[#374151] border border-gray-200">• {item.action}</span>
-                                        <span className="text-[#9CA3AF] text-[10px]">{new Date(item.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}</span>
+
+                                    <div className="flex items-center justify-between gap-2 text-[11px] text-[#6B7280]">
+                                        <span className="font-medium truncate max-w-[55%]">
+                                            👤 {item.adminUser?.fullName || 'System Event'}
+                                        </span>
+                                        <span className="font-mono text-[10px] text-gray-500 bg-[#EDF5F2]/80 px-1.5 py-0.5 rounded truncate max-w-[45%]">
+                                            {item.entity}
+                                        </span>
+                                    </div>
+
+                                    <div className="mt-1 pt-2 border-t border-gray-100 flex items-center justify-between gap-2">
+                                        <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold tracking-wide uppercase bg-[#EDF5F2] text-[#374151] border border-gray-200 truncate max-w-[60%]">
+                                            • {item.action}
+                                        </span>
+                                        <span className="text-[#9CA3AF] text-[10px] whitespace-nowrap shrink-0">
+                                            {new Date(item.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })},{' '}
+                                            {new Date(item.createdAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
+                                        </span>
                                     </div>
                                 </div>
                             ))}
@@ -159,23 +182,23 @@ export default function ActivityLogsPage() {
                     )}
                 </div>
 
-                {/* ── DESKTOP TABLE (hidden on mobile) ── */}
-                <div className="hidden sm:block overflow-x-auto w-full touch-auto">
-                    <table className="w-full text-left text-sm text-[#374151] min-w-[600px]">
-                        <thead className="bg-[#EDF5F2]/70 border-b border-gray-200 text-[#111827]">
+                {/* ── DESKTOP TABLE: Sticky Table Header & Inner Scroll (hidden on mobile) ── */}
+                <div className="hidden sm:block overflow-y-auto custom-scrollbar flex-1">
+                    <table className="w-full text-left text-sm text-[#374151] min-w-[600px] border-collapse">
+                        <thead className="sticky top-0 z-10 bg-[#EDF5F2] border-b border-gray-200 text-[#111827] shadow-xs">
                             <tr>
-                                <th className="p-4 font-medium min-w-[150px]">Date / Time</th>
-                                <th className="p-4 font-medium min-w-[150px] hidden sm:table-cell">Admin</th>
-                                <th className="p-4 font-medium min-w-[100px]">Action</th>
-                                <th className="p-4 font-medium min-w-[200px]">Description</th>
-                                <th className="p-4 font-medium text-right min-w-[100px]">Details</th>
+                                <th className="p-4 font-semibold min-w-[150px]">Date / Time</th>
+                                <th className="p-4 font-semibold min-w-[150px] hidden sm:table-cell">Admin</th>
+                                <th className="p-4 font-semibold min-w-[100px]">Action</th>
+                                <th className="p-4 font-semibold min-w-[200px]">Description</th>
+                                <th className="p-4 font-semibold text-right min-w-[100px]">Details</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-gray-100">
+                        <tbody className="divide-y divide-gray-100 bg-white">
                             {isLoading ? (
                                 <tr>
                                     <td colSpan={5} className="p-12 text-center text-[#9CA3AF]">
-                                        <div className="animate-spin rounded-full h-6 w-6 mx-auto border-t-2 border-b-2 border-gray-200 mb-2"></div>
+                                        <div className="animate-spin rounded-full h-6 w-6 mx-auto border-t-2 border-b-2 border-[#6B9F91] mb-2"></div>
                                         Fetching immutable records...
                                     </td>
                                 </tr>
@@ -187,19 +210,19 @@ export default function ActivityLogsPage() {
                                 </tr>
                             ) : (
                                 logs.map(item => (
-                                    <tr key={item.id} className="hover:bg-[#EDF5F2]/50 transition-colors">
+                                    <tr key={item.id} className="hover:bg-[#EDF5F2]/40 transition-colors">
                                         <td className="p-4">
-                                            <div className="text-[#111827] text-xs">
+                                            <div className="text-[#111827] text-xs font-medium">
                                                 {new Date(item.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })},{' '}
                                                 <span className="text-[#6B7280]">{new Date(item.createdAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}</span>
                                             </div>
                                         </td>
                                         <td className="p-4 hidden sm:table-cell">
-                                            <span className="font-medium text-[#111827] text-xs truncate max-w-[150px]">{item.adminUser?.fullName || 'System Event'}</span>
-                                            <span className="text-[#9CA3AF] text-[10px] truncate max-w-[150px]">{item.adminUser?.email || '-'}</span>
+                                            <span className="font-medium text-[#111827] text-xs truncate max-w-[150px] block">{item.adminUser?.fullName || 'System Event'}</span>
+                                            <span className="text-[#9CA3AF] text-[10px] truncate max-w-[150px] block">{item.adminUser?.email || '-'}</span>
                                         </td>
                                         <td className="p-4">
-                                            <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold tracking-wide uppercase bg-[#EDF5F2]/70 text-[#374151] border border-gray-200">
+                                            <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold tracking-wide uppercase bg-[#EDF5F2]/80 text-[#374151] border border-gray-200">
                                                 {item.action}
                                             </span>
                                         </td>
@@ -208,10 +231,8 @@ export default function ActivityLogsPage() {
                                                 {item.description}
                                             </div>
                                         </td>
-                                        <td className="p-3">
-                                            <div className="flex justify-end">
-                                                <button onClick={() => handleOpenModal(item)} className="px-3 py-1 rounded border border-[#6B9F91] text-[#6B9F91] text-xs font-medium hover:bg-[#6B9F91]/10 transition-colors whitespace-nowrap">View</button>
-                                            </div>
+                                        <td className="p-3 text-right">
+                                            <button onClick={() => handleOpenModal(item)} className="px-3 py-1 rounded-lg border border-[#6B9F91] text-[#6B9F91] text-xs font-semibold hover:bg-[#6B9F91]/10 transition-colors whitespace-nowrap">View</button>
                                         </td>
                                     </tr>
                                 ))

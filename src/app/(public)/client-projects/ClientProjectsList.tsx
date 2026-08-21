@@ -2,11 +2,8 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import NextImage from "next/image";
 import { ArrowLeft, ArrowRight, Building2, ShieldCheck, Lock, CheckCircle2, X, ExternalLink } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CardMotion } from "@/components/ui/Card";
-import { hoverLift, slideUp } from "@/lib/animations";
 import { CardGridSkeleton } from "@/components/ui/Skeleton";
 
 export function ClientProjectsList({ initialProjects }: { initialProjects: any[] }) {
@@ -15,7 +12,7 @@ export function ClientProjectsList({ initialProjects }: { initialProjects: any[]
     return (
         <div className="w-full">
             {/* Common Heading Block */}
-            <div className="w-full flex justify-center mb-10 md:mb-12">
+            <div className="w-full flex justify-center mb-8 md:mb-10">
                 <h2 className="text-2xl md:text-3xl font-bold text-[var(--color-heading)] tracking-tight relative text-center">
                     Explore All Projects & Deployments
                     <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-12 h-1 bg-[#6B9F91] rounded-full"></div>
@@ -28,18 +25,23 @@ export function ClientProjectsList({ initialProjects }: { initialProjects: any[]
             ) : (
                 <motion.div
                     layout
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6"
                 >
                     <AnimatePresence mode="popLayout">
                         {initialProjects.map((project: any) => (
-                            <CardMotion
+                            <motion.div
                                 key={project.id}
                                 layout
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 exit={{ opacity: 0, scale: 0.9 }}
-                                transition={{ duration: 0.2 }}
-                                {...hoverLift}
+                                whileHover={{ 
+                                    y: -6, 
+                                    scale: 1.015, 
+                                    boxShadow: "0 20px 40px -8px rgba(107,159,145,0.18), 0 8px 16px -4px rgba(107,159,145,0.10)" 
+                                }}
+                                whileTap={{ scale: 0.98, y: -2 }}
+                                transition={{ type: "spring", stiffness: 350, damping: 22 }}
                                 role="button"
                                 tabIndex={0}
                                 onClick={() => setActiveModalProject(project)}
@@ -49,44 +51,39 @@ export function ClientProjectsList({ initialProjects }: { initialProjects: any[]
                                         setActiveModalProject(project);
                                     }
                                 }}
-                                className="cursor-pointer bg-white overflow-hidden rounded-2xl flex-col group border border-[var(--color-border)] hover:border-[#6B9F91]/30 transition-all duration-300 flex focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2"
+                                className="cursor-pointer bg-white rounded-2xl flex flex-col group border border-[var(--color-border)] hover:border-[#6B9F91]/40 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 overflow-hidden shadow-sm"
                             >
-                                {/* Grid Visual Placeholder */}
+                                {/* Grid Visual Placeholder (4:3 aspect ratio, flush to top/left/right border with 0 gap) */}
                                 <div className="relative w-full aspect-[4/3] bg-gray-50 overflow-hidden shrink-0 flex items-center justify-center border-b border-gray-100">
                                     {project.isConfidential ? (
-                                        <div className="absolute inset-0 bg-gray-100 flex flex-col items-center justify-center text-center p-6 select-none opacity-80 backdrop-blur-md">
-                                            <div className="w-16 h-16 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-400 mb-4">
-                                                <Lock className="w-8 h-8" />
+                                        <div className="absolute inset-0 bg-gray-100 flex flex-col items-center justify-center text-center p-4 select-none opacity-80 backdrop-blur-md">
+                                            <div className="w-12 h-12 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-400 mb-2">
+                                                <Lock className="w-6 h-6" />
                                             </div>
-                                            <h4 className="font-bold text-gray-700 text-sm mb-1 uppercase tracking-wider">Confidential Project</h4>
-                                            <p className="text-xs text-gray-500">Visuals protected under corporate NDA.</p>
+                                            <h4 className="font-bold text-gray-700 text-xs mb-0.5 uppercase tracking-wider">Confidential Project</h4>
+                                            <p className="text-[11px] text-gray-500">Visuals protected under corporate NDA.</p>
                                         </div>
                                     ) : project.imageUrl ? (
-                                        <div className="relative w-full h-full">
-                                            <NextImage 
-                                                src={project.imageUrl} 
-                                                alt={project.title} 
-                                                fill
-                                                className="object-cover group-hover:scale-105 transition-transform duration-500"
-                                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                                loading="lazy"
-                                            />
-                                        </div>
+                                        <img 
+                                            src={project.imageUrl} 
+                                            alt={project.title} 
+                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" 
+                                        />
                                     ) : (
-                                        <div className="w-full h-full flex flex-col p-4 gap-3 bg-[#6B9F91]/5 group-hover:scale-105 transition-transform duration-500">
-                                            <div className="w-full h-1/2 flex gap-3">
-                                                <div className="w-1/3 bg-white border border-gray-200 rounded-lg shadow-sm" />
-                                                <div className="flex-1 bg-white border border-gray-200 rounded-lg shadow-sm" />
+                                        <div className="w-full h-full flex flex-col p-4 gap-2.5 bg-[#6B9F91]/5 group-hover:scale-105 transition-transform duration-700 ease-out">
+                                            <div className="w-full h-1/2 flex gap-2.5">
+                                                <div className="w-1/3 bg-white border border-gray-200 rounded-md shadow-sm" />
+                                                <div className="flex-1 bg-white border border-gray-200 rounded-md shadow-sm" />
                                             </div>
-                                            <div className="w-full h-1/2 bg-white border border-gray-200 rounded-lg shadow-sm" />
+                                            <div className="w-full h-1/2 bg-white border border-gray-200 rounded-md shadow-sm" />
                                         </div>
                                     )}
                                 </div>
 
-                                {/* Grid Content Area */}
-                                <div className="p-6 md:p-8 flex flex-col flex-1">
-                                    <div className="flex items-center justify-between gap-4 mb-4">
-                                        <span className="px-3 py-1 bg-[#6B9F91]/10 text-[#6B9F91] text-[10px] font-bold uppercase tracking-wider rounded-md whitespace-nowrap overflow-hidden text-ellipsis">
+                                {/* Grid Content Area (Compact Spacing) */}
+                                <div className="p-4 sm:p-5 flex flex-col flex-1">
+                                    <div className="flex items-center justify-between gap-3 mb-2.5">
+                                        <span className="px-2.5 py-0.5 bg-[#6B9F91]/10 text-[#6B9F91] text-[10px] font-bold uppercase tracking-wider rounded whitespace-nowrap overflow-hidden text-ellipsis">
                                             {project.industry}
                                         </span>
                                         {project.status && (
@@ -97,27 +94,39 @@ export function ClientProjectsList({ initialProjects }: { initialProjects: any[]
                                         )}
                                     </div>
 
-                                    <h3 className="font-bold text-xl text-[var(--color-heading)] leading-tight mb-3">
+                                    <h3 className="font-bold text-base md:text-lg text-[var(--color-heading)] leading-snug mb-2 group-hover:text-[#6B9F91] transition-colors">
                                         {project.title}
                                     </h3>
 
-                                    <p className="text-[var(--color-body-text)] text-sm mb-6 flex-1 line-clamp-3">
+                                    <p className="text-[var(--color-body-text)] text-xs sm:text-sm mb-4 flex-1 line-clamp-3 text-gray-600 leading-relaxed">
                                         {project.description}
                                     </p>
 
+                                    {/* Tags */}
+                                    {Array.isArray(project.tags) && project.tags.length > 0 && (
+                                        <div className="flex flex-wrap gap-1 mb-4">
+                                            {project.tags.slice(0, 3).map((tag: any, idx: number) => (
+                                                <span key={idx} className="px-2 py-0.5 bg-[#6B9F91]/10 text-[#6B9F91] rounded text-[10px] sm:text-xs font-semibold whitespace-nowrap">
+                                                    {tag}
+                                                </span>
+                                            ))}
+                                            {project.tags.length > 3 && (
+                                                <span className="px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded text-[10px] sm:text-xs font-semibold whitespace-nowrap">
+                                                    +{project.tags.length - 3}
+                                                </span>
+                                            )}
+                                        </div>
+                                    )}
+
                                     {/* Open Modal Button */}
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            setActiveModalProject(project);
-                                        }}
-                                        className="mt-auto flex items-center text-sm font-bold text-[#6B9F91] hover:text-[#588478] transition-colors group/btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] rounded-sm"
-                                    >
-                                        View Details
-                                        <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
-                                    </button>
+                                    <div className="mt-auto pt-3 border-t border-gray-100 flex items-center justify-between">
+                                        <span className="text-xs font-bold text-[#6B9F91] group-hover:text-[#588478] transition-colors inline-flex items-center gap-1.5">
+                                            View Details
+                                            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                                        </span>
+                                    </div>
                                 </div>
-                            </CardMotion>
+                            </motion.div>
                         ))}
                     </AnimatePresence>
                 </motion.div>

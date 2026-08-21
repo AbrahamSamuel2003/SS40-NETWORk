@@ -83,19 +83,41 @@ export async function GET(request: Request) {
 
         const skip = (page - 1) * limit;
 
-        const [data, total] = await Promise.all([
-            prisma.media.findMany({
-                where,
-                orderBy: { createdAt: 'desc' },
-                skip,
-                take: limit
-            }),
-            prisma.media.count({ where })
-        ]);
+        const rawData = await prisma.media.findMany({
+            where,
+            orderBy: { createdAt: 'desc' }
+        });
+
+        // Deduplicate in-memory by fileUrl, and by fileName+fileSize
+        const seenUrls = new Set<string>();
+        const seenFiles = new Set<string>();
+        const duplicateIdsToDelete: string[] = [];
+        const uniqueData: typeof rawData = [];
+
+        for (const item of rawData) {
+            const fileKey = `${item.fileName.toLowerCase()}_${item.fileSize || 0}`;
+            if (seenUrls.has(item.fileUrl) || seenFiles.has(fileKey)) {
+                duplicateIdsToDelete.push(item.id);
+            } else {
+                seenUrls.add(item.fileUrl);
+                seenFiles.add(fileKey);
+                uniqueData.push(item);
+            }
+        }
+
+        // Clean up redundant duplicate records in background if any found
+        if (duplicateIdsToDelete.length > 0) {
+            prisma.media.deleteMany({
+                where: { id: { in: duplicateIdsToDelete } }
+            }).catch(err => console.warn('Could not prune duplicate media records:', err));
+        }
+
+        const total = uniqueData.length;
+        const paginatedData = uniqueData.slice(skip, skip + limit);
 
         return NextResponse.json({
             success: true,
-            data,
+            data: paginatedData,
             pagination: {
                 page,
                 limit,

@@ -60,10 +60,10 @@ export default async function AdminDashboardPage() {
                 })}
             </div>
 
-            <div className="admin-card overflow-hidden">
-                <div className="p-6 border-b border-gray-100 bg-white/60">
+            <div className="admin-card">
+                <div className="p-5 sm:px-6 border-b border-gray-100 bg-white sticky top-16 z-20 rounded-t-2xl shadow-xs">
                     <h3 className="text-xl font-extrabold text-[#111827]">Recent Activity</h3>
-                    <p className="text-sm text-[#6B7280] mt-1">Audit log of latest CMS modifications.</p>
+                    <p className="text-xs sm:text-sm text-[#6B7280] mt-0.5">Audit log of latest CMS modifications.</p>
                 </div>
                 {activities.length === 0 ? (
                     <div className="p-8 text-center text-[#6B7280]">
@@ -72,20 +72,20 @@ export default async function AdminDashboardPage() {
                 ) : (
                     <div className="divide-y divide-gray-100">
                         {activities.map((log) => (
-                            <div key={log.id} className="p-4 sm:px-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-[#EDF5F2]/60 transition-colors">
-                                <div>
-                                    <p className="text-sm font-medium text-[#111827]">
+                            <div key={log.id} className="p-4 sm:px-6 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-4 hover:bg-[#EDF5F2]/50 transition-colors last:rounded-b-2xl">
+                                <div className="min-w-0 flex-1">
+                                    <p className="text-xs sm:text-sm font-medium text-[#111827] break-words">
                                         <span className="text-[#6B9F91] font-bold">{log.adminUser?.fullName || 'System'}</span> {log.description.toLowerCase()}
                                     </p>
-                                    <div className="mt-1 flex items-center gap-2 text-xs text-[#6B7280]">
+                                    <div className="mt-1.5 flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs text-[#6B7280]">
                                         <span className="bg-[#EDF5F2] text-[#111827] px-2 py-0.5 rounded text-[10px] font-mono tracking-wide">
                                             {log.action}
                                         </span>
                                         <span>•</span>
-                                        <span>{log.entity}</span>
+                                        <span className="font-mono text-[11px] text-gray-500">{log.entity}</span>
                                     </div>
                                 </div>
-                                <div className="text-xs text-[#6B7280] whitespace-nowrap">
+                                <div className="text-[11px] sm:text-xs text-[#9CA3AF] whitespace-nowrap shrink-0">
                                     {new Intl.DateTimeFormat('en-US', {
                                         month: 'short', day: 'numeric',
                                         hour: 'numeric', minute: '2-digit'

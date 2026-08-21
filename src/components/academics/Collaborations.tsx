@@ -14,6 +14,8 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { LogoMarqueeSkeleton } from "@/components/ui/Skeleton";
 
+import { shuffleArray } from "@/utils/shuffle";
+
 // --- Data ---
 const NETWORK_NODES = [
     { id: "uni", label: "Universities", tooltip: "Global academic partnerships", icon: Library, x: -140, y: -60 },
@@ -22,8 +24,6 @@ const NETWORK_NODES = [
     { id: "train", label: "Training Institutions", tooltip: "Vocational & technical training", icon: BookOpen, x: 100, y: 100 },
     { id: "res", label: "Research Partners", tooltip: "Innovation & R&D", icon: Target, x: 0, y: -130 },
 ];
-
-
 
 const BENEFITS = [
     { title: "Industry Projects", description: "Students solve real business challenges.", icon: Rocket },
@@ -35,6 +35,11 @@ const BENEFITS = [
 ];
 
 export function Collaborations({ logos = [] }: { logos?: any[] }) {
+    const [hoveredNode, setHoveredNode] = React.useState<string | null>(null);
+    const [isMarqueePaused, setIsMarqueePaused] = React.useState(false);
+
+    const shuffledLogos = React.useMemo(() => shuffleArray(logos), [logos]);
+
     if (!logos || logos.length === 0) {
         return (
             <SectionWrapper id="collaborations" className="bg-white relative overflow-hidden pb-8 md:pb-12">
@@ -53,10 +58,8 @@ export function Collaborations({ logos = [] }: { logos?: any[] }) {
             </SectionWrapper>
         );
     }
-    const [hoveredNode, setHoveredNode] = React.useState<string | null>(null);
-    const [isMarqueePaused, setIsMarqueePaused] = React.useState(false);
 
-    const expandedItems = logos.length < 5 ? [...logos, ...logos, ...logos, ...logos] : logos;
+    const expandedItems = shuffledLogos.length < 5 ? [...shuffledLogos, ...shuffledLogos, ...shuffledLogos, ...shuffledLogos] : shuffledLogos;
     const half = [...expandedItems, ...expandedItems, ...expandedItems];
     const marqueeItems = [...half, ...half];
 
@@ -192,30 +195,42 @@ export function Collaborations({ logos = [] }: { logos?: any[] }) {
                         onMouseLeave={handleMouseLeave}
                     >
                         <div
-                            className="academic-marquee-track flex animate-[scroll-left_30s_linear_infinite] gap-6 pr-6 w-max will-change-transform"
+                            className="academic-marquee-track flex animate-[scroll-left_35s_linear_infinite] gap-4 sm:gap-6 pr-6 w-max will-change-transform"
                             style={{ animationPlayState: isMarqueePaused ? 'paused' : 'running' }}
                         >
                             {marqueeItems.map((inst, idx) => (
                                 <div
                                     key={`inst-${idx}`}
-                                    className={`academic-marquee-card bg-white rounded-2xl border border-gray-100 shadow-[0_1px_3px_rgb(0,0,0,0.05)] hover:shadow-[0_10px_20px_-5px_rgb(0,0,0,0.08)] flex items-center shrink-0 transition-all cursor-pointer group ${
+                                    className={`academic-marquee-card bg-white rounded-2xl border border-gray-100 shadow-[0_2px_8px_-3px_rgba(0,0,0,0.05)] hover:shadow-[0_10px_20px_-5px_rgba(0,0,0,0.08)] flex items-center shrink-0 transition-all cursor-pointer group ${
                                         inst.showTextOnCard
-                                            ? 'p-4 md:p-5 gap-4 w-max h-[80px] md:h-[90px] justify-start'
-                                            : 'px-4 py-2.5 md:px-5 md:py-3 h-auto min-h-[56px] md:min-h-[64px] w-auto justify-center'
+                                            ? 'p-3 sm:p-4 gap-3 sm:gap-4 w-max h-[64px] sm:h-[72px] md:h-[80px] justify-start'
+                                            : 'px-4 py-2 sm:px-5 sm:py-2.5 h-[64px] sm:h-[72px] md:h-[80px] w-auto justify-center'
                                     }`}
                                     title={inst.name}
                                 >
-                                    {/* Logo Placeholder */}
-                                    <div className={`flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105 ${inst.showTextOnCard ? 'w-10 h-10 md:w-12 md:h-12' : 'h-8 md:h-10 w-auto min-w-[32px]'}`}>
+                                    {/* Logo Container */}
+                                    <div className={`flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105 ${
+                                        inst.showTextOnCard 
+                                            ? 'w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12' 
+                                            : 'h-11 sm:h-12 md:h-14 w-auto min-w-[36px]'
+                                    }`}>
                                         {inst.logoUrl ? (
-                                            <img src={inst.logoUrl} alt={inst.showTextOnCard ? inst.name : ''} className={`object-contain ${inst.showTextOnCard ? 'w-full h-full' : 'w-auto h-full max-w-[140px] md:max-w-[180px]'}`} />
+                                            <img 
+                                                src={inst.logoUrl} 
+                                                alt={inst.showTextOnCard ? inst.name : ''} 
+                                                className={`object-contain ${
+                                                    inst.showTextOnCard 
+                                                        ? 'w-full h-full' 
+                                                        : 'w-auto h-full max-w-[160px] sm:max-w-[200px] md:max-w-[240px]'
+                                                }`} 
+                                            />
                                         ) : (
-                                            <Building2 className="w-6 h-6 md:w-8 md:h-8 text-[#6B9F91]" />
+                                            <Building2 className="w-7 h-7 sm:w-8 sm:h-8 text-[#6B9F91]" />
                                         )}
                                     </div>
                                     {inst.showTextOnCard && (
                                         <div className="flex flex-col overflow-hidden max-w-[200px] pr-2">
-                                            <h4 className="text-sm font-extrabold text-[#111827] leading-tight mb-1 whitespace-nowrap overflow-hidden text-ellipsis">{inst.name}</h4>
+                                            <h4 className="text-sm sm:text-base font-extrabold text-[#111827] leading-tight mb-0.5 whitespace-nowrap overflow-hidden text-ellipsis">{inst.name}</h4>
                                             {inst.category && (
                                                 <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider overflow-hidden text-ellipsis whitespace-nowrap">{inst.category}</p>
                                             )}

@@ -75,7 +75,7 @@ const MENU_ITEMS: MenuBlock[] = [
         subItems: [
             { name: 'Products', href: '/admin/products', exact: true }, // Existing
             { name: 'Product Testimonials', href: '/admin/products/testimonials' },
-            { name: 'Product Logos', href: '/admin/products/logos' },
+            { name: 'Product Client Logos', href: '/admin/products/logos' },
         ]
     },
     {
