@@ -451,10 +451,10 @@ export function ClientProjects() {
                                                 whileInView="visible"
                                                 viewport={{ once: true, margin: "-100px" }}
                                                 className={`grid gap-6 mt-1 ${
-                                                    layoutConfig.grid.length === 1 
+                                                    Math.min(layoutConfig.grid.length, 3) === 1 
                                                         ? 'grid-cols-1' 
-                                                        : layoutConfig.grid.length === 2 
-                                                        ? 'grid-cols-3 justify-center' 
+                                                        : Math.min(layoutConfig.grid.length, 3) === 2 
+                                                        ? 'grid-cols-2' 
                                                         : 'grid-cols-3'
                                                 }`}
                                             >
