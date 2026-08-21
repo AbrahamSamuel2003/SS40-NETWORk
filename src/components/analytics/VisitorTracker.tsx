@@ -22,7 +22,7 @@ export const VisitorTracker = React.memo(function VisitorTracker() {
     lastTrackedPath.current = pathname;
 
     // Track visitor using sendBeacon for non-blocking
-    const data = JSON.stringify({ path: pathname });
+    const data = JSON.stringify({ currentPath: pathname, referrer: document.referrer });
     const blob = new Blob([data], { type: 'application/json' });
     
     if (navigator.sendBeacon) {

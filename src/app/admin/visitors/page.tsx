@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { Search, X, Bot, Globe, Shield, Trash2, Eye } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Search, X, Bot, Globe, Shield, Trash2, Eye, RefreshCw, Play, Pause } from 'lucide-react';
 
 export default function VisitorsPage() {
     const [visitors, setVisitors] = useState<any[]>([]);
@@ -13,6 +13,17 @@ export default function VisitorsPage() {
     const [searchTerm, setSearchTerm] = useState('');
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+
+    // Polling State
+    const [isPolling, setIsPolling] = useState(true);
+    const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+    const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null);
+    const POLLING_INTERVAL = 5000; // 5 seconds
+
+    // Initialize lastUpdated only on client to avoid hydration mismatch
+    useEffect(() => {
+        setLastUpdated(new Date());
+    }, []);
 
     // View Visitor states
     const [visitorData, setVisitorData] = useState<any>(null);
@@ -34,6 +45,8 @@ export default function VisitorsPage() {
             if (data.success) {
                 setVisitors(data.data);
                 setTotalPages(data.pagination.totalPages);
+                setLastUpdated(new Date());
+                setErrorMsg('');
             } else {
                 setErrorMsg(data.error || 'Failed to load visitors');
             }
@@ -42,6 +55,51 @@ export default function VisitorsPage() {
         } finally {
             setIsLoading(false);
         }
+    };
+
+    // Polling Effect
+    useEffect(() => {
+        if (!isPolling || isModalOpen) {
+            if (pollingIntervalRef.current) {
+                clearInterval(pollingIntervalRef.current);
+                pollingIntervalRef.current = null;
+            }
+            return;
+        }
+
+        pollingIntervalRef.current = setInterval(() => {
+            fetchData();
+        }, POLLING_INTERVAL);
+
+        return () => {
+            if (pollingIntervalRef.current) {
+                clearInterval(pollingIntervalRef.current);
+            }
+        };
+    }, [isPolling, isModalOpen, page, searchTerm]);
+
+    // Page Visibility API - Pause polling when tab is hidden
+    useEffect(() => {
+        const handleVisibilityChange = () => {
+            if (document.hidden) {
+                setIsPolling(false);
+            } else if (!isModalOpen) {
+                setIsPolling(true);
+            }
+        };
+
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        return () => {
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+        };
+    }, [isModalOpen]);
+
+    const togglePolling = () => {
+        setIsPolling(!isPolling);
+    };
+
+    const handleManualRefresh = () => {
+        fetchData();
     };
 
     const handleOpenModal = (item: any) => {
@@ -74,8 +132,38 @@ export default function VisitorsPage() {
     return (
         <div className="max-w-7xl mx-auto pb-12">
             <div className="mb-8">
-                <h2 className="text-2xl font-bold tracking-tight text-[#111827] mb-2">Visitors CRM</h2>
-                <p className="text-[#6B7280]">Monitor and inspect localized website session traffic dynamically.</p>
+                <div className="flex items-center justify-between mb-2">
+                    <div>
+                        <h2 className="text-2xl font-bold tracking-tight text-[#111827]">Visitors CRM</h2>
+                        <p className="text-[#6B7280]">Monitor and inspect localized website session traffic dynamically.</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <button
+                            onClick={handleManualRefresh}
+                            className="admin-card p-2 rounded-lg text-[#6B9F91] hover:bg-[#6B9F91]/10 transition-colors"
+                            title="Manual refresh"
+                        >
+                            <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+                        </button>
+                        <button
+                            onClick={togglePolling}
+                            className={`admin-card px-3 py-2 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors ${isPolling ? 'text-[#6B9F91] bg-[#6B9F91]/10' : 'text-[#6B7280] bg-[#EDF5F2]/50'}`}
+                            title={isPolling ? 'Pause auto-refresh' : 'Resume auto-refresh'}
+                        >
+                            {isPolling ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+                            <span className="hidden sm:inline">{isPolling ? 'Live' : 'Paused'}</span>
+                        </button>
+                    </div>
+                </div>
+                <div className="text-xs text-[#9CA3AF]">
+                    Last updated: {lastUpdated ? lastUpdated.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : 'Loading...'}
+                    {isPolling && ' • Auto-refreshing every 5 seconds'}
+                </div>
+                {errorMsg && (
+                    <div className="mt-4 p-4 text-sm text-[#B91C1C] bg-[#FEE2E2] border border-[#FCA5A5] rounded-lg">
+                        {errorMsg}
+                    </div>
+                )}
             </div>
 
             <div className="mb-6 flex flex-col md:flex-row gap-4 items-center justify-between">
