@@ -1,6 +1,53 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
+// Simple in-memory cache for geolocation results
+const geoCache = new Map<string, { city: string; country: string; timestamp: number }>();
+const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
+
+async function getGeolocation(ipAddress: string): Promise<{ city: string; country: string } | null> {
+    // Check cache first
+    const cached = geoCache.get(ipAddress);
+    if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+        return { city: cached.city, country: cached.country };
+    }
+
+    // Skip geolocation for localhost/internal IPs
+    if (ipAddress === 'Unknown' || ipAddress === '127.0.0.1' || ipAddress === '::1' || ipAddress.startsWith('192.168.') || ipAddress.startsWith('10.') || ipAddress.startsWith('172.')) {
+        console.log('Skipping geolocation for internal IP:', ipAddress);
+        return null;
+    }
+
+    try {
+        // Use ip-api.com (free, no API key required)
+        const response = await fetch(`http://ip-api.com/json/${ipAddress}`);
+        if (!response.ok) {
+            console.error('Geolocation API failed:', response.status, response.statusText);
+            return null;
+        }
+
+        const data = await response.json();
+        console.log('Geolocation response for IP', ipAddress, ':', data);
+        
+        if (data.status === 'success') {
+            const result = {
+                city: data.city || 'Unknown',
+                country: data.country || 'Unknown'
+            };
+            // Cache the result
+            geoCache.set(ipAddress, { ...result, timestamp: Date.now() });
+            console.log('Geolocation result:', result);
+            return result;
+        } else {
+            console.error('Geolocation API returned error:', data.message);
+        }
+    } catch (error) {
+        console.error('Geolocation lookup failed:', error);
+    }
+
+    return null;
+}
+
 export async function POST(request: Request) {
     try {
         const body = await request.json();
@@ -13,6 +60,17 @@ export async function POST(request: Request) {
 
         const ipAddress = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'Unknown';
         const userAgent = request.headers.get('user-agent') || 'Unknown';
+
+        // Get geolocation for IP address
+        let city = 'Unknown';
+        let country = 'Unknown';
+        if (ipAddress !== 'Unknown') {
+            const geo = await getGeolocation(ipAddress);
+            if (geo) {
+                city = geo.city;
+                country = geo.country;
+            }
+        }
 
         let isBot = false;
         const botKeywords = ['bot', 'crawler', 'spider', 'google', 'bing', 'yandex', 'baidu'];
@@ -51,11 +109,17 @@ export async function POST(request: Request) {
             });
 
             if (existing) {
+                // Add current page visit to history
+                const currentVisits = (existing.pageVisits as any[]) || [];
+                const newVisit = { path: currentPath, timestamp: new Date().toISOString() };
+                const updatedVisits = [newVisit, ...currentVisits].slice(0, 100); // Keep last 100 visits
+
                 await prisma.visitor.update({
                     where: { id: existing.id },
                     data: {
                         pageViews: { increment: 1 },
-                        lastVisitedAt: new Date()
+                        lastVisitedAt: new Date(),
+                        pageVisits: updatedVisits
                     }
                 });
             } else {
@@ -73,7 +137,10 @@ export async function POST(request: Request) {
                         operatingSystem: os,
                         landingPage: currentPath,
                         referrerUrl: referrer,
-                        isBot
+                        city,
+                        country,
+                        isBot,
+                        pageVisits: [{ path: currentPath, timestamp: new Date().toISOString() }]
                     }
                 });
             }
@@ -91,7 +158,10 @@ export async function POST(request: Request) {
                     operatingSystem: os,
                     landingPage: currentPath,
                     referrerUrl: referrer,
-                    isBot
+                    city,
+                    country,
+                    isBot,
+                    pageVisits: [{ path: currentPath, timestamp: new Date().toISOString() }]
                 }
             });
         }

@@ -1,13 +1,16 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, X, Bot, Globe, Shield, Trash2, Eye, RefreshCw, Play, Pause } from 'lucide-react';
+import { Search, X, Bot, Globe, Shield, Trash2, Eye, RefreshCw, Play, Pause, Calendar } from 'lucide-react';
 
 export default function VisitorsPage() {
     const [visitors, setVisitors] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [errorMsg, setErrorMsg] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isCleanupModalOpen, setIsCleanupModalOpen] = useState(false);
+    const [cleanupDays, setCleanupDays] = useState(30);
+    const [isCleaningUp, setIsCleaningUp] = useState(false);
 
     // Filters and Search
     const [searchTerm, setSearchTerm] = useState('');
@@ -102,6 +105,37 @@ export default function VisitorsPage() {
         fetchData();
     };
 
+    const handleOpenCleanupModal = () => {
+        setIsCleanupModalOpen(true);
+        setCleanupDays(30);
+    };
+
+    const handleCleanup = async () => {
+        if (!confirm(`Are you sure you want to delete all visitor records older than ${cleanupDays} days? This action cannot be undone.`)) return;
+
+        try {
+            setIsCleaningUp(true);
+            const res = await fetch('/api/admin/visitors', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ days: cleanupDays })
+            });
+
+            const data = await res.json();
+            if (data.success) {
+                alert(data.message || `Deleted ${data.deletedCount} records`);
+                setIsCleanupModalOpen(false);
+                fetchData();
+            } else {
+                alert(data.error || 'Cleanup failed');
+            }
+        } catch (e) {
+            alert('Error during cleanup');
+        } finally {
+            setIsCleaningUp(false);
+        }
+    };
+
     const handleOpenModal = (item: any) => {
         setVisitorData(item);
         setErrorMsg('');
@@ -138,6 +172,14 @@ export default function VisitorsPage() {
                         <p className="text-[#6B7280]">Monitor and inspect localized website session traffic dynamically.</p>
                     </div>
                     <div className="flex items-center gap-2">
+                        <button
+                            onClick={handleOpenCleanupModal}
+                            className="admin-card px-3 py-2 rounded-lg flex items-center gap-2 text-sm font-medium text-[#B91C1C] hover:bg-red-50 transition-colors"
+                            title="Clear visitor history"
+                        >
+                            <Calendar className="w-4 h-4" />
+                            <span className="hidden sm:inline">Clear History</span>
+                        </button>
                         <button
                             onClick={handleManualRefresh}
                             className="admin-card p-2 rounded-lg text-[#6B9F91] hover:bg-[#6B9F91]/10 transition-colors"
@@ -423,11 +465,103 @@ export default function VisitorsPage() {
                                     </div>
                                 </div>
 
+                                {/* Page Visit History */}
+                                <div className="md:col-span-2 bg-[#EDF5F2]/40 rounded-md border border-gray-100 overflow-hidden">
+                                    <div className="px-3 py-2 bg-[#EDF5F2]/70 border-b border-gray-200">
+                                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B9F91]">Page Visit History</span>
+                                    </div>
+                                    <div className="px-3 py-2 max-h-48 overflow-y-auto custom-scrollbar">
+                                        {visitorData.pageVisits && Array.isArray(visitorData.pageVisits) && visitorData.pageVisits.length > 0 ? (
+                                            <div className="space-y-2">
+                                                {visitorData.pageVisits.slice(0, 20).map((visit: any, index: number) => (
+                                                    <div key={index} className="flex items-center justify-between text-xs">
+                                                        <span className="text-[#111827] font-mono">{visit.path || '/'}</span>
+                                                        <span className="text-[#9CA3AF]">
+                                                            {new Date(visit.timestamp).toLocaleString('en-GB', { 
+                                                                day: '2-digit', 
+                                                                month: 'short', 
+                                                                hour: '2-digit', 
+                                                                minute: '2-digit' 
+                                                            })}
+                                                        </span>
+                                                    </div>
+                                                ))}
+                                                {visitorData.pageVisits.length > 20 && (
+                                                    <div className="text-center text-[10px] text-[#9CA3AF] pt-2">
+                                                        Showing 20 of {visitorData.pageVisits.length} visits
+                                                    </div>
+                                                )}
+                                            </div>
+                                        ) : (
+                                            <div className="text-[10px] text-[#9CA3AF]">No page visit history available</div>
+                                        )}
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
 
                         <div className="px-4 py-2.5 border-t border-gray-200 flex justify-end bg-[#EDF5F2]/50 shrink-0">
                             <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-1.5 rounded-md text-xs font-medium bg-[#EDF5F2] text-[#111827] hover:bg-[#EDF5F2]/80 transition-colors">Close Inspection</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {isCleanupModalOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#111827]/40 backdrop-blur-sm">
+                    <div className="admin-card w-full max-w-md overflow-hidden shadow-2xl flex flex-col">
+                        <div className="px-4 py-3 border-b border-gray-200 flex justify-between items-center bg-[#EDF5F2]/80 shrink-0">
+                            <div className="flex items-center gap-2">
+                                <Calendar className="w-4 h-4 text-[#B91C1C]" />
+                                <div>
+                                    <h3 className="text-sm font-bold text-[#111827]">Clear Visitor History</h3>
+                                    <p className="text-[10px] text-[#9CA3AF] mt-0.5">Delete old visitor records</p>
+                                </div>
+                            </div>
+                            <button onClick={() => setIsCleanupModalOpen(false)} className="text-[#9CA3AF] hover:text-[#111827] p-1"><X className="w-4 h-4" /></button>
+                        </div>
+
+                        <div className="p-4">
+                            <div className="mb-4">
+                                <label className="block text-xs font-medium text-[#111827] mb-2">
+                                    Delete records older than (days):
+                                </label>
+                                <input
+                                    type="number"
+                                    value={cleanupDays}
+                                    onChange={(e) => setCleanupDays(parseInt(e.target.value) || 30)}
+                                    min="1"
+                                    max="365"
+                                    className="w-full admin-card rounded-lg px-3 py-2 text-sm text-[#111827]"
+                                />
+                            </div>
+
+                            <div className="mb-4 p-3 bg-[#FEF3C7] border border-[#FCD34D] rounded-lg">
+                                <p className="text-xs text-[#92400E]">
+                                    This will permanently delete all visitor records older than {cleanupDays} days. This action cannot be undone.
+                                </p>
+                            </div>
+
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={handleCleanup}
+                                    disabled={isCleaningUp}
+                                    className="flex-1 px-3 py-2 rounded-lg bg-[#B91C1C] text-white text-xs font-medium hover:bg-red-700 transition-colors disabled:opacity-50"
+                                >
+                                    {isCleaningUp ? 'Deleting...' : 'Delete Records'}
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="px-4 py-2.5 border-t border-gray-200 flex justify-end bg-[#EDF5F2]/50 shrink-0">
+                            <button 
+                                type="button" 
+                                onClick={() => setIsCleanupModalOpen(false)} 
+                                className="px-4 py-1.5 rounded-md text-xs font-medium bg-[#EDF5F2] text-[#111827] hover:bg-[#EDF5F2]/80 transition-colors"
+                            >
+                                Cancel
+                            </button>
                         </div>
                     </div>
                 </div>

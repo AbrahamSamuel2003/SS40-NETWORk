@@ -204,3 +204,73 @@ export async function POST(request: Request) {
         return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });
     }
 }
+
+export async function DELETE(request: Request) {
+    try {
+        const admin = await getCurrentAdmin();
+        if (!admin) {
+            return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+        }
+
+        let body;
+        try {
+            body = await request.json();
+        } catch {
+            return NextResponse.json({ success: false, error: 'Invalid JSON payload' }, { status: 400 });
+        }
+
+        const { days } = body;
+
+        if (typeof days !== 'number' || days < 1) {
+            return NextResponse.json({ success: false, error: 'days must be a positive number' }, { status: 400 });
+        }
+
+        const cutoffDate = new Date();
+        cutoffDate.setDate(cutoffDate.getDate() - days);
+
+        // Count records to be deleted
+        const count = await prisma.visitor.count({
+            where: {
+                createdAt: {
+                    lt: cutoffDate
+                }
+            }
+        });
+
+        if (count === 0) {
+            return NextResponse.json({ success: true, deletedCount: 0, message: 'No records found to delete' }, { status: 200 });
+        }
+
+        // Delete the records
+        await prisma.visitor.deleteMany({
+            where: {
+                createdAt: {
+                    lt: cutoffDate
+                }
+            }
+        });
+
+        let clientIp = null;
+        let clientAgent = null;
+        try {
+            clientIp = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || null;
+            clientAgent = request.headers.get('user-agent') || null;
+        } catch { }
+
+        await logAdminActivity({
+            adminId: admin.id,
+            action: 'VISITORS_CLEANUP',
+            entity: 'Visitor',
+            entityId: undefined,
+            description: `Cleaned up ${count} visitor records older than ${days} days`,
+            ipAddress: clientIp,
+            userAgent: clientAgent
+        });
+
+        return NextResponse.json({ success: true, deletedCount: count, message: `Deleted ${count} visitor records` }, { status: 200 });
+
+    } catch (error) {
+        console.error('Error cleaning up visitors:', error);
+        return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });
+    }
+}

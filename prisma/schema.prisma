@@ -192,6 +192,7 @@ model Visitor {
   operatingSystem String?
   landingPage     String?
   referrerUrl     String?
+  pageVisits      Json?    // Array of {path: string, timestamp: DateTime}
   firstVisitedAt  DateTime @default(now())
   lastVisitedAt   DateTime @default(now())
   pageViews       Int      @default(1)
