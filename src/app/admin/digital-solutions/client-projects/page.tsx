@@ -19,6 +19,7 @@ export default function ClientProjectsPage() {
     const [status, setStatus] = useState('');
     const [sortOrder, setSortOrder] = useState(0);
     const [isConfidential, setIsConfidential] = useState(false);
+    const [isFeatured, setIsFeatured] = useState(false);
     const [isActive, setIsActive] = useState(true);
 
     // New fields
@@ -61,6 +62,7 @@ export default function ClientProjectsPage() {
             setStatus(item.status || '');
             setSortOrder(item.sortOrder || 0);
             setIsConfidential(item.isConfidential);
+            setIsFeatured(item.isFeatured || false);
             setIsActive(item.isActive);
             setImageUrl(item.imageUrl || '');
             setProjectUrl(item.projectUrl || '');
@@ -74,6 +76,7 @@ export default function ClientProjectsPage() {
             setStatus('');
             setSortOrder(0);
             setIsConfidential(false);
+            setIsFeatured(false);
             setIsActive(true);
             setImageUrl('');
             setProjectUrl('');
@@ -122,6 +125,7 @@ export default function ClientProjectsPage() {
             status,
             sortOrder,
             isConfidential,
+            isFeatured,
             isActive,
             imageUrl,
             projectUrl,
@@ -249,9 +253,16 @@ export default function ClientProjectsPage() {
                                             </div>
                                         </td>
                                         <td className="p-4 text-center">
-                                            <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-semibold ${item.isActive ? 'bg-[#6B9F91]/10 text-[#6B9F91] border border-[#6B9F91]/20' : 'bg-[#FEE2E2] text-[#B91C1C] border border-[#FCA5A5]'}`}>
-                                                {item.isActive ? 'Active' : 'Inactive'}
-                                            </span>
+                                            <div className="flex flex-col gap-1 items-center">
+                                                <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-semibold ${item.isActive ? 'bg-[#6B9F91]/10 text-[#6B9F91] border border-[#6B9F91]/20' : 'bg-[#FEE2E2] text-[#B91C1C] border border-[#FCA5A5]'}`}>
+                                                    {item.isActive ? 'Active' : 'Inactive'}
+                                                </span>
+                                                {item.isFeatured && (
+                                                    <span className="inline-flex px-2 py-0.5 rounded text-[10px] font-semibold bg-[#FFC900]/10 text-[#FFC900] border border-[#FFC900]/20">
+                                                        Featured
+                                                    </span>
+                                                )}
+                                            </div>
                                         </td>
                                         <td className="p-3">
                                             <div className="flex flex-col xl:flex-row gap-1.5 justify-end ml-auto shrink-0">
@@ -318,6 +329,10 @@ export default function ClientProjectsPage() {
                                     <label className="flex items-center gap-3 cursor-pointer group pt-2">
                                         <div className="relative"><input type="checkbox" checked={isActive} onChange={e => setIsActive(e.target.checked)} className="sr-only" /><div className={`w-10 h-6 rounded-full transition-colors ${isActive ? 'bg-[#6B9F91]' : 'bg-[#EDF5F2]'}`}></div><div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${isActive ? 'translate-x-4' : 'translate-x-0'}`}></div></div>
                                         <span className="text-sm font-medium text-[#374151]">Active</span>
+                                    </label>
+                                    <label className="flex items-center gap-3 cursor-pointer group pt-2">
+                                        <div className="relative"><input type="checkbox" checked={isFeatured} onChange={e => setIsFeatured(e.target.checked)} className="sr-only" /><div className={`w-10 h-6 rounded-full transition-colors ${isFeatured ? 'bg-[#FFC900]' : 'bg-[#EDF5F2]'}`}></div><div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${isFeatured ? 'translate-x-4' : 'translate-x-0'}`}></div></div>
+                                        <span className="text-sm font-medium text-[#374151]">Featured (Big Card)</span>
                                     </label>
                                     <label className="flex items-center gap-3 cursor-pointer group pt-2">
                                         <div className="relative"><input type="checkbox" checked={isConfidential} onChange={e => setIsConfidential(e.target.checked)} className="sr-only" /><div className={`w-10 h-6 rounded-full transition-colors ${isConfidential ? 'bg-[#FFC900]' : 'bg-[#EDF5F2]'}`}></div><div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${isConfidential ? 'translate-x-4' : 'translate-x-0'}`}></div></div>

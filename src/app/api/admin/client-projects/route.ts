@@ -89,6 +89,7 @@ export async function POST(request: Request) {
             tags,
             status,
             isConfidential,
+            isFeatured,
             sortOrder,
             isActive,
             imageUrl,
@@ -134,6 +135,10 @@ export async function POST(request: Request) {
             return NextResponse.json({ success: false, error: 'isConfidential must be a strict boolean' }, { status: 400 });
         }
 
+        if (isFeatured !== undefined && typeof isFeatured !== 'boolean') {
+            return NextResponse.json({ success: false, error: 'isFeatured must be a strict boolean' }, { status: 400 });
+        }
+
         if (isActive !== undefined && typeof isActive !== 'boolean') {
             return NextResponse.json({ success: false, error: 'isActive must be a strict boolean' }, { status: 400 });
         }
@@ -153,6 +158,7 @@ export async function POST(request: Request) {
                 projectUrl: (projectUrl && String(projectUrl).trim() !== '') ? String(projectUrl).trim() : null,
                 caseStudy: (caseStudy && String(caseStudy).trim() !== '') ? String(caseStudy).trim() : null,
                 isConfidential: isConfidential ?? false,
+                isFeatured: isFeatured ?? false,
                 sortOrder: sortOrder ?? 0,
                 isActive: isActive ?? true
             }

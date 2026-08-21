@@ -35,6 +35,32 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ['lucide-react', 'framer-motion'],
   },
+  async rewrites() {
+    return [
+      {
+        source: '/siva',
+        destination: '/admin',
+      },
+      {
+        source: '/siva/:path*',
+        destination: '/admin/:path*',
+      },
+    ];
+  },
+  async redirects() {
+    return [
+      {
+        source: '/admin',
+        destination: '/',
+        permanent: false,
+      },
+      {
+        source: '/admin/:path*',
+        destination: '/',
+        permanent: false,
+      },
+    ];
+  },
   async headers() {
     return [
       {

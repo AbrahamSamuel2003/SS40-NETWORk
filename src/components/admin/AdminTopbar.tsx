@@ -13,7 +13,7 @@ export function AdminTopbar({ adminName, onMenuClick }: TopbarProps) {
     const pathname = usePathname();
 
     // Naive way to generate a page title from the pathname
-    const pageTitle = pathname === '/admin'
+    const pageTitle = (pathname === '/siva' || pathname === '/admin')
         ? 'Dashboard'
         : pathname.split('/').pop()?.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') || 'Dashboard';
 

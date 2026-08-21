@@ -142,17 +142,28 @@ export default function RootLayout({
         "@id": "https://www.ss40network.com/#website",
         "url": "https://www.ss40network.com",
         "name": "SS40 NETWORK PRIVATE LIMITED",
+        "alternateName": "SS40 NETWORK",
         "publisher": {
           "@id": "https://www.ss40network.com/#organization"
         },
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": {
-            "@type": "EntryPoint",
-            "urlTemplate": "https://www.ss40network.com/search?q={search_term_string}"
+        "potentialAction": [
+          {
+            "@type": "SearchAction",
+            "target": {
+              "@type": "EntryPoint",
+              "urlTemplate": "https://www.ss40network.com/search?q={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
           },
-          "query-input": "required name=search_term_string"
-        }
+          {
+            "@type": "SearchAction",
+            "target": {
+              "@type": "EntryPoint",
+              "urlTemplate": "https://www.ss40network.com/digital-solutions"
+            },
+            "name": "Digital Solutions"
+          }
+        ]
       }
     ]
   };

@@ -65,7 +65,7 @@ export async function POST(request: Request) {
                 return NextResponse.json({
                     success: true,
                     role: 'ADMIN',
-                    redirectTo: '/admin'
+                    redirectTo: '/siva'
                 });
             } else {
                 // Record failed login attempt

@@ -46,75 +46,75 @@ type MenuLabel = {
 type MenuBlock = MenuItem | MenuLabel;
 
 const MENU_ITEMS: MenuBlock[] = [
-    { name: 'Dashboard', href: '/admin', icon: LayoutDashboard, exact: true },
+    { name: 'Dashboard', href: '/siva', icon: LayoutDashboard, exact: true },
 
     { label: 'CONTENT' },
     {
         name: 'Home',
-        href: '/admin/home', // Base route
+        href: '/siva/home', // Base route
         icon: Home,
         subItems: [
-            { name: 'Logos', href: '/admin/home/logos' },
-            { name: 'Happimonials', href: '/admin/home/happimonials' },
+            { name: 'Logos', href: '/siva/home/logos' },
+            { name: 'Happimonials', href: '/siva/home/happimonials' },
         ]
     },
     {
         name: 'Digital Solutions',
-        href: '/admin/digital-solutions', // Logical grouping
+        href: '/siva/digital-solutions', // Logical grouping
         icon: Monitor,
         subItems: [
-            { name: 'Client Projects', href: '/admin/digital-solutions/client-projects' }, // Existing
-            { name: 'Happimonials', href: '/admin/digital-solutions/happimonials' }, // Existing
-            { name: 'Organization Logos', href: '/admin/digital-solutions/organization-logos' }, // Existing
+            { name: 'Client Projects', href: '/siva/digital-solutions/client-projects' }, // Existing
+            { name: 'Happimonials', href: '/siva/digital-solutions/happimonials' }, // Existing
+            { name: 'Organization Logos', href: '/siva/digital-solutions/organization-logos' }, // Existing
         ]
     },
     {
         name: 'Products',
-        href: '/admin/products-group',
+        href: '/siva/products-group',
         icon: Package,
         subItems: [
-            { name: 'Products', href: '/admin/products', exact: true }, // Existing
-            { name: 'Product Testimonials', href: '/admin/products/testimonials' },
-            { name: 'Product Client Logos', href: '/admin/products/logos' },
+            { name: 'Products', href: '/siva/products', exact: true }, // Existing
+            { name: 'Product Testimonials', href: '/siva/products/testimonials' },
+            { name: 'Product Client Logos', href: '/siva/products/logos' },
         ]
     },
     {
         name: 'Academics',
-        href: '/admin/academics',
+        href: '/siva/academics',
         icon: GraduationCap,
         subItems: [
-            { name: 'Student Projects', href: '/admin/student-projects' }, // Existing
-            { name: 'Student Impacts', href: '/admin/student-impacts' }, // Existing
-            { name: 'Academic Partner Logos', href: '/admin/academics/logos' },
+            { name: 'Student Projects', href: '/siva/student-projects' }, // Existing
+            { name: 'Student Impacts', href: '/siva/student-impacts' }, // Existing
+            { name: 'Academic Partner Logos', href: '/siva/academics/logos' },
         ]
     },
     {
         name: 'Media',
-        href: '/admin/media',
+        href: '/siva/media',
         icon: ImageIcon,
     },
 
     { label: 'CRM' },
     {
         name: 'Leads',
-        href: '/admin/leads',
+        href: '/siva/leads',
         icon: Inbox,
     },
     {
         name: 'Visitors',
-        href: '/admin/visitors',
+        href: '/siva/visitors',
         icon: Activity,
     },
 
     { label: 'SYSTEM' },
     {
         name: 'Site Config',
-        href: '/admin/site-config',
+        href: '/siva/site-config',
         icon: Settings,
     },
     {
         name: 'Activity Logs',
-        href: '/admin/activity-logs',
+        href: '/siva/activity-logs',
         icon: Database,
     },
 ];

@@ -46,7 +46,17 @@ export function ProductImpacts() {
     const [activeModalStory, setActiveModalStory] = React.useState<any | null>(null);
 
     const mobileScrollRef = React.useRef<HTMLDivElement>(null);
-    const displayedImpacts = React.useMemo(() => happimonials.slice(0, 3), [happimonials]);
+    
+    // Adaptive layout: determine layout type based on content count
+    const layoutConfig = React.useMemo(() => {
+        if (happimonials.length === 0) return { type: 'empty', grid: [] };
+        if (happimonials.length === 1) return { type: 'single', grid: [happimonials[0]] };
+        if (happimonials.length === 2) return { type: 'two-grid', grid: happimonials };
+        if (happimonials.length === 3) return { type: 'three-grid', grid: happimonials };
+        return { type: 'three-grid', grid: happimonials.slice(0, 3) }; // 4+ items: show 3 in grid
+    }, [happimonials]);
+
+    const displayedImpacts = React.useMemo(() => layoutConfig.grid, [layoutConfig]);
 
     const scrollToMobileTestimonial = (idx: number) => {
         if (!mobileScrollRef.current) return;
@@ -133,7 +143,13 @@ export function ProductImpacts() {
                             initial="hidden"
                             whileInView="visible"
                             viewport={{ once: true, margin: "-100px" }}
-                            className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
+                            className={`hidden md:grid gap-6 lg:gap-8 ${
+                                layoutConfig.type === 'single' 
+                                    ? 'md:grid-cols-1' 
+                                    : layoutConfig.type === 'two-grid' 
+                                    ? 'md:grid-cols-2' 
+                                    : 'md:grid-cols-2 lg:grid-cols-3'
+                            }`}
                         >
                             {displayedImpacts.map((item) => (
                                 <motion.div

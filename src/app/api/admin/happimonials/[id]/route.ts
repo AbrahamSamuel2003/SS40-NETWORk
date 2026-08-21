@@ -161,6 +161,13 @@ export async function PUT(request: Request, context: { params: Promise<{ id: str
             updateData.isActive = body.isActive;
         }
 
+        if (body.isFeatured !== undefined) {
+            if (typeof body.isFeatured !== 'boolean') {
+                return NextResponse.json({ success: false, error: 'isFeatured must be a strict boolean' }, { status: 400 });
+            }
+            updateData.isFeatured = body.isFeatured;
+        }
+
         if (body.sortOrder !== undefined) {
             if (!Number.isInteger(body.sortOrder)) {
                 return NextResponse.json({ success: false, error: 'sortOrder must be an integer' }, { status: 400 });

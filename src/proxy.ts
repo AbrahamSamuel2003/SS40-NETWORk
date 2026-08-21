@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 // Paths that require authentication
-const protectedPaths = ['/admin'];
+const protectedPaths = ['/siva', '/admin'];
 
 // Paths that should redirect to home if authenticated
 const authPaths = ['/login'];
@@ -17,7 +17,7 @@ export function proxy(request: NextRequest) {
 
     // Redirect authenticated users away from auth pages
     if (isAuthPath && token) {
-        return NextResponse.redirect(new URL('/admin', request.url));
+        return NextResponse.redirect(new URL('/siva', request.url));
     }
 
     // Redirect unauthenticated users to login

@@ -10,7 +10,7 @@ export const VisitorTracker = React.memo(function VisitorTracker() {
 
   useEffect(() => {
     // Skip tracking for admin and API routes
-    if (pathname.startsWith('/admin') || pathname.startsWith('/api')) {
+    if (pathname.startsWith('/admin') || pathname.startsWith('/siva') || pathname.startsWith('/api')) {
       return;
     }
 

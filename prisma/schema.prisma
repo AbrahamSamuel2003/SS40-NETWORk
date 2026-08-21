@@ -90,6 +90,7 @@ model ClientProject {
   description    String
   status         String?
   isConfidential Boolean  @default(false)
+  isFeatured     Boolean  @default(false)
   tags           Json
   imageUrl       String?
   projectUrl     String?
@@ -106,6 +107,7 @@ model StudentProject {
   category    String
   badge       String?
   description String
+  isFeatured  Boolean  @default(false)
   imageUrl    String?
   projectUrl  String?
   tags        Json
@@ -121,6 +123,7 @@ model Happimonial {
   companyName  String
   industry     String
   testimonial  String
+  isFeatured   Boolean  @default(false)
   videoUrl     String?
   thumbnailUrl String?
   youtubeUrl   String? // Optional YouTube URL; one-video-HOME rule enforced at API level

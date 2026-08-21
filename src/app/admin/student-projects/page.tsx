@@ -22,6 +22,7 @@ export default function StudentProjectsPage() {
     const [projectUrl, setProjectUrl] = useState('');
     const [tagsInput, setTagsInput] = useState('');
     const [sortOrder, setSortOrder] = useState(0);
+    const [isFeatured, setIsFeatured] = useState(false);
     const [isActive, setIsActive] = useState(true);
 
     const [isSaving, setIsSaving] = useState(false);
@@ -61,6 +62,7 @@ export default function StudentProjectsPage() {
             const rawTags = Array.isArray(proj.tags) ? proj.tags : [];
             setTagsInput(rawTags.map((t: any) => typeof t === 'string' ? t : t.label).join(', '));
             setSortOrder(proj.sortOrder);
+            setIsFeatured(proj.isFeatured || false);
             setIsActive(proj.isActive);
         } else {
             setEditingId(null);
@@ -72,6 +74,7 @@ export default function StudentProjectsPage() {
             setProjectUrl('');
             setTagsInput('');
             setSortOrder(0);
+            setIsFeatured(false);
             setIsActive(true);
         }
 
@@ -127,6 +130,7 @@ export default function StudentProjectsPage() {
             imageUrl: imageUrl.trim() ? imageUrl : null,
             projectUrl: projectUrl.trim() ? projectUrl : null,
             sortOrder: Number(sortOrder),
+            isFeatured,
             isActive,
             tags
         };
@@ -256,15 +260,22 @@ export default function StudentProjectsPage() {
                                         <td className="p-4 text-[#6B7280] hidden sm:table-cell">{proj.category}</td>
                                         <td className="p-4 text-[#6B7280] hidden md:table-cell">{proj.sortOrder}</td>
                                         <td className="p-4">
-                                            {proj.isActive ? (
-                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#6B9F91]/10 text-[#6B9F91]">
-                                                    <CheckCircle2 className="w-3 h-3" /> ACTIVE
-                                                </span>
-                                            ) : (
-                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#EDF5F2]/70 text-[#9CA3AF]">
-                                                    INACTIVE
-                                                </span>
-                                            )}
+                                            <div className="flex flex-col gap-1">
+                                                {proj.isActive ? (
+                                                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#6B9F91]/10 text-[#6B9F91]">
+                                                        <CheckCircle2 className="w-3 h-3" /> ACTIVE
+                                                    </span>
+                                                ) : (
+                                                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#EDF5F2]/70 text-[#9CA3AF]">
+                                                        INACTIVE
+                                                    </span>
+                                                )}
+                                                {proj.isFeatured && (
+                                                    <span className="inline-flex px-2 py-0.5 rounded text-[10px] font-semibold bg-[#FFC900]/10 text-[#FFC900] border border-[#FFC900]/20">
+                                                        Featured
+                                                    </span>
+                                                )}
+                                            </div>
                                         </td>
                                         <td className="p-3">
                                             <div className="flex flex-col xl:flex-row gap-1.5 justify-end ml-auto shrink-0">
@@ -385,7 +396,7 @@ export default function StudentProjectsPage() {
                                     )}
                                 </div>
 
-                                <div className="pt-2">
+                                <div className="pt-2 flex flex-wrap gap-6">
                                     <label className="flex items-center gap-3 cursor-pointer group">
                                         <div className="relative">
                                             <input type="checkbox" checked={isActive} onChange={e => setIsActive(e.target.checked)} className="sr-only" />
@@ -393,6 +404,14 @@ export default function StudentProjectsPage() {
                                             <div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${isActive ? 'translate-x-4' : 'translate-x-0'}`}></div>
                                         </div>
                                         <span className="text-sm font-medium text-[#374151]">Active Configuration</span>
+                                    </label>
+                                    <label className="flex items-center gap-3 cursor-pointer group">
+                                        <div className="relative">
+                                            <input type="checkbox" checked={isFeatured} onChange={e => setIsFeatured(e.target.checked)} className="sr-only" />
+                                            <div className={`w-10 h-6 rounded-full transition-colors ${isFeatured ? 'bg-[#FFC900]' : 'bg-[#EDF5F2] group-hover:bg-[#EDF5F2]'}`}></div>
+                                            <div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${isFeatured ? 'translate-x-4' : 'translate-x-0'}`}></div>
+                                        </div>
+                                        <span className="text-sm font-medium text-[#374151]">Featured (Big Card)</span>
                                     </label>
                                 </div>
                             </form>

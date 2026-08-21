@@ -4,52 +4,56 @@ import { prisma } from '@/lib/prisma';
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = 'https://www.ss40network.com';
 
-    // Static public routes
-    const staticRoutes = [
-        '',
-        '/about',
-        '/academics',
-        '/academics/student-projects',
-        '/client-projects',
-        '/contact',
-        '/digital-solutions',
-        '/happimonials',
-        '/product-impacts',
-        '/products',
-        '/products/all-products',
-        '/privacy-policy',
-        '/refund-policy',
-        '/terms',
+    // Static routes with explicit priority + changeFrequency per page.
+    // Priority signal is used by Google to determine sitelink prominence order.
+    // Desired sitelink order: Digital Solutions → Products → Academics → Contact → Privacy Policy → Terms
+    type StaticRoute = {
+        route: string;
+        priority: number;
+        changeFrequency: 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never';
+    };
+
+    const staticRouteConfig: StaticRoute[] = [
+        // Homepage — highest priority
+        { route: '',                          priority: 1.00, changeFrequency: 'daily' },
+        // Core service pages — drive sitelink order via priority
+        { route: '/digital-solutions',        priority: 0.95, changeFrequency: 'weekly' },
+        { route: '/products',                 priority: 0.92, changeFrequency: 'weekly' },
+        { route: '/academics',                priority: 0.90, changeFrequency: 'weekly' },
+        // Supporting pages
+        { route: '/contact',                  priority: 0.85, changeFrequency: 'monthly' },
+        { route: '/about',                    priority: 0.80, changeFrequency: 'monthly' },
+        { route: '/client-projects',          priority: 0.78, changeFrequency: 'weekly' },
+        { route: '/happimonials',             priority: 0.72, changeFrequency: 'weekly' },
+        { route: '/product-impacts',          priority: 0.70, changeFrequency: 'weekly' },
+        { route: '/products/all-products',    priority: 0.68, changeFrequency: 'weekly' },
+        { route: '/academics/student-projects', priority: 0.65, changeFrequency: 'weekly' },
+        // Legal pages — low priority, rarely change
+        { route: '/privacy-policy',           priority: 0.55, changeFrequency: 'yearly' },
+        { route: '/refund-policy',            priority: 0.52, changeFrequency: 'yearly' },
+        { route: '/terms',                    priority: 0.50, changeFrequency: 'yearly' },
     ];
 
-    const staticEntries = staticRoutes.map((route) => {
-        // Assign priorities based on page hierarchy
-        let priority = 0.5;
-        if (route === '') priority = 1.0;
-        else if (['/products', '/digital-solutions', '/academics'].includes(route)) priority = 0.9;
-        else if (['/client-projects', '/contact', '/about'].includes(route)) priority = 0.8;
-
-        // Advanced SEO: Get real file modification time instead of faking new Date()
+    const staticEntries = staticRouteConfig.map(({ route, priority, changeFrequency }) => {
+        // Advanced SEO: Use real file modification time for accurate lastModified
         let lastModified = new Date();
         try {
             const fs = require('fs');
             const path = require('path');
-            // Resolve the physical file path. Handle root '' vs named routes
             const routePath = route === '' ? 'page.tsx' : `${route}/page.tsx`;
-            // Note: In production, process.cwd() is the root of the project
             const fullPath = path.join(process.cwd(), 'src', 'app', '(public)', routePath);
             if (fs.existsSync(fullPath)) {
                 const stats = fs.statSync(fullPath);
                 lastModified = stats.mtime;
             }
         } catch (e) {
-            // Fallback to current date if file system read fails (e.g., in some serverless environments)
+            // Fallback to current date in serverless environments
         }
 
         return {
             url: `${baseUrl}${route}`,
             lastModified,
-            changeFrequency: 'weekly' as const,
+            changeFrequency,
             priority,
         };
     });

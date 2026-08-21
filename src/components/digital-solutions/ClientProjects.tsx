@@ -14,6 +14,173 @@ import { scrollChildIntoContainer } from "@/utils/scroll";
 // Mock structural classes deleted: dynamic API is now the source of truth
 import { CardGridSkeleton } from "@/components/ui/Skeleton";
 
+// Helper components for card rendering
+function SingleProjectCard({ project }: { project: any }) {
+    return (
+        <>
+            {/* Featured Visual */}
+            <div className="w-full lg:w-7/12 aspect-video lg:aspect-auto bg-gray-100 relative overflow-hidden flex items-center justify-center shrink-0 min-h-[260px]">
+                {project.isConfidential ? (
+                    <div className="absolute inset-0 bg-gray-100 flex flex-col items-center justify-center text-center p-6 select-none opacity-80 backdrop-blur-md">
+                        <div className="w-14 h-14 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-400 mb-3">
+                            <Lock className="w-7 h-7" />
+                        </div>
+                        <h4 className="font-bold text-gray-700 text-xs mb-1 uppercase tracking-wider">Confidential Project</h4>
+                        <p className="text-[11px] text-gray-500">Visuals protected under corporate NDA.</p>
+                    </div>
+                ) : project.imageUrl ? (
+                    <img src={project.imageUrl} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
+                ) : (
+                    <div className="absolute inset-0 bg-[#6B9F91]/5 flex flex-col p-6 gap-3 group-hover:scale-105 transition-transform duration-700 ease-out">
+                        <div className="w-full flex justify-between items-center bg-white/80 backdrop-blur-md p-3 rounded-lg border border-gray-200 shadow-sm">
+                            <div className="flex items-center gap-2">
+                                <div className="w-6 h-6 rounded-full bg-[#6B9F91]/20" />
+                                <div className="w-24 h-2.5 bg-gray-200 rounded-full" />
+                            </div>
+                            <div className="flex gap-1.5">
+                                <div className="w-6 h-6 rounded-full bg-gray-200" />
+                                <div className="w-6 h-6 rounded-full bg-gray-200" />
+                            </div>
+                        </div>
+                        <div className="flex gap-3 flex-1">
+                            <div className="w-1/4 h-full bg-white/80 backdrop-blur-md rounded-lg border border-gray-200 shadow-sm p-3 flex flex-col gap-2">
+                                <div className="w-full h-6 bg-gray-100 rounded" />
+                                <div className="w-2/3 h-6 bg-gray-100 rounded" />
+                            </div>
+                            <div className="flex-1 h-full bg-white/80 backdrop-blur-md rounded-lg border border-gray-200 shadow-sm p-3 grid grid-cols-2 gap-3">
+                                <div className="bg-[#6B9F91]/10 rounded" />
+                                <div className="bg-gray-100 rounded" />
+                                <div className="bg-gray-100 rounded col-span-2" />
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                <div className="absolute inset-0 bg-gray-900/10 flex items-center justify-center z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                    <div className="bg-white/90 backdrop-blur-sm px-5 py-2 rounded-full text-xs font-bold text-gray-800 shadow-xl flex items-center gap-2">
+                        <ImageIcon className="w-3.5 h-3.5 text-gray-500" />
+                        Project Visual Preview
+                    </div>
+                </div>
+            </div>
+
+            {/* Featured Content Area */}
+            <div className="w-full lg:w-5/12 p-6 lg:p-8 flex flex-col justify-center bg-white relative z-10 border-l border-gray-100">
+                <div className="flex items-center justify-between gap-3 mb-3">
+                    <span className="px-2.5 py-0.5 bg-gray-100 text-gray-600 text-[10px] font-bold uppercase tracking-wider rounded whitespace-nowrap">
+                        {project.industry}
+                    </span>
+                    {project.status && (
+                        <div className="flex items-center gap-1 text-[10px] font-bold text-[#6B9F91] uppercase tracking-wider">
+                            <CheckCircle2 className="w-3 h-3" />
+                            {project.status}
+                        </div>
+                    )}
+                </div>
+
+                <h3 className="text-xl md:text-2xl font-bold text-[var(--color-heading)] mb-2.5 leading-tight group-hover:text-[#6B9F91] transition-colors">
+                    {project.title}
+                </h3>
+
+                <p className="text-[var(--color-body-text)] text-sm mb-4 leading-relaxed line-clamp-3 text-gray-600">
+                    {project.description}
+                </p>
+
+                <div className="flex flex-wrap gap-1.5 mb-6">
+                    {Array.isArray(project.tags) && project.tags.slice(0, 4).map((tag: any, idx: number) => (
+                        <span key={idx} className="px-2.5 py-1 bg-[#6B9F91]/10 text-[#6B9F91] rounded-md text-xs font-semibold">
+                            {tag}
+                        </span>
+                    ))}
+                </div>
+
+                <div className="mt-auto">
+                    <Button
+                        onClick={(e: React.MouseEvent) => {
+                            e.stopPropagation();
+                        }}
+                        size="sm"
+                        className="w-full sm:w-auto bg-[#6B9F91] hover:bg-[#588478] text-white shadow-md shadow-[#6B9F91]/20 font-semibold"
+                    >
+                        View Details
+                    </Button>
+                </div>
+            </div>
+        </>
+    );
+}
+
+function GridProjectCard({ project }: { project: any }) {
+    return (
+        <>
+            {/* Grid Visual Placeholder */}
+            <div className="relative w-full aspect-[4/3] bg-gray-50 overflow-hidden shrink-0 flex items-center justify-center border-b border-gray-100">
+                {project.isConfidential ? (
+                    <div className="absolute inset-0 bg-gray-100 flex flex-col items-center justify-center text-center p-4 select-none opacity-80 backdrop-blur-md">
+                        <div className="w-12 h-12 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-400 mb-2">
+                            <Lock className="w-6 h-6" />
+                        </div>
+                        <h4 className="font-bold text-gray-700 text-xs mb-0.5 uppercase tracking-wider">Confidential Project</h4>
+                        <p className="text-[11px] text-gray-500">Visuals protected under corporate NDA.</p>
+                    </div>
+                ) : project.imageUrl ? (
+                    <img src={project.imageUrl} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
+                ) : (
+                    <div className="w-full h-full flex flex-col p-4 gap-2.5 bg-[#6B9F91]/5 group-hover:scale-105 transition-transform duration-700 ease-out">
+                        <div className="w-full h-1/2 flex gap-2.5">
+                            <div className="w-1/3 bg-white border border-gray-200 rounded-md shadow-sm" />
+                            <div className="flex-1 bg-white border border-gray-200 rounded-md shadow-sm" />
+                        </div>
+                        <div className="w-full h-1/2 bg-white border border-gray-200 rounded-md shadow-sm" />
+                    </div>
+                )}
+            </div>
+
+            {/* Grid Content Area */}
+            <div className="p-4 sm:p-5 flex flex-col flex-1">
+                <div className="flex items-center justify-between gap-3 mb-2.5">
+                    <span className="px-2.5 py-0.5 bg-gray-100 text-gray-600 text-[10px] font-bold uppercase tracking-wider rounded whitespace-nowrap overflow-hidden text-ellipsis">
+                        {project.industry}
+                    </span>
+                    {project.status && (
+                        <div className="flex items-center gap-1 text-[10px] font-bold text-[#6B9F91] uppercase tracking-wider whitespace-nowrap overflow-hidden text-ellipsis">
+                            {project.status}
+                        </div>
+                    )}
+                </div>
+
+                <h3 className="font-bold text-base md:text-lg text-[var(--color-heading)] leading-snug mb-2 group-hover:text-[#6B9F91] transition-colors">
+                    {project.title}
+                </h3>
+
+                <p className="text-[var(--color-body-text)] text-xs sm:text-sm mb-4 flex-1 line-clamp-3 text-gray-600 leading-relaxed">
+                    {project.description}
+                </p>
+
+                <div className="flex flex-wrap gap-1 mb-4">
+                    {Array.isArray(project.tags) && project.tags.slice(0, 3).map((tag: any, idx: number) => (
+                        <span key={idx} className="px-2 py-0.5 bg-[#6B9F91]/10 text-[#6B9F91] rounded text-[10px] sm:text-xs font-semibold whitespace-nowrap">
+                            {tag}
+                        </span>
+                    ))}
+                    {Array.isArray(project.tags) && project.tags.length > 3 && (
+                        <span className="px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded text-[10px] sm:text-xs font-semibold whitespace-nowrap">
+                            +{project.tags.length - 3}
+                        </span>
+                    )}
+                </div>
+
+                <div className="mt-auto pt-3 border-t border-gray-100 flex items-center justify-between">
+                    <span className="text-xs font-bold text-[#6B9F91] group-hover:text-[#588478] transition-colors inline-flex items-center gap-1.5">
+                        View Details
+                        <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                    </span>
+                </div>
+            </div>
+        </>
+    );
+}
+
 export function ClientProjects() {
     const [projects, setProjects] = React.useState<any[]>([]);
     const [isLoading, setIsLoading] = React.useState(true);
@@ -21,7 +188,36 @@ export function ClientProjects() {
 
     const [activeMobileIdx, setActiveMobileIdx] = React.useState(0);
     const mobileScrollRef = React.useRef<HTMLDivElement>(null);
-    const displayedProjects = React.useMemo(() => projects.slice(0, 4), [projects]);
+    
+    // Adaptive layout: determine layout type based on content count and featured status
+    const layoutConfig = React.useMemo(() => {
+        if (projects.length === 0) return { type: 'empty', featured: null, grid: [] };
+        
+        // If there's a featured item, use featured-grid layout regardless of count
+        const featuredItem = projects.find(p => p.isFeatured);
+        if (featuredItem) {
+            const gridItems = projects.filter(p => p.id !== featuredItem.id);
+            return { type: 'featured-grid', featured: featuredItem, grid: gridItems };
+        }
+        
+        // No featured item - use count-based layouts
+        if (projects.length === 1) return { type: 'single', featured: projects[0], grid: [] };
+        if (projects.length === 2) return { type: 'two-grid', featured: null, grid: projects };
+        if (projects.length === 3) return { type: 'three-grid', featured: null, grid: projects };
+        
+        // 4+ items with no featured: use first item as featured
+        const defaultFeatured = projects[0];
+        const gridItems = projects.slice(1);
+        return { type: 'featured-grid', featured: defaultFeatured, grid: gridItems };
+    }, [projects]);
+
+    const displayedProjects = React.useMemo(() => {
+        if (layoutConfig.type === 'featured-grid') {
+            // Show featured + up to 3 grid items
+            return [layoutConfig.featured, ...layoutConfig.grid.slice(0, 3)];
+        }
+        return layoutConfig.grid.length > 0 ? layoutConfig.grid : [layoutConfig.featured].filter(Boolean);
+    }, [layoutConfig]);
 
     React.useEffect(() => {
         fetch('/api/client-projects')
@@ -134,11 +330,97 @@ export function ClientProjects() {
                 />
 
                 <div className="hidden lg:flex flex-col gap-6 lg:gap-8">
-                    <>
-                            {(() => {
-                                const featuredProject = displayedProjects[0];
-                                const additionalProjects = displayedProjects.slice(1);
-
+                    {(() => {
+                        switch (layoutConfig.type) {
+                            case 'single':
+                                return (
+                                    <motion.div
+                                        initial="hidden"
+                                        whileInView="visible"
+                                        viewport={{ once: true, margin: "-100px" }}
+                                        variants={slideUp}
+                                        role="button"
+                                        tabIndex={0}
+                                        onClick={() => setActiveModalProject(layoutConfig.featured)}
+                                        onKeyDown={(e: React.KeyboardEvent) => {
+                                            if (e.key === 'Enter' || e.key === 'Space') {
+                                                e.preventDefault();
+                                                setActiveModalProject(layoutConfig.featured);
+                                            }
+                                        }}
+                                        className="cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 w-full bg-white border border-[var(--color-border)] rounded-2xl overflow-hidden shadow-xl shadow-gray-200/50 flex flex-col lg:flex-row group"
+                                    >
+                                        <SingleProjectCard project={layoutConfig.featured} />
+                                    </motion.div>
+                                );
+                            
+                            case 'two-grid':
+                                return (
+                                    <motion.div
+                                        variants={staggerContainer}
+                                        initial="hidden"
+                                        whileInView="visible"
+                                        viewport={{ once: true, margin: "-100px" }}
+                                        className="grid grid-cols-2 gap-6"
+                                    >
+                                        {layoutConfig.grid.map((project: any) => (
+                                            <motion.div
+                                                key={project.id}
+                                                variants={slideUp}
+                                                whileHover={{ y: -6, scale: 1.015, boxShadow: "0 20px 40px -8px rgba(107,159,145,0.18), 0 8px 16px -4px rgba(107,159,145,0.10)" }}
+                                                whileTap={{ scale: 0.98, y: -2 }}
+                                                transition={{ type: "spring", stiffness: 350, damping: 22 }}
+                                                role="button"
+                                                tabIndex={0}
+                                                onClick={() => setActiveModalProject(project)}
+                                                onKeyDown={(e: React.KeyboardEvent) => {
+                                                    if (e.key === 'Enter' || e.key === 'Space') {
+                                                        e.preventDefault();
+                                                        setActiveModalProject(project);
+                                                    }
+                                                }}
+                                                className="cursor-pointer bg-white rounded-2xl flex flex-col group border border-[var(--color-border)] hover:border-[#6B9F91]/40 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 overflow-hidden"
+                                            >
+                                                <GridProjectCard project={project} />
+                                            </motion.div>
+                                        ))}
+                                    </motion.div>
+                                );
+                            
+                            case 'three-grid':
+                                return (
+                                    <motion.div
+                                        variants={staggerContainer}
+                                        initial="hidden"
+                                        whileInView="visible"
+                                        viewport={{ once: true, margin: "-100px" }}
+                                        className="grid grid-cols-3 gap-6"
+                                    >
+                                        {layoutConfig.grid.map((project: any) => (
+                                            <motion.div
+                                                key={project.id}
+                                                variants={slideUp}
+                                                whileHover={{ y: -6, scale: 1.015, boxShadow: "0 20px 40px -8px rgba(107,159,145,0.18), 0 8px 16px -4px rgba(107,159,145,0.10)" }}
+                                                whileTap={{ scale: 0.98, y: -2 }}
+                                                transition={{ type: "spring", stiffness: 350, damping: 22 }}
+                                                role="button"
+                                                tabIndex={0}
+                                                onClick={() => setActiveModalProject(project)}
+                                                onKeyDown={(e: React.KeyboardEvent) => {
+                                                    if (e.key === 'Enter' || e.key === 'Space') {
+                                                        e.preventDefault();
+                                                        setActiveModalProject(project);
+                                                    }
+                                                }}
+                                                className="cursor-pointer bg-white rounded-2xl flex flex-col group border border-[var(--color-border)] hover:border-[#6B9F91]/40 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 overflow-hidden"
+                                            >
+                                                <GridProjectCard project={project} />
+                                            </motion.div>
+                                        ))}
+                                    </motion.div>
+                                );
+                            
+                            case 'featured-grid':
                                 return (
                                     <>
                                         {/* Featured Project */}
@@ -149,211 +431,63 @@ export function ClientProjects() {
                                             variants={slideUp}
                                             role="button"
                                             tabIndex={0}
-                                            onClick={() => setActiveModalProject(featuredProject)}
+                                            onClick={() => setActiveModalProject(layoutConfig.featured)}
                                             onKeyDown={(e: React.KeyboardEvent) => {
                                                 if (e.key === 'Enter' || e.key === 'Space') {
                                                     e.preventDefault();
-                                                    setActiveModalProject(featuredProject);
+                                                    setActiveModalProject(layoutConfig.featured);
                                                 }
                                             }}
                                             className="cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 w-full bg-white border border-[var(--color-border)] rounded-2xl overflow-hidden shadow-xl shadow-gray-200/50 flex flex-col lg:flex-row group"
                                         >
-                                            {/* Featured Visual */}
-                                            <div className="w-full lg:w-7/12 aspect-video lg:aspect-auto bg-gray-100 relative overflow-hidden flex items-center justify-center shrink-0 min-h-[260px]">
-                                                {featuredProject.isConfidential ? (
-                                                    <div className="absolute inset-0 bg-gray-100 flex flex-col items-center justify-center text-center p-6 select-none opacity-80 backdrop-blur-md">
-                                                        <div className="w-14 h-14 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-400 mb-3">
-                                                            <Lock className="w-7 h-7" />
-                                                        </div>
-                                                        <h4 className="font-bold text-gray-700 text-xs mb-1 uppercase tracking-wider">Confidential Project</h4>
-                                                        <p className="text-[11px] text-gray-500">Visuals protected under corporate NDA.</p>
-                                                    </div>
-                                                ) : featuredProject.imageUrl ? (
-                                                    <img src={featuredProject.imageUrl} alt={featuredProject.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
-                                                ) : (
-                                                    <div className="absolute inset-0 bg-[#6B9F91]/5 flex flex-col p-6 gap-3 group-hover:scale-105 transition-transform duration-700 ease-out">
-                                                        <div className="w-full flex justify-between items-center bg-white/80 backdrop-blur-md p-3 rounded-lg border border-gray-200 shadow-sm">
-                                                            <div className="flex items-center gap-2">
-                                                                <div className="w-6 h-6 rounded-full bg-[#6B9F91]/20" />
-                                                                <div className="w-24 h-2.5 bg-gray-200 rounded-full" />
-                                                            </div>
-                                                            <div className="flex gap-1.5">
-                                                                <div className="w-6 h-6 rounded-full bg-gray-200" />
-                                                                <div className="w-6 h-6 rounded-full bg-gray-200" />
-                                                            </div>
-                                                        </div>
-                                                        <div className="flex gap-3 flex-1">
-                                                            <div className="w-1/4 h-full bg-white/80 backdrop-blur-md rounded-lg border border-gray-200 shadow-sm p-3 flex flex-col gap-2">
-                                                                <div className="w-full h-6 bg-gray-100 rounded" />
-                                                                <div className="w-2/3 h-6 bg-gray-100 rounded" />
-                                                            </div>
-                                                            <div className="flex-1 h-full bg-white/80 backdrop-blur-md rounded-lg border border-gray-200 shadow-sm p-3 grid grid-cols-2 gap-3">
-                                                                <div className="bg-[#6B9F91]/10 rounded" />
-                                                                <div className="bg-gray-100 rounded" />
-                                                                <div className="bg-gray-100 rounded col-span-2" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                )}
-
-                                                <div className="absolute inset-0 bg-gray-900/10 flex items-center justify-center z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                                                    <div className="bg-white/90 backdrop-blur-sm px-5 py-2 rounded-full text-xs font-bold text-gray-800 shadow-xl flex items-center gap-2">
-                                                        <ImageIcon className="w-3.5 h-3.5 text-gray-500" />
-                                                        Project Visual Preview
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            {/* Featured Content Area */}
-                                            <div className="w-full lg:w-5/12 p-6 lg:p-8 flex flex-col justify-center bg-white relative z-10 border-l border-gray-100">
-                                                <div className="flex items-center justify-between gap-3 mb-3">
-                                                    <span className="px-2.5 py-0.5 bg-gray-100 text-gray-600 text-[10px] font-bold uppercase tracking-wider rounded whitespace-nowrap">
-                                                        {featuredProject.industry}
-                                                    </span>
-                                                    {featuredProject.status && (
-                                                        <div className="flex items-center gap-1 text-[10px] font-bold text-[#6B9F91] uppercase tracking-wider">
-                                                            <CheckCircle2 className="w-3 h-3" />
-                                                            {featuredProject.status}
-                                                        </div>
-                                                    )}
-                                                </div>
-
-                                                <h3 className="text-xl md:text-2xl font-bold text-[var(--color-heading)] mb-2.5 leading-tight group-hover:text-[#6B9F91] transition-colors">
-                                                    {featuredProject.title}
-                                                </h3>
-
-                                                <p className="text-[var(--color-body-text)] text-sm mb-4 leading-relaxed line-clamp-3 text-gray-600">
-                                                    {featuredProject.description}
-                                                </p>
-
-                                                <div className="flex flex-wrap gap-1.5 mb-6">
-                                                    {Array.isArray(featuredProject.tags) && featuredProject.tags.slice(0, 4).map((tag: any, idx: number) => (
-                                                        <span key={idx} className="px-2.5 py-1 bg-[#6B9F91]/10 text-[#6B9F91] rounded-md text-xs font-semibold">
-                                                            {tag}
-                                                        </span>
-                                                    ))}
-                                                </div>
-
-                                                <div className="mt-auto">
-                                                    <Button
-                                                        onClick={(e: React.MouseEvent) => {
-                                                            e.stopPropagation();
-                                                            setActiveModalProject(featuredProject);
-                                                        }}
-                                                        size="sm"
-                                                        className="w-full sm:w-auto bg-[#6B9F91] hover:bg-[#588478] text-white shadow-md shadow-[#6B9F91]/20 font-semibold"
-                                                    >
-                                                        View Details
-                                                    </Button>
-                                                </div>
-                                            </div>
+                                            <SingleProjectCard project={layoutConfig.featured} />
                                         </motion.div>
 
-                                        {/* Additional Projects Grid (Compact Happymonials-like Structure) */}
-                                        {
-                                            additionalProjects.length > 0 && (
-                                                <motion.div
-                                                    variants={staggerContainer}
-                                                    initial="hidden"
-                                                    whileInView="visible"
-                                                    viewport={{ once: true, margin: "-100px" }}
-                                                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6 mt-1"
-                                                >
-                                                    {additionalProjects.map((project: any) => (
-                                                        <motion.div
-                                                            key={project.id}
-                                                            variants={slideUp}
-                                                            whileHover={{ 
-                                                                y: -6, 
-                                                                scale: 1.015, 
-                                                                boxShadow: "0 20px 40px -8px rgba(107,159,145,0.18), 0 8px 16px -4px rgba(107,159,145,0.10)" 
-                                                            }}
-                                                            whileTap={{ scale: 0.98, y: -2 }}
-                                                            transition={{ type: "spring", stiffness: 350, damping: 22 }}
-                                                            role="button"
-                                                            tabIndex={0}
-                                                            onClick={() => setActiveModalProject(project)}
-                                                            onKeyDown={(e: React.KeyboardEvent) => {
-                                                                if (e.key === 'Enter' || e.key === 'Space') {
-                                                                    e.preventDefault();
-                                                                    setActiveModalProject(project);
-                                                                }
-                                                            }}
-                                                            className="cursor-pointer bg-white rounded-2xl flex flex-col group border border-[var(--color-border)] hover:border-[#6B9F91]/40 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 overflow-hidden shadow-sm"
-                                                        >
-                                                            {/* Grid Visual Placeholder (4:3 aspect ratio, flushed to top/left/right of card with 0 gap) */}
-                                                            <div className="relative w-full aspect-[4/3] bg-gray-50 overflow-hidden shrink-0 flex items-center justify-center border-b border-gray-100">
-                                                                {project.isConfidential ? (
-                                                                    <div className="absolute inset-0 bg-gray-100 flex flex-col items-center justify-center text-center p-4 select-none opacity-80 backdrop-blur-md">
-                                                                        <div className="w-12 h-12 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-400 mb-2">
-                                                                            <Lock className="w-6 h-6" />
-                                                                        </div>
-                                                                        <h4 className="font-bold text-gray-700 text-xs mb-0.5 uppercase tracking-wider">Confidential Project</h4>
-                                                                        <p className="text-[11px] text-gray-500">Visuals protected under corporate NDA.</p>
-                                                                    </div>
-                                                                ) : project.imageUrl ? (
-                                                                    <img src={project.imageUrl} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
-                                                                ) : (
-                                                                    <div className="w-full h-full flex flex-col p-4 gap-2.5 bg-[#6B9F91]/5 group-hover:scale-105 transition-transform duration-700 ease-out">
-                                                                        <div className="w-full h-1/2 flex gap-2.5">
-                                                                            <div className="w-1/3 bg-white border border-gray-200 rounded-md shadow-sm" />
-                                                                            <div className="flex-1 bg-white border border-gray-200 rounded-md shadow-sm" />
-                                                                        </div>
-                                                                        <div className="w-full h-1/2 bg-white border border-gray-200 rounded-md shadow-sm" />
-                                                                    </div>
-                                                                )}
-                                                            </div>
-
-                                                            {/* Grid Content Area (Compact Spacing) */}
-                                                            <div className="p-4 sm:p-5 flex flex-col flex-1">
-                                                                <div className="flex items-center justify-between gap-3 mb-2.5">
-                                                                    <span className="px-2.5 py-0.5 bg-gray-100 text-gray-600 text-[10px] font-bold uppercase tracking-wider rounded whitespace-nowrap overflow-hidden text-ellipsis">
-                                                                        {project.industry}
-                                                                    </span>
-                                                                    {project.status && (
-                                                                        <div className="flex items-center gap-1 text-[10px] font-bold text-[#6B9F91] uppercase tracking-wider whitespace-nowrap overflow-hidden text-ellipsis">
-                                                                            {project.status}
-                                                                        </div>
-                                                                    )}
-                                                                </div>
-
-                                                                <h3 className="font-bold text-base md:text-lg text-[var(--color-heading)] leading-snug mb-2 group-hover:text-[#6B9F91] transition-colors">
-                                                                    {project.title}
-                                                                </h3>
-
-                                                                <p className="text-[var(--color-body-text)] text-xs sm:text-sm mb-4 flex-1 line-clamp-3 text-gray-600 leading-relaxed">
-                                                                    {project.description}
-                                                                </p>
-
-                                                                <div className="flex flex-wrap gap-1 mb-4">
-                                                                    {Array.isArray(project.tags) && project.tags.slice(0, 3).map((tag: any, idx: number) => (
-                                                                        <span key={idx} className="px-2 py-0.5 bg-[#6B9F91]/10 text-[#6B9F91] rounded text-[10px] sm:text-xs font-semibold whitespace-nowrap">
-                                                                            {tag}
-                                                                        </span>
-                                                                    ))}
-                                                                    {Array.isArray(project.tags) && project.tags.length > 3 && (
-                                                                        <span className="px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded text-[10px] sm:text-xs font-semibold whitespace-nowrap">
-                                                                            +{project.tags.length - 3}
-                                                                        </span>
-                                                                    )}
-                                                                </div>
-
-                                                                <div className="mt-auto pt-3 border-t border-gray-100 flex items-center justify-between">
-                                                                    <span className="text-xs font-bold text-[#6B9F91] group-hover:text-[#588478] transition-colors inline-flex items-center gap-1.5">
-                                                                        View Details
-                                                                        <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                        </motion.div>
-                                                    ))}
-                                                </motion.div>
-                                            )
-                                        }
+                                        {/* Additional Projects Grid */}
+                                        {layoutConfig.grid.length > 0 && (
+                                            <motion.div
+                                                variants={staggerContainer}
+                                                initial="hidden"
+                                                whileInView="visible"
+                                                viewport={{ once: true, margin: "-100px" }}
+                                                className={`grid gap-6 mt-1 ${
+                                                    layoutConfig.grid.length === 1 
+                                                        ? 'grid-cols-1' 
+                                                        : layoutConfig.grid.length === 2 
+                                                        ? 'grid-cols-3 justify-center' 
+                                                        : 'grid-cols-3'
+                                                }`}
+                                            >
+                                                {layoutConfig.grid.slice(0, 3).map((project: any) => (
+                                                    <motion.div
+                                                        key={project.id}
+                                                        variants={slideUp}
+                                                        whileHover={{ y: -6, scale: 1.015, boxShadow: "0 20px 40px -8px rgba(107,159,145,0.18), 0 8px 16px -4px rgba(107,159,145,0.10)" }}
+                                                        whileTap={{ scale: 0.98, y: -2 }}
+                                                        transition={{ type: "spring", stiffness: 350, damping: 22 }}
+                                                        role="button"
+                                                        tabIndex={0}
+                                                        onClick={() => setActiveModalProject(project)}
+                                                        onKeyDown={(e: React.KeyboardEvent) => {
+                                                            if (e.key === 'Enter' || e.key === 'Space') {
+                                                                e.preventDefault();
+                                                                setActiveModalProject(project);
+                                                            }
+                                                        }}
+                                                        className="cursor-pointer bg-white rounded-2xl flex flex-col group border border-[var(--color-border)] hover:border-[#6B9F91]/40 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 overflow-hidden"
+                                                    >
+                                                        <GridProjectCard project={project} />
+                                                    </motion.div>
+                                                ))}
+                                            </motion.div>
+                                        )}
                                     </>
                                 );
-                            })()}
-                        </>
+                            
+                            default:
+                                return null;
+                        }
+                    })()}
                 </div>
 
                 {/* Mobile Native Horizontal Swipe Deck */}

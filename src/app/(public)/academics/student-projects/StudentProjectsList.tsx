@@ -56,11 +56,40 @@ function ProjectPreviewPlaceholder() {
 
 export function StudentProjectsList({ initialProjects }: { initialProjects: any[] }) {
     const [activeModalProject, setActiveModalProject] = useState<any | null>(null);
+    
+    // Adaptive layout: determine layout type based on content count and featured status
+    const layoutConfig = React.useMemo(() => {
+        if (initialProjects.length === 0) return { type: 'empty', featured: null, grid: [] };
+        
+        // If there's a featured item, use featured-grid layout regardless of count
+        const featuredItem = initialProjects.find(p => p.isFeatured);
+        if (featuredItem) {
+            const gridItems = initialProjects.filter(p => p.id !== featuredItem.id);
+            return { type: 'featured-grid', featured: featuredItem, grid: gridItems };
+        }
+        
+        // No featured item - use count-based layouts
+        if (initialProjects.length === 1) return { type: 'single', featured: initialProjects[0], grid: [] };
+        if (initialProjects.length === 2) return { type: 'two-grid', featured: null, grid: initialProjects };
+        if (initialProjects.length === 3) return { type: 'three-grid', featured: null, grid: initialProjects };
+        
+        // 4+ items with no featured: use first item as featured
+        const defaultFeatured = initialProjects[0];
+        const gridItems = initialProjects.slice(1);
+        return { type: 'featured-grid', featured: defaultFeatured, grid: gridItems };
+    }, [initialProjects]);
+
+    const displayedProjects = React.useMemo(() => {
+        if (layoutConfig.type === 'featured-grid') {
+            return [layoutConfig.featured, ...layoutConfig.grid.slice(0, 3)];
+        }
+        return layoutConfig.grid.length > 0 ? layoutConfig.grid : [layoutConfig.featured].filter(Boolean);
+    }, [layoutConfig]);
 
     return (
         <div className="w-full">
             {/* Grid Area */}
-            {initialProjects.length === 0 ? (
+            {displayedProjects.length === 0 ? (
                 <div className="py-24 text-center flex flex-col items-center justify-center">
                     <div className="w-20 h-20 rounded-full bg-gray-50 flex items-center justify-center mb-4 border border-gray-100">
                         <Blocks className="w-8 h-8 text-gray-300" />
@@ -69,36 +98,29 @@ export function StudentProjectsList({ initialProjects }: { initialProjects: any[
                     <p className="text-gray-500">There are no student projects available at this time.</p>
                 </div>
             ) : (
-                <motion.div
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
-                    initial="hidden"
-                    animate="show"
-                    variants={{
-                        hidden: { opacity: 0 },
-                        show: { opacity: 1, transition: { staggerChildren: 0.1 } }
-                    }}
-                >
-                    {initialProjects.map((project: any) => (
+                <>
+                    {layoutConfig.type === 'featured-grid' && layoutConfig.featured && (
                         <motion.div
-                            key={project.id}
+                            initial="hidden"
+                            animate="show"
                             variants={itemVariants}
                             role="button"
                             tabIndex={0}
-                            onClick={() => setActiveModalProject(project)}
+                            onClick={() => setActiveModalProject(layoutConfig.featured)}
                             onKeyDown={(e: React.KeyboardEvent) => {
                                 if (e.key === 'Enter' || e.key === ' ') {
                                     e.preventDefault();
-                                    setActiveModalProject(project);
+                                    setActiveModalProject(layoutConfig.featured);
                                 }
                             }}
-                            className="bg-white rounded-3xl shadow-lg shadow-gray-200/40 border border-gray-100 overflow-hidden flex-col group cursor-pointer hover:-translate-y-1 transition-transform duration-300 flex focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2"
+                            className="bg-white rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden flex-col lg:flex-row group cursor-pointer hover:-translate-y-1 transition-transform duration-300 flex focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 mb-6 lg:mb-8"
                         >
-                            {/* Image / Placeholder */}
-                            <div className="w-full aspect-[4/3] relative overflow-hidden bg-gray-50 border-b border-gray-100">
-                                {project.image || project.imageUrl ? (
+                            {/* Featured Project Image */}
+                            <div className="w-full lg:w-7/12 aspect-[4/3] lg:aspect-auto relative overflow-hidden bg-gray-50 border-b lg:border-b-0 lg:border-r border-gray-100">
+                                {layoutConfig.featured.image || layoutConfig.featured.imageUrl ? (
                                     <Image
-                                        src={project.image || project.imageUrl}
-                                        alt={project.title}
+                                        src={layoutConfig.featured.image || layoutConfig.featured.imageUrl}
+                                        alt={layoutConfig.featured.title}
                                         fill
                                         className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                                     />
@@ -107,45 +129,110 @@ export function StudentProjectsList({ initialProjects }: { initialProjects: any[
                                 )}
                             </div>
 
-                            <div className="p-6 flex flex-col flex-grow">
-                                <h4 className="text-lg font-bold text-gray-900 mb-1 leading-tight group-hover:text-[#6B9F91] transition-colors">{project.title}</h4>
-                                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">{project.category}</span>
-                                <p className="text-sm text-gray-600 line-clamp-3 leading-relaxed mb-5 flex-grow">
-                                    {project.description}
+                            {/* Featured Project Content */}
+                            <div className="w-full lg:w-5/12 p-6 lg:p-8 flex flex-col flex-grow">
+                                <h4 className="text-xl lg:text-2xl font-bold text-gray-900 mb-2 leading-tight group-hover:text-[#6B9F91] transition-colors">{layoutConfig.featured.title}</h4>
+                                <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">{layoutConfig.featured.category}</span>
+                                <p className="text-sm lg:text-base text-gray-600 line-clamp-4 leading-relaxed mb-6 flex-grow">
+                                    {layoutConfig.featured.description}
                                 </p>
-
-                                <div className="flex flex-wrap gap-2 mb-6">
-                                    {Array.isArray(project.tags) ? project.tags.map((tag: any, i: number) => {
-                                        const TagIcon = getIcon(tag.icon);
-                                        return (
-                                            <span key={i} className={`text-[10px] font-bold px-2.5 py-1 rounded-md flex items-center gap-1.5 border border-transparent ${tag.colorClass}`}>
-                                                <TagIcon className="w-3 h-3" /> {tag.label}
-                                            </span>
-                                        );
-                                    }) : typeof project.tags === 'string' ? (() => {
-                                        try {
-                                            const tags = JSON.parse(project.tags);
-                                            if (Array.isArray(tags)) {
-                                                return tags.map((tag: any, i: number) => {
-                                                    const TagIcon = getIcon(tag.icon);
-                                                    return (
-                                                        <span key={i} className={`text-[10px] font-bold px-2.5 py-1 rounded-md flex items-center gap-1.5 border border-transparent ${tag.colorClass}`}>
-                                                            <TagIcon className="w-3 h-3" /> {tag.label}
-                                                        </span>
-                                                    );
-                                                });
-                                            }
-                                        } catch { return null; }
-                                    })() : null}
-                                </div>
-
-                                <div className="mt-auto border-t border-gray-100 pt-4 flex items-center text-[#6B9F91] font-bold text-sm group-hover:text-[#5C8C80]">
-                                    View Details <ArrowRight className="w-4 h-4 ml-auto group-hover:translate-x-1 transition-transform" />
+                                <div className="mt-auto">
+                                    <span className="text-sm font-bold text-[#6B9F91] group-hover:text-[#588478] transition-colors inline-flex items-center gap-2">
+                                        View Project
+                                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                                    </span>
                                 </div>
                             </div>
                         </motion.div>
-                    ))}
-                </motion.div>
+                    )}
+
+                    {/* Grid Projects */}
+                    {layoutConfig.grid.length > 0 && (
+                        <motion.div
+                            className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 ${
+                                layoutConfig.grid.length === 1 
+                                    ? 'md:grid-cols-1' 
+                                    : layoutConfig.grid.length === 2 
+                                    ? 'md:grid-cols-2 lg:grid-cols-3 justify-center' 
+                                    : 'md:grid-cols-2 lg:grid-cols-3'
+                            }`}
+                            initial="hidden"
+                            animate="show"
+                            variants={{
+                                hidden: { opacity: 0 },
+                                show: { opacity: 1, transition: { staggerChildren: 0.1 } }
+                            }}
+                        >
+                            {layoutConfig.grid.slice(0, 3).map((project: any) => (
+                                <motion.div
+                                    key={project.id}
+                                    variants={itemVariants}
+                                    role="button"
+                                    tabIndex={0}
+                                    onClick={() => setActiveModalProject(project)}
+                                    onKeyDown={(e: React.KeyboardEvent) => {
+                                        if (e.key === 'Enter' || e.key === ' ') {
+                                            e.preventDefault();
+                                            setActiveModalProject(project);
+                                        }
+                                    }}
+                                    className="bg-white rounded-3xl shadow-lg shadow-gray-200/40 border border-gray-100 overflow-hidden flex-col group cursor-pointer hover:-translate-y-1 transition-transform duration-300 flex focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2"
+                                >
+                                    {/* Image / Placeholder */}
+                                    <div className="w-full aspect-[4/3] relative overflow-hidden bg-gray-50 border-b border-gray-100">
+                                        {project.image || project.imageUrl ? (
+                                            <Image
+                                                src={project.image || project.imageUrl}
+                                                alt={project.title}
+                                                fill
+                                                className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                                            />
+                                        ) : (
+                                            <ProjectPreviewPlaceholder />
+                                        )}
+                                    </div>
+
+                                    <div className="p-6 flex flex-col flex-grow">
+                                        <h4 className="text-lg font-bold text-gray-900 mb-1 leading-tight group-hover:text-[#6B9F91] transition-colors">{project.title}</h4>
+                                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">{project.category}</span>
+                                        <p className="text-sm text-gray-600 line-clamp-3 leading-relaxed mb-5 flex-grow">
+                                            {project.description}
+                                        </p>
+
+                                        <div className="flex flex-wrap gap-2 mb-6">
+                                            {Array.isArray(project.tags) ? project.tags.map((tag: any, i: number) => {
+                                                const TagIcon = getIcon(tag.icon);
+                                                return (
+                                                    <span key={i} className={`text-[10px] font-bold px-2.5 py-1 rounded-md flex items-center gap-1.5 border border-transparent ${tag.colorClass}`}>
+                                                        <TagIcon className="w-3 h-3" /> {tag.label}
+                                                    </span>
+                                                );
+                                            }) : typeof project.tags === 'string' ? (() => {
+                                                try {
+                                                    const tags = JSON.parse(project.tags);
+                                                    if (Array.isArray(tags)) {
+                                                        return tags.map((tag: any, i: number) => {
+                                                            const TagIcon = getIcon(tag.icon);
+                                                            return (
+                                                                <span key={i} className={`text-[10px] font-bold px-2.5 py-1 rounded-md flex items-center gap-1.5 border border-transparent ${tag.colorClass}`}>
+                                                                    <TagIcon className="w-3 h-3" /> {tag.label}
+                                                                </span>
+                                                            );
+                                                        });
+                                                    }
+                                                } catch { return null; }
+                                            })() : null}
+                                        </div>
+
+                                        <div className="mt-auto border-t border-gray-100 pt-4 flex items-center text-[#6B9F91] font-bold text-sm group-hover:text-[#5C8C80]">
+                                            View Details <ArrowRight className="w-4 h-4 ml-auto group-hover:translate-x-1 transition-transform" />
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </motion.div>
+                    )}
+                </>
             )}
 
             {/* Read Details Modal overlay */}

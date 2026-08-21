@@ -101,6 +101,13 @@ export async function PUT(request: Request, context: { params: Promise<{ id: str
             updateData.isConfidential = body.isConfidential;
         }
 
+        if (body.isFeatured !== undefined) {
+            if (typeof body.isFeatured !== 'boolean') {
+                return NextResponse.json({ success: false, error: 'isFeatured must be a strict boolean' }, { status: 400 });
+            }
+            updateData.isFeatured = body.isFeatured;
+        }
+
         if (body.isActive !== undefined) {
             if (typeof body.isActive !== 'boolean') {
                 return NextResponse.json({ success: false, error: 'isActive must be a strict boolean' }, { status: 400 });

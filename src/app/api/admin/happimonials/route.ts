@@ -107,7 +107,7 @@ export async function POST(request: Request) {
         }
 
         const body = await request.json();
-        const { clientName, companyName, industry, testimonial, videoUrl, thumbnailUrl, youtubeUrl, sortOrder, isActive, pageScope } = body;
+        const { clientName, companyName, industry, testimonial, videoUrl, thumbnailUrl, youtubeUrl, isFeatured, sortOrder, isActive, pageScope } = body;
 
         // Required fields
         if (
@@ -127,6 +127,9 @@ export async function POST(request: Request) {
         }
         if (isActive !== undefined && typeof isActive !== 'boolean') {
             return NextResponse.json({ success: false, error: 'isActive must be a strict boolean' }, { status: 400 });
+        }
+        if (isFeatured !== undefined && typeof isFeatured !== 'boolean') {
+            return NextResponse.json({ success: false, error: 'isFeatured must be a strict boolean' }, { status: 400 });
         }
         if (sortOrder !== undefined && !Number.isInteger(sortOrder)) {
             return NextResponse.json({ success: false, error: 'sortOrder must be an integer' }, { status: 400 });
@@ -166,6 +169,7 @@ export async function POST(request: Request) {
                 thumbnailUrl: (thumbnailUrl && String(thumbnailUrl).trim() !== '') ? String(thumbnailUrl).trim() : null,
                 youtubeUrl: resolvedYoutubeUrl,
                 pageScope: resolvedScope,
+                isFeatured: isFeatured ?? false,
                 sortOrder: sortOrder ?? 0,
                 isActive: isActive ?? true
             }

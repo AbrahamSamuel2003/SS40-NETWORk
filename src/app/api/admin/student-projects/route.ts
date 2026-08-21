@@ -90,6 +90,7 @@ export async function POST(request: Request) {
             imageUrl,
             projectUrl,
             tags,
+            isFeatured,
             sortOrder,
             isActive
         } = body;
@@ -124,6 +125,10 @@ export async function POST(request: Request) {
             return NextResponse.json({ success: false, error: 'isActive must be a strict boolean' }, { status: 400 });
         }
 
+        if (isFeatured !== undefined && typeof isFeatured !== 'boolean') {
+            return NextResponse.json({ success: false, error: 'isFeatured must be a strict boolean' }, { status: 400 });
+        }
+
         if (sortOrder !== undefined && !Number.isInteger(sortOrder)) {
             return NextResponse.json({ success: false, error: 'sortOrder must be an integer' }, { status: 400 });
         }
@@ -137,6 +142,7 @@ export async function POST(request: Request) {
                 badge: (badge && String(badge).trim() !== '') ? String(badge).trim() : null,
                 imageUrl: (imageUrl && String(imageUrl).trim() !== '') ? String(imageUrl).trim() : null,
                 projectUrl: (projectUrl && String(projectUrl).trim() !== '') ? String(projectUrl).trim() : null,
+                isFeatured: isFeatured ?? false,
                 sortOrder: sortOrder ?? 0,
                 isActive: isActive ?? true
             }

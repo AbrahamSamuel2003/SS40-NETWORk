@@ -19,6 +19,7 @@ export default function DigitalSolutionsHappimonialsPage() {
     const [thumbnailUrl, setThumbnailUrl] = useState('');
     const [videoUrl, setVideoUrl] = useState('');
     const [youtubeUrl, setYoutubeUrl] = useState('');
+    const [isFeatured, setIsFeatured] = useState(false);
     const [isActive, setIsActive] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
@@ -54,6 +55,7 @@ export default function DigitalSolutionsHappimonialsPage() {
             setThumbnailUrl(item.thumbnailUrl || '');
             setVideoUrl(item.videoUrl || '');
             setYoutubeUrl(item.youtubeUrl || '');
+            setIsFeatured(item.isFeatured || false);
             setIsActive(item.isActive);
         } else {
             setEditingId(null);
@@ -64,6 +66,7 @@ export default function DigitalSolutionsHappimonialsPage() {
             setThumbnailUrl('');
             setVideoUrl('');
             setYoutubeUrl('');
+            setIsFeatured(false);
             setIsActive(true);
         }
         setErrorMsg('');
@@ -106,6 +109,7 @@ export default function DigitalSolutionsHappimonialsPage() {
             thumbnailUrl,
             videoUrl,
             youtubeUrl,
+            isFeatured,
             isActive,
             pageScope: 'DIGITAL_SOLUTIONS'
         };
@@ -212,6 +216,13 @@ export default function DigitalSolutionsHappimonialsPage() {
                                         <td className="p-4 font-medium">
                                             <div className="text-[#111827]">{item.clientName}</div>
                                             <div className="text-[#9CA3AF] text-xs">{item.companyName} · {item.industry}</div>
+                                            {item.isFeatured && (
+                                                <div className="mt-1">
+                                                    <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-[#FFC900] bg-[#FFC900]/10 border border-[#FFC900]/20 rounded px-1.5 py-0.5">
+                                                        Featured
+                                                    </span>
+                                                </div>
+                                            )}
                                             {item.youtubeUrl && (
                                                 <div className="mt-1">
                                                     <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-[#B91C1C] bg-[#FEE2E2] border border-[#FCA5A5] rounded px-1.5 py-0.5">
@@ -286,6 +297,15 @@ export default function DigitalSolutionsHappimonialsPage() {
                                         <div className={`absolute top-0.5 left-0.5 bg-white w-4 h-4 rounded-full transition-transform ${isActive ? 'translate-x-3' : 'translate-x-0'}`}></div>
                                     </div>
                                     <span className="text-xs font-medium text-[#374151]">Active</span>
+                                </label>
+
+                                <label className="flex items-center gap-2.5 cursor-pointer pt-1">
+                                    <div className="relative shrink-0">
+                                        <input type="checkbox" checked={isFeatured} onChange={e => setIsFeatured(e.target.checked)} className="sr-only" />
+                                        <div className={`w-8 h-5 rounded-full transition-colors ${isFeatured ? 'bg-[#FFC900]' : 'bg-[#EDF5F2]'}`}></div>
+                                        <div className={`absolute top-0.5 left-0.5 bg-white w-4 h-4 rounded-full transition-transform ${isFeatured ? 'translate-x-3' : 'translate-x-0'}`}></div>
+                                    </div>
+                                    <span className="text-xs font-medium text-[#374151]">Featured (Big Card)</span>
                                 </label>
                             </form>
                         </div>

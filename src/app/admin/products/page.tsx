@@ -19,7 +19,6 @@ export default function ManagedProductsPage() {
     const [description, setDescription] = useState('');
     const [tagsInput, setTagsInput] = useState('');
     const [isActive, setIsActive] = useState(true);
-    const [isFeatured, setIsFeatured] = useState(false); // Kept since it's in our DB model
     const [sortOrder, setSortOrder] = useState(0);
     const [screenshotUrl, setScreenshotUrl] = useState('');
     const [isMediaSelectorOpen, setIsMediaSelectorOpen] = useState(false);
@@ -129,7 +128,6 @@ export default function ManagedProductsPage() {
             setTagsInput(Array.isArray(item.tags) ? item.tags.join(', ') : '');
             setScreenshotUrl(item.screenshotUrl || '');
             setIsActive(item.isActive ?? true);
-            setIsFeatured(item.isFeatured ?? false);
             setSortOrder(item.sortOrder || 0);
         } else {
             setEditingId(null);
@@ -141,7 +139,6 @@ export default function ManagedProductsPage() {
             setTagsInput('');
             setScreenshotUrl('');
             setIsActive(true);
-            setIsFeatured(false);
             setSortOrder(0);
         }
         setErrorMsg('');
@@ -185,7 +182,6 @@ export default function ManagedProductsPage() {
             tags,
             screenshotUrl,
             isActive,
-            isFeatured,
             sortOrder
         };
 
@@ -313,16 +309,9 @@ export default function ManagedProductsPage() {
                                             </div>
                                         </td>
                                         <td className="p-4 text-center">
-                                            <div className="flex flex-col items-center gap-1.5">
-                                                <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-semibold ${item.isActive ? 'bg-[#6B9F91]/10 text-[#6B9F91] border border-[#6B9F91]/20' : 'bg-[#FEE2E2] text-[#B91C1C] border border-[#FCA5A5]'}`}>
-                                                    {item.isActive ? 'Active' : 'Inactive'}
-                                                </span>
-                                                {item.isFeatured && (
-                                                    <span className="inline-flex px-2 py-0.5 rounded text-[10px] font-semibold bg-yellow-500/10 text-yellow-500 border border-yellow-500/20">
-                                                        Featured
-                                                    </span>
-                                                )}
-                                            </div>
+                                            <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-semibold ${item.isActive ? 'bg-[#6B9F91]/10 text-[#6B9F91] border border-[#6B9F91]/20' : 'bg-[#FEE2E2] text-[#B91C1C] border border-[#FCA5A5]'}`}>
+                                                {item.isActive ? 'Active' : 'Inactive'}
+                                            </span>
                                         </td>
                                         <td className="p-3">
                                             <div className="flex flex-col xl:flex-row gap-1.5 justify-end ml-auto shrink-0">
@@ -462,10 +451,6 @@ export default function ManagedProductsPage() {
                                     <label className="flex items-center gap-2 cursor-pointer">
                                         <div className="relative shrink-0"><input type="checkbox" checked={isActive} onChange={e => setIsActive(e.target.checked)} className="sr-only" /><div className={`w-8 h-5 rounded-full transition-colors ${isActive ? 'bg-[#6B9F91]' : 'bg-[#EDF5F2]'}`}></div><div className={`absolute top-0.5 left-0.5 bg-white w-4 h-4 rounded-full transition-transform ${isActive ? 'translate-x-3' : 'translate-x-0'}`}></div></div>
                                         <span className="text-xs font-medium text-[#374151]">Active</span>
-                                    </label>
-                                    <label className="flex items-center gap-2 cursor-pointer">
-                                        <div className="relative shrink-0"><input type="checkbox" checked={isFeatured} onChange={e => setIsFeatured(e.target.checked)} className="sr-only" /><div className={`w-8 h-5 rounded-full transition-colors ${isFeatured ? 'bg-yellow-500' : 'bg-[#EDF5F2]'}`}></div><div className={`absolute top-0.5 left-0.5 bg-white w-4 h-4 rounded-full transition-transform ${isFeatured ? 'translate-x-3' : 'translate-x-0'}`}></div></div>
-                                        <span className="text-xs font-medium text-[#374151]">Featured</span>
                                     </label>
                                     <div className="flex items-center gap-2">
                                         <span className="text-xs font-medium text-[#374151]">Sort Order</span>

@@ -49,7 +49,35 @@ export function Happimonials() {
     const [activeModalStory, setActiveModalStory] = React.useState<any | null>(null);
 
     const mobileScrollRef = React.useRef<HTMLDivElement>(null);
-    const displayedHappimonials = React.useMemo(() => happimonials.slice(0, 3), [happimonials]);
+    
+    // Adaptive layout: determine layout type based on content count and featured status
+    const layoutConfig = React.useMemo(() => {
+        if (happimonials.length === 0) return { type: 'empty', featured: null, grid: [] };
+        
+        // If there's a featured item, use featured-grid layout regardless of count
+        const featuredItem = happimonials.find(h => h.isFeatured);
+        if (featuredItem) {
+            const gridItems = happimonials.filter(h => h.id !== featuredItem.id);
+            return { type: 'featured-grid', featured: featuredItem, grid: gridItems };
+        }
+        
+        // No featured item - use count-based layouts
+        if (happimonials.length === 1) return { type: 'single', featured: happimonials[0], grid: [] };
+        if (happimonials.length === 2) return { type: 'two-grid', featured: null, grid: happimonials };
+        if (happimonials.length === 3) return { type: 'three-grid', featured: null, grid: happimonials };
+        
+        // 4+ items with no featured: use first item as featured
+        const defaultFeatured = happimonials[0];
+        const gridItems = happimonials.slice(1);
+        return { type: 'featured-grid', featured: defaultFeatured, grid: gridItems };
+    }, [happimonials]);
+
+    const displayedHappimonials = React.useMemo(() => {
+        if (layoutConfig.type === 'featured-grid') {
+            return [layoutConfig.featured, ...layoutConfig.grid.slice(0, 3)];
+        }
+        return layoutConfig.grid.length > 0 ? layoutConfig.grid : [layoutConfig.featured].filter(Boolean);
+    }, [layoutConfig]);
 
     const scrollToMobileTestimonial = (idx: number) => {
         if (!mobileScrollRef.current) return;
@@ -140,15 +168,83 @@ export function Happimonials() {
                     <CardGridSkeleton count={3} columns={3} />
                 ) : (
                     <>
+                        {layoutConfig.type === 'featured-grid' && layoutConfig.featured && (
+                            <motion.div
+                                initial="hidden"
+                                whileInView="visible"
+                                viewport={{ once: true, margin: "-100px" }}
+                                variants={slideUp}
+                                role="button"
+                                tabIndex={0}
+                                onClick={(e) => {
+                                    if ((e.target as HTMLElement).closest("[data-video-player]")) return;
+                                    setActiveModalStory(layoutConfig.featured);
+                                }}
+                                onKeyDown={(e: React.KeyboardEvent) => {
+                                    if (e.key === 'Enter' || e.key === 'Space') {
+                                        e.preventDefault();
+                                        setActiveModalStory(layoutConfig.featured);
+                                    }
+                                }}
+                                className="cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 w-full bg-white border border-[var(--color-border)] rounded-2xl overflow-hidden shadow-xl shadow-gray-200/50 flex flex-col lg:flex-row group mb-6 lg:mb-8"
+                            >
+                                {/* Featured Happimonial Video/Thumbnail */}
+                                <div className="w-full lg:w-7/12 aspect-video lg:aspect-auto bg-gray-900 relative overflow-hidden shrink-0 min-h-[260px]">
+                                    {layoutConfig.featured.youtubeUrl ? (
+                                        <div data-video-player className="w-full h-full">
+                                            <YouTubeResumeThumbnailPlayer
+                                                youtubeUrl={layoutConfig.featured.youtubeUrl}
+                                                title={layoutConfig.featured.clientName}
+                                                className="w-full h-full"
+                                                iframeClassName="absolute inset-0 w-full h-full border-0 z-0"
+                                            />
+                                        </div>
+                                    ) : layoutConfig.featured.thumbnailUrl ? (
+                                        <img src={layoutConfig.featured.thumbnailUrl} alt={layoutConfig.featured.clientName} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
+                                    ) : (
+                                        <div className="absolute inset-0 bg-gradient-to-br from-[#6B9F91]/20 to-[#6B9F91]/5 flex items-center justify-center">
+                                            <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#6B9F91 1px, transparent 1px)', backgroundSize: '16px 16px' }} />
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Featured Happimonial Content */}
+                                <div className="w-full lg:w-5/12 p-6 lg:p-8 flex flex-col flex-1">
+                                    <div className="flex items-center gap-3 mb-4">
+                                        {layoutConfig.featured.thumbnailUrl && !layoutConfig.featured.youtubeUrl && (
+                                            <img src={layoutConfig.featured.thumbnailUrl} alt="" className="w-12 h-12 rounded-full object-cover border-2 border-[#6B9F91]/20" />
+                                        )}
+                                        <div>
+                                            <h3 className="text-lg lg:text-xl font-bold text-[var(--color-heading)]">{layoutConfig.featured.clientName}</h3>
+                                            <p className="text-sm text-[var(--color-body-text)]">{layoutConfig.featured.companyName}</p>
+                                        </div>
+                                    </div>
+                                    <p className="text-sm lg:text-base text-[var(--color-body-text)] line-clamp-4 leading-relaxed mb-6 flex-1">
+                                        "{layoutConfig.featured.testimonial}"
+                                    </p>
+                                    <div className="mt-auto flex items-center gap-2 text-[#6B9F91] font-bold text-sm group-hover:text-[#588478]">
+                                        Read Story <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                                    </div>
+                                </div>
+                            </motion.div>
+                        )}
+
                         {/* Grid */}
-                        <motion.div
-                            variants={staggerContainer}
-                            initial="hidden"
-                            whileInView="visible"
-                            viewport={{ once: true, margin: "-100px" }}
-                            className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
-                        >
-                            {happimonials.slice(0, 3).map((item) => (
+                        {layoutConfig.grid.length > 0 && (
+                            <motion.div
+                                variants={staggerContainer}
+                                initial="hidden"
+                                whileInView="visible"
+                                viewport={{ once: true, margin: "-100px" }}
+                                className={`hidden md:grid gap-6 lg:gap-8 ${
+                                    layoutConfig.grid.length === 1 
+                                        ? 'md:grid-cols-1' 
+                                        : layoutConfig.grid.length === 2 
+                                        ? 'md:grid-cols-2 lg:grid-cols-3 justify-center' 
+                                        : 'md:grid-cols-2 lg:grid-cols-3'
+                                }`}
+                            >
+                                {layoutConfig.grid.slice(0, 3).map((item) => (
                                 <motion.div
                                     key={item.id}
                                     variants={slideUp}
@@ -235,6 +331,7 @@ export function Happimonials() {
                                 </motion.div>
                             ))}
                         </motion.div>
+                        )}
 
                         {/* Mobile Native Horizontal Swipe Deck */}
                         <div className="flex flex-col md:hidden relative overflow-visible -mx-6 mt-2">
