@@ -15,8 +15,32 @@ const ContactSection = dynamic(() => import("@/components/home/ContactSection").
 export const revalidate = 3600; // 1 hour ISR caching
 
 export const metadata: Metadata = {
-  title: "SS40 NETWORK PRIVATE LIMITED - Top IT Company in Tirunelveli",
-  description: "SS40 NETWORK PRIVATE LIMITED is the leading IT company in Tirunelveli, Tamil Nadu. We specialize in custom software development, web applications, AI solutions, and IT training.",
+  title: "SS40 Network | Intelligent Digital Solutions, SaaS Products & Academics",
+  description: "One Company. Three Business Wings. Driving the modern era forward with world-class digital services, innovative SaaS products, and elite academic empowerment.",
+  openGraph: {
+    title: "SS40 Network | Intelligent Digital Solutions, SaaS Products & Academics",
+    description: "One Company. Three Business Wings. Driving the modern era forward with world-class digital services, innovative SaaS products, and elite academic empowerment.",
+    url: "https://www.ss40network.com",
+    siteName: "SS40 Network",
+    locale: "en_US",
+    type: "website",
+    images: [
+      {
+        url: "https://www.ss40network.com/og-image.jpg",
+        secureUrl: "https://www.ss40network.com/og-image.jpg",
+        width: 1200,
+        height: 630,
+        type: "image/jpeg",
+        alt: "SS40 Network - Intelligent Digital Solutions, SaaS Products & Academics",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "SS40 Network | Intelligent Digital Solutions, SaaS Products & Academics",
+    description: "One Company. Three Business Wings. Driving the modern era forward with world-class digital services, innovative SaaS products, and elite academic empowerment.",
+    images: ["https://www.ss40network.com/og-image.jpg"],
+  },
 };
 
 export default async function Home() {

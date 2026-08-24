@@ -12,9 +12,9 @@ const inter = Inter({
 
 export async function generateMetadata(): Promise<Metadata> {
   const config = await getSiteConfig();
-  const defaultTitle = config?.seoDefaultTitle || "SS40 NETWORK PRIVATE LIMITED | Best IT Company in Tirunelveli | Web & AI Development";
-  const company = "SS40 NETWORK PRIVATE LIMITED";
-  const defaultDesc = config?.seoDefaultDescription || "Top-rated IT Company in Tirunelveli offering premium Web Development, Custom Software Solutions, AI Development, and Tech Services to transform your business.";
+  const defaultTitle = config?.seoDefaultTitle || "SS40 Network | Intelligent Digital Solutions, SaaS Products & Academics";
+  const company = "SS40 Network PRIVATE LIMITED";
+  const defaultDesc = config?.seoDefaultDescription || "One Company. Three Business Wings. Driving the modern era forward with world-class digital services, innovative SaaS products, and elite academic empowerment.";
   
   return {
     metadataBase: new URL("https://www.ss40network.com"),
@@ -24,13 +24,17 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     description: defaultDesc,
     keywords: [
+      "SS40 Network",
+      "SS40 Digital Solutions",
+      "SS40 Products",
+      "SS40 Academics",
       "Best IT Company in Tirunelveli", 
-      "Web Development in Tirunelveli", 
+      "Web Development Company", 
       "Custom Software Development", 
       "AI Development Company", 
       "Tech Service Provider",
-      "Digital Solutions", 
-      "Software Agency Tirunelveli",
+      "Digital Solutions Agency", 
+      "SaaS Products",
       "Mobile App Development",
       "SS40 NETWORK PRIVATE LIMITED"
     ],
@@ -49,10 +53,12 @@ export async function generateMetadata(): Promise<Metadata> {
       type: "website",
       images: [
         {
-          url: "/og-image.jpg",
+          url: "https://www.ss40network.com/og-image.jpg",
+          secureUrl: "https://www.ss40network.com/og-image.jpg",
           width: 1200,
           height: 630,
-          alt: "SS40 Network - Engineering Intelligent Digital Solutions, Building Innovative Products & Empowering Future Leaders",
+          type: "image/jpeg",
+          alt: "SS40 Network - Intelligent Digital Solutions, SaaS Products & Academics",
         },
       ],
     },
@@ -60,7 +66,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: "summary_large_image",
       title: defaultTitle,
       description: defaultDesc,
-      images: ["/og-image.jpg"],
+      images: ["https://www.ss40network.com/og-image.jpg"],
     },
     robots: {
       index: true,
