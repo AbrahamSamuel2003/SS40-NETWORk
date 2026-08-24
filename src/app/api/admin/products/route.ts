@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCurrentAdmin } from '@/lib/auth';
 import { logAdminActivity } from '@/lib/admin-activity';
+import { revalidateEntityCache } from '@/lib/revalidate-helpers';
 
 export async function GET() {
     try {
@@ -54,6 +55,9 @@ export async function POST(request: Request) {
             entityId: newRecord.id,
             description: `Created product: ${newRecord.name}`
         });
+
+        // Invalidate product caches on public pages
+        revalidateEntityCache('PRODUCT');
 
         return NextResponse.json({ success: true, data: newRecord });
     } catch (error) {

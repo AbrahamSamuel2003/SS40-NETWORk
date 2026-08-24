@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCurrentAdmin } from '@/lib/auth';
 import { logAdminActivity } from '@/lib/admin-activity';
+import { revalidateEntityCache } from '@/lib/revalidate-helpers';
 
 const isValidUrl = (url: string | null) => {
     if (!url) return true;
@@ -172,6 +173,9 @@ export async function PUT(request: Request) {
             ipAddress,
             userAgent,
         });
+
+        // Invalidate Next.js cache globally so site config updates apply immediately
+        revalidateEntityCache('SITE_CONFIG');
 
         return NextResponse.json({ success: true, data: updatedConfig }, { status: 200 });
     } catch (error) {

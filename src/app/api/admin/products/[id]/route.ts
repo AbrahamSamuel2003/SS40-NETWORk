@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCurrentAdmin } from '@/lib/auth';
 import { logAdminActivity } from '@/lib/admin-activity';
+import { revalidateEntityCache } from '@/lib/revalidate-helpers';
 
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
@@ -38,6 +39,9 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
             description: `Updated product: ${updatedRecord.name}`
         });
 
+        // Invalidate product caches on public pages
+        revalidateEntityCache('PRODUCT');
+
         return NextResponse.json({ success: true, data: updatedRecord });
     } catch (error) {
         console.error('Error updating product:', error);
@@ -65,6 +69,9 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
             entityId: id,
             description: `Deleted product: ${record.name}`
         });
+
+        // Invalidate product caches on public pages
+        revalidateEntityCache('PRODUCT');
 
         return NextResponse.json({ success: true });
     } catch (error) {

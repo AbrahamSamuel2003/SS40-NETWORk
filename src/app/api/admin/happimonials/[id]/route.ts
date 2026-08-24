@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCurrentAdmin } from '@/lib/auth';
 import { logAdminActivity } from '@/lib/admin-activity';
+import { revalidateEntityCache } from '@/lib/revalidate-helpers';
 import { extractYouTubeVideoId } from '../route';
 
 const isValidUUID = (id: string) => {
@@ -201,6 +202,9 @@ export async function PUT(request: Request, context: { params: Promise<{ id: str
             userAgent
         });
 
+        // Invalidate Next.js cache so the updated testimonial appears on public pages immediately
+        revalidateEntityCache('HAPPIMONIAL', updatedHappimonial.pageScope);
+
         return NextResponse.json({ success: true, data: updatedHappimonial }, { status: 200 });
     } catch (error) {
         console.error('Error updating Happimonial:', error);
@@ -245,6 +249,9 @@ export async function DELETE(request: Request, context: { params: Promise<{ id: 
             ipAddress,
             userAgent
         });
+
+        // Invalidate Next.js cache so the deleted testimonial is removed from public pages immediately
+        revalidateEntityCache('HAPPIMONIAL', existing.pageScope);
 
         return NextResponse.json({ success: true, message: 'Happimonial deleted' }, { status: 200 });
     } catch (error) {

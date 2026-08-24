@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCurrentAdmin } from '@/lib/auth';
 import { logAdminActivity } from '@/lib/admin-activity';
+import { revalidateEntityCache } from '@/lib/revalidate-helpers';
 
 const isValidAbsoluteUrl = (u: any) => {
     if (u === null || u === undefined || u === '') return true;
@@ -191,6 +192,9 @@ export async function POST(request: Request) {
             ipAddress,
             userAgent
         });
+
+        // Invalidate Next.js cache so the new testimonial appears on public pages immediately
+        revalidateEntityCache('HAPPIMONIAL', newHappimonial.pageScope);
 
         return NextResponse.json({ success: true, data: newHappimonial }, { status: 201 });
     } catch (error) {

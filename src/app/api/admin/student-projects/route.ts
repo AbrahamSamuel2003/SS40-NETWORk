@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCurrentAdmin } from '@/lib/auth';
 import { logAdminActivity } from '@/lib/admin-activity';
+import { revalidateEntityCache } from '@/lib/revalidate-helpers';
 
 const isValidJsonParam = (val: any) => {
     return typeof val === 'object' && val !== null;
@@ -164,6 +165,9 @@ export async function POST(request: Request) {
             ipAddress,
             userAgent
         });
+
+        // Invalidate student-projects caches on public pages
+        revalidateEntityCache('STUDENT_PROJECT');
 
         return NextResponse.json({ success: true, data: newStudentProject }, { status: 201 });
     } catch (error) {

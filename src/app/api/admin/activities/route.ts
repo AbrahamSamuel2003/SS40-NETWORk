@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCurrentAdmin } from '@/lib/auth';
 import { logAdminActivity } from '@/lib/admin-activity';
+import { revalidateEntityCache } from '@/lib/revalidate-helpers';
 
 export async function GET() {
     try {
@@ -84,11 +85,8 @@ export async function POST(request: Request) {
             description: `Created activity post: ${newRecord.title}`
         });
 
-        try {
-            const { revalidatePath } = await import('next/cache');
-            revalidatePath('/');
-            revalidatePath('/blogs');
-        } catch {}
+        // Invalidate Next.js cache so the new post appears immediately on public pages
+        revalidateEntityCache('ACTIVITY');
 
         return NextResponse.json({ success: true, data: newRecord });
     } catch (error) {

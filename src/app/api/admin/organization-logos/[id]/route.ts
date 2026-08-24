@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCurrentAdmin } from '@/lib/auth';
 import { logAdminActivity } from '@/lib/admin-activity';
+import { revalidateEntityCache } from '@/lib/revalidate-helpers';
 
 const VALID_PLACEMENTS = ['CLIENT', 'BRAND', 'UNIVERSITY', 'PARTNER'];
 
@@ -205,6 +206,9 @@ export async function PUT(
             userAgent,
         });
 
+        // Invalidate Next.js cache so the updated logo appears immediately on public pages
+        revalidateEntityCache('ORGANIZATION_LOGO', updated.pageScope);
+
         return NextResponse.json({ success: true, data: updated }, { status: 200 });
     } catch (error) {
         console.error('Error updating OrganizationLogo:', error);
@@ -271,6 +275,9 @@ export async function DELETE(
             ipAddress,
             userAgent,
         });
+
+        // Invalidate Next.js cache so the deleted logo is removed from public pages immediately
+        revalidateEntityCache('ORGANIZATION_LOGO', existing.pageScope);
 
         return NextResponse.json({ success: true }, { status: 200 });
     } catch (error) {

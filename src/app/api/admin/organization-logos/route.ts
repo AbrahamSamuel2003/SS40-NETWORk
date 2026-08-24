@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCurrentAdmin } from '@/lib/auth';
 import { logAdminActivity } from '@/lib/admin-activity';
+import { revalidateEntityCache } from '@/lib/revalidate-helpers';
 
 const VALID_PLACEMENTS = ['CLIENT', 'BRAND', 'UNIVERSITY', 'PARTNER'];
 
@@ -194,6 +195,9 @@ export async function POST(request: Request) {
             ipAddress,
             userAgent,
         });
+
+        // Invalidate Next.js cache so the new logo appears on public pages immediately
+        revalidateEntityCache('ORGANIZATION_LOGO', logo.pageScope);
 
         return NextResponse.json({ success: true, data: logo }, { status: 201 });
     } catch (error) {

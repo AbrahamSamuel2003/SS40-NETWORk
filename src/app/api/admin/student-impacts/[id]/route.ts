@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCurrentAdmin } from '@/lib/auth';
 import { logAdminActivity } from '@/lib/admin-activity';
+import { revalidateEntityCache } from '@/lib/revalidate-helpers';
 
 const isValidUUID = (id: string) => {
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -172,6 +173,9 @@ export async function PUT(request: Request, context: { params: Promise<{ id: str
             userAgent
         });
 
+        // Invalidate student-impacts caches on public pages
+        revalidateEntityCache('STUDENT_IMPACT');
+
         return NextResponse.json({ success: true, data: updatedStudentImpact }, { status: 200 });
     } catch (error) {
         console.error('Error updating StudentImpact:', error);
@@ -216,6 +220,9 @@ export async function DELETE(request: Request, context: { params: Promise<{ id: 
             ipAddress,
             userAgent
         });
+
+        // Invalidate student-impacts caches on public pages
+        revalidateEntityCache('STUDENT_IMPACT');
 
         return NextResponse.json({ success: true, message: 'StudentImpact deleted' }, { status: 200 });
     } catch (error) {

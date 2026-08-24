@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCurrentAdmin } from '@/lib/auth';
 import { logAdminActivity } from '@/lib/admin-activity';
+import { revalidateEntityCache } from '@/lib/revalidate-helpers';
 
 function slugify(text: string): string {
     return text
@@ -91,11 +92,8 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
             description: `Updated activity post: ${updatedRecord.title}`
         });
 
-        try {
-            const { revalidatePath } = await import('next/cache');
-            revalidatePath('/');
-            revalidatePath('/blogs');
-        } catch {}
+        // Invalidate Next.js cache so the updated post appears immediately on public pages
+        revalidateEntityCache('ACTIVITY');
 
         return NextResponse.json({ success: true, data: updatedRecord });
     } catch (error) {
@@ -125,11 +123,8 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
             description: `Deleted activity post: ${record.title}`
         });
 
-        try {
-            const { revalidatePath } = await import('next/cache');
-            revalidatePath('/');
-            revalidatePath('/blogs');
-        } catch {}
+        // Invalidate Next.js cache so the deleted post is removed from public pages immediately
+        revalidateEntityCache('ACTIVITY');
 
         return NextResponse.json({ success: true });
     } catch (error) {
