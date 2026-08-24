@@ -385,8 +385,6 @@ function FeaturedVideoArea({ story }: {
 
 function SecondaryStoryCarousel({ stories, onOpenModal }: { stories: any[], onOpenModal: (story: any) => void }) {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [isTruncated, setIsTruncated] = useState(true); // Default to assuming truncation for safety
-    const quoteRef = useRef<HTMLParagraphElement>(null);
 
     // Automatic rotation
     React.useEffect(() => {
@@ -402,21 +400,6 @@ function SecondaryStoryCarousel({ stories, onOpenModal }: { stories: any[], onOp
     const quote = story.testimonial || story.quote;
     const company = story.companyName || story.company;
     const route = story.route || "/features";
-
-    // Detect if content is overflowing (clamped) to conditionally show the "Read Full Story" button
-    React.useEffect(() => {
-        const checkTruncation = () => {
-            if (quoteRef.current) {
-                const { scrollHeight, clientHeight } = quoteRef.current;
-                // If scrollHeight is strictly greater than client height, text was cut off
-                setIsTruncated(scrollHeight > clientHeight);
-            }
-        };
-        // Small delay to ensure DOM rendered the text
-        setTimeout(checkTruncation, 50);
-        window.addEventListener('resize', checkTruncation);
-        return () => window.removeEventListener('resize', checkTruncation);
-    }, [currentIndex]);
 
     // Smooth horizontal slide variants
     const slideVariants: Variants = {
@@ -455,12 +438,12 @@ function SecondaryStoryCarousel({ stories, onOpenModal }: { stories: any[], onOp
                     });
                 }
             }}
-            className="cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 bg-white border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_15px_35px_rgb(107,159,145,0.06)] hover:border-[#6B9F91]/20 rounded-2xl p-6 sm:p-8 lg:p-10 flex flex-col relative overflow-hidden w-full lg:h-full lg:absolute lg:inset-0"
+            className="cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2E544A] focus-visible:ring-offset-2 bg-white border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_15px_35px_rgb(107,159,145,0.06)] hover:border-[#2E544A]/20 rounded-2xl p-6 sm:p-8 lg:p-10 flex flex-col relative overflow-hidden w-full lg:h-full lg:absolute lg:inset-0"
             // Desktop: absolute inset to match video container height. Mobile: natural height.
             style={{ minHeight: '320px' }}
         >
             {/* Subtle highlight glow on hover */}
-            <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-[#6B9F91]/0 to-transparent group-hover:via-[#6B9F91]/40 transition-all duration-700 ease-out" />
+            <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-[#2E544A]/0 to-transparent group-hover:via-[#2E544A]/40 transition-all duration-700 ease-out" />
 
             <div className="flex-1 relative flex flex-col h-full min-h-0">
                 <AnimatePresence mode="wait">
@@ -483,7 +466,6 @@ function SecondaryStoryCarousel({ stories, onOpenModal }: { stories: any[], onOp
                         <div className="flex-1 min-h-0 relative mb-2">
                             <div className="h-full overflow-hidden">
                                 <p
-                                    ref={quoteRef}
                                     className="text-lg lg:text-xl text-gray-700 font-medium italic leading-relaxed line-clamp-4"
                                 >
                                     &ldquo;{quote}&rdquo;
@@ -491,25 +473,23 @@ function SecondaryStoryCarousel({ stories, onOpenModal }: { stories: any[], onOp
                             </div>
                         </div>
 
-                        {/* Action Area - Conditionally visible if clamped */}
+                        {/* Action Area */}
                         <div className="h-10 shrink-0 flex items-start">
-                            {isTruncated && (
-                                <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        onOpenModal({
-                                            clientName: story.clientName,
-                                            company,
-                                            quote,
-                                            route
-                                        });
-                                    }}
-                                    className="text-sm font-bold text-[#6B9F91] hover:text-[#5C8C80] flex items-center group/read transition-colors focus-visible:outline-none"
-                                >
-                                    Read Full Story
-                                    <ArrowRight className="w-3.5 h-3.5 ml-1 transition-transform group-hover/read:translate-x-1" />
-                                </button>
-                            )}
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    onOpenModal({
+                                        clientName: story.clientName,
+                                        company,
+                                        quote,
+                                        route
+                                    });
+                                }}
+                                className="text-sm font-bold text-[#1F3D35] hover:text-[#11221E] flex items-center group/read transition-colors focus-visible:outline-none"
+                            >
+                                Read Full Story
+                                <ArrowRight className="w-3.5 h-3.5 ml-1 transition-transform group-hover/read:translate-x-1" />
+                            </button>
                         </div>
 
                         {/* Profile Info block - fixed at bottom */}

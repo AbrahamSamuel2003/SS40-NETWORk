@@ -133,10 +133,10 @@ export function Navbar({ config }: { config?: SiteConfigData | null }) {
                                     key={link.name}
                                     href={link.href}
                                     className={cn(
-                                        "px-4 py-2 text-sm font-medium transition-all duration-200 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] outline-offset-2",
+                                        "px-4 py-2 text-sm transition-all duration-200 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F766E] outline-offset-2",
                                         isActive
-                                            ? "text-[var(--color-primary)]"
-                                            : "text-[var(--color-body-text)] hover:text-[var(--color-heading)] hover:bg-gray-100"
+                                            ? "text-[#0F766E] font-bold bg-[#EDF5F2]"
+                                            : "text-[#374151] font-medium hover:text-[#111827] hover:bg-gray-100"
                                     )}
                                     aria-current={isActive ? "page" : undefined}
                                 >

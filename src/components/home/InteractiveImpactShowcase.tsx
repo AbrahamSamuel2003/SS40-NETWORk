@@ -279,19 +279,7 @@ const MobileVisualDigital = React.memo(() => {
             transition={{ duration: 0.6 }}
             className="w-full h-full flex items-center justify-center"
         >
-            <svg viewBox="0 0 400 360" className="w-[400px] h-auto drop-shadow-sm pointer-events-none">
-                <defs>
-                    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-                        <feDropShadow dx="0" dy="0" stdDeviation="6" floodColor="#6B9F91" floodOpacity="0.4" />
-                    </filter>
-                    <filter id="shadow-md" x="-10%" y="-10%" width="120%" height="120%">
-                        <feDropShadow dx="0" dy="6" stdDeviation="8" floodColor="#000" floodOpacity="0.08" />
-                    </filter>
-                    <filter id="shadow-lg" x="-10%" y="-10%" width="120%" height="120%">
-                        <feDropShadow dx="0" dy="10" stdDeviation="15" floodColor="#000" floodOpacity="0.12" />
-                    </filter>
-                </defs>
-
+            <svg viewBox="0 0 400 360" className="w-[400px] h-auto pointer-events-none">
                 {/* Circuit Board Trace Background */}
                 <path
                     d="M 130 150 V 190 Q 130 200 140 200 H 180 Q 190 200 190 210 V 275 M 190 275 H 280"
@@ -309,7 +297,7 @@ const MobileVisualDigital = React.memo(() => {
                 />
 
                 {/* Component 1: Code Editor (SS40 Theme) */}
-                <g transform="translate(15, 15)" filter="url(#shadow-lg)">
+                <g transform="translate(15, 15)">
                     <rect x="0" y="0" width="220" height="135" rx="8" fill="#111827" />
                     {/* Header */}
                     <rect x="0" y="0" width="220" height="24" rx="8" fill="#1F2937" />
@@ -354,7 +342,7 @@ const MobileVisualDigital = React.memo(() => {
                 </g>
 
                 {/* Component 2: Dev Team Panel */}
-                <g transform="translate(195, 45)" filter="url(#shadow-md)">
+                <g transform="translate(195, 45)">
                     <rect x="0" y="0" width="145" height="75" rx="10" fill="#ffffff" stroke="#e5e7eb" strokeWidth="1" />
                     <rect x="0" y="0" width="145" height="75" rx="10" fill="white" />
                     {/* Sparkle mint */}
@@ -371,7 +359,7 @@ const MobileVisualDigital = React.memo(() => {
                 </g>
 
                 {/* Component 3: Build Terminal */}
-                <g transform="translate(15, 170)" filter="url(#shadow-md)">
+                <g transform="translate(15, 170)">
                     <rect x="0" y="0" width="165" height="65" rx="10" fill="#111827" />
                     <text x="15" y="24" fontSize="10" fill="#6B9F91" fontFamily="monospace">&gt;</text>
                     <text x="26" y="24" fontSize="10" fill="#D1D5DB" fontFamily="monospace">npm run deploy</text>
@@ -389,7 +377,7 @@ const MobileVisualDigital = React.memo(() => {
                 </g>
 
                 {/* Component 4: Cloud Deployment */}
-                <g transform="translate(130, 245)" filter="url(#shadow-md)">
+                <g transform="translate(130, 245)">
                     <rect x="0" y="0" width="120" height="65" rx="12" fill="#ffffff" stroke="#e5e7eb" strokeWidth="1" />
                     <motion.g
                         animate={{ y: [-1, 1, -1] }}
@@ -413,7 +401,7 @@ const MobileVisualDigital = React.memo(() => {
                 </g>
 
                 {/* Component 5: Live Preview */}
-                <g transform="translate(265, 175)" filter="url(#shadow-lg)">
+                <g transform="translate(265, 175)">
                     <rect x="0" y="0" width="120" height="135" rx="10" fill="#ffffff" />
                     <rect x="0" y="0" width="120" height="24" rx="10" fill="#F3F4F6" />
                     <rect x="0" y="14" width="120" height="10" fill="#F3F4F6" />
