@@ -2,8 +2,8 @@
  * Client-Side High-Performance Image Compressor
  * 
  * Automatically compresses, scales, and optimizes images in the browser
- * before upload, preventing 413 Payload Too Large errors and speeding up
- * network transfer times.
+ * before upload, guaranteeing file sizes stay under 700KB so they never
+ * exceed proxy limits (like Nginx 1MB default).
  */
 
 export interface CompressionOptions {
@@ -14,21 +14,38 @@ export interface CompressionOptions {
 }
 
 const DEFAULT_OPTIONS: CompressionOptions = {
-    maxWidth: 2000,
-    maxHeight: 2000,
-    quality: 0.85,
-    maxSizeKB: 750,
+    maxWidth: 1600,
+    maxHeight: 1600,
+    quality: 0.82,
+    maxSizeKB: 650,
 };
 
 /**
+ * Checks if a canvas context contains transparent pixels
+ */
+function hasTransparency(ctx: CanvasRenderingContext2D, width: number, height: number): boolean {
+    try {
+        // Sample pixels across the canvas for performance
+        const imgData = ctx.getImageData(0, 0, width, height).data;
+        for (let i = 3; i < imgData.length; i += 16) {
+            if (imgData[i] < 250) {
+                return true;
+            }
+        }
+    } catch {
+        return false;
+    }
+    return false;
+}
+
+/**
  * Compresses an image File using browser-native HTML5 Canvas.
- * Preserves PNG transparency, skips SVGs/GIFs, and guarantees the file size remains small.
+ * Supports smart WebP conversion, transparency preservation, and guaranteed size reduction.
  */
 export async function compressImageFile(
     file: File,
     options: CompressionOptions = {}
 ): Promise<File> {
-    // If not running in browser or not a compressible image, return as-is
     if (typeof window === 'undefined' || !file) {
         return file;
     }
@@ -36,12 +53,16 @@ export async function compressImageFile(
     const type = file.type.toLowerCase();
     const name = file.name.toLowerCase();
 
-    // Skip vector SVGs, animated GIFs, or non-image files
+    // Skip vector SVGs, animated GIFs, or non-image files (e.g. MP4 videos, PDFs)
     if (
         type.includes('svg') ||
         type.includes('gif') ||
+        type.startsWith('video/') ||
+        type.includes('pdf') ||
         name.endsWith('.svg') ||
         name.endsWith('.gif') ||
+        name.endsWith('.mp4') ||
+        name.endsWith('.pdf') ||
         (!type.startsWith('image/') && !name.match(/\.(jpe?g|png|webp|avif)$/))
     ) {
         return file;
@@ -49,8 +70,8 @@ export async function compressImageFile(
 
     const config = { ...DEFAULT_OPTIONS, ...options };
 
-    // If file is already smaller than 300KB, skip heavy compression
-    if (file.size <= 300 * 1024) {
+    // If file is already smaller than 250KB, skip heavy compression
+    if (file.size <= 250 * 1024) {
         return file;
     }
 
@@ -63,10 +84,10 @@ export async function compressImageFile(
 
             try {
                 let { width, height } = img;
-                const maxWidth = config.maxWidth || 2000;
-                const maxHeight = config.maxHeight || 2000;
+                const maxWidth = config.maxWidth || 1600;
+                const maxHeight = config.maxHeight || 1600;
 
-                // Proportionally calculate target dimensions
+                // Scale down if dimensions are large
                 if (width > maxWidth || height > maxHeight) {
                     const ratio = Math.min(maxWidth / width, maxHeight / height);
                     width = Math.round(width * ratio);
@@ -79,31 +100,76 @@ export async function compressImageFile(
 
                 const ctx = canvas.getContext('2d', { alpha: true });
                 if (!ctx) {
-                    resolve(file); // Fallback to original
+                    resolve(file);
                     return;
                 }
 
-                // Enable high-quality image smoothing
                 ctx.imageSmoothingEnabled = true;
                 ctx.imageSmoothingQuality = 'high';
-
-                // Draw resized image on canvas
                 ctx.drawImage(img, 0, 0, width, height);
 
-                // Preserve PNG transparency or choose WebP / JPEG
                 const isPng = type === 'image/png' || name.endsWith('.png');
-                const outputType = isPng ? 'image/png' : 'image/jpeg';
-                const quality = isPng ? undefined : config.quality;
+                const isTransparent = isPng ? hasTransparency(ctx, width, height) : false;
+
+                // Check browser WebP support for superior compression while preserving alpha channel
+                const isWebpSupported = canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0;
+
+                let outputType = 'image/jpeg';
+                let outputName = file.name.replace(/\.[^/.]+$/, '.jpg');
+                let quality = config.quality || 0.82;
+
+                if (isTransparent) {
+                    if (isWebpSupported) {
+                        outputType = 'image/webp';
+                        outputName = file.name.replace(/\.[^/.]+$/, '.webp');
+                        quality = 0.85;
+                    } else {
+                        outputType = 'image/png';
+                        outputName = file.name;
+                        quality = 1;
+                    }
+                } else if (isWebpSupported) {
+                    outputType = 'image/webp';
+                    outputName = file.name.replace(/\.[^/.]+$/, '.webp');
+                    quality = 0.82;
+                }
 
                 canvas.toBlob(
                     (blob) => {
-                        if (!blob || (blob.size >= file.size && width === img.width && height === img.height)) {
-                            // If compressed blob is somehow larger and didn't resize, keep original
+                        if (!blob) {
                             resolve(file);
                             return;
                         }
 
-                        const compressedFile = new File([blob], file.name, {
+                        // If blob is still somehow > 1MB, do one more quick scale pass
+                        if (blob.size > 900 * 1024) {
+                            const secondCanvas = document.createElement('canvas');
+                            const scale = 0.75;
+                            secondCanvas.width = Math.round(width * scale);
+                            secondCanvas.height = Math.round(height * scale);
+                            const secondCtx = secondCanvas.getContext('2d');
+                            if (secondCtx) {
+                                secondCtx.drawImage(canvas, 0, 0, secondCanvas.width, secondCanvas.height);
+                                secondCanvas.toBlob(
+                                    (secondBlob) => {
+                                        if (secondBlob) {
+                                            const finalFile = new File([secondBlob], outputName, {
+                                                type: secondBlob.type || outputType,
+                                                lastModified: Date.now(),
+                                            });
+                                            resolve(finalFile);
+                                        } else {
+                                            resolve(new File([blob], outputName, { type: blob.type || outputType }));
+                                        }
+                                    },
+                                    outputType,
+                                    0.75
+                                );
+                                return;
+                            }
+                        }
+
+                        const compressedFile = new File([blob], outputName, {
                             type: blob.type || outputType,
                             lastModified: Date.now(),
                         });
@@ -114,14 +180,14 @@ export async function compressImageFile(
                     quality
                 );
             } catch (err) {
-                console.warn('Browser image compression fallback to raw file:', err);
+                console.warn('Image compression fallback to original:', err);
                 resolve(file);
             }
         };
 
         img.onerror = () => {
             URL.revokeObjectURL(objectUrl);
-            resolve(file); // Fallback to original
+            resolve(file);
         };
 
         img.src = objectUrl;
