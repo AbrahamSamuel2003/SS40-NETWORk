@@ -12,23 +12,39 @@ export function revalidateEntityCache(
     pageScope?: string
 ) {
     try {
-        // Invalidate root and shared tags
+        const scope = (pageScope || 'GLOBAL').toUpperCase();
+
+        // 1. Invalidate Next.js in-memory query cache tag
         try { (revalidateTag as any)('home-data'); } catch {}
 
         switch (entity) {
             case 'ORGANIZATION_LOGO':
                 try { (revalidateTag as any)('logos'); } catch {}
-                try { revalidatePath('/', 'page'); } catch {}
-                try { revalidatePath('/digital-solutions', 'page'); } catch {}
-                try { revalidatePath('/products', 'page'); } catch {}
-                try { revalidatePath('/academics', 'page'); } catch {}
+                if (scope === 'HOME' || scope === 'GLOBAL') {
+                    try { revalidatePath('/', 'page'); } catch {}
+                }
+                if (scope === 'DIGITAL_SOLUTIONS' || scope === 'GLOBAL') {
+                    try { revalidatePath('/digital-solutions', 'page'); } catch {}
+                }
+                if (scope === 'PRODUCTS' || scope === 'GLOBAL') {
+                    try { revalidatePath('/products', 'page'); } catch {}
+                }
+                if (scope === 'ACADEMICS' || scope === 'GLOBAL') {
+                    try { revalidatePath('/academics', 'page'); } catch {}
+                }
                 break;
 
             case 'HAPPIMONIAL':
                 try { (revalidateTag as any)('happimonials'); } catch {}
-                try { revalidatePath('/', 'page'); } catch {}
-                try { revalidatePath('/digital-solutions', 'page'); } catch {}
-                try { revalidatePath('/products', 'page'); } catch {}
+                if (scope === 'HOME' || scope === 'GLOBAL') {
+                    try { revalidatePath('/', 'page'); } catch {}
+                }
+                if (scope === 'DIGITAL_SOLUTIONS' || scope === 'GLOBAL') {
+                    try { revalidatePath('/digital-solutions', 'page'); } catch {}
+                }
+                if (scope === 'PRODUCTS' || scope === 'GLOBAL') {
+                    try { revalidatePath('/products', 'page'); } catch {}
+                }
                 try { revalidatePath('/happimonials', 'page'); } catch {}
                 break;
 

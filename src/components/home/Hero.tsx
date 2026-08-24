@@ -9,12 +9,21 @@ import { HeroDashboardMockup } from "./HeroDashboardMockup";
 
 export function Hero() {
     return (
-        <section className={cn("relative w-full overflow-hidden bg-white", HERO_SPACING_CLASSES)}>
-            {/* Background Blur Shapes (Static CSS without client overhead) */}
-            <div className="absolute top-0 left-1/2 -z-10 -translate-x-1/2 transform-gpu pointer-events-none">
-                <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-[var(--color-hero)]/40 blur-[100px] mix-blend-multiply opacity-70" />
-                <div className="absolute top-[20%] right-[-20%] w-[500px] h-[500px] rounded-full bg-[var(--color-primary)]/10 blur-[100px] mix-blend-multiply opacity-80" />
-                <div className="absolute bottom-[-30%] left-[20%] w-[700px] h-[700px] rounded-full bg-[var(--color-soft)]/20 blur-[120px] mix-blend-multiply opacity-60" />
+        <section className={cn("relative w-full overflow-hidden bg-white isolate", HERO_SPACING_CLASSES)}>
+            {/* Background Ambient Shapes (Hardware-Accelerated Radial Gradients without CSS Filter Overhead) */}
+            <div className="absolute top-0 left-1/2 -z-10 -translate-x-1/2 transform-gpu pointer-events-none w-full h-full max-w-7xl overflow-hidden">
+                <div 
+                    className="absolute top-[-10%] left-[-5%] w-[550px] h-[550px] rounded-full pointer-events-none opacity-60" 
+                    style={{ background: 'radial-gradient(circle, rgba(237,245,242,0.8) 0%, rgba(237,245,242,0) 70%)' }}
+                />
+                <div 
+                    className="absolute top-[15%] right-[-10%] w-[450px] h-[450px] rounded-full pointer-events-none opacity-40" 
+                    style={{ background: 'radial-gradient(circle, rgba(107,159,145,0.3) 0%, rgba(107,159,145,0) 70%)' }}
+                />
+                <div 
+                    className="absolute bottom-[-20%] left-[25%] w-[600px] h-[600px] rounded-full pointer-events-none opacity-50" 
+                    style={{ background: 'radial-gradient(circle, rgba(166,203,190,0.35) 0%, rgba(166,203,190,0) 70%)' }}
+                />
             </div>
 
             <Container className="relative z-10">

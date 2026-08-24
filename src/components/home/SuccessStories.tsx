@@ -19,6 +19,9 @@ const FEATURED_STORY = {
     company: "Operations Director, Apex Logistics",
     quote: "Partnering with SS40 NETWORK for our custom digital transformation was a game-changer. They modernized our entire legacy supply-chain system into a scalable, high-performance architecture.",
     link: "/digital-solutions",
+    youtubeUrl: null,
+    videoUrl: null,
+    thumbnailUrl: null
 };
 
 const SECONDARY_STORIES = [
@@ -54,28 +57,13 @@ const fadeUpAnim: Variants = {
 };
 
 export function SuccessStories({ data }: { data?: any[] }) {
-    if (data && data.length === 0) {
-        return (
-            <SectionWrapper id="success-stories" className="bg-[#EDF5F2] overflow-hidden">
-                <Container className="space-y-12 lg:space-y-16">
-                    <div>
-                        <SectionHeading
-                            badge="Success Stories"
-                            title="Built on trust. Driven by results."
-                            description="Real partnerships. Real outcomes. Discover how SS40 NETWORK helps businesses and learners grow through technology, products, and education."
-                        />
-                    </div>
-                    <StoryGridSkeleton />
-                </Container>
-            </SectionWrapper>
-        );
-    }
+    const hasData = Boolean(data && data.length > 0);
 
     // Featured = the one HOME story that has a youtubeUrl.
     // All other stories (no youtubeUrl) go to the secondary carousel.
-    const featuredStory = (data && data.find((s: any) => s.youtubeUrl)) || null;
-    const secondaryStories = data
-        ? data.filter((s: any) => !s.youtubeUrl)
+    const featuredStory = hasData ? (data!.find((s: any) => s.youtubeUrl) || null) : null;
+    const secondaryStories = hasData
+        ? (data!.filter((s: any) => !s.youtubeUrl).length > 0 ? data!.filter((s: any) => !s.youtubeUrl) : SECONDARY_STORIES)
         : SECONDARY_STORIES;
 
     // Map featured story fields safely.
@@ -89,7 +77,7 @@ export function SuccessStories({ data }: { data?: any[] }) {
         youtubeUrl: featuredStory.youtubeUrl,
         videoUrl: featuredStory.videoUrl || null,
         thumbnailUrl: featuredStory.thumbnailUrl || null
-    } : null;
+    } : FEATURED_STORY;
 
     // Modal state lifted here to avoid CSS perspective trapping fixed elements
     const [activeModalStory, setActiveModalStory] = useState<{

@@ -45,9 +45,9 @@ export function ActivityUpdates({ data = [] }: ActivityUpdatesProps) {
 
     useMotionValueEvent(scrollYProgress, 'change', (latest) => {
         if (count === 0) return;
-        // Divide progression into 3 equal slots: 0 -> 0.33 -> 0.66 -> 1.0
+        // Divide progression into equal slots
         const index = Math.min(Math.floor(latest * count), count - 1);
-        setActiveDesktopIdx(index);
+        setActiveDesktopIdx((prev) => (prev !== index ? index : prev));
     });
 
     // If no activities, hide section

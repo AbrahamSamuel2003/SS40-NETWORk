@@ -37,8 +37,20 @@ const SCENES = [
 
 const GlowingOrbs = () => (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-0 transform-gpu" style={{ willChange: "transform" }}>
-        <motion.div animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.3, 0.1] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} className="absolute top-1/4 left-1/4 w-64 h-64 bg-[#6B9F91] rounded-full blur-[100px] transform-gpu" style={{ willChange: "transform, opacity" }} />
-        <motion.div animate={{ scale: [1, 1.5, 1], opacity: [0.1, 0.2, 0.1] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }} className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#A6CBBE] rounded-full blur-[120px] transform-gpu" style={{ willChange: "transform, opacity" }} />
+        <div 
+            className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full pointer-events-none transform-gpu opacity-40"
+            style={{ 
+                background: 'radial-gradient(circle, rgba(107,159,145,0.4) 0%, rgba(107,159,145,0) 70%)',
+                willChange: "transform"
+            }} 
+        />
+        <div 
+            className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full pointer-events-none transform-gpu opacity-30"
+            style={{ 
+                background: 'radial-gradient(circle, rgba(166,203,190,0.4) 0%, rgba(166,203,190,0) 70%)',
+                willChange: "transform"
+            }} 
+        />
     </div>
 );
 

@@ -34,7 +34,7 @@ export function TrustedBy({ data }: { data?: any[] }) {
     const hasAdminLogos = Boolean(data && data.length > 0);
 
     const rows = React.useMemo(() => {
-        if (hasAdminLogos && data) {
+        if (hasAdminLogos && data && data.length > 0) {
             return {
                 row1: data,
                 row2: data.length > 3 ? [...data].reverse() : data,
@@ -45,36 +45,6 @@ export function TrustedBy({ data }: { data?: any[] }) {
             row2: MIXED_ROW_2,
         };
     }, [data, hasAdminLogos]);
-
-    if (data && data.length === 0) {
-        return (
-            <SectionWrapper id="trusted-by" className="bg-white relative overflow-hidden">
-                {/* Soft Ambient Background Enhancements */}
-                <div className="absolute inset-0 pointer-events-none z-0">
-                    <div
-                        className="absolute inset-0 opacity-[0.02] mix-blend-multiply"
-                        style={{ backgroundImage: 'linear-gradient(#6B9F91 1px, transparent 1px), linear-gradient(90deg, #6B9F91 1px, transparent 1px)', backgroundSize: '40px 40px' }}
-                    />
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-[#6B9F91]/5 blur-[120px] rounded-full" />
-                </div>
-
-                <Container className="relative z-10">
-                    <div className="text-center mb-12 lg:mb-20">
-                        <span className="inline-block px-3 py-1 rounded-full bg-[#6B9F91]/10 text-[#6B9F91] text-[10px] font-bold uppercase tracking-widest mb-4">
-                            OUR PARTNERS & CLIENTS
-                        </span>
-                        <h2 className="text-3xl md:text-5xl font-extrabold text-[#111827] mb-4">
-                            Trusted by Businesses, Institutions & Partners
-                        </h2>
-                        <p className="text-gray-500 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
-                            Organizations that trust SS40 NETWORK across digital solutions, products, and industry-focused academics.
-                        </p>
-                    </div>
-                    <LogoMarqueeSkeleton count={6} title="" />
-                </Container>
-            </SectionWrapper>
-        );
-    }
 
     return (
         <SectionWrapper id="trusted-by" className="bg-white relative overflow-hidden">
@@ -169,9 +139,18 @@ interface MarqueeRowProps {
 }
 
 function MarqueeRow({ items, direction, speed }: MarqueeRowProps) {
-    // Lean 2x duplication for seamless -50% marquee loop without DOM node bloat
-    const baseItems = items.length < 4 ? [...items, ...items, ...items] : (items.length < 6 ? [...items, ...items] : items);
-    const duplicatedItems = [...baseItems, ...baseItems];
+    // Dynamic duplication ensuring at least 10 items in track for seamless -50% loop on 4K/Ultrawide displays
+    const baseItems = React.useMemo(() => {
+        if (!items || items.length === 0) return [];
+        let list = [...items];
+        while (list.length < 8) {
+            list = [...list, ...items];
+        }
+        return list;
+    }, [items]);
+
+    const duplicatedItems = React.useMemo(() => [...baseItems, ...baseItems], [baseItems]);
+
     const pauseMarquee = (event: React.PointerEvent<HTMLDivElement>) => {
         if (event.pointerType === "touch") {
             event.currentTarget.classList.add("marquee-touch-paused");
@@ -207,7 +186,8 @@ function MarqueeRow({ items, direction, speed }: MarqueeRowProps) {
                     return (
                         <div
                             key={`${item.id}-${idx}`}
-                            className={`marquee-logo-card bg-white border border-gray-100 rounded-2xl flex items-center shadow-[0_2px_8px_-3px_rgba(0,0,0,0.05)] hover:shadow-[0_10px_20px_-5px_rgba(0,0,0,0.08)] transition-all duration-300 cursor-pointer overflow-hidden group shrink-0 ${
+                            style={{ contain: 'paint layout' }}
+                            className={`marquee-logo-card bg-white border border-gray-100 rounded-2xl flex items-center shadow-[0_2px_8px_-3px_rgba(0,0,0,0.05)] hover:shadow-[0_10px_20px_-5px_rgba(0,0,0,0.08)] transition-all duration-300 cursor-pointer overflow-hidden group shrink-0 transform-gpu ${
                                 item.showTextOnCard
                                     ? 'p-3 sm:p-4 gap-3 sm:gap-4 w-max h-[64px] sm:h-[72px] md:h-[80px] justify-start'
                                     : 'px-4 py-2 sm:px-5 sm:py-2.5 h-[64px] sm:h-[72px] md:h-[80px] w-auto justify-center'
@@ -225,7 +205,6 @@ function MarqueeRow({ items, direction, speed }: MarqueeRowProps) {
                                         alt={item.showTextOnCard ? item.name : (item.name || 'Partner Logo')} 
                                         width={160}
                                         height={80}
-                                        loading="lazy"
                                         decoding="async"
                                         sizes="(max-width: 768px) 120px, 160px"
                                         className={`object-contain ${
