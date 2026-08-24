@@ -320,12 +320,17 @@ function ActivityStoryModal({ activity, onClose }: { activity: ActivityItem; onC
         return () => el.removeEventListener('wheel', onWheel);
     }, [images.length, nextImg, prevImg]);
 
-    const formattedDate = new Date(activity.activityDate).toLocaleDateString('en-US', {
-        weekday: 'long',
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric'
-    });
+    const formattedDate = React.useMemo(() => {
+        const d = typeof activity.activityDate === 'string' ? new Date(activity.activityDate) : activity.activityDate;
+        if (!d || isNaN(new Date(d).getTime())) return '';
+        return new Date(d).toLocaleDateString('en-US', {
+            weekday: 'long',
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric',
+            timeZone: 'UTC',
+        });
+    }, [activity.activityDate]);
 
     // Keyboard navigation
     useEffect(() => {
@@ -485,6 +490,7 @@ function ActivityStoryModal({ activity, onClose }: { activity: ActivityItem; onC
                                 href={activity.externalLink}
                                 target="_blank"
                                 rel="noopener noreferrer"
+                                aria-label={`Read story on LinkedIn for ${activity.title}`}
                                 className="inline-flex items-center gap-2 bg-[#0A66C2] hover:bg-[#004182] text-white px-5 py-2.5 rounded-xl font-bold text-xs shadow-md transition-all"
                             >
                                 <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">

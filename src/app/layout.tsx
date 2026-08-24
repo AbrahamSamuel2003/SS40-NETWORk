@@ -184,14 +184,14 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" className={`${inter.variable} antialiased`}>
+    <html lang="en" className={`${inter.variable} antialiased`} suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="min-h-screen flex flex-col bg-white">
+      <body className="min-h-screen flex flex-col bg-white" suppressHydrationWarning>
         <VisitorTracker />
         {children}
       </body>

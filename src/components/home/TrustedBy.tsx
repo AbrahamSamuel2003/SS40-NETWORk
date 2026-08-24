@@ -33,23 +33,17 @@ const MIXED_ROW_2 = [
 export function TrustedBy({ data }: { data?: any[] }) {
     const hasAdminLogos = Boolean(data && data.length > 0);
 
-    const [rows, setRows] = React.useState(() => ({
-        row1: hasAdminLogos ? data! : MIXED_ROW_1,
-        row2: hasAdminLogos ? data! : MIXED_ROW_2,
-    }));
-
-    React.useEffect(() => {
-        if (hasAdminLogos) {
-            setRows({
-                row1: shuffleArray(data!),
-                row2: shuffleArray(data!),
-            });
-        } else {
-            setRows({
-                row1: MIXED_ROW_1,
-                row2: MIXED_ROW_2,
-            });
+    const rows = React.useMemo(() => {
+        if (hasAdminLogos && data) {
+            return {
+                row1: data,
+                row2: data.length > 3 ? [...data].reverse() : data,
+            };
         }
+        return {
+            row1: MIXED_ROW_1,
+            row2: MIXED_ROW_2,
+        };
     }, [data, hasAdminLogos]);
 
     if (data && data.length === 0) {

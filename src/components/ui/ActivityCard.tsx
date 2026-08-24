@@ -184,11 +184,16 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
     const meta = ACTIVITY_META[activity.activityType] || ACTIVITY_META.MEETING;
     const Icon = meta.icon;
 
-    const formattedDate = new Date(activity.activityDate).toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric'
-    });
+    const formattedDate = React.useMemo(() => {
+        const d = typeof activity.activityDate === 'string' ? new Date(activity.activityDate) : activity.activityDate;
+        if (!d || isNaN(new Date(d).getTime())) return '';
+        return new Date(d).toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+            timeZone: 'UTC',
+        });
+    }, [activity.activityDate]);
 
     // ─────────────────────────────────────────────────────────────────────────────
     // MOBILE SWIPE VARIANT (For the horizontal snap carousel on mobile)
@@ -273,7 +278,7 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
 
                         <h3
                             onClick={() => onReadStory && onReadStory(activity)}
-                            className="text-base font-bold text-[#111827] leading-snug hover:text-[#6B9F91] transition-colors cursor-pointer line-clamp-2 mb-2"
+                            className="text-base font-bold text-[#111827] leading-snug hover:text-[#2E544A] transition-colors cursor-pointer line-clamp-2 mb-2"
                         >
                             {activity.title}
                         </h3>
@@ -287,7 +292,7 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
                         <button
                             type="button"
                             onClick={() => onReadStory && onReadStory(activity)}
-                            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#6B9F91] hover:text-[#5C8C80] transition-colors"
+                            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#1F3D35] hover:text-[#11221E] transition-colors"
                         >
                             Read Story
                             <ArrowUpRight className="w-3.5 h-3.5" />
@@ -298,7 +303,8 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
                                 href={activity.externalLink}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1 text-[11px] font-semibold text-gray-500 hover:text-[#0A66C2] transition-colors bg-gray-50 px-2 py-1 rounded border border-gray-200"
+                                aria-label={`Read LinkedIn post about ${activity.title}`}
+                                className="inline-flex items-center gap-1 text-[11px] font-semibold text-gray-700 hover:text-[#0A66C2] transition-colors bg-gray-50 px-2 py-1 rounded border border-gray-200"
                                 onClick={(e) => e.stopPropagation()}
                             >
                                 <svg className="w-3 h-3 fill-current text-[#0A66C2]" viewBox="0 0 24 24">
@@ -395,7 +401,7 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
 
                         <h3
                             onClick={() => onReadStory && onReadStory(activity)}
-                            className="text-base font-bold text-[#111827] leading-snug hover:text-[#6B9F91] transition-colors cursor-pointer line-clamp-2 mb-2"
+                            className="text-base font-bold text-[#111827] leading-snug hover:text-[#2E544A] transition-colors cursor-pointer line-clamp-2 mb-2"
                         >
                             {activity.title}
                         </h3>
@@ -409,7 +415,7 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
                         <button
                             type="button"
                             onClick={() => onReadStory && onReadStory(activity)}
-                            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#6B9F91] hover:text-[#5C8C80] transition-colors"
+                            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#1F3D35] hover:text-[#11221E] transition-colors"
                         >
                             Read Story
                             <ArrowUpRight className="w-3.5 h-3.5" />
@@ -420,7 +426,8 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
                                 href={activity.externalLink}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1 text-[11px] font-semibold text-gray-500 hover:text-[#0A66C2] transition-colors bg-gray-50 px-2 py-1 rounded border border-gray-200"
+                                aria-label={`Read LinkedIn post about ${activity.title}`}
+                                className="inline-flex items-center gap-1 text-[11px] font-semibold text-gray-700 hover:text-[#0A66C2] transition-colors bg-gray-50 px-2 py-1 rounded border border-gray-200"
                                 onClick={(e) => e.stopPropagation()}
                             >
                                 <svg className="w-3 h-3 fill-current text-[#0A66C2]" viewBox="0 0 24 24">
@@ -549,14 +556,14 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
             <div className="p-6 sm:p-8 lg:p-10 flex flex-col justify-between flex-1 overflow-hidden">
                 <div className="space-y-4">
                     {/* Date and Location Header */}
-                    <div className="flex flex-wrap items-center gap-3 text-xs sm:text-sm text-gray-500">
-                        <span className="flex items-center gap-1.5 font-semibold text-gray-800 bg-[#EDF5F2] px-3 py-1 rounded-full">
-                            <Calendar className="w-3.5 h-3.5 text-[#6B9F91]" />
+                    <div className="flex flex-wrap items-center gap-3 text-xs sm:text-sm text-gray-600">
+                        <span className="flex items-center gap-1.5 font-semibold text-[#1F3D35] bg-[#EDF5F2] px-3 py-1 rounded-full">
+                            <Calendar className="w-3.5 h-3.5 text-[#2E544A]" />
                             {formattedDate}
                         </span>
                         {activity.location && (
-                            <span className="flex items-center gap-1.5 text-gray-600 bg-gray-100 px-3 py-1 rounded-full">
-                                <MapPin className="w-3.5 h-3.5 text-gray-400 shrink-0" />
+                            <span className="flex items-center gap-1.5 text-gray-700 bg-gray-100 px-3 py-1 rounded-full font-medium">
+                                <MapPin className="w-3.5 h-3.5 text-gray-500 shrink-0" />
                                 <span className="truncate max-w-[180px] sm:max-w-[280px]">{activity.location}</span>
                             </span>
                         )}
@@ -565,7 +572,7 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
                     {/* Blog Title */}
                     <h3
                         onClick={() => onReadStory && onReadStory(activity)}
-                        className="text-xl sm:text-2xl font-extrabold text-[#111827] leading-tight hover:text-[#6B9F91] transition-colors cursor-pointer"
+                        className="text-xl sm:text-2xl font-extrabold text-[#111827] leading-tight hover:text-[#2E544A] transition-colors cursor-pointer"
                     >
                         {activity.title}
                     </h3>
@@ -581,7 +588,7 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
                     <button
                         type="button"
                         onClick={() => onReadStory && onReadStory(activity)}
-                        className="inline-flex items-center gap-2 text-sm font-bold text-[#6B9F91] hover:text-[#5C8C80] group-hover/card:translate-x-1 transition-all bg-[#EDF5F2]/80 hover:bg-[#EDF5F2] px-4 py-2 rounded-xl"
+                        className="inline-flex items-center gap-2 text-sm font-bold text-[#1F3D35] hover:text-[#11221E] group-hover/card:translate-x-1 transition-all bg-[#EDF5F2] hover:bg-[#DEEDE8] px-4 py-2 rounded-xl"
                     >
                         Read Full Story
                         <ArrowUpRight className="w-4 h-4" />
@@ -592,8 +599,9 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
                             href={activity.externalLink}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-600 hover:text-[#0A66C2] transition-colors bg-gray-50 hover:bg-blue-50 px-3 py-2 rounded-xl border border-gray-200 hover:border-blue-200 shadow-sm"
-                            title="View original post on LinkedIn"
+                            aria-label={`Read LinkedIn post about ${activity.title}`}
+                            className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-700 hover:text-[#0A66C2] transition-colors bg-gray-50 hover:bg-blue-50 px-3 py-2 rounded-xl border border-gray-200 hover:border-blue-200 shadow-sm"
+                            title={`Read LinkedIn post about ${activity.title}`}
                             onClick={(e) => e.stopPropagation()}
                         >
                             <svg className="w-3.5 h-3.5 fill-current text-[#0A66C2]" viewBox="0 0 24 24">

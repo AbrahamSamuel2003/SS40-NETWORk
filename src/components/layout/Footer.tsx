@@ -105,13 +105,13 @@ export async function Footer() {
                     </p>
                     <div className="flex items-center gap-4 text-[var(--color-body-text)]">
                         {config?.urlInstagram && (
-                            <a href={config.urlInstagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="hover:text-[var(--color-primary)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] rounded-full p-1"><Instagram className="w-5 h-5" /></a>
+                            <a href={config.urlInstagram} target="_blank" rel="noopener noreferrer" aria-label="SS40 Network Instagram Profile" className="hover:text-[var(--color-primary)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] rounded-full p-1"><Instagram className="w-5 h-5" /></a>
                         )}
                         {config?.urlYoutube && (
-                            <a href={config.urlYoutube} target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="hover:text-[var(--color-primary)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] rounded-full p-1"><Youtube className="w-5 h-5" /></a>
+                            <a href={config.urlYoutube} target="_blank" rel="noopener noreferrer" aria-label="SS40 Network YouTube Channel" className="hover:text-[var(--color-primary)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] rounded-full p-1"><Youtube className="w-5 h-5" /></a>
                         )}
                         {config?.urlLinkedin && (
-                            <a href={config.urlLinkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="hover:text-[var(--color-primary)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] rounded-full p-1"><Linkedin className="w-5 h-5" /></a>
+                            <a href={config.urlLinkedin} target="_blank" rel="noopener noreferrer" aria-label="SS40 Network Official LinkedIn Company Profile" className="hover:text-[var(--color-primary)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] rounded-full p-1"><Linkedin className="w-5 h-5" /></a>
                         )}
                     </div>
                 </div>
