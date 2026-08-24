@@ -142,20 +142,22 @@ export function ActivityUpdates({ data = [] }: ActivityUpdatesProps) {
                         <div className="w-full flex items-center justify-between pt-2 pb-2 shrink-0 border-t border-gray-100">
                             {/* Step Progress Tracker */}
                             <div className="flex items-center gap-3">
-                                <span className="text-xs font-bold text-[#6B9F91] tracking-widest uppercase">
+                                <span className="text-xs font-bold text-[#1F3D35] tracking-widest uppercase">
                                     0{activeDesktopIdx + 1} / 0{count}
                                 </span>
                                 <div className="flex items-center gap-1.5">
                                     {homeActivities.map((_, i) => (
                                         <button
                                             key={`step-${i}`}
+                                            type="button"
                                             onClick={() => scrollToDesktopCard(i)}
+                                            aria-label={`Go to blog slide ${i + 1}`}
                                             className={`h-2 rounded-full transition-all duration-400 cursor-pointer ${
                                                 activeDesktopIdx === i
-                                                    ? 'w-8 bg-[#6B9F91]'
-                                                    : 'w-2 bg-gray-200 hover:bg-gray-300'
+                                                    ? 'w-8 bg-[#0F766E]'
+                                                    : 'w-2 bg-gray-300 hover:bg-gray-400'
                                             }`}
-                                            title={`Go to blog ${i + 1}`}
+                                            title={`Go to blog slide ${i + 1}`}
                                         />
                                     ))}
                                 </div>
@@ -165,13 +167,13 @@ export function ActivityUpdates({ data = [] }: ActivityUpdatesProps) {
                             {data.length > 3 ? (
                                 <Link
                                     href="/blogs"
-                                    className="inline-flex items-center justify-center font-bold text-sm text-[#6B9F91] hover:text-[#588478] transition-colors group"
+                                    className="inline-flex items-center justify-center font-bold text-sm text-[#1F3D35] hover:text-[#11221E] transition-colors group"
                                 >
                                     View All Blogs
                                     <ArrowRight className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" />
                                 </Link>
                             ) : (
-                                <span className="text-xs font-medium text-gray-400">
+                                <span className="text-xs font-medium text-gray-600">
                                     Scroll down to continue
                                 </span>
                             )}
