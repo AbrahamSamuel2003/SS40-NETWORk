@@ -364,7 +364,102 @@ export default function ManagedActivitiesPage() {
 
             {/* List / Table */}
             <div className="admin-card overflow-hidden">
-                <div className="overflow-x-auto w-full">
+                {/* ── MOBILE CARD GRID (hidden on sm+) ── */}
+                <div className="sm:hidden">
+                    {filteredActivities.length === 0 ? (
+                        <div className="p-8 text-center text-[#9CA3AF]">
+                            No activity posts found matching your criteria.
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-2 gap-3 p-3">
+                            {filteredActivities.map(item => {
+                                const typeMeta = getActivityTypeMeta(item.activityType);
+                                const TypeIcon = typeMeta.icon;
+                                const itemImages: any[] = Array.isArray(item.images) ? item.images : [];
+                                const firstImg = itemImages[0]?.url || (typeof itemImages[0] === 'string' ? itemImages[0] : null);
+
+                                return (
+                                    <div key={item.id} className="admin-card p-3 flex flex-col gap-2 rounded-xl bg-white border border-gray-100 shadow-sm overflow-hidden">
+                                        {/* Image thumbnail with overlay badges */}
+                                        <div className="relative aspect-[16/10] w-full rounded-lg bg-gray-100 overflow-hidden border border-gray-200 shrink-0">
+                                            {firstImg ? (
+                                                <img src={firstImg} alt={item.title} className="w-full h-full object-cover" />
+                                            ) : (
+                                                <div className="w-full h-full flex items-center justify-center text-gray-300">
+                                                    <ImageIcon className="w-6 h-6" />
+                                                </div>
+                                            )}
+                                            {itemImages.length > 1 && (
+                                                <span className="absolute bottom-1 right-1 bg-black/75 text-[9px] font-bold text-white px-1.5 py-0.5 rounded">
+                                                    +{itemImages.length - 1}
+                                                </span>
+                                            )}
+                                            {item.isFeatured && (
+                                                <span className="absolute top-1 right-1 bg-amber-500 text-[8px] font-bold text-white px-1 py-0.5 rounded shadow-sm">
+                                                    ★
+                                                </span>
+                                            )}
+                                        </div>
+
+                                        {/* Header & Type */}
+                                        <div className="flex items-start justify-between gap-1">
+                                            <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold border ${typeMeta.color}`}>
+                                                <TypeIcon className="w-2.5 h-2.5" />
+                                                {typeMeta.label}
+                                            </span>
+                                            <button
+                                                onClick={() => handleOpenModal(item)}
+                                                className="shrink-0 p-1 text-[#9CA3AF] hover:text-[#111827]"
+                                                title="Edit"
+                                            >
+                                                <Edit2 className="w-3.5 h-3.5" />
+                                            </button>
+                                        </div>
+
+                                        {/* Title & Summary */}
+                                        <span className="font-bold text-[#111827] text-xs leading-tight line-clamp-2">
+                                            {item.title}
+                                        </span>
+                                        <p className="text-[#6B7280] text-[10px] leading-snug line-clamp-2">
+                                            {item.summary}
+                                        </p>
+
+                                        {/* Date & Location */}
+                                        <div className="text-[10px] text-gray-400 flex items-center gap-1 truncate">
+                                            <Calendar className="w-2.5 h-2.5 shrink-0" />
+                                            {new Date(item.activityDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                                            {item.location && <span>· {item.location}</span>}
+                                        </div>
+
+                                        {/* Footer Actions & Status */}
+                                        <div className="mt-auto pt-2 border-t border-gray-50 flex items-center justify-between gap-1">
+                                            <div className="flex items-center gap-1">
+                                                <span className={`inline-flex px-1.5 py-0.5 rounded text-[9px] font-semibold ${item.isActive ? 'bg-[#6B9F91]/10 text-[#6B9F91] border border-[#6B9F91]/20' : 'bg-red-50 text-red-600 border border-red-200'}`}>
+                                                    {item.isActive ? 'Active' : 'Draft'}
+                                                </span>
+                                                {item.showOnHome && (
+                                                    <span className="inline-flex px-1 py-0.5 rounded text-[8px] font-semibold bg-emerald-50 text-emerald-700">
+                                                        Home
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <button
+                                                onClick={() => handleDelete(item.id)}
+                                                className="text-[#B91C1C]/50 hover:text-[#B91C1C] p-1"
+                                                title="Delete"
+                                            >
+                                                <Trash2 className="w-3.5 h-3.5" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
+                </div>
+
+                {/* ── DESKTOP TABLE (hidden on mobile) ── */}
+                <div className="hidden sm:block overflow-x-auto w-full touch-auto">
                     <table className="w-full text-left text-sm text-[#374151] min-w-[700px]">
                         <thead className="bg-[#EDF5F2]/80 border-b border-gray-200 text-[#111827]">
                             <tr>
