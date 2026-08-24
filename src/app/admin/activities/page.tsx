@@ -17,7 +17,7 @@ import {
     MapPin,
     Search,
     ChevronLeft,
-    
+
     ChevronRight,
     MoveUp,
     MoveDown,
