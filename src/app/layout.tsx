@@ -156,8 +156,8 @@ export default function RootLayout({
         "@type": "WebSite",
         "@id": "https://www.ss40network.com/#website",
         "url": "https://www.ss40network.com",
-        "name": "SS40 NETWORK PRIVATE LIMITED",
-        "alternateName": "SS40 NETWORK",
+        "name": "SS40 Network Private Limited",
+        "alternateName": ["SS40 Network", "SS40 NETWORK PRIVATE LIMITED"],
         "publisher": {
           "@id": "https://www.ss40network.com/#organization"
         },

@@ -75,9 +75,23 @@ export default async function Home() {
       {
         "@type": "SiteNavigationElement",
         "position": 4,
-        "name": "Contact Us",
-        "description": "Get in touch with SS40 NETWORK PRIVATE LIMITED.",
+        "name": "Contact",
+        "description": "Get in touch with SS40 Network.",
         "url": "https://www.ss40network.com/contact"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "position": 5,
+        "name": "Terms of Service",
+        "description": "Terms of service and legal conditions for SS40 Network.",
+        "url": "https://www.ss40network.com/terms"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "position": 6,
+        "name": "Privacy Policy",
+        "description": "Privacy policy and data protection guidelines of SS40 Network.",
+        "url": "https://www.ss40network.com/privacy-policy"
       }
     ]
   };

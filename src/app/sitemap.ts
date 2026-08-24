@@ -16,22 +16,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const staticRouteConfig: StaticRoute[] = [
         // Homepage — highest priority
         { route: '',                          priority: 1.00, changeFrequency: 'daily' },
-        // Core service pages — drive sitelink order via priority
+        // 1. Digital Solutions
         { route: '/digital-solutions',        priority: 0.95, changeFrequency: 'weekly' },
-        { route: '/products',                 priority: 0.92, changeFrequency: 'weekly' },
-        { route: '/academics',                priority: 0.90, changeFrequency: 'weekly' },
-        // Supporting pages
-        { route: '/contact',                  priority: 0.85, changeFrequency: 'monthly' },
-        { route: '/about',                    priority: 0.80, changeFrequency: 'monthly' },
-        { route: '/client-projects',          priority: 0.78, changeFrequency: 'weekly' },
-        { route: '/happimonials',             priority: 0.72, changeFrequency: 'weekly' },
-        { route: '/product-impacts',          priority: 0.70, changeFrequency: 'weekly' },
-        { route: '/products/all-products',    priority: 0.68, changeFrequency: 'weekly' },
-        { route: '/academics/student-projects', priority: 0.65, changeFrequency: 'weekly' },
-        // Legal pages — low priority, rarely change
-        { route: '/privacy-policy',           priority: 0.55, changeFrequency: 'yearly' },
-        { route: '/refund-policy',            priority: 0.52, changeFrequency: 'yearly' },
-        { route: '/terms',                    priority: 0.50, changeFrequency: 'yearly' },
+        // 2. Products
+        { route: '/products',                 priority: 0.90, changeFrequency: 'weekly' },
+        // 3. Academics
+        { route: '/academics',                priority: 0.85, changeFrequency: 'weekly' },
+        // 4. Contact
+        { route: '/contact',                  priority: 0.80, changeFrequency: 'monthly' },
+        // 5. Terms
+        { route: '/terms',                    priority: 0.70, changeFrequency: 'yearly' },
+        // 6. Privacy Policy
+        { route: '/privacy-policy',           priority: 0.65, changeFrequency: 'yearly' },
+        // Supporting secondary pages
+        { route: '/about',                    priority: 0.60, changeFrequency: 'monthly' },
+        { route: '/client-projects',          priority: 0.58, changeFrequency: 'weekly' },
+        { route: '/happimonials',             priority: 0.55, changeFrequency: 'weekly' },
+        { route: '/product-impacts',          priority: 0.53, changeFrequency: 'weekly' },
+        { route: '/products/all-products',    priority: 0.52, changeFrequency: 'weekly' },
+        { route: '/academics/student-projects', priority: 0.51, changeFrequency: 'weekly' },
+        { route: '/refund-policy',            priority: 0.50, changeFrequency: 'yearly' },
     ];
 
     const staticEntries = staticRouteConfig.map(({ route, priority, changeFrequency }) => {
