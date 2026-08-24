@@ -56,45 +56,36 @@ const AboutIllustration = () => (
         <div className="absolute w-[200px] h-[200px] bg-[var(--color-primary)]/20 blur-3xl rounded-full" />
 
         {/* Core Orbit Ring */}
-        <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
-            className="absolute inset-4 border border-dashed border-[var(--color-primary)]/40 rounded-full"
+        <div
+            className="animate-spin-slow absolute inset-4 border border-dashed border-[var(--color-primary)]/40 rounded-full"
         />
-        <motion.div
-            animate={{ rotate: -360 }}
-            transition={{ repeat: Infinity, duration: 35, ease: "linear" }}
-            className="absolute inset-10 border border-solid border-gray-200 rounded-full"
+        <div
+            className="animate-spin-slow-reverse absolute inset-10 border border-solid border-gray-200 rounded-full"
         />
 
         {/* Product: Central Glass Cube */}
-        <motion.div
-            animate={{ y: [-8, 8, -8] }}
-            transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
-            className="absolute w-28 h-28 bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl shadow-[var(--color-primary)]/10 border border-[var(--color-border)] flex items-center justify-center z-10"
+        <div
+            className="animate-float-slow absolute w-28 h-28 bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl shadow-[var(--color-primary)]/10 border border-[var(--color-border)] flex items-center justify-center z-10"
         >
             <Box className="w-12 h-12 text-[var(--color-primary)]" />
-        </motion.div>
+        </div>
 
         {/* Education: Top Right Floating Element */}
-        <motion.div
-            animate={{ y: [8, -8, 8], x: [4, -4, 4] }}
-            transition={{ repeat: Infinity, duration: 7, ease: "easeInOut" }}
-            className="absolute top-4 right-4 sm:right-8 w-16 h-16 bg-[var(--color-accent)]/10 backdrop-blur-md rounded-full shadow-lg border border-[var(--color-accent)]/20 flex items-center justify-center z-20"
+        <div
+            className="animate-float-delayed-1 absolute top-4 right-4 sm:right-8 w-16 h-16 bg-[var(--color-accent)]/10 backdrop-blur-md rounded-full shadow-lg border border-[var(--color-accent)]/20 flex items-center justify-center z-20"
         >
             <GraduationCap className="w-6 h-6 text-[var(--color-accent)]" />
-        </motion.div>
+        </div>
 
         {/* Tech: Bottom Left Floating Element */}
-        <motion.div
-            animate={{ y: [-6, 12, -6], x: [-8, 4, -8] }}
-            transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
-            className="absolute bottom-6 left-6 sm:left-10 w-16 h-16 bg-teal-500/10 backdrop-blur-md rounded-xl shadow-lg border border-teal-500/20 flex items-center justify-center z-20 rotate-12"
+        <div
+            className="animate-float-delayed-2 absolute bottom-6 left-6 sm:left-10 w-16 h-16 bg-teal-500/10 backdrop-blur-md rounded-xl shadow-lg border border-teal-500/20 flex items-center justify-center z-20 rotate-12"
         >
             <Cpu className="w-6 h-6 text-teal-600" />
-        </motion.div>
+        </div>
     </div>
 );
+
 
 export function About() {
     return (

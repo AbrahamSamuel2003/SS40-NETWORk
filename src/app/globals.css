@@ -325,4 +325,63 @@
       transform: translateX(100%);
     }
   }
+
+  /* GPU-Accelerated Floating Animations (Offloaded from JS Main Thread) */
+  .animate-float-slow {
+    animation: floatSlow 6s ease-in-out infinite;
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
+  .animate-float-delayed-1 {
+    animation: floatSlow 7s ease-in-out infinite 0.8s;
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
+  .animate-float-delayed-2 {
+    animation: floatSlow 8s ease-in-out infinite 1.6s;
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
+  .animate-spin-slow {
+    animation: spinSlow 25s linear infinite;
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
+  .animate-spin-slow-reverse {
+    animation: spinSlowReverse 35s linear infinite;
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
+  @keyframes floatSlow {
+    0%, 100% {
+      transform: translateY(-8px) translateZ(0);
+    }
+    50% {
+      transform: translateY(8px) translateZ(0);
+    }
+  }
+
+  @keyframes spinSlow {
+    0% {
+      transform: rotate(0deg) translateZ(0);
+    }
+    100% {
+      transform: rotate(360deg) translateZ(0);
+    }
+  }
+
+  @keyframes spinSlowReverse {
+    0% {
+      transform: rotate(0deg) translateZ(0);
+    }
+    100% {
+      transform: rotate(-360deg) translateZ(0);
+    }
+  }
 }
+

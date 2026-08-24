@@ -4,6 +4,7 @@ import * as React from "react";
 import { useRef, useState, useEffect } from "react";
 import { motion, useMotionValue, useSpring, useTransform, Variants, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { Play, Star, ArrowRight, Quote, ChevronUp, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
@@ -311,11 +312,17 @@ function FeaturedVideoArea({ story }: {
             {/* Ambient Thumbnail Overlay (Mockup background before play) */}
             <div className={`absolute inset-0 pointer-events-none bg-gradient-to-tr from-gray-200/55 via-gray-100/45 to-[#E8F0EE]/55 z-10 transition-opacity duration-500 ${isPlaying ? 'opacity-0' : 'opacity-55'}`} />
             {resolvedThumbnail && (
-                <img
-                    src={resolvedThumbnail}
-                    alt={story.clientName || ""}
-                    className={`absolute inset-0 w-full h-full object-cover z-10 transition-opacity duration-500 ${isPlaying ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
-                />
+                <div className={`absolute inset-0 w-full h-full z-10 transition-opacity duration-500 ${isPlaying ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+                    <Image
+                        src={resolvedThumbnail}
+                        alt={story.clientName || ""}
+                        fill
+                        sizes="(max-width: 1024px) 100vw, 768px"
+                        className="object-cover"
+                        loading="lazy"
+                        decoding="async"
+                    />
+                </div>
             )}
             <motion.div
                 className={`absolute inset-0 pointer-events-none bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-12 z-10 transition-opacity duration-500 ${isPlaying ? 'opacity-0' : 'opacity-100'}`}
@@ -509,7 +516,9 @@ function SecondaryStoryCarousel({ stories, onOpenModal }: { stories: any[], onOp
                         <div className="flex items-center gap-4 border-t border-gray-100 pt-6 shrink-0 mt-auto">
                             <div className="w-12 h-12 shrink-0 rounded-full bg-gradient-to-tr from-gray-200 to-gray-100 p-[2px]">
                                 {story.thumbnailUrl ? (
-                                    <div className="w-full h-full rounded-full overflow-hidden"><img src={story.thumbnailUrl} alt="" className="w-full h-full object-cover" /></div>
+                                    <div className="relative w-full h-full rounded-full overflow-hidden">
+                                        <Image src={story.thumbnailUrl} alt="" fill sizes="48px" className="object-cover" loading="lazy" />
+                                    </div>
                                 ) : (
                                     <div className="w-full h-full bg-white rounded-full flex items-center justify-center">
                                         <span className="text-gray-500 font-bold">{story.clientName?.charAt(0)}</span>

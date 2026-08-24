@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
 import {
     ActivityCard,
@@ -372,16 +373,24 @@ function ActivityStoryModal({ activity, onClose }: { activity: ActivityItem; onC
                 >
                     <AnimatePresence mode="wait">
                         {images[activeImgIdx] && (
-                            <motion.img
+                            <motion.div
                                 key={images[activeImgIdx].url || activeImgIdx}
-                                src={images[activeImgIdx].url}
-                                alt={images[activeImgIdx].altText || activity.title}
                                 initial={{ opacity: 0.85 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0.85 }}
                                 transition={{ duration: 0.25 }}
-                                className="absolute inset-0 w-full h-full object-cover"
-                            />
+                                className="absolute inset-0 w-full h-full"
+                            >
+                                <Image
+                                    src={images[activeImgIdx].url}
+                                    alt={images[activeImgIdx].altText || activity.title}
+                                    fill
+                                    sizes="(max-width: 768px) 100vw, 896px"
+                                    className="object-cover"
+                                    loading="lazy"
+                                    decoding="async"
+                                />
+                            </motion.div>
                         )}
                     </AnimatePresence>
 
@@ -426,7 +435,7 @@ function ActivityStoryModal({ activity, onClose }: { activity: ActivityItem; onC
                                         activeImgIdx === idx ? 'border-[#6B9F91] scale-110 shadow-xl' : 'border-white/50 opacity-75 hover:opacity-100'
                                     }`}
                                 >
-                                    <img src={img.url} alt="" className="w-full h-full object-cover" />
+                                    <Image src={img.url} alt="" fill sizes="56px" className="object-cover" loading="lazy" />
                                 </button>
                             ))}
                         </div>

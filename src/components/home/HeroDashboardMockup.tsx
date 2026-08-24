@@ -1,17 +1,14 @@
 "use client";
 
 import * as React from "react";
-import { motion } from "framer-motion";
 import { Activity, Users, Box, BarChart3, LayoutDashboard, Briefcase, Sparkles, GraduationCap } from "lucide-react";
 
 export function HeroDashboardMockup() {
     return (
         <div className="w-full lg:w-[45%] relative mt-10 lg:mt-0 hidden lg:flex justify-center lg:justify-end select-none">
             {/* Main Dashboard Mockup */}
-            <motion.div
-                animate={{ y: [-8, 8, -8] }}
-                transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
-                className="relative w-full max-w-[500px] h-[400px] bg-white rounded-2xl shadow-[var(--shadow-hover)] border border-[var(--color-border)] overflow-hidden flex flex-col z-10"
+            <div
+                className="animate-float-slow relative w-full max-w-[500px] h-[400px] bg-white rounded-2xl shadow-[var(--shadow-hover)] border border-[var(--color-border)] overflow-hidden flex flex-col z-10"
             >
                 {/* Browser Header */}
                 <div className="h-10 bg-gray-50 border-b border-[var(--color-border)] flex items-center px-4 gap-2">
@@ -80,13 +77,11 @@ export function HeroDashboardMockup() {
                         </div>
                     </div>
                 </div>
-            </motion.div>
+            </div>
 
             {/* Floating Feature Cards */}
-            <motion.div
-                animate={{ y: [-15, 10, -15], rotate: [-2, 2, -2] }}
-                transition={{ repeat: Infinity, duration: 7, ease: "easeInOut" }}
-                className="absolute -left-6 top-12 z-20 bg-white/90 backdrop-blur-md p-3 rounded-xl shadow-lg border border-[var(--color-border)] flex items-center gap-3 hidden md:flex"
+            <div
+                className="animate-float-delayed-1 absolute -left-6 top-12 z-20 bg-white/90 backdrop-blur-md p-3 rounded-xl shadow-lg border border-[var(--color-border)] flex items-center gap-3 hidden md:flex"
             >
                 <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
                     <Briefcase className="w-5 h-5" />
@@ -95,12 +90,10 @@ export function HeroDashboardMockup() {
                     <p className="text-sm font-bold text-[var(--color-heading)]">Digital Services</p>
                     <p className="text-xs text-[var(--color-body-text)]">Premium IT Solutions</p>
                 </div>
-            </motion.div>
+            </div>
 
-            <motion.div
-                animate={{ y: [10, -15, 10], x: [-5, 5, -5] }}
-                transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }}
-                className="absolute -right-8 bottom-24 z-20 bg-white/90 backdrop-blur-md p-3 rounded-xl shadow-lg border border-[var(--color-border)] flex items-center gap-3 hidden sm:flex"
+            <div
+                className="animate-float-delayed-2 absolute -right-8 bottom-24 z-20 bg-white/90 backdrop-blur-md p-3 rounded-xl shadow-lg border border-[var(--color-border)] flex items-center gap-3 hidden sm:flex"
             >
                 <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600">
                     <Sparkles className="w-5 h-5" />
@@ -109,12 +102,10 @@ export function HeroDashboardMockup() {
                     <p className="text-sm font-bold text-[var(--color-heading)]">AI Solutions</p>
                     <p className="text-xs text-[var(--color-body-text)]">Next-gen intelligence</p>
                 </div>
-            </motion.div>
+            </div>
 
-            <motion.div
-                animate={{ y: [-8, 12, -8], rotate: [1, -1, 1] }}
-                transition={{ repeat: Infinity, duration: 6.5, ease: "easeInOut" }}
-                className="absolute left-10 -bottom-8 z-20 bg-[var(--color-primary)] text-white p-3 rounded-xl shadow-lg shadow-[var(--color-primary)]/20 flex items-center gap-3"
+            <div
+                className="animate-float-slow absolute left-10 -bottom-8 z-20 bg-[var(--color-primary)] text-white p-3 rounded-xl shadow-lg shadow-[var(--color-primary)]/20 flex items-center gap-3"
             >
                 <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
                     <GraduationCap className="w-5 h-5 text-white" />
@@ -123,7 +114,8 @@ export function HeroDashboardMockup() {
                     <p className="text-sm font-bold">Products & Academics</p>
                     <p className="text-xs text-white/90 font-medium">World-class education</p>
                 </div>
-            </motion.div>
+            </div>
         </div>
     );
 }
+

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Calendar,
@@ -205,16 +206,24 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
                 >
                     <AnimatePresence mode="wait">
                         {images[currentIndex] && (
-                            <motion.img
+                            <motion.div
                                 key={images[currentIndex].url || currentIndex}
-                                src={images[currentIndex].url}
-                                alt={images[currentIndex].altText || activity.title}
                                 initial={{ opacity: 0.85 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0.85 }}
                                 transition={{ duration: 0.25 }}
-                                className="absolute inset-0 w-full h-full object-cover"
-                            />
+                                className="absolute inset-0 w-full h-full"
+                            >
+                                <Image
+                                    src={images[currentIndex].url}
+                                    alt={images[currentIndex].altText || activity.title}
+                                    fill
+                                    sizes="(max-width: 640px) 85vw, 380px"
+                                    className="object-cover"
+                                    loading="lazy"
+                                    decoding="async"
+                                />
+                            </motion.div>
                         )}
                     </AnimatePresence>
 
@@ -319,16 +328,24 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
                 >
                     <AnimatePresence mode="wait">
                         {images[currentIndex] && (
-                            <motion.img
+                            <motion.div
                                 key={images[currentIndex].url || currentIndex}
-                                src={images[currentIndex].url}
-                                alt={images[currentIndex].altText || activity.title}
                                 initial={{ opacity: 0.85 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0.85 }}
                                 transition={{ duration: 0.25 }}
-                                className="absolute inset-0 w-full h-full object-cover group-hover/card:scale-105 transition-transform duration-500"
-                            />
+                                className="absolute inset-0 w-full h-full group-hover/card:scale-105 transition-transform duration-500"
+                            >
+                                <Image
+                                    src={images[currentIndex].url}
+                                    alt={images[currentIndex].altText || activity.title}
+                                    fill
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                    className="object-cover"
+                                    loading="lazy"
+                                    decoding="async"
+                                />
+                            </motion.div>
                         )}
                     </AnimatePresence>
 
@@ -437,16 +454,24 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
             >
                 <AnimatePresence mode="wait">
                     {images[currentIndex] && (
-                        <motion.img
+                        <motion.div
                             key={images[currentIndex].url || currentIndex}
-                            src={images[currentIndex].url}
-                            alt={images[currentIndex].altText || activity.title}
                             initial={{ opacity: 0.85 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0.85 }}
                             transition={{ duration: 0.25 }}
-                            className="absolute inset-0 w-full h-full object-cover group-hover/card:scale-105 transition-transform duration-700"
-                        />
+                            className="absolute inset-0 w-full h-full group-hover/card:scale-105 transition-transform duration-700"
+                        >
+                            <Image
+                                src={images[currentIndex].url}
+                                alt={images[currentIndex].altText || activity.title}
+                                fill
+                                sizes="(max-width: 1024px) 100vw, 50vw"
+                                className="object-cover"
+                                loading="lazy"
+                                decoding="async"
+                            />
+                        </motion.div>
                     )}
                 </AnimatePresence>
 
