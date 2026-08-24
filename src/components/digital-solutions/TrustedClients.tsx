@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import { Building2, Globe } from "lucide-react";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
@@ -177,9 +178,14 @@ function MarqueeRow({ items, direction, speed }: MarqueeRowProps) {
                                 : 'h-11 sm:h-12 md:h-14 w-auto min-w-[36px]'
                         }`}>
                             {client.logoUrl ? (
-                                <img 
+                                <Image 
                                     src={client.logoUrl} 
-                                    alt={client.showTextOnCard ? client.name : ''} 
+                                    alt={client.showTextOnCard ? client.name : (client.name || 'Client Logo')} 
+                                    width={160}
+                                    height={80}
+                                    loading="lazy"
+                                    decoding="async"
+                                    sizes="(max-width: 768px) 120px, 160px"
                                     className={`object-contain ${
                                         client.showTextOnCard 
                                             ? 'w-full h-full' 

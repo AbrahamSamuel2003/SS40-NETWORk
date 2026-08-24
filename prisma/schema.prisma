@@ -261,3 +261,43 @@ model AdminActivityLog {
 
   adminUser AdminUser @relation(fields: [adminUserId], references: [id], onDelete: Restrict)
 }
+
+// -----------------------------------------------------------------------------
+// BLOGS & ACTIVITY UPDATES (Ecosystem, Visits, Partnerships, Events)
+// -----------------------------------------------------------------------------
+
+enum ActivityType {
+  GOVERNMENT_OFFICIAL
+  PARTNERSHIP
+  INDUSTRY_VISIT
+  MEETING
+  EVENT
+  ACHIEVEMENT
+  FOUNDER_ACTIVITY
+  WEBINAR
+  ANNOUNCEMENT
+  COMMUNITY
+}
+
+model ActivityPost {
+  id           String        @id @default(uuid())
+  title        String
+  slug         String        @unique
+  activityType ActivityType  @default(MEETING)
+  summary      String
+  content      String?
+  images       Json          // Array of up to 5 image objects [{ url: string, altText?: string, caption?: string }]
+  location     String?
+  activityDate DateTime      @default(now())
+  externalLink String?       // e.g. LinkedIn post URL
+  isFeatured   Boolean       @default(false)
+  showOnHome   Boolean       @default(true)
+  sortOrder    Int           @default(0)
+  isActive     Boolean       @default(true)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([activityType])
+  @@index([activityDate])
+}
+

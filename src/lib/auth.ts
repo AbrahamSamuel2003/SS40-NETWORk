@@ -26,7 +26,7 @@ export async function createSession(userId: string, accountType: 'AdminUser', ro
     const isProduction = process.env.NODE_ENV === 'production';
     const secure = isProduction && process.env.COOKIE_SECURE === 'true';
     
-    const cookieOptions: any = {
+    const cookieOptions: Record<string, unknown> = {
         httpOnly: true,
         secure: secure,
         sameSite: 'lax',

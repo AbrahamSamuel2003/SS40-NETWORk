@@ -535,10 +535,10 @@ export function InteractiveImpactShowcase() {
     };
 
     return (
-        <section className="bg-white border-t border-b border-gray-100 relative">
+        <section className="bg-[#EDF5F2] border-t border-b border-gray-200/60 relative">
 
             {/* Header Area above the sticky scroll */}
-            <div className="w-full bg-[#FAFCFB] pt-16 md:pt-24 pb-8 md:pb-10 border-b border-gray-100 relative z-20">
+            <div className="w-full bg-[#EDF5F2] pt-16 md:pt-24 pb-8 md:pb-10 border-b border-gray-200/60 relative z-20">
                 <Container className="text-center">
                     <motion.span
                         initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
@@ -613,7 +613,7 @@ export function InteractiveImpactShowcase() {
             </div>
 
             {/* Mobile Native Horizontal Swipe Deck */}
-            <div className="flex flex-col lg:hidden w-full bg-gray-50 pt-10 pb-16 relative">
+            <div className="flex flex-col lg:hidden w-full bg-[#EDF5F2] pt-10 pb-16 relative">
                 <div
                     ref={mobileScrollRef}
                     className="flex w-full overflow-x-auto snap-x snap-mandatory px-6 gap-5 items-stretch [&::-webkit-scrollbar]:hidden"

@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import {
     Building2, Store, Factory, Plane, Landmark,
     Stethoscope, GraduationCap, Code2, Cpu, Globe, Library, Rocket
@@ -53,7 +54,7 @@ export function TrustedBy({ data }: { data?: any[] }) {
 
     if (data && data.length === 0) {
         return (
-            <SectionWrapper id="trusted-by" className="bg-[#EDF5F2] relative overflow-hidden">
+            <SectionWrapper id="trusted-by" className="bg-white relative overflow-hidden">
                 {/* Soft Ambient Background Enhancements */}
                 <div className="absolute inset-0 pointer-events-none z-0">
                     <div
@@ -82,7 +83,7 @@ export function TrustedBy({ data }: { data?: any[] }) {
     }
 
     return (
-        <SectionWrapper id="trusted-by" className="bg-[#EDF5F2] relative overflow-hidden">
+        <SectionWrapper id="trusted-by" className="bg-white relative overflow-hidden">
             {/* Soft Ambient Background Enhancements */}
             <div className="absolute inset-0 pointer-events-none z-0">
                 <div
@@ -226,9 +227,14 @@ function MarqueeRow({ items, direction, speed }: MarqueeRowProps) {
                                     : 'h-11 sm:h-12 md:h-14 w-auto min-w-[36px]'
                             }`}>
                                 {item.logoUrl ? (
-                                    <img 
+                                    <Image 
                                         src={item.logoUrl} 
                                         alt={item.showTextOnCard ? item.name : (item.name || 'Partner Logo')} 
+                                        width={160}
+                                        height={80}
+                                        loading="lazy"
+                                        decoding="async"
+                                        sizes="(max-width: 768px) 120px, 160px"
                                         className={`object-contain ${
                                             item.showTextOnCard 
                                                 ? 'w-full h-full' 

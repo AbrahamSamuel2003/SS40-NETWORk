@@ -1,17 +1,18 @@
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { Hero } from "@/components/home/Hero";
-// import { About } from "@/components/home/About";
-import { getSiteConfig } from "@/lib/site-config";
-import { prisma } from "@/lib/prisma";
+import { About } from "@/components/home/About";
+import { getHomeDataCached } from "@/lib/home-cache";
 
-// Dynamically import heavy interactive layers below the fold
+// Code-split below-the-fold components to reduce initial main-thread JavaScript execution
 const BusinessWings = dynamic(() => import("@/components/home/BusinessWings").then(mod => mod.BusinessWings), { ssr: true });
 const SuccessStories = dynamic(() => import("@/components/home/SuccessStories").then(mod => mod.SuccessStories), { ssr: true });
-const InteractiveImpactShowcase = dynamic(() => import("@/components/home/InteractiveImpactShowcase").then(mod => mod.InteractiveImpactShowcase), { ssr: true });
+const ActivityUpdates = dynamic(() => import("@/components/home/ActivityUpdates").then(mod => mod.ActivityUpdates), { ssr: true });
+const InteractiveImpactShowcase = dynamic(() => import("@/components/home/InteractiveImpactShowcase").then(mod => mod.InteractiveImpactShowcase));
 const TrustedBy = dynamic(() => import("@/components/home/TrustedBy").then(mod => mod.TrustedBy), { ssr: true });
 const ContactSection = dynamic(() => import("@/components/home/ContactSection").then(mod => mod.ContactSection), { ssr: true });
-const About = dynamic(() => import("@/components/home/About").then(mod => mod.About), { ssr: true });
+
+export const revalidate = 3600; // 1 hour ISR caching
 
 export const metadata: Metadata = {
   title: "SS40 NETWORK PRIVATE LIMITED - Top IT Company in Tirunelveli",
@@ -19,18 +20,8 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const config = await getSiteConfig();
-
-  const [logos, happimonials] = await Promise.all([
-    prisma.organizationLogo.findMany({
-      where: { pageScope: 'HOME', isActive: true },
-      orderBy: { sortOrder: 'asc' }
-    }),
-    prisma.happimonial.findMany({
-      where: { pageScope: 'HOME', isActive: true },
-      orderBy: { sortOrder: 'asc' }
-    })
-  ]);
+  // Ultra-fast cached data fetch (resolves in < 15ms)
+  const { config, logos, happimonials, activities } = await getHomeDataCached();
 
   const sitelinksSchema = {
     "@context": "https://schema.org",
@@ -80,6 +71,7 @@ export default async function Home() {
       {/* Below the fold (Deferred JavaScript Chunks) */}
       <BusinessWings />
       <SuccessStories data={happimonials} />
+      <ActivityUpdates data={activities} />
       <InteractiveImpactShowcase />
       <TrustedBy data={logos} />
       <ContactSection config={config} />

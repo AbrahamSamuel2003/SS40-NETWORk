@@ -25,7 +25,7 @@ export function Hero() {
 
                     {/* Left Column - Content */}
                     <div
-                        className="w-full lg:w-[55%] flex flex-col items-center lg:items-start text-center lg:text-left animate-fade-in"
+                        className="w-full lg:w-[55%] flex flex-col items-center lg:items-start text-center lg:text-left"
                     >
                         <div
                             className="mb-8"

@@ -1,0 +1,63 @@
+import React from "react";
+import type { Metadata } from "next";
+import Link from "next/link";
+import { ArrowLeft, Sparkles } from "lucide-react";
+import { prisma } from "@/lib/prisma";
+import { Container } from "@/components/ui/Container";
+import { BlogsList } from "./BlogsList";
+
+export const metadata: Metadata = {
+    title: "Blogs & Field Activities - SS40 NETWORK",
+    description: "Explore government official dialogues, academic MoUs, industry visits, conclaves, and founder activities across the SS40 ecosystem.",
+};
+
+export const revalidate = 0; // Dynamic route
+
+export default async function AllBlogsPage() {
+    // Fetch all active activity posts
+    const activities = await prisma.activityPost.findMany({
+        where: {
+            isActive: true
+        },
+        orderBy: [{ sortOrder: 'asc' }, { activityDate: 'desc' }, { createdAt: 'desc' }]
+    });
+
+    return (
+        <div className="w-full flex-col flex bg-white min-h-screen">
+            {/* Header Hero Section */}
+            <div className="w-full relative pt-24 pb-10 lg:pt-28 lg:pb-14 overflow-hidden bg-[#EDF5F2]">
+                <div className="absolute top-0 right-0 w-96 h-96 bg-[#6B9F91]/10 blur-[100px] rounded-full translate-x-1/3 -translate-y-1/3" />
+                <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#6B9F91]/10 blur-[100px] rounded-full -translate-x-1/3 translate-y-1/3" />
+
+                <Container className="relative z-10 flex flex-col items-center text-center max-w-4xl">
+                    <div className="w-full flex justify-center mb-6">
+                        <Link href="/#activities" className="flex items-center text-sm font-bold text-[#6B9F91] hover:text-[#588478] transition-colors group">
+                            <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
+                            Back to Home
+                        </Link>
+                    </div>
+
+                    <div className="flex items-center justify-center mb-4">
+                        <span className="px-5 py-1.5 bg-white text-[#6B9F91] text-xs font-bold uppercase tracking-widest rounded-full shadow-sm border border-[#6B9F91]/10 flex items-center gap-1.5">
+                            <Sparkles className="w-3.5 h-3.5" />
+                            Blogs & Field Updates
+                        </span>
+                    </div>
+
+                    <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#111827] mb-4 leading-tight tracking-tight">
+                        Moments That Shape Our Impact
+                    </h1>
+
+                    <p className="text-base md:text-lg text-[#4B5563] max-w-2xl mx-auto leading-relaxed">
+                        Discover the field visits, official dialogues, institutional partnerships, and founder initiatives driving technology empowerment in southern districts.
+                    </p>
+                </Container>
+            </div>
+
+            {/* Blogs List Section */}
+            <Container className="pt-8 pb-16 lg:pt-12 lg:pb-24 max-w-7xl">
+                <BlogsList initialActivities={activities} />
+            </Container>
+        </div>
+    );
+}

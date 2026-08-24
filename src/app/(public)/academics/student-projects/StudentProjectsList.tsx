@@ -149,12 +149,12 @@ export function StudentProjectsList({ initialProjects }: { initialProjects: any[
                     {/* Grid Projects */}
                     {layoutConfig.grid.length > 0 && (
                         <motion.div
-                            className={`grid gap-6 lg:gap-8 ${
-                                Math.min(layoutConfig.grid.length, 3) === 1 
-                                    ? 'grid-cols-1' 
-                                    : Math.min(layoutConfig.grid.length, 3) === 2 
-                                    ? 'grid-cols-1 md:grid-cols-2' 
-                                    : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+                            className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 ${
+                                layoutConfig.grid.length === 1 
+                                    ? 'md:grid-cols-1' 
+                                    : layoutConfig.grid.length === 2 
+                                    ? 'md:grid-cols-2 lg:grid-cols-3 justify-center' 
+                                    : 'md:grid-cols-2 lg:grid-cols-3'
                             }`}
                             initial="hidden"
                             animate="show"

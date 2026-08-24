@@ -63,7 +63,7 @@ export function ContactSection({ config }: { config?: SiteConfigData | null }) {
     };
 
     return (
-        <SectionWrapper id="contact" className="bg-white">
+        <SectionWrapper id="contact" className="bg-[#EDF5F2]">
             <Container className="space-y-12 lg:space-y-16">
 
                 {/* Section Header */}

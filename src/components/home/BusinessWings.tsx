@@ -171,14 +171,12 @@ export function BusinessWings() {
                                             return (
                                                 <motion.div
                                                     key={`m-grid-${i}`}
-                                                    animate={{
-                                                        opacity: isGlowing ? [0.8, 1, 0.8] : 1,
-                                                        backgroundColor: isGlowing
-                                                            ? ["rgba(107, 159, 145, 0.15)", "rgba(107, 159, 145, 0.3)", "rgba(107, 159, 145, 0.15)"]
-                                                            : "rgba(107, 159, 145, 0.05)"
-                                                    }}
-                                                    transition={{ duration: 4 + (i % 4), repeat: Infinity, ease: "easeInOut", delay: i * 0.1 }}
-                                                    className="w-full h-full rounded-[1px] border border-[var(--color-primary)]/15 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] overflow-hidden relative"
+                                                    animate={isGlowing ? { opacity: [0.6, 1, 0.6] } : undefined}
+                                                    transition={isGlowing ? { duration: 4 + (i % 4), repeat: Infinity, ease: "easeInOut", delay: i * 0.1 } : undefined}
+                                                    className={cn(
+                                                        "w-full h-full rounded-[1px] border border-[var(--color-primary)]/15 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] overflow-hidden relative transform-gpu will-change-[opacity]",
+                                                        isGlowing ? "bg-[#6B9F91]/25" : "bg-[#6B9F91]/5"
+                                                    )}
                                                 >
                                                     {/* Soft glass reflection on each panel */}
                                                     <div className="absolute top-0 right-0 w-full h-[70%] bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />

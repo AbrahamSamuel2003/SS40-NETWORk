@@ -22,7 +22,8 @@ import {
     ChevronDown,
     Home,
     Monitor,
-    Database
+    Database,
+    Newspaper
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -56,6 +57,7 @@ const MENU_ITEMS: MenuBlock[] = [
         subItems: [
             { name: 'Logos', href: '/siva/home/logos' },
             { name: 'Happimonials', href: '/siva/home/happimonials' },
+            { name: 'Activities & Blogs', href: '/siva/activities' },
         ]
     },
     {
