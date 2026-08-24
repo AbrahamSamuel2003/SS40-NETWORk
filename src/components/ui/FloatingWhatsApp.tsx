@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { SiteConfigData } from "@/lib/site-config";
@@ -34,11 +33,8 @@ export function FloatingWhatsApp({ config }: { config?: SiteConfigData | null })
     if (!config?.whatsappNumber) return null;
 
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 30, scale: 0.8 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.6, ease: [0.34, 1.56, 0.64, 1], delay: 1 }}
-            className="fixed bottom-4 right-4 md:bottom-6 md:right-8 lg:bottom-8 lg:right-10 z-30 flex items-center justify-center pointer-events-none"
+        <div
+            className="fixed bottom-4 right-4 md:bottom-6 md:right-8 lg:bottom-8 lg:right-10 z-30 flex items-center justify-center pointer-events-none animate-in fade-in slide-in-from-bottom-4 duration-700"
         >
             {/* The idle pulse ring behind the button */}
             <div className="absolute inset-0 bg-[#25D366] rounded-full animate-ping opacity-25 pointer-events-none" style={{ animationDuration: '3s' }} />
@@ -52,6 +48,6 @@ export function FloatingWhatsApp({ config }: { config?: SiteConfigData | null })
             >
                 <WhatsAppIcon className="w-7 h-7 md:w-8 md:h-8 fill-current drop-shadow-sm" />
             </Link>
-        </motion.div>
+        </div>
     );
 }

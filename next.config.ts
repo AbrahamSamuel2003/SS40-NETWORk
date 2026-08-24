@@ -31,9 +31,11 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: 60,
   },
   // Optimize production builds
-  // Enable experimental features for better performance
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production" ? { exclude: ["error"] } : false,
+  },
   experimental: {
-    optimizePackageImports: ['lucide-react', 'framer-motion'],
+    optimizePackageImports: ['lucide-react', 'clsx', 'tailwind-merge'],
   },
   async rewrites() {
     return [

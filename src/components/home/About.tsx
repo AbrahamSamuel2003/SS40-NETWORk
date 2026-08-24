@@ -1,7 +1,4 @@
-"use client";
-
 import * as React from "react";
-import { motion } from "framer-motion";
 import {
     Calendar,
     Building,
@@ -20,9 +17,8 @@ import {
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { CardMotion } from "@/components/ui/Card";
+import { Card } from "@/components/ui/Card";
 import { FeatureCard } from "@/components/ui/FeatureCard";
-import { hoverLift, staggerContainer, fadeIn, slideUp } from "@/lib/animations";
 
 const HIGHLIGHTS = [
     { icon: <Calendar className="w-5 h-5" />, label: "Founded", value: "2023" },
@@ -30,7 +26,6 @@ const HIGHLIGHTS = [
     { icon: <Landmark className="w-5 h-5" />, label: "MCA", value: "Registered" },
     { icon: <Globe2 className="w-5 h-5" />, label: "Serving", value: "India" },
 ];
-
 
 const TRUST_FEATURES = [
     {
@@ -86,7 +81,6 @@ const AboutIllustration = () => (
     </div>
 );
 
-
 export function About() {
     return (
         <SectionWrapper id="about" className="bg-[#EDF5F2]">
@@ -111,27 +105,18 @@ export function About() {
                 {/* 2. Company Highlights */}
                 <div className="relative w-full">
 
-                    {/* Mobile Watermark Illustration: complete composition scaled and rendered behind the cards */}
+                    {/* Mobile Watermark Illustration */}
                     <div className="absolute inset-0 z-0 flex items-center justify-center lg:hidden opacity-[0.06] overflow-visible pointer-events-none">
                         <div className="scale-75 sm:scale-100 flex items-center justify-center">
                             <AboutIllustration />
                         </div>
                     </div>
 
-                    <motion.div
-                        variants={staggerContainer}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true, margin: "-100px" }}
-                        className="grid grid-cols-2 lg:grid-cols-4 gap-6 relative z-10"
-                    >
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
                         {HIGHLIGHTS.map((item, i) => (
-                            <CardMotion
+                            <Card
                                 key={i}
-                                variants={slideUp}
-                                whileHover="hover"
-                                className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4"
-                                {...hoverLift}
+                                className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4 hover:-translate-y-1 hover:shadow-lg transition-all duration-300"
                             >
                                 <div className="w-12 h-12 shrink-0 rounded-full bg-[var(--color-primary)]/10 text-[var(--color-primary)] flex items-center justify-center">
                                     {item.icon}
@@ -140,41 +125,35 @@ export function About() {
                                     <p className="text-sm font-medium text-[var(--color-body-text)]">{item.label}</p>
                                     <p className="text-xl font-bold text-[var(--color-heading)]">{item.value}</p>
                                 </div>
-                            </CardMotion>
+                            </Card>
                         ))}
-                    </motion.div>
+                    </div>
                 </div>
 
                 {/* 3. Vision, Mission & Culture */}
-                <motion.div
-                    variants={staggerContainer}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, margin: "-100px" }}
-                    className="grid grid-cols-1 md:grid-cols-3 gap-6"
-                >
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {/* Vision */}
-                    <CardMotion variants={slideUp} className="flex flex-col gap-4 items-start relative overflow-hidden">
+                    <Card className="flex flex-col gap-4 items-start relative overflow-hidden hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
                         <h3 className="text-card-title flex items-center gap-2">
                             <Eye className="w-5 h-5 text-[var(--color-primary)]" /> Vision
                         </h3>
                         <p className="text-[var(--color-body-text)] flex-1 text-lg leading-relaxed relative z-10">
                             Most trusted digital partner in South India.
                         </p>
-                    </CardMotion>
+                    </Card>
 
                     {/* Mission */}
-                    <CardMotion variants={slideUp} className="flex flex-col gap-4 items-start relative overflow-hidden">
+                    <Card className="flex flex-col gap-4 items-start relative overflow-hidden hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
                         <h3 className="text-card-title flex items-center gap-2">
                             <Target className="w-5 h-5 text-[var(--color-primary)]" /> Mission
                         </h3>
                         <p className="text-[var(--color-body-text)] flex-1 text-lg leading-relaxed relative z-10">
                             Ship quality products. Empower growth.
                         </p>
-                    </CardMotion>
+                    </Card>
 
                     {/* Culture */}
-                    <CardMotion variants={slideUp} className="flex flex-col gap-4 items-start relative overflow-hidden">
+                    <Card className="flex flex-col gap-4 items-start relative overflow-hidden hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
                         <h3 className="text-card-title flex items-center gap-2">
                             <Heart className="w-5 h-5 text-[var(--color-primary)]" /> Culture
                         </h3>
@@ -183,18 +162,11 @@ export function About() {
                             <span className="px-3 py-1.5 bg-[var(--color-primary)]/10 text-[var(--color-primary-hover)] rounded-full text-sm font-semibold tracking-wide">Curiosity</span>
                             <span className="px-3 py-1.5 bg-[var(--color-primary)]/10 text-[var(--color-primary-hover)] rounded-full text-sm font-semibold tracking-wide">Partnership</span>
                         </div>
-                    </CardMotion>
-                </motion.div>
-
+                    </Card>
+                </div>
 
                 {/* 5. Trust Highlights */}
-                <motion.div
-                    variants={staggerContainer}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, margin: "-100px" }}
-                    className="grid grid-cols-1 md:grid-cols-3 gap-6"
-                >
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {TRUST_FEATURES.map((feat, i) => (
                         <FeatureCard
                             key={i}
@@ -203,7 +175,7 @@ export function About() {
                             icon={feat.icon}
                         />
                     ))}
-                </motion.div>
+                </div>
 
             </Container>
         </SectionWrapper>

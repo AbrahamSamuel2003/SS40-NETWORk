@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import { motion } from "framer-motion";
 
 export function FooterInteractive({ children }: { children: React.ReactNode }) {
     const containerRef = useRef<HTMLElement>(null);
@@ -28,10 +27,8 @@ export function FooterInteractive({ children }: { children: React.ReactNode }) {
             {/* Spotlight Background Effect (Desktop Only) */}
             <div className="absolute inset-0 z-0 hidden md:block pointer-events-none select-none overflow-hidden">
                 {/* Stretched SVG Text Reveal */}
-                <motion.div 
-                    className="absolute inset-0 w-full h-full"
-                    animate={{ opacity: isHovered ? 1 : 0 }}
-                    transition={{ duration: 0.6, ease: "easeOut" }}
+                <div 
+                    className={`absolute inset-0 w-full h-full transition-opacity duration-500 ease-out ${isHovered ? 'opacity-100' : 'opacity-0'}`}
                     style={{
                         WebkitMaskImage: `radial-gradient(circle 500px at ${mousePosition.x}px ${mousePosition.y}px, black 35%, transparent 65%)`,
                         maskImage: `radial-gradient(circle 500px at ${mousePosition.x}px ${mousePosition.y}px, black 35%, transparent 65%)`,
@@ -53,7 +50,7 @@ export function FooterInteractive({ children }: { children: React.ReactNode }) {
                             <tspan className="fill-[var(--color-primary)]"> NETWORK</tspan>
                         </text>
                     </svg>
-                </motion.div>
+                </div>
             </div>
 
             {/* Foreground Content */}

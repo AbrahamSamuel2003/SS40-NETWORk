@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import { Activity, Users, Box, BarChart3, LayoutDashboard, Briefcase, Sparkles, GraduationCap } from "lucide-react";
 
