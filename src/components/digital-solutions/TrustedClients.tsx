@@ -126,11 +126,9 @@ interface MarqueeRowProps {
     direction: "left" | "right";
     speed: number;
 }
-
 function MarqueeRow({ items, direction, speed }: MarqueeRowProps) {
-    const expandedItems = items.length < 5 ? [...items, ...items, ...items, ...items] : items;
-    const half = [...expandedItems, ...expandedItems, ...expandedItems];
-    const duplicatedItems = [...half, ...half];
+    const baseItems = items.length < 4 ? [...items, ...items, ...items] : (items.length < 6 ? [...items, ...items] : items);
+    const duplicatedItems = [...baseItems, ...baseItems];
 
     const pauseMarquee = (event: React.PointerEvent<HTMLDivElement>) => {
         if (event.pointerType === "touch") {

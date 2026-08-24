@@ -136,9 +136,8 @@ interface MarqueeRowProps {
 
 function MarqueeRow({ items, direction, speed }: MarqueeRowProps) {
     // Duplicate exactly to fit -50% perfectly. Note: must have a robust amount of duplicates if the initial array is small
-    const expandedItems = items.length < 5 ? [...items, ...items, ...items, ...items] : items;
-    const half = [...expandedItems, ...expandedItems, ...expandedItems];
-    const duplicatedItems = [...half, ...half];
+    const baseItems = items.length < 4 ? [...items, ...items, ...items] : (items.length < 6 ? [...items, ...items] : items);
+    const duplicatedItems = [...baseItems, ...baseItems];
     const pauseMarquee = (event: React.PointerEvent<HTMLDivElement>) => {
         if (event.pointerType === "touch") {
             event.currentTarget.classList.add("marquee-touch-paused");

@@ -177,7 +177,7 @@ const VisualProducts = React.memo(() => {
                     <div className="flex items-center gap-3 text-gray-500 text-sm font-semibold mb-2"><Users className="w-4 h-4 text-blue-500" /> Active Users</div>
                     <div className="flex items-end gap-2">
                         <div className="text-2xl font-black text-[#111827]">1,204</div>
-                        <div className="text-xs font-bold text-green-500 mb-1">+12%</div>
+                        <div className="text-xs font-extrabold text-emerald-700 mb-1">+12%</div>
                     </div>
                 </motion.div>
 
@@ -465,7 +465,7 @@ const MobileSwipeCard = ({ scene, idx }: { scene: any, idx: number }) => {
 
             {/* Content Part */}
             <div className="flex-1 w-full flex flex-col px-6 pb-8 bg-white text-left relative z-10">
-                <div className="w-10 h-10 rounded-xl bg-[#EDF5F2] text-[#6B9F91] flex items-center justify-center font-bold text-base mb-4 border border-gray-100 shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-[#EDF5F2] text-[#2E544A] flex items-center justify-center font-extrabold text-base mb-4 border border-gray-100 shrink-0">
                     0{idx + 1}
                 </div>
                 <h3 className="text-2xl font-black text-[#111827] tracking-tight mb-2">{scene.title}</h3>
@@ -542,7 +542,7 @@ export function InteractiveImpactShowcase() {
                 <Container className="text-center">
                     <motion.span
                         initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-                        className="inline-block px-3 py-1.5 rounded-full bg-[#6B9F91]/10 text-[#6B9F91] text-[10px] font-bold uppercase tracking-widest mb-6"
+                        className="inline-block px-3 py-1.5 rounded-full bg-[#2E544A]/10 text-[#2E544A] text-[10px] font-bold uppercase tracking-widest mb-6"
                     >
                         OUR IMPACT
                     </motion.span>
@@ -586,7 +586,7 @@ export function InteractiveImpactShowcase() {
                                     viewport={{ margin: "-20% 0px -20% 0px" }}
                                     transition={{ duration: 0.4 }}
                                 >
-                                    <div className="w-12 h-12 rounded-xl bg-[#EDF5F2] text-[#6B9F91] flex items-center justify-center font-bold text-lg mb-8 border border-gray-100">
+                                    <div className="w-12 h-12 rounded-xl bg-[#EDF5F2] text-[#2E544A] flex items-center justify-center font-extrabold text-lg mb-8 border border-gray-100">
                                         0{idx + 1}
                                     </div>
                                     <h3 className="text-4xl font-black text-[#111827] tracking-tight mb-6">{scene.title}</h3>
@@ -596,7 +596,7 @@ export function InteractiveImpactShowcase() {
                                         {scene.cards.map((card, i) => (
                                             <div key={i} className="flex flex-col gap-2 p-5 bg-white rounded-2xl border border-gray-100 shadow-sm">
                                                 <div className="flex items-center gap-3">
-                                                    <div className="w-8 h-8 rounded-full bg-[#EDF5F2] flex items-center justify-center shadow-sm border border-gray-50 text-[#6B9F91] font-bold text-sm">
+                                                    <div className="w-8 h-8 rounded-full bg-[#EDF5F2] flex items-center justify-center shadow-sm border border-gray-50 text-[#2E544A] font-extrabold text-sm">
                                                         {i + 1}
                                                     </div>
                                                     <span className="text-[#111827] font-bold text-lg tracking-wide">{card.title}</span>
