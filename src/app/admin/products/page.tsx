@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Plus, Edit2, Trash2, AlertCircle, X, ExternalLink, Upload, Image as ImageIcon, ZoomIn, ZoomOut, Check, RefreshCw } from 'lucide-react';
+import { Plus, Edit2, Trash2, CheckCircle2, AlertCircle, Upload, X, Crop, Move, ZoomIn, ZoomOut, Check, ArrowUp, ArrowDown, Image as ImageIcon, Sparkles, ExternalLink, RefreshCw } from 'lucide-react';
+import { compressImageFile } from '@/utils/imageCompressor';
 import { MediaSelectorModal } from '@/components/admin/MediaSelectorModal';
 
 export default function ManagedProductsPage() {
@@ -147,10 +148,13 @@ export default function ManagedProductsPage() {
 
     const handleUploadLocal = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files?.length) return;
+        const rawFile = e.target.files[0];
         setIsUploading(true);
         try {
+            const file = await compressImageFile(rawFile);
             const formData = new FormData();
-            formData.append('file', e.target.files[0]);
+            formData.append('file', file);
+            formData.append('pageScope', 'PRODUCTS');
             const res = await fetch('/api/admin/media/upload', { method: 'POST', body: formData });
             const data = await res.json();
             if (data.success) {

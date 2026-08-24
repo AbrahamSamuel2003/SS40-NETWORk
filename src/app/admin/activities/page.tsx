@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import { compressImageFile } from '@/utils/imageCompressor';
 import {
     Plus,
     Edit2,
@@ -168,9 +169,11 @@ export default function ManagedActivitiesPage() {
         setIsUploading(true);
         try {
             const uploadedUrls: string[] = [];
-            for (const file of filesToUpload) {
+            for (const rawFile of filesToUpload) {
+                const file = await compressImageFile(rawFile);
                 const formData = new FormData();
                 formData.append('file', file);
+                formData.append('pageScope', 'ACTIVITIES');
                 const res = await fetch('/api/admin/media/upload', { method: 'POST', body: formData });
                 const data = await res.json();
                 if (data.success) {

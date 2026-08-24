@@ -38,7 +38,8 @@ export async function POST(request: Request) {
         let finalMimeType = file.type || 'application/octet-stream';
 
         // 1. Intelligent Compression using Sharp for raster images
-        const isCompressibleImage = file.type.startsWith('image/') && !file.type.includes('svg') && !file.type.includes('gif');
+        const isCompressibleImage = (file.type.startsWith('image/') || Boolean(ext.match(/\.(jpe?g|png|webp|avif)$/))) && 
+            !file.type.includes('svg') && !file.type.includes('gif') && ext !== '.svg' && ext !== '.gif';
         
         if (isCompressibleImage) {
             try {
@@ -58,17 +59,16 @@ export async function POST(request: Request) {
                 if (file.type === 'image/jpeg' || file.type === 'image/jpg' || ext === '.jpg' || ext === '.jpeg') {
                     buffer = await sharpInstance.jpeg({ quality: 85, mozjpeg: true }).toBuffer();
                     finalMimeType = 'image/jpeg';
-                } else if (file.type === 'image/png' || ext === '.png') {
-                    buffer = await sharpInstance.png({ compressionLevel: 8, effort: 6 }).toBuffer();
+                } else if (file.type === 'image/png' || ext === '.png' || file.type === 'image/x-png') {
+                    buffer = await sharpInstance.png({ compressionLevel: 7, effort: 3 }).toBuffer();
                     finalMimeType = 'image/png';
                 } else if (file.type === 'image/webp' || ext === '.webp') {
-                    buffer = await sharpInstance.webp({ quality: 85, effort: 6 }).toBuffer();
+                    buffer = await sharpInstance.webp({ quality: 85, effort: 4 }).toBuffer();
                     finalMimeType = 'image/webp';
                 } else if (file.type === 'image/avif' || ext === '.avif') {
                     buffer = await sharpInstance.avif({ quality: 80 }).toBuffer();
                     finalMimeType = 'image/avif';
                 } else {
-                    // Fallback to high-quality webp
                     buffer = await sharpInstance.webp({ quality: 85 }).toBuffer();
                     ext = '.webp';
                     finalMimeType = 'image/webp';

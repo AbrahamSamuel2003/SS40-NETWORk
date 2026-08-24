@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit2, Trash2, CheckCircle2, AlertCircle, Upload, X, Image as ImageIcon } from 'lucide-react';
+import { Plus, Edit2, Trash2, CheckCircle2, AlertCircle, Upload, X, Image as ImageIcon, Sparkles } from 'lucide-react';
+import { compressImageFile } from '@/utils/imageCompressor';
 import { MediaSelectorModal } from '@/components/admin/MediaSelectorModal';
 
 export default function DigitalSolutionsHappimonialsPage() {
@@ -75,12 +76,14 @@ export default function DigitalSolutionsHappimonialsPage() {
 
     const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files?.length) return;
-        const file = e.target.files[0];
+        const rawFile = e.target.files[0];
 
         setIsUploading(true);
         try {
+            const file = await compressImageFile(rawFile, { maxWidth: 1200, maxHeight: 1200 });
             const formData = new FormData();
             formData.append('file', file);
+            formData.append('pageScope', 'DIGITAL_SOLUTIONS_HAPPIMONIALS');
             const res = await fetch('/api/admin/media/upload', { method: 'POST', body: formData });
             const data = await res.json();
             if (data.success) {

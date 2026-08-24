@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getCurrentAdmin } from '@/lib/auth';
 import { promises as fs } from 'fs';
 import path from 'path';
+import sharp from 'sharp';
 
 export async function POST(request: Request) {
     try {
@@ -17,12 +18,15 @@ export async function POST(request: Request) {
             return NextResponse.json({ success: false, error: 'No file uploaded' }, { status: 400 });
         }
 
-        if (!file.type.startsWith('image/')) {
+        const ext = path.extname(file.name).toLowerCase() || '.png';
+        const isImage = file.type.startsWith('image/') || Boolean(ext.match(/\.(jpe?g|png|webp|svg|avif)$/));
+
+        if (!isImage) {
             return NextResponse.json({ success: false, error: 'File must be an image' }, { status: 400 });
         }
 
         const arrayBuffer = await file.arrayBuffer();
-        const buffer = Buffer.from(arrayBuffer);
+        let buffer = Buffer.from(arrayBuffer);
 
         const uploadDir = path.join(process.cwd(), 'storage', 'uploads', 'logos');
         try {
@@ -31,7 +35,33 @@ export async function POST(request: Request) {
             await fs.mkdir(uploadDir, { recursive: true });
         }
 
-        const ext = path.extname(file.name) || '.png';
+        // Compress raster logos using Sharp while preserving transparency
+        if (!file.type.includes('svg') && ext !== '.svg') {
+            try {
+                let sharpInstance = sharp(buffer);
+                const metadata = await sharpInstance.metadata();
+
+                if ((metadata.width && metadata.width > 1200) || (metadata.height && metadata.height > 1200)) {
+                    sharpInstance = sharpInstance.resize({
+                        width: 1200,
+                        height: 1200,
+                        fit: 'inside',
+                        withoutEnlargement: true
+                    });
+                }
+
+                if (file.type === 'image/png' || ext === '.png' || file.type === 'image/x-png') {
+                    buffer = await sharpInstance.png({ compressionLevel: 7, effort: 3 }).toBuffer();
+                } else if (file.type === 'image/webp' || ext === '.webp') {
+                    buffer = await sharpInstance.webp({ quality: 90, effort: 4 }).toBuffer();
+                } else {
+                    buffer = await sharpInstance.jpeg({ quality: 90, mozjpeg: true }).toBuffer();
+                }
+            } catch (err) {
+                console.warn('Logo optimization fallback to raw buffer:', err);
+            }
+        }
+
         const fileName = `logo-${Date.now()}${ext}`;
         const filePath = path.join(uploadDir, fileName);
 

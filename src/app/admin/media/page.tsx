@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, Upload, X, Copy, Check, Eye, ExternalLink, Download, FileText, Film, Image as ImageIcon } from 'lucide-react';
+import { compressImageFile } from '@/utils/imageCompressor';
 
 function formatBytes(bytes?: number) {
     if (!bytes || bytes === 0) return '0 B';
@@ -45,10 +46,11 @@ export default function GlobalMediaPage() {
 
     const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files?.length) return;
-        const file = e.target.files[0];
+        const rawFile = e.target.files[0];
 
         setIsUploading(true);
         try {
+            const file = await compressImageFile(rawFile);
             const formData = new FormData();
             formData.append('file', file);
             formData.append('pageScope', 'GLOBAL');

@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit2, Trash2, CheckCircle2, AlertCircle, Upload, X, Star, Image as ImageIcon } from 'lucide-react';
+import { Plus, Edit2, Trash2, CheckCircle2, AlertCircle, Upload, X, Film, Image as ImageIcon, Sparkles, Star } from 'lucide-react';
+import { compressImageFile } from '@/utils/imageCompressor';
 import { useRouter } from 'next/navigation';
 import { MediaSelectorModal } from '@/components/admin/MediaSelectorModal';
 
@@ -83,12 +84,14 @@ export default function StudentImpactsPage() {
 
     const handleUploadMedia = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files?.length) return;
-        const file = e.target.files[0];
+        const rawFile = e.target.files[0];
 
         setIsUploadingMedia(true);
         try {
+            const file = await compressImageFile(rawFile);
             const formData = new FormData();
             formData.append('file', file);
+            formData.append('pageScope', 'STUDENT_IMPACTS');
 
             const res = await fetch('/api/admin/media/upload', {
                 method: 'POST',

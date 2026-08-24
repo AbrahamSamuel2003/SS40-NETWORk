@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { Save, AlertCircle, CheckCircle2, Upload, Trash2, Image as ImageIcon } from 'lucide-react';
+import { compressImageFile } from '@/utils/imageCompressor';
 import { useRouter } from 'next/navigation';
 import { MediaSelectorModal } from '@/components/admin/MediaSelectorModal';
 
@@ -112,8 +113,9 @@ export default function SiteConfigPage() {
     const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files || e.target.files.length === 0) return;
 
-        const file = e.target.files[0];
-        if (!file.type.startsWith('image/')) {
+        const rawFile = e.target.files[0];
+        const isImage = rawFile.type.startsWith('image/') || Boolean(rawFile.name.toLowerCase().match(/\.(jpe?g|png|webp|svg|avif)$/));
+        if (!isImage) {
             setErrorMsg('Please upload a valid image file.');
             return;
         }
@@ -122,6 +124,7 @@ export default function SiteConfigPage() {
         setErrorMsg('');
 
         try {
+            const file = await compressImageFile(rawFile, { maxWidth: 1200, maxHeight: 1200 });
             const formData = new FormData();
             formData.append('logo', file);
 
