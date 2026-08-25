@@ -12,39 +12,32 @@ import { cn } from "@/utils/cn";
 import { shuffleArray } from "@/utils/shuffle";
 import { LogoMarqueeSkeleton } from "@/components/ui/Skeleton";
 
-const MIXED_ROW_1 = [
-    { id: "1", name: "Global Enterprise", icon: Globe },
-    { id: "2", name: "Apex Logistics", icon: Plane },
-    { id: "3", name: "Tech Institute of Excellence", icon: Library },
-    { id: "4", name: "Nova Healthcare", icon: Stethoscope },
-    { id: "5", name: "Stellar Fabrication", icon: Factory },
-    { id: "6", name: "Pioneer Engineering Academy", icon: GraduationCap },
-];
-
-const MIXED_ROW_2 = [
-    { id: "7", name: "Vertex Tech", icon: Code2 },
-    { id: "8", name: "Global Management College", icon: Building2 },
-    { id: "9", name: "Horizon Retail", icon: Store },
-    { id: "10", name: "Future Innovators University", icon: Rocket },
-    { id: "11", name: "Oasis Financial", icon: Landmark },
-    { id: "12", name: "Nexus Systems", icon: Cpu },
-];
-
 export function TrustedBy({ data }: { data?: any[] }) {
-    const hasAdminLogos = Boolean(data && data.length > 0);
+    if (!data || data.length === 0) {
+        return (
+            <SectionWrapper id="trusted-by" className="bg-white relative overflow-hidden pb-8 md:pb-12">
+                <Container className="relative z-10">
+                    <div className="text-center mb-12 lg:mb-20">
+                        <span className="inline-block px-3 py-1 rounded-full bg-[#6B9F91]/10 text-[#6B9F91] text-[10px] font-bold uppercase tracking-widest mb-4">
+                            OUR PARTNERS & CLIENTS
+                        </span>
+                        <h2 className="text-3xl md:text-5xl font-extrabold text-[#111827] mb-4">
+                            Trusted by Businesses, Institutions & Partners
+                        </h2>
+                        <p className="text-gray-500 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
+                            Organizations that trust SS40 NETWORK across digital solutions, products, and industry-focused academics.
+                        </p>
+                    </div>
+                    <LogoMarqueeSkeleton count={6} title="" />
+                </Container>
+            </SectionWrapper>
+        );
+    }
 
-    const rows = React.useMemo(() => {
-        if (hasAdminLogos && data && data.length > 0) {
-            return {
-                row1: data,
-                row2: data.length > 3 ? [...data].reverse() : data,
-            };
-        }
-        return {
-            row1: MIXED_ROW_1,
-            row2: MIXED_ROW_2,
-        };
-    }, [data, hasAdminLogos]);
+    const rows = {
+        row1: data,
+        row2: data.length > 3 ? [...data].reverse() : data,
+    };
 
     return (
         <SectionWrapper id="trusted-by" className="bg-white relative overflow-hidden">

@@ -8,6 +8,7 @@ import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { cn } from "@/utils/cn";
 import { shuffleArray } from "@/utils/shuffle";
+import { LogoMarqueeSkeleton } from "@/components/ui/Skeleton";
 
 export function TrustedClients() {
     const [logos, setLogos] = React.useState<any[]>([]);
@@ -28,12 +29,24 @@ export function TrustedClients() {
     const row1 = React.useMemo(() => shuffleArray(logos), [logos]);
     const row2 = React.useMemo(() => shuffleArray(logos), [logos]);
 
-    if (!isLoading && logos.length === 0) {
-        return null; // hide section entirely if there are no trusted clients configured for this page (fail safe)
+    if (isLoading || logos.length === 0) {
+        return (
+            <SectionWrapper id="trusted-clients" className="bg-[#EDF5F2] relative overflow-hidden pb-8 md:pb-12 !pt-0 md:!pt-0 lg:!pt-0">
+                <Container className="relative z-10">
+                    <SectionHeading
+                        badge="OUR PARTNERS"
+                        title="Trusted by Our Clients"
+                        description="We're proud to have partnered with organizations across multiple industries to design, develop, and deliver reliable digital solutions."
+                        className="mb-12 lg:mb-20"
+                    />
+                    <LogoMarqueeSkeleton count={6} title="" />
+                </Container>
+            </SectionWrapper>
+        );
     }
 
     return (
-        <SectionWrapper id="trusted-clients" className={cn("bg-[#EDF5F2] relative overflow-hidden transition-opacity duration-500", isLoading ? "opacity-0" : "opacity-100", "!pt-0 md:!pt-0 lg:!pt-0")}>
+        <SectionWrapper id="trusted-clients" className={cn("bg-[#EDF5F2] relative overflow-hidden transition-opacity duration-500 opacity-100 !pt-0 md:!pt-0 lg:!pt-0")}>
             {/* Soft Ambient Background Enhancements */}
             <div className="absolute inset-0 pointer-events-none z-0">
                 <div

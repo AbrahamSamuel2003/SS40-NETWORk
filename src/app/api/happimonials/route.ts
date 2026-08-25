@@ -41,7 +41,7 @@ export async function GET(request: Request) {
 
         return NextResponse.json({ success: true, data: happimonials }, {
             headers: {
-                'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+                'Cache-Control': 'no-cache, no-store, max-age=0, must-revalidate',
             }
         });
     } catch (error) {

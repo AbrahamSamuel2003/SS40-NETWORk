@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { Hero } from "@/components/home/Hero";
 import { About } from "@/components/home/About";
-import { getHomeDataCached } from "@/lib/home-cache";
+import { prisma } from "@/lib/prisma";
+import { getSiteConfig } from "@/lib/site-config";
 
 // Code-split below-the-fold components to reduce initial main-thread JavaScript execution
 const BusinessWings = dynamic(() => import("@/components/home/BusinessWings").then(mod => mod.BusinessWings), { ssr: true });
@@ -12,7 +13,7 @@ const InteractiveImpactShowcase = dynamic(() => import("@/components/home/Intera
 const TrustedBy = dynamic(() => import("@/components/home/TrustedBy").then(mod => mod.TrustedBy), { ssr: true });
 const ContactSection = dynamic(() => import("@/components/home/ContactSection").then(mod => mod.ContactSection), { ssr: true });
 
-export const revalidate = 3600; // 1 hour ISR caching
+export const revalidate = 0; // Real-time dynamic CMS replication
 
 export const metadata: Metadata = {
   title: "SS40 Network | Intelligent Digital Solutions, SaaS Products & Academics",
@@ -44,8 +45,22 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  // Ultra-fast cached data fetch (resolves in < 15ms)
-  const { config, logos, happimonials, activities } = await getHomeDataCached();
+  // Ultra-fast direct Prisma data fetch in parallel
+  const [config, logos, happimonials, activities] = await Promise.all([
+    getSiteConfig(),
+    prisma.organizationLogo.findMany({
+      where: { pageScope: 'HOME', isActive: true },
+      orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }]
+    }),
+    prisma.happimonial.findMany({
+      where: { pageScope: 'HOME', isActive: true },
+      orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }]
+    }),
+    prisma.activityPost.findMany({
+      where: { showOnHome: true, isActive: true },
+      orderBy: [{ sortOrder: 'asc' }, { activityDate: 'desc' }]
+    })
+  ]);
 
   const sitelinksSchema = {
     "@context": "https://schema.org",

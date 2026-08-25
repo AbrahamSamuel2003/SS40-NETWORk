@@ -13,32 +13,6 @@ import { Button } from "@/components/ui/Button";
 import { YouTubeResumeThumbnailPlayer, getYouTubeThumbnailUrl, getYouTubeVideoId } from "@/components/ui/YouTubeResumeThumbnailPlayer";
 import { StoryGridSkeleton } from "@/components/ui/Skeleton";
 
-// Data-driven placeholders specific to SS40 NETWORK wings
-const FEATURED_STORY = {
-    clientName: "Sarah Jenkins",
-    company: "Operations Director, Apex Logistics",
-    quote: "Partnering with SS40 NETWORK for our custom digital transformation was a game-changer. They modernized our entire legacy supply-chain system into a scalable, high-performance architecture.",
-    link: "/digital-solutions",
-    youtubeUrl: null,
-    videoUrl: null,
-    thumbnailUrl: null
-};
-
-const SECONDARY_STORIES = [
-    {
-        clientName: "Michael Chang",
-        company: "CFO, Horizon Retail",
-        quote: "ClearInvoice completely eliminated our billing discrepancies. We recovered 15% in lost revenue and automated our entire financial workflow within the first month.",
-        route: "/products"
-    },
-    {
-        clientName: "Priya Sharma",
-        company: "Software Engineer, Nexus Systems",
-        quote: "The hands-on practical learning and real-world projects at SS40 Academics bridged my talent gap and directly helped me secure a top-tier engineering role.",
-        route: "/academics"
-    },
-];
-
 // Elegant stagger entrance sequence
 const entranceStagger: Variants = {
     hidden: { opacity: 0 },
@@ -56,28 +30,47 @@ const fadeUpAnim: Variants = {
     visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] } }
 };
 
-export function SuccessStories({ data }: { data?: any[] }) {
-    const hasData = Boolean(data && data.length > 0);
+export function SuccessStories({ data = [] }: { data?: any[] }) {
+    if (!data || data.length === 0) {
+        return (
+            <SectionWrapper id="success-stories" className="bg-[#EDF5F2] overflow-hidden">
+                <Container className="space-y-12 lg:space-y-16">
+                    <div>
+                        <SectionHeading
+                            badge="Success Stories"
+                            title="Built on trust. Driven by results."
+                            description="Real partnerships. Real outcomes. Discover how SS40 NETWORK helps businesses and learners grow through technology, products, and education."
+                        />
+                    </div>
+                    <StoryGridSkeleton />
+                </Container>
+            </SectionWrapper>
+        );
+    }
 
-    // Featured = the one HOME story that has a youtubeUrl.
-    // All other stories (no youtubeUrl) go to the secondary carousel.
-    const featuredStory = hasData ? (data!.find((s: any) => s.youtubeUrl) || null) : null;
-    const secondaryStories = hasData
-        ? (data!.filter((s: any) => !s.youtubeUrl).length > 0 ? data!.filter((s: any) => !s.youtubeUrl) : SECONDARY_STORIES)
-        : SECONDARY_STORIES;
+    // Featured = story that has youtubeUrl or videoUrl or isFeatured
+    const featuredStoryRaw = data.find((s: any) => s.youtubeUrl || s.videoUrl) || (data.length === 1 ? data[0] : null);
+    const secondaryStoriesRaw = featuredStoryRaw 
+        ? data.filter((s: any) => s.id !== featuredStoryRaw.id) 
+        : data;
 
-    // Map featured story fields safely.
-    // When a youtubeUrl is present, thumbnailUrl is intentionally set to null
-    // so no other story's avatar/image can appear inside the video area.
-    const finalFeaturedStory = featuredStory ? {
-        clientName: featuredStory.clientName,
-        company: featuredStory.companyName,
-        quote: featuredStory.testimonial,
+    const finalFeaturedStory = featuredStoryRaw ? {
+        clientName: featuredStoryRaw.clientName,
+        company: featuredStoryRaw.companyName,
+        quote: featuredStoryRaw.testimonial,
         link: "/digital-solutions",
-        youtubeUrl: featuredStory.youtubeUrl,
-        videoUrl: featuredStory.videoUrl || null,
-        thumbnailUrl: featuredStory.thumbnailUrl || null
-    } : FEATURED_STORY;
+        youtubeUrl: featuredStoryRaw.youtubeUrl || null,
+        videoUrl: featuredStoryRaw.videoUrl || null,
+        thumbnailUrl: featuredStoryRaw.thumbnailUrl || null
+    } : null;
+
+    const secondaryStories = secondaryStoriesRaw.map((s: any) => ({
+        clientName: s.clientName,
+        company: s.companyName,
+        quote: s.testimonial,
+        route: s.route || "/digital-solutions",
+        thumbnailUrl: s.thumbnailUrl || null
+    }));
 
     // Modal state lifted here to avoid CSS perspective trapping fixed elements
     const [activeModalStory, setActiveModalStory] = useState<{
@@ -113,17 +106,19 @@ export function SuccessStories({ data }: { data?: any[] }) {
                     viewport={{ once: true, margin: "-100px" }}
                     className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-6xl mx-auto perspective-1000"
                 >
-                    {/* === LEFT COLUMN (Featured YouTube Story) — only rendered when a YouTube story exists === */}
+                    {/* === LEFT COLUMN (Featured Video Story) — only rendered when a video story exists === */}
                     {finalFeaturedStory && (
-                        <div className="lg:col-span-2 flex flex-col relative z-20 h-full">
+                        <div className={`${secondaryStories.length > 0 ? 'lg:col-span-2' : 'lg:col-span-3'} flex flex-col relative z-20 h-full`}>
                             <FeaturedVideoArea story={finalFeaturedStory} />
                         </div>
                     )}
 
                     {/* === RIGHT COLUMN (Secondary Stories Carousel) === */}
-                    <div className={`${finalFeaturedStory ? 'lg:col-span-1' : 'lg:col-span-3'} flex flex-col relative z-10 h-full`}>
-                        <SecondaryStoryCarousel stories={secondaryStories} onOpenModal={(story) => setActiveModalStory(story)} />
-                    </div>
+                    {secondaryStories.length > 0 && (
+                        <div className={`${finalFeaturedStory ? 'lg:col-span-1' : 'lg:col-span-3'} flex flex-col relative z-10 h-full`}>
+                            <SecondaryStoryCarousel stories={secondaryStories} onOpenModal={(story) => setActiveModalStory(story)} />
+                        </div>
+                    )}
                 </motion.div>
 
                 {/* Bottom CTA Block */}

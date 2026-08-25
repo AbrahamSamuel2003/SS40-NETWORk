@@ -39,7 +39,11 @@ export async function GET(request: Request) {
             ]
         });
 
-        return NextResponse.json({ success: true, data: projects });
+        return NextResponse.json({ success: true, data: projects }, {
+            headers: {
+                'Cache-Control': 'no-cache, no-store, max-age=0, must-revalidate',
+            }
+        });
     } catch (error) {
         console.error('Error fetching client projects:', error);
         return NextResponse.json({ success: false, error: 'Failed to fetch client projects' }, { status: 500 });
