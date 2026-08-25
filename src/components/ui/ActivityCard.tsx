@@ -198,16 +198,21 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
     // ─────────────────────────────────────────────────────────────────────────────
     // MOBILE SWIPE VARIANT (For the horizontal snap carousel on mobile)
     // ─────────────────────────────────────────────────────────────────────────────
+    // MOBILE SWIPE VARIANT (Replicating exact OUR IMPACT geometry)
+    // ─────────────────────────────────────────────────────────────────────────────
     if (variant === 'mobile-swipe') {
         return (
-            <div className="w-[85vw] sm:w-[380px] shrink-0 snap-center flex flex-col bg-white rounded-3xl overflow-hidden shadow-xl shadow-gray-200/60 border border-gray-100 h-full select-none">
+            <div
+                className="mobile-activity-card w-[82vw] sm:w-[350px] shrink-0 snap-center flex flex-col bg-white rounded-3xl overflow-hidden shadow-xl shadow-gray-200/50 border border-gray-100 h-full select-none relative scroll-ml-6 transform-gpu"
+                style={{ transform: 'translateZ(0)', willChange: 'transform' }}
+            >
                 {/* Standard Fixed Aspect Image */}
                 <div
                     ref={imageBoxRef}
                     onTouchStart={handleTouchStart}
                     onTouchEnd={handleTouchEnd}
                     onClick={() => onReadStory && onReadStory(activity)}
-                    className="relative w-full h-[220px] sm:h-[240px] bg-gray-950 overflow-hidden cursor-pointer shrink-0"
+                    className="relative w-full h-[200px] sm:h-[220px] bg-gray-950 overflow-hidden cursor-pointer shrink-0 z-0"
                 >
                     <AnimatePresence mode="wait">
                         {images[currentIndex] && (
@@ -223,7 +228,7 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
                                     src={images[currentIndex].url}
                                     alt={images[currentIndex].altText || activity.title}
                                     fill
-                                    sizes="(max-width: 640px) 85vw, 380px"
+                                    sizes="(max-width: 640px) 82vw, 350px"
                                     className="object-cover"
                                     loading="lazy"
                                     decoding="async"
@@ -241,8 +246,8 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
                         </span>
 
                         {totalImages > 1 && (
-                            <span className="bg-black/75 backdrop-blur-md text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
-                                📷 {currentIndex + 1} / {totalImages}
+                            <span className="bg-black/75 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow-sm">
+                                {currentIndex + 1} / {totalImages}
                             </span>
                         )}
                     </div>
@@ -364,8 +369,8 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
                         </span>
 
                         {totalImages > 1 && (
-                            <span className="bg-black/75 backdrop-blur-md text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
-                                📷 {currentIndex + 1} / {totalImages}
+                            <span className="bg-black/75 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow-sm">
+                                {currentIndex + 1} / {totalImages}
                             </span>
                         )}
                     </div>
@@ -447,7 +452,7 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
     // ─────────────────────────────────────────────────────────────────────────────
     return (
         <div
-            className={`group/card bg-white rounded-3xl border border-gray-200/90 shadow-sm hover:shadow-xl hover:border-[#6B9F91]/50 transition-all duration-300 overflow-hidden flex flex-col ${
+            className={`group/card bg-white rounded-3xl border border-gray-200/90 shadow-sm hover:shadow-xl hover:border-[#6B9F91]/50 transition-all duration-300 overflow-hidden flex flex-col transform-gpu ${
                 reversed ? 'lg:flex-row-reverse' : 'lg:flex-row'
             }`}
         >
@@ -457,7 +462,7 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
                 onClick={() => onReadStory && onReadStory(activity)}
-                className="relative w-full lg:w-1/2 h-[260px] sm:h-[340px] lg:h-[390px] xl:h-[410px] bg-gray-950 overflow-hidden cursor-pointer select-none shrink-0"
+                className="relative w-full lg:w-1/2 h-[240px] sm:h-[300px] lg:h-[320px] xl:h-[350px] bg-gray-950 overflow-hidden cursor-pointer select-none shrink-0"
             >
                 <AnimatePresence mode="wait">
                     {images[currentIndex] && (
@@ -486,15 +491,15 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-black/30 pointer-events-none" />
 
                 {/* Top Badges */}
-                <div className="absolute top-4 inset-x-4 flex items-center justify-between pointer-events-none z-10">
-                    <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold shadow-lg backdrop-blur-md border ${meta.color}`}>
+                <div className="absolute top-3 inset-x-3 lg:top-4 lg:inset-x-4 flex items-center justify-between pointer-events-none z-10">
+                    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] lg:text-xs font-bold shadow-lg backdrop-blur-md border ${meta.color}`}>
                         <Icon className="w-3.5 h-3.5" />
                         {meta.label}
                     </span>
 
                     {totalImages > 1 && (
-                        <span className="bg-black/75 backdrop-blur-md text-white text-[11px] font-bold px-2.5 py-1 rounded-full shadow-md">
-                            📷 {currentIndex + 1} / {totalImages}
+                        <span className="bg-black/75 backdrop-blur-md text-white text-[10px] lg:text-[11px] font-bold px-2.5 py-1 rounded-full shadow-md">
+                            {currentIndex + 1} / {totalImages}
                         </span>
                     )}
                 </div>
@@ -519,25 +524,25 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
                         <button
                             type="button"
                             onClick={prevImage}
-                            className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center backdrop-blur-md opacity-0 group-hover/card:opacity-100 transition-opacity z-20 shadow-lg"
+                            className="absolute left-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 text-white backdrop-blur-sm flex items-center justify-center opacity-0 group-hover/card:opacity-100 transition-all hover:scale-110 z-20"
                             aria-label="Previous photo"
                         >
-                            <ChevronLeft className="w-5 h-5" />
+                            <ChevronLeft className="w-4 h-4" />
                         </button>
                         <button
                             type="button"
                             onClick={nextImage}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center backdrop-blur-md opacity-0 group-hover/card:opacity-100 transition-opacity z-20 shadow-lg"
+                            className="absolute right-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 text-white backdrop-blur-sm flex items-center justify-center opacity-0 group-hover/card:opacity-100 transition-all hover:scale-110 z-20"
                             aria-label="Next photo"
                         >
-                            <ChevronRight className="w-5 h-5" />
+                            <ChevronRight className="w-4 h-4" />
                         </button>
                     </>
                 )}
 
                 {/* Bottom Segmented Pill Indicators */}
                 {totalImages > 1 && (
-                    <div className="absolute bottom-3.5 inset-x-6 flex items-center justify-center gap-1.5 z-20 pointer-events-none">
+                    <div className="absolute bottom-3 inset-x-4 flex items-center justify-center gap-1.5 z-20 pointer-events-none">
                         {images.map((_, i) => (
                             <div
                                 key={i}
@@ -553,18 +558,18 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
             </div>
 
             {/* ── CONTENT SECTION ── */}
-            <div className="p-6 sm:p-8 lg:p-10 flex flex-col justify-between flex-1 overflow-hidden">
-                <div className="space-y-4">
+            <div className="p-5 sm:p-6 lg:p-7 xl:p-8 flex flex-col justify-between flex-1 overflow-hidden">
+                <div className="space-y-3">
                     {/* Date and Location Header */}
-                    <div className="flex flex-wrap items-center gap-3 text-xs sm:text-sm text-gray-600">
-                        <span className="flex items-center gap-1.5 font-semibold text-[#1F3D35] bg-[#EDF5F2] px-3 py-1 rounded-full">
+                    <div className="flex flex-wrap items-center gap-2.5 text-xs sm:text-sm text-gray-600">
+                        <span className="flex items-center gap-1.5 font-semibold text-[#1F3D35] bg-[#D8E8E2] px-2.5 py-0.5 rounded-full">
                             <Calendar className="w-3.5 h-3.5 text-[#2E544A]" />
                             {formattedDate}
                         </span>
                         {activity.location && (
-                            <span className="flex items-center gap-1.5 text-gray-700 bg-gray-100 px-3 py-1 rounded-full font-medium">
+                            <span className="flex items-center gap-1.5 text-gray-700 bg-gray-100 px-2.5 py-0.5 rounded-full font-medium">
                                 <MapPin className="w-3.5 h-3.5 text-gray-500 shrink-0" />
-                                <span className="truncate max-w-[180px] sm:max-w-[280px]">{activity.location}</span>
+                                <span className="truncate max-w-[180px] sm:max-w-[260px]">{activity.location}</span>
                             </span>
                         )}
                     </div>
@@ -572,13 +577,13 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
                     {/* Blog Title */}
                     <h3
                         onClick={() => onReadStory && onReadStory(activity)}
-                        className="text-xl sm:text-2xl font-extrabold text-[#111827] leading-tight hover:text-[#2E544A] transition-colors cursor-pointer"
+                        className="text-lg sm:text-xl lg:text-2xl font-extrabold text-[#111827] leading-snug hover:text-[#2E544A] transition-colors cursor-pointer line-clamp-2"
                     >
                         {activity.title}
                     </h3>
 
                     {/* Summary Paragraph */}
-                    <p className="text-sm sm:text-base text-[#4B5563] leading-relaxed line-clamp-4">
+                    <p className="text-xs sm:text-sm text-[#4B5563] leading-relaxed line-clamp-3">
                         {activity.summary}
                     </p>
                 </div>
@@ -588,7 +593,7 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
                     <button
                         type="button"
                         onClick={() => onReadStory && onReadStory(activity)}
-                        className="inline-flex items-center gap-2 text-sm font-bold text-[#1F3D35] hover:text-[#11221E] group-hover/card:translate-x-1 transition-all bg-[#EDF5F2] hover:bg-[#DEEDE8] px-4 py-2 rounded-xl"
+                        className="inline-flex items-center gap-2 text-sm font-bold text-[#1F3D35] hover:text-[#11221E] group-hover/card:translate-x-1 transition-all bg-[#D8E8E2] hover:bg-[#DEEDE8] px-4 py-2 rounded-xl"
                     >
                         Read Full Story
                         <ArrowUpRight className="w-4 h-4" />

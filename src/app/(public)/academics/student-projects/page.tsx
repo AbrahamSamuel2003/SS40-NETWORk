@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { prisma } from "@/lib/prisma";
@@ -46,7 +46,7 @@ export default async function AllStudentProjectsPage() {
             </div>
 
             {/* List and Tabs Section */}
-            <div className="bg-[#EDF5F2] w-full pt-8 pb-16 lg:pt-12 lg:pb-24">
+            <div className="bg-[#D8E8E2] w-full pt-8 pb-16 lg:pt-12 lg:pb-24">
                 <Container className="max-w-7xl">
                     <StudentProjectsList initialProjects={projects} />
                 </Container>

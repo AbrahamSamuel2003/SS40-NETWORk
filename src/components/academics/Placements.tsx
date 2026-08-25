@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { BookOpen, Blocks, Users, Briefcase, TrendingUp, ChevronRight, User } from "lucide-react";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
+import { SectionHeading } from "@/components/ui/SectionHeading";
 
 const TABS = [
     {
@@ -72,7 +73,7 @@ export function Placements() {
     };
 
     return (
-        <SectionWrapper id="placements" className="bg-[#EDF5F2] relative overflow-hidden">
+        <SectionWrapper id="placements" className="bg-[#D8E8E2] relative overflow-hidden">
 
             {/* Ambient Background Glow */}
             <div className="absolute inset-0 pointer-events-none z-0 flex items-center justify-center">
@@ -82,17 +83,12 @@ export function Placements() {
             <Container className="relative z-20 flex flex-col items-center">
 
                 {/* Header */}
-                <div className="text-center mb-16 lg:mb-20">
-                    <span className="inline-block px-3 py-1 rounded-full bg-[#6B9F91]/10 text-[#6B9F91] text-[10px] font-bold uppercase tracking-widest mb-4">
-                        CAREER JOURNEYS
-                    </span>
-                    <h2 className="text-3xl md:text-5xl font-extrabold text-[#111827] mb-4">
-                        Turning Learning Into <span className="text-[#6B9F91]">Careers.</span>
-                    </h2>
-                    <p className="text-gray-500 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
-                        Through practical learning, mentorship, and real-world projects, students gain the confidence and experience needed for successful professional careers.
-                    </p>
-                </div>
+                <SectionHeading
+                    badge="CAREER JOURNEYS"
+                    title="Turning Learning Into Careers"
+                    description="Through practical learning, mentorship, and real-world projects, students gain the confidence and experience needed for successful professional careers."
+                    className="mb-16 lg:mb-20"
+                />
 
                 <div className="flex flex-col lg:grid lg:grid-cols-[1fr_1.1fr] gap-12 lg:gap-16 w-full max-w-6xl mx-auto relative items-center">
 
@@ -133,7 +129,7 @@ export function Placements() {
 
                             {/* Center Node */}
                             <motion.div
-                                className="w-32 h-32 md:w-36 md:h-36 bg-white rounded-full shadow-[0_10px_40px_rgba(107,159,145,0.15)] border-4 border-[#EDF5F2] flex flex-col items-center justify-center relative z-20"
+                                className="w-32 h-32 md:w-36 md:h-36 bg-white rounded-full shadow-[0_10px_40px_rgba(107,159,145,0.15)] border-4 border-[#D8E8E2] flex flex-col items-center justify-center relative z-20"
                             >
                                 <div className="absolute inset-0 bg-[#6B9F91]/5 rounded-full animate-pulse z-0 hidden md:block" />
                                 <TrendingUp className="w-8 h-8 text-[#6B9F91] mb-2 relative z-10" />
@@ -168,7 +164,7 @@ export function Placements() {
                                                 className={`px-3 py-1.5 md:px-4 md:py-2 rounded-full transition-all duration-300 ease-out flex items-center justify-center flex-col gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] cursor-pointer whitespace-nowrap
                                                     ${isActive
                                                         ? 'bg-[#6B9F91] border border-[#5C8C80] shadow-[0_4px_15px_rgba(107,159,145,0.4)] scale-[1.05] z-30'
-                                                        : 'bg-white border border-gray-100 opacity-70 shadow-md hover:opacity-100 hover:scale-[1.03] hover:shadow-lg lg:hover:bg-[#EDF5F2]/50'
+                                                        : 'bg-white border border-gray-100 opacity-70 shadow-md hover:opacity-100 hover:scale-[1.03] hover:shadow-lg lg:hover:bg-[#D8E8E2]/50'
                                                     }
                                                 `}
                                             >

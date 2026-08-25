@@ -10,7 +10,7 @@ import { cn } from "@/utils/cn";
 const WINGS = [
     {
         id: "digital",
-        title: "Digital Solutions",
+        title: "SS40 Digital Solutions",
         description: "Modern digital solutions for growing businesses.",
         icon: <Code2 className="w-6 h-6" />,
         link: "/digital-solutions",
@@ -21,7 +21,7 @@ const WINGS = [
     },
     {
         id: "products",
-        title: "Products",
+        title: "SS40 Products",
         description: "Scalable software products built for real business needs.",
         icon: <Box className="w-6 h-6" />,
         link: "/products",
@@ -32,7 +32,7 @@ const WINGS = [
     },
     {
         id: "academics",
-        title: "Academics",
+        title: "SS40 Academics",
         description: "Practical learning programs designed for future professionals.",
         icon: <GraduationCap className="w-6 h-6" />,
         link: "/academics",
@@ -85,11 +85,11 @@ export function BusinessWings() {
 
                     {/* Central Hub: Modern Corporate Headquarters Visual */}
                     <div
-                        className="relative z-20 flex flex-col items-center justify-center mb-10 lg:mb-[130px] w-full max-w-[320px] mx-auto h-[220px]"
+                        className="relative z-20 flex flex-col items-center justify-center mb-8 lg:mb-[80px] w-full max-w-[290px] mx-auto h-[190px]"
                     >
                         {/* Ambient Glow */}
                         <div
-                            className="animate-pulse absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] h-[280px] bg-[var(--color-primary)]/10 blur-[60px] rounded-full z-0 pointer-events-none"
+                            className="animate-pulse absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[240px] h-[240px] bg-[var(--color-primary)]/10 blur-[50px] rounded-full z-0 pointer-events-none"
                         />
 
                         {/* HQ Architecture Wrapper */}
@@ -113,40 +113,34 @@ export function BusinessWings() {
 
                             {/* Background Tall Building (Right) */}
                             <div
-                                className="animate-float-delayed-2 absolute right-[15%] bottom-[8px] w-[26%] h-[140px] bg-gradient-to-tl from-gray-100 to-white/90 rounded-tr-[1.25rem] rounded-tl-sm shadow-lg border border-white/80 backdrop-blur-sm z-10 flex flex-col p-1.5 gap-1.5 overflow-hidden"
+                                className="animate-float-delayed-2 absolute right-[15%] bottom-[8px] w-[22%] h-[110px] bg-gradient-to-t from-gray-50 to-white/95 rounded-tr-[1rem] rounded-tl-sm shadow-lg border border-white/80 backdrop-blur-sm z-10 overflow-hidden flex flex-col p-1.5 gap-1"
                             >
-                                <div className="absolute top-0 inset-x-0 h-6 bg-gradient-to-b from-white to-transparent z-0" />
-                                {[...Array(6)].map((_, i) => (
-                                    <div key={`hline-${i}`} className="w-full flex-1 bg-[var(--color-primary)]/5 rounded-[2px] border border-[var(--color-primary)]/10 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8)] relative overflow-hidden z-10">
-                                        <div className="absolute top-0 right-0 w-full h-2 bg-gradient-to-b from-white/90 to-transparent" />
+                                <div className="absolute top-0 inset-x-0 h-4 bg-gradient-to-b from-white to-transparent" />
+                                {[...Array(3)].map((_, i) => (
+                                    <div key={`r-row-${i}`} className="flex-1 flex gap-1 z-10">
+                                        {[...Array(3)].map((_, j) => (
+                                            <div key={`r-col-${j}`} className="flex-1 bg-[var(--color-primary)]/5 rounded-[2px] border border-[var(--color-primary)]/10 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8)] relative overflow-hidden">
+                                                <div className="absolute top-0 right-0 w-full h-1/2 bg-gradient-to-b from-white/90 to-transparent" />
+                                            </div>
+                                        ))}
                                     </div>
                                 ))}
                             </div>
 
-                            {/* Main Center Building */}
+                            {/* Main Center HQ Tower */}
                             <div
-                                className="animate-float-slow relative z-20 w-[140px] h-[180px] bg-white rounded-t-2xl shadow-[0_20px_40px_rgba(0,0,0,0.08)] border border-gray-100 flex flex-col items-center justify-start pt-5 overflow-hidden"
+                                className="animate-float-slow relative w-[48%] h-[170px] bg-white rounded-t-2xl shadow-2xl border border-gray-100/80 z-20 flex flex-col items-center p-2.5 overflow-hidden"
                             >
-                                {/* Inner Glass Pillar / Grid Facade */}
-                                <div className="w-[104px] h-[110px] bg-gradient-to-b from-[#EDF5F2] to-white rounded-t-xl border-t-2 border-x border-[var(--color-primary)]/20 relative overflow-hidden flex flex-col p-1.5 shadow-inner">
-
-                                    {/* Sub-structure: premium window grid */}
-                                    <div className="w-full flex-1 grid grid-cols-4 gap-[3px] relative z-10">
-                                        {[...Array(16)].map((_, i) => {
-                                            const isGlowing = i === 5 || i === 10 || i === 14;
-                                            return (
-                                                <div
-                                                    key={`m-grid-${i}`}
-                                                    className={cn(
-                                                        "w-full h-full rounded-[1px] border border-[var(--color-primary)]/15 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] overflow-hidden relative",
-                                                        isGlowing ? "bg-[#6B9F91]/25" : "bg-[#6B9F91]/5"
-                                                    )}
-                                                >
-                                                    <div className="absolute top-0 right-0 w-full h-[70%] bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
-                                                </div>
-                                            )
-                                        })}
-                                    </div>
+                                {/* Frosted Glass Window Grid */}
+                                <div className="w-full flex-1 grid grid-cols-3 gap-1.5 p-1 bg-gradient-to-b from-[var(--color-primary)]/[0.04] to-transparent rounded-lg border border-[var(--color-primary)]/10 relative">
+                                    {[...Array(9)].map((_, i) => (
+                                        <div
+                                            key={`w-${i}`}
+                                            className="bg-white/80 rounded-[3px] border border-gray-100 shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)] flex items-center justify-center relative overflow-hidden group/win"
+                                        >
+                                            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-[var(--color-primary)]/10 to-transparent opacity-0 group-hover/win:opacity-100 transition-opacity" />
+                                        </div>
+                                    ))}
 
                                     {/* Minimal Entrance / Lobby indication */}
                                     <div className="w-full h-5 mt-[3px] flex gap-[3px] relative z-10">
@@ -164,11 +158,11 @@ export function BusinessWings() {
                                 </div>
 
                                 {/* Main Company Signboard */}
-                                <div className="absolute bottom-6 w-[124px] bg-white border border-gray-100 shadow-sm rounded-xl py-3 px-2 flex flex-col items-center justify-center z-30">
-                                    <span className="text-base font-black tracking-widest text-[#111827] leading-none mb-1">
+                                <div className="absolute bottom-5 w-[110px] bg-white border border-gray-100 shadow-sm rounded-xl py-2 px-1.5 flex flex-col items-center justify-center z-30">
+                                    <span className="text-sm font-black tracking-widest text-[#111827] leading-none mb-0.5">
                                         SS40
                                     </span>
-                                    <span className="text-[9px] font-bold tracking-[0.1em] text-[var(--color-primary)] uppercase leading-none">
+                                    <span className="text-[8px] font-bold tracking-[0.1em] text-[var(--color-primary)] uppercase leading-none">
                                         Network
                                     </span>
                                 </div>
@@ -178,49 +172,49 @@ export function BusinessWings() {
                             </div>
 
                             {/* Ground Base / Foundation */}
-                            <div className="absolute bottom-[-10px] left-1/2 -translate-x-1/2 w-[260px] h-[24px] bg-gray-50 rounded-[100%] shadow-inner border border-gray-100 z-0" />
-                            <div className="absolute bottom-[-20px] left-1/2 -translate-x-1/2 w-[220px] h-[30px] bg-[var(--color-primary)]/5 rounded-[100%] blur-md z-[-1]" />
+                            <div className="absolute bottom-[-10px] left-1/2 -translate-x-1/2 w-[240px] h-[20px] bg-gray-50 rounded-[100%] shadow-inner border border-gray-100 z-0" />
+                            <div className="absolute bottom-[-20px] left-1/2 -translate-x-1/2 w-[200px] h-[26px] bg-[var(--color-primary)]/5 rounded-[100%] blur-md z-[-1]" />
                         </div>
                     </div>
 
                     {/* Business Wings Cards */}
                     <div
-                        className="w-full grid grid-cols-1 lg:grid-cols-3 gap-8 relative z-10"
+                        className="w-full grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-6 relative z-10"
                     >
                         {WINGS.map((wing) => (
                             <Card
                                 key={wing.id}
                                 className={cn(
-                                    "group relative overflow-hidden flex flex-col bg-white border border-[var(--color-border)] shadow-sm hover:-translate-y-1 hover:shadow-xl transition-all duration-300 ease-out",
+                                    "group relative overflow-hidden flex flex-col bg-white border border-[var(--color-border)] shadow-sm hover:-translate-y-1 hover:shadow-lg transition-all duration-300 ease-out p-6 lg:p-7",
                                     wing.glowHover
                                 )}
                             >
                                 {/* Accent Top Bar */}
                                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[var(--color-border)] to-transparent group-hover:via-[var(--color-primary)] transition-all duration-500 opacity-50 group-hover:opacity-100" />
 
-                                <div className="mb-6">
-                                    <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center transition-colors duration-300 bg-gray-50 text-gray-500", wing.colorHover)}>
+                                <div className="mb-4">
+                                    <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center transition-colors duration-300 bg-gray-50 text-gray-500", wing.colorHover)}>
                                         <div className="group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-300">
                                             {wing.icon}
                                         </div>
                                     </div>
                                 </div>
 
-                                <h3 className="text-2xl font-bold text-[var(--color-heading)] mb-3">{wing.title}</h3>
-                                <p className="text-[var(--color-body-text)] text-base mb-8 flex-1">{wing.description}</p>
+                                <h3 className="text-xl lg:text-2xl font-bold text-[var(--color-heading)] mb-2.5">{wing.title}</h3>
+                                <p className="text-[var(--color-body-text)] text-sm mb-5 flex-1 leading-relaxed">{wing.description}</p>
 
-                                <div className="flex flex-wrap gap-2 mb-8">
+                                <div className="flex flex-wrap gap-1.5 mb-5">
                                     {wing.chips.map((chip, idx) => (
-                                        <span key={idx} className="px-3 py-1 bg-gray-50 border border-gray-100 rounded-lg text-xs font-semibold text-gray-600">
+                                        <span key={idx} className="px-2.5 py-0.5 bg-gray-50 border border-gray-100 rounded-md text-[11px] font-semibold text-gray-600">
                                             {chip}
                                         </span>
                                     ))}
                                 </div>
 
-                                <div className="mt-auto pt-4 border-t border-[var(--color-border)]">
-                                    <Link href={wing.link} className="inline-flex items-center text-sm font-bold text-[var(--color-heading)] group/btn focus-visible:outline-none rounded-md px-1 py-1">
+                                <div className="mt-auto pt-3.5 border-t border-[var(--color-border)]">
+                                    <Link href={wing.link} className="inline-flex items-center text-xs font-bold text-[var(--color-heading)] group/btn focus-visible:outline-none rounded-md px-1 py-1">
                                         {wing.cta}
-                                        <ArrowRight className="ml-2 w-4 h-4 opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 group-hover/btn:text-[var(--color-primary)] transition-all duration-300" />
+                                        <ArrowRight className="ml-1.5 w-3.5 h-3.5 opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 group-hover/btn:text-[var(--color-primary)] transition-all duration-300" />
                                     </Link>
                                 </div>
                             </Card>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState } from "react";
 import { ArrowRight, Lightbulb, Blocks, Target, Box, Sparkles, Sprout, HeartPulse, Building2, Monitor, LayoutDashboard } from "lucide-react";
@@ -31,7 +31,7 @@ function getIcon(name: string): React.ElementType {
 
 function ProjectPreviewPlaceholder() {
     return (
-        <div className="w-full h-full flex flex-col bg-[#EDF5F2] group-hover:bg-white transition-colors duration-500">
+        <div className="w-full h-full flex flex-col bg-[#D8E8E2] group-hover:bg-white transition-colors duration-500">
             {/* Browser Header */}
             <div className="h-8 bg-white border-b border-gray-100 flex items-center px-4 gap-1.5 shrink-0">
                 <div className="w-2.5 h-2.5 rounded-full bg-red-400/80" />

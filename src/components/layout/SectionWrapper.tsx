@@ -18,12 +18,12 @@ export function SectionWrapper({ children, className, id, ...props }: SectionWra
         ? className.replace(/\b(sm:|md:|lg:|xl:)?p[tyb]-[0-9]+\b/g, '').replace(/\s+/g, ' ').trim()
         : '';
 
-    // Standard Vertical Rhythm (Desktop: 96px, Mobile: 56px) - via Tailwind classes
-    const standardRhythm = "py-14 md:py-20 lg:py-24";
+    // Standard Vertical Rhythm (Compact 90% Scale Density)
+    const standardRhythm = "py-10 md:py-14 lg:py-16";
 
     // Exception: Hero sections need extra top breathing room for the navbar
     const isHero = id === 'hero' || (className && className.includes('pt-32'));
-    const finalRhythm = isHero ? "pt-32 pb-14 md:pt-40 md:pb-20 lg:pb-24" : standardRhythm;
+    const finalRhythm = isHero ? "pt-24 pb-10 md:pt-32 md:pb-14 lg:pb-16" : standardRhythm;
 
     return (
         <motion.section

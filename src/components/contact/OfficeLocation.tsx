@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import * as React from "react";
 import { motion } from "framer-motion";
@@ -14,7 +14,7 @@ export function OfficeLocation({ config }: { config?: SiteConfigData | null }) {
     const businessHours = config?.businessHours || "Monday – Friday: 9:30 AM – 6:30 PM";
 
     return (
-        <SectionWrapper id="office-location" className="bg-[#EDF5F2] py-12 md:py-16">
+        <SectionWrapper id="office-location" className="bg-[#D8E8E2] py-12 md:py-16">
             <Container className="max-w-6xl mx-auto flex flex-col items-center">
 
                 {/* HEADINGS */}
@@ -41,7 +41,7 @@ export function OfficeLocation({ config }: { config?: SiteConfigData | null }) {
 
                     {/* Left: Info */}
                     <div className="flex-1 flex flex-col">
-                        <div className="w-12 h-12 bg-[#EDF5F2] rounded-2xl flex items-center justify-center border border-gray-100 mb-4">
+                        <div className="w-12 h-12 bg-[#D8E8E2] rounded-2xl flex items-center justify-center border border-gray-100 mb-4">
                             <MapPin className="w-6 h-6 text-[#6B9F91]" />
                         </div>
 
@@ -51,7 +51,7 @@ export function OfficeLocation({ config }: { config?: SiteConfigData | null }) {
                             {addressText}
                         </address>
 
-                        <div className="flex items-center gap-3 md:gap-4 text-[13px] md:text-sm font-bold text-[#111827] mb-4 bg-[#EDF5F2] w-full md:w-max px-3 md:px-4 py-3 rounded-xl border border-gray-100">
+                        <div className="flex items-center gap-3 md:gap-4 text-[13px] md:text-sm font-bold text-[#111827] mb-4 bg-[#D8E8E2] w-full md:w-max px-3 md:px-4 py-3 rounded-xl border border-gray-100">
                             <Clock className="w-5 h-5 text-[#6B9F91] shrink-0" />
                             <div className="flex flex-col min-w-0">
                                 <span className="text-gray-500 text-[10px] uppercase tracking-widest whitespace-nowrap">Office Hours</span>
@@ -78,7 +78,7 @@ export function OfficeLocation({ config }: { config?: SiteConfigData | null }) {
                     </div>
 
                     {/* Right: Embedded Interactive Map */}
-                    <div className="flex-1 w-full bg-[#EDF5F2] rounded-2xl border border-gray-100 overflow-hidden relative min-h-[280px] lg:min-h-[100%] group shadow-inner">
+                    <div className="flex-1 w-full bg-[#D8E8E2] rounded-2xl border border-gray-100 overflow-hidden relative min-h-[280px] lg:min-h-[100%] group shadow-inner">
 
                         {/* Live Google Map Iframe seamlessly generated from Admin Address */}
                         <iframe

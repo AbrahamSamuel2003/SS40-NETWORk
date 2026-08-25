@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import * as React from "react";
 import { motion, Variants, AnimatePresence } from "framer-motion";
@@ -33,7 +33,7 @@ const itemVariants: Variants = {
 // Premium Browser Mockup Placeholder
 function ProjectPreviewPlaceholder() {
     return (
-        <div className="w-full h-full flex flex-col bg-[#EDF5F2] group-hover:bg-white transition-colors duration-500">
+        <div className="w-full h-full flex flex-col bg-[#D8E8E2] group-hover:bg-white transition-colors duration-500">
             {/* Browser Header */}
             <div className="h-8 bg-white border-b border-gray-100 flex items-center px-4 gap-1.5 shrink-0">
                 <div className="w-2.5 h-2.5 rounded-full bg-red-400/80" />
@@ -275,7 +275,7 @@ export function BestProjects({ projects = [] }: BestProjectsProps) {
 
                                     <div className="flex flex-wrap gap-2 mb-6 mt-auto">
                                         {Array.isArray(featuredProject.tags) && featuredProject.tags.map((tag: any, i: number) => (
-                                            <span key={i} className="text-[10px] lg:text-[11px] font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 whitespace-nowrap border bg-[#EDF5F2] text-[#0F766E] border-[#6B9F91]/20">
+                                            <span key={i} className="text-[10px] lg:text-[11px] font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 whitespace-nowrap border bg-[#D8E8E2] text-[#0F766E] border-[#6B9F91]/20">
                                                 {typeof tag === 'string' ? tag : tag.label}
                                             </span>
                                         ))}
@@ -409,7 +409,7 @@ export function BestProjects({ projects = [] }: BestProjectsProps) {
 
                                             <div className="flex flex-wrap gap-2 mb-6">
                                                 {Array.isArray(project.tags) && project.tags.map((tag: any, i: number) => (
-                                                    <span key={i} className="text-[10px] font-bold px-2.5 py-1 rounded-md flex items-center gap-1.5 border border-transparent bg-[#EDF5F2] text-[#0F766E] border-[#6B9F91]/20">
+                                                    <span key={i} className="text-[10px] font-bold px-2.5 py-1 rounded-md flex items-center gap-1.5 border border-transparent bg-[#D8E8E2] text-[#0F766E] border-[#6B9F91]/20">
                                                         <span className="truncate">{typeof tag === 'string' ? tag : tag.label}</span>
                                                     </span>
                                                 ))}
@@ -569,7 +569,7 @@ export function StudentProjectModal({ project, onClose }: { project: any, onClos
                         {/* Tags */}
                         <div className="flex flex-wrap gap-2 mb-8 mt-auto">
                             {parsedTags.map((tag: any, i: number) => (
-                                <span key={i} className="text-xs md:text-sm font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 border bg-[#EDF5F2] text-[#0F766E] border-[#6B9F91]/20">
+                                <span key={i} className="text-xs md:text-sm font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 border bg-[#D8E8E2] text-[#0F766E] border-[#6B9F91]/20">
                                     {typeof tag === 'string' ? tag : tag.label}
                                 </span>
                             ))}

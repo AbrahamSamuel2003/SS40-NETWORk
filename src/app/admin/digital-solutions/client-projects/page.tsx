@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, CheckCircle2, AlertCircle, Upload, X, Image as ImageIcon, Sparkles } from 'lucide-react';
@@ -213,7 +213,7 @@ export default function ClientProjectsPage() {
                 {/* ── DESKTOP TABLE (hidden on mobile) ── */}
                 <div className="hidden sm:block overflow-x-auto w-full touch-auto">
                     <table className="w-full text-left text-sm text-[#374151] min-w-[600px]">
-                        <thead className="bg-[#EDF5F2]/70 border-b border-gray-200 text-[#111827]">
+                        <thead className="bg-[#D8E8E2]/70 border-b border-gray-200 text-[#111827]">
                             <tr>
                                 <th className="p-4 font-medium min-w-[80px] hidden sm:table-cell">Image</th>
                                 <th className="p-4 font-medium min-w-[150px]">Project</th>
@@ -227,12 +227,12 @@ export default function ClientProjectsPage() {
                                 <tr><td colSpan={5} className="p-8 text-center text-[#9CA3AF]">No projects found.</td></tr>
                             ) : (
                                 projects.map(item => (
-                                    <tr key={item.id} className="hover:bg-[#EDF5F2]/50">
+                                    <tr key={item.id} className="hover:bg-[#D8E8E2]/50">
                                         <td className="p-4 w-20 hidden sm:table-cell">
                                             {item.imageUrl ? (
                                                 <div className="w-12 h-12 rounded overflow-hidden shrink-0"><img src={item.imageUrl} alt="" className="w-full h-full object-cover" /></div>
                                             ) : (
-                                                <div className="w-12 h-12 rounded bg-[#EDF5F2] flex items-center justify-center shrink-0 uppercase font-bold text-[#9CA3AF]">{item.title.charAt(0)}</div>
+                                                <div className="w-12 h-12 rounded bg-[#D8E8E2] flex items-center justify-center shrink-0 uppercase font-bold text-[#9CA3AF]">{item.title.charAt(0)}</div>
                                             )}
                                         </td>
                                         <td className="p-4 font-medium">
@@ -248,7 +248,7 @@ export default function ClientProjectsPage() {
                                             <div className="text-[#111827] text-xs mb-1">{item.industry}</div>
                                             <div className="flex flex-wrap gap-1">
                                                 {Array.isArray(item.tags) && item.tags.slice(0, 3).map((tag: string, i: number) => (
-                                                    <span key={i} className="text-[10px] bg-[#EDF5F2] px-1.5 py-0.5 rounded text-[#6B7280]">{tag}</span>
+                                                    <span key={i} className="text-[10px] bg-[#D8E8E2] px-1.5 py-0.5 rounded text-[#6B7280]">{tag}</span>
                                                 ))}
                                                 {Array.isArray(item.tags) && item.tags.length > 3 && (
                                                     <span className="text-[10px] text-[#9CA3AF]">+{item.tags.length - 3}</span>
@@ -269,7 +269,7 @@ export default function ClientProjectsPage() {
                                         </td>
                                         <td className="p-3">
                                             <div className="flex flex-col xl:flex-row gap-1.5 justify-end ml-auto shrink-0">
-                                                <button onClick={() => handleOpenModal(item)} className="px-3 py-1 rounded border border-gray-300 text-[#374151] text-xs font-medium hover:bg-[#EDF5F2]/70 hover:border-[#6B9F91] transition-colors whitespace-nowrap">Edit</button>
+                                                <button onClick={() => handleOpenModal(item)} className="px-3 py-1 rounded border border-gray-300 text-[#374151] text-xs font-medium hover:bg-[#D8E8E2]/70 hover:border-[#6B9F91] transition-colors whitespace-nowrap">Edit</button>
                                                 <button onClick={() => handleDelete(item.id)} className="px-3 py-1 rounded border border-[#FCA5A5] text-[#B91C1C] text-xs font-medium hover:bg-red-50 transition-colors whitespace-nowrap">Delete</button>
                                             </div>
                                         </td>
@@ -284,7 +284,7 @@ export default function ClientProjectsPage() {
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#111827]/40 backdrop-blur-sm">
                     <div className="admin-card w-full max-w-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
-                        <div className="p-5 border-b border-gray-200 flex justify-between items-center bg-[#EDF5F2]/70">
+                        <div className="p-5 border-b border-gray-200 flex justify-between items-center bg-[#D8E8E2]/70">
                             <h3 className="text-lg font-bold text-[#111827]">{editingId ? 'Edit Project' : 'Add Project'}</h3>
                             <button onClick={() => setIsModalOpen(false)} className="text-[#9CA3AF] hover:text-[#111827]"><X className="w-5 h-5" /></button>
                         </div>
@@ -308,11 +308,11 @@ export default function ClientProjectsPage() {
                                     <label className="block text-sm text-[#374151] mb-1.5">Project Image (Media Library)</label>
                                     <div className="flex gap-4">
                                         <input value={imageUrl} onChange={e => setImageUrl(e.target.value)} className="flex-1 bg-white border border-gray-200 rounded-lg px-4 py-2 text-[#111827]" placeholder="URL..." />
-                                        <label className={`cursor-pointer shrink-0 bg-[#EDF5F2]/70 hover:bg-[#EDF5F2] text-[#111827] px-4 py-2 rounded-lg text-sm transition-colors flex items-center gap-2 ${isUploading ? 'opacity-50' : ''}`}>
+                                        <label className={`cursor-pointer shrink-0 bg-[#D8E8E2]/70 hover:bg-[#D8E8E2] text-[#111827] px-4 py-2 rounded-lg text-sm transition-colors flex items-center gap-2 ${isUploading ? 'opacity-50' : ''}`}>
                                             <Upload className="w-4 h-4" /> Upload Local File
                                             <input type="file" accept="image/*" onChange={handleUpload} className="hidden" disabled={isUploading} />
                                         </label>
-                                        <button type="button" onClick={() => setIsMediaSelectorOpen(true)} className="cursor-pointer shrink-0 bg-[#EDF5F2]/70 hover:bg-[#EDF5F2] text-[#111827] px-4 py-2 rounded-lg text-sm transition-colors flex items-center gap-2">
+                                        <button type="button" onClick={() => setIsMediaSelectorOpen(true)} className="cursor-pointer shrink-0 bg-[#D8E8E2]/70 hover:bg-[#D8E8E2] text-[#111827] px-4 py-2 rounded-lg text-sm transition-colors flex items-center gap-2">
                                             <ImageIcon className="w-4 h-4 text-[#6B9F91]" /> Select from Media
                                         </button>
                                     </div>
@@ -330,15 +330,15 @@ export default function ClientProjectsPage() {
 
                                 <div className="pt-2 flex flex-wrap gap-6 border-t border-gray-100 mt-4">
                                     <label className="flex items-center gap-3 cursor-pointer group pt-2">
-                                        <div className="relative"><input type="checkbox" checked={isActive} onChange={e => setIsActive(e.target.checked)} className="sr-only" /><div className={`w-10 h-6 rounded-full transition-colors ${isActive ? 'bg-[#6B9F91]' : 'bg-[#EDF5F2]'}`}></div><div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${isActive ? 'translate-x-4' : 'translate-x-0'}`}></div></div>
+                                        <div className="relative"><input type="checkbox" checked={isActive} onChange={e => setIsActive(e.target.checked)} className="sr-only" /><div className={`w-10 h-6 rounded-full transition-colors ${isActive ? 'bg-[#6B9F91]' : 'bg-[#D8E8E2]'}`}></div><div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${isActive ? 'translate-x-4' : 'translate-x-0'}`}></div></div>
                                         <span className="text-sm font-medium text-[#374151]">Active</span>
                                     </label>
                                     <label className="flex items-center gap-3 cursor-pointer group pt-2">
-                                        <div className="relative"><input type="checkbox" checked={isFeatured} onChange={e => setIsFeatured(e.target.checked)} className="sr-only" /><div className={`w-10 h-6 rounded-full transition-colors ${isFeatured ? 'bg-[#FFC900]' : 'bg-[#EDF5F2]'}`}></div><div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${isFeatured ? 'translate-x-4' : 'translate-x-0'}`}></div></div>
+                                        <div className="relative"><input type="checkbox" checked={isFeatured} onChange={e => setIsFeatured(e.target.checked)} className="sr-only" /><div className={`w-10 h-6 rounded-full transition-colors ${isFeatured ? 'bg-[#FFC900]' : 'bg-[#D8E8E2]'}`}></div><div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${isFeatured ? 'translate-x-4' : 'translate-x-0'}`}></div></div>
                                         <span className="text-sm font-medium text-[#374151]">Featured (Big Card)</span>
                                     </label>
                                     <label className="flex items-center gap-3 cursor-pointer group pt-2">
-                                        <div className="relative"><input type="checkbox" checked={isConfidential} onChange={e => setIsConfidential(e.target.checked)} className="sr-only" /><div className={`w-10 h-6 rounded-full transition-colors ${isConfidential ? 'bg-[#FFC900]' : 'bg-[#EDF5F2]'}`}></div><div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${isConfidential ? 'translate-x-4' : 'translate-x-0'}`}></div></div>
+                                        <div className="relative"><input type="checkbox" checked={isConfidential} onChange={e => setIsConfidential(e.target.checked)} className="sr-only" /><div className={`w-10 h-6 rounded-full transition-colors ${isConfidential ? 'bg-[#FFC900]' : 'bg-[#D8E8E2]'}`}></div><div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${isConfidential ? 'translate-x-4' : 'translate-x-0'}`}></div></div>
                                         <span className="text-sm font-medium text-[#374151]">Confidential</span>
                                     </label>
                                     <div className="flex items-center gap-3 pt-2">
@@ -348,8 +348,8 @@ export default function ClientProjectsPage() {
                                 </div>
                             </form>
                         </div>
-                        <div className="p-5 border-t border-gray-200 flex justify-end gap-3 bg-[#EDF5F2]/70">
-                            <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 rounded-lg text-[#6B7280] hover:bg-[#EDF5F2]/70">Cancel</button>
+                        <div className="p-5 border-t border-gray-200 flex justify-end gap-3 bg-[#D8E8E2]/70">
+                            <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 rounded-lg text-[#6B7280] hover:bg-[#D8E8E2]/70">Cancel</button>
                             <button type="submit" form="projectForm" disabled={isSaving} className="bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-6 py-2 rounded-lg disabled:opacity-50">Save Project</button>
                         </div>
                     </div>

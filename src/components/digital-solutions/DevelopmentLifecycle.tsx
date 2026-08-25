@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -355,12 +355,12 @@ export function DevelopmentLifecycle() {
                                                     className="absolute w-48 bg-white border border-gray-100 rounded-2xl p-3.5 shadow-2xl shadow-gray-400/40 z-30 flex flex-col gap-2.5 cursor-pointer"
                                                 >
                                                     <div className="flex justify-between items-center">
-                                                        <span className="text-[8px] font-bold text-[#6B9F91] bg-[#EDF5F2] px-1.5 py-0.5 rounded">High-Fi Prototype</span>
+                                                        <span className="text-[8px] font-bold text-[#6B9F91] bg-[#D8E8E2] px-1.5 py-0.5 rounded">High-Fi Prototype</span>
                                                         <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-ping" />
                                                     </div>
 
                                                     {/* Product preview */}
-                                                    <div className="w-full h-24 rounded-lg bg-gradient-to-br from-[#EDF5F2] to-gray-50 relative flex items-center justify-center overflow-hidden">
+                                                    <div className="w-full h-24 rounded-lg bg-gradient-to-br from-[#D8E8E2] to-gray-50 relative flex items-center justify-center overflow-hidden">
                                                         {/* Vector drawing overlay */}
                                                         <svg className="w-full h-full absolute inset-0 z-0 opacity-40" viewBox="0 0 100 100">
                                                             <path d="M 10 50 Q 50 10 90 50" fill="none" stroke="#2DD4BF" strokeWidth="2" />

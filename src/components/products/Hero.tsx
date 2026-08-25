@@ -59,7 +59,7 @@ export function Hero() {
                             </p>
 
                             <div className="flex flex-col sm:flex-row items-center w-full sm:w-auto gap-4">
-                                <Button asChild size="lg" className="w-full sm:w-auto bg-[#6B9F91] hover:bg-[#5C8C80] text-white shadow-lg shadow-[#6B9F91]/20 group">
+                                <Button asChild size="lg" className="w-full sm:w-auto shadow-lg shadow-[var(--color-primary)]/20 group">
                                     <a href="#featured-product">
                                         Explore Products
                                         <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -76,8 +76,6 @@ export function Hero() {
 
                     {/* Right Column - The Constellation (50%) */}
                     <div className="w-full lg:w-1/2 relative flex justify-center items-center min-h-[340px] sm:min-h-[450px] lg:min-h-[500px]">
-
-                        {/* Connecting SVG Lines */}
                         <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0 }}>
                             <motion.line
                                 x1="50%" y1="50%" x2="25%" y2="25%"

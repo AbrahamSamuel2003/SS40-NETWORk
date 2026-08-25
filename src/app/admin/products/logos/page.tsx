@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, CheckCircle2, AlertCircle, Upload, X, Image as ImageIcon, Sparkles } from 'lucide-react';
@@ -209,7 +209,7 @@ export default function ProductLogosPage() {
                 {/* ── DESKTOP TABLE (hidden on mobile) ── */}
                 <div className="hidden sm:block overflow-x-auto w-full touch-auto">
                     <table className="w-full text-left text-sm text-[#374151] min-w-[600px]">
-                        <thead className="bg-[#EDF5F2]/70 border-b border-gray-200 text-[#111827]">
+                        <thead className="bg-[#D8E8E2]/70 border-b border-gray-200 text-[#111827]">
                             <tr>
                                 <th className="p-4 font-medium min-w-[80px] hidden sm:table-cell">Logo</th>
                                 <th className="p-4 font-medium min-w-[150px]">Organization / Category</th>
@@ -227,14 +227,14 @@ export default function ProductLogosPage() {
                                 </tr>
                             ) : (
                                 logos.map((logo) => (
-                                    <tr key={logo.id} className="hover:bg-[#EDF5F2]/50">
+                                    <tr key={logo.id} className="hover:bg-[#D8E8E2]/50">
                                         <td className="p-4 w-24 hidden sm:table-cell">
                                             {logo.logoUrl ? (
-                                                <div className="w-14 h-14 bg-[#EDF5F2]/70 rounded flex items-center justify-center p-2">
+                                                <div className="w-14 h-14 bg-[#D8E8E2]/70 rounded flex items-center justify-center p-2">
                                                     <img src={logo.logoUrl} alt={logo.name} className="max-w-full max-h-full object-contain" />
                                                 </div>
                                             ) : (
-                                                <div className="w-14 h-14 bg-[#EDF5F2]/70 rounded flex items-center justify-center text-[#111827]/20 text-xs text-center border border-dashed border-gray-200/20">
+                                                <div className="w-14 h-14 bg-[#D8E8E2]/70 rounded flex items-center justify-center text-[#111827]/20 text-xs text-center border border-dashed border-gray-200/20">
                                                     No Img
                                                 </div>
                                             )}
@@ -244,7 +244,7 @@ export default function ProductLogosPage() {
                                             <div className="text-[#9CA3AF] text-xs mt-0.5">{logo.category}</div>
                                         </td>
                                         <td className="p-4 text-xs hidden sm:table-cell">
-                                            <span className="inline-block bg-[#EDF5F2] px-2 py-0.5 rounded text-[#6B7280] mb-1">
+                                            <span className="inline-block bg-[#D8E8E2] px-2 py-0.5 rounded text-[#6B7280] mb-1">
                                                 {logo.placementType}
                                             </span>
                                             <div className="text-[#9CA3AF] mt-1">PRODUCTS</div>
@@ -256,7 +256,7 @@ export default function ProductLogosPage() {
                                         </td>
                                         <td className="p-3">
                                             <div className="flex flex-col xl:flex-row gap-1.5 justify-end ml-auto shrink-0">
-                                                <button onClick={() => handleOpenModal(logo)} className="px-3 py-1 rounded border border-gray-300 text-[#374151] text-xs font-medium hover:bg-[#EDF5F2]/70 hover:border-[#6B9F91] transition-colors whitespace-nowrap">Edit</button>
+                                                <button onClick={() => handleOpenModal(logo)} className="px-3 py-1 rounded border border-gray-300 text-[#374151] text-xs font-medium hover:bg-[#D8E8E2]/70 hover:border-[#6B9F91] transition-colors whitespace-nowrap">Edit</button>
                                                 <button onClick={() => handleDelete(logo.id)} className="px-3 py-1 rounded border border-[#FCA5A5] text-[#B91C1C] text-xs font-medium hover:bg-red-50 transition-colors whitespace-nowrap">Delete</button>
                                             </div>
                                         </td>
@@ -271,7 +271,7 @@ export default function ProductLogosPage() {
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#111827]/40 backdrop-blur-sm">
                     <div className="admin-card w-full max-w-md overflow-hidden shadow-2xl flex flex-col max-h-[88vh]">
-                        <div className="px-4 py-3 border-b border-gray-200 flex justify-between items-center bg-[#EDF5F2]/80 shrink-0">
+                        <div className="px-4 py-3 border-b border-gray-200 flex justify-between items-center bg-[#D8E8E2]/80 shrink-0">
                             <div>
                                 <h3 className="text-sm font-bold text-[#111827]">{editingId ? 'Edit Logo' : 'Add Logo'}</h3>
                                 <p className="text-[10px] text-[#9CA3AF] mt-0.5">Products page client logos</p>
@@ -322,11 +322,11 @@ export default function ProductLogosPage() {
                                         )}
                                         
                                         <div className="flex flex-wrap gap-2">
-                                            <label className={`cursor-pointer bg-[#EDF5F2]/70 hover:bg-[#EDF5F2] text-[#111827] px-3 py-1.5 rounded-md text-xs font-medium transition-colors flex items-center gap-1.5 ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}>
+                                            <label className={`cursor-pointer bg-[#D8E8E2]/70 hover:bg-[#D8E8E2] text-[#111827] px-3 py-1.5 rounded-md text-xs font-medium transition-colors flex items-center gap-1.5 ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}>
                                                 <Upload className="w-3.5 h-3.5" /> {isUploading ? 'Uploading...' : 'Upload Local File'}
                                                 <input type="file" accept="image/*" onChange={handleUpload} className="hidden" disabled={isUploading} />
                                             </label>
-                                            <button type="button" onClick={() => setIsMediaSelectorOpen(true)} className="cursor-pointer bg-[#EDF5F2]/70 hover:bg-[#EDF5F2] text-[#111827] px-3 py-1.5 rounded-md text-xs font-medium transition-colors flex items-center gap-1.5">
+                                            <button type="button" onClick={() => setIsMediaSelectorOpen(true)} className="cursor-pointer bg-[#D8E8E2]/70 hover:bg-[#D8E8E2] text-[#111827] px-3 py-1.5 rounded-md text-xs font-medium transition-colors flex items-center gap-1.5">
                                                 <ImageIcon className="w-3.5 h-3.5 text-[#6B9F91]" /> Select from Media
                                             </button>
                                         </div>
@@ -337,7 +337,7 @@ export default function ProductLogosPage() {
                                     <label className="flex items-center gap-2 cursor-pointer">
                                         <div className="relative shrink-0">
                                             <input type="checkbox" checked={isActive} onChange={e => setIsActive(e.target.checked)} className="sr-only" />
-                                            <div className={`w-8 h-5 rounded-full transition-colors ${isActive ? 'bg-[#6B9F91]' : 'bg-[#EDF5F2]'}`}></div>
+                                            <div className={`w-8 h-5 rounded-full transition-colors ${isActive ? 'bg-[#6B9F91]' : 'bg-[#D8E8E2]'}`}></div>
                                             <div className={`absolute top-0.5 left-0.5 bg-white w-4 h-4 rounded-full transition-transform ${isActive ? 'translate-x-3' : 'translate-x-0'}`}></div>
                                         </div>
                                         <span className="text-xs font-medium text-[#374151]">Active</span>
@@ -345,7 +345,7 @@ export default function ProductLogosPage() {
                                     <label className="flex items-center gap-2 cursor-pointer">
                                         <div className="relative shrink-0">
                                             <input type="checkbox" checked={showTextOnCard} onChange={e => setShowTextOnCard(e.target.checked)} className="sr-only" />
-                                            <div className={`w-8 h-5 rounded-full transition-colors ${showTextOnCard ? 'bg-[#6B9F91]' : 'bg-[#EDF5F2]'}`}></div>
+                                            <div className={`w-8 h-5 rounded-full transition-colors ${showTextOnCard ? 'bg-[#6B9F91]' : 'bg-[#D8E8E2]'}`}></div>
                                             <div className={`absolute top-0.5 left-0.5 bg-white w-4 h-4 rounded-full transition-transform ${showTextOnCard ? 'translate-x-3' : 'translate-x-0'}`}></div>
                                         </div>
                                         <span className="text-xs font-medium text-[#374151]">Show text on card</span>
@@ -354,8 +354,8 @@ export default function ProductLogosPage() {
                             </form>
                         </div>
 
-                        <div className="px-4 py-2.5 border-t border-gray-200 flex justify-end gap-2 bg-[#EDF5F2]/50 shrink-0">
-                            <button type="button" onClick={handleCloseModal} className="px-3 py-1.5 rounded-md text-xs text-[#6B7280] hover:bg-[#EDF5F2]/70 font-medium transition-colors">Cancel</button>
+                        <div className="px-4 py-2.5 border-t border-gray-200 flex justify-end gap-2 bg-[#D8E8E2]/50 shrink-0">
+                            <button type="button" onClick={handleCloseModal} className="px-3 py-1.5 rounded-md text-xs text-[#6B7280] hover:bg-[#D8E8E2]/70 font-medium transition-colors">Cancel</button>
                             <button type="submit" form="logoForm" disabled={isSaving} className="bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-5 py-1.5 rounded-md text-xs font-medium transition-colors disabled:opacity-50">
                                 {isSaving ? 'Saving...' : (editingId ? 'Update Logo' : 'Add Logo')}
                             </button>

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -21,7 +21,7 @@ import type { SiteConfigData } from '@/lib/site-config';
 
 function MobileAnimatedScene() {
     return (
-        <div className="relative w-full h-[210px] bg-gradient-to-b from-[#D4ECE2] via-[#E4F4ED] to-[#EDF5F2] overflow-hidden select-none">
+        <div className="relative w-full h-[210px] bg-gradient-to-b from-[#D4ECE2] via-[#E4F4ED] to-[#D8E8E2] overflow-hidden select-none">
             {/* Drifting Clouds */}
             <motion.div
                 animate={{ x: [-40, 360] }}
@@ -94,7 +94,7 @@ function MobileAnimatedScene() {
                         <rect x="75" y="38" width="8" height="2" rx="1" fill="#94A3B8" />
 
                         {/* SS40 Logo Emblem on car */}
-                        <circle cx="92" cy="42" r="4.5" fill="#EDF5F2" stroke="#6B9F91" strokeWidth="0.8" />
+                        <circle cx="92" cy="42" r="4.5" fill="#D8E8E2" stroke="#6B9F91" strokeWidth="0.8" />
                         <circle cx="92" cy="42" r="2" fill="#6B9F91" />
 
                         <path d="M 152 45 L 155 48 L 150 49 Z" fill="#38BDF8" />
@@ -131,7 +131,7 @@ function DesktopLoginIllustration() {
             >
                 <path
                     d="M 180 150 C 260 140, 320 200, 300 280 C 280 360, 210 400, 160 380 C 120 360, 120 200, 180 150 Z"
-                    fill="#EDF5F2"
+                    fill="#D8E8E2"
                     opacity="0.9"
                 />
                 <path
@@ -357,7 +357,7 @@ export default function LoginPage() {
                                 value={identifier}
                                 onChange={(e) => setIdentifier(e.target.value)}
                                 placeholder="Email or Username"
-                                className="w-full bg-[#EDF5F2] hover:bg-[#E4F2EC] focus:bg-white text-sm text-[#111827] placeholder-gray-400 rounded-2xl px-4 py-3.5 border border-transparent focus:border-[#6B9F91] focus:outline-none transition-all font-medium"
+                                className="w-full bg-[#D8E8E2] hover:bg-[#E4F2EC] focus:bg-white text-sm text-[#111827] placeholder-gray-400 rounded-2xl px-4 py-3.5 border border-transparent focus:border-[#6B9F91] focus:outline-none transition-all font-medium"
                             />
                         </div>
 
@@ -368,7 +368,7 @@ export default function LoginPage() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 placeholder="Password"
-                                className="w-full bg-[#EDF5F2] hover:bg-[#E4F2EC] focus:bg-white text-sm text-[#111827] placeholder-gray-400 rounded-2xl px-4 py-3.5 pr-11 border border-transparent focus:border-[#6B9F91] focus:outline-none transition-all font-medium"
+                                className="w-full bg-[#D8E8E2] hover:bg-[#E4F2EC] focus:bg-white text-sm text-[#111827] placeholder-gray-400 rounded-2xl px-4 py-3.5 pr-11 border border-transparent focus:border-[#6B9F91] focus:outline-none transition-all font-medium"
                             />
                             <button
                                 type="button"
@@ -446,7 +446,7 @@ export default function LoginPage() {
                             </div>
                         </Link>
 
-                        <span className="inline-flex items-center gap-1 bg-[#EDF5F2] text-[#6B9F91] text-[10px] font-bold px-2.5 py-1 rounded-full">
+                        <span className="inline-flex items-center gap-1 bg-[#D8E8E2] text-[#6B9F91] text-[10px] font-bold px-2.5 py-1 rounded-full">
                             <ShieldCheck className="w-3 h-3" />
                             SSO Secure
                         </span>

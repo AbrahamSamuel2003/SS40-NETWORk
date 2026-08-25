@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
 import { compressImageFile } from '@/utils/imageCompressor';
@@ -464,7 +464,7 @@ export default function ManagedActivitiesPage() {
                 {/* ── DESKTOP TABLE (hidden on mobile) ── */}
                 <div className="hidden sm:block overflow-x-auto w-full touch-auto">
                     <table className="w-full text-left text-sm text-[#374151] min-w-[700px]">
-                        <thead className="bg-[#EDF5F2]/80 border-b border-gray-200 text-[#111827]">
+                        <thead className="bg-[#D8E8E2]/80 border-b border-gray-200 text-[#111827]">
                             <tr>
                                 <th className="p-4 font-semibold min-w-[120px]">Images</th>
                                 <th className="p-4 font-semibold min-w-[220px]">Activity Details</th>
@@ -490,7 +490,7 @@ export default function ManagedActivitiesPage() {
                                     const firstImg = itemImages[0]?.url || (typeof itemImages[0] === 'string' ? itemImages[0] : null);
 
                                     return (
-                                        <tr key={item.id} className="hover:bg-[#EDF5F2]/40 transition-colors">
+                                        <tr key={item.id} className="hover:bg-[#D8E8E2]/40 transition-colors">
                                             <td className="p-4">
                                                 <div className="relative w-16 h-12 rounded-lg bg-gray-100 overflow-hidden border border-gray-200 shadow-sm shrink-0">
                                                     {firstImg ? (
@@ -555,7 +555,7 @@ export default function ManagedActivitiesPage() {
                                                 <div className="flex items-center justify-end gap-1.5">
                                                     <button
                                                         onClick={() => handleOpenModal(item)}
-                                                        className="px-2.5 py-1 rounded border border-gray-300 text-xs font-medium text-[#374151] hover:bg-[#EDF5F2] transition-colors"
+                                                        className="px-2.5 py-1 rounded border border-gray-300 text-xs font-medium text-[#374151] hover:bg-[#D8E8E2] transition-colors"
                                                     >
                                                         Edit
                                                     </button>
@@ -581,7 +581,7 @@ export default function ManagedActivitiesPage() {
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-[#111827]/50 backdrop-blur-sm overflow-y-auto">
                     <div className="admin-card w-full max-w-4xl max-h-[92vh] overflow-hidden shadow-2xl flex flex-col my-auto">
                         {/* Modal Header */}
-                        <div className="px-5 py-3.5 border-b border-gray-200 flex justify-between items-center bg-[#EDF5F2]/80 shrink-0">
+                        <div className="px-5 py-3.5 border-b border-gray-200 flex justify-between items-center bg-[#D8E8E2]/80 shrink-0">
                             <div>
                                 <h3 className="text-base font-bold text-[#111827]">
                                     {editingId ? 'Edit Activity Post' : 'Add New Activity Post'}
@@ -721,7 +721,7 @@ export default function ManagedActivitiesPage() {
                                 </div>
 
                                 {/* MULTI-IMAGE MANAGER (MAX 5) */}
-                                <div className="border border-[#6B9F91]/30 rounded-xl p-4 bg-[#EDF5F2]/30 space-y-3">
+                                <div className="border border-[#6B9F91]/30 rounded-xl p-4 bg-[#D8E8E2]/30 space-y-3">
                                     <div className="flex items-center justify-between">
                                         <div>
                                             <span className="text-xs font-bold text-[#111827] uppercase tracking-wider">
@@ -862,7 +862,7 @@ export default function ManagedActivitiesPage() {
                         </div>
 
                         {/* Modal Footer */}
-                        <div className="px-5 py-3 border-t border-gray-200 flex justify-end gap-2 bg-[#EDF5F2]/60 shrink-0">
+                        <div className="px-5 py-3 border-t border-gray-200 flex justify-end gap-2 bg-[#D8E8E2]/60 shrink-0">
                             <button
                                 type="button"
                                 onClick={() => setIsModalOpen(false)}

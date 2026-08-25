@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, CheckCircle2, AlertCircle, Upload, X, Image as ImageIcon, Sparkles } from 'lucide-react';
@@ -195,7 +195,7 @@ export default function DigitalSolutionsLogosPage() {
                                     </div>
                                     <p className="text-[#6B7280] text-xs leading-snug line-clamp-1">{logo.category} · {logo.placementType}</p>
                                     <div className="mt-auto pt-1 flex items-center justify-between">
-                                        <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-semibold ${logo.isActive ? 'bg-[#6B9F91]/10 text-[#6B9F91] border border-[#6B9F91]/20' : 'bg-[#EDF5F2]/70 text-[#9CA3AF]'}`}>• {logo.isActive ? 'ACTIVE' : 'INACTIVE'}</span>
+                                        <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-semibold ${logo.isActive ? 'bg-[#6B9F91]/10 text-[#6B9F91] border border-[#6B9F91]/20' : 'bg-[#D8E8E2]/70 text-[#9CA3AF]'}`}>• {logo.isActive ? 'ACTIVE' : 'INACTIVE'}</span>
                                         <button onClick={() => handleDelete(logo.id)} className="text-[#B91C1C]/50 hover:text-[#B91C1C] p-1">
                                             <Trash2 className="w-3.5 h-3.5" />
                                         </button>
@@ -209,7 +209,7 @@ export default function DigitalSolutionsLogosPage() {
                 {/* ── DESKTOP TABLE (hidden on mobile) ── */}
                 <div className="hidden sm:block overflow-x-auto w-full touch-auto">
                     <table className="w-full text-left text-sm text-[#374151] min-w-[600px]">
-                        <thead className="bg-[#EDF5F2]/70 border-b border-gray-200 text-[#111827]">
+                        <thead className="bg-[#D8E8E2]/70 border-b border-gray-200 text-[#111827]">
                             <tr>
                                 <th className="p-4 font-medium min-w-[80px] hidden sm:table-cell">Logo</th>
                                 <th className="p-4 font-medium min-w-[150px]">Name</th>
@@ -225,14 +225,14 @@ export default function DigitalSolutionsLogosPage() {
                                 </tr>
                             ) : (
                                 logos.map(logo => (
-                                    <tr key={logo.id} className="hover:bg-[#EDF5F2]/50 transition-colors">
+                                    <tr key={logo.id} className="hover:bg-[#D8E8E2]/50 transition-colors">
                                         <td className="p-4 hidden sm:table-cell">
                                             {logo.logoUrl ? (
-                                                <div className="w-12 h-12 bg-[#EDF5F2] rounded overflow-hidden flex items-center justify-center">
+                                                <div className="w-12 h-12 bg-[#D8E8E2] rounded overflow-hidden flex items-center justify-center">
                                                     <img src={logo.logoUrl} alt={logo.name} className="max-w-full max-h-full object-contain p-1" />
                                                 </div>
                                             ) : (
-                                                <div className="w-12 h-12 bg-[#EDF5F2]/70 rounded flex items-center justify-center text-xs text-[#9CA3AF]">N/A</div>
+                                                <div className="w-12 h-12 bg-[#D8E8E2]/70 rounded flex items-center justify-center text-xs text-[#9CA3AF]">N/A</div>
                                             )}
                                         </td>
                                         <td className="p-4 font-medium">{logo.name}</td>
@@ -243,14 +243,14 @@ export default function DigitalSolutionsLogosPage() {
                                                     <CheckCircle2 className="w-3 h-3" /> ACTIVE
                                                 </span>
                                             ) : (
-                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#EDF5F2]/70 text-[#9CA3AF]">
+                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#D8E8E2]/70 text-[#9CA3AF]">
                                                     INACTIVE
                                                 </span>
                                             )}
                                         </td>
                                         <td className="p-3">
                                             <div className="flex flex-col xl:flex-row gap-1.5 justify-end ml-auto shrink-0">
-                                                <button onClick={() => handleOpenModal(logo)} className="px-3 py-1 rounded border border-gray-300 text-[#374151] text-xs font-medium hover:bg-[#EDF5F2]/70 hover:border-[#6B9F91] transition-colors whitespace-nowrap">Edit</button>
+                                                <button onClick={() => handleOpenModal(logo)} className="px-3 py-1 rounded border border-gray-300 text-[#374151] text-xs font-medium hover:bg-[#D8E8E2]/70 hover:border-[#6B9F91] transition-colors whitespace-nowrap">Edit</button>
                                                 <button onClick={() => handleDelete(logo.id)} className="px-3 py-1 rounded border border-[#FCA5A5] text-[#B91C1C] text-xs font-medium hover:bg-red-50 transition-colors whitespace-nowrap">Delete</button>
                                             </div>
                                         </td>
@@ -266,7 +266,7 @@ export default function DigitalSolutionsLogosPage() {
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#111827]/40 backdrop-blur-sm">
                     <div className="admin-card w-full max-w-md overflow-hidden shadow-2xl flex flex-col max-h-[88vh]">
-                        <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between bg-[#EDF5F2]/80 shrink-0">
+                        <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between bg-[#D8E8E2]/80 shrink-0">
                             <div>
                                 <h3 className="text-sm font-bold text-[#111827]">{editingId ? 'Edit Logo' : 'Add Logo'}</h3>
                                 <p className="text-[10px] text-[#9CA3AF] mt-0.5">Digital Solutions org logos</p>
@@ -306,11 +306,11 @@ export default function DigitalSolutionsLogosPage() {
                                     <label className="block text-xs font-medium text-[#374151] mb-1">Logo Media</label>
                                     <div className="flex gap-2 items-center">
                                         <input type="text" value={logoUrl} onChange={e => setLogoUrl(e.target.value)} placeholder="/uploads/... or https://..." className="flex-1 bg-white border border-gray-200 rounded-md px-3 py-1.5 text-sm text-[#111827] focus:outline-none focus:border-[#6B9F91]" />
-                                        <label className={`cursor-pointer shrink-0 bg-[#EDF5F2]/70 hover:bg-[#EDF5F2] text-[#111827] px-3 py-1.5 rounded-md text-xs font-medium transition-colors flex items-center gap-1.5 ${isUploading ? 'opacity-50' : ''}`}>
+                                        <label className={`cursor-pointer shrink-0 bg-[#D8E8E2]/70 hover:bg-[#D8E8E2] text-[#111827] px-3 py-1.5 rounded-md text-xs font-medium transition-colors flex items-center gap-1.5 ${isUploading ? 'opacity-50' : ''}`}>
                                             <Upload className="w-3.5 h-3.5" /> {isUploading ? '...' : 'Upload'}
                                             <input type="file" accept="image/*" onChange={handleUpload} className="hidden" disabled={isUploading} />
                                         </label>
-                                        <button type="button" onClick={() => setIsMediaSelectorOpen(true)} className="cursor-pointer shrink-0 bg-[#EDF5F2]/70 hover:bg-[#EDF5F2] text-[#111827] px-3 py-1.5 rounded-md text-xs font-medium transition-colors flex items-center gap-1.5">
+                                        <button type="button" onClick={() => setIsMediaSelectorOpen(true)} className="cursor-pointer shrink-0 bg-[#D8E8E2]/70 hover:bg-[#D8E8E2] text-[#111827] px-3 py-1.5 rounded-md text-xs font-medium transition-colors flex items-center gap-1.5">
                                             <ImageIcon className="w-3.5 h-3.5 text-[#6B9F91]" /> Select from Media
                                         </button>
                                     </div>
@@ -320,7 +320,7 @@ export default function DigitalSolutionsLogosPage() {
                                     <label className="flex items-center gap-2 cursor-pointer">
                                         <div className="relative shrink-0">
                                             <input type="checkbox" checked={isActive} onChange={e => setIsActive(e.target.checked)} className="sr-only" />
-                                            <div className={`w-8 h-5 rounded-full transition-colors ${isActive ? 'bg-[#6B9F91]' : 'bg-[#EDF5F2]'}`}></div>
+                                            <div className={`w-8 h-5 rounded-full transition-colors ${isActive ? 'bg-[#6B9F91]' : 'bg-[#D8E8E2]'}`}></div>
                                             <div className={`absolute top-0.5 left-0.5 bg-white w-4 h-4 rounded-full transition-transform ${isActive ? 'translate-x-3' : 'translate-x-0'}`}></div>
                                         </div>
                                         <span className="text-xs font-medium text-[#374151]">Active</span>
@@ -328,7 +328,7 @@ export default function DigitalSolutionsLogosPage() {
                                     <label className="flex items-center gap-2 cursor-pointer">
                                         <div className="relative shrink-0">
                                             <input type="checkbox" checked={showTextOnCard} onChange={e => setShowTextOnCard(e.target.checked)} className="sr-only" />
-                                            <div className={`w-8 h-5 rounded-full transition-colors ${showTextOnCard ? 'bg-[#6B9F91]' : 'bg-[#EDF5F2]'}`}></div>
+                                            <div className={`w-8 h-5 rounded-full transition-colors ${showTextOnCard ? 'bg-[#6B9F91]' : 'bg-[#D8E8E2]'}`}></div>
                                             <div className={`absolute top-0.5 left-0.5 bg-white w-4 h-4 rounded-full transition-transform ${showTextOnCard ? 'translate-x-3' : 'translate-x-0'}`}></div>
                                         </div>
                                         <span className="text-xs font-medium text-[#374151]">Show text on card</span>
@@ -337,8 +337,8 @@ export default function DigitalSolutionsLogosPage() {
                             </form>
                         </div>
 
-                        <div className="px-4 py-2.5 border-t border-gray-200 bg-[#EDF5F2]/50 flex justify-end gap-2 shrink-0">
-                            <button type="button" onClick={handleCloseModal} className="px-3 py-1.5 rounded-md text-xs text-[#6B7280] hover:text-[#111827] hover:bg-[#EDF5F2]/70 font-medium transition-colors">Cancel</button>
+                        <div className="px-4 py-2.5 border-t border-gray-200 bg-[#D8E8E2]/50 flex justify-end gap-2 shrink-0">
+                            <button type="button" onClick={handleCloseModal} className="px-3 py-1.5 rounded-md text-xs text-[#6B7280] hover:text-[#111827] hover:bg-[#D8E8E2]/70 font-medium transition-colors">Cancel</button>
                             <button form="logoForm" type="submit" disabled={isSaving} className="bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-5 py-1.5 rounded-md text-xs font-medium transition-colors disabled:opacity-50">
                                 {isSaving ? 'Saving...' : 'Save Logo'}
                             </button>

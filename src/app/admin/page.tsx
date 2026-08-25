@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/prisma';
+﻿import { prisma } from '@/lib/prisma';
 import { Activity, Package, Briefcase, GraduationCap, Inbox, Image } from 'lucide-react';
 
 export default async function AdminDashboardPage() {
@@ -50,7 +50,7 @@ export default async function AdminDashboardPage() {
                     const Icon = stat.icon;
                     return (
                         <div key={idx} className="admin-card p-6 flex flex-col items-center justify-center text-center hover:border-[#6B9F91]/30 transition-colors">
-                            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#EDF5F2] border border-[#6B9F91]/10">
+                            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#D8E8E2] border border-[#6B9F91]/10">
                                 <Icon className={`w-6 h-6 ${stat.color}`} />
                             </div>
                             <div className="text-3xl font-extrabold text-[#111827] mb-1">{stat.value}</div>
@@ -72,13 +72,13 @@ export default async function AdminDashboardPage() {
                 ) : (
                     <div className="divide-y divide-gray-100">
                         {activities.map((log) => (
-                            <div key={log.id} className="p-4 sm:px-6 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-4 hover:bg-[#EDF5F2]/50 transition-colors last:rounded-b-2xl">
+                            <div key={log.id} className="p-4 sm:px-6 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-4 hover:bg-[#D8E8E2]/50 transition-colors last:rounded-b-2xl">
                                 <div className="min-w-0 flex-1">
                                     <p className="text-xs sm:text-sm font-medium text-[#111827] break-words">
                                         <span className="text-[#6B9F91] font-bold">{log.adminUser?.fullName || 'System'}</span> {log.description.toLowerCase()}
                                     </p>
                                     <div className="mt-1.5 flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs text-[#6B7280]">
-                                        <span className="bg-[#EDF5F2] text-[#111827] px-2 py-0.5 rounded text-[10px] font-mono tracking-wide">
+                                        <span className="bg-[#D8E8E2] text-[#111827] px-2 py-0.5 rounded text-[10px] font-mono tracking-wide">
                                             {log.action}
                                         </span>
                                         <span>•</span>

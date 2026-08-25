@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
-import { FloatingWhatsApp } from '@/components/ui/FloatingWhatsApp';
+import { FloatingSupportHub } from '@/components/ui/FloatingSupportHub';
 import { getSiteConfig } from '@/lib/site-config';
 
 export default async function PublicLayout({ children }: { children: React.ReactNode }) {
@@ -13,7 +13,7 @@ export default async function PublicLayout({ children }: { children: React.React
                 {children}
             </main>
             <Footer />
-            <FloatingWhatsApp config={config} />
+            <FloatingSupportHub config={config} />
         </>
     );
 }

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import * as React from "react";
 import { motion } from "framer-motion";
@@ -150,7 +150,7 @@ export function BookDemo() {
                                             variants={slideUp}
                                             className="group/feature flex items-center gap-3 p-2 -mx-2 rounded-xl md:hover:bg-[#6B9F91]/[0.03] md:hover:shadow-[0_4px_15px_rgba(107,159,145,0.05)] border border-transparent md:hover:border-[#6B9F91]/10 transition-colors duration-200 md:transition-all md:duration-300 cursor-default"
                                         >
-                                            <div className="w-7 h-7 rounded-full bg-[#EDF5F2] text-[#6B9F91] flex items-center justify-center shrink-0 md:group-hover/feature:bg-[#6B9F91] md:group-hover/feature:text-white md:group-hover/feature:shadow-[0_0_12px_rgba(107,159,145,0.3)] transition-colors duration-200 md:transition-all md:duration-300">
+                                            <div className="w-7 h-7 rounded-full bg-[#D8E8E2] text-[#6B9F91] flex items-center justify-center shrink-0 md:group-hover/feature:bg-[#6B9F91] md:group-hover/feature:text-white md:group-hover/feature:shadow-[0_0_12px_rgba(107,159,145,0.3)] transition-colors duration-200 md:transition-all md:duration-300">
                                                 <Icon className="w-3.5 h-3.5 md:group-hover/feature:scale-110 transition-transform duration-200" />
                                             </div>
                                             <span className="font-semibold text-gray-700 text-sm md:group-hover/feature:text-[#111827] md:group-hover/feature:translate-x-1 transition-colors duration-200 md:transition-all md:duration-300 ease-out">{item.text}</span>
@@ -165,7 +165,7 @@ export function BookDemo() {
                                 initial="hidden"
                                 whileInView="visible"
                                 viewport={{ once: true }}
-                                className="w-full bg-[#EDF5F2] border border-[#6B9F91]/20 md:hover:border-[#6B9F91]/40 md:hover:shadow-[0_4px_20px_rgba(107,159,145,0.1)] transition-colors duration-200 md:transition-all md:duration-300 rounded-2xl p-4 flex items-center justify-between group/duration cursor-default"
+                                className="w-full bg-[#D8E8E2] border border-[#6B9F91]/20 md:hover:border-[#6B9F91]/40 md:hover:shadow-[0_4px_20px_rgba(107,159,145,0.1)] transition-colors duration-200 md:transition-all md:duration-300 rounded-2xl p-4 flex items-center justify-between group/duration cursor-default"
                             >
                                 <div className="flex flex-col">
                                     <span className="text-[10px] font-bold text-[#6B9F91] uppercase tracking-wider mb-1">Typical Demo Duration</span>

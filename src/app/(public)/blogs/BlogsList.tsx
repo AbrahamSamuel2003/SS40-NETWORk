@@ -54,7 +54,7 @@ export function BlogsList({ initialActivities }: BlogsListProps) {
     return (
         <div className="space-y-10">
             {/* Search & Category Filter Bar */}
-            <div className="flex flex-col md:flex-row gap-4 items-center justify-between bg-[#EDF5F2]/50 p-4 sm:p-5 rounded-3xl border border-[#6B9F91]/20 shadow-sm">
+            <div className="flex flex-col md:flex-row gap-4 items-center justify-between bg-[#D8E8E2]/50 p-4 sm:p-5 rounded-3xl border border-[#6B9F91]/20 shadow-sm">
                 {/* Search input */}
                 <div className="relative w-full md:w-80">
                     <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -123,7 +123,7 @@ export function BlogsList({ initialActivities }: BlogsListProps) {
                     </p>
                     <button
                         onClick={() => { setSearchQuery(''); setSelectedCategory('ALL'); }}
-                        className="mt-4 px-4 py-2 bg-[#EDF5F2] text-[#6B9F91] hover:bg-[#6B9F91] hover:text-white rounded-xl text-xs font-bold transition-all"
+                        className="mt-4 px-4 py-2 bg-[#D8E8E2] text-[#6B9F91] hover:bg-[#6B9F91] hover:text-white rounded-xl text-xs font-bold transition-all"
                     >
                         Reset All Filters
                     </button>
@@ -305,7 +305,7 @@ function ActivityStoryModal({ activity, onClose }: { activity: ActivityItem; onC
                     {/* Image Counter Badge */}
                     {images.length > 1 && (
                         <div className="absolute top-4 left-4 bg-black/75 backdrop-blur-md text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
-                            📷 {activeImgIdx + 1} / {images.length}
+                            {activeImgIdx + 1} / {images.length}
                         </div>
                     )}
 
@@ -355,7 +355,7 @@ function ActivityStoryModal({ activity, onClose }: { activity: ActivityItem; onC
                             {meta.label}
                         </span>
 
-                        <span className="flex items-center gap-1.5 text-xs text-gray-700 font-semibold bg-[#EDF5F2] px-3.5 py-1.5 rounded-full">
+                        <span className="flex items-center gap-1.5 text-xs text-gray-700 font-semibold bg-[#D8E8E2] px-3.5 py-1.5 rounded-full">
                             <Calendar className="w-3.5 h-3.5 text-[#6B9F91]" />
                             {formattedDate}
                         </span>
@@ -373,7 +373,7 @@ function ActivityStoryModal({ activity, onClose }: { activity: ActivityItem; onC
                     </h2>
 
                     <div className="space-y-4 text-sm sm:text-base text-[#374151] leading-relaxed">
-                        <p className="font-semibold text-gray-800 bg-[#EDF5F2]/60 p-5 rounded-2xl border border-[#6B9F91]/25">
+                        <p className="font-semibold text-gray-800 bg-[#D8E8E2]/60 p-5 rounded-2xl border border-[#6B9F91]/25">
                             {activity.summary}
                         </p>
 

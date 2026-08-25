@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import * as React from 'react';
 import { Menu, LogOut, Home } from 'lucide-react';
@@ -29,7 +29,7 @@ export function AdminTopbar({ adminName, onMenuClick }: TopbarProps) {
             <div className="flex items-center gap-4">
                 <button
                     onClick={onMenuClick}
-                    className="p-2 -ml-2 lg:hidden text-[#111827]/70 hover:text-[#111827] hover:bg-[#EDF5F2] rounded-md transition-colors"
+                    className="p-2 -ml-2 lg:hidden text-[#111827]/70 hover:text-[#111827] hover:bg-[#D8E8E2] rounded-md transition-colors"
                 >
                     <Menu size={24} />
                 </button>
@@ -40,7 +40,7 @@ export function AdminTopbar({ adminName, onMenuClick }: TopbarProps) {
             <div className="flex items-center gap-3">
                 <a
                     href="/"
-                    className="flex items-center gap-2 text-sm text-[#6B7280] hover:text-[#6B9F91] transition-colors px-3 py-2 rounded-md hover:bg-[#EDF5F2]"
+                    className="flex items-center gap-2 text-sm text-[#6B7280] hover:text-[#6B9F91] transition-colors px-3 py-2 rounded-md hover:bg-[#D8E8E2]"
                     title="Home"
                 >
                     <Home size={16} />

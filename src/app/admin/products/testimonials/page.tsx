@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, CheckCircle2, AlertCircle, Upload, X, Image as ImageIcon, Sparkles } from 'lucide-react';
@@ -191,7 +191,7 @@ export default function ProductTestimonialsPage() {
                 {/* ── DESKTOP TABLE (hidden on mobile) ── */}
                 <div className="hidden sm:block overflow-x-auto w-full touch-auto">
                     <table className="w-full text-left text-sm text-[#374151] min-w-[600px]">
-                        <thead className="bg-[#EDF5F2]/70 border-b border-gray-200 text-[#111827]">
+                        <thead className="bg-[#D8E8E2]/70 border-b border-gray-200 text-[#111827]">
                             <tr>
                                 <th className="p-4 font-medium min-w-[80px] hidden sm:table-cell">Avatar</th>
                                 <th className="p-4 font-medium min-w-[150px]">Client Info</th>
@@ -204,12 +204,12 @@ export default function ProductTestimonialsPage() {
                                 <tr><td colSpan={4} className="p-8 text-center text-[#9CA3AF]">No product testimonials found.</td></tr>
                             ) : (
                                 happimonials.map(item => (
-                                    <tr key={item.id} className="hover:bg-[#EDF5F2]/50">
+                                    <tr key={item.id} className="hover:bg-[#D8E8E2]/50">
                                         <td className="p-4 hidden sm:table-cell">
                                             {item.thumbnailUrl ? (
                                                 <div className="w-10 h-10 rounded-full overflow-hidden shrink-0"><img src={item.thumbnailUrl} alt="" className="w-full h-full object-cover" /></div>
                                             ) : (
-                                                <div className="w-10 h-10 rounded-full bg-[#EDF5F2] flex items-center justify-center shrink-0 uppercase font-bold text-[#9CA3AF]">{item.clientName.charAt(0)}</div>
+                                                <div className="w-10 h-10 rounded-full bg-[#D8E8E2] flex items-center justify-center shrink-0 uppercase font-bold text-[#9CA3AF]">{item.clientName.charAt(0)}</div>
                                             )}
                                         </td>
                                         <td className="p-4 font-medium">
@@ -226,7 +226,7 @@ export default function ProductTestimonialsPage() {
                                         <td className="p-4 text-[#6B7280] text-xs max-w-sm truncate hidden sm:table-cell">{item.testimonial}</td>
                                         <td className="p-3">
                                             <div className="flex flex-col xl:flex-row gap-1.5 justify-end ml-auto shrink-0">
-                                                <button onClick={() => handleOpenModal(item)} className="px-3 py-1 rounded border border-gray-300 text-[#374151] text-xs font-medium hover:bg-[#EDF5F2]/70 hover:border-[#6B9F91] transition-colors whitespace-nowrap">Edit</button>
+                                                <button onClick={() => handleOpenModal(item)} className="px-3 py-1 rounded border border-gray-300 text-[#374151] text-xs font-medium hover:bg-[#D8E8E2]/70 hover:border-[#6B9F91] transition-colors whitespace-nowrap">Edit</button>
                                                 <button onClick={() => handleDelete(item.id)} className="px-3 py-1 rounded border border-[#FCA5A5] text-[#B91C1C] text-xs font-medium hover:bg-red-50 transition-colors whitespace-nowrap">Delete</button>
                                             </div>
                                         </td>
@@ -241,7 +241,7 @@ export default function ProductTestimonialsPage() {
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#111827]/40 backdrop-blur-sm">
                     <div className="admin-card w-full max-w-xl overflow-hidden shadow-2xl flex flex-col max-h-[88vh]">
-                        <div className="px-4 py-3 border-b border-gray-200 flex justify-between items-center bg-[#EDF5F2]/80 shrink-0">
+                        <div className="px-4 py-3 border-b border-gray-200 flex justify-between items-center bg-[#D8E8E2]/80 shrink-0">
                             <div>
                                 <h3 className="text-sm font-bold text-[#111827]">{editingId ? 'Edit Success Story' : 'Add Success Story'}</h3>
                                 <p className="text-[10px] text-[#9CA3AF] mt-0.5">Products testimonials</p>
@@ -275,11 +275,11 @@ export default function ProductTestimonialsPage() {
                                         )}
                                         
                                         <div className="flex flex-wrap gap-2">
-                                            <label className={`cursor-pointer bg-[#EDF5F2]/70 hover:bg-[#EDF5F2] text-[#111827] px-3 py-1.5 rounded-md text-xs font-medium transition-colors flex items-center gap-1.5 ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}>
+                                            <label className={`cursor-pointer bg-[#D8E8E2]/70 hover:bg-[#D8E8E2] text-[#111827] px-3 py-1.5 rounded-md text-xs font-medium transition-colors flex items-center gap-1.5 ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}>
                                                 <Upload className="w-3.5 h-3.5" /> {isUploading ? 'Uploading...' : 'Upload Local File'}
                                                 <input type="file" accept="image/*" onChange={handleUpload} className="hidden" disabled={isUploading} />
                                             </label>
-                                            <button type="button" onClick={() => setIsMediaSelectorOpen(true)} className="cursor-pointer bg-[#EDF5F2]/70 hover:bg-[#EDF5F2] text-[#111827] px-3 py-1.5 rounded-md text-xs font-medium transition-colors flex items-center gap-1.5">
+                                            <button type="button" onClick={() => setIsMediaSelectorOpen(true)} className="cursor-pointer bg-[#D8E8E2]/70 hover:bg-[#D8E8E2] text-[#111827] px-3 py-1.5 rounded-md text-xs font-medium transition-colors flex items-center gap-1.5">
                                                 <ImageIcon className="w-3.5 h-3.5 text-[#6B9F91]" /> Select from Media
                                             </button>
                                         </div>
@@ -297,15 +297,15 @@ export default function ProductTestimonialsPage() {
                                 <label className="flex items-center gap-2.5 cursor-pointer pt-1 border-t border-gray-100">
                                     <div className="relative shrink-0">
                                         <input type="checkbox" checked={isActive} onChange={e => setIsActive(e.target.checked)} className="sr-only" />
-                                        <div className={`w-8 h-5 rounded-full transition-colors ${isActive ? 'bg-[#6B9F91]' : 'bg-[#EDF5F2]'}`}></div>
+                                        <div className={`w-8 h-5 rounded-full transition-colors ${isActive ? 'bg-[#6B9F91]' : 'bg-[#D8E8E2]'}`}></div>
                                         <div className={`absolute top-0.5 left-0.5 bg-white w-4 h-4 rounded-full transition-transform ${isActive ? 'translate-x-3' : 'translate-x-0'}`}></div>
                                     </div>
                                     <span className="text-xs font-medium text-[#374151]">Active</span>
                                 </label>
                             </form>
                         </div>
-                        <div className="px-4 py-2.5 border-t border-gray-200 flex justify-end gap-2 bg-[#EDF5F2]/50 shrink-0">
-                            <button type="button" onClick={() => setIsModalOpen(false)} className="px-3 py-1.5 rounded-md text-xs text-[#6B7280] hover:bg-[#EDF5F2]/70 font-medium">Cancel</button>
+                        <div className="px-4 py-2.5 border-t border-gray-200 flex justify-end gap-2 bg-[#D8E8E2]/50 shrink-0">
+                            <button type="button" onClick={() => setIsModalOpen(false)} className="px-3 py-1.5 rounded-md text-xs text-[#6B7280] hover:bg-[#D8E8E2]/70 font-medium">Cancel</button>
                             <button type="submit" form="happimonialForm" disabled={isSaving} className="bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-5 py-1.5 rounded-md text-xs font-medium disabled:opacity-50">Save Testimonial</button>
                         </div>
                     </div>

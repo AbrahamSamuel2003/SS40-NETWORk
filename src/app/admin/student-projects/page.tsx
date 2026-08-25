@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, CheckCircle2, AlertCircle, Upload, X, Image as ImageIcon, Sparkles } from 'lucide-react';
@@ -218,7 +218,7 @@ export default function StudentProjectsPage() {
                                     </div>
                                     <p className="text-[#6B7280] text-xs leading-snug line-clamp-1">{proj.category}</p>
                                     <div className="mt-auto pt-1 flex items-center justify-between">
-                                        <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-semibold ${proj.isActive ? 'bg-[#6B9F91]/10 text-[#6B9F91] border border-[#6B9F91]/20' : 'bg-[#EDF5F2]/70 text-[#9CA3AF]'}`}>• {proj.isActive ? 'ACTIVE' : 'INACTIVE'}</span>
+                                        <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-semibold ${proj.isActive ? 'bg-[#6B9F91]/10 text-[#6B9F91] border border-[#6B9F91]/20' : 'bg-[#D8E8E2]/70 text-[#9CA3AF]'}`}>• {proj.isActive ? 'ACTIVE' : 'INACTIVE'}</span>
                                         <button onClick={() => handleDelete(proj.id)} className="text-[#B91C1C]/50 hover:text-[#B91C1C] p-1">
                                             <Trash2 className="w-3.5 h-3.5" />
                                         </button>
@@ -232,7 +232,7 @@ export default function StudentProjectsPage() {
                 {/* ── DESKTOP TABLE (hidden on mobile) ── */}
                 <div className="hidden sm:block overflow-x-auto w-full touch-auto">
                     <table className="w-full text-left text-sm text-[#374151] min-w-[600px]">
-                        <thead className="bg-[#EDF5F2]/70 border-b border-gray-200 text-[#111827]">
+                        <thead className="bg-[#D8E8E2]/70 border-b border-gray-200 text-[#111827]">
                             <tr>
                                 <th className="p-4 font-medium min-w-[100px] hidden sm:table-cell">Image</th>
                                 <th className="p-4 font-medium min-w-[150px]">Title</th>
@@ -249,14 +249,14 @@ export default function StudentProjectsPage() {
                                 </tr>
                             ) : (
                                 projects.map(proj => (
-                                    <tr key={proj.id} className="hover:bg-[#EDF5F2]/50 transition-colors">
+                                    <tr key={proj.id} className="hover:bg-[#D8E8E2]/50 transition-colors">
                                         <td className="p-4 hidden sm:table-cell">
                                             {proj.imageUrl ? (
-                                                <div className="w-16 h-10 bg-[#EDF5F2] rounded overflow-hidden flex items-center justify-center">
+                                                <div className="w-16 h-10 bg-[#D8E8E2] rounded overflow-hidden flex items-center justify-center">
                                                     <img src={proj.imageUrl} alt={proj.title} className="max-w-full max-h-full object-cover" />
                                                 </div>
                                             ) : (
-                                                <div className="w-16 h-10 bg-[#EDF5F2]/70 rounded flex items-center justify-center text-[10px] text-[#9CA3AF]">N/A</div>
+                                                <div className="w-16 h-10 bg-[#D8E8E2]/70 rounded flex items-center justify-center text-[10px] text-[#9CA3AF]">N/A</div>
                                             )}
                                         </td>
                                         <td className="p-4 font-medium">{proj.title}</td>
@@ -269,7 +269,7 @@ export default function StudentProjectsPage() {
                                                         <CheckCircle2 className="w-3 h-3" /> ACTIVE
                                                     </span>
                                                 ) : (
-                                                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#EDF5F2]/70 text-[#9CA3AF]">
+                                                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#D8E8E2]/70 text-[#9CA3AF]">
                                                         INACTIVE
                                                     </span>
                                                 )}
@@ -282,7 +282,7 @@ export default function StudentProjectsPage() {
                                         </td>
                                         <td className="p-3">
                                             <div className="flex flex-col xl:flex-row gap-1.5 justify-end ml-auto shrink-0">
-                                                <button onClick={() => handleOpenModal(proj)} className="px-3 py-1 rounded border border-gray-300 text-[#374151] text-xs font-medium hover:bg-[#EDF5F2]/70 hover:border-[#6B9F91] transition-colors whitespace-nowrap">Edit</button>
+                                                <button onClick={() => handleOpenModal(proj)} className="px-3 py-1 rounded border border-gray-300 text-[#374151] text-xs font-medium hover:bg-[#D8E8E2]/70 hover:border-[#6B9F91] transition-colors whitespace-nowrap">Edit</button>
                                                 <button onClick={() => handleDelete(proj.id)} className="px-3 py-1 rounded border border-[#FCA5A5] text-[#B91C1C] text-xs font-medium hover:bg-red-50 transition-colors whitespace-nowrap">Delete</button>
                                             </div>
                                         </td>
@@ -355,11 +355,11 @@ export default function StudentProjectsPage() {
                                         )}
                                         
                                         <div className="flex flex-wrap gap-3">
-                                            <label className={`cursor-pointer bg-[#EDF5F2]/70 hover:bg-[#EDF5F2] text-[#111827] px-4 py-2.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}>
+                                            <label className={`cursor-pointer bg-[#D8E8E2]/70 hover:bg-[#D8E8E2] text-[#111827] px-4 py-2.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}>
                                                 <Upload className="w-4 h-4" /> {isUploading ? 'Uploading...' : 'Upload Local File'}
                                                 <input type="file" accept="image/*" onChange={handleUpload} className="hidden" disabled={isUploading} />
                                             </label>
-                                            <button type="button" onClick={() => setIsMediaSelectorOpen(true)} className="cursor-pointer bg-[#EDF5F2]/70 hover:bg-[#EDF5F2] text-[#111827] px-4 py-2.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+                                            <button type="button" onClick={() => setIsMediaSelectorOpen(true)} className="cursor-pointer bg-[#D8E8E2]/70 hover:bg-[#D8E8E2] text-[#111827] px-4 py-2.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
                                                 <ImageIcon className="w-4 h-4 text-[#6B9F91]" /> Select from Media
                                             </button>
                                         </div>
@@ -391,7 +391,7 @@ export default function StudentProjectsPage() {
                                     {tagsInput && (
                                         <div className="flex flex-wrap gap-2 mt-2">
                                             {tagsInput.split(',').map(t => t.trim()).filter(t => t).map((tag, idx) => (
-                                                <span key={idx} className="inline-flex items-center gap-1 px-2.5 py-1 bg-[#EDF5F2] border border-[#6B9F91]/20 rounded-lg text-xs font-semibold text-[#0F766E]">
+                                                <span key={idx} className="inline-flex items-center gap-1 px-2.5 py-1 bg-[#D8E8E2] border border-[#6B9F91]/20 rounded-lg text-xs font-semibold text-[#0F766E]">
                                                     {tag}
                                                 </span>
                                             ))}
@@ -403,7 +403,7 @@ export default function StudentProjectsPage() {
                                     <label className="flex items-center gap-3 cursor-pointer group">
                                         <div className="relative">
                                             <input type="checkbox" checked={isActive} onChange={e => setIsActive(e.target.checked)} className="sr-only" />
-                                            <div className={`w-10 h-6 rounded-full transition-colors ${isActive ? 'bg-[#6B9F91]' : 'bg-[#EDF5F2] group-hover:bg-[#EDF5F2]'}`}></div>
+                                            <div className={`w-10 h-6 rounded-full transition-colors ${isActive ? 'bg-[#6B9F91]' : 'bg-[#D8E8E2] group-hover:bg-[#D8E8E2]'}`}></div>
                                             <div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${isActive ? 'translate-x-4' : 'translate-x-0'}`}></div>
                                         </div>
                                         <span className="text-sm font-medium text-[#374151]">Active Configuration</span>
@@ -411,7 +411,7 @@ export default function StudentProjectsPage() {
                                     <label className="flex items-center gap-3 cursor-pointer group">
                                         <div className="relative">
                                             <input type="checkbox" checked={isFeatured} onChange={e => setIsFeatured(e.target.checked)} className="sr-only" />
-                                            <div className={`w-10 h-6 rounded-full transition-colors ${isFeatured ? 'bg-[#FFC900]' : 'bg-[#EDF5F2] group-hover:bg-[#EDF5F2]'}`}></div>
+                                            <div className={`w-10 h-6 rounded-full transition-colors ${isFeatured ? 'bg-[#FFC900]' : 'bg-[#D8E8E2] group-hover:bg-[#D8E8E2]'}`}></div>
                                             <div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${isFeatured ? 'translate-x-4' : 'translate-x-0'}`}></div>
                                         </div>
                                         <span className="text-sm font-medium text-[#374151]">Featured (Big Card)</span>
@@ -420,8 +420,8 @@ export default function StudentProjectsPage() {
                             </form>
                         </div>
 
-                        <div className="p-5 border-t border-gray-200 bg-[#EDF5F2]/70 flex justify-end gap-3 shrink-0">
-                            <button type="button" onClick={handleCloseModal} className="px-4 py-2 rounded-lg text-[#6B7280] hover:text-[#111827] hover:bg-[#EDF5F2]/70 font-medium transition-colors">Cancel</button>
+                        <div className="p-5 border-t border-gray-200 bg-[#D8E8E2]/70 flex justify-end gap-3 shrink-0">
+                            <button type="button" onClick={handleCloseModal} className="px-4 py-2 rounded-lg text-[#6B7280] hover:text-[#111827] hover:bg-[#D8E8E2]/70 font-medium transition-colors">Cancel</button>
                             <button form="projForm" type="submit" disabled={isSaving} className="bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-6 py-2 rounded-lg font-medium transition-colors disabled:opacity-50">
                                 {isSaving ? 'Saving...' : 'Save Project'}
                             </button>

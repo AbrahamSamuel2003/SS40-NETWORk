@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Plus, Edit2, Trash2, CheckCircle2, AlertCircle, Upload, X, Crop, Move, ZoomIn, ZoomOut, Check, ArrowUp, ArrowDown, Image as ImageIcon, Sparkles, ExternalLink, RefreshCw } from 'lucide-react';
@@ -270,7 +270,7 @@ export default function ManagedProductsPage() {
                 {/* ── DESKTOP TABLE (hidden on mobile) ── */}
                 <div className="hidden sm:block overflow-x-auto w-full touch-auto">
                     <table className="w-full text-left text-sm text-[#374151] min-w-[600px]">
-                        <thead className="bg-[#EDF5F2]/70 border-b border-gray-200 text-[#111827]">
+                        <thead className="bg-[#D8E8E2]/70 border-b border-gray-200 text-[#111827]">
                             <tr>
                                 <th className="p-4 font-medium min-w-[180px]">Product Details</th>
                                 <th className="p-4 font-medium min-w-[150px] hidden sm:table-cell">Marketing Title</th>
@@ -284,7 +284,7 @@ export default function ManagedProductsPage() {
                                 <tr><td colSpan={5} className="p-8 text-center text-[#9CA3AF]">No products found.</td></tr>
                             ) : (
                                 products.map(item => (
-                                    <tr key={item.id} className="hover:bg-[#EDF5F2]/50">
+                                    <tr key={item.id} className="hover:bg-[#D8E8E2]/50">
                                         <td className="p-4 font-medium">
                                             <div className="text-[#111827]">{item.name}</div>
                                             <div className="text-[#9CA3AF] text-xs truncate max-w-xs">{item.description}</div>
@@ -299,13 +299,13 @@ export default function ManagedProductsPage() {
                                         <td className="p-4 hidden sm:table-cell">
                                             <div className="text-[#111827] text-xs mb-1">{item.marketingTitle}</div>
                                             {item.badgeText && (
-                                                <span className="text-[10px] font-bold tracking-widest uppercase bg-[#EDF5F2] px-1.5 py-0.5 rounded text-[#6B7280]">{item.badgeText}</span>
+                                                <span className="text-[10px] font-bold tracking-widest uppercase bg-[#D8E8E2] px-1.5 py-0.5 rounded text-[#6B7280]">{item.badgeText}</span>
                                             )}
                                         </td>
                                         <td className="p-4 hidden md:table-cell">
                                             <div className="flex flex-wrap gap-1">
                                                 {Array.isArray(item.tags) && item.tags.slice(0, 3).map((tag: string, i: number) => (
-                                                    <span key={i} className="text-[10px] bg-[#EDF5F2] px-1.5 py-0.5 rounded text-[#6B7280]">{tag}</span>
+                                                    <span key={i} className="text-[10px] bg-[#D8E8E2] px-1.5 py-0.5 rounded text-[#6B7280]">{tag}</span>
                                                 ))}
                                                 {Array.isArray(item.tags) && item.tags.length > 3 && (
                                                     <span className="text-[10px] text-[#9CA3AF]">+{item.tags.length - 3}</span>
@@ -319,7 +319,7 @@ export default function ManagedProductsPage() {
                                         </td>
                                         <td className="p-3">
                                             <div className="flex flex-col xl:flex-row gap-1.5 justify-end ml-auto shrink-0">
-                                                <button onClick={() => handleOpenModal(item)} className="px-3 py-1 rounded border border-gray-300 text-[#374151] text-xs font-medium hover:bg-[#EDF5F2]/70 hover:border-[#6B9F91] transition-colors whitespace-nowrap">Edit</button>
+                                                <button onClick={() => handleOpenModal(item)} className="px-3 py-1 rounded border border-gray-300 text-[#374151] text-xs font-medium hover:bg-[#D8E8E2]/70 hover:border-[#6B9F91] transition-colors whitespace-nowrap">Edit</button>
                                                 <button onClick={() => handleDelete(item.id)} className="px-3 py-1 rounded border border-[#FCA5A5] text-[#B91C1C] text-xs font-medium hover:bg-red-50 transition-colors whitespace-nowrap">Delete</button>
                                             </div>
                                         </td>
@@ -334,7 +334,7 @@ export default function ManagedProductsPage() {
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#111827]/40 backdrop-blur-sm">
                     <div className="admin-card w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col max-h-[88vh]">
-                        <div className="px-4 py-3 border-b border-gray-200 flex justify-between items-center bg-[#EDF5F2]/80 shrink-0">
+                        <div className="px-4 py-3 border-b border-gray-200 flex justify-between items-center bg-[#D8E8E2]/80 shrink-0">
                             <div>
                                 <h3 className="text-sm font-bold text-[#111827]">{editingId ? 'Edit Product' : 'Add Product'}</h3>
                                 <p className="text-[10px] text-[#9CA3AF] mt-0.5">Fill in the product details below</p>
@@ -383,7 +383,7 @@ export default function ManagedProductsPage() {
                                     
                                     {/* Crop Editor Canvas Workspace */}
                                     {editorImage && (
-                                        <div className="border border-[#6B9F91]/40 rounded-xl p-3 bg-[#EDF5F2]/20 mb-3 space-y-3">
+                                        <div className="border border-[#6B9F91]/40 rounded-xl p-3 bg-[#D8E8E2]/20 mb-3 space-y-3">
                                             <div className="flex justify-between items-center">
                                                 <span className="text-[10px] font-bold text-[#6B9F91] uppercase tracking-wider">Image Editor (Ratio: 16:11)</span>
                                             </div>
@@ -438,7 +438,7 @@ export default function ManagedProductsPage() {
                                             <span className="text-xs font-medium text-[#374151]">{isUploading ? 'Uploading...' : 'Upload Local File'}</span>
                                             <input type="file" accept="image/*" onChange={handleUploadLocal} className="hidden" disabled={isUploading} />
                                         </label>
-                                        <button type="button" onClick={() => setIsMediaSelectorOpen(true)} className="flex-1 flex items-center justify-center gap-2 border border-[#6B9F91]/30 bg-[#EDF5F2]/50 hover:bg-[#EDF5F2] rounded-lg px-4 py-2 transition-colors">
+                                        <button type="button" onClick={() => setIsMediaSelectorOpen(true)} className="flex-1 flex items-center justify-center gap-2 border border-[#6B9F91]/30 bg-[#D8E8E2]/50 hover:bg-[#D8E8E2] rounded-lg px-4 py-2 transition-colors">
                                             <ImageIcon className="w-4 h-4 text-[#6B9F91]" />
                                             <span className="text-xs font-medium text-[#111827]">Select from Media</span>
                                         </button>
@@ -453,7 +453,7 @@ export default function ManagedProductsPage() {
 
                                 <div className="flex flex-wrap items-center gap-x-5 gap-y-2 pt-2 border-t border-gray-100">
                                     <label className="flex items-center gap-2 cursor-pointer">
-                                        <div className="relative shrink-0"><input type="checkbox" checked={isActive} onChange={e => setIsActive(e.target.checked)} className="sr-only" /><div className={`w-8 h-5 rounded-full transition-colors ${isActive ? 'bg-[#6B9F91]' : 'bg-[#EDF5F2]'}`}></div><div className={`absolute top-0.5 left-0.5 bg-white w-4 h-4 rounded-full transition-transform ${isActive ? 'translate-x-3' : 'translate-x-0'}`}></div></div>
+                                        <div className="relative shrink-0"><input type="checkbox" checked={isActive} onChange={e => setIsActive(e.target.checked)} className="sr-only" /><div className={`w-8 h-5 rounded-full transition-colors ${isActive ? 'bg-[#6B9F91]' : 'bg-[#D8E8E2]'}`}></div><div className={`absolute top-0.5 left-0.5 bg-white w-4 h-4 rounded-full transition-transform ${isActive ? 'translate-x-3' : 'translate-x-0'}`}></div></div>
                                         <span className="text-xs font-medium text-[#374151]">Active</span>
                                     </label>
                                     <div className="flex items-center gap-2">
@@ -463,8 +463,8 @@ export default function ManagedProductsPage() {
                                 </div>
                             </form>
                         </div>
-                        <div className="px-4 py-2.5 border-t border-gray-200 flex justify-end gap-2 bg-[#EDF5F2]/50 shrink-0">
-                            <button type="button" onClick={() => setIsModalOpen(false)} className="px-3 py-1.5 rounded-md text-xs text-[#6B7280] hover:bg-[#EDF5F2]/70 font-medium">Cancel</button>
+                        <div className="px-4 py-2.5 border-t border-gray-200 flex justify-end gap-2 bg-[#D8E8E2]/50 shrink-0">
+                            <button type="button" onClick={() => setIsModalOpen(false)} className="px-3 py-1.5 rounded-md text-xs text-[#6B7280] hover:bg-[#D8E8E2]/70 font-medium">Cancel</button>
                             <button type="submit" form="productForm" disabled={isSaving} className="bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-5 py-1.5 rounded-md text-xs font-medium disabled:opacity-50">Save Product</button>
                         </div>
                     </div>

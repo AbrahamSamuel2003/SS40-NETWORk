@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect } from 'react';
 import { Edit2, Trash2, AlertCircle, X, Search } from 'lucide-react';
@@ -123,7 +123,7 @@ export default function LeadsPage() {
             case 'CONTACTED': return 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20';
             case 'CONVERTED': return 'bg-[#6B9F91]/10 text-[#6B9F91] border border-[#6B9F91]/20';
             case 'SPAM': return 'bg-[#FEE2E2] text-[#B91C1C] border border-[#FCA5A5]';
-            default: return 'bg-[#EDF5F2] text-[#6B7280] border border-gray-200/20';
+            default: return 'bg-[#D8E8E2] text-[#6B7280] border border-gray-200/20';
         }
     };
 
@@ -208,7 +208,7 @@ export default function LeadsPage() {
                 {/* ── DESKTOP TABLE (hidden on mobile) ── */}
                 <div className="hidden sm:block overflow-x-auto w-full touch-auto">
                     <table className="w-full text-left text-sm text-[#374151] min-w-[600px]">
-                        <thead className="bg-[#EDF5F2]/70 border-b border-gray-200 text-[#111827]">
+                        <thead className="bg-[#D8E8E2]/70 border-b border-gray-200 text-[#111827]">
                             <tr>
                                 <th className="p-4 font-medium min-w-[180px]">Contact</th>
                                 <th className="p-4 font-medium min-w-[150px] hidden sm:table-cell">Service Interest</th>
@@ -230,7 +230,7 @@ export default function LeadsPage() {
                                 <tr><td colSpan={6} className="p-8 text-center text-[#9CA3AF]">No leads found.</td></tr>
                             ) : (
                                 leads.map(item => (
-                                    <tr key={item.id} className="hover:bg-[#EDF5F2]/50">
+                                    <tr key={item.id} className="hover:bg-[#D8E8E2]/50">
                                         <td className="p-4">
                                             <div className="font-medium text-[#111827]">{item.fullName}</div>
                                             <div className="text-[#6B7280] text-xs">{item.email}</div>
@@ -291,7 +291,7 @@ export default function LeadsPage() {
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#111827]/40 backdrop-blur-sm">
                     <div className="admin-card w-full max-w-3xl overflow-hidden shadow-2xl flex flex-col max-h-[88vh]">
                         {/* Header */}
-                        <div className="px-4 py-3 border-b border-gray-200 flex justify-between items-center bg-[#EDF5F2]/80 shrink-0">
+                        <div className="px-4 py-3 border-b border-gray-200 flex justify-between items-center bg-[#D8E8E2]/80 shrink-0">
                             <div>
                                 <h3 className="text-sm font-bold text-[#111827]">Lead Details</h3>
                                 <p className="text-[10px] text-[#9CA3AF] mt-0.5">{leadData.fullName} · {leadData.email}</p>
@@ -321,7 +321,7 @@ export default function LeadsPage() {
                                         <div><span className="text-[#9CA3AF] block text-[10px]">Service</span><span className="text-[#111827]">{leadData.serviceInterest}</span></div>
                                         <div>
                                             <span className="text-[#9CA3AF] block text-[10px] mb-1">Message</span>
-                                            <div className="bg-[#EDF5F2]/70 px-2.5 py-2 rounded text-[#374151] whitespace-pre-wrap text-xs leading-relaxed max-h-28 overflow-y-auto">{leadData.message}</div>
+                                            <div className="bg-[#D8E8E2]/70 px-2.5 py-2 rounded text-[#374151] whitespace-pre-wrap text-xs leading-relaxed max-h-28 overflow-y-auto">{leadData.message}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -361,7 +361,7 @@ export default function LeadsPage() {
                                 <label className="flex items-center gap-2.5 cursor-pointer pt-1">
                                     <div className="relative shrink-0">
                                         <input type="checkbox" checked={isArchived} onChange={e => setIsArchived(e.target.checked)} className="sr-only" />
-                                        <div className={`w-8 h-5 rounded-full transition-colors ${isArchived ? 'bg-[#FFC900]' : 'bg-[#EDF5F2]'}`}></div>
+                                        <div className={`w-8 h-5 rounded-full transition-colors ${isArchived ? 'bg-[#FFC900]' : 'bg-[#D8E8E2]'}`}></div>
                                         <div className={`absolute top-0.5 left-0.5 bg-white w-4 h-4 rounded-full transition-transform ${isArchived ? 'translate-x-3' : 'translate-x-0'}`}></div>
                                     </div>
                                     <span className="text-xs font-medium text-[#374151]">Archived Record</span>
@@ -370,8 +370,8 @@ export default function LeadsPage() {
                         </div>
 
                         {/* Footer */}
-                        <div className="px-4 py-2.5 border-t border-gray-200 flex justify-end gap-2 bg-[#EDF5F2]/50 shrink-0">
-                            <button type="button" onClick={() => setIsModalOpen(false)} className="px-3 py-1.5 rounded-md text-xs text-[#6B7280] hover:bg-[#EDF5F2]/70 font-medium">Close</button>
+                        <div className="px-4 py-2.5 border-t border-gray-200 flex justify-end gap-2 bg-[#D8E8E2]/50 shrink-0">
+                            <button type="button" onClick={() => setIsModalOpen(false)} className="px-3 py-1.5 rounded-md text-xs text-[#6B7280] hover:bg-[#D8E8E2]/70 font-medium">Close</button>
                             <button type="submit" form="leadForm" disabled={isSaving} className="bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-5 py-1.5 rounded-md text-xs font-medium disabled:opacity-50">Save Changes</button>
                         </div>
                     </div>

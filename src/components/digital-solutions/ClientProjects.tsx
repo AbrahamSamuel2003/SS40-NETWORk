@@ -304,11 +304,12 @@ export function ClientProjects() {
 
     if (isLoading || projects.length === 0) {
         return (
-            <SectionWrapper id="featured-projects" className="bg-[#EDF5F2] overflow-visible scroll-mt-24">
+            <SectionWrapper id="featured-projects" className="bg-[#D8E8E2] overflow-visible scroll-mt-24">
                 <Container className="space-y-12 lg:space-y-16">
                     <SectionHeading
                         badge="Client Projects"
                         title="Solutions That Drive Business Growth"
+                        highlight="Business Growth"
                         description="Explore a selection of digital solutions developed to solve real business challenges across different industries."
                     />
                     <CardGridSkeleton count={3} columns={3} />
@@ -318,13 +319,14 @@ export function ClientProjects() {
     }
 
     return (
-        <SectionWrapper id="featured-projects" className="bg-[#EDF5F2] overflow-visible scroll-mt-24">
+        <SectionWrapper id="featured-projects" className="bg-[#D8E8E2] overflow-visible scroll-mt-24">
             <Container className="space-y-8 lg:space-y-12">
 
                 {/* Section Header */}
                 <SectionHeading
                     badge="Client Projects"
                     title="Solutions That Drive Business Growth"
+                    highlight="Business Growth"
                     description="Explore a selection of digital solutions developed to solve real business challenges across different industries."
                     className="mb-8 lg:mb-12"
                 />

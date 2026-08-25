@@ -5,12 +5,12 @@ import { useRef, useState, useEffect } from "react";
 import { motion, useMotionValue, useSpring, useTransform, Variants, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { Play, Star, ArrowRight, Quote, ChevronUp, ChevronLeft, ChevronRight, X } from "lucide-react";
+import { Play, Star, ArrowRight, Quote, ChevronLeft, ChevronRight, X, Sparkles, CheckCircle2 } from "lucide-react";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
-import { YouTubeResumeThumbnailPlayer, getYouTubeThumbnailUrl, getYouTubeVideoId } from "@/components/ui/YouTubeResumeThumbnailPlayer";
+import { getYouTubeThumbnailUrl, getYouTubeVideoId } from "@/components/ui/YouTubeResumeThumbnailPlayer";
 import { StoryGridSkeleton } from "@/components/ui/Skeleton";
 
 // Elegant stagger entrance sequence
@@ -19,21 +19,21 @@ const entranceStagger: Variants = {
     visible: {
         opacity: 1,
         transition: {
-            staggerChildren: 0.15,
-            delayChildren: 0.1,
+            staggerChildren: 0.12,
+            delayChildren: 0.08,
         }
     }
 };
 
 const fadeUpAnim: Variants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] } }
+    hidden: { opacity: 0, y: 25 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] } }
 };
 
 export function SuccessStories({ data = [] }: { data?: any[] }) {
     if (!data || data.length === 0) {
         return (
-            <SectionWrapper id="success-stories" className="bg-[#EDF5F2] overflow-hidden">
+            <SectionWrapper id="success-stories" className="bg-[#D8E8E2] overflow-hidden">
                 <Container className="space-y-12 lg:space-y-16">
                     <div>
                         <SectionHeading
@@ -48,8 +48,8 @@ export function SuccessStories({ data = [] }: { data?: any[] }) {
         );
     }
 
-    // Featured = story that has youtubeUrl or videoUrl or isFeatured
-    const featuredStoryRaw = data.find((s: any) => s.youtubeUrl || s.videoUrl) || (data.length === 1 ? data[0] : null);
+    // Featured = story that has youtubeUrl or videoUrl
+    const featuredStoryRaw = data.find((s: any) => s.youtubeUrl || s.videoUrl);
     const secondaryStoriesRaw = featuredStoryRaw 
         ? data.filter((s: any) => s.id !== featuredStoryRaw.id) 
         : data;
@@ -65,6 +65,7 @@ export function SuccessStories({ data = [] }: { data?: any[] }) {
     } : null;
 
     const secondaryStories = secondaryStoriesRaw.map((s: any) => ({
+        id: s.id,
         clientName: s.clientName,
         company: s.companyName,
         quote: s.testimonial,
@@ -81,8 +82,11 @@ export function SuccessStories({ data = [] }: { data?: any[] }) {
     } | null>(null);
 
     return (
-        <SectionWrapper id="success-stories" className="bg-[#EDF5F2] overflow-hidden">
-            <Container className="space-y-12 lg:space-y-16">
+        <SectionWrapper id="success-stories" className="bg-[#D8E8E2] overflow-hidden relative">
+            {/* Ambient Background Glows */}
+            <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-[#6B9F91]/10 rounded-full blur-3xl pointer-events-none" />
+
+            <Container className="space-y-12 lg:space-y-16 relative z-10">
 
                 {/* Section Header */}
                 <motion.div
@@ -98,31 +102,50 @@ export function SuccessStories({ data = [] }: { data?: any[] }) {
                     />
                 </motion.div>
 
-                {/* Main Grid Layout */}
-                <motion.div
-                    variants={entranceStagger}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, margin: "-100px" }}
-                    className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-6xl mx-auto perspective-1000"
-                >
-                    {/* === LEFT COLUMN (Featured Video Story) — only rendered when a video story exists === */}
-                    {finalFeaturedStory && (
-                        <div className={`${secondaryStories.length > 0 ? 'lg:col-span-2' : 'lg:col-span-3'} flex flex-col relative z-20 h-full`}>
+                {/* Main Dynamic Layout */}
+                {finalFeaturedStory ? (
+                    /* === LAYOUT A: Featured Video Story === */
+                    secondaryStories.length === 0 ? (
+                        /* Single Compact Video Centerpiece (~75% screen height budget) */
+                        <motion.div
+                            variants={entranceStagger}
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true, margin: "-100px" }}
+                            className="w-full max-w-3xl mx-auto flex flex-col relative z-20"
+                        >
                             <FeaturedVideoArea story={finalFeaturedStory} />
-                        </div>
-                    )}
+                        </motion.div>
+                    ) : (
+                        /* Video + Adjacent Carousel */
+                        <motion.div
+                            variants={entranceStagger}
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true, margin: "-100px" }}
+                            className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-5xl mx-auto items-stretch"
+                        >
+                            <div className="lg:col-span-2 flex flex-col relative z-20 h-full">
+                                <FeaturedVideoArea story={finalFeaturedStory} />
+                            </div>
 
-                    {/* === RIGHT COLUMN (Secondary Stories Carousel) === */}
-                    {secondaryStories.length > 0 && (
-                        <div className={`${finalFeaturedStory ? 'lg:col-span-1' : 'lg:col-span-3'} flex flex-col relative z-10 h-full`}>
-                            <SecondaryStoryCarousel stories={secondaryStories} onOpenModal={(story) => setActiveModalStory(story)} />
-                        </div>
-                    )}
-                </motion.div>
-
-                {/* Bottom CTA Block */}
-                <BottomCTA />
+                            <div className="lg:col-span-1 flex flex-col relative z-10 h-full">
+                                <SecondaryStoryCarousel stories={secondaryStories} onOpenModal={(story) => setActiveModalStory(story)} />
+                            </div>
+                        </motion.div>
+                    )
+                ) : (
+                    /* === LAYOUT B: Text Testimonials Multi-Card Showcase (Grid / Carousel) === */
+                    <motion.div
+                        variants={entranceStagger}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: "-100px" }}
+                        className="w-full max-w-6xl mx-auto"
+                    >
+                        <TestimonialsShowcase stories={secondaryStories} onOpenModal={(story) => setActiveModalStory(story)} />
+                    </motion.div>
+                )}
 
             </Container>
 
@@ -137,7 +160,7 @@ export function SuccessStories({ data = [] }: { data?: any[] }) {
 }
 
 // ============================================================================
-// MICRO-INTERACTION COMPONENTS
+// FEATURED VIDEO STORY COMPONENT
 // ============================================================================
 
 function FeaturedVideoArea({ story }: {
@@ -196,7 +219,7 @@ function FeaturedVideoArea({ story }: {
         y.set(0);
     }
 
-    // ── YouTube IFrame API state listener ──────────────────────────────────
+    // YouTube IFrame API state listener
     useEffect(() => {
         if (!story.youtubeUrl) return;
 
@@ -206,16 +229,12 @@ function FeaturedVideoArea({ story }: {
 
                 const msg = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
 
-                // 1 = PLAYING, 3 = BUFFERING (treat as playing to avoid flashing), 
-                // 2 = PAUSED, 0 = ENDED, -1 = UNSTARTED, 5 = CUED
                 if (msg?.event === 'onStateChange' && typeof msg.info === 'number') {
                     setIsPlaying(msg.info === 1 || msg.info === 3);
                 } else if (msg?.event === 'infoDelivery' && msg?.info?.playerState !== undefined) {
                     setIsPlaying(msg.info.playerState === 1 || msg.info.playerState === 3);
                 }
-            } catch {
-                // Ignore irrelevant/non-JSON messages safely
-            }
+            } catch { }
         }
 
         window.addEventListener('message', onMessage);
@@ -253,9 +272,9 @@ function FeaturedVideoArea({ story }: {
                 transformStyle: "preserve-3d"
             }}
             onClick={handleTogglePlay}
-            className={`relative w-full aspect-video bg-gray-100 rounded-2xl overflow-hidden flex flex-col items-center justify-center group shadow-[0_4px_20px_rgb(0,0,0,0.05)] ${isPlaying ? 'cursor-auto' : 'cursor-pointer'}`}
+            className={`relative w-full aspect-video bg-gray-950 rounded-3xl overflow-hidden flex flex-col items-center justify-center group shadow-2xl shadow-gray-400/30 border border-white/80 ${isPlaying ? 'cursor-auto' : 'cursor-pointer'}`}
         >
-            {/* Native HTML5 Video Element (shown only when no YouTube URL) */}
+            {/* Native HTML5 Video Element */}
             {!story.youtubeUrl && (
                 <video
                     ref={videoRef}
@@ -270,7 +289,7 @@ function FeaturedVideoArea({ story }: {
                 />
             )}
 
-            {/* YouTube iframe embed (shown only when youtubeUrl exists) */}
+            {/* YouTube iframe embed */}
             {story.youtubeUrl && videoId && (
                 <iframe
                     ref={iframeRef}
@@ -281,19 +300,18 @@ function FeaturedVideoArea({ story }: {
                     allowFullScreen
                     loading="lazy"
                     onLoad={(e) => {
-                        // Handshake: Tell the YouTube IFrame API to start dispatching state events to our window
                         try {
                             e.currentTarget.contentWindow?.postMessage(
                                 JSON.stringify({ event: 'listening', id: 1 }),
                                 '*'
                             );
-                        } catch (err) { }
+                        } catch { }
                     }}
                 />
             )}
 
-            {/* Ambient Thumbnail Overlay (Mockup background before play) */}
-            <div className={`absolute inset-0 pointer-events-none bg-gradient-to-tr from-gray-200/55 via-gray-100/45 to-[#E8F0EE]/55 z-10 transition-opacity duration-500 ${isPlaying ? 'opacity-0' : 'opacity-55'}`} />
+            {/* Thumbnail Overlay */}
+            <div className={`absolute inset-0 pointer-events-none bg-gradient-to-t from-black/75 via-black/25 to-black/30 z-10 transition-opacity duration-500 ${isPlaying ? 'opacity-0' : 'opacity-65'}`} />
             {resolvedThumbnail && (
                 <div className={`absolute inset-0 w-full h-full z-10 transition-opacity duration-500 ${isPlaying ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
                     <Image
@@ -307,12 +325,6 @@ function FeaturedVideoArea({ story }: {
                     />
                 </div>
             )}
-            <motion.div
-                className={`absolute inset-0 pointer-events-none bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-12 z-10 transition-opacity duration-500 ${isPlaying ? 'opacity-0' : 'opacity-100'}`}
-                animate={{ x: ["-200%", "200%"] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", repeatDelay: 4 }}
-            />
-            <div className={`absolute inset-0 pointer-events-none opacity-[0.03] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PHBhdGggZD0iTTAgMGg0MHY0MEgwek0yMCAyMGMxMS0xMSAxMS0xMSAxMS0xMSBMMSAxWiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMTExODI3IiBzdHJva2Utd2lkdGg9IjEuNSIvPjwvc3ZnPg==')] mix-blend-multiply z-10 transition-opacity duration-500 ${isPlaying ? 'opacity-0' : 'opacity-100'}`} />
 
             {/* Premium Play Button */}
             <motion.button
@@ -322,59 +334,61 @@ function FeaturedVideoArea({ story }: {
                     pointerEvents: isPlaying ? "none" : "auto"
                 }}
                 style={{ translateZ: 20 }}
-                className="relative z-20 w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/90 backdrop-blur-sm shadow-[0_8px_30px_rgb(107,159,145,0.2)] flex items-center justify-center text-[#6B9F91] transition-all duration-500 ease-out border border-white focus-visible:outline-none"
+                className="relative z-20 w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/95 backdrop-blur-md shadow-[0_10px_35px_rgba(0,0,0,0.3)] flex items-center justify-center text-[#1F3D35] group-hover:scale-110 group-hover:text-[#0F766E] transition-all duration-300 border-2 border-white"
                 aria-label="Play testimonial video"
             >
                 <Play className="w-6 h-6 md:w-8 md:h-8 ml-1 fill-current drop-shadow-sm" />
-
-                {/* Slow breathing pulse */}
                 <motion.div
-                    animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0, 0.5] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute inset-0 rounded-full border border-white pointer-events-none"
+                    animate={{ scale: [1, 1.25, 1], opacity: [0.6, 0, 0.6] }}
+                    transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+                    className="absolute inset-0 rounded-full border-2 border-white pointer-events-none"
                 />
             </motion.button>
 
-            {/* Static Teaser Panel - Extremely Compact */}
+            {/* Floating Glassmorphic Teaser Panel */}
             <motion.div
                 animate={{
                     opacity: isPlaying ? 0 : 1,
                     y: isPlaying ? 20 : 0,
                     pointerEvents: isPlaying ? "none" : "auto"
                 }}
-                transition={{ duration: 0.5, type: "spring", bounce: 0.15 }}
-                className="absolute inset-x-0 bottom-0 z-20 flex flex-col justify-end overflow-hidden border-t border-white/50 shadow-[0_-10px_40px_rgba(0,0,0,0.04)]"
+                transition={{ duration: 0.4 }}
+                className="absolute inset-x-3 bottom-3 md:inset-x-5 md:bottom-5 z-20 rounded-2xl overflow-hidden border border-white/60 shadow-2xl bg-white/95 backdrop-blur-xl p-4 md:p-5 text-left"
             >
-                <div
-                    className="absolute inset-0 z-0 backdrop-blur-xl"
-                    style={{ backgroundColor: "rgba(255, 255, 255, 0.42)" }}
-                />
-
-                <div className="relative z-10 flex flex-col w-full py-2 px-3 md:py-5 md:px-8 text-left">
-                    {/* Stars - hidden on mobile for compact overlay */}
-                    <div className="hidden md:flex gap-1 text-[#FFC900] mb-2">
+                <div className="flex items-center justify-between gap-2 mb-2">
+                    <div className="flex gap-1 text-[#FFC900]">
                         {[1, 2, 3, 4, 5].map((i) => (
-                            <Star key={i} className="w-4 h-4 fill-current" />
+                            <Star key={i} className="w-4 h-4 fill-current drop-shadow-xs" />
                         ))}
                     </div>
-                    <p className="font-medium text-[#111827] italic leading-tight text-[11px] md:text-sm line-clamp-1 md:line-clamp-2">
-                        "{story.quote}"
-                    </p>
+                    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[#0F766E] bg-[#D8E8E2] px-3 py-0.5 rounded-full uppercase tracking-wider">
+                        <CheckCircle2 className="w-3 h-3 text-[#0F766E]" />
+                        {story.company || "Client Story"}
+                    </span>
                 </div>
+                <p className="font-bold text-[#111827] italic leading-snug text-sm md:text-base line-clamp-1 md:line-clamp-2">
+                    &ldquo;{story.quote}&rdquo;
+                </p>
+                <p className="text-xs font-semibold text-[#4B5563] mt-1.5">
+                    — {story.clientName}
+                </p>
             </motion.div>
         </motion.div>
     );
 }
 
+// ============================================================================
+// SECONDARY STORY CAROUSEL (When video is present)
+// ============================================================================
+
 function SecondaryStoryCarousel({ stories, onOpenModal }: { stories: any[], onOpenModal: (story: any) => void }) {
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    // Automatic rotation
-    React.useEffect(() => {
-        if (!stories || stories.length === 0) return;
+    useEffect(() => {
+        if (!stories || stories.length <= 1) return;
         const timer = setInterval(() => {
             setCurrentIndex((prev) => (prev === stories.length - 1 ? 0 : prev + 1));
-        }, 3500);
+        }, 4500);
         return () => clearInterval(timer);
     }, [stories]);
 
@@ -382,123 +396,229 @@ function SecondaryStoryCarousel({ stories, onOpenModal }: { stories: any[], onOp
     const story = stories[currentIndex];
     const quote = story.testimonial || story.quote;
     const company = story.companyName || story.company;
-    const route = story.route || "/features";
+    const route = story.route || "/digital-solutions";
 
-    // Smooth horizontal slide variants
-    const slideVariants: Variants = {
-        initial: { x: 15, opacity: 0 },
-        animate: {
-            x: 0,
-            opacity: 1,
-            transition: { duration: 0.4, ease: "easeOut" }
-        },
-        exit: {
-            x: -15,
-            opacity: 0,
-            transition: { duration: 0.3, ease: "easeIn" }
-        }
+    const nextSlide = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setCurrentIndex((prev) => (prev === stories.length - 1 ? 0 : prev + 1));
+    };
+
+    const prevSlide = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setCurrentIndex((prev) => (prev === 0 ? stories.length - 1 : prev - 1));
     };
 
     return (
         <motion.div
             variants={fadeUpAnim}
-            role="button"
-            tabIndex={0}
-            onClick={() => onOpenModal({
-                clientName: story.clientName,
-                company,
-                quote,
-                route
-            })}
-            onKeyDown={(e: React.KeyboardEvent) => {
-                if (e.key === 'Enter' || e.key === 'Space') {
-                    e.preventDefault();
-                    onOpenModal({
-                        clientName: story.clientName,
-                        company,
-                        quote,
-                        route
-                    });
-                }
-            }}
-            className="cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2E544A] focus-visible:ring-offset-2 bg-white border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_15px_35px_rgb(107,159,145,0.06)] hover:border-[#2E544A]/20 rounded-2xl p-6 sm:p-8 lg:p-10 flex flex-col relative overflow-hidden w-full lg:h-full lg:absolute lg:inset-0"
-            // Desktop: absolute inset to match video container height. Mobile: natural height.
-            style={{ minHeight: '320px' }}
+            onClick={() => onOpenModal({ clientName: story.clientName, company, quote, route })}
+            className="cursor-pointer bg-white rounded-3xl border border-gray-100/90 shadow-xl shadow-gray-300/40 hover:shadow-2xl hover:border-[#6B9F91]/50 transition-all duration-300 p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden h-full min-h-[380px] group"
         >
-            {/* Subtle highlight glow on hover */}
-            <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-[#2E544A]/0 to-transparent group-hover:via-[#2E544A]/40 transition-all duration-700 ease-out" />
-
-            <div className="flex-1 relative flex flex-col h-full min-h-0">
-                <AnimatePresence mode="wait">
-                    <motion.div
-                        key={currentIndex}
-                        variants={slideVariants}
-                        initial="initial"
-                        animate="animate"
-                        exit="exit"
-                        className="flex flex-col h-full min-h-0"
-                    >
-                        {/* Rating - fixed at top */}
-                        <div className="flex gap-1 mb-6 text-[#FFC900] shrink-0">
-                            {[1, 2, 3, 4, 5].map((i) => (
-                                <Star key={i} className="w-5 h-5 fill-current" />
-                            ))}
-                        </div>
-
-                        {/* Quote area - permanently clamped to 4 lines */}
-                        <div className="flex-1 min-h-0 relative mb-2">
-                            <div className="h-full overflow-hidden">
-                                <p
-                                    className="text-lg lg:text-xl text-gray-700 font-medium italic leading-relaxed line-clamp-4"
-                                >
-                                    &ldquo;{quote}&rdquo;
-                                </p>
-                            </div>
-                        </div>
-
-                        {/* Action Area */}
-                        <div className="h-10 shrink-0 flex items-start">
+            {/* Top Bar with Stars & Chevrons */}
+            <div>
+                <div className="flex items-center justify-between mb-5">
+                    <div className="flex gap-1 text-[#FFC900]">
+                        {[1, 2, 3, 4, 5].map((i) => (
+                            <Star key={i} className="w-4 h-4 fill-current drop-shadow-xs" />
+                        ))}
+                    </div>
+                    {stories.length > 1 && (
+                        <div className="flex items-center gap-1.5 z-10" onClick={(e) => e.stopPropagation()}>
                             <button
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    onOpenModal({
-                                        clientName: story.clientName,
-                                        company,
-                                        quote,
-                                        route
-                                    });
-                                }}
-                                className="text-sm font-bold text-[#1F3D35] hover:text-[#11221E] flex items-center group/read transition-colors focus-visible:outline-none"
+                                onClick={prevSlide}
+                                aria-label="Previous story"
+                                className="w-8 h-8 rounded-full bg-[#D8E8E2]/60 hover:bg-[#D8E8E2] text-[#1F3D35] flex items-center justify-center transition-colors shadow-xs"
                             >
-                                Read Full Story
-                                <ArrowRight className="w-3.5 h-3.5 ml-1 transition-transform group-hover/read:translate-x-1" />
+                                <ChevronLeft className="w-4 h-4" />
+                            </button>
+                            <button
+                                onClick={nextSlide}
+                                aria-label="Next story"
+                                className="w-8 h-8 rounded-full bg-[#D8E8E2]/60 hover:bg-[#D8E8E2] text-[#1F3D35] flex items-center justify-center transition-colors shadow-xs"
+                            >
+                                <ChevronRight className="w-4 h-4" />
                             </button>
                         </div>
+                    )}
+                </div>
 
-                        {/* Profile Info block - fixed at bottom */}
-                        <div className="flex items-center gap-4 border-t border-gray-100 pt-6 shrink-0 mt-auto">
-                            <div className="w-12 h-12 shrink-0 rounded-full bg-gradient-to-tr from-gray-200 to-gray-100 p-[2px]">
-                                {story.thumbnailUrl ? (
-                                    <div className="relative w-full h-full rounded-full overflow-hidden">
-                                        <Image src={story.thumbnailUrl} alt="" fill sizes="48px" className="object-cover" loading="lazy" />
-                                    </div>
-                                ) : (
-                                    <div className="w-full h-full bg-white rounded-full flex items-center justify-center">
-                                        <span className="text-gray-500 font-bold">{story.clientName?.charAt(0)}</span>
-                                    </div>
-                                )}
-                            </div>
-                            <div>
-                                <p className="font-bold text-[#111827] text-base">{story.clientName}</p>
-                                <p className="text-sm font-semibold text-[#6B9F91] uppercase tracking-wider mt-0.5">
-                                    {route.replace('/', '')}
-                                </p>
-                            </div>
+                {/* Quote Content */}
+                <div className="relative mb-5">
+                    <Quote className="w-9 h-9 text-[#6B9F91]/25 mb-3 -scale-x-100" />
+                    <AnimatePresence mode="wait">
+                        <motion.p
+                            key={currentIndex}
+                            initial={{ opacity: 0, y: 8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -8 }}
+                            transition={{ duration: 0.3 }}
+                            className="text-base sm:text-lg text-[#111827] font-semibold italic leading-relaxed line-clamp-4"
+                        >
+                            &ldquo;{quote}&rdquo;
+                        </motion.p>
+                    </AnimatePresence>
+                </div>
+
+                <div className="pt-2">
+                    <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#1F3D35] bg-[#D8E8E2]/60 group-hover:bg-[#D8E8E2] group-hover:text-[#0F766E] px-3 py-1.5 rounded-lg transition-all">
+                        Read Full Story
+                        <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                    </span>
+                </div>
+            </div>
+
+            {/* Author Footer */}
+            <div className="flex items-center gap-4 pt-5 border-t border-gray-100 mt-6">
+                <div className="w-12 h-12 shrink-0 rounded-full bg-gradient-to-tr from-[#6B9F91] to-[#D8E8E2] p-0.5 shadow-sm">
+                    {story.thumbnailUrl ? (
+                        <div className="relative w-full h-full rounded-full overflow-hidden">
+                            <Image src={story.thumbnailUrl} alt={story.clientName} fill sizes="48px" className="object-cover" />
                         </div>
-                    </motion.div>
-                </AnimatePresence>
+                    ) : (
+                        <div className="w-full h-full bg-white rounded-full flex items-center justify-center text-[#1F3D35] font-extrabold text-base">
+                            {story.clientName?.charAt(0) || "C"}
+                        </div>
+                    )}
+                </div>
+                <div className="min-w-0 flex-1">
+                    <p className="font-bold text-[#111827] text-base truncate">{story.clientName}</p>
+                    <p className="text-xs font-bold text-[#0F766E] truncate uppercase tracking-wider">
+                        {company || "Partner Client"}
+                    </p>
+                </div>
             </div>
         </motion.div>
+    );
+}
+
+// ============================================================================
+// TESTIMONIALS SHOWCASE (When NO video exists - Dynamic Multi-Card Grid / Carousel)
+// ============================================================================
+
+function TestimonialsShowcase({ stories, onOpenModal }: { stories: any[], onOpenModal: (story: any) => void }) {
+    const [pageIndex, setPageIndex] = useState(0);
+    const isMultiPage = stories.length > 3;
+    const itemsPerPage = 3;
+    const totalPages = Math.ceil(stories.length / itemsPerPage);
+
+    const displayedStories = isMultiPage 
+        ? stories.slice(pageIndex * itemsPerPage, (pageIndex + 1) * itemsPerPage)
+        : stories;
+
+    const gridCols = stories.length === 1 
+        ? 'grid-cols-1 max-w-xl mx-auto' 
+        : stories.length === 2 
+        ? 'grid-cols-1 md:grid-cols-2 max-w-4xl mx-auto' 
+        : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3';
+
+    return (
+        <div className="space-y-8">
+            <div className={`grid ${gridCols} gap-6 sm:gap-7`}>
+                <AnimatePresence mode="wait">
+                    {displayedStories.map((story, idx) => (
+                        <motion.div
+                            key={story.id || idx}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
+                            transition={{ duration: 0.4, delay: idx * 0.08 }}
+                            onClick={() => onOpenModal({
+                                clientName: story.clientName,
+                                company: story.company,
+                                quote: story.quote,
+                                route: story.route
+                            })}
+                            className="cursor-pointer bg-white rounded-3xl p-7 sm:p-8 border border-gray-100/90 shadow-lg shadow-gray-200/60 hover:shadow-2xl hover:border-[#6B9F91]/50 transition-all duration-300 flex flex-col justify-between group transform-gpu hover:-translate-y-1.5"
+                        >
+                            <div>
+                                {/* Rating Stars & Verified Badge */}
+                                <div className="flex items-center justify-between mb-4">
+                                    <div className="flex gap-1 text-[#FFC900]">
+                                        {[1, 2, 3, 4, 5].map((i) => (
+                                            <Star key={i} className="w-4 h-4 fill-current drop-shadow-xs" />
+                                        ))}
+                                    </div>
+                                    <span className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider text-[#0F766E] bg-[#D8E8E2] px-3 py-0.5 rounded-full shadow-xs">
+                                        <CheckCircle2 className="w-3 h-3 text-[#0F766E]" />
+                                        Verified
+                                    </span>
+                                </div>
+
+                                <Quote className="w-8 h-8 text-[#6B9F91]/25 mb-3 -scale-x-100" />
+
+                                <p className="text-base sm:text-lg text-[#111827] font-semibold italic leading-relaxed line-clamp-4 mb-5">
+                                    &ldquo;{story.quote}&rdquo;
+                                </p>
+
+                                <div className="mb-6">
+                                    <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#1F3D35] bg-[#D8E8E2]/60 group-hover:bg-[#D8E8E2] group-hover:text-[#0F766E] px-3 py-1.5 rounded-lg transition-all">
+                                        Read Full Story
+                                        <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                                    </span>
+                                </div>
+                            </div>
+
+                            {/* Author Row */}
+                            <div className="flex items-center gap-4 pt-5 border-t border-gray-100">
+                                <div className="w-12 h-12 shrink-0 rounded-full bg-gradient-to-tr from-[#6B9F91] to-[#D8E8E2] p-0.5 shadow-sm">
+                                    {story.thumbnailUrl ? (
+                                        <div className="relative w-full h-full rounded-full overflow-hidden">
+                                            <Image src={story.thumbnailUrl} alt={story.clientName} fill sizes="48px" className="object-cover" />
+                                        </div>
+                                    ) : (
+                                        <div className="w-full h-full bg-white rounded-full flex items-center justify-center text-[#1F3D35] font-extrabold text-base">
+                                            {story.clientName?.charAt(0) || "C"}
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                    <p className="font-bold text-[#111827] text-base truncate">{story.clientName}</p>
+                                    <p className="text-xs font-bold text-[#0F766E] truncate uppercase tracking-wider">
+                                        {story.company || "Client Partner"}
+                                    </p>
+                                </div>
+                            </div>
+                        </motion.div>
+                    ))}
+                </AnimatePresence>
+            </div>
+
+            {/* Pagination Controls for > 3 stories */}
+            {isMultiPage && (
+                <div className="flex items-center justify-center gap-3 pt-4">
+                    <button
+                        onClick={() => setPageIndex((prev) => Math.max(0, prev - 1))}
+                        disabled={pageIndex === 0}
+                        className="p-3 rounded-full bg-white shadow-sm border border-gray-200 text-gray-700 disabled:opacity-30 hover:bg-[#D8E8E2] transition-colors"
+                        aria-label="Previous testimonials"
+                    >
+                        <ChevronLeft className="w-4 h-4" />
+                    </button>
+
+                    <div className="flex items-center gap-1.5">
+                        {Array.from({ length: totalPages }).map((_, i) => (
+                            <button
+                                key={i}
+                                onClick={() => setPageIndex(i)}
+                                className={`h-2.5 rounded-full transition-all duration-300 ${
+                                    pageIndex === i ? 'w-8 bg-[#0F766E]' : 'w-2.5 bg-gray-300 hover:bg-gray-400'
+                                }`}
+                                aria-label={`Go to page ${i + 1}`}
+                            />
+                        ))}
+                    </div>
+
+                    <button
+                        onClick={() => setPageIndex((prev) => Math.min(totalPages - 1, prev + 1))}
+                        disabled={pageIndex === totalPages - 1}
+                        className="p-3 rounded-full bg-white shadow-sm border border-gray-200 text-gray-700 disabled:opacity-30 hover:bg-[#D8E8E2] transition-colors"
+                        aria-label="Next testimonials"
+                    >
+                        <ChevronRight className="w-4 h-4" />
+                    </button>
+                </div>
+            )}
+        </div>
     );
 }
 
@@ -507,8 +627,7 @@ function SecondaryStoryCarousel({ stories, onOpenModal }: { stories: any[], onOp
 // ============================================================================
 
 function StoryModal({ story, onClose }: { story: any, onClose: () => void }) {
-    // Lock body scroll when modal opens
-    React.useEffect(() => {
+    useEffect(() => {
         document.body.style.overflow = 'hidden';
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === 'Escape') onClose();
@@ -522,98 +641,61 @@ function StoryModal({ story, onClose }: { story: any, onClose: () => void }) {
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center px-4 sm:px-6">
-            {/* Backdrop */}
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={onClose}
-                className="absolute inset-0 bg-gray-900/40 backdrop-blur-sm transition-opacity"
+                className="absolute inset-0 bg-gray-950/65 backdrop-blur-md transition-opacity"
             />
 
-            {/* Modal Dialog */}
             <motion.div
-                initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                initial={{ opacity: 0, scale: 0.94, y: 15 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                exit={{ opacity: 0, scale: 0.94, y: 15 }}
                 transition={{ duration: 0.3, ease: [0.21, 0.47, 0.32, 0.98] }}
-                className="relative w-full max-w-2xl bg-white/95 backdrop-blur-xl border border-gray-100 shadow-2xl rounded-3xl overflow-hidden flex flex-col max-h-[80vh]"
+                className="relative w-full max-w-2xl bg-white border border-gray-100 shadow-2xl rounded-3xl overflow-hidden flex flex-col max-h-[85vh] z-10"
             >
-                {/* Close Button */}
                 <button
                     onClick={onClose}
-                    className="absolute top-4 right-4 md:top-6 md:right-6 w-10 h-10 bg-gray-100 hover:bg-gray-200 text-gray-500 hover:text-gray-900 rounded-full flex items-center justify-center transition-colors z-10 focus-visible:outline-none"
+                    className="absolute top-4 right-4 md:top-5 md:right-5 w-10 h-10 bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-900 rounded-full flex items-center justify-center transition-colors z-20 focus-visible:outline-none"
                     aria-label="Close modal"
                 >
                     <X className="w-5 h-5" />
                 </button>
 
-                {/* Scrollable Content Area */}
                 <div
-                    className="overflow-y-auto px-6 py-8 md:px-10 md:py-12 flex flex-col h-full [&::-webkit-scrollbar]:hidden"
+                    className="overflow-y-auto p-6 sm:p-8 md:p-10 flex flex-col h-full [&::-webkit-scrollbar]:hidden"
                     style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
                 >
-                    <div className="flex gap-1 mb-8 text-[#FFC900] shrink-0">
+                    <div className="flex items-center gap-1.5 text-[#FFC900] mb-6">
                         {[1, 2, 3, 4, 5].map((i) => (
-                            <Star key={i} className="w-6 h-6 fill-current drop-shadow-sm" />
+                            <Star key={i} className="w-5 h-5 fill-current drop-shadow-xs" />
                         ))}
                     </div>
 
-                    <div className="relative mb-12">
-                        {/* Large faded quote mark decorative */}
-                        <Quote className="absolute -top-4 -left-4 w-12 h-12 text-[#6B9F91]/10 transform -scale-x-100 pointer-events-none" />
-                        <p className="relative z-10 text-xl md:text-2xl lg:text-[28px] text-gray-800 font-medium italic leading-relaxed md:leading-[1.6]">
+                    <div className="relative mb-8">
+                        <Quote className="w-10 h-10 text-[#6B9F91]/20 mb-3 -scale-x-100" />
+                        <p className="relative z-10 text-lg sm:text-xl md:text-2xl text-[#111827] font-semibold italic leading-relaxed">
                             &ldquo;{story.quote}&rdquo;
                         </p>
                     </div>
 
-                    <div className="flex items-center gap-5 border-t border-gray-100 pt-6 mt-auto shrink-0">
-                        <div className="w-14 h-14 shrink-0 rounded-full bg-gradient-to-tr from-gray-200 to-gray-100 p-[2px]">
-                            <div className="w-full h-full bg-white rounded-full flex items-center justify-center">
-                                <span className="text-gray-500 font-bold text-lg">{story.clientName.charAt(0)}</span>
+                    <div className="flex items-center gap-4 border-t border-gray-100 pt-6 mt-auto shrink-0">
+                        <div className="w-14 h-14 shrink-0 rounded-full bg-gradient-to-tr from-[#6B9F91] to-[#D8E8E2] p-0.5 shadow-sm">
+                            <div className="w-full h-full bg-white rounded-full flex items-center justify-center text-[#1F3D35] font-extrabold text-lg">
+                                {story.clientName?.charAt(0) || "C"}
                             </div>
                         </div>
                         <div>
                             <p className="font-bold text-[#111827] text-lg">{story.clientName}</p>
-                            <p className="text-sm font-bold text-[#6B9F91] uppercase tracking-wider mt-0.5">
-                                {story.route.replace('/', '')} | {story.company}
+                            <p className="text-xs font-bold text-[#0F766E] uppercase tracking-wider mt-0.5">
+                                {story.company || "Client Partner"}
                             </p>
                         </div>
                     </div>
                 </div>
             </motion.div>
         </div>
-    );
-}
-
-function BottomCTA() {
-    return (
-        <motion.div
-            variants={fadeUpAnim}
-            className="flex flex-col items-center justify-center text-center pt-8 lg:pt-10"
-        >
-            <div className="relative bg-white border border-gray-100 rounded-[2rem] p-6 sm:p-8 md:p-12 lg:p-16 w-full max-w-4xl mx-auto flex flex-col items-center shadow-[0_8px_40px_rgb(0,0,0,0.03)] overflow-hidden group">
-
-                {/* Ambient Soft Glow Background */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[#6B9F91]/5 blur-3xl rounded-full opacity-50 group-hover:opacity-100 transition-opacity duration-1000" />
-
-                {/* Very subtle floating dust particles */}
-                <motion.div animate={{ y: [0, -10, 0], opacity: [0, 0.5, 0] }} transition={{ duration: 4, repeat: Infinity }} className="absolute top-[20%] left-[20%] w-1.5 h-1.5 rounded-full bg-[#6B9F91]/30 blur-[1px]" />
-                <motion.div animate={{ y: [0, 10, 0], opacity: [0, 0.4, 0] }} transition={{ duration: 5, repeat: Infinity, delay: 1 }} className="absolute bottom-[20%] right-[25%] w-2 h-2 rounded-full bg-[#6B9F91]/20 blur-[1px]" />
-
-                <h3 className="relative z-10 text-3xl md:text-4xl font-bold text-gray-900 mb-8 max-w-2xl tracking-tight">
-                    Ready to build your next digital success story?
-                </h3>
-
-                <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }}>
-                    <Button asChild size="lg" className="relative z-10 w-full sm:w-auto min-w-[220px] whitespace-nowrap shadow-xl shadow-[#6B9F91]/20 hover:shadow-[#6B9F91]/40 bg-[#6B9F91] text-white hover:bg-[#5C8C80] transition-all duration-300">
-                        <Link href="/contact" className="group/btn">
-                            Start Your Project
-                            <ArrowRight className="ml-2 w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                        </Link>
-                    </Button>
-                </motion.div>
-            </div>
-        </motion.div>
     );
 }

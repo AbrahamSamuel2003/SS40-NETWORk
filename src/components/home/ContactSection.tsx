@@ -63,7 +63,7 @@ export function ContactSection({ config }: { config?: SiteConfigData | null }) {
     };
 
     return (
-        <SectionWrapper id="contact" className="bg-[#EDF5F2]">
+        <SectionWrapper id="contact" className="bg-[#D8E8E2]">
             <Container className="space-y-12 lg:space-y-16">
 
                 {/* Section Header */}
@@ -229,23 +229,23 @@ export function ContactSection({ config }: { config?: SiteConfigData | null }) {
                     </div>
                 </div>
 
-                {/* WhatsApp CTA Card (Centered below columns) */}
+                {/* WhatsApp CTA Card (Centered below columns - Optimized Performance) */}
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 15 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-50px" }}
-                    transition={{ delay: 0.4 }}
-                    className="w-full lg:w-[60%] mx-auto mt-8 lg:mt-12 bg-[var(--color-hero)]/30 border border-[var(--color-primary)]/20 rounded-2xl p-6 md:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 overflow-hidden relative"
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
+                    className="w-full lg:w-[60%] mx-auto mt-8 lg:mt-12 bg-white/80 backdrop-blur-md border border-[#0F766E]/20 rounded-2xl p-6 md:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 overflow-hidden relative shadow-sm transform-gpu"
                 >
                     <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
-                        <MessageCircle className="w-24 h-24 text-[var(--color-primary)]" />
+                        <MessageCircle className="w-24 h-24 text-[#0F766E]" />
                     </div>
                     <div className="relative z-10 text-center sm:text-left">
-                        <h4 className="text-lg font-bold text-[var(--color-heading)] mb-1">Need a quicker response?</h4>
-                        <p className="text-sm text-[var(--color-body-text)]">Our support team is active on WhatsApp.</p>
+                        <h4 className="text-lg font-bold text-[#0F172A] mb-1">Need a quicker response?</h4>
+                        <p className="text-sm text-[#334155]">Our support team is active on WhatsApp.</p>
                     </div>
-                    <Button asChild className="relative z-10 whitespace-nowrap bg-[#25D366] hover:bg-[#128C7E] text-white border-[#25D366] hover:border-[#128C7E] shadow-lg shadow-[#25D366]/20 group">
-                        <a href="https://wa.me/918300591750" target="_blank" rel="noopener noreferrer">
+                    <Button asChild className="relative z-10 whitespace-nowrap bg-[#25D366] hover:bg-[#128C7E] text-white border-[#25D366] hover:border-[#128C7E] shadow-lg shadow-[#25D366]/20 group transition-transform hover:scale-105 active:scale-95">
+                        <a href={config?.whatsappNumber ? `https://wa.me/${config.whatsappNumber.replace(/\D/g, '')}` : "https://wa.me/918300591750"} target="_blank" rel="noopener noreferrer">
                             <MessageCircle className="mr-2 w-5 h-5 fill-current" />
                             Chat on WhatsApp
                         </a>

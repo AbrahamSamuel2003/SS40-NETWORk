@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import * as React from 'react';
 import { Save, AlertCircle, CheckCircle2, Upload, Trash2, Image as ImageIcon } from 'lucide-react';
@@ -362,9 +362,9 @@ export default function SiteConfigPage() {
                         <div>
                             <label className="block text-sm font-medium text-[#374151] mb-2">Upload Company Logo</label>
                             {config.uploadedLogoUrl ? (
-                                <div className="flex items-center gap-4 bg-[#EDF5F2]/70 border border-gray-200 rounded-lg p-4">
+                                <div className="flex items-center gap-4 bg-[#D8E8E2]/70 border border-gray-200 rounded-lg p-4">
                                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                                    <img src={config.uploadedLogoUrl} alt="Uploaded Logo" className="h-12 w-auto object-contain bg-[#EDF5F2] rounded" />
+                                    <img src={config.uploadedLogoUrl} alt="Uploaded Logo" className="h-12 w-auto object-contain bg-[#D8E8E2] rounded" />
                                     <div className="flex-1 text-sm text-[#6B7280]">
                                         Using uploaded logo. (Takes priority over URL)
                                     </div>
@@ -378,7 +378,7 @@ export default function SiteConfigPage() {
                                     </button>
                                 </div>
                             ) : (
-                                <div className="border border-dashed border-gray-200/20 rounded-lg p-6 bg-[#EDF5F2]/70 flex flex-col items-center justify-center text-center">
+                                <div className="border border-dashed border-gray-200/20 rounded-lg p-6 bg-[#D8E8E2]/70 flex flex-col items-center justify-center text-center">
                                     <div className="flex flex-wrap gap-4 justify-center">
                                         <div>
                                             <input
@@ -390,7 +390,7 @@ export default function SiteConfigPage() {
                                             />
                                             <label
                                                 htmlFor="logo-upload-input"
-                                                className={`cursor-pointer inline-flex items-center gap-2 px-4 py-2 ${isUploadingLogo ? 'bg-[#EDF5F2] text-[#6B7280]' : 'bg-[#6B9F91] text-[#111827] hover:bg-[#5C8C80]'} rounded-lg transition-colors font-medium text-sm`}
+                                                className={`cursor-pointer inline-flex items-center gap-2 px-4 py-2 ${isUploadingLogo ? 'bg-[#D8E8E2] text-[#6B7280]' : 'bg-[#6B9F91] text-[#111827] hover:bg-[#5C8C80]'} rounded-lg transition-colors font-medium text-sm`}
                                             >
                                                 {isUploadingLogo ? (
                                                     <>
@@ -408,7 +408,7 @@ export default function SiteConfigPage() {
                                         <button
                                             type="button"
                                             onClick={() => setIsMediaSelectorOpen(true)}
-                                            className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-[#EDF5F2] text-[#111827] hover:bg-[#E5F0EC] border border-[#6B9F91]/20 rounded-lg transition-colors font-medium text-sm"
+                                            className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-[#D8E8E2] text-[#111827] hover:bg-[#E5F0EC] border border-[#6B9F91]/20 rounded-lg transition-colors font-medium text-sm"
                                         >
                                             <ImageIcon className="w-4 h-4 text-[#6B9F91]" /> Select from Media
                                         </button>

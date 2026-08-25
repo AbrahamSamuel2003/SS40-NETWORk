@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, CheckCircle2, AlertCircle, Upload, X, Film, Image as ImageIcon, Sparkles, Star } from 'lucide-react';
@@ -208,7 +208,7 @@ export default function StudentImpactsPage() {
                                     </div>
                                     <p className="text-[#6B7280] text-xs leading-snug line-clamp-1">{imp.academicRoute} · {imp.designation}</p>
                                     <div className="mt-auto pt-1 flex items-center justify-between">
-                                        <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-semibold ${imp.isActive ? 'bg-[#6B9F91]/10 text-[#6B9F91] border border-[#6B9F91]/20' : 'bg-[#EDF5F2]/70 text-[#9CA3AF]'}`}>• {imp.isActive ? 'ACTIVE' : 'INACTIVE'}</span>
+                                        <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-semibold ${imp.isActive ? 'bg-[#6B9F91]/10 text-[#6B9F91] border border-[#6B9F91]/20' : 'bg-[#D8E8E2]/70 text-[#9CA3AF]'}`}>• {imp.isActive ? 'ACTIVE' : 'INACTIVE'}</span>
                                         <button onClick={() => handleDelete(imp.id)} className="text-[#B91C1C]/50 hover:text-[#B91C1C] p-1">
                                             <Trash2 className="w-3.5 h-3.5" />
                                         </button>
@@ -222,7 +222,7 @@ export default function StudentImpactsPage() {
                 {/* ── DESKTOP TABLE (hidden on mobile) ── */}
                 <div className="hidden sm:block overflow-x-auto w-full touch-auto">
                     <table className="w-full text-left text-sm text-[#374151] min-w-[600px]">
-                        <thead className="bg-[#EDF5F2]/70 border-b border-gray-200 text-[#111827]">
+                        <thead className="bg-[#D8E8E2]/70 border-b border-gray-200 text-[#111827]">
                             <tr>
                                 <th className="p-4 font-medium min-w-[150px]">Student Name</th>
                                 <th className="p-4 font-medium min-w-[150px] hidden sm:table-cell">Route / Designation</th>
@@ -239,7 +239,7 @@ export default function StudentImpactsPage() {
                                 </tr>
                             ) : (
                                 impacts.map(imp => (
-                                    <tr key={imp.id} className="hover:bg-[#EDF5F2]/50 transition-colors">
+                                    <tr key={imp.id} className="hover:bg-[#D8E8E2]/50 transition-colors">
                                         <td className="p-4 font-medium">{imp.studentName}</td>
                                         <td className="p-4 text-[#6B7280] hidden sm:table-cell">{imp.academicRoute} <span className="opacity-50">· {imp.designation}</span></td>
                                         <td className="p-4 hidden md:table-cell">
@@ -258,14 +258,14 @@ export default function StudentImpactsPage() {
                                                     <CheckCircle2 className="w-3 h-3" /> ACTIVE
                                                 </span>
                                             ) : (
-                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#EDF5F2]/70 text-[#9CA3AF]">
+                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#D8E8E2]/70 text-[#9CA3AF]">
                                                     INACTIVE
                                                 </span>
                                             )}
                                         </td>
                                         <td className="p-3">
                                             <div className="flex flex-col xl:flex-row gap-1.5 justify-end ml-auto shrink-0">
-                                                <button onClick={() => handleOpenModal(imp)} className="px-3 py-1 rounded border border-gray-300 text-[#374151] text-xs font-medium hover:bg-[#EDF5F2]/70 hover:border-[#6B9F91] transition-colors whitespace-nowrap">Edit</button>
+                                                <button onClick={() => handleOpenModal(imp)} className="px-3 py-1 rounded border border-gray-300 text-[#374151] text-xs font-medium hover:bg-[#D8E8E2]/70 hover:border-[#6B9F91] transition-colors whitespace-nowrap">Edit</button>
                                                 <button onClick={() => handleDelete(imp.id)} className="px-3 py-1 rounded border border-[#FCA5A5] text-[#B91C1C] text-xs font-medium hover:bg-red-50 transition-colors whitespace-nowrap">Delete</button>
                                             </div>
                                         </td>
@@ -338,11 +338,11 @@ export default function StudentImpactsPage() {
                                         )}
                                         
                                         <div className="flex flex-wrap gap-3">
-                                            <label className={`cursor-pointer bg-[#EDF5F2]/70 hover:bg-[#EDF5F2] text-[#111827] px-4 py-2.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${isUploadingMedia ? 'opacity-50 pointer-events-none' : ''}`}>
+                                            <label className={`cursor-pointer bg-[#D8E8E2]/70 hover:bg-[#D8E8E2] text-[#111827] px-4 py-2.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${isUploadingMedia ? 'opacity-50 pointer-events-none' : ''}`}>
                                                 <Upload className="w-4 h-4" /> {isUploadingMedia ? 'Uploading...' : 'Upload Local File'}
                                                 <input type="file" accept="video/mp4,video/webm" onChange={handleUploadMedia} className="hidden" disabled={isUploadingMedia} />
                                             </label>
-                                            <button type="button" onClick={() => setIsMediaSelectorOpen(true)} className="cursor-pointer bg-[#EDF5F2]/70 hover:bg-[#EDF5F2] text-[#111827] px-4 py-2.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+                                            <button type="button" onClick={() => setIsMediaSelectorOpen(true)} className="cursor-pointer bg-[#D8E8E2]/70 hover:bg-[#D8E8E2] text-[#111827] px-4 py-2.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
                                                 <ImageIcon className="w-4 h-4 text-[#6B9F91]" /> Select from Media
                                             </button>
                                         </div>
@@ -361,7 +361,7 @@ export default function StudentImpactsPage() {
                                     <label className="flex items-center gap-3 cursor-pointer group">
                                         <div className="relative">
                                             <input type="checkbox" checked={isActive} onChange={e => setIsActive(e.target.checked)} className="sr-only" />
-                                            <div className={`w-10 h-6 rounded-full transition-colors ${isActive ? 'bg-[#6B9F91]' : 'bg-[#EDF5F2] group-hover:bg-[#EDF5F2]'}`}></div>
+                                            <div className={`w-10 h-6 rounded-full transition-colors ${isActive ? 'bg-[#6B9F91]' : 'bg-[#D8E8E2] group-hover:bg-[#D8E8E2]'}`}></div>
                                             <div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${isActive ? 'translate-x-4' : 'translate-x-0'}`}></div>
                                         </div>
                                         <span className="text-sm font-medium text-[#374151]">Active</span>
@@ -370,7 +370,7 @@ export default function StudentImpactsPage() {
                                     <label className="flex items-center gap-3 cursor-pointer group">
                                         <div className="relative">
                                             <input type="checkbox" checked={isFeatured} onChange={e => setIsFeatured(e.target.checked)} className="sr-only" />
-                                            <div className={`w-10 h-6 rounded-full transition-colors ${isFeatured ? 'bg-amber-500' : 'bg-[#EDF5F2] group-hover:bg-[#EDF5F2]'}`}></div>
+                                            <div className={`w-10 h-6 rounded-full transition-colors ${isFeatured ? 'bg-amber-500' : 'bg-[#D8E8E2] group-hover:bg-[#D8E8E2]'}`}></div>
                                             <div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${isFeatured ? 'translate-x-4' : 'translate-x-0'}`}></div>
                                         </div>
                                         <span className="text-sm font-medium text-[#374151]">Featured (Large Card w/ Video)</span>
@@ -379,8 +379,8 @@ export default function StudentImpactsPage() {
                             </form>
                         </div>
 
-                        <div className="p-5 border-t border-gray-200 bg-[#EDF5F2]/70 flex justify-end gap-3 shrink-0">
-                            <button type="button" onClick={handleCloseModal} className="px-4 py-2 rounded-lg text-[#6B7280] hover:text-[#111827] hover:bg-[#EDF5F2]/70 font-medium transition-colors">Cancel</button>
+                        <div className="p-5 border-t border-gray-200 bg-[#D8E8E2]/70 flex justify-end gap-3 shrink-0">
+                            <button type="button" onClick={handleCloseModal} className="px-4 py-2 rounded-lg text-[#6B7280] hover:text-[#111827] hover:bg-[#D8E8E2]/70 font-medium transition-colors">Cancel</button>
                             <button form="impForm" type="submit" disabled={isSaving} className="bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-6 py-2 rounded-lg font-medium transition-colors disabled:opacity-50">
                                 {isSaving ? 'Saving...' : 'Save Impact'}
                             </button>

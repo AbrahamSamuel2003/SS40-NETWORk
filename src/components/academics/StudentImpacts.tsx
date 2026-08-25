@@ -19,12 +19,13 @@ interface StudentImpactsProps {
 export function StudentImpacts({ impacts = [] }: StudentImpactsProps) {
     if (!impacts || impacts.length === 0) {
         return (
-            <SectionWrapper id="student-impact" className="bg-[#EDF5F2] overflow-hidden">
+            <SectionWrapper id="student-impact" className="bg-[#D8E8E2] overflow-hidden">
                 <Container className="space-y-12 lg:space-y-16">
                     <div>
                         <SectionHeading
                             badge="Student Impact"
-                            title="From Learning to Professional Success."
+                            title="From Learning to Professional Success"
+                            highlight="Professional Success"
                             description="Discover how our students build practical skills, complete real-world projects, and prepare for successful careers through hands-on architecture."
                         />
                     </div>
@@ -62,7 +63,7 @@ export function StudentImpacts({ impacts = [] }: StudentImpactsProps) {
     } | null>(null);
 
     return (
-        <SectionWrapper id="student-impact" className="bg-[#EDF5F2] overflow-hidden">
+        <SectionWrapper id="student-impact" className="bg-[#D8E8E2] overflow-hidden">
             <Container className="space-y-12 lg:space-y-16">
 
                 {/* Section Header */}
@@ -74,7 +75,8 @@ export function StudentImpacts({ impacts = [] }: StudentImpactsProps) {
                 >
                     <SectionHeading
                         badge="Student Impact"
-                        title="From Learning to Professional Success."
+                        title="From Learning to Professional Success"
+                        highlight="Professional Success"
                         description="Discover how our students build practical skills, complete real-world projects, and prepare for successful careers through hands-on architecture."
                     />
                 </motion.div>

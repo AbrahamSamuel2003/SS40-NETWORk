@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import * as React from 'react';
 import { AdminSidebar } from './AdminSidebar';
@@ -14,7 +14,7 @@ export const AdminLayoutClient = React.memo(function AdminLayoutClient({
     const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
 
     return (
-        <div className="min-h-screen bg-[#EDF5F2] flex font-sans selection:bg-[#6B9F91] selection:text-white">
+        <div className="min-h-screen bg-[#D8E8E2] flex font-sans selection:bg-[#6B9F91] selection:text-white">
             <AdminSidebar
                 adminName={adminName}
                 isOpen={isSidebarOpen}

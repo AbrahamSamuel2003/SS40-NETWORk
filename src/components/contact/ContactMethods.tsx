@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import type { ComponentType, CSSProperties } from "react";
 import { motion } from "framer-motion";
@@ -41,7 +41,7 @@ export function ContactMethods({ config }: { config?: SiteConfigData | null }) {
     ];
 
     return (
-        <SectionWrapper id="contact-methods" className="bg-[#EDF5F2] py-12 md:py-16">
+        <SectionWrapper id="contact-methods" className="bg-[#D8E8E2] py-12 md:py-16">
             <Container className="max-w-5xl mx-auto">
 
                 {/* SECTION HEADER */}

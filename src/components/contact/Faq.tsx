@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -37,7 +37,7 @@ export function Faq() {
     };
 
     return (
-        <SectionWrapper id="faq" className="bg-[#EDF5F2] py-12 md:py-16">
+        <SectionWrapper id="faq" className="bg-[#D8E8E2] py-12 md:py-16">
             <Container className="max-w-4xl mx-auto flex flex-col items-center">
 
                 <div className="text-center mb-10">
@@ -65,7 +65,7 @@ export function Faq() {
                                     <span className={`font-bold text-base md:text-lg transition-colors pr-8 ${isOpen ? 'text-[#6B9F91]' : 'text-[#111827]'}`}>
                                         {faq.question}
                                     </span>
-                                    <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-colors ${isOpen ? 'bg-[#6B9F91] text-white' : 'bg-[#EDF5F2] text-gray-400'}`}>
+                                    <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-colors ${isOpen ? 'bg-[#6B9F91] text-white' : 'bg-[#D8E8E2] text-gray-400'}`}>
                                         {isOpen ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                                     </div>
                                 </button>

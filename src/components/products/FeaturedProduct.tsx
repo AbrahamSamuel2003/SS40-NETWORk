@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -61,7 +61,7 @@ export function FeaturedProduct() {
 
     if (isLoading || products.length === 0) {
         return (
-            <SectionWrapper id="featured-product" className="bg-[#EDF5F2] scroll-mt-24">
+            <SectionWrapper id="featured-product" className="bg-[#D8E8E2] scroll-mt-24">
                 <Container className="space-y-12 lg:space-y-24">
                     {/* Section Header */}
                     <SectionHeading
@@ -82,7 +82,7 @@ export function FeaturedProduct() {
     }
 
     return (
-        <SectionWrapper id="featured-product" className="bg-[#EDF5F2] scroll-mt-24">
+        <SectionWrapper id="featured-product" className="bg-[#D8E8E2] scroll-mt-24">
             <Container className="space-y-12 lg:space-y-24">
                 {/* Section Header */}
                 <SectionHeading
@@ -250,7 +250,7 @@ export function FeaturedProduct() {
                                               <div className="w-12" /> {/* Spacer */}
                                           </div>
 
-                                          <div className="flex-grow flex items-center justify-center p-1 relative bg-gradient-to-tr from-[#E0F2FE] via-[#EDF5F2] to-[#CCFBF1] overflow-hidden">
+                                          <div className="flex-grow flex items-center justify-center p-1 relative bg-gradient-to-tr from-[#E0F2FE] via-[#D8E8E2] to-[#CCFBF1] overflow-hidden">
                                                {/* Light Sun/Halo glow */}
                                                <div className="absolute top-[-10%] right-[-10%] w-40 h-40 bg-[#99F6E4]/40 blur-[30px] rounded-full pointer-events-none" />
                                                

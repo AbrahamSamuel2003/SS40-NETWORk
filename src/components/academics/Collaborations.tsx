@@ -44,15 +44,12 @@ export function Collaborations({ logos = [] }: { logos?: any[] }) {
         return (
             <SectionWrapper id="collaborations" className="bg-white relative overflow-hidden pb-8 md:pb-12">
                 <Container className="relative z-10 flex flex-col items-center">
-                    <span className="inline-block px-3 py-1 rounded-full bg-[#6B9F91]/10 text-[#6B9F91] text-[10px] font-bold uppercase tracking-widest mb-4">
-                        UNIVERSITIES &amp; COLLEGE COLLABORATIONS
-                    </span>
-                    <h2 className="text-3xl md:text-5xl font-extrabold text-[#111827] mb-4 text-center max-w-3xl leading-tight">
-                        Building Strong Academic <span className="text-[#6B9F91]">Partnerships.</span>
-                    </h2>
-                    <p className="text-gray-500 text-sm md:text-lg max-w-2xl mx-auto text-center leading-relaxed mb-10">
-                        Collaborating with educational institutions to create practical learning experiences, industry exposure, and career opportunities.
-                    </p>
+                    <SectionHeading
+                        badge="UNIVERSITIES & COLLEGE COLLABORATIONS"
+                        title="Building Strong Academic Partnerships"
+                        description="Collaborating with educational institutions to create practical learning experiences, industry exposure, and career opportunities."
+                        className="mb-10"
+                    />
                     <LogoMarqueeSkeleton count={6} title="" />
                 </Container>
             </SectionWrapper>
@@ -81,15 +78,12 @@ export function Collaborations({ logos = [] }: { logos?: any[] }) {
             <Container className="relative z-10 flex flex-col items-center">
 
                 {/* SECTION HEADER */}
-                <span className="inline-block px-3 py-1 rounded-full bg-[#6B9F91]/10 text-[#6B9F91] text-[10px] font-bold uppercase tracking-widest mb-4">
-                    UNIVERSITIES &amp; COLLEGE COLLABORATIONS
-                </span>
-                <h2 className="text-3xl md:text-5xl font-extrabold text-[#111827] mb-4 text-center max-w-3xl leading-tight">
-                    Building Strong Academic <span className="text-[#6B9F91]">Partnerships.</span>
-                </h2>
-                <p className="text-gray-500 text-sm md:text-lg max-w-2xl mx-auto text-center leading-relaxed mb-10">
-                    Collaborating with educational institutions to create practical learning experiences, industry exposure, and career opportunities.
-                </p>
+                <SectionHeading
+                    badge="UNIVERSITIES & COLLEGE COLLABORATIONS"
+                    title="Building Strong Academic Partnerships"
+                    description="Collaborating with educational institutions to create practical learning experiences, industry exposure, and career opportunities."
+                    className="mb-10"
+                />
 
                 {/* 1. PARTNERSHIP NETWORK */}
                 <div className="w-full max-w-[340px] sm:max-w-[420px] md:max-w-[440px] mx-auto relative flex items-center justify-center mb-8 isolate">
@@ -127,7 +121,7 @@ export function Collaborations({ logos = [] }: { logos?: any[] }) {
                         </svg>
 
                         {/* Central Node */}
-                        <div className="relative z-20 flex flex-col items-center justify-center w-28 h-28 md:w-36 md:h-36 lg:w-44 lg:h-44 bg-white rounded-full shadow-[0_15px_50px_rgba(107,159,145,0.15)] border-4 border-[#EDF5F2]">
+                        <div className="relative z-20 flex flex-col items-center justify-center w-28 h-28 md:w-36 md:h-36 lg:w-44 lg:h-44 bg-white rounded-full shadow-[0_15px_50px_rgba(107,159,145,0.15)] border-4 border-[#D8E8E2]">
                             <div className="absolute inset-0 bg-[#6B9F91]/5 rounded-full animate-pulse -z-10" />
                             <Network className="w-8 h-8 text-[#6B9F91] mb-2" />
                             <span className="font-extrabold text-[#111827] text-[10px] md:text-xs tracking-wider text-center">SS40<br />ACADEMICS</span>
@@ -183,8 +177,8 @@ export function Collaborations({ logos = [] }: { logos?: any[] }) {
 
                 {/* 2. INSTITUTION SHOWCASE (MARQUEE) */}
                 <div className="w-full relative py-2 mb-16 md:mb-24">
-                    <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-white to-transparent z-10 hidden md:block" />
-                    <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-white to-transparent z-10 hidden md:block" />
+                    <div className="absolute inset-y-0 left-0 w-14 md:w-28 bg-gradient-to-r from-[#EDF5F2] via-[#EDF5F2]/40 to-transparent z-10 hidden md:block" />
+                    <div className="absolute inset-y-0 right-0 w-14 md:w-28 bg-gradient-to-l from-[#EDF5F2] via-[#EDF5F2]/40 to-transparent z-10 hidden md:block" />
 
                     <div
                         className="academic-marquee-row flex overflow-hidden group touch-pan-y select-none"
@@ -263,7 +257,7 @@ export function Collaborations({ logos = [] }: { logos?: any[] }) {
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ margin: "-50px", once: true }}
                                     transition={{ delay: idx * 0.1, duration: 0.5 }}
-                                    className="p-6 md:p-8 bg-[#EDF5F2] rounded-[2rem] border border-gray-100 hover:bg-white hover:shadow-xl hover:shadow-[#6B9F91]/5 transition-all duration-300 group"
+                                    className="p-6 md:p-8 bg-[#D8E8E2] rounded-[2rem] border border-gray-100 hover:bg-white hover:shadow-xl hover:shadow-[#6B9F91]/5 transition-all duration-300 group"
                                 >
                                     <div className="w-12 h-12 bg-white rounded-2xl shadow-sm border border-gray-100 flex items-center justify-center mb-5 group-hover:bg-[#6B9F91]/10 group-hover:border-[#6B9F91]/20 transition-colors">
                                         <Icon className="w-6 h-6 text-[#6B9F91]" />

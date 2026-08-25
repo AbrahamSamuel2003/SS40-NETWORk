@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState } from "react";
 import Link from "next/link";
@@ -30,7 +30,7 @@ export function AllProductsDisplay() {
 
 
     return (
-        <SectionWrapper className="bg-[#EDF5F2] min-h-screen pt-32 pb-24 relative overflow-hidden">
+        <SectionWrapper className="bg-[#D8E8E2] min-h-screen pt-32 pb-24 relative overflow-hidden">
             {/* Ambient Background */}
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#6B9F91]/5 blur-[120px] rounded-full pointer-events-none" />
             <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#2DD4BF]/5 blur-[100px] rounded-full pointer-events-none" />

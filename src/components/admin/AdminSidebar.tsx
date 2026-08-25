@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import * as React from 'react';
 import Link from 'next/link';
@@ -223,7 +223,7 @@ export function AdminSidebar({ adminName, isOpen, setIsOpen }: SidebarProps) {
                                                 "w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-colors",
                                                 isActiveGroup && !isExpanded
                                                     ? "bg-[#6B9F91]/10 text-[#111827]"
-                                                    : "text-[#6B7280] hover:bg-[#EDF5F2] hover:text-[#111827]"
+                                                    : "text-[#6B7280] hover:bg-[#D8E8E2] hover:text-[#111827]"
                                             )}
                                         >
                                             <div className="flex items-center gap-3">
@@ -252,7 +252,7 @@ export function AdminSidebar({ adminName, isOpen, setIsOpen }: SidebarProps) {
                                                                 "flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors",
                                                                 isSubActive
                                                                     ? "bg-[#6B9F91]/10 text-[#6B9F91] font-semibold"
-                                                                    : "text-[#6B7280] hover:text-[#111827] hover:bg-[#EDF5F2]"
+                                                                    : "text-[#6B7280] hover:text-[#111827] hover:bg-[#D8E8E2]"
                                                             )}
                                                         >
                                                             {sub.name}
@@ -276,7 +276,7 @@ export function AdminSidebar({ adminName, isOpen, setIsOpen }: SidebarProps) {
                                         "flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors",
                                         isActive
                                             ? "bg-[#6B9F91]/10 text-[#111827] font-semibold"
-                                            : "text-[#6B7280] hover:bg-[#EDF5F2] hover:text-[#111827]"
+                                            : "text-[#6B7280] hover:bg-[#D8E8E2] hover:text-[#111827]"
                                     )}
                                 >
                                     <Icon size={18} className={isActive ? "text-[#6B9F91]" : "opacity-75"} />
@@ -288,7 +288,7 @@ export function AdminSidebar({ adminName, isOpen, setIsOpen }: SidebarProps) {
                 </div>
 
                 {/* Footer / User Area */}
-                <div className="p-4 border-t border-gray-200 flex items-center justify-between shrink-0 bg-[#EDF5F2]/70">
+                <div className="p-4 border-t border-gray-200 flex items-center justify-between shrink-0 bg-[#D8E8E2]/70">
                     <div className="flex flex-col min-w-0">
                         <span className="text-sm font-semibold text-[#111827] truncate">{adminName}</span>
                         <span className="text-xs text-[#6B7280] truncate">Administrator</span>

@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
+import { SectionHeading } from "@/components/ui/SectionHeading";
 import { cn } from "@/utils/cn";
 import { shuffleArray } from "@/utils/shuffle";
 import { LogoMarqueeSkeleton } from "@/components/ui/Skeleton";
@@ -17,17 +18,12 @@ export function TrustedBy({ data }: { data?: any[] }) {
         return (
             <SectionWrapper id="trusted-by" className="bg-white relative overflow-hidden pb-8 md:pb-12">
                 <Container className="relative z-10">
-                    <div className="text-center mb-12 lg:mb-20">
-                        <span className="inline-block px-3 py-1 rounded-full bg-[#6B9F91]/10 text-[#6B9F91] text-[10px] font-bold uppercase tracking-widest mb-4">
-                            OUR PARTNERS & CLIENTS
-                        </span>
-                        <h2 className="text-3xl md:text-5xl font-extrabold text-[#111827] mb-4">
-                            Trusted by Businesses, Institutions & Partners
-                        </h2>
-                        <p className="text-gray-500 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
-                            Organizations that trust SS40 NETWORK across digital solutions, products, and industry-focused academics.
-                        </p>
-                    </div>
+                    <SectionHeading
+                        badge="Our Partners & Clients"
+                        title="Trusted by Businesses, Institutions & Partners"
+                        description="Organizations that trust SS40 NETWORK across digital solutions, products, and industry-focused academics."
+                        className="mb-12 lg:mb-20"
+                    />
                     <LogoMarqueeSkeleton count={6} title="" />
                 </Container>
             </SectionWrapper>
@@ -51,17 +47,12 @@ export function TrustedBy({ data }: { data?: any[] }) {
             </div>
 
             <Container className="relative z-10">
-                <div className="text-center mb-12 lg:mb-20">
-                    <span className="inline-block px-3 py-1 rounded-full bg-[#6B9F91]/10 text-[#6B9F91] text-[10px] font-bold uppercase tracking-widest mb-4">
-                        OUR PARTNERS & CLIENTS
-                    </span>
-                    <h2 className="text-3xl md:text-5xl font-extrabold text-[#111827] mb-4">
-                        Trusted by Businesses, Institutions & Partners
-                    </h2>
-                    <p className="text-gray-500 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
-                        Organizations that trust SS40 NETWORK across digital solutions, products, and industry-focused academics.
-                    </p>
-                </div>
+                <SectionHeading
+                    badge="Our Partners & Clients"
+                    title="Trusted by Businesses, Institutions & Partners"
+                    description="Organizations that trust SS40 NETWORK across digital solutions, products, and industry-focused academics."
+                    className="mb-12 lg:mb-20"
+                />
             </Container>
 
             {/* Inline styles for seamless infinite CSS Marquee */}
@@ -110,9 +101,9 @@ export function TrustedBy({ data }: { data?: any[] }) {
             {/* Marquee Section (Full Bleed) */}
             <div className="relative z-10 w-full flex flex-col gap-6 md:gap-8 overflow-hidden py-4">
 
-                {/* Left/Right Fade Gradients for visual smoothness */}
-                <div className="absolute top-0 bottom-0 left-0 w-24 md:w-48 bg-gradient-to-r from-[#EDF5F2] to-transparent z-20 pointer-events-none" />
-                <div className="absolute top-0 bottom-0 right-0 w-24 md:w-48 bg-gradient-to-l from-[#EDF5F2] to-transparent z-20 pointer-events-none" />
+                {/* Left/Right Fade Gradients for visual smoothness (Mint Teal Dissolve Blend) */}
+                <div className="absolute top-0 bottom-0 left-0 w-14 md:w-28 bg-gradient-to-r from-[#EDF5F2] via-[#EDF5F2]/40 to-transparent z-20 pointer-events-none" />
+                <div className="absolute top-0 bottom-0 right-0 w-14 md:w-28 bg-gradient-to-l from-[#EDF5F2] via-[#EDF5F2]/40 to-transparent z-20 pointer-events-none" />
 
                 {/* ROW 1: Scroll Left */}
                 <MarqueeRow items={rows.row1} direction="left" speed={35} />

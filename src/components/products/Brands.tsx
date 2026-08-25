@@ -32,7 +32,7 @@ export function Brands() {
 
     if (isLoading || logos.length === 0) {
         return (
-            <SectionWrapper id="brands" className="bg-[#EDF5F2] relative overflow-hidden pb-8 md:pb-12">
+            <SectionWrapper id="brands" className="bg-[#D8E8E2] relative overflow-hidden pb-8 md:pb-12">
                 <Container className="relative z-10">
                     <SectionHeading
                         badge="TRUSTED BY BUSINESSES"
@@ -47,7 +47,7 @@ export function Brands() {
     }
 
     return (
-        <SectionWrapper id="brands" className="bg-[#EDF5F2] relative overflow-hidden">
+        <SectionWrapper id="brands" className="bg-[#D8E8E2] relative overflow-hidden">
 
             {/* Soft Ambient Background Enhancements */}
             <div className="absolute inset-0 pointer-events-none z-0">
@@ -113,9 +113,9 @@ export function Brands() {
             {/* Marquee Section (Full Bleed) */}
             <div className="relative z-10 w-full flex flex-col gap-6 md:gap-8 overflow-hidden py-4">
 
-                {/* Left/Right Fade Gradients for visual smoothness */}
-                <div className="absolute top-0 bottom-0 left-0 w-24 md:w-48 bg-gradient-to-r from-[#EDF5F2] to-transparent z-20 pointer-events-none" />
-                <div className="absolute top-0 bottom-0 right-0 w-24 md:w-48 bg-gradient-to-l from-[#EDF5F2] to-transparent z-20 pointer-events-none" />
+                {/* Left/Right Fade Gradients for visual smoothness (Mint Teal Dissolve Blend) */}
+                <div className="absolute top-0 bottom-0 left-0 w-14 md:w-28 bg-gradient-to-r from-[#EDF5F2] via-[#EDF5F2]/40 to-transparent z-20 pointer-events-none" />
+                <div className="absolute top-0 bottom-0 right-0 w-14 md:w-28 bg-gradient-to-l from-[#EDF5F2] via-[#EDF5F2]/40 to-transparent z-20 pointer-events-none" />
 
                 {/* ROW 1: Scroll Left */}
                 {ROW_1.length > 0 && <MarqueeRow items={ROW_1} direction="left" speed={35} />}

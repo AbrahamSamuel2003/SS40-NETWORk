@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import * as React from "react";
 import Link from "next/link";
@@ -135,7 +135,7 @@ export function Navbar({ config }: { config?: SiteConfigData | null }) {
                                     className={cn(
                                         "px-4 py-2 text-sm transition-all duration-200 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F766E] outline-offset-2",
                                         isActive
-                                            ? "text-[#0F766E] font-bold bg-[#EDF5F2]"
+                                            ? "text-[#0F766E] font-bold bg-[#D8E8E2]"
                                             : "text-[#374151] font-medium hover:text-[#111827] hover:bg-gray-100"
                                     )}
                                     aria-current={isActive ? "page" : undefined}

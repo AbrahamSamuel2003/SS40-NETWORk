@@ -1,4 +1,4 @@
-import * as React from "react";
+﻿import * as React from "react";
 import {
     Calendar,
     Building,
@@ -83,7 +83,7 @@ const AboutIllustration = () => (
 
 export function About() {
     return (
-        <SectionWrapper id="about" className="bg-[#EDF5F2]">
+        <SectionWrapper id="about" className="bg-[#D8E8E2]">
             <Container className="space-y-12 lg:space-y-16">
 
                 {/* 1. Section Header & Abstract Graphic */}

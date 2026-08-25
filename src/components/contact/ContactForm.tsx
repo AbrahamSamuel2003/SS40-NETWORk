@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import * as React from "react";
 import { useState, useEffect } from "react";
@@ -157,7 +157,7 @@ export function ContactForm() {
                                     transition={{ duration: 0.4 }}
                                     className="relative z-10 flex flex-col items-center justify-center text-center py-8 md:py-12"
                                 >
-                                    <div className="w-16 h-16 bg-[#EDF5F2] rounded-full flex items-center justify-center mb-4 border border-[#6B9F91]/20 shadow-inner">
+                                    <div className="w-16 h-16 bg-[#D8E8E2] rounded-full flex items-center justify-center mb-4 border border-[#6B9F91]/20 shadow-inner">
                                         <CheckCircle2 className="w-10 h-10 text-[#6B9F91]" />
                                     </div>
                                     <h3 className="text-2xl md:text-3xl font-extrabold text-[#111827] mb-4">Message Sent Successfully</h3>
@@ -202,29 +202,29 @@ export function ContactForm() {
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div className="flex flex-col gap-1.5">
                                             <label htmlFor="fullName" className="text-sm font-bold text-[#111827]">Full Name</label>
-                                            <input required disabled={status === "submitting"} type="text" id="fullName" value={formData.fullName} onChange={handleChange} className="w-full bg-[#EDF5F2] border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 placeholder:text-gray-400 disabled:opacity-50 text-sm" placeholder="Full Name" />
+                                            <input required disabled={status === "submitting"} type="text" id="fullName" value={formData.fullName} onChange={handleChange} className="w-full bg-[#D8E8E2] border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 placeholder:text-gray-400 disabled:opacity-50 text-sm" placeholder="Full Name" />
                                         </div>
                                         <div className="flex flex-col gap-1.5">
                                             <label htmlFor="email" className="text-sm font-bold text-[#111827]">Email Address</label>
-                                            <input required disabled={status === "submitting"} type="email" id="email" value={formData.email} onChange={handleChange} className="w-full bg-[#EDF5F2] border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 placeholder:text-gray-400 disabled:opacity-50 text-sm" placeholder="Email Address" />
+                                            <input required disabled={status === "submitting"} type="email" id="email" value={formData.email} onChange={handleChange} className="w-full bg-[#D8E8E2] border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 placeholder:text-gray-400 disabled:opacity-50 text-sm" placeholder="Email Address" />
                                         </div>
                                     </div>
 
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div className="flex flex-col gap-1.5">
                                             <label htmlFor="phone" className="text-sm font-bold text-[#111827]">Phone Number</label>
-                                            <input required disabled={status === "submitting"} type="tel" id="phone" value={formData.phone} onChange={handleChange} className="w-full bg-[#EDF5F2] border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 placeholder:text-gray-400 disabled:opacity-50 text-sm" placeholder="Mobile Number" />
+                                            <input required disabled={status === "submitting"} type="tel" id="phone" value={formData.phone} onChange={handleChange} className="w-full bg-[#D8E8E2] border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 placeholder:text-gray-400 disabled:opacity-50 text-sm" placeholder="Mobile Number" />
                                         </div>
                                         <div className="flex flex-col gap-1.5">
                                             <label htmlFor="company" className="text-sm font-bold text-[#111827]">Company / Institution <span className="text-gray-400 font-normal">(Optional)</span></label>
-                                            <input disabled={status === "submitting"} type="text" id="company" value={formData.company} onChange={handleChange} className="w-full bg-[#EDF5F2] border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 placeholder:text-gray-400 disabled:opacity-50 text-sm" placeholder="Company Name (Optional)" />
+                                            <input disabled={status === "submitting"} type="text" id="company" value={formData.company} onChange={handleChange} className="w-full bg-[#D8E8E2] border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 placeholder:text-gray-400 disabled:opacity-50 text-sm" placeholder="Company Name (Optional)" />
                                         </div>
                                     </div>
 
                                     <div className="flex flex-col gap-1.5">
                                         <label htmlFor="serviceInterest" className="text-sm font-bold text-[#111827]">Interested In</label>
                                         <div className="relative">
-                                            <select required disabled={status === "submitting"} id="serviceInterest" value={formData.serviceInterest} onChange={handleChange} className="w-full bg-[#EDF5F2] border border-gray-200 rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 appearance-none disabled:opacity-50 text-sm cursor-pointer">
+                                            <select required disabled={status === "submitting"} id="serviceInterest" value={formData.serviceInterest} onChange={handleChange} className="w-full bg-[#D8E8E2] border border-gray-200 rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 appearance-none disabled:opacity-50 text-sm cursor-pointer">
                                                 <option value="" disabled>Select an option</option>
                                                 {INTEREST_OPTIONS.map((opt) => (
                                                     <option key={opt} value={opt}>{opt}</option>
@@ -236,7 +236,7 @@ export function ContactForm() {
 
                                     <div className="flex flex-col gap-1.5">
                                         <label htmlFor="message" className="text-sm font-bold text-[#111827]">Message</label>
-                                        <textarea required disabled={status === "submitting"} id="message" value={formData.message} onChange={handleChange} rows={4} className="w-full bg-[#EDF5F2] border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 placeholder:text-gray-400 resize-none disabled:opacity-50 text-sm" placeholder="Project Message"></textarea>
+                                        <textarea required disabled={status === "submitting"} id="message" value={formData.message} onChange={handleChange} rows={4} className="w-full bg-[#D8E8E2] border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 focus:border-[#6B9F91] transition-all text-gray-900 placeholder:text-gray-400 resize-none disabled:opacity-50 text-sm" placeholder="Project Message"></textarea>
                                     </div>
 
                                     <motion.div whileHover={{ scale: status !== "submitting" ? 1.01 : 1 }} whileTap={{ scale: status !== "submitting" ? 0.98 : 1 }} className="mt-2">
@@ -272,7 +272,7 @@ export function ContactForm() {
                                 <motion.div
                                     key={idx}
                                     initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.3 + idx * 0.1 }}
-                                    className="bg-[#EDF5F2] rounded-2xl p-3 md:p-4 border border-gray-100 flex items-start gap-2 hover:shadow-lg hover:shadow-gray-200/50 hover:-translate-y-1 transition-all duration-300"
+                                    className="bg-[#D8E8E2] rounded-2xl p-3 md:p-4 border border-gray-100 flex items-start gap-2 hover:shadow-lg hover:shadow-gray-200/50 hover:-translate-y-1 transition-all duration-300"
                                 >
                                     <div className="w-10 h-10 rounded-xl bg-white border border-gray-200 flex items-center justify-center shrink-0">
                                         <Icon className="w-5 h-5 text-[#6B9F91]" />

@@ -70,7 +70,7 @@ export function Hero() {
                             </p>
 
                             <div className="flex flex-col sm:flex-row items-center w-full sm:w-auto gap-4">
-                                <Button asChild size="lg" className="w-full sm:w-auto bg-[#6B9F91] hover:bg-[#5C8C80] text-white shadow-lg shadow-[#6B9F91]/20 group">
+                                <Button asChild size="lg" className="w-full sm:w-auto shadow-lg shadow-[var(--color-primary)]/20 group">
                                     <a href="#placements">
                                         Explore Programs
                                         <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -113,8 +113,8 @@ export function Hero() {
                                 </motion.circle>
 
                                 {/* Soft glowing ring around center */}
-                                <motion.circle cx="50" cy="50" r="25" fill="transparent" stroke="#EDF5F2" strokeWidth="0.5" opacity="0.6" />
-                                <motion.circle cx="50" cy="50" r="35" fill="transparent" stroke="#EDF5F2" strokeWidth="0.5" opacity="0.4" strokeDasharray="1 2" />
+                                <motion.circle cx="50" cy="50" r="25" fill="transparent" stroke="#D8E8E2" strokeWidth="0.5" opacity="0.6" />
+                                <motion.circle cx="50" cy="50" r="35" fill="transparent" stroke="#D8E8E2" strokeWidth="0.5" opacity="0.4" strokeDasharray="1 2" />
                             </svg>
 
                             {/* Ambient Glow */}
@@ -123,7 +123,7 @@ export function Hero() {
                             {/* CENTER: Career Launch Pad Platform */}
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, type: "spring" }}
-                                className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 z-10 w-44 h-44 bg-white/80 backdrop-blur-xl rounded-full border border-white shadow-2xl flex flex-col items-center justify-center p-6 text-center ring-8 ring-[#EDF5F2]/50"
+                                className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 z-10 w-44 h-44 bg-white/80 backdrop-blur-xl rounded-full border border-white shadow-2xl flex flex-col items-center justify-center p-6 text-center ring-8 ring-[#D8E8E2]/50"
                             >
                                 <div className="absolute inset-0 rounded-full bg-gradient-to-t from-[#6B9F91]/5 to-transparent pointer-events-none" />
                                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#111827] to-gray-800 flex items-center justify-center shadow-lg border border-gray-700 mb-3 group">

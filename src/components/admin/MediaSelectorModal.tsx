@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect } from 'react';
 import { X, Search, Image as ImageIcon } from 'lucide-react';
@@ -41,7 +41,7 @@ export function MediaSelectorModal({ onSelect, onClose }: MediaSelectorModalProp
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-[#111827]/40 backdrop-blur-sm shadow-2xl">
             <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[85vh] flex flex-col overflow-hidden">
                 {/* Header */}
-                <div className="px-5 py-4 border-b border-gray-200 flex justify-between items-center bg-[#EDF5F2]/80">
+                <div className="px-5 py-4 border-b border-gray-200 flex justify-between items-center bg-[#D8E8E2]/80">
                     <div>
                         <h3 className="text-base font-bold text-[#111827] flex items-center gap-2">
                             <ImageIcon className="w-5 h-5 text-[#6B9F91]" />

@@ -4,84 +4,61 @@ import { getCurrentAdmin } from '@/lib/auth';
 import { logAdminActivity } from '@/lib/admin-activity';
 import { revalidateEntityCache } from '@/lib/revalidate-helpers';
 
-function slugify(text: string): string {
-    return text
-        .toString()
-        .toLowerCase()
-        .trim()
-        .replace(/\s+/g, '-')
-        .replace(/[^\w\-]+/g, '')
-        .replace(/\-\-+/g, '-')
-        .replace(/^-+/, '')
-        .replace(/-+$/, '');
-}
-
-export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(request: Request, context: { params: Promise<{ id: string }> }) {
     try {
-        const { id } = await params;
         const admin = await getCurrentAdmin();
         if (!admin) return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
 
-        const record = await prisma.activityPost.findUnique({ where: { id } });
-        if (!record) return NextResponse.json({ success: false, error: 'Record not found' }, { status: 404 });
+        const { id } = await context.params;
+        const activity = await prisma.activityPost.findUnique({
+            where: { id }
+        });
 
-        return NextResponse.json({ success: true, data: record });
+        if (!activity) {
+            return NextResponse.json({ success: false, error: 'Activity post not found' }, { status: 404 });
+        }
+
+        return NextResponse.json({ success: true, data: activity });
     } catch (error) {
         console.error('Error fetching activity post:', error);
         return NextResponse.json({ success: false, error: 'Failed to fetch activity post' }, { status: 500 });
     }
 }
 
-export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function PUT(request: Request, context: { params: Promise<{ id: string }> }) {
     try {
-        const { id } = await params;
         const admin = await getCurrentAdmin();
         if (!admin) return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
 
+        const { id } = await context.params;
         const body = await request.json();
 
-        const existingRecord = await prisma.activityPost.findUnique({ where: { id } });
-        if (!existingRecord) return NextResponse.json({ success: false, error: 'Record not found' }, { status: 404 });
-
-        let updateData: any = {};
-        if (body.title !== undefined) updateData.title = body.title;
-        if (body.summary !== undefined) updateData.summary = body.summary;
-        if (body.content !== undefined) updateData.content = body.content;
-        if (body.activityType !== undefined) updateData.activityType = body.activityType;
-        if (body.location !== undefined) updateData.location = body.location;
-        if (body.activityDate !== undefined) updateData.activityDate = new Date(body.activityDate);
-        if (body.externalLink !== undefined) updateData.externalLink = body.externalLink;
-        if (body.isFeatured !== undefined) updateData.isFeatured = !!body.isFeatured;
-        if (body.showOnHome !== undefined) updateData.showOnHome = !!body.showOnHome;
-        if (body.sortOrder !== undefined) updateData.sortOrder = isNaN(Number(body.sortOrder)) ? 0 : Number(body.sortOrder);
-        if (body.isActive !== undefined) updateData.isActive = !!body.isActive;
-
-        if (body.images !== undefined) {
-            let imagesArray = Array.isArray(body.images) ? body.images : [];
-            if (imagesArray.length > 5) {
-                imagesArray = imagesArray.slice(0, 5);
-            }
-            updateData.images = imagesArray;
+        const existing = await prisma.activityPost.findUnique({ where: { id } });
+        if (!existing) {
+            return NextResponse.json({ success: false, error: 'Activity post not found' }, { status: 404 });
         }
 
-        if (body.slug !== undefined && body.slug !== existingRecord.slug) {
-            let baseSlug = slugify(body.slug || body.title || 'activity');
-            let uniqueSlug = baseSlug;
-            let counter = 1;
-            while (true) {
-                const clash = await prisma.activityPost.findFirst({
-                    where: { slug: uniqueSlug, NOT: { id } }
-                });
-                if (!clash) break;
-                uniqueSlug = `${baseSlug}-${counter}`;
-                counter++;
-            }
-            updateData.slug = uniqueSlug;
+        let imagesArray = body.images !== undefined ? (Array.isArray(body.images) ? body.images : []) : undefined;
+        if (imagesArray && imagesArray.length > 5) {
+            imagesArray = imagesArray.slice(0, 5);
         }
 
-        const updatedRecord = await prisma.activityPost.update({
+        const updated = await prisma.activityPost.update({
             where: { id },
-            data: updateData
+            data: {
+                title: body.title !== undefined ? body.title : undefined,
+                activityType: body.activityType !== undefined ? body.activityType : undefined,
+                summary: body.summary !== undefined ? body.summary : undefined,
+                content: body.content !== undefined ? body.content : undefined,
+                images: imagesArray !== undefined ? imagesArray : undefined,
+                location: body.location !== undefined ? body.location : undefined,
+                activityDate: body.activityDate ? new Date(body.activityDate) : undefined,
+                externalLink: body.externalLink !== undefined ? body.externalLink : undefined,
+                isFeatured: body.isFeatured !== undefined ? !!body.isFeatured : undefined,
+                showOnHome: body.showOnHome !== undefined ? !!body.showOnHome : undefined,
+                sortOrder: body.sortOrder !== undefined ? Number(body.sortOrder) : undefined,
+                isActive: body.isActive !== undefined ? !!body.isActive : undefined
+            }
         });
 
         await logAdminActivity({
@@ -89,44 +66,42 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
             action: 'UPDATE',
             entity: 'ActivityPost',
             entityId: id,
-            description: `Updated activity post: ${updatedRecord.title}`
+            description: `Updated activity post: ${updated.title}`
         });
 
-        // Invalidate Next.js cache so the updated post appears immediately on public pages
         revalidateEntityCache('ACTIVITY');
 
-        return NextResponse.json({ success: true, data: updatedRecord });
+        return NextResponse.json({ success: true, data: updated });
     } catch (error) {
         console.error('Error updating activity post:', error);
         return NextResponse.json({ success: false, error: 'Failed to update activity post' }, { status: 500 });
     }
 }
 
-export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(request: Request, context: { params: Promise<{ id: string }> }) {
     try {
-        const { id } = await params;
         const admin = await getCurrentAdmin();
         if (!admin) return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
 
-        const record = await prisma.activityPost.findUnique({ where: { id } });
-        if (!record) return NextResponse.json({ success: false, error: 'Record not found' }, { status: 404 });
+        const { id } = await context.params;
+        const existing = await prisma.activityPost.findUnique({ where: { id } });
+        if (!existing) {
+            return NextResponse.json({ success: false, error: 'Activity post not found' }, { status: 404 });
+        }
 
-        await prisma.activityPost.delete({
-            where: { id }
-        });
+        await prisma.activityPost.delete({ where: { id } });
 
         await logAdminActivity({
             adminId: admin.id,
             action: 'DELETE',
             entity: 'ActivityPost',
             entityId: id,
-            description: `Deleted activity post: ${record.title}`
+            description: `Deleted activity post: ${existing.title}`
         });
 
-        // Invalidate Next.js cache so the deleted post is removed from public pages immediately
         revalidateEntityCache('ACTIVITY');
 
-        return NextResponse.json({ success: true });
+        return NextResponse.json({ success: true, message: 'Activity post deleted' });
     } catch (error) {
         console.error('Error deleting activity post:', error);
         return NextResponse.json({ success: false, error: 'Failed to delete activity post' }, { status: 500 });

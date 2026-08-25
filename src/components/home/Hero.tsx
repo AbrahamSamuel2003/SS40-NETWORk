@@ -51,7 +51,7 @@ export function Hero() {
                         </p>
 
                         <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
-                            <Button asChild size="lg" className="w-full sm:w-auto shadow-lg shadow-[var(--color-primary)]/20 bg-[#2E544A] hover:bg-[#234038] text-white font-semibold group">
+                            <Button asChild size="lg" className="w-full sm:w-auto shadow-lg shadow-[var(--color-primary)]/20 group">
                                 <Link href="/digital-solutions">
                                     Explore Solutions
                                     <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />

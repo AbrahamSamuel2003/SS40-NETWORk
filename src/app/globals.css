@@ -6,29 +6,29 @@
   --color-primary-hover: #0F766E;
   --color-background: #FFFFFF;
   --color-hero: #DFE9D4;
-  --color-alternate: #B7D4B6;
+  --color-alternate: #D8E8E2;
   --color-soft: #96C3A8;
-  --color-heading: #111827;
-  --color-body-text: #6B7280;
+  --color-heading: #0F172A;
+  --color-body-text: #334155;
   --color-border: #E5E7EB;
   --color-accent: #FFC900;
 
-  /* Typography */
-  --text-hero-title: 64px;
-  --text-hero-subtitle: 24px;
-  --text-section-title: 42px;
-  --text-section-desc: 18px;
-  --text-card-title: 22px;
-  --text-body: 16px;
-  --text-caption: 14px;
+  /* Typography - Compact 90% Scale Density */
+  --text-hero-title: 52px;
+  --text-hero-subtitle: 20px;
+  --text-section-title: 34px;
+  --text-section-desc: 16px;
+  --text-card-title: 20px;
+  --text-body: 15px;
+  --text-caption: 13px;
 
-  /* Spacing */
-  --spacing-container: 1200px;
-  --spacing-section: 80px;
-  --spacing-card: 32px;
-  --spacing-grid: 32px;
-  --spacing-btn-y: 16px;
-  --spacing-btn-x: 28px;
+  /* Spacing - Compact 90% Scale Density */
+  --spacing-container: 1120px;
+  --spacing-section: 64px;
+  --spacing-card: 24px;
+  --spacing-grid: 24px;
+  --spacing-btn-y: 13px;
+  --spacing-btn-x: 24px;
 
   /* Border Radius */
   --radius-btn: 12px;

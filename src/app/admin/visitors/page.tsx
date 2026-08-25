@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Search, X, Bot, Globe, Shield, Trash2, Eye, RefreshCw, Play, Pause, Calendar } from 'lucide-react';
@@ -189,7 +189,7 @@ export default function VisitorsPage() {
                         </button>
                         <button
                             onClick={togglePolling}
-                            className={`admin-card px-3 py-2 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors ${isPolling ? 'text-[#6B9F91] bg-[#6B9F91]/10' : 'text-[#6B7280] bg-[#EDF5F2]/50'}`}
+                            className={`admin-card px-3 py-2 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors ${isPolling ? 'text-[#6B9F91] bg-[#6B9F91]/10' : 'text-[#6B7280] bg-[#D8E8E2]/50'}`}
                             title={isPolling ? 'Pause auto-refresh' : 'Resume auto-refresh'}
                         >
                             {isPolling ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
@@ -251,7 +251,7 @@ export default function VisitorsPage() {
                                     <p className="text-[#6B7280] text-[10px] leading-snug line-clamp-1">{item.deviceType || 'Unknown'} · {item.browser || 'Unknown'}</p>
                                     <p className="text-[#9CA3AF] text-[10px] leading-snug line-clamp-1">{item.landingPage || 'Direct'}</p>
                                     <div className="mt-auto pt-1 flex items-center justify-between">
-                                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-[#EDF5F2]/70 text-[#111827] border border-gray-200">• {item.pageViews} views</span>
+                                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-[#D8E8E2]/70 text-[#111827] border border-gray-200">• {item.pageViews} views</span>
                                         <button onClick={() => handleDelete(item.id)} className="text-[#B91C1C]/50 hover:text-[#B91C1C] p-1">
                                             <Trash2 className="w-3.5 h-3.5" />
                                         </button>
@@ -265,7 +265,7 @@ export default function VisitorsPage() {
                 {/* ── DESKTOP TABLE (hidden on mobile) ── */}
                 <div className="hidden sm:block overflow-x-auto w-full touch-auto">
                     <table className="w-full text-left text-sm text-[#374151] min-w-[600px]">
-                        <thead className="bg-[#EDF5F2]/70 border-b border-gray-200 text-[#111827]">
+                        <thead className="bg-[#D8E8E2]/70 border-b border-gray-200 text-[#111827]">
                             <tr>
                                 <th className="p-4 font-medium min-w-[180px]">Session ID</th>
                                 <th className="p-4 font-medium min-w-[150px] hidden sm:table-cell">Platform / OS</th>
@@ -287,7 +287,7 @@ export default function VisitorsPage() {
                                 <tr><td colSpan={6} className="p-10 text-center text-[#9CA3AF]">No tracked visitors match your query.</td></tr>
                             ) : (
                                 visitors.map(item => (
-                                    <tr key={item.id} className="hover:bg-[#EDF5F2]/50 transition-colors">
+                                    <tr key={item.id} className="hover:bg-[#D8E8E2]/50 transition-colors">
                                         <td className="p-4">
                                             <div className="flex items-center gap-2">
                                                 {item.isBot && (
@@ -308,7 +308,7 @@ export default function VisitorsPage() {
                                             {item.ipAddress && <div className="text-[#9CA3AF] text-[10px] font-mono mt-1">{item.ipAddress}</div>}
                                         </td>
                                         <td className="p-4 text-center">
-                                            <span className="inline-flex items-center justify-center bg-[#EDF5F2]/70 border border-gray-200 rounded-md px-2 py-0.5 text-xs font-bold text-[#111827]/90">
+                                            <span className="inline-flex items-center justify-center bg-[#D8E8E2]/70 border border-gray-200 rounded-md px-2 py-0.5 text-xs font-bold text-[#111827]/90">
                                                 {item.pageViews}
                                             </span>
                                         </td>
@@ -353,7 +353,7 @@ export default function VisitorsPage() {
             {isModalOpen && visitorData && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#111827]/40 backdrop-blur-sm">
                     <div className="admin-card w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col max-h-[88vh]">
-                        <div className="px-4 py-3 border-b border-gray-200 flex justify-between items-center bg-[#EDF5F2]/80 shrink-0">
+                        <div className="px-4 py-3 border-b border-gray-200 flex justify-between items-center bg-[#D8E8E2]/80 shrink-0">
                             <div className="flex items-center gap-2">
                                 <Shield className="w-4 h-4 text-[#6B9F91]" />
                                 <div>
@@ -368,8 +368,8 @@ export default function VisitorsPage() {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                                 {/* Session Identity */}
-                                <div className="bg-[#EDF5F2]/40 rounded-md border border-gray-100 overflow-hidden">
-                                    <div className="px-3 py-2 bg-[#EDF5F2]/70 border-b border-gray-200">
+                                <div className="bg-[#D8E8E2]/40 rounded-md border border-gray-100 overflow-hidden">
+                                    <div className="px-3 py-2 bg-[#D8E8E2]/70 border-b border-gray-200">
                                         <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B9F91]">Session Identity</span>
                                     </div>
                                     <div className="divide-y divide-gray-100">
@@ -393,8 +393,8 @@ export default function VisitorsPage() {
                                 </div>
 
                                 {/* Hardware / Geography */}
-                                <div className="bg-[#EDF5F2]/40 rounded-md border border-gray-100 overflow-hidden">
-                                    <div className="px-3 py-2 bg-[#EDF5F2]/70 border-b border-gray-200">
+                                <div className="bg-[#D8E8E2]/40 rounded-md border border-gray-100 overflow-hidden">
+                                    <div className="px-3 py-2 bg-[#D8E8E2]/70 border-b border-gray-200">
                                         <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B9F91]">Hardware / Geography</span>
                                     </div>
                                     <div className="divide-y divide-gray-100">
@@ -418,8 +418,8 @@ export default function VisitorsPage() {
                                 </div>
 
                                 {/* Interactivity Logs */}
-                                <div className="bg-[#EDF5F2]/40 rounded-md border border-gray-100 overflow-hidden">
-                                    <div className="px-3 py-2 bg-[#EDF5F2]/70 border-b border-gray-200">
+                                <div className="bg-[#D8E8E2]/40 rounded-md border border-gray-100 overflow-hidden">
+                                    <div className="px-3 py-2 bg-[#D8E8E2]/70 border-b border-gray-200">
                                         <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B9F91]">Interactivity Logs</span>
                                     </div>
                                     <div className="divide-y divide-gray-100">
@@ -439,8 +439,8 @@ export default function VisitorsPage() {
                                 </div>
 
                                 {/* Timestamps */}
-                                <div className="bg-[#EDF5F2]/40 rounded-md border border-gray-100 overflow-hidden">
-                                    <div className="px-3 py-2 bg-[#EDF5F2]/70 border-b border-gray-200">
+                                <div className="bg-[#D8E8E2]/40 rounded-md border border-gray-100 overflow-hidden">
+                                    <div className="px-3 py-2 bg-[#D8E8E2]/70 border-b border-gray-200">
                                         <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B9F91]">Timestamps</span>
                                     </div>
                                     <div className="divide-y divide-gray-100">
@@ -456,8 +456,8 @@ export default function VisitorsPage() {
                                 </div>
 
                                 {/* User-Agent */}
-                                <div className="md:col-span-2 bg-[#EDF5F2]/40 rounded-md border border-gray-100 overflow-hidden">
-                                    <div className="px-3 py-2 bg-[#EDF5F2]/70 border-b border-gray-200">
+                                <div className="md:col-span-2 bg-[#D8E8E2]/40 rounded-md border border-gray-100 overflow-hidden">
+                                    <div className="px-3 py-2 bg-[#D8E8E2]/70 border-b border-gray-200">
                                         <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B9F91]">Raw User-Agent Blob</span>
                                     </div>
                                     <div className="px-3 py-2">
@@ -466,8 +466,8 @@ export default function VisitorsPage() {
                                 </div>
 
                                 {/* Page Visit History */}
-                                <div className="md:col-span-2 bg-[#EDF5F2]/40 rounded-md border border-gray-100 overflow-hidden">
-                                    <div className="px-3 py-2 bg-[#EDF5F2]/70 border-b border-gray-200">
+                                <div className="md:col-span-2 bg-[#D8E8E2]/40 rounded-md border border-gray-100 overflow-hidden">
+                                    <div className="px-3 py-2 bg-[#D8E8E2]/70 border-b border-gray-200">
                                         <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B9F91]">Page Visit History</span>
                                     </div>
                                     <div className="px-3 py-2 max-h-48 overflow-y-auto custom-scrollbar">
@@ -501,8 +501,8 @@ export default function VisitorsPage() {
                             </div>
                         </div>
 
-                        <div className="px-4 py-2.5 border-t border-gray-200 flex justify-end bg-[#EDF5F2]/50 shrink-0">
-                            <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-1.5 rounded-md text-xs font-medium bg-[#EDF5F2] text-[#111827] hover:bg-[#EDF5F2]/80 transition-colors">Close Inspection</button>
+                        <div className="px-4 py-2.5 border-t border-gray-200 flex justify-end bg-[#D8E8E2]/50 shrink-0">
+                            <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-1.5 rounded-md text-xs font-medium bg-[#D8E8E2] text-[#111827] hover:bg-[#D8E8E2]/80 transition-colors">Close Inspection</button>
                         </div>
                     </div>
                 </div>
@@ -511,7 +511,7 @@ export default function VisitorsPage() {
             {isCleanupModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#111827]/40 backdrop-blur-sm">
                     <div className="admin-card w-full max-w-md overflow-hidden shadow-2xl flex flex-col">
-                        <div className="px-4 py-3 border-b border-gray-200 flex justify-between items-center bg-[#EDF5F2]/80 shrink-0">
+                        <div className="px-4 py-3 border-b border-gray-200 flex justify-between items-center bg-[#D8E8E2]/80 shrink-0">
                             <div className="flex items-center gap-2">
                                 <Calendar className="w-4 h-4 text-[#B91C1C]" />
                                 <div>
@@ -554,11 +554,11 @@ export default function VisitorsPage() {
                             </div>
                         </div>
 
-                        <div className="px-4 py-2.5 border-t border-gray-200 flex justify-end bg-[#EDF5F2]/50 shrink-0">
+                        <div className="px-4 py-2.5 border-t border-gray-200 flex justify-end bg-[#D8E8E2]/50 shrink-0">
                             <button 
                                 type="button" 
                                 onClick={() => setIsCleanupModalOpen(false)} 
-                                className="px-4 py-1.5 rounded-md text-xs font-medium bg-[#EDF5F2] text-[#111827] hover:bg-[#EDF5F2]/80 transition-colors"
+                                className="px-4 py-1.5 rounded-md text-xs font-medium bg-[#D8E8E2] text-[#111827] hover:bg-[#D8E8E2]/80 transition-colors"
                             >
                                 Cancel
                             </button>

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect } from 'react';
 import { Search, X, Activity, Filter, Eye } from 'lucide-react';
@@ -80,7 +80,7 @@ export default function ActivityLogsPage() {
             </div>
 
             {/* Sticky Search & Filters Controls (Pins right below top navigation) */}
-            <div className="sticky top-16 z-20 bg-[#EDF5F2]/95 backdrop-blur-md pb-4 pt-2 mb-4 border-b border-gray-200/80 flex flex-col lg:flex-row gap-3 items-center justify-between">
+            <div className="sticky top-16 z-20 bg-[#D8E8E2]/95 backdrop-blur-md pb-4 pt-2 mb-4 border-b border-gray-200/80 flex flex-col lg:flex-row gap-3 items-center justify-between">
                 <div className="relative w-full lg:w-96">
                     <Search className="w-5 h-5 absolute left-3 top-2.5 text-[#9CA3AF]" />
                     <input
@@ -162,13 +162,13 @@ export default function ActivityLogsPage() {
                                         <span className="font-medium truncate max-w-[55%]">
                                             👤 {item.adminUser?.fullName || 'System Event'}
                                         </span>
-                                        <span className="font-mono text-[10px] text-gray-500 bg-[#EDF5F2]/80 px-1.5 py-0.5 rounded truncate max-w-[45%]">
+                                        <span className="font-mono text-[10px] text-gray-500 bg-[#D8E8E2]/80 px-1.5 py-0.5 rounded truncate max-w-[45%]">
                                             {item.entity}
                                         </span>
                                     </div>
 
                                     <div className="mt-1 pt-2 border-t border-gray-100 flex items-center justify-between gap-2">
-                                        <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold tracking-wide uppercase bg-[#EDF5F2] text-[#374151] border border-gray-200 truncate max-w-[60%]">
+                                        <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold tracking-wide uppercase bg-[#D8E8E2] text-[#374151] border border-gray-200 truncate max-w-[60%]">
                                             • {item.action}
                                         </span>
                                         <span className="text-[#9CA3AF] text-[10px] whitespace-nowrap shrink-0">
@@ -185,7 +185,7 @@ export default function ActivityLogsPage() {
                 {/* ── DESKTOP TABLE: Sticky Table Header & Inner Scroll (hidden on mobile) ── */}
                 <div className="hidden sm:block overflow-y-auto custom-scrollbar flex-1">
                     <table className="w-full text-left text-sm text-[#374151] min-w-[600px] border-collapse">
-                        <thead className="sticky top-0 z-10 bg-[#EDF5F2] border-b border-gray-200 text-[#111827] shadow-xs">
+                        <thead className="sticky top-0 z-10 bg-[#D8E8E2] border-b border-gray-200 text-[#111827] shadow-xs">
                             <tr>
                                 <th className="p-4 font-semibold min-w-[150px]">Date / Time</th>
                                 <th className="p-4 font-semibold min-w-[150px] hidden sm:table-cell">Admin</th>
@@ -210,7 +210,7 @@ export default function ActivityLogsPage() {
                                 </tr>
                             ) : (
                                 logs.map(item => (
-                                    <tr key={item.id} className="hover:bg-[#EDF5F2]/40 transition-colors">
+                                    <tr key={item.id} className="hover:bg-[#D8E8E2]/40 transition-colors">
                                         <td className="p-4">
                                             <div className="text-[#111827] text-xs font-medium">
                                                 {new Date(item.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })},{' '}
@@ -222,7 +222,7 @@ export default function ActivityLogsPage() {
                                             <span className="text-[#9CA3AF] text-[10px] truncate max-w-[150px] block">{item.adminUser?.email || '-'}</span>
                                         </td>
                                         <td className="p-4">
-                                            <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold tracking-wide uppercase bg-[#EDF5F2]/80 text-[#374151] border border-gray-200">
+                                            <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold tracking-wide uppercase bg-[#D8E8E2]/80 text-[#374151] border border-gray-200">
                                                 {item.action}
                                             </span>
                                         </td>
@@ -247,7 +247,7 @@ export default function ActivityLogsPage() {
                     <button
                         disabled={page === 1}
                         onClick={() => setPage(p => Math.max(1, p - 1))}
-                        className="px-4 py-2 rounded-lg admin-card text-[#111827] disabled:opacity-50 hover:bg-[#EDF5F2]/70 transition-colors text-sm font-medium"
+                        className="px-4 py-2 rounded-lg admin-card text-[#111827] disabled:opacity-50 hover:bg-[#D8E8E2]/70 transition-colors text-sm font-medium"
                     >
                         Previous
                     </button>
@@ -257,7 +257,7 @@ export default function ActivityLogsPage() {
                     <button
                         disabled={page === totalPages}
                         onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                        className="px-4 py-2 rounded-lg admin-card text-[#111827] disabled:opacity-50 hover:bg-[#EDF5F2]/70 transition-colors text-sm font-medium"
+                        className="px-4 py-2 rounded-lg admin-card text-[#111827] disabled:opacity-50 hover:bg-[#D8E8E2]/70 transition-colors text-sm font-medium"
                     >
                         Next
                     </button>
@@ -267,7 +267,7 @@ export default function ActivityLogsPage() {
             {isModalOpen && logData && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#111827]/40 backdrop-blur-sm shadow-2xl">
                     <div className="admin-card w-full max-w-xl overflow-hidden shadow-2xl flex flex-col max-h-[88vh]">
-                        <div className="px-4 py-3 border-b border-gray-200 flex justify-between items-center bg-[#EDF5F2]/80 shrink-0">
+                        <div className="px-4 py-3 border-b border-gray-200 flex justify-between items-center bg-[#D8E8E2]/80 shrink-0">
                             <div className="flex items-center gap-2">
                                 <Activity className="w-4 h-4 text-[#6B9F91] opacity-80" />
                                 <div>
@@ -282,8 +282,8 @@ export default function ActivityLogsPage() {
 
                             {/* Top meta grid */}
                             <div className="grid grid-cols-2 gap-3">
-                                <div className="bg-[#EDF5F2]/40 rounded-md border border-gray-100 overflow-hidden">
-                                    <div className="px-3 py-1.5 bg-[#EDF5F2]/70 border-b border-gray-200">
+                                <div className="bg-[#D8E8E2]/40 rounded-md border border-gray-100 overflow-hidden">
+                                    <div className="px-3 py-1.5 bg-[#D8E8E2]/70 border-b border-gray-200">
                                         <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B9F91]">Date &amp; Time</span>
                                     </div>
                                     <div className="px-3 py-2">
@@ -296,8 +296,8 @@ export default function ActivityLogsPage() {
                                     </div>
                                 </div>
 
-                                <div className="bg-[#EDF5F2]/40 rounded-md border border-gray-100 overflow-hidden">
-                                    <div className="px-3 py-1.5 bg-[#EDF5F2]/70 border-b border-gray-200">
+                                <div className="bg-[#D8E8E2]/40 rounded-md border border-gray-100 overflow-hidden">
+                                    <div className="px-3 py-1.5 bg-[#D8E8E2]/70 border-b border-gray-200">
                                         <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B9F91]">Administrator</span>
                                     </div>
                                     <div className="px-3 py-2">
@@ -306,8 +306,8 @@ export default function ActivityLogsPage() {
                                     </div>
                                 </div>
 
-                                <div className="bg-[#EDF5F2]/40 rounded-md border border-gray-100 overflow-hidden">
-                                    <div className="px-3 py-1.5 bg-[#EDF5F2]/70 border-b border-gray-200">
+                                <div className="bg-[#D8E8E2]/40 rounded-md border border-gray-100 overflow-hidden">
+                                    <div className="px-3 py-1.5 bg-[#D8E8E2]/70 border-b border-gray-200">
                                         <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B9F91]">Action Code</span>
                                     </div>
                                     <div className="px-3 py-2">
@@ -317,8 +317,8 @@ export default function ActivityLogsPage() {
                                     </div>
                                 </div>
 
-                                <div className="bg-[#EDF5F2]/40 rounded-md border border-gray-100 overflow-hidden">
-                                    <div className="px-3 py-1.5 bg-[#EDF5F2]/70 border-b border-gray-200">
+                                <div className="bg-[#D8E8E2]/40 rounded-md border border-gray-100 overflow-hidden">
+                                    <div className="px-3 py-1.5 bg-[#D8E8E2]/70 border-b border-gray-200">
                                         <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B9F91]">Entity Context</span>
                                     </div>
                                     <div className="px-3 py-2">
@@ -328,8 +328,8 @@ export default function ActivityLogsPage() {
                             </div>
 
                             {/* Description */}
-                            <div className="bg-[#EDF5F2]/40 rounded-md border border-gray-100 overflow-hidden">
-                                <div className="px-3 py-1.5 bg-[#EDF5F2]/70 border-b border-gray-200">
+                            <div className="bg-[#D8E8E2]/40 rounded-md border border-gray-100 overflow-hidden">
+                                <div className="px-3 py-1.5 bg-[#D8E8E2]/70 border-b border-gray-200">
                                     <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B9F91]">Immutable Description</span>
                                 </div>
                                 <div className="px-3 py-2">
@@ -339,8 +339,8 @@ export default function ActivityLogsPage() {
 
                             {/* Target ID + Network */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                <div className="bg-[#EDF5F2]/40 rounded-md border border-gray-100 overflow-hidden">
-                                    <div className="px-3 py-1.5 bg-[#EDF5F2]/70 border-b border-gray-200">
+                                <div className="bg-[#D8E8E2]/40 rounded-md border border-gray-100 overflow-hidden">
+                                    <div className="px-3 py-1.5 bg-[#D8E8E2]/70 border-b border-gray-200">
                                         <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B9F91]">Target Entity ID</span>
                                     </div>
                                     <div className="px-3 py-2">
@@ -349,8 +349,8 @@ export default function ActivityLogsPage() {
                                 </div>
 
                                 {(logData.ipAddress || logData.userAgent) && (
-                                    <div className="bg-[#EDF5F2]/40 rounded-md border border-gray-100 overflow-hidden">
-                                        <div className="px-3 py-1.5 bg-[#EDF5F2]/70 border-b border-gray-200">
+                                    <div className="bg-[#D8E8E2]/40 rounded-md border border-gray-100 overflow-hidden">
+                                        <div className="px-3 py-1.5 bg-[#D8E8E2]/70 border-b border-gray-200">
                                             <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B9F91]">Network Signature</span>
                                         </div>
                                         <div className="px-3 py-2 max-h-[72px] overflow-y-auto custom-scrollbar">
@@ -365,8 +365,8 @@ export default function ActivityLogsPage() {
 
                         </div>
 
-                        <div className="px-4 py-2.5 border-t border-gray-200 flex justify-end bg-[#EDF5F2]/50 shrink-0">
-                            <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-1.5 rounded-md text-xs font-medium bg-[#EDF5F2] text-[#111827] hover:bg-[#EDF5F2]/80 transition-colors">
+                        <div className="px-4 py-2.5 border-t border-gray-200 flex justify-end bg-[#D8E8E2]/50 shrink-0">
+                            <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-1.5 rounded-md text-xs font-medium bg-[#D8E8E2] text-[#111827] hover:bg-[#D8E8E2]/80 transition-colors">
                                 Close Audit Record
                             </button>
                         </div>

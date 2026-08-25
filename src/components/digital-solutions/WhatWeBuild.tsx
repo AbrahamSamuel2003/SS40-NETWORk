@@ -119,13 +119,14 @@ export function WhatWeBuild() {
     };
 
     return (
-        <SectionWrapper id="what-we-build" className="bg-[#EDF5F2] !overflow-visible">
+        <SectionWrapper id="what-we-build" className="bg-[#D8E8E2] !overflow-visible">
             <Container className="space-y-12 lg:space-y-16">
 
                 {/* Section Header */}
                 <SectionHeading
                     badge="What We Build"
                     title="Digital Solutions Built for Modern Businesses"
+                    highlight="Built for Modern Businesses"
                     description="From enterprise software to AI-powered automation, we create scalable digital products that solve real business challenges."
                 />
 

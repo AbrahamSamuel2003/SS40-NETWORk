@@ -55,28 +55,38 @@ export function ActivityUpdates({ data = [] }: ActivityUpdatesProps) {
         return null;
     }
 
-    // Sync mobile scroll position with active dot
-    const handleMobileScroll = () => {
+    // IntersectionObserver for active mobile card detection (matching OUR IMPACT pattern)
+    useEffect(() => {
         const el = mobileScrollRef.current;
         if (!el) return;
-        const scrollLeft = el.scrollLeft;
-        const cardWidth = el.firstElementChild ? (el.firstElementChild as HTMLElement).offsetWidth + 16 : 300;
-        const idx = Math.round(scrollLeft / cardWidth);
-        setActiveMobileIdx(Math.min(Math.max(0, idx), homeActivities.length - 1));
-    };
+
+        const mobileObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = Number(entry.target.getAttribute("data-mobile-id"));
+                    if (!isNaN(id)) {
+                        setActiveMobileIdx(id);
+                    }
+                }
+            });
+        }, { root: el, threshold: 0.6 });
+
+        const mobileCards = el.querySelectorAll(".mobile-activity-wrapper");
+        mobileCards.forEach(c => mobileObserver.observe(c));
+
+        return () => {
+            mobileObserver.disconnect();
+        };
+    }, [homeActivities.length]);
 
     const scrollToMobileCard = (idx: number) => {
-        const el = mobileScrollRef.current;
-        if (!el) return;
-        const cards = el.querySelectorAll('.mobile-activity-card');
-        if (cards[idx]) {
-            (cards[idx] as HTMLElement).scrollIntoView({
-                behavior: 'smooth',
-                block: 'nearest',
-                inline: 'center'
-            });
-            setActiveMobileIdx(idx);
-        }
+        if (!mobileScrollRef.current) return;
+        const container = mobileScrollRef.current;
+        const cardWidth = container.clientWidth * 0.82 + 20; // Exact match to scroll math
+        container.scrollTo({
+            left: idx * cardWidth,
+            behavior: "smooth"
+        });
     };
 
     const scrollToDesktopCard = (idx: number) => {
@@ -85,7 +95,7 @@ export function ActivityUpdates({ data = [] }: ActivityUpdatesProps) {
         const trackTop = el.offsetTop;
         const trackHeight = el.offsetHeight;
         const targetScroll = trackTop + (idx / count) * (trackHeight - window.innerHeight) + 20;
-        window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+        window.scrollTo({ top: targetScroll, behavior: "smooth" });
     };
 
     return (
@@ -99,33 +109,34 @@ export function ActivityUpdates({ data = [] }: ActivityUpdatesProps) {
                 className="hidden lg:block relative bg-white border-t border-gray-100"
                 style={{ height: `${Math.max(200, count * 100)}vh` }}
             >
-                {/* Pinned Viewport Container */}
-                <div className="sticky top-0 h-screen w-full flex flex-col justify-between overflow-hidden py-8 px-4 relative">
+                {/* Pinned Viewport Container with Optimized Vertical Budget */}
+                <div className="sticky top-0 h-screen w-full flex flex-col justify-between overflow-hidden py-4 lg:py-6 px-4 relative">
                     {/* Ambient Glow */}
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-[#6B9F91]/5 rounded-full blur-3xl pointer-events-none" />
 
                     <Container className="relative z-10 w-full flex flex-col justify-between h-full max-w-6xl">
                         {/* Section Header */}
-                        <div className="text-center pt-2 shrink-0">
+                        <div className="text-center pt-1 shrink-0">
                             <SectionHeading
                                 badge="Blogs & Field Activities"
                                 title="Moments That Shape Our Impact"
+                                highlight="Our Impact"
                                 description="Explore our field visits, institutional partnerships, and official dialogues driving modern technology empowerment."
                                 align="center"
                             />
                         </div>
 
-                        {/* Active Pinned Blog Card with Smooth Phase Transitions */}
-                        <div className="relative w-full my-auto flex items-center justify-center min-h-[420px]">
+                        {/* Active Pinned Blog Card with Hardware-Accelerated Phase Transitions */}
+                        <div className="relative w-full my-auto flex items-center justify-center py-2">
                             <AnimatePresence mode="wait">
                                 {homeActivities[activeDesktopIdx] && (
                                     <motion.div
                                         key={`desktop-card-${homeActivities[activeDesktopIdx].id}`}
-                                        initial={{ opacity: 0, y: 25, scale: 0.98 }}
+                                        initial={{ opacity: 0, y: 15, scale: 0.99 }}
                                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                                        exit={{ opacity: 0, y: -25, scale: 0.98 }}
-                                        transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                                        className="w-full"
+                                        exit={{ opacity: 0, y: -15, scale: 0.99 }}
+                                        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                                        className="w-full transform-gpu"
                                     >
                                         <ActivityCard
                                             activity={homeActivities[activeDesktopIdx]}
@@ -138,8 +149,8 @@ export function ActivityUpdates({ data = [] }: ActivityUpdatesProps) {
                             </AnimatePresence>
                         </div>
 
-                        {/* Bottom Bar: Step Tracker & View All Link */}
-                        <div className="w-full flex items-center justify-between pt-2 pb-2 shrink-0 border-t border-gray-100">
+                        {/* Bottom Bar: Step Tracker & Scroll / View All Link (Guaranteed Visible) */}
+                        <div className="w-full flex items-center justify-between pt-2.5 pb-1 shrink-0 border-t border-gray-100 z-20">
                             {/* Step Progress Tracker */}
                             <div className="flex items-center gap-3">
                                 <span className="text-xs font-bold text-[#1F3D35] tracking-widest uppercase">
@@ -152,7 +163,7 @@ export function ActivityUpdates({ data = [] }: ActivityUpdatesProps) {
                                             type="button"
                                             onClick={() => scrollToDesktopCard(i)}
                                             aria-label={`Go to blog slide ${i + 1}`}
-                                            className={`h-2 rounded-full transition-all duration-400 cursor-pointer ${
+                                            className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
                                                 activeDesktopIdx === i
                                                     ? 'w-8 bg-[#0F766E]'
                                                     : 'w-2 bg-gray-300 hover:bg-gray-400'
@@ -163,7 +174,7 @@ export function ActivityUpdates({ data = [] }: ActivityUpdatesProps) {
                                 </div>
                             </div>
 
-                            {/* View All Blogs Navigation Link (Only appears if > 3 blogs) */}
+                            {/* View All Blogs / Scroll Indicator */}
                             {data.length > 3 ? (
                                 <Link
                                     href="/blogs"
@@ -173,7 +184,7 @@ export function ActivityUpdates({ data = [] }: ActivityUpdatesProps) {
                                     <ArrowRight className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" />
                                 </Link>
                             ) : (
-                                <span className="text-xs font-medium text-gray-600">
+                                <span className="text-xs font-semibold text-[#1F3D35] bg-[#D8E8E2] px-3 py-1 rounded-full">
                                     Scroll down to continue
                                 </span>
                             )}
@@ -183,71 +194,74 @@ export function ActivityUpdates({ data = [] }: ActivityUpdatesProps) {
             </div>
 
             {/* ═════════════════════════════════════════════════════════════════════ */}
-            {/* MOBILE TOUCH-SWIPE CAROUSEL (hidden on desktop)                       */}
+            {/* MOBILE TOUCH-SWIPE CAROUSEL (Replicating exact OUR IMPACT pattern)    */}
             {/* ═════════════════════════════════════════════════════════════════════ */}
-            <div id="activities-mobile" className="block lg:hidden w-full bg-white py-16 border-t border-gray-100 relative overflow-hidden">
-                <Container className="space-y-8">
+            <div id="activities-mobile" className="flex flex-col lg:hidden w-full bg-white pt-10 pb-16 border-t border-gray-100 relative">
+                <div className="px-6 mb-8 text-center">
                     <SectionHeading
                         badge="Blogs & Field Activities"
                         title="Moments That Shape Our Impact"
+                        highlight="Our Impact"
                         description="Explore our field visits, institutional partnerships, and official dialogues driving modern technology empowerment."
                         align="center"
                     />
+                </div>
 
-                    {/* Mobile Native Horizontal Swipe Deck */}
-                    <div className="flex flex-col w-full -mx-4 sm:-mx-6">
+                {/* Mobile Native Horizontal Swipe Deck */}
+                <div
+                    ref={mobileScrollRef}
+                    className="flex w-full overflow-x-auto snap-x snap-mandatory px-6 gap-5 items-stretch [&::-webkit-scrollbar]:hidden"
+                    style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                >
+                    {homeActivities.map((activity, idx) => (
                         <div
-                            ref={mobileScrollRef}
-                            onScroll={handleMobileScroll}
-                            className="flex w-full overflow-x-auto snap-x snap-mandatory px-4 sm:px-6 gap-4 sm:gap-5 items-stretch [&::-webkit-scrollbar]:hidden"
-                            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                            key={`mobile-act-${activity.id}`}
+                            data-mobile-id={idx}
+                            className="mobile-activity-wrapper shrink-0 snap-center"
                         >
-                            {homeActivities.map((activity) => (
-                                <div key={`mobile-act-${activity.id}`} className="mobile-activity-card snap-center shrink-0">
-                                    <ActivityCard
-                                        activity={activity}
-                                        variant="mobile-swipe"
-                                        onReadStory={(item) => setActiveModalItem(item)}
-                                    />
-                                </div>
-                            ))}
-                            <div className="w-2 shrink-0" />
+                            <ActivityCard
+                                activity={activity}
+                                variant="mobile-swipe"
+                                onReadStory={(item) => setActiveModalItem(item)}
+                            />
                         </div>
+                    ))}
+                    {/* End spacer: larger on mobile so the last card sits clear of the screen edge */}
+                    <div className="w-[10vw] sm:w-[4vw] shrink-0" />
+                </div>
 
-                        {/* Mobile Pagination Indicator Dots */}
-                        <div className="w-full flex justify-center items-center gap-2 mt-6 z-10 relative">
-                            {homeActivities.map((_, i) => (
-                                <button
-                                    key={`dot-${i}`}
-                                    onClick={() => scrollToMobileCard(i)}
-                                    aria-label={`Scroll to blog ${i + 1}`}
-                                    className="p-2 focus:outline-none flex items-center justify-center touch-manipulation cursor-pointer"
-                                >
-                                    <div
-                                        className={`h-2 rounded-full transition-all duration-300 ${
-                                            activeMobileIdx === i
-                                                ? 'bg-[#6B9F91] w-7 shadow-sm'
-                                                : 'bg-gray-300 w-2 hover:bg-gray-400'
-                                        }`}
-                                    />
-                                </button>
-                            ))}
-                        </div>
+                {/* Pagination Pill Dots matching OUR IMPACT */}
+                <div className="w-full flex justify-center items-center gap-3 mt-8 z-10 relative">
+                    {homeActivities.map((_, i) => (
+                        <button
+                            key={`dot-${i}`}
+                            onClick={() => scrollToMobileCard(i)}
+                            aria-label={`Scroll to blog ${i + 1}`}
+                            className="p-3 focus:outline-none min-w-[44px] min-h-[44px] flex items-center justify-center touch-manipulation cursor-pointer"
+                        >
+                            <div
+                                className={`h-2.5 rounded-full transition-all duration-400 ease-out ${
+                                    activeMobileIdx === i
+                                        ? 'bg-[#6B9F91] w-8 shadow-sm scale-100'
+                                        : 'bg-gray-300 w-2.5 hover:bg-gray-400 scale-90'
+                                } border-none`}
+                            />
+                        </button>
+                    ))}
+                </div>
+
+                {/* View All Blogs Navigation Link */}
+                {data.length > 3 && (
+                    <div className="w-full flex justify-center mt-4 px-6">
+                        <Link
+                            href="/blogs"
+                            className="inline-flex items-center justify-center font-bold text-base text-[#6B9F91] hover:text-[#588478] transition-colors group"
+                        >
+                            View All Blogs
+                            <ArrowRight className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" />
+                        </Link>
                     </div>
-
-                    {/* View All Blogs Navigation Link (Appears ONLY when blogs exceed 3) */}
-                    {data.length > 3 && (
-                        <div className="w-full flex justify-center mt-2">
-                            <Link
-                                href="/blogs"
-                                className="inline-flex items-center justify-center font-bold text-base text-[#6B9F91] hover:text-[#588478] transition-colors group"
-                            >
-                                View All Blogs
-                                <ArrowRight className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" />
-                            </Link>
-                        </div>
-                    )}
-                </Container>
+                )}
             </div>
 
             {/* ═════════════════════════════════════════════════════════════════════ */}
@@ -407,7 +421,7 @@ function ActivityStoryModal({ activity, onClose }: { activity: ActivityItem; onC
                     {/* Image Counter Badge */}
                     {images.length > 1 && (
                         <div className="absolute top-4 left-4 bg-black/75 backdrop-blur-md text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
-                            📷 {activeImgIdx + 1} / {images.length}
+                            {activeImgIdx + 1} / {images.length}
                         </div>
                     )}
 
@@ -457,7 +471,7 @@ function ActivityStoryModal({ activity, onClose }: { activity: ActivityItem; onC
                             {meta.label}
                         </span>
 
-                        <span className="flex items-center gap-1.5 text-xs text-gray-700 font-semibold bg-[#EDF5F2] px-3.5 py-1.5 rounded-full">
+                        <span className="flex items-center gap-1.5 text-xs text-gray-700 font-semibold bg-[#D8E8E2] px-3.5 py-1.5 rounded-full">
                             <Calendar className="w-3.5 h-3.5 text-[#6B9F91]" />
                             {formattedDate}
                         </span>
@@ -475,7 +489,7 @@ function ActivityStoryModal({ activity, onClose }: { activity: ActivityItem; onC
                     </h2>
 
                     <div className="space-y-4 text-sm sm:text-base text-[#374151] leading-relaxed">
-                        <p className="font-semibold text-gray-800 bg-[#EDF5F2]/60 p-5 rounded-2xl border border-[#6B9F91]/25">
+                        <p className="font-semibold text-gray-800 bg-[#D8E8E2]/60 p-5 rounded-2xl border border-[#6B9F91]/25">
                             {activity.summary}
                         </p>
 
