@@ -61,6 +61,7 @@ interface ChatMessage {
         email: string;
         whatsappUrl: string;
         mailtoUrl: string;
+        gmailUrl: string;
         contactUrl: string;
         mapsUrl: string;
     };
@@ -84,13 +85,11 @@ interface KnowledgeRule {
 }
 
 // ----------------------------------------------------------------------------
-// Helper: Generate Formatted Email Template URL (Matching WhatsApp standard)
+// Helper: Generate Formatted Email Template URLs
 // ----------------------------------------------------------------------------
-function generateMailtoUrl(email: string, query?: string) {
-    const subject = encodeURIComponent(
-        query ? `SS40 Network Inquiry: ${query.slice(0, 50)}` : "SS40 Network Enterprise & Academic Inquiry"
-    );
-    const body = encodeURIComponent(
+function generateMailContent(query?: string) {
+    const subject = query ? `SS40 Network Inquiry: ${query.slice(0, 50)}` : "SS40 Network Enterprise & Academic Inquiry";
+    const body = 
 `Hello SS40 Network Team,
 
 I am writing to inquire regarding the following details:
@@ -104,9 +103,18 @@ I am writing to inquire regarding the following details:
 
 Looking forward to your response.
 
-Best regards,`
-    );
-    return `mailto:${email}?subject=${subject}&body=${body}`;
+Best regards,`;
+    return { subject, body };
+}
+
+function generateMailtoUrl(email: string, query?: string) {
+    const { subject, body } = generateMailContent(query);
+    return `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
+
+function generateGmailUrl(email: string, query?: string) {
+    const { subject, body } = generateMailContent(query);
+    return `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 
 // ----------------------------------------------------------------------------
@@ -331,9 +339,18 @@ export function RuleBasedChatbot({
     const [messages, setMessages] = useState<ChatMessage[]>([initialBotMessage]);
     const [inputValue, setInputValue] = useState("");
     const [isTyping, setIsTyping] = useState(false);
+    const [copiedEmail, setCopiedEmail] = useState(false);
     const chatContainerRef = useRef<HTMLDivElement>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
+
+    const handleCopyEmail = (emailToCopy: string) => {
+        try {
+            navigator.clipboard.writeText(emailToCopy);
+            setCopiedEmail(true);
+            setTimeout(() => setCopiedEmail(false), 2000);
+        } catch {}
+    };
 
     // Optimized smooth auto-scroll to bottom without layout thrashing
     const scrollToBottom = useCallback(() => {
@@ -465,6 +482,7 @@ export function RuleBasedChatbot({
                         email,
                         whatsappUrl: `https://wa.me/${cleanPhone}?text=${encodeURIComponent(`Hello SS40, I need assistance regarding: "${query}"`)}`,
                         mailtoUrl: generateMailtoUrl(email, query),
+                        gmailUrl: generateGmailUrl(email, query),
                         contactUrl: "/contact",
                         mapsUrl: GOOGLE_MAPS_URL
                     },
@@ -496,6 +514,7 @@ export function RuleBasedChatbot({
                 email,
                 whatsappUrl: `https://wa.me/${cleanPhone}?text=${encodeURIComponent(`Hello SS40 Support, I have an inquiry about: "${query}"`)}`,
                 mailtoUrl: generateMailtoUrl(email, query),
+                gmailUrl: generateGmailUrl(email, query),
                 contactUrl: "/contact",
                 mapsUrl: GOOGLE_MAPS_URL
             },
@@ -688,22 +707,54 @@ export function RuleBasedChatbot({
                                             >
                                                 <span className="flex items-center gap-2">
                                                     <MessageCircle className="w-4 h-4 text-[#25D366]" />
-                                                    Chat on WhatsApp (Instant)
+                                                    Chat on WhatsApp
                                                 </span>
                                                 <ExternalLink className="w-3.5 h-3.5 text-[#128C7E]" />
                                             </a>
 
-                                            {/* Formatted Mailto Launcher (With Full Inquiry Template) */}
-                                            <a
-                                                href={msg.supportData.mailtoUrl}
-                                                className="inline-flex items-center justify-between p-2.5 rounded-xl bg-blue-50 hover:bg-blue-100/80 text-blue-800 font-bold text-xs transition-colors border border-blue-200 cursor-pointer"
-                                            >
-                                                <span className="flex items-center gap-2 truncate">
-                                                    <Mail className="w-4 h-4 text-blue-600 shrink-0" />
-                                                    <span className="truncate">Email Support (Pre-filled)</span>
-                                                </span>
-                                                <ExternalLink className="w-3.5 h-3.5 text-blue-600 shrink-0" />
-                                            </a>
+                                            {/* Single Row: Email (Gmail Web) + Default Mail App + Copy Address */}
+                                            <div className="grid grid-cols-3 gap-1.5">
+                                                {/* 1. Gmail Web */}
+                                                <a
+                                                    href={msg.supportData.gmailUrl}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="inline-flex items-center justify-center p-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-800 font-bold text-[11px] transition-colors border border-blue-200 cursor-pointer text-center truncate"
+                                                    title="Open pre-filled email in Gmail Web"
+                                                >
+                                                    <Mail className="w-3.5 h-3.5 text-blue-600 mr-1 shrink-0" />
+                                                    <span className="truncate">Email</span>
+                                                </a>
+
+                                                {/* 2. Default Mail App */}
+                                                <a
+                                                    href={msg.supportData.mailtoUrl}
+                                                    className="inline-flex items-center justify-center p-2 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-700 font-semibold text-[11px] transition-colors border border-gray-200 cursor-pointer text-center truncate"
+                                                    title="Open in default desktop email client (Outlook, Apple Mail)"
+                                                >
+                                                    <Mail className="w-3.5 h-3.5 text-gray-500 mr-1 shrink-0" />
+                                                    <span className="truncate">Default App</span>
+                                                </a>
+
+                                                {/* 3. Copy Address */}
+                                                <button
+                                                    onClick={() => handleCopyEmail(msg.supportData!.email)}
+                                                    className="inline-flex items-center justify-center p-2 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-700 font-semibold text-[11px] transition-colors border border-gray-200 cursor-pointer text-center truncate"
+                                                    title="Copy email address to clipboard"
+                                                >
+                                                    {copiedEmail ? (
+                                                        <>
+                                                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 mr-1 shrink-0" />
+                                                            <span className="text-emerald-700 font-bold truncate">Copied!</span>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <FileText className="w-3.5 h-3.5 text-gray-500 mr-1 shrink-0" />
+                                                            <span className="truncate">Copy</span>
+                                                        </>
+                                                    )}
+                                                </button>
+                                            </div>
 
                                             {/* Google Maps Location Launcher */}
                                             <a
