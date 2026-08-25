@@ -36,6 +36,7 @@ const SCENES = [
         wingNumber: "01",
         wingTag: "WING 01 • SS40 DIGITAL SOLUTIONS",
         title: "Transforming Business Through Intelligent Software",
+        mobileTitle: "SS40 Digital Solutions",
         shortTitle: "Digital Solutions",
         description: "We help modern enterprises automate operations, streamline data pipelines, and scale with custom cloud architecture and high-performance digital systems.",
         href: "/digital-solutions",
@@ -56,6 +57,7 @@ const SCENES = [
         wingNumber: "02",
         wingTag: "WING 02 • SS40 PRODUCTS",
         title: "Scalable Digital Products Engineered for Growth",
+        mobileTitle: "SS40 Products",
         shortTitle: "Products",
         description: "Bespoke SaaS platforms engineered to eliminate manual bottlenecks, optimize billing workflows, and empower businesses with real-time operational intelligence.",
         href: "/products",
@@ -76,6 +78,7 @@ const SCENES = [
         wingNumber: "03",
         wingTag: "WING 03 • SS40 ACADEMICS",
         title: "Bridging Education & Real-World Industry Practice",
+        mobileTitle: "SS40 Academics",
         shortTitle: "Academics",
         description: "Empowering students and institutions through immersive hands-on technology training, industry mentorship, sprint projects, and direct placement pipelines.",
         href: "/academics",
@@ -585,7 +588,7 @@ const MobileSwipeCard = ({ scene, idx }: { scene: typeof SCENES[0], idx: number 
                 <div className="w-10 h-10 rounded-xl bg-[#EDF5F2] text-[#2E544A] flex items-center justify-center font-extrabold text-base mb-4 border border-gray-100 shrink-0">
                     0{idx + 1}
                 </div>
-                <h3 className="text-2xl font-black text-[#111827] tracking-tight mb-2">{scene.title}</h3>
+                <h3 className="text-2xl font-black text-[#111827] tracking-tight mb-2">{scene.mobileTitle || scene.title}</h3>
                 <p className="text-gray-600 text-sm leading-snug mb-5 shrink-0 line-clamp-2">{scene.description}</p>
 
                 <div className="flex flex-col gap-2">
