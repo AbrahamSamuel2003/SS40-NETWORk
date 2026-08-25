@@ -16,11 +16,11 @@ const ContactSection = dynamic(() => import("@/components/home/ContactSection").
 export const revalidate = 0; // Real-time dynamic CMS replication
 
 export const metadata: Metadata = {
-  title: "SS40 Network | Intelligent Digital Solutions, SaaS Products & Academics",
-  description: "One Company. Three Business Wings. Driving the modern era forward with world-class digital services, innovative SaaS products, and elite academic empowerment.",
+  title: "SS40 Network | Digital Solutions, SaaS & Academics",
+  description: "Enterprise software engineering, scalable SaaS products, and career-launching academic programs.",
   openGraph: {
-    title: "SS40 Network | Intelligent Digital Solutions, SaaS Products & Academics",
-    description: "One Company. Three Business Wings. Driving the modern era forward with world-class digital services, innovative SaaS products, and elite academic empowerment.",
+    title: "SS40 Network | Digital Solutions, SaaS & Academics",
+    description: "Enterprise software engineering, scalable SaaS products, and career-launching academic programs.",
     url: "https://www.ss40network.com",
     siteName: "SS40 Network",
     locale: "en_US",
@@ -32,14 +32,14 @@ export const metadata: Metadata = {
         width: 1200,
         height: 630,
         type: "image/jpeg",
-        alt: "SS40 Network - Intelligent Digital Solutions, SaaS Products & Academics",
+        alt: "SS40 Network - Digital Solutions, SaaS Products & Academics",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "SS40 Network | Intelligent Digital Solutions, SaaS Products & Academics",
-    description: "One Company. Three Business Wings. Driving the modern era forward with world-class digital services, innovative SaaS products, and elite academic empowerment.",
+    title: "SS40 Network | Digital Solutions, SaaS & Academics",
+    description: "Enterprise software engineering, scalable SaaS products, and career-launching academic programs.",
     images: ["https://www.ss40network.com/og-image.jpg"],
   },
 };
