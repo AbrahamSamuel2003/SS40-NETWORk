@@ -12,9 +12,9 @@ const inter = Inter({
 
 export async function generateMetadata(): Promise<Metadata> {
   const config = await getSiteConfig();
-  const defaultTitle = config?.seoDefaultTitle || "SS40 Network | Digital Solutions, SaaS & Academics";
-  const company = "SS40 Network PRIVATE LIMITED";
-  const defaultDesc = config?.seoDefaultDescription || "Enterprise software engineering, scalable SaaS products, and career-launching academic programs.";
+  const defaultTitle = config?.seoDefaultTitle || "SS40 NETWORK PRIVATE LIMITED — Enterprise Digital Solutions, SaaS Products & Tech Academics";
+  const company = "SS40 NETWORK PRIVATE LIMITED";
+  const defaultDesc = config?.seoDefaultDescription || "Architecting high-scale digital systems, intelligent SaaS products, and career-launching tech academics by SS40 NETWORK PRIVATE LIMITED. Built in India. Thinking Globally.";
   
   return {
     metadataBase: new URL("https://www.ss40network.com"),

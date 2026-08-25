@@ -16,13 +16,13 @@ const ContactSection = dynamic(() => import("@/components/home/ContactSection").
 export const revalidate = 0; // Real-time dynamic CMS replication
 
 export const metadata: Metadata = {
-  title: "SS40 Network | Digital Solutions, SaaS & Academics",
-  description: "Enterprise software engineering, scalable SaaS products, and career-launching academic programs.",
+  title: "SS40 NETWORK PRIVATE LIMITED — Enterprise Digital Solutions, SaaS Products & Tech Academics",
+  description: "Architecting high-scale digital systems, intelligent SaaS products, and career-launching tech academics by SS40 NETWORK PRIVATE LIMITED. Built in India. Thinking Globally.",
   openGraph: {
-    title: "SS40 Network | Digital Solutions, SaaS & Academics",
-    description: "Enterprise software engineering, scalable SaaS products, and career-launching academic programs.",
+    title: "SS40 NETWORK PRIVATE LIMITED — Enterprise Digital Solutions, SaaS Products & Tech Academics",
+    description: "Architecting high-scale digital systems, intelligent SaaS products, and career-launching tech academics by SS40 NETWORK PRIVATE LIMITED. Built in India. Thinking Globally.",
     url: "https://www.ss40network.com",
-    siteName: "SS40 Network",
+    siteName: "SS40 NETWORK PRIVATE LIMITED",
     locale: "en_US",
     type: "website",
     images: [
@@ -32,20 +32,20 @@ export const metadata: Metadata = {
         width: 1200,
         height: 630,
         type: "image/jpeg",
-        alt: "SS40 Network - Digital Solutions, SaaS Products & Academics",
+        alt: "SS40 NETWORK PRIVATE LIMITED — Digital Solutions, SaaS Products & Academics",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "SS40 Network | Digital Solutions, SaaS & Academics",
-    description: "Enterprise software engineering, scalable SaaS products, and career-launching academic programs.",
+    title: "SS40 NETWORK PRIVATE LIMITED — Enterprise Digital Solutions, SaaS Products & Tech Academics",
+    description: "Architecting high-scale digital systems, intelligent SaaS products, and career-launching tech academics by SS40 NETWORK PRIVATE LIMITED. Built in India. Thinking Globally.",
     images: [
       {
         url: "https://www.ss40network.com/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "SS40 Network - Digital Solutions, SaaS Products & Academics",
+        alt: "SS40 NETWORK PRIVATE LIMITED — Digital Solutions, SaaS Products & Academics",
       },
     ],
   },
