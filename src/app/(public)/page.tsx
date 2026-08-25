@@ -40,7 +40,14 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "SS40 Network | Digital Solutions, SaaS & Academics",
     description: "Enterprise software engineering, scalable SaaS products, and career-launching academic programs.",
-    images: ["https://www.ss40network.com/og-image.jpg"],
+    images: [
+      {
+        url: "https://www.ss40network.com/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "SS40 Network - Digital Solutions, SaaS Products & Academics",
+      },
+    ],
   },
 };
 

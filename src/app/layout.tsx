@@ -66,7 +66,14 @@ export async function generateMetadata(): Promise<Metadata> {
       card: "summary_large_image",
       title: defaultTitle,
       description: defaultDesc,
-      images: ["https://www.ss40network.com/og-image.jpg"],
+      images: [
+        {
+          url: "https://www.ss40network.com/og-image.jpg",
+          width: 1200,
+          height: 630,
+          alt: "SS40 Network — Digital Solutions, SaaS Products & Academics",
+        },
+      ],
     },
     robots: {
       index: true,
