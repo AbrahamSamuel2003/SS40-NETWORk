@@ -29,7 +29,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         // 6. Privacy Policy
         { route: '/privacy-policy',           priority: 0.65, changeFrequency: 'yearly' },
         // Supporting secondary pages
-        { route: '/about',                    priority: 0.60, changeFrequency: 'monthly' },
         { route: '/client-projects',          priority: 0.58, changeFrequency: 'weekly' },
         { route: '/happimonials',             priority: 0.55, changeFrequency: 'weekly' },
         { route: '/product-impacts',          priority: 0.53, changeFrequency: 'weekly' },
