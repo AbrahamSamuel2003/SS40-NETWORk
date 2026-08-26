@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import {
@@ -21,17 +22,26 @@ export function Hero() {
     return (
         <section className={cn("relative w-full overflow-hidden bg-white", HERO_SPACING_CLASSES)}>
 
-            {/* Ambient Background Elements */}
-            <div className="absolute inset-0 z-0">
+            {/* Ambient Background Image & Gradients (Clean Stacking Context) */}
+            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
+                <Image
+                    src="/images/hero/products-hero-bg.jpg"
+                    alt=""
+                    fill
+                    priority
+                    sizes="100vw"
+                    className="object-cover object-center opacity-35 sm:opacity-45 mix-blend-multiply"
+                    quality={85}
+                />
+                <div 
+                    className="absolute inset-0"
+                    style={{ background: 'radial-gradient(ellipse at 50% 35%, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.85) 65%, #ffffff 100%)' }}
+                />
                 {/* Soft Grid Texture */}
                 <div
                     className="absolute inset-0 opacity-[0.04] pointer-events-none mix-blend-multiply"
                     style={{ backgroundImage: 'radial-gradient(#6B9F91 1.5px, transparent 1.5px)', backgroundSize: '32px 32px' }}
                 />
-
-                {/* Soft Teal Radial Glows */}
-                <div className="absolute top-0 right-0 w-[700px] h-[700px] bg-[#6B9F91]/10 blur-[130px] rounded-full translate-x-1/3 -translate-y-1/3 pointer-events-none" />
-                <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#6B9F91]/5 blur-[100px] rounded-full -translate-x-1/3 translate-y-1/3 pointer-events-none" />
             </div>
 
             <Container className="relative z-10 w-full">
@@ -60,13 +70,13 @@ export function Hero() {
 
                             <div className="flex flex-col sm:flex-row items-center w-full sm:w-auto gap-4">
                                 <Button asChild size="lg" className="w-full sm:w-auto shadow-lg shadow-[var(--color-primary)]/20 group">
-                                    <a href="#featured-product">
+                                    <a href="#featured-product" className="inline-flex items-center justify-center whitespace-nowrap">
                                         Explore Products
-                                        <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                                        <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform shrink-0" />
                                     </a>
                                 </Button>
-                                <Button asChild variant="outline" size="lg" className="w-full sm:w-auto bg-white/50 backdrop-blur-sm border-gray-200 hover:bg-white text-gray-700">
-                                    <Link href="/contact">
+                                <Button asChild variant="outline" size="lg" className="w-full sm:w-auto bg-white/70 backdrop-blur-sm border-gray-300 hover:bg-white text-gray-800">
+                                    <Link href="/contact" className="inline-flex items-center justify-center whitespace-nowrap">
                                         Book a Demo
                                     </Link>
                                 </Button>

@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import {
@@ -29,19 +30,25 @@ export function Hero() {
     return (
         <section className={cn("relative w-full overflow-hidden bg-white border-b border-gray-100", HERO_SPACING_CLASSES)}>
 
-            {/* Ambient Background Elements */}
-            <div className="absolute inset-0 z-0 overflow-hidden">
+            {/* Ambient Background Image & Gradients (Clean Stacking Context) */}
+            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
+                <Image
+                    src="/images/hero/academics-hero-bg.jpg"
+                    alt=""
+                    fill
+                    priority
+                    sizes="100vw"
+                    className="object-cover object-center opacity-35 sm:opacity-45 mix-blend-multiply"
+                    quality={85}
+                />
+                <div 
+                    className="absolute inset-0"
+                    style={{ background: 'radial-gradient(ellipse at 50% 35%, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.85) 65%, #ffffff 100%)' }}
+                />
                 <div
                     className="absolute inset-0 opacity-[0.03] mix-blend-multiply"
                     style={{ backgroundImage: 'radial-gradient(#6B9F91 1.5px, transparent 1.5px)', backgroundSize: '32px 32px' }}
                 />
-                <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#FFC900]/10 blur-[130px] rounded-full translate-x-1/3 -translate-y-1/3 pointer-events-none" />
-                <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#6B9F91]/10 blur-[100px] rounded-full -translate-x-1/3 translate-y-1/3 pointer-events-none" />
-
-                {/* Glowing Particles */}
-                <motion.div animate={{ opacity: [0.3, 0.8, 0.3], scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }} className="absolute top-[20%] left-[20%] w-2 h-2 bg-[#FFC900] rounded-full shadow-[0_0_10px_#FFC900]" />
-                <motion.div animate={{ opacity: [0.2, 0.6, 0.2], scale: [1, 1.5, 1] }} transition={{ repeat: Infinity, duration: 6, ease: "easeInOut", delay: 1 }} className="absolute bottom-[30%] right-[30%] w-3 h-3 bg-[#6B9F91] rounded-full shadow-[0_0_15px_#6B9F91]" />
-                <motion.div animate={{ opacity: [0.4, 1, 0.4], y: [-10, 10, -10] }} transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }} className="absolute top-[40%] right-[15%] w-1.5 h-1.5 bg-blue-400 rounded-full shadow-[0_0_8px_#60A5FA]" />
             </div>
 
             <Container className="relative z-10 w-full">
@@ -71,13 +78,13 @@ export function Hero() {
 
                             <div className="flex flex-col sm:flex-row items-center w-full sm:w-auto gap-4">
                                 <Button asChild size="lg" className="w-full sm:w-auto shadow-lg shadow-[var(--color-primary)]/20 group">
-                                    <a href="#placements">
+                                    <a href="#placements" className="inline-flex items-center justify-center whitespace-nowrap">
                                         Explore Programs
-                                        <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                                        <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform shrink-0" />
                                     </a>
                                 </Button>
-                                <Button asChild variant="outline" size="lg" className="w-full sm:w-auto bg-white/50 backdrop-blur-sm border-gray-200 hover:bg-white text-gray-700">
-                                    <a href="#collaborate">
+                                <Button asChild variant="outline" size="lg" className="w-full sm:w-auto bg-white/70 backdrop-blur-sm border-gray-300 hover:bg-white text-gray-800">
+                                    <a href="#collaborate" className="inline-flex items-center justify-center whitespace-nowrap">
                                         Partner with Us
                                     </a>
                                 </Button>

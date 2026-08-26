@@ -1,4 +1,5 @@
 import * as React from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/Button";
@@ -9,20 +10,21 @@ import { HeroDashboardMockup } from "./HeroDashboardMockup";
 
 export function Hero() {
     return (
-        <section className={cn("relative w-full overflow-hidden bg-white isolate", HERO_SPACING_CLASSES)}>
-            {/* Background Ambient Shapes (Hardware-Accelerated Radial Gradients without CSS Filter Overhead) */}
-            <div className="absolute top-0 left-1/2 -z-10 -translate-x-1/2 transform-gpu pointer-events-none w-full h-full max-w-7xl overflow-hidden">
-                <div 
-                    className="absolute top-[-10%] left-[-5%] w-[550px] h-[550px] rounded-full pointer-events-none opacity-60" 
-                    style={{ background: 'radial-gradient(circle, rgba(237,245,242,0.8) 0%, rgba(237,245,242,0) 70%)' }}
+        <section className={cn("relative w-full overflow-hidden bg-white", HERO_SPACING_CLASSES)}>
+            {/* Ambient Background Image & Gradients (Clean Stacking Context) */}
+            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
+                <Image
+                    src="/images/hero/home-hero-bg.jpg"
+                    alt=""
+                    fill
+                    priority
+                    sizes="100vw"
+                    className="object-cover object-center opacity-40 sm:opacity-50 mix-blend-multiply"
+                    quality={85}
                 />
                 <div 
-                    className="absolute top-[15%] right-[-10%] w-[450px] h-[450px] rounded-full pointer-events-none opacity-40" 
-                    style={{ background: 'radial-gradient(circle, rgba(107,159,145,0.3) 0%, rgba(107,159,145,0) 70%)' }}
-                />
-                <div 
-                    className="absolute bottom-[-20%] left-[25%] w-[600px] h-[600px] rounded-full pointer-events-none opacity-50" 
-                    style={{ background: 'radial-gradient(circle, rgba(166,203,190,0.35) 0%, rgba(166,203,190,0) 70%)' }}
+                    className="absolute inset-0"
+                    style={{ background: 'radial-gradient(ellipse at 50% 35%, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.85) 65%, #ffffff 100%)' }}
                 />
             </div>
 
@@ -52,13 +54,13 @@ export function Hero() {
 
                         <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
                             <Button asChild size="lg" className="w-full sm:w-auto shadow-lg shadow-[var(--color-primary)]/20 group">
-                                <Link href="/digital-solutions">
+                                <Link href="/digital-solutions" className="inline-flex items-center justify-center whitespace-nowrap">
                                     Explore Solutions
-                                    <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                                    <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform shrink-0" />
                                 </Link>
                             </Button>
                             <Button asChild variant="outline" size="lg" className="w-full sm:w-auto bg-white/70 backdrop-blur-sm text-gray-800 border-gray-300 hover:bg-white hover:text-black">
-                                <Link href="/contact?source=HOME_CONTACT_US&sourcePage=/">
+                                <Link href="/contact?source=HOME_CONTACT_US&sourcePage=/" className="inline-flex items-center justify-center whitespace-nowrap">
                                     Contact Us
                                 </Link>
                             </Button>
