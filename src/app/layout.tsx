@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { getSiteConfig } from "@/lib/site-config";
 import { VisitorTracker } from "@/components/analytics/VisitorTracker";
+import { SmoothScrollProvider } from "@/components/providers/SmoothScrollProvider";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -200,7 +201,9 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen flex flex-col bg-white" suppressHydrationWarning>
         <VisitorTracker />
-        {children}
+        <SmoothScrollProvider>
+          {children}
+        </SmoothScrollProvider>
       </body>
     </html>
   );

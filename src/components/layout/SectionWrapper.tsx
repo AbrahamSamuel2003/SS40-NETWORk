@@ -30,9 +30,9 @@ export function SectionWrapper({ children, className, id, ...props }: SectionWra
             id={id}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: true, amount: 0.12, margin: "0px 0px -50px 0px" }}
             variants={slideUp}
-            className={cn(`${finalRhythm} w-full overflow-hidden`, strippedClassName)}
+            className={cn(`${finalRhythm} w-full overflow-hidden transform-gpu`, strippedClassName)}
             {...props}
         >
             {children}
