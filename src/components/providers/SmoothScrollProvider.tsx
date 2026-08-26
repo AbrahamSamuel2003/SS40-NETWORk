@@ -4,7 +4,6 @@ import * as React from "react";
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { ReactLenis, useLenis } from "lenis/react";
-import { LazyMotion, domAnimation } from "framer-motion";
 import "lenis/dist/lenis.css";
 
 interface SmoothScrollProviderProps {
@@ -12,7 +11,7 @@ interface SmoothScrollProviderProps {
 }
 
 /**
- * RouteChangeScrollReset: Automatically resets scroll to top cleanly on page route transitions.
+ * RouteChangeScrollReset: Automatically resets scroll to top cleanly on public page transitions.
  */
 function RouteChangeScrollReset() {
     const pathname = usePathname();
@@ -33,56 +32,35 @@ function RouteChangeScrollReset() {
 }
 
 /**
- * TabVisibilityController: Pauses Lenis RAF animation loop when browser tab is in background,
- * reducing idle background CPU and battery consumption to 0%.
- */
-function TabVisibilityController() {
-    const lenis = useLenis();
-
-    useEffect(() => {
-        if (!lenis) return;
-
-        const handleVisibilityChange = () => {
-            if (document.hidden) {
-                lenis.stop();
-            } else {
-                lenis.start();
-            }
-        };
-
-        document.addEventListener("visibilitychange", handleVisibilityChange);
-        return () => {
-            document.removeEventListener("visibilitychange", handleVisibilityChange);
-        };
-    }, [lenis]);
-
-    return null;
-}
-
-/**
  * SmoothScrollProvider:
- * 1. LazyMotion: Strips unused 3D and heavy morph libraries, cutting animation JS bundle by ~70%.
- * 2. Lenis: Delivers physics-based inertial scrolling on desktop while passing through 120Hz native touch on mobile.
+ * - Activates Lenis physics-driven scrolling for public-facing web pages.
+ * - Automatically bypasses Lenis on Admin/CMS portals (/admin, /siva, /login) to guarantee
+ *   100% native scrolling for sidebars, data tables, and modals.
  */
 export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
+    const pathname = usePathname();
+    const isAdminRoute = pathname?.startsWith('/admin') || pathname?.startsWith('/siva') || pathname === '/login';
+
+    // If on admin dashboard or login page, render children directly with native browser scrolling
+    if (isAdminRoute) {
+        return <>{children}</>;
+    }
+
     return (
-        <LazyMotion features={domAnimation} strict={false}>
-            <ReactLenis
-                root
-                options={{
-                    lerp: 0.09,
-                    duration: 1.2,
-                    smoothWheel: true,
-                    wheelMultiplier: 1.0,
-                    touchMultiplier: 1.0,
-                    syncTouch: false,
-                    autoRaf: true,
-                }}
-            >
-                <RouteChangeScrollReset />
-                <TabVisibilityController />
-                {children}
-            </ReactLenis>
-        </LazyMotion>
+        <ReactLenis
+            root
+            options={{
+                lerp: 0.09,
+                duration: 1.2,
+                smoothWheel: true,
+                wheelMultiplier: 1.0,
+                touchMultiplier: 1.0,
+                syncTouch: false,
+                autoRaf: true,
+            }}
+        >
+            <RouteChangeScrollReset />
+            {children}
+        </ReactLenis>
     );
 }

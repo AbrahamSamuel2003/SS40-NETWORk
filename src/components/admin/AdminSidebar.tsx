@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import * as React from 'react';
 import Link from 'next/link';
@@ -177,8 +177,9 @@ export function AdminSidebar({ adminName, isOpen, setIsOpen }: SidebarProps) {
 
             {/* Sidebar */}
             <aside
+                data-lenis-prevent="true"
                 className={cn(
-                    "fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 text-[#111827] flex flex-col transition-transform duration-300 lg:translate-x-0 hidden-scrollbar shadow-xl shadow-gray-200/60",
+                    "fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 text-[#111827] flex flex-col h-full transition-transform duration-300 lg:translate-x-0 shadow-xl shadow-gray-200/60",
                     isOpen ? "translate-x-0 pointer-events-auto" : "-translate-x-full pointer-events-none lg:pointer-events-auto"
                 )}
             >
@@ -193,7 +194,11 @@ export function AdminSidebar({ adminName, isOpen, setIsOpen }: SidebarProps) {
                 </div>
 
                 {/* Nav Links */}
-                <div className="flex-1 overflow-y-auto py-4 scrollbar-thin scrollbar-thumb-[#6B9F91]/20">
+                <div
+                    data-lenis-prevent="true"
+                    className="flex-1 min-h-0 overflow-y-auto overscroll-contain py-4 scrollbar-thin scrollbar-thumb-[#6B9F91]/20"
+                    style={{ WebkitOverflowScrolling: "touch", touchAction: "pan-y" }}
+                >
                     <nav className="space-y-1 px-3">
                         {MENU_ITEMS.map((item, idx) => {
                             if ('label' in item) {

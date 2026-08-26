@@ -608,6 +608,7 @@ export function RuleBasedChatbot({
 
                         {/* Messages Scroll Area */}
                         <div
+                            data-lenis-prevent="true"
                             className="flex-1 overflow-y-auto p-3 sm:p-3.5 space-y-2.5 sm:space-y-3 bg-gray-50/80 overscroll-contain"
                             style={{
                                 WebkitOverflowScrolling: "touch",
