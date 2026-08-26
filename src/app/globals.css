@@ -46,6 +46,11 @@
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+    text-rendering: optimizeLegibility;
+  }
+
   body {
     background-color: var(--color-background);
     color: var(--color-body-text);
