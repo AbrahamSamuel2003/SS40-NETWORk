@@ -7,8 +7,32 @@ import { Container } from "@/components/ui/Container";
 import { HappimonialsList } from "../happimonials/HappimonialsList";
 
 export const metadata: Metadata = {
-    title: "Product Impacts & Success Stories | SS40 NETWORK",
-    description: "Read comprehensive success stories from organizations leveraging SS40 NETWORK products.",
+    title: "Product Impacts | SS40 NETWORK PRIVATE LIMITED",
+    description: "Read comprehensive client success stories and enterprise impacts from organizations leveraging products by SS40 NETWORK PRIVATE LIMITED.",
+    alternates: {
+        canonical: "https://www.ss40network.com/product-impacts",
+    },
+    openGraph: {
+        title: "Product Impacts | SS40 NETWORK PRIVATE LIMITED",
+        description: "Read comprehensive client success stories and enterprise impacts from organizations leveraging products by SS40 NETWORK PRIVATE LIMITED.",
+        url: "https://www.ss40network.com/product-impacts",
+        siteName: "SS40 NETWORK PRIVATE LIMITED",
+        type: "website",
+        images: [
+            {
+                url: "https://www.ss40network.com/og-image.jpg",
+                width: 1200,
+                height: 630,
+                alt: "Product Impacts — SS40 NETWORK PRIVATE LIMITED",
+            },
+        ],
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "Product Impacts | SS40 NETWORK PRIVATE LIMITED",
+        description: "Read comprehensive client success stories and enterprise impacts from organizations leveraging products by SS40 NETWORK PRIVATE LIMITED.",
+        images: ["https://www.ss40network.com/og-image.jpg"],
+    },
 };
 
 export const revalidate = 0; // Dynamic route
@@ -23,8 +47,41 @@ export default async function ProductImpactsPage() {
         orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }]
     });
 
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://www.ss40network.com/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Products",
+                        "item": "https://www.ss40network.com/products"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Product Impacts",
+                        "item": "https://www.ss40network.com/product-impacts"
+                    }
+                ]
+            }
+        ]
+    };
+
     return (
         <div className="w-full flex-col flex bg-white min-h-screen">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
             {/* Hero / Header Section designed natively for SS40 NETWORK */}
             <div className="w-full relative pt-24 pb-8 lg:pt-28 lg:pb-10 overflow-hidden bg-white">
                 <div className="absolute top-0 right-0 w-96 h-96 bg-[#6B9F91]/10 blur-[100px] rounded-full translate-x-1/3 -translate-y-1/3" />

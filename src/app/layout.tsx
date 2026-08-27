@@ -109,12 +109,13 @@ export default function RootLayout({
         "@type": "Organization",
         "@id": "https://www.ss40network.com/#organization",
         "name": "SS40 NETWORK PRIVATE LIMITED",
+        "legalName": "SS40 NETWORK PRIVATE LIMITED",
         "url": "https://www.ss40network.com",
         "logo": {
           "@type": "ImageObject",
           "url": "https://www.ss40network.com/icon.jpg"
         },
-        "description": "Best IT Company in Tirunelveli providing top-notch web development, custom software, and AI development services.",
+        "description": "Architecting high-scale digital systems, intelligent SaaS products, and career-launching tech academics by SS40 NETWORK PRIVATE LIMITED.",
         "address": {
           "@type": "PostalAddress",
           "streetAddress": "1st Floor, Municipal Corporation Incubation Centre (Near by trade centre), Sree Puram",
@@ -125,13 +126,16 @@ export default function RootLayout({
         },
         "telephone": "+91 83005 91750",
         "email": "support@ss40network.com",
-        "areaServed": "Tirunelveli",
-        "sameAs": []
+        "areaServed": "India, Global",
+        "sameAs": [
+          "https://www.linkedin.com/company/ss40-network"
+        ]
       },
       {
         "@type": "LocalBusiness",
         "@id": "https://www.ss40network.com/#localbusiness",
         "name": "SS40 NETWORK PRIVATE LIMITED",
+        "legalName": "SS40 NETWORK PRIVATE LIMITED",
         "url": "https://www.ss40network.com",
         "telephone": "+91 83005 91750",
         "email": "support@ss40network.com",
@@ -166,8 +170,8 @@ export default function RootLayout({
         "@type": "WebSite",
         "@id": "https://www.ss40network.com/#website",
         "url": "https://www.ss40network.com",
-        "name": "SS40 Network Private Limited",
-        "alternateName": ["SS40 Network", "SS40 NETWORK PRIVATE LIMITED"],
+        "name": "SS40 NETWORK PRIVATE LIMITED",
+        "alternateName": ["SS40 NETWORK PRIVATE LIMITED", "SS40 Network", "SS40"],
         "publisher": {
           "@id": "https://www.ss40network.com/#organization"
         },
@@ -179,14 +183,55 @@ export default function RootLayout({
               "urlTemplate": "https://www.ss40network.com/search?q={search_term_string}"
             },
             "query-input": "required name=search_term_string"
+          }
+        ]
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "@id": "https://www.ss40network.com/#navigation",
+        "name": "Primary Site Navigation",
+        "hasPart": [
+          {
+            "@type": "SiteNavigationElement",
+            "position": 1,
+            "name": "Home",
+            "description": "SS40 NETWORK PRIVATE LIMITED — Enterprise Digital Solutions, SaaS Products & Tech Academics",
+            "url": "https://www.ss40network.com/"
           },
           {
-            "@type": "SearchAction",
-            "target": {
-              "@type": "EntryPoint",
-              "urlTemplate": "https://www.ss40network.com/digital-solutions"
-            },
-            "name": "Digital Solutions"
+            "@type": "SiteNavigationElement",
+            "position": 2,
+            "name": "Digital Solutions",
+            "description": "Custom enterprise software development, web applications, and AI systems by SS40 NETWORK PRIVATE LIMITED.",
+            "url": "https://www.ss40network.com/digital-solutions"
+          },
+          {
+            "@type": "SiteNavigationElement",
+            "position": 3,
+            "name": "Products",
+            "description": "Proprietary SaaS products, enterprise ERPs, and automated business software by SS40 NETWORK PRIVATE LIMITED.",
+            "url": "https://www.ss40network.com/products"
+          },
+          {
+            "@type": "SiteNavigationElement",
+            "position": 4,
+            "name": "Academics",
+            "description": "Industry-grade tech training, software engineering programs, and student capstone projects by SS40 NETWORK PRIVATE LIMITED.",
+            "url": "https://www.ss40network.com/academics"
+          },
+          {
+            "@type": "SiteNavigationElement",
+            "position": 5,
+            "name": "Contact",
+            "description": "Connect with SS40 NETWORK PRIVATE LIMITED for project consultations, inquiries, and partnerships.",
+            "url": "https://www.ss40network.com/contact"
+          },
+          {
+            "@type": "SiteNavigationElement",
+            "position": 6,
+            "name": "Blogs & Field Updates",
+            "description": "Field visits, institutional partnerships, conclaves, and founder initiatives by SS40 NETWORK PRIVATE LIMITED.",
+            "url": "https://www.ss40network.com/blogs"
           }
         ]
       }

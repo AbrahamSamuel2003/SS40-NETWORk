@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
@@ -7,8 +7,32 @@ import { Container } from "@/components/ui/Container";
 import { ClientProjectsList } from "./ClientProjectsList";
 
 export const metadata: Metadata = {
-    title: "Our Portfolio | Custom Web & App Development Success",
-    description: "Discover how SS40 NETWORK has transformed businesses globally with scalable web apps, mobile applications, and AI integrations.",
+    title: "Client Projects | SS40 NETWORK PRIVATE LIMITED",
+    description: "Explore enterprise client success stories, web apps, and custom software delivered by SS40 NETWORK PRIVATE LIMITED.",
+    alternates: {
+        canonical: "https://www.ss40network.com/client-projects",
+    },
+    openGraph: {
+        title: "Client Projects | SS40 NETWORK PRIVATE LIMITED",
+        description: "Explore enterprise client success stories, web apps, and custom software delivered by SS40 NETWORK PRIVATE LIMITED.",
+        url: "https://www.ss40network.com/client-projects",
+        siteName: "SS40 NETWORK PRIVATE LIMITED",
+        type: "website",
+        images: [
+            {
+                url: "https://www.ss40network.com/og-image.jpg",
+                width: 1200,
+                height: 630,
+                alt: "Client Projects — SS40 NETWORK PRIVATE LIMITED",
+            },
+        ],
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "Client Projects | SS40 NETWORK PRIVATE LIMITED",
+        description: "Explore enterprise client success stories, web apps, and custom software delivered by SS40 NETWORK PRIVATE LIMITED.",
+        images: ["https://www.ss40network.com/og-image.jpg"],
+    },
 };
 
 export const revalidate = 0; // Dynamic route
@@ -20,8 +44,35 @@ export default async function AllClientProjectsPage() {
         orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }]
     });
 
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://www.ss40network.com/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Client Projects",
+                        "item": "https://www.ss40network.com/client-projects"
+                    }
+                ]
+            }
+        ]
+    };
+
     return (
         <div className="w-full flex-col flex bg-white min-h-screen">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
             {/* Hero / Header Section designed natively for SS40 NETWORK */}
             <div className="w-full relative pt-24 pb-8 lg:pt-28 lg:pb-10 overflow-hidden bg-[#D8E8E2]">
                 <div className="absolute top-0 right-0 w-96 h-96 bg-[#6B9F91]/10 blur-[100px] rounded-full translate-x-1/3 -translate-y-1/3" />

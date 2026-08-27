@@ -23,6 +23,7 @@ export function Navbar({ config }: { config?: SiteConfigData | null }) {
 
     const companyName = config?.companyName || "SS40 NETWORK";
 
+    
     React.useEffect(() => {
         let lastY = window.scrollY;
         let ticking = false;
@@ -123,7 +124,7 @@ export function Navbar({ config }: { config?: SiteConfigData | null }) {
                     </Link>
 
                     {/* Desktop Navigation */}
-                    <nav className="hidden md:flex items-center gap-1 xl:gap-2">
+                    <nav aria-label="Main Navigation" className="hidden md:flex items-center gap-1 xl:gap-2">
                         {NAV_LINKS.map((link) => {
                             const isActive = pathname === link.href;
                             return (

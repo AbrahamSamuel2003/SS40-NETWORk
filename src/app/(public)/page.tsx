@@ -70,47 +70,55 @@ export default async function Home() {
   const sitelinksSchema = {
     "@context": "https://schema.org",
     "@type": "ItemList",
+    "name": "SS40 NETWORK PRIVATE LIMITED - Core Services & Sitelinks",
     "itemListElement": [
       {
         "@type": "SiteNavigationElement",
         "position": 1,
         "name": "Digital Solutions",
-        "description": "Premium Web Development, Mobile Apps, and AI Solutions",
+        "description": "Custom enterprise software development, web applications, and AI systems by SS40 NETWORK PRIVATE LIMITED.",
         "url": "https://www.ss40network.com/digital-solutions"
       },
       {
         "@type": "SiteNavigationElement",
         "position": 2,
         "name": "Products",
-        "description": "Explore our innovative software products and tools.",
+        "description": "Proprietary SaaS products, enterprise ERPs, and automated software solutions engineered by SS40 NETWORK PRIVATE LIMITED.",
         "url": "https://www.ss40network.com/products"
       },
       {
         "@type": "SiteNavigationElement",
         "position": 3,
         "name": "Academics",
-        "description": "Tech training, internships, and student project guidance.",
+        "description": "Industry-grade tech training, software engineering programs, and student capstone projects by SS40 NETWORK PRIVATE LIMITED.",
         "url": "https://www.ss40network.com/academics"
       },
       {
         "@type": "SiteNavigationElement",
         "position": 4,
         "name": "Contact",
-        "description": "Get in touch with SS40 Network.",
+        "description": "Connect with SS40 NETWORK PRIVATE LIMITED in Tirunelveli for consultations, inquiries, and partnerships.",
         "url": "https://www.ss40network.com/contact"
       },
       {
         "@type": "SiteNavigationElement",
         "position": 5,
-        "name": "Terms of Service",
-        "description": "Terms of service and legal conditions for SS40 Network.",
-        "url": "https://www.ss40network.com/terms"
+        "name": "Blogs & Field Updates",
+        "description": "Field visits, institutional partnerships, conclaves, and founder initiatives by SS40 NETWORK PRIVATE LIMITED.",
+        "url": "https://www.ss40network.com/blogs"
       },
       {
         "@type": "SiteNavigationElement",
         "position": 6,
+        "name": "Terms of Service",
+        "description": "Terms of service and legal conditions for SS40 NETWORK PRIVATE LIMITED.",
+        "url": "https://www.ss40network.com/terms"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "position": 7,
         "name": "Privacy Policy",
-        "description": "Privacy policy and data protection guidelines of SS40 Network.",
+        "description": "Privacy policy and data protection standards of SS40 NETWORK PRIVATE LIMITED.",
         "url": "https://www.ss40network.com/privacy-policy"
       }
     ]

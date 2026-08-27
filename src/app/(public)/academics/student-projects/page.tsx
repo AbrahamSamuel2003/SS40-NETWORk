@@ -1,9 +1,18 @@
-﻿import React from "react";
+import React from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { Container } from "@/components/ui/Container";
 import { StudentProjectsList } from "./StudentProjectsList";
+
+export const metadata: Metadata = {
+    title: 'Student Projects | SS40 NETWORK PRIVATE LIMITED',
+    description: 'Explore live software capstone projects, full-stack web applications, and AI models built by students at SS40 NETWORK PRIVATE LIMITED.',
+    alternates: {
+        canonical: 'https://www.ss40network.com/academics/student-projects',
+    },
+};
 
 export const revalidate = 0; // Dynamic route
 

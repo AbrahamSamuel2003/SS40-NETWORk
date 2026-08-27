@@ -21,13 +21,16 @@ export async function generateMetadata({ params }: ClientProjectPageProps): Prom
 
     if (!project) {
         return {
-            title: "Project Not Found - SS40 NETWORK",
+            title: "Project Not Found | SS40 NETWORK PRIVATE LIMITED",
         };
     }
 
     return {
-        title: `${project.title} | SS40 NETWORK Client Project`,
-        description: project.description || "Explore digital solutions developed for real business challenges.",
+        title: `${project.title} | SS40 NETWORK PRIVATE LIMITED`,
+        description: project.description || `Enterprise software and digital solutions delivered by SS40 NETWORK PRIVATE LIMITED in ${project.industry || 'technology'}.`,
+        alternates: {
+            canonical: `https://www.ss40network.com/client-projects/${id}`,
+        },
     };
 }
 

@@ -24,16 +24,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { route: '/academics',                priority: 0.85, changeFrequency: 'weekly' },
         // 4. Contact
         { route: '/contact',                  priority: 0.80, changeFrequency: 'monthly' },
-        // 5. Terms
-        { route: '/terms',                    priority: 0.70, changeFrequency: 'yearly' },
-        // 6. Privacy Policy
-        { route: '/privacy-policy',           priority: 0.65, changeFrequency: 'yearly' },
+        // 5. Blogs & Field Updates
+        { route: '/blogs',                    priority: 0.75, changeFrequency: 'daily' },
         // Supporting secondary pages
-        { route: '/client-projects',          priority: 0.58, changeFrequency: 'weekly' },
-        { route: '/happimonials',             priority: 0.55, changeFrequency: 'weekly' },
-        { route: '/product-impacts',          priority: 0.53, changeFrequency: 'weekly' },
-        { route: '/products/all-products',    priority: 0.52, changeFrequency: 'weekly' },
-        { route: '/academics/student-projects', priority: 0.51, changeFrequency: 'weekly' },
+        { route: '/client-projects',          priority: 0.70, changeFrequency: 'weekly' },
+        { route: '/happimonials',             priority: 0.65, changeFrequency: 'weekly' },
+        { route: '/product-impacts',          priority: 0.65, changeFrequency: 'weekly' },
+        { route: '/products/all-products',    priority: 0.60, changeFrequency: 'weekly' },
+        { route: '/academics/student-projects', priority: 0.60, changeFrequency: 'weekly' },
+        { route: '/terms',                    priority: 0.55, changeFrequency: 'yearly' },
+        { route: '/privacy-policy',           priority: 0.55, changeFrequency: 'yearly' },
         { route: '/refund-policy',            priority: 0.50, changeFrequency: 'yearly' },
     ];
 
@@ -61,11 +61,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         };
     });
 
-    // Dynamic client projects from DB
+    // Dynamic client projects from DB (has dedicated /client-projects/[id] route)
     let projectEntries: MetadataRoute.Sitemap = [];
-    let studentProjectEntries: MetadataRoute.Sitemap = [];
-    let productEntries: MetadataRoute.Sitemap = [];
-    let happimonialEntries: MetadataRoute.Sitemap = [];
 
     try {
         const clientProjects = await prisma.clientProject.findMany({
@@ -77,48 +74,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             url: `${baseUrl}/client-projects/${project.id}`,
             lastModified: project.updatedAt,
             changeFrequency: 'monthly' as const,
-            priority: 0.6,
-        }));
-
-        const studentProjects = await prisma.studentProject.findMany({
-            where: { isActive: true },
-            select: { id: true, updatedAt: true },
-        });
-
-        studentProjectEntries = studentProjects.map((project) => ({
-            url: `${baseUrl}/academics/student-projects/${project.id}`,
-            lastModified: project.updatedAt,
-            changeFrequency: 'monthly' as const,
-            priority: 0.6,
-        }));
-
-        const products = await prisma.product.findMany({
-            where: { isActive: true },
-            select: { id: true, updatedAt: true },
-        });
-
-        productEntries = products.map((product) => ({
-            url: `${baseUrl}/products/${product.id}`,
-            lastModified: product.updatedAt,
-            changeFrequency: 'weekly' as const,
-            priority: 0.7,
-        }));
-
-        const happimonials = await prisma.happimonial.findMany({
-            where: { isActive: true },
-            select: { id: true, updatedAt: true },
-        });
-
-        happimonialEntries = happimonials.map((item) => ({
-            url: `${baseUrl}/happimonials/${item.id}`,
-            lastModified: item.updatedAt,
-            changeFrequency: 'monthly' as const,
-            priority: 0.5,
+            priority: 0.65,
         }));
 
     } catch (error) {
         console.error('Failed to generate dynamic sitemap entries:', error);
     }
 
-    return [...staticEntries, ...projectEntries, ...studentProjectEntries, ...productEntries, ...happimonialEntries];
+    return [...staticEntries, ...projectEntries];
 }
