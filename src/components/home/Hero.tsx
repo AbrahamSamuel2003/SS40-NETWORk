@@ -17,12 +17,12 @@ export function Hero() {
                     src="/images/hero/home-hero-bg.jpg"
                     alt=""
                     fill
-                    priority
+                    loading="eager"
                     sizes="100vw"
-                    className="object-cover object-center opacity-40 sm:opacity-50 mix-blend-multiply"
-                    quality={85}
+                    className="object-cover object-center opacity-65 sm:opacity-75 mix-blend-multiply"
+                    quality={90}
                 />
-                <div 
+                <div
                     className="absolute inset-0"
                     style={{ background: 'radial-gradient(ellipse at 50% 35%, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.85) 65%, #ffffff 100%)' }}
                 />

@@ -1,6 +1,7 @@
-﻿"use client";
+"use client";
 
 import * as React from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowDown, PhoneCall, Mail, Phone, Video, HelpCircle, Network } from "lucide-react";
 import { cn } from "@/utils/cn";
@@ -19,29 +20,25 @@ export function Hero() {
     return (
         <section id="contact-hero" className={cn("relative w-full overflow-hidden bg-white border-b border-gray-100 pt-8 pb-12 lg:pt-12 lg:pb-24 lg:min-h-[min(65vh,600px)] flex items-center")}>
 
-            {/* Ambient Background Elements */}
-            <div className="absolute inset-0 pointer-events-none z-0">
+            {/* Ambient Background Image & Gradients (Clean Stacking Context) */}
+            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
+                <Image
+                    src="/images/hero/contact-hero-bg.png"
+                    alt=""
+                    fill
+                    loading="eager"
+                    sizes="100vw"
+                    className="object-cover object-center opacity-65 sm:opacity-75 mix-blend-multiply"
+                    quality={90}
+                />
+                <div 
+                    className="absolute inset-0"
+                    style={{ background: 'radial-gradient(ellipse at 50% 35%, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.75) 65%, #ffffff 100%)' }}
+                />
                 {/* Dotted texture */}
                 <div
                     className="absolute inset-0 opacity-[0.03]"
                     style={{ backgroundImage: 'radial-gradient(#111827 2px, transparent 2px)', backgroundSize: '32px 32px' }}
-                />
-
-                {/* Soft teal radial glow */}
-                <motion.div
-                    animate={{ scale: [1, 1.05, 1], opacity: [0.15, 0.2, 0.15] }}
-                    transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }}
-                    className="absolute top-1/2 right-[15%] -translate-y-1/2 w-[600px] h-[600px] bg-[#6B9F91] blur-[150px] rounded-full mix-blend-multiply pointer-events-none"
-                />
-
-                {/* Minimal geometric floating accents */}
-                <motion.div
-                    animate={{ y: [-15, 15, -15], rotate: [0, 45, 0] }} transition={{ repeat: Infinity, duration: 7, ease: "easeInOut" }}
-                    className="absolute top-[20%] left-[10%] w-12 h-12 rounded-lg border border-[#6B9F91]/20 opacity-40"
-                />
-                <motion.div
-                    animate={{ y: [15, -15, 15] }} transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
-                    className="absolute bottom-[20%] left-[20%] w-4 h-4 rounded-full bg-[#FFC900]/20"
                 />
             </div>
 
@@ -81,18 +78,18 @@ export function Hero() {
                                 onClick={() => {
                                     document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' });
                                 }}
-                                className="w-full sm:w-auto bg-[#6B9F91] text-white hover:bg-[#5C8C80] font-bold text-base px-6 py-4 rounded-full group shadow-lg shadow-[#6B9F91]/20"
+                                className="w-full sm:w-auto bg-[#6B9F91] text-white hover:bg-[#5C8C80] font-bold text-base px-6 py-4 rounded-full group shadow-lg shadow-[#6B9F91]/20 inline-flex items-center justify-center whitespace-nowrap"
                             >
                                 Get in Touch
-                                <ArrowDown className="w-4 h-4 ml-2 group-hover:translate-y-1 transition-transform" />
+                                <ArrowDown className="w-4 h-4 ml-2 group-hover:translate-y-1 transition-transform shrink-0" />
                             </Button>
 
-                            <a href="tel:+918300591750" className="w-full sm:w-auto">
+                            <a href="tel:+918300591750" className="w-full sm:w-auto inline-flex items-center justify-center">
                                 <Button
                                     variant="outline"
-                                    className="w-full bg-[#D8E8E2] border-gray-200 text-[#111827] hover:bg-gray-50 hover:border-gray-300 font-bold text-base px-6 py-4 rounded-full group transition-all"
+                                    className="w-full bg-[#D8E8E2] border-gray-200 text-[#111827] hover:bg-gray-50 hover:border-gray-300 font-bold text-base px-6 py-4 rounded-full group transition-all inline-flex items-center justify-center whitespace-nowrap"
                                 >
-                                    <PhoneCall className="w-4 h-4 mr-2 text-[#6B9F91]" />
+                                    <PhoneCall className="w-4 h-4 mr-2 text-[#6B9F91] shrink-0" />
                                     Call Us
                                 </Button>
                             </a>
@@ -145,9 +142,9 @@ export function Hero() {
                                             initial={{ opacity: 0, scale: 0 }}
                                             animate={{ opacity: 1, scale: 1, y: [-4, 4, -4] }}
                                             transition={{
-                                                opacity: { duration: 0.4, delay: 0.6 + i * 0.2 },
-                                                scale: { duration: 0.5, type: "spring", delay: 0.6 + i * 0.2 },
-                                                y: { repeat: Infinity, duration: 4 + i, ease: "easeInOut", delay: node.delay }
+                                                 opacity: { duration: 0.4, delay: 0.6 + i * 0.2 },
+                                                 scale: { duration: 0.5, type: "spring", delay: 0.6 + i * 0.2 },
+                                                 y: { repeat: Infinity, duration: 4 + i, ease: "easeInOut", delay: node.delay }
                                             }}
                                             className="relative flex flex-col items-center justify-center w-16 h-16 rounded-2xl bg-white shadow-xl shadow-gray-200/50 border border-gray-100"
                                         >
