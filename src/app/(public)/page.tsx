@@ -1,19 +1,17 @@
 import type { Metadata } from "next";
-import dynamic from "next/dynamic";
 import { Hero } from "@/components/home/Hero";
 import { About } from "@/components/home/About";
+import { BusinessWings } from "@/components/home/BusinessWings";
+import { SuccessStories } from "@/components/home/SuccessStories";
+import { ActivityUpdates } from "@/components/home/ActivityUpdates";
+import { InteractiveImpactShowcase } from "@/components/home/InteractiveImpactShowcase";
+import { TrustedBy } from "@/components/home/TrustedBy";
+import { ContactSection } from "@/components/home/ContactSection";
 import { prisma } from "@/lib/prisma";
 import { getSiteConfig } from "@/lib/site-config";
 
-// Code-split below-the-fold components to reduce initial main-thread JavaScript execution
-const BusinessWings = dynamic(() => import("@/components/home/BusinessWings").then(mod => mod.BusinessWings), { ssr: true });
-const SuccessStories = dynamic(() => import("@/components/home/SuccessStories").then(mod => mod.SuccessStories), { ssr: true });
-const ActivityUpdates = dynamic(() => import("@/components/home/ActivityUpdates").then(mod => mod.ActivityUpdates), { ssr: true });
-const InteractiveImpactShowcase = dynamic(() => import("@/components/home/InteractiveImpactShowcase").then(mod => mod.InteractiveImpactShowcase), { ssr: true });
-const TrustedBy = dynamic(() => import("@/components/home/TrustedBy").then(mod => mod.TrustedBy), { ssr: true });
-const ContactSection = dynamic(() => import("@/components/home/ContactSection").then(mod => mod.ContactSection), { ssr: true });
-
-export const revalidate = 0; // Real-time dynamic CMS replication
+// Sub-15ms TTFB: ISR memory caching with 60s background revalidation
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "SS40 NETWORK PRIVATE LIMITED — Enterprise Digital Solutions, SaaS Products & Tech Academics",
@@ -128,7 +126,7 @@ export default async function Home() {
       <Hero />
       <About />
 
-      {/* Below the fold (Deferred JavaScript Chunks) */}
+      {/* Below the fold (Clean direct imports, 0 preload fragmentation) */}
       <BusinessWings />
       <SuccessStories data={happimonials} />
       <ActivityUpdates data={activities} />

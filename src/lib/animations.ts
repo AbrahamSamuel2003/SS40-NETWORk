@@ -28,11 +28,17 @@ export const springGentle: Transition = {
     mass: 1,
 };
 
-// ── Viewport Observer Options (Runs once then unbinds for zero CPU overhead) ──
+// ── Viewport Observer Options (Pre-triggers BEFORE entering screen to eliminate blank box pop-in) ──
 export const viewportOnce = {
     once: true,
-    amount: 0.15,
-    margin: "0px 0px -50px 0px"
+    amount: 0.05,
+    margin: "120px 0px -40px 0px"
+};
+
+export const viewportPredictive = {
+    once: true,
+    amount: 0.02,
+    margin: "200px 0px -40px 0px"
 };
 
 // ── Performance-Tuned Variants ──

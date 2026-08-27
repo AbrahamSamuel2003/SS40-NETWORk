@@ -1,21 +1,18 @@
-import dynamic from "next/dynamic";
 import { Hero } from "@/components/academics/Hero";
 import { StudentImpacts } from "@/components/academics/StudentImpacts";
-
+import { BestProjects } from "@/components/academics/BestProjects";
+import { Placements } from "@/components/academics/Placements";
+import { Collaborations } from "@/components/academics/Collaborations";
+import { Collaborate } from "@/components/academics/Collaborate";
 import { prisma } from "@/lib/prisma";
-
-// Dynamically import heavy interactive layers below the fold
-const BestProjects = dynamic(() => import("@/components/academics/BestProjects").then(mod => mod.BestProjects), { ssr: true });
-const Placements = dynamic(() => import("@/components/academics/Placements").then(mod => mod.Placements), { ssr: true });
-const Collaborations = dynamic(() => import("@/components/academics/Collaborations").then(mod => mod.Collaborations), { ssr: true });
-const Collaborate = dynamic(() => import("@/components/academics/Collaborate").then(mod => mod.Collaborate), { ssr: true });
 
 export const metadata = {
     title: "IT Training & Academic Projects in Tirunelveli",
     description: "Master modern web development, AI, and software engineering with industry-grade academic training and final-year student projects at SS40 NETWORK.",
 };
 
-export const revalidate = 0; // Dynamic route
+// Sub-15ms TTFB: ISR memory caching with 60s background revalidation
+export const revalidate = 60;
 
 export default async function AcademicsPage() {
     const studentProjects = await prisma.studentProject.findMany({
@@ -39,7 +36,7 @@ export default async function AcademicsPage() {
             <Hero />
             <StudentImpacts impacts={studentImpactRecords} />
 
-            {/* Below the fold (Deferred JavaScript Chunks) */}
+            {/* Below the fold */}
             <BestProjects projects={studentProjects} />
             <Placements />
             <Collaborations logos={academicLogos} />

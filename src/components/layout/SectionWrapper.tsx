@@ -27,7 +27,7 @@ export function SectionWrapper({ children, className, id, ...props }: SectionWra
             id={id}
             initial={isHero ? false : "hidden"}
             whileInView="visible"
-            viewport={{ once: true, amount: 0.08 }}
+            viewport={{ once: true, amount: 0.02, margin: "150px 0px -40px 0px" }}
             variants={slideUp}
             className={cn(`${finalRhythm} w-full overflow-hidden transform-gpu`, strippedClassName)}
             {...props}
