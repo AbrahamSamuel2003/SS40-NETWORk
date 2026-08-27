@@ -1,18 +1,16 @@
 import type { Metadata } from "next";
-import dynamic from "next/dynamic";
 import { Hero } from "@/components/products/Hero";
 import { FeaturedProduct } from "@/components/products/FeaturedProduct";
-
-
-// Dynamically import heavy interactive layers below the fold
-const ProductImpacts = dynamic(() => import("@/components/products/ProductImpacts").then(mod => mod.ProductImpacts), { ssr: true });
-const Brands = dynamic(() => import("@/components/products/Brands").then(mod => mod.Brands), { ssr: true });
-const BookDemo = dynamic(() => import("@/components/products/BookDemo").then(mod => mod.BookDemo), { ssr: true });
+import { ProductImpacts } from "@/components/products/ProductImpacts";
+import { Brands } from "@/components/products/Brands";
+import { BookDemo } from "@/components/products/BookDemo";
 
 export const metadata: Metadata = {
     title: "Enterprise SaaS & Custom Software Products",
     description: "Explore cutting-edge SaaS products, ERP systems, and business automation software engineered by SS40 NETWORK.",
 };
+
+export const revalidate = 60;
 
 export default function ProductsPage() {
     return (
@@ -21,7 +19,7 @@ export default function ProductsPage() {
             <Hero />
             <FeaturedProduct />
 
-            {/* Below the fold (Deferred JavaScript Chunks) */}
+            {/* Below the fold (Clean direct imports, 0 preload fragmentation) */}
             <ProductImpacts />
             <Brands />
             <BookDemo />

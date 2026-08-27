@@ -1,19 +1,18 @@
 import type { Metadata } from "next";
-import dynamic from "next/dynamic";
 import { Hero } from "@/components/digital-solutions/Hero";
 import { WhatWeBuild } from "@/components/digital-solutions/WhatWeBuild";
-
-// Dynamically import heavy interactive layers below the fold
-const DevelopmentLifecycle = dynamic(() => import("@/components/digital-solutions/DevelopmentLifecycle").then(mod => mod.DevelopmentLifecycle), { ssr: true });
-const ClientProjects = dynamic(() => import("@/components/digital-solutions/ClientProjects").then(mod => mod.ClientProjects), { ssr: true });
-const Happimonials = dynamic(() => import("@/components/digital-solutions/Happimonials").then(mod => mod.Happimonials), { ssr: true });
-const TrustedClients = dynamic(() => import("@/components/digital-solutions/TrustedClients").then(mod => mod.TrustedClients), { ssr: true });
-const GetQuote = dynamic(() => import("@/components/digital-solutions/GetQuote").then(mod => mod.GetQuote), { ssr: true });
+import { DevelopmentLifecycle } from "@/components/digital-solutions/DevelopmentLifecycle";
+import { ClientProjects } from "@/components/digital-solutions/ClientProjects";
+import { Happimonials } from "@/components/digital-solutions/Happimonials";
+import { TrustedClients } from "@/components/digital-solutions/TrustedClients";
+import { GetQuote } from "@/components/digital-solutions/GetQuote";
 
 export const metadata: Metadata = {
     title: "Custom Software & Web Development in Tirunelveli",
     description: "Best IT Company in Tirunelveli offering custom software, web applications, mobile apps, AI solutions, and business automation from SS40 NETWORK.",
 };
+
+export const revalidate = 60;
 
 export default function DigitalSolutionsPage() {
     return (
@@ -22,7 +21,7 @@ export default function DigitalSolutionsPage() {
             <Hero />
             <WhatWeBuild />
 
-            {/* Below the fold (Deferred JavaScript Chunks) */}
+            {/* Below the fold (Clean direct imports, 0 preload fragmentation) */}
             <DevelopmentLifecycle />
             <ClientProjects />
             <Happimonials />
