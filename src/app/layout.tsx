@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import NextTopLoader from "nextjs-toploader";
 import "./globals.css";
 import { getSiteConfig } from "@/lib/site-config";
 import { VisitorTracker } from "@/components/analytics/VisitorTracker";
@@ -201,6 +202,18 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen flex flex-col bg-white" suppressHydrationWarning>
+        <NextTopLoader
+          color="#6B9F91"
+          initialPosition={0.08}
+          crawlSpeed={200}
+          height={3}
+          crawl={true}
+          showSpinner={false}
+          easing="ease"
+          speed={200}
+          shadow="0 0 10px #6B9F91,0 0 5px #2DD4BF"
+          zIndex={99999}
+        />
         <VisitorTracker />
         {children}
       </body>
