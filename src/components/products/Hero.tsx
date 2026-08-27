@@ -30,7 +30,7 @@ export function Hero() {
                     fill
                     loading="eager"
                     sizes="100vw"
-                    className="object-cover object-center opacity-60 sm:opacity-70 mix-blend-multiply"
+                    className="object-cover object-center opacity-40 sm:opacity-50 mix-blend-multiply"
                     quality={90}
                 />
                 <div

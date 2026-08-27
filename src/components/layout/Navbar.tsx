@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import * as React from "react";
 import Link from "next/link";
@@ -89,17 +89,15 @@ export function Navbar({ config }: { config?: SiteConfigData | null }) {
 
     return (
         <header
-            // Uses standard transform positioning to animate. MobileNav overlay is portaled out to avoid containing block bugs
+            // Fixed overlay: completely transparent at top (hero image visible behind), frosted glass on scroll
             className={cn(
-                "sticky top-0 z-40 w-full transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] transform-gpu",
+                "fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] transform-gpu",
                 isScrolled
-                    ? "bg-gray-50/80 shadow-sm border-b border-[var(--color-border)]"
-                    : "bg-gray-50 border-b border-transparent",
+                    ? "bg-white/80 backdrop-blur-xl shadow-xs border-b border-gray-200/50"
+                    : "bg-transparent border-b border-transparent",
                 isHidden ? "-translate-y-full" : "translate-y-0"
             )}
         >
-            {/* Dedicated Blur Layer to prevent breaking fixed positioning context for MobileNav */}
-            {isScrolled && <div className="absolute inset-0 backdrop-blur-lg pointer-events-none -z-10" />}
 
             <div className="container-width relative z-10 w-full">
                 <div className="flex items-center justify-between h-[72px] lg:h-[80px]">

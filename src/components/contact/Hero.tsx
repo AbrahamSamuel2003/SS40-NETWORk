@@ -18,7 +18,7 @@ const NODES = [
 
 export function Hero() {
     return (
-        <section id="contact-hero" className={cn("relative w-full overflow-hidden bg-white border-b border-gray-100 pt-8 pb-12 lg:pt-12 lg:pb-24 lg:min-h-[min(65vh,600px)] flex items-center")}>
+        <section id="contact-hero" className={cn("relative w-full overflow-hidden bg-white border-b border-gray-100 pt-24 pb-12 sm:pt-28 sm:pb-14 lg:pt-32 lg:pb-20 lg:min-h-[min(70vh,650px)] flex items-center")}>
 
             {/* Ambient Background Image & Gradients (Clean Stacking Context) */}
             <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
@@ -28,7 +28,7 @@ export function Hero() {
                     fill
                     loading="eager"
                     sizes="100vw"
-                    className="object-cover object-center opacity-65 sm:opacity-75 mix-blend-multiply"
+                    className="object-cover object-center opacity-45 sm:opacity-55 mix-blend-multiply"
                     quality={90}
                 />
                 <div 

@@ -5,6 +5,6 @@ export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
 
-// Global standardized layout utilities (Compact 90% Scale Density)
-export const HERO_SPACING_CLASSES = "pt-8 pb-12 lg:pt-10 lg:pb-14 lg:min-h-[min(70vh,680px)] flex items-center";
+// Global standardized layout utilities (Hero bleeds behind fixed transparent Navbar)
+export const HERO_SPACING_CLASSES = "pt-24 pb-12 sm:pt-28 sm:pb-14 lg:pt-32 lg:pb-16 lg:min-h-[min(75vh,720px)] flex items-center";
 
