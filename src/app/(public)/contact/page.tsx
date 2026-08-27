@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Suspense } from "react";
 import { Hero } from "@/components/contact/Hero";
 import { ContactMethods } from "@/components/contact/ContactMethods";
 import { ContactForm } from "@/components/contact/ContactForm";
@@ -21,9 +22,11 @@ export default async function ContactPage() {
             <Hero />
             <ContactMethods config={config} />
 
-            {/* Below the fold (Clean direct imports, 0 preload fragmentation) */}
+            {/* Below the fold */}
             <OfficeLocation config={config} />
-            <ContactForm />
+            <Suspense fallback={<div className="w-full py-16 text-center text-gray-400" />}>
+                <ContactForm />
+            </Suspense>
             <Faq />
         </div>
     );
