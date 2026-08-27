@@ -183,273 +183,273 @@ export function BestProjects({ projects = [] }: BestProjectsProps) {
         <SectionWrapper id="best-projects" className="bg-white relative overflow-hidden scroll-mt-24">
             <>
 
-                    {/* Ambient Background & Floating Geometry */}
-                    <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-                        <div
-                            className="absolute inset-0 opacity-[0.03] mix-blend-multiply"
-                            style={{ backgroundImage: 'radial-gradient(#6B9F91 2px, transparent 2px)', backgroundSize: '40px 40px' }}
-                        />
+                {/* Ambient Background & Floating Geometry */}
+                <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+                    <div
+                        className="absolute inset-0 opacity-[0.03] mix-blend-multiply"
+                        style={{ backgroundImage: 'radial-gradient(#6B9F91 2px, transparent 2px)', backgroundSize: '40px 40px' }}
+                    />
 
-                        <motion.div
-                            animate={{ rotate: -360 }} transition={{ duration: 150, repeat: Infinity, ease: "linear" }}
-                            className="absolute top-[20%] -right-[15%] w-[600px] h-[600px] bg-emerald-500/5 blur-[120px] rounded-full"
-                        />
+                    <motion.div
+                        animate={{ rotate: -360 }} transition={{ duration: 150, repeat: Infinity, ease: "linear" }}
+                        className="absolute top-[20%] -right-[15%] w-[600px] h-[600px] bg-emerald-500/5 blur-[120px] rounded-full"
+                    />
 
-                        {/* Floating Abstract Elements */}
+                    {/* Floating Abstract Elements */}
+                    <motion.div
+                        animate={{ y: [-15, 15, -15], rotate: [0, 10, 0] }} transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }}
+                        className="absolute top-[15%] right-[10%] w-24 h-24 border-4 border-[#FFC900]/20 rounded-2xl opacity-60 flex items-center justify-center p-2"
+                    >
+                        <Box className="w-12 h-12 text-[#FFC900]/30" />
+                    </motion.div>
+
+                    <motion.div
+                        animate={{ y: [15, -15, 15], rotate: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 7, ease: "easeInOut" }}
+                        className="absolute bottom-[25%] left-[5%] w-32 h-32 border border-[#6B9F91]/20 rounded-full opacity-60 flex items-center justify-center"
+                    >
+                        <Target className="w-16 h-16 text-[#6B9F91]/10" />
+                    </motion.div>
+                </div>
+
+                <Container className="relative z-20">
+                    <SectionHeading
+                        badge="BEST STUDENT PROJECTS"
+                        title={<>Ideas Built Into <span className="text-[#6B9F91]">Reality.</span></>}
+                        description="Explore innovative projects created by students through hands-on learning, mentorship, and real-world challenges."
+                        align="center"
+                        className="mb-16 lg:mb-20"
+                    />
+
+                    <motion.div
+                        variants={containerVariants}
+                        initial="hidden"
+                        whileInView="show"
+                        viewport={{ once: true, margin: "-100px" }}
+                        className="hidden md:flex flex-col gap-8 lg:gap-10"
+                    >
+                        {/* TOP: Featured Project (Dominant) */}
                         <motion.div
-                            animate={{ y: [-15, 15, -15], rotate: [0, 10, 0] }} transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }}
-                            className="absolute top-[15%] right-[10%] w-24 h-24 border-4 border-[#FFC900]/20 rounded-2xl opacity-60 flex items-center justify-center p-2"
+                            variants={itemVariants}
+                            role="button"
+                            tabIndex={0}
+                            onClick={() => setActiveModalProject(featuredProject)}
+                            onKeyDown={(e: React.KeyboardEvent) => {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                    e.preventDefault();
+                                    setActiveModalProject(featuredProject);
+                                }
+                            }}
+                            className="cursor-pointer w-full bg-white rounded-[2rem] shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden flex flex-col lg:flex-row group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2"
                         >
-                            <Box className="w-12 h-12 text-[#FFC900]/30" />
-                        </motion.div>
+                            {/* Project Preview */}
+                            <div className="w-full lg:w-7/12 aspect-video lg:aspect-auto min-h-[350px] relative overflow-hidden bg-gray-50 border-b lg:border-b-0 lg:border-r border-gray-100 flex-grow">
+                                {featuredProject.image || featuredProject.imageUrl ? (
+                                    <Image
+                                        src={featuredProject.image || featuredProject.imageUrl}
+                                        alt={featuredProject.title}
+                                        fill
+                                        className="object-cover group-hover:scale-105 transition-transform duration-1000 ease-out"
+                                    />
+                                ) : (
+                                    <ProjectPreviewPlaceholder />
+                                )}
+                            </div>
 
-                        <motion.div
-                            animate={{ y: [15, -15, 15], rotate: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 7, ease: "easeInOut" }}
-                            className="absolute bottom-[25%] left-[5%] w-32 h-32 border border-[#6B9F91]/20 rounded-full opacity-60 flex items-center justify-center"
-                        >
-                            <Target className="w-16 h-16 text-[#6B9F91]/10" />
-                        </motion.div>
-                    </div>
-
-                    <Container className="relative z-20">
-                        <SectionHeading
-                            badge="BEST STUDENT PROJECTS"
-                            title={<>Ideas Built Into <span className="text-[#6B9F91]">Reality.</span></>}
-                            description="Explore innovative projects created by students through hands-on learning, mentorship, and real-world challenges."
-                            align="center"
-                            className="mb-16 lg:mb-20"
-                        />
-
-                        <motion.div
-                            variants={containerVariants}
-                            initial="hidden"
-                            whileInView="show"
-                            viewport={{ once: true, margin: "-100px" }}
-                            className="hidden md:flex flex-col gap-8 lg:gap-10"
-                        >
-                            {/* TOP: Featured Project (Dominant) */}
-                            <motion.div
-                                variants={itemVariants}
-                                role="button"
-                                tabIndex={0}
-                                onClick={() => setActiveModalProject(featuredProject)}
-                                onKeyDown={(e: React.KeyboardEvent) => {
-                                    if (e.key === 'Enter' || e.key === ' ') {
-                                        e.preventDefault();
-                                        setActiveModalProject(featuredProject);
-                                    }
-                                }}
-                                className="cursor-pointer w-full bg-white rounded-[2rem] shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden flex flex-col lg:flex-row group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2"
-                            >
-                                {/* Project Preview */}
-                                <div className="w-full lg:w-7/12 aspect-video lg:aspect-auto min-h-[350px] relative overflow-hidden bg-gray-50 border-b lg:border-b-0 lg:border-r border-gray-100 flex-grow">
-                                    {featuredProject.image || featuredProject.imageUrl ? (
-                                        <Image
-                                            src={featuredProject.image || featuredProject.imageUrl}
-                                            alt={featuredProject.title}
-                                            fill
-                                            className="object-cover group-hover:scale-105 transition-transform duration-1000 ease-out"
-                                        />
-                                    ) : (
-                                        <ProjectPreviewPlaceholder />
+                            {/* Content */}
+                            <div className="w-full lg:w-5/12 p-6 lg:p-8 flex flex-col bg-white">
+                                <div className="mb-4 flex justify-between items-start gap-4">
+                                    {featuredProject.badge && (
+                                        <Badge className="bg-[#6B9F91]/10 text-[#6B9F91] hover:bg-[#6B9F91]/20 border-none font-bold uppercase tracking-wider text-[10px]">
+                                            {featuredProject.badge}
+                                        </Badge>
                                     )}
+                                    <Blocks className="w-6 h-6 text-gray-300 ml-auto shrink-0" />
                                 </div>
 
-                                {/* Content */}
-                                <div className="w-full lg:w-5/12 p-6 lg:p-8 flex flex-col bg-white">
-                                    <div className="mb-4 flex justify-between items-start gap-4">
-                                        {featuredProject.badge && (
-                                            <Badge className="bg-[#6B9F91]/10 text-[#6B9F91] hover:bg-[#6B9F91]/20 border-none font-bold uppercase tracking-wider text-[10px]">
-                                                {featuredProject.badge}
-                                            </Badge>
-                                        )}
-                                        <Blocks className="w-6 h-6 text-gray-300 ml-auto shrink-0" />
-                                    </div>
+                                <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-2 leading-tight">{featuredProject.title}</h3>
+                                <p className="text-xs font-semibold text-[#FFC900] uppercase tracking-widest mb-3">{featuredProject.category}</p>
 
-                                    <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-2 leading-tight">{featuredProject.title}</h3>
-                                    <p className="text-xs font-semibold text-[#FFC900] uppercase tracking-widest mb-3">{featuredProject.category}</p>
+                                <p className="text-gray-600 text-sm lg:text-base leading-relaxed mb-5 overflow-hidden line-clamp-3">
+                                    {featuredProject.description}
+                                </p>
 
-                                    <p className="text-gray-600 text-sm lg:text-base leading-relaxed mb-5 overflow-hidden line-clamp-3">
-                                        {featuredProject.description}
-                                    </p>
+                                <div className="flex flex-wrap gap-2 mb-6 mt-auto">
+                                    {Array.isArray(featuredProject.tags) && featuredProject.tags.map((tag: any, i: number) => (
+                                        <span key={i} className="text-[10px] lg:text-[11px] font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 whitespace-nowrap border bg-[#D8E8E2] text-[#0F766E] border-[#6B9F91]/20">
+                                            {typeof tag === 'string' ? tag : tag.label}
+                                        </span>
+                                    ))}
+                                </div>
 
-                                    <div className="flex flex-wrap gap-2 mb-6 mt-auto">
-                                        {Array.isArray(featuredProject.tags) && featuredProject.tags.map((tag: any, i: number) => (
-                                            <span key={i} className="text-[10px] lg:text-[11px] font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 whitespace-nowrap border bg-[#D8E8E2] text-[#0F766E] border-[#6B9F91]/20">
-                                                {typeof tag === 'string' ? tag : tag.label}
-                                            </span>
-                                        ))}
-                                    </div>
-
-                                    {featuredProject.projectUrl ? (
-                                        <a href={featuredProject.projectUrl} target="_blank" rel="noopener noreferrer" className="mt-auto">
-                                            <Button className="w-full sm:w-auto bg-[#111827] text-white hover:bg-gray-800 font-bold group/btn">
-                                                Explore Project <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
-                                            </Button>
-                                        </a>
-                                    ) : (
-                                        <Button onClick={(e: React.MouseEvent) => { e.stopPropagation(); setActiveModalProject(featuredProject); }} className="w-full sm:w-auto bg-[#111827] text-white hover:bg-gray-800 font-bold group/btn mt-auto">
+                                {featuredProject.projectUrl ? (
+                                    <a href={featuredProject.projectUrl} target="_blank" rel="noopener noreferrer" className="mt-auto">
+                                        <Button className="w-full sm:w-auto bg-[#111827] text-white hover:bg-gray-800 font-bold group/btn">
                                             Explore Project <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
                                         </Button>
-                                    )}
-                                </div>
-                            </motion.div>
-
-                            {/* BOTTOM: 3 Project Cards Grid */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-                                {secondaryProjects.map((project, idx) => (
-                                    <motion.div
-                                        key={project.id}
-                                        variants={itemVariants}
-                                        role="button"
-                                        tabIndex={0}
-                                        onClick={() => setActiveModalProject(project)}
-                                        onKeyDown={(e: React.KeyboardEvent) => {
-                                            if (e.key === 'Enter' || e.key === ' ') {
-                                                e.preventDefault();
-                                                setActiveModalProject(project);
-                                            }
-                                        }}
-                                        className={`bg-white rounded-3xl shadow-lg shadow-gray-200/40 border border-gray-100 overflow-hidden flex-col group cursor-pointer hover:-translate-y-1 transition-transform duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 md:last:col-span-2 lg:last:col-span-1 ${idx === 2 ? 'hidden md:flex' : 'flex'}`}
-                                    >
-
-                                        {/* Image / Placeholder */}
-                                        <div className="w-full aspect-video relative overflow-hidden bg-gray-50 border-b border-gray-100">
-                                            {project.image || project.imageUrl ? (
-                                                <Image
-                                                    src={project.image || project.imageUrl}
-                                                    alt={project.title}
-                                                    fill
-                                                    className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
-                                                />
-                                            ) : (
-                                                <ProjectPreviewPlaceholder />
-                                            )}
-                                        </div>
-
-                                        <div className="p-6 flex flex-col flex-grow">
-                                            <h4 className="text-lg font-bold text-gray-900 mb-1 leading-tight group-hover:text-[#6B9F91] transition-colors">{project.title}</h4>
-                                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">{project.category}</span>
-                                            <p className="text-sm text-gray-600 line-clamp-2 leading-relaxed mb-5 flex-grow">
-                                                {project.description}
-                                            </p>
-
-                                            <div className="flex flex-wrap gap-2 mb-6">
-                                                {Array.isArray(project.tags) && project.tags.map((tag: any, i: number) => {
-                                                    const TagIcon = getIcon(tag.icon);
-                                                    return (
-                                                        <span key={i} className={`text-[10px] font-bold px-2.5 py-1 rounded-md flex items-center gap-1.5 border border-transparent ${tag.colorClass}`}>
-                                                            <TagIcon className="w-3 h-3" /> {tag.label}
-                                                        </span>
-                                                    );
-                                                })}
-                                            </div>
-
-                                            <button onClick={(e) => { e.stopPropagation(); setActiveModalProject(project); }} className="mt-auto border-t border-gray-100 pt-4 flex items-center text-[#6B9F91] font-bold text-sm group-hover:text-[#5C8C80] w-full text-left focus:outline-none">
-                                                View Details <ArrowRight className="w-4 h-4 ml-auto group-hover:translate-x-1 transition-transform" />
-                                            </button>
-                                        </div>
-                                    </motion.div>
-                                ))}
+                                    </a>
+                                ) : (
+                                    <Button onClick={(e: React.MouseEvent) => { e.stopPropagation(); setActiveModalProject(featuredProject); }} className="w-full sm:w-auto bg-[#111827] text-white hover:bg-gray-800 font-bold group/btn mt-auto">
+                                        Explore Project <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
+                                    </Button>
+                                )}
                             </div>
-
-
-
                         </motion.div>
 
-                        {/* Mobile Native Horizontal Swipe Deck */}
-                        <div className="flex flex-col md:hidden relative overflow-visible -mx-6 mt-2">
-                            <div
-                                ref={mobileScrollRef}
-                                className="flex w-full overflow-x-auto snap-x snap-mandatory pb-4 gap-5 items-stretch [&::-webkit-scrollbar]:hidden px-6"
-                                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-                            >
-                                {displayedProjects.map((project: any, idx: number) => (
-                                    <div
-                                        key={`mobile-proj-${project.id}`}
-                                        data-mobile-id={idx}
-                                        role="button"
-                                        tabIndex={0}
-                                        onClick={() => setActiveModalProject(project)}
-                                        onKeyDown={(e: React.KeyboardEvent) => {
-                                            if (e.key === 'Enter' || e.key === ' ') {
-                                                e.preventDefault();
-                                                setActiveModalProject(project);
-                                            }
-                                        }}
-                                        className="project-mobile-card cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 w-[clamp(280px,85vw,350px)] flex-shrink-0 flex flex-col bg-white rounded-3xl overflow-hidden shadow-xl shadow-gray-200/50 border border-[var(--color-border)] snap-center relative scroll-ml-6 group"
-                                    >
-                                        {/* Image / Placeholder */}
-                                        <div className="w-full aspect-video relative overflow-hidden bg-gray-50 border-b border-gray-100 shrink-0">
-                                            {project.image || project.imageUrl ? (
-                                                <Image
-                                                    src={project.image || project.imageUrl}
-                                                    alt={project.title}
-                                                    fill
-                                                    className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
-                                                />
-                                            ) : (
-                                                <ProjectPreviewPlaceholder />
-                                            )}
-                                        </div>
+                        {/* BOTTOM: 3 Project Cards Grid */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                            {secondaryProjects.map((project, idx) => (
+                                <motion.div
+                                    key={project.id}
+                                    variants={itemVariants}
+                                    role="button"
+                                    tabIndex={0}
+                                    onClick={() => setActiveModalProject(project)}
+                                    onKeyDown={(e: React.KeyboardEvent) => {
+                                        if (e.key === 'Enter' || e.key === ' ') {
+                                            e.preventDefault();
+                                            setActiveModalProject(project);
+                                        }
+                                    }}
+                                    className={`bg-white rounded-3xl shadow-lg shadow-gray-200/40 border border-gray-100 overflow-hidden flex-col group cursor-pointer hover:-translate-y-1 transition-transform duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 md:last:col-span-2 lg:last:col-span-1 ${idx === 2 ? 'hidden md:flex' : 'flex'}`}
+                                >
 
-                                        <div className="p-6 flex flex-col flex-1 relative z-10 text-left">
-                                            <div className="flex items-start justify-between mb-4">
-                                                <div className="flex-1 pr-2">
-                                                    <h4 className="font-bold text-xl text-gray-900 leading-tight tracking-tight mb-1">{project.title}</h4>
-                                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{project.category}</p>
-                                                </div>
-                                            </div>
-
-                                            <div className="flex-1 min-h-0 relative mb-5">
-                                                <p className="text-[var(--color-body-text)] text-sm leading-relaxed overflow-hidden line-clamp-4">
-                                                    {project.description}
-                                                </p>
-                                            </div>
-
-                                            <div className="flex flex-wrap gap-2 mb-6">
-                                                {Array.isArray(project.tags) && project.tags.map((tag: any, i: number) => (
-                                                    <span key={i} className="text-[10px] font-bold px-2.5 py-1 rounded-md flex items-center gap-1.5 border border-transparent bg-[#D8E8E2] text-[#0F766E] border-[#6B9F91]/20">
-                                                        <span className="truncate">{typeof tag === 'string' ? tag : tag.label}</span>
-                                                    </span>
-                                                ))}
-                                            </div>
-
-                                            <button onClick={(e) => { e.stopPropagation(); setActiveModalProject(project); }} className="mt-auto border-t border-gray-100 pt-4 flex items-center text-[#6B9F91] font-bold text-sm group-hover:text-[#5C8C80] w-full text-left focus:outline-none">
-                                                View Details <ArrowRight className="w-4 h-4 ml-auto group-hover:translate-x-1 transition-transform" />
-                                            </button>
-                                        </div>
+                                    {/* Image / Placeholder */}
+                                    <div className="w-full aspect-video relative overflow-hidden bg-gray-50 border-b border-gray-100">
+                                        {project.image || project.imageUrl ? (
+                                            <Image
+                                                src={project.image || project.imageUrl}
+                                                alt={project.title}
+                                                fill
+                                                className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                                            />
+                                        ) : (
+                                            <ProjectPreviewPlaceholder />
+                                        )}
                                     </div>
-                                ))}
-                                {/* End spacer so the last card doesn't hit the right screen edge */}
-                                <div className="w-[4vw] shrink-0" />
-                            </div>
 
-                            {/* Pagination Dots representation */}
-                            <div className="w-full flex justify-center items-center gap-3 mt-4 mb-2 z-10 relative">
-                                {displayedProjects.map((_: any, i: number) => (
-                                    <button
-                                        key={`dot-${i}`}
-                                        onClick={() => scrollToMobileProject(i)}
-                                        aria-label={`Scroll to project ${i + 1}`}
-                                        className={`h-2.5 rounded-full transition-all duration-400 ease-out ${activeMobileIdx === i ? 'bg-[#6B9F91] w-8 shadow-sm scale-100' : 'bg-gray-300 w-2.5 hover:bg-gray-400 scale-90'} border-none cursor-pointer focus:outline-none`}
-                                    />
-                                ))}
-                            </div>
+                                    <div className="p-6 flex flex-col flex-grow">
+                                        <h4 className="text-lg font-bold text-gray-900 mb-1 leading-tight group-hover:text-[#6B9F91] transition-colors">{project.title}</h4>
+                                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">{project.category}</span>
+                                        <p className="text-sm text-gray-600 line-clamp-2 leading-relaxed mb-5 flex-grow">
+                                            {project.description}
+                                        </p>
+
+                                        <div className="flex flex-wrap gap-2 mb-6">
+                                            {Array.isArray(project.tags) && project.tags.map((tag: any, i: number) => {
+                                                const TagIcon = getIcon(tag.icon);
+                                                return (
+                                                    <span key={i} className={`text-[10px] font-bold px-2.5 py-1 rounded-md flex items-center gap-1.5 border border-transparent ${tag.colorClass}`}>
+                                                        <TagIcon className="w-3 h-3" /> {tag.label}
+                                                    </span>
+                                                );
+                                            })}
+                                        </div>
+
+                                        <button onClick={(e) => { e.stopPropagation(); setActiveModalProject(project); }} className="mt-auto border-t border-gray-100 pt-4 flex items-center text-[#6B9F91] font-bold text-sm group-hover:text-[#5C8C80] w-full text-left focus:outline-none">
+                                            View Details <ArrowRight className="w-4 h-4 ml-auto group-hover:translate-x-1 transition-transform" />
+                                        </button>
+                                    </div>
+                                </motion.div>
+                            ))}
                         </div>
 
-                        {/* Read More Button if more than 4 projects exist */}
-                        {activeProjects.length > 4 && (
-                            <div id="view-all-student-projects" className="w-full flex justify-center mt-12 mb-4 relative z-20 scroll-mt-24">
-                                <Link href="/academics/student-projects" className="inline-flex items-center justify-center font-bold text-lg text-[#6B9F91] hover:text-[#588478] transition-colors group">
-                                    View All Projects
-                                    <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                                </Link>
-                            </div>
-                        )}
 
-                    </Container>
-                </>
+
+                    </motion.div>
+
+                    {/* Mobile Native Horizontal Swipe Deck */}
+                    <div className="flex flex-col md:hidden relative overflow-visible -mx-6 mt-2">
+                        <div
+                            ref={mobileScrollRef}
+                            className="flex w-full overflow-x-auto snap-x snap-mandatory pb-4 gap-5 items-stretch [&::-webkit-scrollbar]:hidden px-6"
+                            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                        >
+                            {displayedProjects.map((project: any, idx: number) => (
+                                <div
+                                    key={`mobile-proj-${project.id}`}
+                                    data-mobile-id={idx}
+                                    role="button"
+                                    tabIndex={0}
+                                    onClick={() => setActiveModalProject(project)}
+                                    onKeyDown={(e: React.KeyboardEvent) => {
+                                        if (e.key === 'Enter' || e.key === ' ') {
+                                            e.preventDefault();
+                                            setActiveModalProject(project);
+                                        }
+                                    }}
+                                    className="project-mobile-card cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 w-[clamp(280px,85vw,350px)] flex-shrink-0 flex flex-col bg-white rounded-3xl overflow-hidden shadow-xl shadow-gray-200/50 border border-[var(--color-border)] snap-center relative scroll-ml-6 group"
+                                >
+                                    {/* Image / Placeholder */}
+                                    <div className="w-full aspect-video relative overflow-hidden bg-gray-50 border-b border-gray-100 shrink-0">
+                                        {project.image || project.imageUrl ? (
+                                            <Image
+                                                src={project.image || project.imageUrl}
+                                                alt={project.title}
+                                                fill
+                                                className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                                            />
+                                        ) : (
+                                            <ProjectPreviewPlaceholder />
+                                        )}
+                                    </div>
+
+                                    <div className="p-6 flex flex-col flex-1 relative z-10 text-left">
+                                        <div className="flex items-start justify-between mb-4">
+                                            <div className="flex-1 pr-2">
+                                                <h4 className="font-bold text-xl text-gray-900 leading-tight tracking-tight mb-1">{project.title}</h4>
+                                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{project.category}</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex-1 min-h-0 relative mb-5">
+                                            <p className="text-[var(--color-body-text)] text-sm leading-relaxed overflow-hidden line-clamp-4">
+                                                {project.description}
+                                            </p>
+                                        </div>
+
+                                        <div className="flex flex-wrap gap-2 mb-6">
+                                            {Array.isArray(project.tags) && project.tags.map((tag: any, i: number) => (
+                                                <span key={i} className="text-[10px] font-bold px-2.5 py-1 rounded-md flex items-center gap-1.5 border border-transparent bg-[#D8E8E2] text-[#0F766E] border-[#6B9F91]/20">
+                                                    <span className="truncate">{typeof tag === 'string' ? tag : tag.label}</span>
+                                                </span>
+                                            ))}
+                                        </div>
+
+                                        <button onClick={(e) => { e.stopPropagation(); setActiveModalProject(project); }} className="mt-auto border-t border-gray-100 pt-4 flex items-center text-[#6B9F91] font-bold text-sm group-hover:text-[#5C8C80] w-full text-left focus:outline-none">
+                                            View Details <ArrowRight className="w-4 h-4 ml-auto group-hover:translate-x-1 transition-transform" />
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                            {/* End spacer so the last card doesn't hit the right screen edge */}
+                            <div className="w-[4vw] shrink-0" />
+                        </div>
+
+                        {/* Pagination Dots representation */}
+                        <div className="w-full flex justify-center items-center gap-3 mt-4 mb-2 z-10 relative">
+                            {displayedProjects.map((_: any, i: number) => (
+                                <button
+                                    key={`dot-${i}`}
+                                    onClick={() => scrollToMobileProject(i)}
+                                    aria-label={`Scroll to project ${i + 1}`}
+                                    className={`h-2.5 rounded-full transition-all duration-400 ease-out ${activeMobileIdx === i ? 'bg-[#6B9F91] w-8 shadow-sm scale-100' : 'bg-gray-300 w-2.5 hover:bg-gray-400 scale-90'} border-none cursor-pointer focus:outline-none`}
+                                />
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Read More Button if more than 4 projects exist */}
+                    {activeProjects.length > 4 && (
+                        <div id="view-all-student-projects" className="w-full flex justify-center mt-12 mb-4 relative z-20 scroll-mt-24">
+                            <Link href="/academics/student-projects" className="inline-flex items-center justify-center font-bold text-lg text-[#6B9F91] hover:text-[#588478] transition-colors group">
+                                View All Projects
+                                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                            </Link>
+                        </div>
+                    )}
+
+                </Container>
+            </>
 
             {/* Read Details Modal overlay */}
             <AnimatePresence>
@@ -534,6 +534,7 @@ export function StudentProjectModal({ project, onClose }: { project: any, onClos
                                 src={project.image || project.imageUrl}
                                 alt={project.title}
                                 fill
+                                sizes="(max-width: 768px) 100vw, 768px"
                                 className="object-cover"
                             />
                         ) : (
@@ -576,10 +577,10 @@ export function StudentProjectModal({ project, onClose }: { project: any, onClos
                         </div>
 
                         {project.projectUrl && (
-                            <a 
-                                href={project.projectUrl} 
-                                target="_blank" 
-                                rel="noopener noreferrer" 
+                            <a
+                                href={project.projectUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 className="inline-flex items-center justify-center w-full py-4 bg-[#6B9F91] text-white font-bold rounded-xl hover:bg-[#5C8C80] transition-colors"
                             >
                                 Explore Project
