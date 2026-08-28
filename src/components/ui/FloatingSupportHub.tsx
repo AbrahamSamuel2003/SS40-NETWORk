@@ -162,13 +162,13 @@ export function FloatingSupportHub({ config }: { config?: SiteConfigData | null 
                                     setIsMenuOpen(false);
                                 }}
                                 className="flex items-center gap-2.5 pl-3.5 pr-2 py-1.5 sm:py-2 rounded-full bg-white text-[#0F766E] shadow-xl border border-gray-200/90 hover:border-[#0F766E]/40 hover:bg-[#D8E8E2]/40 active:scale-95 transition-all duration-200 cursor-pointer touch-manipulation group/chat"
-                                aria-label="Open SS40 AI Chatbot"
+                                aria-label="Open SS40 SKY Digital Assistant"
                             >
                                 <span className="text-xs font-bold text-[#0F172A] tracking-tight">
-                                    Ask Assistant
+                                    SS40 SKY
                                 </span>
                                 <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#0F766E] text-white flex items-center justify-center shadow-md group-hover/chat:scale-105 transition-transform">
-                                    <Bot className="w-4 h-4 sm:w-5 sm:h-5" />
+                                    <Sparkles className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-[#D8E8E2]" />
                                 </div>
                             </motion.button>
 

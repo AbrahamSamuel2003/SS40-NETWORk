@@ -114,7 +114,7 @@ export function SuccessStories({ data = [] }: { data?: any[] }) {
                             viewport={{ once: true, margin: "-100px" }}
                             className="w-full max-w-3xl mx-auto flex flex-col relative z-20"
                         >
-                            <FeaturedVideoArea story={finalFeaturedStory} />
+                            <FeaturedVideoArea story={finalFeaturedStory} onOpenModal={(story) => setActiveModalStory(story)} />
                         </motion.div>
                     ) : (
                         /* Video + Adjacent Carousel */
@@ -126,7 +126,7 @@ export function SuccessStories({ data = [] }: { data?: any[] }) {
                             className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-5xl mx-auto items-stretch"
                         >
                             <div className="lg:col-span-2 flex flex-col relative z-20 h-full">
-                                <FeaturedVideoArea story={finalFeaturedStory} />
+                                <FeaturedVideoArea story={finalFeaturedStory} onOpenModal={(story) => setActiveModalStory(story)} />
                             </div>
 
                             <div className="lg:col-span-1 flex flex-col relative z-10 h-full">
@@ -163,7 +163,7 @@ export function SuccessStories({ data = [] }: { data?: any[] }) {
 // FEATURED VIDEO STORY COMPONENT
 // ============================================================================
 
-function FeaturedVideoArea({ story }: {
+function FeaturedVideoArea({ story, onOpenModal }: {
     story: {
         clientName: string;
         company: string;
@@ -172,7 +172,8 @@ function FeaturedVideoArea({ story }: {
         youtubeUrl: string | null;
         videoUrl: string | null;
         thumbnailUrl: string | null;
-    }
+    };
+    onOpenModal?: (story: any) => void;
 }) {
     const ref = useRef<HTMLDivElement>(null);
     const [isPlaying, setIsPlaying] = useState(false);
@@ -334,10 +335,10 @@ function FeaturedVideoArea({ story }: {
                     pointerEvents: isPlaying ? "none" : "auto"
                 }}
                 style={{ translateZ: 20 }}
-                className="relative z-20 w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/95 backdrop-blur-md shadow-[0_10px_35px_rgba(0,0,0,0.3)] flex items-center justify-center text-[#1F3D35] group-hover:scale-110 group-hover:text-[#0F766E] transition-all duration-300 border-2 border-white"
+                className="relative z-20 w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 rounded-full bg-white/95 backdrop-blur-md shadow-[0_10px_35px_rgba(0,0,0,0.3)] flex items-center justify-center text-[#1F3D35] group-hover:scale-110 group-hover:text-[#0F766E] transition-all duration-300 border-2 border-white -translate-y-2 md:translate-y-0"
                 aria-label="Play testimonial video"
             >
-                <Play className="w-6 h-6 md:w-8 md:h-8 ml-1 fill-current drop-shadow-sm" />
+                <Play className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 ml-0.5 md:ml-1 fill-current drop-shadow-sm" />
                 <motion.div
                     animate={{ scale: [1, 1.25, 1], opacity: [0.6, 0, 0.6] }}
                     transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
@@ -345,31 +346,48 @@ function FeaturedVideoArea({ story }: {
                 />
             </motion.button>
 
-            {/* Floating Glassmorphic Teaser Panel */}
+            {/* Floating Glassmorphic Teaser Panel (Click to view full story overlay) */}
             <motion.div
+                onClick={(e) => {
+                    e.stopPropagation(); // Prevents video play/pause
+                    if (onOpenModal) {
+                        onOpenModal({
+                            clientName: story.clientName,
+                            company: story.company,
+                            quote: story.quote,
+                            link: story.link,
+                            thumbnailUrl: story.thumbnailUrl
+                        });
+                    }
+                }}
                 animate={{
                     opacity: isPlaying ? 0 : 1,
                     y: isPlaying ? 20 : 0,
                     pointerEvents: isPlaying ? "none" : "auto"
                 }}
                 transition={{ duration: 0.4 }}
-                className="absolute inset-x-3 bottom-3 md:inset-x-5 md:bottom-5 z-20 rounded-2xl overflow-hidden border border-white/60 shadow-2xl bg-white/95 backdrop-blur-xl p-4 md:p-5 text-left"
+                className="absolute inset-x-2 bottom-2 sm:inset-x-3 sm:bottom-3 md:inset-x-5 md:bottom-5 z-20 rounded-xl md:rounded-2xl overflow-hidden border border-white/60 shadow-xl bg-white/95 backdrop-blur-xl px-2.5 py-1.5 sm:px-3 sm:py-2 md:p-5 text-left max-h-[22%] md:max-h-none flex flex-col justify-center cursor-pointer hover:bg-white hover:border-[#6B9F91]/40 hover:shadow-2xl transition-all duration-200 group/teaser"
             >
-                <div className="flex items-center justify-between gap-2 mb-2">
-                    <div className="flex gap-1 text-[#FFC900]">
+                {/* Header: Stars & Badge */}
+                <div className="flex items-center justify-between gap-1.5 md:gap-2 mb-0.5 md:mb-2">
+                    <div className="flex gap-0.5 md:gap-1 text-[#FFC900]">
                         {[1, 2, 3, 4, 5].map((i) => (
-                            <Star key={i} className="w-4 h-4 fill-current drop-shadow-xs" />
+                            <Star key={i} className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-4 md:h-4 fill-current drop-shadow-xs" />
                         ))}
                     </div>
-                    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[#0F766E] bg-[#D8E8E2] px-3 py-0.5 rounded-full uppercase tracking-wider">
-                        <CheckCircle2 className="w-3 h-3 text-[#0F766E]" />
-                        {story.company || "Client Story"}
+                    <span className="inline-flex items-center gap-1 text-[9px] sm:text-[10px] md:text-[11px] font-bold text-[#0F766E] bg-[#D8E8E2] px-2 py-0.5 md:px-3 rounded-full uppercase tracking-wider truncate max-w-[150px] sm:max-w-none">
+                        <CheckCircle2 className="w-2.5 h-2.5 md:w-3 md:h-3 text-[#0F766E] shrink-0" />
+                        <span className="truncate">{story.company || story.clientName || "Client Story"}</span>
                     </span>
                 </div>
-                <p className="font-bold text-[#111827] italic leading-snug text-sm md:text-base line-clamp-1 md:line-clamp-2">
+
+                {/* Quote */}
+                <p className="font-bold text-[#111827] italic leading-tight text-[11px] sm:text-xs md:text-base line-clamp-1 md:line-clamp-2">
                     &ldquo;{story.quote}&rdquo;
                 </p>
-                <p className="text-xs font-semibold text-[#4B5563] mt-1.5">
+
+                {/* Author attribution */}
+                <p className="hidden md:block text-xs font-semibold text-[#4B5563] mt-1.5">
                     — {story.clientName}
                 </p>
             </motion.div>
@@ -654,6 +672,7 @@ function StoryModal({ story, onClose }: { story: any, onClose: () => void }) {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.94, y: 15 }}
                 transition={{ duration: 0.3, ease: [0.21, 0.47, 0.32, 0.98] }}
+                onClick={(e) => e.stopPropagation()}
                 className="relative w-full max-w-2xl bg-white border border-gray-100 shadow-2xl rounded-3xl overflow-hidden flex flex-col max-h-[85vh] z-10"
             >
                 <button

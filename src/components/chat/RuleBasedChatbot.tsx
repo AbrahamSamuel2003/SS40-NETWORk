@@ -128,7 +128,7 @@ const KNOWLEDGE_BASE: KnowledgeRule[] = [
         keywords: ["hi", "hello", "hey", "greetings", "good morning", "good afternoon", "good evening", "namaste", "start", "welcome", "help", "menu"],
         patterns: [/\b(hi|hello|hey|greetings|good\s*(morning|afternoon|evening)|namaste|start|menu|who\s*are\s*you)\b/i],
         weight: 10,
-        response: "Hello. Welcome to SS40 NETWORK. I am your AI Concierge. I can guide you through our Three Business Wings, SaaS Products, Academic Programs, or connect you directly with our team.",
+        response: "Hello! Welcome to SS40 NETWORK. I am SS40 SKY, your virtual assistant. I can guide you through our Three Business Wings, SaaS Products, Academic Programs, or connect you directly with our team.",
         quickReplies: ["Our Three Wings", "SS40 Academics", "Digital Solutions", "SS40 Products", "Support Team"]
     },
 
@@ -331,7 +331,7 @@ export function RuleBasedChatbot({
     const initialBotMessage: ChatMessage = {
         id: "msg-welcome",
         sender: "bot",
-        text: "Hello. Welcome to SS40 NETWORK. How can I assist you today?",
+        text: "Hello! Welcome to SS40 NETWORK. I am SS40 SKY, your virtual assistant. How can I help you today?",
         timestamp: new Date(),
         quickReplies: ["Our Three Wings", "SS40 Academics", "Digital Solutions", "SS40 Products", "Support Team"]
     };
@@ -340,8 +340,13 @@ export function RuleBasedChatbot({
     const [inputValue, setInputValue] = useState("");
     const [isTyping, setIsTyping] = useState(false);
     const [copiedEmail, setCopiedEmail] = useState(false);
+    const [viewportStyle, setViewportStyle] = useState<{
+        top?: number;
+        height?: number;
+        maxHeight?: number;
+    }>({});
     const chatContainerRef = useRef<HTMLDivElement>(null);
-    const messagesEndRef = useRef<HTMLDivElement>(null);
+    const messagesContainerRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
 
     const handleCopyEmail = (emailToCopy: string) => {
@@ -352,12 +357,57 @@ export function RuleBasedChatbot({
         } catch {}
     };
 
-    // Optimized smooth auto-scroll to bottom without layout thrashing
-    const scrollToBottom = useCallback(() => {
+    // Isolated smooth auto-scroll on the inner chat container (NEVER displaces the page body)
+    const scrollToBottom = useCallback((smooth = true) => {
         requestAnimationFrame(() => {
-            messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+            if (messagesContainerRef.current) {
+                messagesContainerRef.current.scrollTo({
+                    top: messagesContainerRef.current.scrollHeight,
+                    behavior: smooth ? "smooth" : "auto"
+                });
+            }
         });
     }, []);
+
+    // ── DYNAMIC VISUAL VIEWPORT TRACKING (ADAPTS TO KEYBOARD HEIGHT ON MOBILE) ──
+    useEffect(() => {
+        if (!isOpen) return;
+
+        const updateViewport = () => {
+            if (typeof window === "undefined") return;
+
+            if (window.innerWidth < 640 && window.visualViewport) {
+                const vv = window.visualViewport;
+                const vh = vv.height;
+                const vTop = vv.offsetTop;
+
+                // Keep 10px safe margin on top and 10px safe margin above virtual keyboard
+                const safeHeight = Math.max(260, vh - 20);
+                const safeTop = Math.max(10, vTop + 10);
+
+                setViewportStyle({
+                    top: safeTop,
+                    height: safeHeight,
+                    maxHeight: safeHeight
+                });
+            } else {
+                setViewportStyle({});
+            }
+        };
+
+        if (typeof window !== "undefined" && window.visualViewport) {
+            window.visualViewport.addEventListener("resize", updateViewport);
+            window.visualViewport.addEventListener("scroll", updateViewport);
+            updateViewport();
+        }
+
+        return () => {
+            if (typeof window !== "undefined" && window.visualViewport) {
+                window.visualViewport.removeEventListener("resize", updateViewport);
+                window.visualViewport.removeEventListener("scroll", updateViewport);
+            }
+        };
+    }, [isOpen]);
 
     // ── CLICK OUTSIDE DETECTION & ESCAPE LISTENER ──
     useEffect(() => {
@@ -554,50 +604,62 @@ export function RuleBasedChatbot({
                         aria-hidden="true"
                     />
 
-                    {/* Chat Modal Window - Perfectly Fits on All Screen Sizes */}
+                    {/* Chat Modal Window - Dynamically Clamped & Perfectly Fits on All Screen Sizes */}
                     <motion.div
                         ref={chatContainerRef}
                         initial={{ opacity: 0, y: 20, scale: 0.96 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 20, scale: 0.96 }}
                         transition={{ duration: 0.2, ease: "easeOut" }}
-                        className="fixed bottom-20 right-3 left-3 sm:left-auto sm:right-6 lg:right-8 sm:bottom-24 z-50 flex flex-col w-auto sm:w-[390px] md:w-[400px] h-[490px] sm:h-[530px] max-h-[calc(100dvh-95px)] sm:max-h-[calc(100vh-120px)] bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-gray-200/90 overflow-hidden"
+                        style={
+                            viewportStyle.top !== undefined
+                                ? {
+                                    top: `${viewportStyle.top}px`,
+                                    height: `${viewportStyle.height}px`,
+                                    maxHeight: `${viewportStyle.maxHeight}px`,
+                                    bottom: "auto"
+                                }
+                                : undefined
+                        }
+                        className="fixed bottom-20 right-3 left-3 sm:left-auto sm:right-6 lg:right-8 sm:bottom-24 z-50 flex flex-col w-auto sm:w-[390px] md:w-[410px] h-[500px] sm:h-[540px] max-h-[calc(100dvh-95px)] sm:max-h-[calc(100vh-120px)] bg-white rounded-2xl sm:rounded-3xl shadow-[0_20px_60px_rgba(15,118,110,0.18)] border border-gray-200/90 overflow-hidden"
                     >
-                        {/* Header - Compact & Sleek */}
-                        <div className="bg-[#0F172A] border-b border-gray-800 text-white px-3.5 py-2.5 sm:px-4 sm:py-3 flex items-center justify-between shadow-xs relative z-10 shrink-0">
-                            <div className="flex items-center gap-2.5">
+                        {/* Header - Modern Brand Palette */}
+                        <div className="bg-gradient-to-r from-[#0F766E] via-[#0D6E66] to-[#0A5751] text-white px-4 py-3 flex items-center justify-between shadow-xs relative z-10 shrink-0 border-b border-[#0F766E]/40">
+                            <div className="flex items-center gap-3">
                                 <div className="relative">
-                                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#0F766E] to-[#2DD4BF] flex items-center justify-center text-white shadow-xs">
-                                        <Bot className="w-4 h-4 text-white" />
+                                    <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-white/15 backdrop-blur-md border border-white/25 flex items-center justify-center text-white shadow-xs">
+                                        <Sparkles className="w-4 h-4 text-[#D8E8E2]" />
                                     </div>
-                                    <span className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-[#0F172A]" />
+                                    <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-[#0F766E]" />
                                 </div>
                                 <div>
-                                    <h3 className="font-bold text-xs sm:text-sm leading-tight flex items-center gap-1.5 text-white">
-                                        SS40 Concierge
-                                        <span className="text-[9px] sm:text-[10px] bg-[#2DD4BF]/15 text-[#2DD4BF] font-extrabold px-1.5 py-0.5 rounded-full uppercase tracking-wider border border-[#2DD4BF]/30">
-                                            Active
+                                    <div className="flex items-center gap-1.5">
+                                        <h3 className="font-bold text-sm sm:text-[15px] leading-tight text-white tracking-tight">
+                                            SS40 SKY
+                                        </h3>
+                                        <span className="text-[9.5px] bg-white/15 text-[#D8E8E2] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider border border-white/20">
+                                            Online
                                         </span>
-                                    </h3>
-                                    <p className="text-[10.5px] text-emerald-400 font-medium flex items-center gap-1 mt-0.5">
-                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                                        Online • Instant AI Concierge
+                                    </div>
+                                    <p className="text-[11px] text-[#D8E8E2]/90 font-medium flex items-center gap-1.5 mt-0.5">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                                        Official Virtual Guide
                                     </p>
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-0.5">
+                            <div className="flex items-center gap-1">
                                 <button
                                     onClick={handleReset}
-                                    className="p-1.5 rounded-full hover:bg-white/10 active:bg-white/20 text-white/80 hover:text-white transition-colors cursor-pointer touch-manipulation"
+                                    className="p-1.5 rounded-lg hover:bg-white/15 active:bg-white/25 text-white/90 hover:text-white transition-colors cursor-pointer touch-manipulation"
                                     title="Reset conversation"
                                     aria-label="Reset chat"
                                 >
-                                    <RotateCcw className="w-3.5 h-3.5" />
+                                    <RotateCcw className="w-4 h-4" />
                                 </button>
                                 <button
                                     onClick={onClose}
-                                    className="p-1.5 rounded-full hover:bg-white/10 active:bg-white/20 text-white/80 hover:text-white transition-colors cursor-pointer touch-manipulation"
+                                    className="p-1.5 rounded-lg hover:bg-white/15 active:bg-white/25 text-white/90 hover:text-white transition-colors cursor-pointer touch-manipulation"
                                     title="Close chat"
                                     aria-label="Close chat"
                                 >
@@ -608,8 +670,9 @@ export function RuleBasedChatbot({
 
                         {/* Messages Scroll Area */}
                         <div
+                            ref={messagesContainerRef}
                             data-lenis-prevent="true"
-                            className="flex-1 overflow-y-auto p-3 sm:p-3.5 space-y-2.5 sm:space-y-3 bg-gray-50/80 overscroll-contain"
+                            className="flex-1 overflow-y-auto p-3.5 sm:p-4 space-y-3 bg-[#F8FAFB] overscroll-contain"
                             style={{
                                 WebkitOverflowScrolling: "touch",
                                 touchAction: "pan-y"
@@ -621,10 +684,10 @@ export function RuleBasedChatbot({
                                     className={`flex flex-col ${msg.sender === "user" ? "items-end" : "items-start"}`}
                                 >
                                     <div
-                                        className={`max-w-[88%] rounded-2xl p-2.5 sm:p-3 text-[13px] sm:text-[13.5px] leading-relaxed break-words ${
+                                        className={`max-w-[88%] rounded-2xl p-3 sm:p-3.5 text-[13px] sm:text-[13.5px] leading-relaxed break-words ${
                                             msg.sender === "user"
-                                                ? "bg-[#0F766E] text-white rounded-br-xs shadow-xs font-medium"
-                                                : "bg-white text-[#111827] rounded-bl-xs border border-gray-200/80 shadow-xs"
+                                                ? "bg-gradient-to-r from-[#0F766E] to-[#134E4A] text-white rounded-tr-xs shadow-xs font-medium"
+                                                : "bg-white text-[#111827] rounded-tl-xs border border-gray-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.04)]"
                                         }`}
                                     >
                                         <p className="whitespace-pre-wrap leading-relaxed">{msg.text}</p>
@@ -659,22 +722,22 @@ export function RuleBasedChatbot({
                                         {/* Rich Three Wings Interactive Card */}
                                         {msg.isWingsCard && (
                                             <div className="mt-2.5 pt-2 border-t border-gray-100 flex flex-col gap-1.5">
-                                                <div className="grid grid-cols-1 gap-1 text-[11px] font-medium text-gray-700">
+                                                <div className="grid grid-cols-1 gap-1.5 text-[11.5px] font-medium text-gray-700">
                                                     <Link
                                                         href="/digital-solutions"
                                                         onClick={onClose}
-                                                        className="p-2 bg-blue-50/70 hover:bg-blue-100/80 active:scale-[0.98] rounded-xl border border-blue-100 flex items-center justify-between transition-all text-blue-900 font-semibold touch-manipulation"
+                                                        className="p-2.5 bg-[#F0FDF4] hover:bg-[#DCFCE7] active:scale-[0.98] rounded-xl border border-[#0F766E]/20 flex items-center justify-between transition-all text-[#0F766E] font-semibold touch-manipulation shadow-2xs"
                                                     >
                                                         <span className="flex items-center gap-2 truncate">
-                                                            <Code className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                                                            <Code className="w-3.5 h-3.5 text-[#0F766E] shrink-0" />
                                                             <span className="truncate">1. SS40 Digital Solutions</span>
                                                         </span>
-                                                        <ArrowRight className="w-3 h-3 text-blue-600 shrink-0" />
+                                                        <ArrowRight className="w-3 h-3 text-[#0F766E] shrink-0" />
                                                     </Link>
                                                     <Link
                                                         href="/products"
                                                         onClick={onClose}
-                                                        className="p-2 bg-purple-50/70 hover:bg-purple-100/80 active:scale-[0.98] rounded-xl border border-purple-100 flex items-center justify-between transition-all text-purple-900 font-semibold touch-manipulation"
+                                                        className="p-2.5 bg-[#F5F3FF] hover:bg-[#EDE9FE] active:scale-[0.98] rounded-xl border border-purple-200/80 flex items-center justify-between transition-all text-purple-950 font-semibold touch-manipulation shadow-2xs"
                                                     >
                                                         <span className="flex items-center gap-2 truncate">
                                                             <Package className="w-3.5 h-3.5 text-purple-600 shrink-0" />
@@ -685,13 +748,13 @@ export function RuleBasedChatbot({
                                                     <Link
                                                         href="/academics"
                                                         onClick={onClose}
-                                                        className="p-2 bg-emerald-50/70 hover:bg-emerald-100/80 active:scale-[0.98] rounded-xl border border-emerald-100 flex items-center justify-between transition-all text-emerald-900 font-semibold touch-manipulation"
+                                                        className="p-2.5 bg-[#EFF6FF] hover:bg-[#DBEAFE] active:scale-[0.98] rounded-xl border border-blue-200/80 flex items-center justify-between transition-all text-blue-950 font-semibold touch-manipulation shadow-2xs"
                                                     >
                                                         <span className="flex items-center gap-2 truncate">
-                                                            <GraduationCap className="w-3.5 h-3.5 text-[#0F766E] shrink-0" />
+                                                            <GraduationCap className="w-3.5 h-3.5 text-blue-600 shrink-0" />
                                                             <span className="truncate">3. SS40 Academics</span>
                                                         </span>
-                                                        <ArrowRight className="w-3 h-3 text-[#0F766E] shrink-0" />
+                                                        <ArrowRight className="w-3 h-3 text-blue-600 shrink-0" />
                                                     </Link>
                                                 </div>
                                             </div>
@@ -700,22 +763,22 @@ export function RuleBasedChatbot({
                                         {/* Rich Academic Interactive Card */}
                                         {msg.isAcademicCard && (
                                             <div className="mt-2.5 pt-2 border-t border-gray-100 flex flex-col gap-1.5">
-                                                <div className="p-2 bg-[#EDF5F2] rounded-xl border border-[#0F766E]/20 text-xs font-semibold text-[#0F766E] flex items-center gap-1.5">
+                                                <div className="p-2 bg-[#EDF5F2] rounded-xl border border-[#0F766E]/20 text-xs font-semibold text-[#0F766E] flex items-center gap-1.5 shadow-2xs">
                                                     <GraduationCap className="w-3.5 h-3.5 text-[#0F766E] shrink-0" />
                                                     <span>Admissions &amp; Academic Sprints Open</span>
                                                 </div>
                                                 <div className="grid grid-cols-2 gap-1 text-[10.5px] font-medium text-gray-700">
-                                                    <div className="p-1.5 bg-gray-50 rounded-lg border border-gray-100 flex items-center gap-1 truncate">
-                                                        <Rocket className="w-3 h-3 text-[#0F766E] shrink-0" /> <span className="truncate">Live Sprints</span>
+                                                    <div className="p-1.5 bg-gray-50 rounded-lg border border-gray-150 flex items-center gap-1 truncate">
+                                                        <Rocket className="w-3.5 h-3.5 text-[#0F766E] shrink-0" /> <span className="truncate">Live Sprints</span>
                                                     </div>
-                                                    <div className="p-1.5 bg-gray-50 rounded-lg border border-gray-100 flex items-center gap-1 truncate">
-                                                        <Briefcase className="w-3 h-3 text-[#0F766E] shrink-0" /> <span className="truncate">Placement Prep</span>
+                                                    <div className="p-1.5 bg-gray-50 rounded-lg border border-gray-150 flex items-center gap-1 truncate">
+                                                        <Briefcase className="w-3.5 h-3.5 text-[#0F766E] shrink-0" /> <span className="truncate">Placement Prep</span>
                                                     </div>
-                                                    <div className="p-1.5 bg-gray-50 rounded-lg border border-gray-100 flex items-center gap-1 truncate">
-                                                        <Building2 className="w-3 h-3 text-[#0F766E] shrink-0" /> <span className="truncate">University MOUs</span>
+                                                    <div className="p-1.5 bg-gray-50 rounded-lg border border-gray-150 flex items-center gap-1 truncate">
+                                                        <Building2 className="w-3.5 h-3.5 text-[#0F766E] shrink-0" /> <span className="truncate">University MOUs</span>
                                                     </div>
-                                                    <div className="p-1.5 bg-gray-50 rounded-lg border border-gray-100 flex items-center gap-1 truncate">
-                                                        <Laptop className="w-3 h-3 text-[#0F766E] shrink-0" /> <span className="truncate">Student GitHub</span>
+                                                    <div className="p-1.5 bg-gray-50 rounded-lg border border-gray-150 flex items-center gap-1 truncate">
+                                                        <Laptop className="w-3.5 h-3.5 text-[#0F766E] shrink-0" /> <span className="truncate">Student GitHub</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -729,13 +792,13 @@ export function RuleBasedChatbot({
                                                     href={msg.supportData.whatsappUrl}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="inline-flex items-center justify-between p-2 rounded-xl bg-[#25D366]/10 hover:bg-[#25D366]/20 active:scale-[0.98] text-[#128C7E] font-bold text-xs transition-all border border-[#25D366]/30 cursor-pointer touch-manipulation"
+                                                    className="inline-flex items-center justify-between p-2.5 rounded-xl bg-[#E7F8ED] hover:bg-[#D1F2DD] active:scale-[0.98] text-[#0B6E3F] font-bold text-xs transition-all border border-[#25D366]/40 cursor-pointer touch-manipulation shadow-2xs"
                                                 >
-                                                    <span className="flex items-center gap-1.5">
-                                                        <MessageCircle className="w-3.5 h-3.5 text-[#25D366]" />
+                                                    <span className="flex items-center gap-2">
+                                                        <MessageCircle className="w-4 h-4 text-[#25D366]" />
                                                         Chat on WhatsApp
                                                     </span>
-                                                    <ExternalLink className="w-3 h-3 text-[#128C7E]" />
+                                                    <ExternalLink className="w-3.5 h-3.5 text-[#0B6E3F]" />
                                                 </a>
 
                                                 {/* Single Row: Email (Gmail Web) + Default Mail App + Copy Address */}
@@ -745,7 +808,7 @@ export function RuleBasedChatbot({
                                                         href={msg.supportData.gmailUrl}
                                                         target="_blank"
                                                         rel="noopener noreferrer"
-                                                        className="inline-flex items-center justify-center p-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 active:scale-95 text-blue-800 font-bold text-[10px] sm:text-[10.5px] transition-all border border-blue-200 cursor-pointer text-center truncate touch-manipulation"
+                                                        className="inline-flex items-center justify-center p-2 rounded-lg bg-blue-50 hover:bg-blue-100 active:scale-95 text-blue-900 font-bold text-[10.5px] transition-all border border-blue-200 cursor-pointer text-center truncate touch-manipulation"
                                                         title="Open pre-filled email in Gmail Web"
                                                     >
                                                         <Mail className="w-3 h-3 text-blue-600 mr-1 shrink-0" />
@@ -755,7 +818,7 @@ export function RuleBasedChatbot({
                                                     {/* 2. Default Mail App */}
                                                     <a
                                                         href={msg.supportData.mailtoUrl}
-                                                        className="inline-flex items-center justify-center p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100 active:scale-95 text-gray-700 font-semibold text-[10px] sm:text-[10.5px] transition-all border border-gray-200 cursor-pointer text-center truncate touch-manipulation"
+                                                        className="inline-flex items-center justify-center p-2 rounded-lg bg-gray-50 hover:bg-gray-100 active:scale-95 text-gray-700 font-semibold text-[10.5px] transition-all border border-gray-200 cursor-pointer text-center truncate touch-manipulation"
                                                         title="Open in default desktop/mobile email client"
                                                     >
                                                         <Mail className="w-3 h-3 text-gray-500 mr-1 shrink-0" />
@@ -765,11 +828,11 @@ export function RuleBasedChatbot({
                                                     {/* 3. Copy Address */}
                                                     <button
                                                         onClick={() => handleCopyEmail(msg.supportData!.email)}
-                                                        className="inline-flex items-center justify-center p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100 active:scale-95 text-gray-700 font-semibold text-[10px] sm:text-[10.5px] transition-all border border-gray-200 cursor-pointer text-center truncate touch-manipulation"
+                                                        className="inline-flex items-center justify-center p-2 rounded-lg bg-gray-50 hover:bg-gray-100 active:scale-95 text-gray-700 font-semibold text-[10.5px] transition-all border border-gray-200 cursor-pointer text-center truncate touch-manipulation"
                                                         title="Copy email address to clipboard"
                                                     >
                                                         {copiedEmail ? (
-                                                            <>
+                                                             <>
                                                                 <CheckCircle2 className="w-3 h-3 text-emerald-600 mr-1 shrink-0" />
                                                                 <span className="text-emerald-700 font-bold truncate">Copied</span>
                                                             </>
@@ -787,19 +850,19 @@ export function RuleBasedChatbot({
                                                     href={msg.supportData.mapsUrl}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="inline-flex items-center justify-between p-2 rounded-xl bg-amber-50 hover:bg-amber-100/80 active:scale-[0.98] text-amber-900 font-bold text-xs transition-all border border-amber-200 cursor-pointer touch-manipulation"
+                                                    className="inline-flex items-center justify-between p-2 rounded-xl bg-amber-50/80 hover:bg-amber-100/80 active:scale-[0.98] text-amber-900 font-bold text-xs transition-all border border-amber-200/80 cursor-pointer touch-manipulation"
                                                 >
                                                     <span className="flex items-center gap-1.5 truncate">
                                                         <Compass className="w-3.5 h-3.5 text-amber-700 shrink-0" />
                                                         <span className="truncate">Office Google Maps</span>
                                                     </span>
-                                                    <ExternalLink className="w-3 h-3 text-amber-700 shrink-0" />
+                                                    <ExternalLink className="w-3.5 h-3.5 text-amber-700 shrink-0" />
                                                 </a>
 
                                                 {/* Direct Phone Call */}
                                                 <a
                                                     href={`tel:+${msg.supportData.phone}`}
-                                                    className="inline-flex items-center justify-between p-2 rounded-xl bg-gray-100 hover:bg-gray-200/80 active:scale-[0.98] text-[#374151] font-semibold text-xs transition-all border border-gray-200 cursor-pointer touch-manipulation"
+                                                    className="inline-flex items-center justify-between p-2 rounded-xl bg-gray-100/80 hover:bg-gray-200/80 active:scale-[0.98] text-[#374151] font-semibold text-xs transition-all border border-gray-200/80 cursor-pointer touch-manipulation"
                                                 >
                                                     <span className="flex items-center gap-1.5 truncate">
                                                         <Phone className="w-3.5 h-3.5 text-[#0F766E] shrink-0" />
@@ -810,7 +873,7 @@ export function RuleBasedChatbot({
                                         )}
                                     </div>
 
-                                    <span className="text-[9.5px] text-gray-400 mt-0.5 px-1">
+                                    <span className="text-[10px] text-gray-400 mt-1 px-1 font-medium">
                                         {msg.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                                     </span>
 
@@ -821,7 +884,7 @@ export function RuleBasedChatbot({
                                                 <button
                                                     key={i}
                                                     onClick={() => handleSend(pill)}
-                                                    className="text-[11px] sm:text-xs font-semibold text-[#0F766E] bg-white hover:bg-[#D8E8E2] active:bg-[#C2DDD3] border border-[#0F766E]/25 shadow-2xs px-2.5 py-1 rounded-full transition-all hover:scale-105 active:scale-95 cursor-pointer touch-manipulation"
+                                                    className="text-[11px] sm:text-xs font-semibold text-[#0F766E] bg-white hover:bg-[#D8E8E2] active:bg-[#C2DDD3] border border-[#0F766E]/20 shadow-2xs hover:shadow-xs px-3 py-1.5 rounded-full transition-all hover:scale-105 active:scale-95 cursor-pointer touch-manipulation"
                                                 >
                                                     {pill}
                                                 </button>
@@ -834,19 +897,17 @@ export function RuleBasedChatbot({
                             {/* Typing Animation */}
                             {isTyping && (
                                 <div className="flex items-start">
-                                    <div className="bg-white border border-gray-200/80 rounded-2xl rounded-bl-xs p-2.5 shadow-xs flex items-center gap-1.5">
+                                    <div className="bg-white border border-gray-200/80 rounded-2xl rounded-tl-xs p-3 shadow-xs flex items-center gap-1.5">
                                         <span className="w-1.5 h-1.5 rounded-full bg-[#0F766E] animate-bounce" style={{ animationDelay: "0ms" }} />
                                         <span className="w-1.5 h-1.5 rounded-full bg-[#0F766E] animate-bounce" style={{ animationDelay: "150ms" }} />
                                         <span className="w-1.5 h-1.5 rounded-full bg-[#0F766E] animate-bounce" style={{ animationDelay: "300ms" }} />
                                     </div>
                                 </div>
                             )}
-
-                            <div ref={messagesEndRef} />
                         </div>
 
                         {/* Input Footer & Safe Area Padding */}
-                        <div className="bg-white border-t border-gray-200 p-2.5 sm:p-3 pb-[max(0.6rem,env(safe-area-inset-bottom))] sm:pb-3 shrink-0 flex flex-col gap-1">
+                        <div className="bg-white border-t border-gray-200/80 p-3 sm:p-3.5 pb-[max(0.7rem,env(safe-area-inset-bottom))] sm:pb-3.5 shrink-0 flex flex-col gap-1.5">
                             <form
                                 onSubmit={(e) => {
                                     e.preventDefault();
@@ -859,20 +920,25 @@ export function RuleBasedChatbot({
                                     type="text"
                                     value={inputValue}
                                     onChange={(e) => setInputValue(e.target.value)}
+                                    onFocus={() => {
+                                        setTimeout(() => {
+                                            scrollToBottom();
+                                        }, 180);
+                                    }}
                                     placeholder="Ask a question or select a topic..."
-                                    className="flex-1 px-3 py-2 text-base sm:text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F766E]/40 focus:border-[#0F766E] text-[#111827] placeholder:text-gray-400"
+                                    className="flex-1 px-3.5 py-2.5 text-base sm:text-sm bg-gray-50/90 border border-gray-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0F766E]/15 focus:border-[#0F766E] text-[#111827] placeholder:text-gray-400 transition-all"
                                 />
                                 <button
                                     type="submit"
                                     disabled={!inputValue.trim()}
-                                    className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#0F766E] hover:bg-[#115E59] active:scale-95 disabled:opacity-40 text-white flex items-center justify-center transition-all shrink-0 shadow-xs cursor-pointer touch-manipulation"
+                                    className="w-10 h-10 rounded-xl bg-[#0F766E] hover:bg-[#115E59] active:scale-95 disabled:opacity-40 text-white flex items-center justify-center transition-all shrink-0 shadow-xs cursor-pointer touch-manipulation"
                                     aria-label="Send message"
                                 >
                                     <Send className="w-4 h-4" />
                                 </button>
                             </form>
-                            <p className="text-[9.5px] text-gray-400 text-center">
-                                SS40 Concierge • Tap outside or press Esc to close
+                            <p className="text-[10px] text-gray-400 text-center font-medium">
+                                SS40 SKY • Tap outside or press Esc to close
                             </p>
                         </div>
                     </motion.div>
