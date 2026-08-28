@@ -116,7 +116,7 @@ const GlowingOrbs = () => (
 );
 
 // SCENE 1: DIGITAL SOLUTIONS VISUAL
-const VisualDigital = React.memo(() => {
+const VisualDigital = React.memo(({ isActive = true }: { isActive?: boolean }) => {
     const radius = 125;
     const nodes = [
         { label: "Mobile", icon: Smartphone, angle: 0 },
@@ -158,7 +158,7 @@ const VisualDigital = React.memo(() => {
                         className="absolute left-[50%] top-[50%] w-2.5 h-2.5 -ml-1.25 -mt-1.25 bg-[#6B9F91] rounded-full z-10 pointer-events-none transform-gpu shadow-sm shadow-[#6B9F91]"
                         style={{ willChange: "transform, opacity" }}
                         initial={{ opacity: 0, x: 0, y: 0 }}
-                        animate={{ opacity: [0, 1, 1, 0], x: [0, node.pos.x], y: [0, node.pos.y] }}
+                        animate={isActive ? { opacity: [0, 1, 1, 0], x: [0, node.pos.x], y: [0, node.pos.y] } : { opacity: 0 }}
                         transition={{ duration: 2.2, repeat: Infinity, delay: i * 0.25, ease: "easeInOut" }}
                     />
                 ))}
@@ -166,7 +166,9 @@ const VisualDigital = React.memo(() => {
                 {/* Central Hub */}
                 <div className="absolute left-[50%] top-[50%] w-20 h-20 -ml-10 -mt-10 bg-white rounded-full shadow-2xl border-4 border-[#D8E8E2] flex items-center justify-center z-20">
                     <div className="text-[#111827] font-black text-xl tracking-tighter">SS40</div>
-                    <motion.div animate={{ scale: [1, 1.25, 1], opacity: [0, 0.25, 0] }} transition={{ duration: 2.5, repeat: Infinity }} className="absolute inset-0 bg-[#6B9F91] rounded-full z-[-1]" />
+                    {isActive && (
+                        <motion.div animate={{ scale: [1, 1.25, 1], opacity: [0, 0.25, 0] }} transition={{ duration: 2.5, repeat: Infinity }} className="absolute inset-0 bg-[#6B9F91] rounded-full z-[-1]" />
+                    )}
                 </div>
 
                 {/* Peripheral Nodes */}
@@ -252,14 +254,14 @@ const MobileVisualDigital = React.memo(() => {
 MobileVisualDigital.displayName = "MobileVisualDigital";
 
 // SCENE 2: PRODUCTS VISUAL
-const VisualProducts = React.memo(() => {
+const VisualProducts = React.memo(({ isActive = true }: { isActive?: boolean }) => {
     return (
         <div className="relative w-full h-full flex flex-col items-center justify-center p-6 perspective-1000">
             <GlowingOrbs />
             <div className="relative w-full max-w-[300px] aspect-square flex items-center justify-center z-10">
 
                 {/* Main Dashboard Panel */}
-                <div className="absolute w-full h-56 bg-white/95 backdrop-blur-xl rounded-2xl border border-white/60 shadow-xl flex flex-col p-5 z-10 overflow-hidden">
+                <div className="absolute w-full h-56 bg-white rounded-2xl border border-gray-100 shadow-xl flex flex-col p-5 z-10 overflow-hidden">
                     <div className="flex justify-between items-center mb-6 border-b border-gray-100 pb-3">
                         <div className="flex gap-1.5">
                             <div className="w-2.5 h-2.5 rounded-full bg-gray-200" />
@@ -281,9 +283,9 @@ const VisualProducts = React.memo(() => {
 
                 {/* Floating Metric 1 (Revenue) */}
                 <motion.div
-                    animate={{ y: [-4, 4, -4] }}
+                    animate={isActive ? { y: [-4, 4, -4] } : { y: 0 }}
                     transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-                    className="absolute -top-3 -left-3 w-36 bg-white/95 backdrop-blur-md rounded-xl p-3 shadow-xl border border-white/60 z-20 flex flex-col gap-0.5"
+                    className="absolute -top-3 -left-3 w-36 bg-white rounded-xl p-3 shadow-xl border border-gray-100 z-20 flex flex-col gap-0.5"
                 >
                     <div className="flex items-center gap-2 text-gray-500 text-xs font-semibold">
                         <DollarSign className="w-3.5 h-3.5 text-green-500" /> Total Revenue
@@ -295,9 +297,9 @@ const VisualProducts = React.memo(() => {
 
                 {/* Floating Metric 2 (Active Users) */}
                 <motion.div
-                    animate={{ y: [4, -4, 4] }}
+                    animate={isActive ? { y: [4, -4, 4] } : { y: 0 }}
                     transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut" }}
-                    className="absolute -bottom-3 -right-3 w-36 bg-white/95 backdrop-blur-md rounded-xl p-3 shadow-xl border border-white/60 z-20 flex flex-col gap-0.5"
+                    className="absolute -bottom-3 -right-3 w-36 bg-white rounded-xl p-3 shadow-xl border border-gray-100 z-20 flex flex-col gap-0.5"
                 >
                     <div className="flex items-center gap-2 text-gray-500 text-xs font-semibold">
                         <Users className="w-3.5 h-3.5 text-blue-500" /> Active Users
@@ -322,7 +324,7 @@ const VisualProducts = React.memo(() => {
 VisualProducts.displayName = "VisualProducts";
 
 // SCENE 3: ACADEMICS VISUAL (CAREER LAUNCH PAD ECOSYSTEM AS PER WEBSITE)
-const VisualAcademics = React.memo(() => {
+const VisualAcademics = React.memo(({ isActive = true }: { isActive?: boolean }) => {
     return (
         <div className="relative w-full h-full flex items-center justify-center p-6 bg-transparent">
             <GlowingOrbs />
@@ -335,7 +337,7 @@ const VisualAcademics = React.memo(() => {
                 </svg>
 
                 {/* CENTER: Career Launch Pad Platform */}
-                <div className="relative z-20 w-28 h-28 bg-white/95 backdrop-blur-xl rounded-full border border-white shadow-xl flex flex-col items-center justify-center p-3 text-center ring-4 ring-[#D8E8E2]/80">
+                <div className="relative z-20 w-28 h-28 bg-white rounded-full border border-gray-100 shadow-xl flex flex-col items-center justify-center p-3 text-center ring-4 ring-[#D8E8E2]/80">
                     <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#111827] to-gray-800 flex items-center justify-center shadow-md border border-gray-700 mb-1">
                         <Rocket className="w-4 h-4 text-white" />
                     </div>
@@ -345,7 +347,7 @@ const VisualAcademics = React.memo(() => {
 
                 {/* SATELLITE 1: Learn (Top-Left) */}
                 <div className="absolute top-[8%] left-[8%] z-20">
-                    <div className="bg-white/95 backdrop-blur-md rounded-xl px-2.5 py-1.5 shadow-md border border-gray-100 flex items-center gap-2">
+                    <div className="bg-white rounded-xl px-2.5 py-1.5 shadow-md border border-gray-100 flex items-center gap-2">
                         <div className="w-6 h-6 rounded-lg bg-[#EDF5F2] flex items-center justify-center shrink-0">
                             <BookOpen className="w-3.5 h-3.5 text-[#0F766E]" />
                         </div>
@@ -355,10 +357,10 @@ const VisualAcademics = React.memo(() => {
 
                 {/* SATELLITE 2: Build with Progress (Bottom-Left) */}
                 <div className="absolute bottom-[8%] left-[5%] z-20">
-                    <div className="bg-white/95 backdrop-blur-md rounded-xl p-2.5 shadow-md border border-gray-100 flex flex-col gap-1 w-28">
+                    <div className="bg-white rounded-xl p-2.5 shadow-md border border-gray-100 flex flex-col gap-1 w-28">
                         <div className="flex items-center gap-1.5">
                             <div className="w-5 h-5 rounded-md bg-[#EDF5F2] flex items-center justify-center">
-                                <TerminalSquare className="w-3 h-3 text-[#0F766E]" />
+                                <TerminalSquare className="w-3.5 h-3.5 text-[#0F766E]" />
                             </div>
                             <span className="text-[11px] font-bold text-gray-800">Build</span>
                         </div>
@@ -366,7 +368,7 @@ const VisualAcademics = React.memo(() => {
                             <motion.div
                                 className="h-full bg-[#0F766E]"
                                 initial={{ width: "20%" }}
-                                animate={{ width: ["20%", "95%", "20%"] }}
+                                animate={isActive ? { width: ["20%", "95%", "20%"] } : { width: "70%" }}
                                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                             />
                         </div>
@@ -375,7 +377,7 @@ const VisualAcademics = React.memo(() => {
 
                 {/* SATELLITE 3: GitHub Projects (Bottom-Right) */}
                 <div className="absolute bottom-[10%] right-[8%] z-20">
-                    <div className="bg-white/95 backdrop-blur-md rounded-xl px-2.5 py-1.5 shadow-md border border-gray-100 flex items-center gap-2">
+                    <div className="bg-white rounded-xl px-2.5 py-1.5 shadow-md border border-gray-100 flex items-center gap-2">
                         <div className="w-6 h-6 rounded-lg bg-gray-50 flex items-center justify-center shrink-0 border border-gray-100">
                             <GitBranch className="w-3.5 h-3.5 text-gray-700" />
                         </div>
@@ -385,7 +387,7 @@ const VisualAcademics = React.memo(() => {
 
                 {/* SATELLITE 4: Portfolio (Top-Right) */}
                 <div className="absolute top-[10%] right-[6%] z-20">
-                    <div className="bg-white/95 backdrop-blur-md rounded-xl px-2.5 py-1.5 shadow-md border border-[#0F766E]/20 flex items-center gap-2">
+                    <div className="bg-white rounded-xl px-2.5 py-1.5 shadow-md border border-[#0F766E]/20 flex items-center gap-2">
                         <div className="w-6 h-6 rounded-lg bg-[#0F766E] flex items-center justify-center shrink-0 shadow-xs">
                             <LayoutDashboard className="w-3.5 h-3.5 text-white" />
                         </div>
@@ -426,36 +428,33 @@ function DesktopDeckCard({ scene, index, activeScene, onSelect, onSwipeLeft, onS
             opacity: 1,
             zIndex: 30,
             rotateY: 0,
-            filter: "blur(0px)",
             pointerEvents: "auto" as const
         },
         left: {
             x: "-22%",
             scale: 0.91,
-            opacity: 0.7,
+            opacity: 0.72,
             zIndex: 10,
             rotateY: 3,
-            filter: "blur(0.4px)",
             pointerEvents: "auto" as const
         },
         right: {
             x: "22%",
             scale: 0.91,
-            opacity: 0.7,
+            opacity: 0.72,
             zIndex: 10,
             rotateY: -3,
-            filter: "blur(0.4px)",
             pointerEvents: "auto" as const
         }
     };
 
-    const VisualComponent = useMemo(() => {
-        if (index === 1) return <VisualProducts />;
-        if (index === 2) return <VisualAcademics />;
-        return <VisualDigital />;
-    }, [index]);
-
     const isCenter = position === "center";
+
+    const VisualComponent = useMemo(() => {
+        if (index === 1) return <VisualProducts isActive={isCenter} />;
+        if (index === 2) return <VisualAcademics isActive={isCenter} />;
+        return <VisualDigital isActive={isCenter} />;
+    }, [index, isCenter]);
 
     // Handle horizontal drag gestures cleanly (like gslv.in Framer cards)
     const handleDragEnd = (_: any, info: PanInfo) => {
@@ -485,12 +484,12 @@ function DesktopDeckCard({ scene, index, activeScene, onSelect, onSwipeLeft, onS
             onClick={() => {
                 if (!isCenter) onSelect();
             }}
-            className={`absolute top-0 left-0 right-0 bottom-0 m-auto max-w-[780px] w-[58vw] xl:max-w-[820px] h-[440px] xl:h-[465px] bg-white/95 backdrop-blur-2xl rounded-[26px] grid grid-cols-12 overflow-hidden transform-gpu select-none transition-shadow duration-300 ${
+            className={`absolute top-0 left-0 right-0 bottom-0 m-auto max-w-[780px] w-[58vw] xl:max-w-[820px] h-[440px] xl:h-[465px] bg-white rounded-[26px] grid grid-cols-12 overflow-hidden transform-gpu select-none transition-shadow duration-300 ${
                 isCenter
                     ? "border-2 border-[#0F766E]/30 shadow-[0_25px_60px_-15px_rgba(15,118,110,0.22),0_12px_25px_-5px_rgba(0,0,0,0.06)] ring-1 ring-[#0F766E]/20 cursor-grab active:cursor-grabbing"
                     : "border-2 border-gray-200/90 shadow-[0_12px_30px_-10px_rgba(0,0,0,0.1)] cursor-pointer"
             }`}
-            style={{ willChange: "transform, opacity" }}
+            style={{ willChange: "transform, opacity", transform: "translateZ(0)" }}
         >
             {/* LEFT SIDE: Content (6 cols / 50%) */}
             <div className="col-span-6 p-6 xl:p-8 flex flex-col justify-between h-full bg-white z-10">

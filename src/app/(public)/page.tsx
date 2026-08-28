@@ -134,13 +134,17 @@ export default async function Home() {
       <Hero />
       <About />
 
-      {/* Below the fold (Clean direct imports, 0 preload fragmentation) */}
+      {/* Below the fold (GPU-accelerated with content-visibility containment) */}
       <BusinessWings />
       <SuccessStories data={happimonials} />
       <ActivityUpdates data={activities} />
       <InteractiveImpactShowcase />
-      <TrustedBy data={logos} />
-      <ContactSection config={config} />
+      <div className="cv-auto">
+        <TrustedBy data={logos} />
+      </div>
+      <div className="cv-auto">
+        <ContactSection config={config} />
+      </div>
     </div>
   );
 }
