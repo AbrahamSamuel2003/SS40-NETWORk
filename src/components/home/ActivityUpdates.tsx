@@ -126,27 +126,40 @@ export function ActivityUpdates({ data = [] }: ActivityUpdatesProps) {
                             />
                         </div>
 
-                        {/* Active Pinned Blog Card with Hardware-Accelerated Phase Transitions */}
+                        {/* Pre-Mounted Zero-Latency Desktop Blog Card Deck with GPU-Accelerated Smooth Transitions */}
                         <div className="relative w-full my-auto flex items-center justify-center py-2">
-                            <AnimatePresence mode="wait">
-                                {homeActivities[activeDesktopIdx] && (
+                            {homeActivities.map((act, idx) => {
+                                const isActive = activeDesktopIdx === idx;
+                                return (
                                     <motion.div
-                                        key={`desktop-card-${homeActivities[activeDesktopIdx].id}`}
-                                        initial={{ opacity: 0, y: 15, scale: 0.99 }}
-                                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                                        exit={{ opacity: 0, y: -15, scale: 0.99 }}
-                                        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                                        className="w-full transform-gpu"
+                                        key={`desktop-card-${act.id}`}
+                                        initial={false}
+                                        animate={{
+                                            opacity: isActive ? 1 : 0,
+                                            y: isActive ? 0 : idx < activeDesktopIdx ? -18 : 18,
+                                            scale: isActive ? 1 : 0.985,
+                                            pointerEvents: isActive ? 'auto' : 'none'
+                                        }}
+                                        transition={{
+                                            duration: 0.36,
+                                            ease: [0.22, 1, 0.36, 1]
+                                        }}
+                                        className={`w-full transform-gpu ${idx === 0 ? 'relative' : 'absolute inset-x-0'}`}
+                                        style={{
+                                            willChange: 'transform, opacity',
+                                            visibility: isActive || Math.abs(activeDesktopIdx - idx) <= 1 ? 'visible' : 'hidden'
+                                        }}
                                     >
                                         <ActivityCard
-                                            activity={homeActivities[activeDesktopIdx]}
-                                            reversed={activeDesktopIdx % 2 === 1}
+                                            activity={act}
+                                            reversed={idx % 2 === 1}
                                             variant="alternating"
+                                            priority={idx === 0 || idx === 1}
                                             onReadStory={(item) => setActiveModalItem(item)}
                                         />
                                     </motion.div>
-                                )}
-                            </AnimatePresence>
+                                );
+                            })}
                         </div>
 
                         {/* Bottom Bar: Step Tracker & Scroll / View All Link (Guaranteed Visible) */}

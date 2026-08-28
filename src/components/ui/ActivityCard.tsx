@@ -109,10 +109,11 @@ export interface ActivityCardProps {
     activity: ActivityItem;
     reversed?: boolean;
     variant?: 'alternating' | 'grid' | 'mobile-swipe';
+    priority?: boolean;
     onReadStory?: (activity: ActivityItem) => void;
 }
 
-export function ActivityCard({ activity, reversed = false, variant = 'alternating', onReadStory }: ActivityCardProps) {
+export function ActivityCard({ activity, reversed = false, variant = 'alternating', priority = false, onReadStory }: ActivityCardProps) {
     const rawImages = Array.isArray(activity.images) ? activity.images : [];
     const images: ActivityImage[] = rawImages.map((img: unknown) => {
         if (typeof img === 'string') return { url: img };
@@ -230,7 +231,8 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
                                     fill
                                     sizes="(max-width: 640px) 82vw, 350px"
                                     className="object-cover"
-                                    loading="lazy"
+                                    priority={priority}
+                                    loading={priority ? 'eager' : 'lazy'}
                                     decoding="async"
                                 />
                             </motion.div>
@@ -480,7 +482,8 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
                                 fill
                                 sizes="(max-width: 1024px) 100vw, 50vw"
                                 className="object-cover"
-                                loading="lazy"
+                                priority={priority}
+                                loading={priority ? 'eager' : 'lazy'}
                                 decoding="async"
                             />
                         </motion.div>
