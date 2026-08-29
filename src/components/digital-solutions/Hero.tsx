@@ -187,7 +187,8 @@ export function Hero() {
                         <motion.div
                             animate={{ y: [-10, 10, -10] }}
                             transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
-                            className="absolute -right-4 md:-right-8 bottom-10 z-20 w-24 md:w-32 h-48 md:h-64 bg-white rounded-[24px] md:rounded-[32px] shadow-2xl border-4 border-gray-900 flex flex-col overflow-hidden hidden sm:flex"
+                            className="absolute -right-4 md:-right-8 bottom-10 z-20 w-24 md:w-32 h-48 md:h-64 bg-white rounded-[24px] md:rounded-[32px] shadow-2xl border-4 border-gray-900 flex flex-col overflow-hidden hidden sm:flex transform-gpu"
+                            style={{ willChange: "transform", transform: "translateZ(0)" }}
                         >
                             <div className="w-full h-4 bg-gray-900 rounded-b-xl flex items-center justify-center shrink-0">
                                 <div className="w-8 h-1 rounded-full bg-gray-700" />
@@ -208,7 +209,8 @@ export function Hero() {
                         <motion.div
                             animate={{ y: [10, -10, 10] }}
                             transition={{ repeat: Infinity, duration: 7, ease: "easeInOut" }}
-                            className="absolute left-0 sm:-left-6 md:-left-12 top-20 z-20 bg-white/90 backdrop-blur-md p-3 md:p-4 rounded-xl shadow-xl border border-[var(--color-border)] flex items-start gap-3 w-[200px] md:w-[240px]"
+                            className="absolute left-0 sm:-left-6 md:-left-12 top-20 z-20 bg-white/90 backdrop-blur-md p-3 md:p-4 rounded-xl shadow-xl border border-[var(--color-border)] flex items-start gap-3 w-[200px] md:w-[240px] transform-gpu"
+                            style={{ willChange: "transform", transform: "translateZ(0)" }}
                         >
                             <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-green-100 flex flex-col shrink-0 items-center justify-center text-green-600">
                                 <Bell className="w-4 h-4 md:w-5 md:h-5" />
@@ -223,7 +225,8 @@ export function Hero() {
                         <motion.div
                             animate={{ y: [-5, 5, -5], rotate: [-2, 2, -2] }}
                             transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
-                            className="absolute left-1/4 -bottom-6 z-30 bg-gray-900 text-white p-2.5 px-4 rounded-full shadow-lg flex items-center gap-2 border border-gray-700 hidden lg:flex"
+                            className="absolute left-1/4 -bottom-6 z-30 bg-gray-900 text-white p-2.5 px-4 rounded-full shadow-lg flex items-center gap-2 border border-gray-700 hidden lg:flex transform-gpu"
+                            style={{ willChange: "transform", transform: "translateZ(0)" }}
                         >
                             <Sparkles className="w-4 h-4 text-yellow-400" />
                             <p className="text-xs font-bold font-mono">AI analyzing metrics...</p>

@@ -29,7 +29,7 @@ function SingleProjectCard({ project }: { project: any }) {
                         <p className="text-[11px] text-gray-500">Visuals protected under corporate NDA.</p>
                     </div>
                 ) : project.imageUrl ? (
-                    <img src={project.imageUrl} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
+                    <img src={project.imageUrl} alt={project.title} loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
                 ) : (
                     <div className="absolute inset-0 bg-[#6B9F91]/5 flex flex-col p-6 gap-3 group-hover:scale-105 transition-transform duration-700 ease-out">
                         <div className="w-full flex justify-between items-center bg-white/80 backdrop-blur-md p-3 rounded-lg border border-gray-200 shadow-sm">
@@ -124,7 +124,7 @@ function GridProjectCard({ project }: { project: any }) {
                         <p className="text-[11px] text-gray-500">Visuals protected under corporate NDA.</p>
                     </div>
                 ) : project.imageUrl ? (
-                    <img src={project.imageUrl} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
+                    <img src={project.imageUrl} alt={project.title} loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
                 ) : (
                     <div className="w-full h-full flex flex-col p-4 gap-2.5 bg-[#6B9F91]/5 group-hover:scale-105 transition-transform duration-700 ease-out">
                         <div className="w-full h-1/2 flex gap-2.5">
@@ -181,9 +181,13 @@ function GridProjectCard({ project }: { project: any }) {
     );
 }
 
-export function ClientProjects() {
-    const [projects, setProjects] = React.useState<any[]>([]);
-    const [isLoading, setIsLoading] = React.useState(true);
+interface ClientProjectsProps {
+    initialData?: any[];
+}
+
+export function ClientProjects({ initialData }: ClientProjectsProps = {}) {
+    const [projects, setProjects] = React.useState<any[]>(initialData || []);
+    const [isLoading, setIsLoading] = React.useState(!initialData || initialData.length === 0);
     const [activeModalProject, setActiveModalProject] = React.useState<any | null>(null);
 
     const [activeMobileIdx, setActiveMobileIdx] = React.useState(0);
@@ -220,6 +224,12 @@ export function ClientProjects() {
     }, [layoutConfig]);
 
     React.useEffect(() => {
+        if (initialData && initialData.length > 0) {
+            setProjects(initialData);
+            setIsLoading(false);
+            return;
+        }
+
         fetch('/api/client-projects')
             .then(res => res.json())
             .then(data => {
@@ -229,7 +239,7 @@ export function ClientProjects() {
                 setIsLoading(false);
             })
             .catch(() => setIsLoading(false));
-    }, []);
+    }, [initialData]);
 
     const scrollToMobileProject = (idx: number) => {
         if (!mobileScrollRef.current) return;

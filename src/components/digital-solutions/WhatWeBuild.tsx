@@ -73,6 +73,8 @@ const SOLUTIONS = [
 export function WhatWeBuild() {
     const [activeId, setActiveId] = React.useState<string>(SOLUTIONS[0].id);
     const [expandedId, setExpandedId] = React.useState<string | null>(SOLUTIONS[0].id);
+    const [isInView, setIsInView] = React.useState(false);
+    const sectionRef = React.useRef<HTMLDivElement>(null);
 
     // Option 1: Mobile E-Commerce Carousel States
     const shoes = [
@@ -87,7 +89,16 @@ export function WhatWeBuild() {
     const [buttonState, setButtonState] = React.useState<'idle' | 'added'>('idle');
 
     React.useEffect(() => {
-        if (activeId !== "mobile") return;
+        if (!sectionRef.current) return;
+        const observer = new IntersectionObserver(([entry]) => {
+            setIsInView(entry.isIntersecting);
+        }, { threshold: 0.1 });
+        observer.observe(sectionRef.current);
+        return () => observer.disconnect();
+    }, []);
+
+    React.useEffect(() => {
+        if (activeId !== "mobile" || !isInView) return;
 
         const interval = setInterval(() => {
             // Trigger "Add to Cart" click
@@ -107,7 +118,7 @@ export function WhatWeBuild() {
         }, 3500);
 
         return () => clearInterval(interval);
-    }, [activeId]);
+    }, [activeId, isInView]);
 
     const handleTopicClick = (id: string) => {
         if (expandedId === id) {
@@ -120,6 +131,7 @@ export function WhatWeBuild() {
 
     return (
         <SectionWrapper id="what-we-build" className="bg-[#D8E8E2] !overflow-visible">
+            <div ref={sectionRef} className="w-full">
             <Container className="space-y-12 lg:space-y-16">
 
                 {/* Section Header */}
@@ -208,12 +220,12 @@ export function WhatWeBuild() {
                     </div>
 
                     {/* Right Column - Dynamic Preview Panel (60%) */}
-                    <div className="hidden lg:flex w-full lg:w-[60%] flex-col pt-4 lg:sticky lg:top-28">
+                    <div className="hidden lg:flex w-full lg:w-[60%] flex-col pt-4 lg:sticky lg:top-28 transform-gpu">
                         {/* 
                           The container preserves the exact grid size, padding, and alignment, 
                           but acts purely as a transparent layout scaffold to hold the illustrations. 
                         */}
-                        <div className="relative w-full aspect-[4/3] min-h-[400px] md:min-h-[500px] flex items-center justify-center p-8 lg:p-12 z-0">
+                        <div className="relative w-full aspect-[4/3] min-h-[400px] md:min-h-[500px] flex items-center justify-center p-8 lg:p-12 z-0 transform-gpu">
 
                             {/* Illustrations animate freely inside this transparent area */}
 
@@ -226,7 +238,8 @@ export function WhatWeBuild() {
                                         animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0, y: -10 }}
                                         transition={{ duration: 0.2, ease: "easeOut" }}
-                                        className="relative z-10 w-full h-full flex flex-col gap-4"
+                                        className="relative z-10 w-full h-full flex flex-col gap-4 transform-gpu"
+                                        style={{ willChange: "transform", transform: "translateZ(0)" }}
                                     >
                                         {/* Floating Notification */}
                                         <motion.div
@@ -290,7 +303,8 @@ export function WhatWeBuild() {
                                         animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0, y: -10 }}
                                         transition={{ duration: 0.2, ease: "easeOut" }}
-                                        className="relative z-10 w-full h-full flex flex-col"
+                                        className="relative z-10 w-full h-full flex flex-col transform-gpu"
+                                        style={{ willChange: "transform", transform: "translateZ(0)" }}
                                     >
                                         <div className="w-full h-full bg-white rounded-xl border border-[var(--color-border)] shadow-sm flex flex-col overflow-hidden group">
                                             {/* Browser Chrome Header */}
@@ -324,7 +338,8 @@ export function WhatWeBuild() {
                                                         initial={{ x: 100, y: 100, opacity: 0 }}
                                                         animate={{ x: [100, -20, -10], y: [100, 20, 30], opacity: [0, 1, 1] }}
                                                         transition={{ duration: 2, ease: "easeOut", repeat: Infinity, repeatDelay: 1 }}
-                                                        className="absolute z-20"
+                                                        className="absolute z-20 transform-gpu"
+                                                        style={{ willChange: "transform", transform: "translateZ(0)" }}
                                                     >
                                                         <MousePointer2 className="w-6 h-6 text-gray-900 fill-gray-900 -rotate-12" />
                                                     </motion.div>
@@ -371,7 +386,8 @@ export function WhatWeBuild() {
                                         animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0, y: -10 }}
                                         transition={{ duration: 0.2, ease: "easeOut" }}
-                                        className="relative z-10 w-full h-full flex items-center justify-center gap-6"
+                                        className="relative z-10 w-full h-full flex items-center justify-center gap-6 transform-gpu"
+                                        style={{ willChange: "transform", transform: "translateZ(0)" }}
                                     >
                                         {/* Back Phone Card (Left) */}
                                         <div className="relative w-48 h-[380px] bg-white rounded-[2rem] shadow-xl border-[6px] border-gray-900 overflow-hidden hidden md:flex flex-col opacity-40 scale-90 translate-x-12 transition-all duration-300">
@@ -575,7 +591,8 @@ export function WhatWeBuild() {
                                         animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0, y: -10 }}
                                         transition={{ duration: 0.2, ease: "easeOut" }}
-                                        className="relative z-10 w-full h-full flex flex-col items-center justify-center"
+                                        className="relative z-10 w-full h-full flex flex-col items-center justify-center transform-gpu"
+                                        style={{ willChange: "transform", transform: "translateZ(0)" }}
                                     >
                                         <div className="w-[85%] max-w-[400px] bg-white rounded-2xl shadow-xl border border-[var(--color-border)] overflow-hidden flex flex-col">
                                             <div className="bg-gray-900 p-4 flex items-center gap-3">
@@ -623,7 +640,8 @@ export function WhatWeBuild() {
                                         animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0, y: -10 }}
                                         transition={{ duration: 0.2, ease: "easeOut" }}
-                                        className="relative z-10 w-full h-full flex flex-col items-center justify-center gap-8"
+                                        className="relative z-10 w-full h-full flex flex-col items-center justify-center gap-8 transform-gpu"
+                                        style={{ willChange: "transform", transform: "translateZ(0)" }}
                                     >
                                         <div className="w-full max-w-[450px] flex justify-between items-center relative">
                                             {/* Lines */}
@@ -678,7 +696,8 @@ export function WhatWeBuild() {
                                         animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0, y: -10 }}
                                         transition={{ duration: 0.2, ease: "easeOut" }}
-                                        className="relative z-10 w-full h-full flex flex-col justify-center gap-6"
+                                        className="relative z-10 w-full h-full flex flex-col justify-center gap-6 transform-gpu"
+                                        style={{ willChange: "transform", transform: "translateZ(0)" }}
                                     >
                                         <div className="flex flex-col gap-6 max-w-[400px] mx-auto w-full relative">
                                             {/* Connection Line */}
@@ -749,6 +768,7 @@ export function WhatWeBuild() {
                 </div>
 
             </Container>
+            </div>
         </SectionWrapper>
     );
 }

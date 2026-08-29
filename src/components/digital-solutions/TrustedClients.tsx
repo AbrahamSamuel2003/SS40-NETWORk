@@ -10,11 +10,21 @@ import { cn } from "@/utils/cn";
 import { shuffleArray } from "@/utils/shuffle";
 import { LogoMarqueeSkeleton } from "@/components/ui/Skeleton";
 
-export function TrustedClients() {
-    const [logos, setLogos] = React.useState<any[]>([]);
-    const [isLoading, setIsLoading] = React.useState(true);
+interface TrustedClientsProps {
+    initialData?: any[];
+}
+
+export function TrustedClients({ initialData }: TrustedClientsProps = {}) {
+    const [logos, setLogos] = React.useState<any[]>(initialData || []);
+    const [isLoading, setIsLoading] = React.useState(!initialData || initialData.length === 0);
 
     React.useEffect(() => {
+        if (initialData && initialData.length > 0) {
+            setLogos(initialData);
+            setIsLoading(false);
+            return;
+        }
+
         fetch('/api/organization-logos?pageScope=DIGITAL_SOLUTIONS')
             .then(res => res.json())
             .then(data => {
@@ -24,10 +34,10 @@ export function TrustedClients() {
                 setIsLoading(false);
             })
             .catch(() => setIsLoading(false));
-    }, []);
+    }, [initialData]);
 
-    const row1 = React.useMemo(() => shuffleArray(logos), [logos]);
-    const row2 = React.useMemo(() => shuffleArray(logos), [logos]);
+    const row1 = React.useMemo(() => logos, [logos]);
+    const row2 = React.useMemo(() => (logos.length > 3 ? [...logos].reverse() : logos), [logos]);
 
     if (isLoading || logos.length === 0) {
         return (
@@ -175,32 +185,29 @@ function MarqueeRow({ items, direction, speed }: MarqueeRowProps) {
                 {duplicatedItems.map((client, idx) => (
                     <div
                         key={`${client.id}-${idx}`}
-                        className={`marquee-logo-card group flex items-center bg-white border border-gray-100 rounded-2xl shadow-[0_2px_8px_-3px_rgba(0,0,0,0.05)] hover:shadow-[0_10px_20px_-5px_rgba(0,0,0,0.08)] shrink-0 transition-all duration-300 cursor-pointer overflow-hidden ${
-                            client.showTextOnCard
+                        className={`marquee-logo-card group flex items-center bg-white border border-gray-100 rounded-2xl shadow-[0_2px_8px_-3px_rgba(0,0,0,0.05)] hover:shadow-[0_10px_20px_-5px_rgba(0,0,0,0.08)] shrink-0 transition-all duration-300 cursor-pointer overflow-hidden ${client.showTextOnCard
                                 ? 'p-3 sm:p-4 gap-3 sm:gap-4 w-max h-[64px] sm:h-[72px] md:h-[80px] justify-start'
                                 : 'px-4 py-2 sm:px-5 sm:py-2.5 h-[64px] sm:h-[72px] md:h-[80px] w-auto justify-center'
-                        }`}
+                            }`}
                         title={client.name}
                     >
-                        <div className={`flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105 ${
-                            client.showTextOnCard 
-                                ? 'w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12' 
+                        <div className={`flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105 ${client.showTextOnCard
+                                ? 'w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12'
                                 : 'h-11 sm:h-12 md:h-14 w-auto min-w-[36px]'
-                        }`}>
+                            }`}>
                             {client.logoUrl ? (
-                                <Image 
-                                    src={client.logoUrl} 
-                                    alt={client.showTextOnCard ? client.name : (client.name || 'Client Logo')} 
+                                <Image
+                                    src={client.logoUrl}
+                                    alt={client.showTextOnCard ? client.name : (client.name || 'Client Logo')}
                                     width={160}
                                     height={80}
                                     loading="lazy"
                                     decoding="async"
                                     sizes="(max-width: 768px) 120px, 160px"
-                                    className={`object-contain ${
-                                        client.showTextOnCard 
-                                            ? 'w-full h-full' 
+                                    className={`object-contain ${client.showTextOnCard
+                                            ? 'w-full h-full'
                                             : 'w-auto h-full max-w-[160px] sm:max-w-[200px] md:max-w-[240px]'
-                                    }`} 
+                                        }`}
                                 />
                             ) : (
                                 <Building2 className="w-7 h-7 sm:w-8 sm:h-8 text-[#6B9F91]" />

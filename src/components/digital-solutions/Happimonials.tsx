@@ -42,9 +42,13 @@ function getYouTubeEmbedUrl(url: string) {
 }
 
 
-export function Happimonials() {
-    const [happimonials, setHappimonials] = React.useState<any[]>([]);
-    const [isLoading, setIsLoading] = React.useState(true);
+interface HappimonialsProps {
+    initialData?: any[];
+}
+
+export function Happimonials({ initialData }: HappimonialsProps = {}) {
+    const [happimonials, setHappimonials] = React.useState<any[]>(initialData || []);
+    const [isLoading, setIsLoading] = React.useState(!initialData || initialData.length === 0);
     const [activeMobileIdx, setActiveMobileIdx] = React.useState(0);
     const [activeModalStory, setActiveModalStory] = React.useState<any | null>(null);
 
@@ -89,6 +93,12 @@ export function Happimonials() {
     };
 
     React.useEffect(() => {
+        if (initialData && initialData.length > 0) {
+            setHappimonials(initialData);
+            setIsLoading(false);
+            return;
+        }
+
         fetch('/api/happimonials?pageScope=DIGITAL_SOLUTIONS')
             .then(res => res.json())
             .then(data => {
@@ -96,7 +106,7 @@ export function Happimonials() {
                 setIsLoading(false);
             })
             .catch(() => setIsLoading(false));
-    }, []);
+    }, [initialData]);
 
     React.useEffect(() => {
         if (isLoading || displayedHappimonials.length === 0) return;

@@ -39,9 +39,13 @@ function getYouTubeEmbedUrl(url: string) {
     }
 }
 
-export function ProductImpacts() {
-    const [happimonials, setHappimonials] = React.useState<any[]>([]);
-    const [isLoading, setIsLoading] = React.useState(true);
+interface ProductImpactsProps {
+    initialData?: any[];
+}
+
+export function ProductImpacts({ initialData }: ProductImpactsProps = {}) {
+    const [happimonials, setHappimonials] = React.useState<any[]>(initialData || []);
+    const [isLoading, setIsLoading] = React.useState(!initialData || initialData.length === 0);
     const [activeMobileIdx, setActiveMobileIdx] = React.useState(0);
     const [activeModalStory, setActiveModalStory] = React.useState<any | null>(null);
 
@@ -68,6 +72,12 @@ export function ProductImpacts() {
     };
 
     React.useEffect(() => {
+        if (initialData && initialData.length > 0) {
+            setHappimonials(initialData);
+            setIsLoading(false);
+            return;
+        }
+
         fetch('/api/happimonials?pageScope=PRODUCTS')
             .then(res => res.json())
             .then(data => {
@@ -75,7 +85,7 @@ export function ProductImpacts() {
                 setIsLoading(false);
             })
             .catch(() => setIsLoading(false));
-    }, []);
+    }, [initialData]);
 
     React.useEffect(() => {
         if (isLoading || displayedImpacts.length === 0) return;

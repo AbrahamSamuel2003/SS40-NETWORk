@@ -38,7 +38,33 @@ export const metadata: Metadata = {
 
 export const revalidate = 60;
 
-export default function DigitalSolutionsPage() {
+import { prisma } from "@/lib/prisma";
+
+export default async function DigitalSolutionsPage() {
+    const [projects, happimonials, logos] = await Promise.all([
+        prisma.clientProject.findMany({
+            where: { isActive: true },
+            orderBy: [
+                { sortOrder: 'asc' },
+                { createdAt: 'asc' }
+            ]
+        }),
+        prisma.happimonial.findMany({
+            where: { pageScope: 'DIGITAL_SOLUTIONS', isActive: true },
+            orderBy: [
+                { sortOrder: 'asc' },
+                { createdAt: 'desc' }
+            ]
+        }),
+        prisma.organizationLogo.findMany({
+            where: { pageScope: 'DIGITAL_SOLUTIONS', isActive: true },
+            orderBy: [
+                { sortOrder: 'asc' },
+                { createdAt: 'desc' }
+            ]
+        })
+    ]);
+
     const jsonLd = {
         "@context": "https://schema.org",
         "@graph": [
@@ -85,12 +111,18 @@ export default function DigitalSolutionsPage() {
             <Hero />
             <WhatWeBuild />
 
-            {/* Below the fold (Clean direct imports, 0 preload fragmentation) */}
+            {/* Below the fold (GPU-accelerated with content-visibility containment) */}
             <DevelopmentLifecycle />
-            <ClientProjects />
-            <Happimonials />
-            <TrustedClients />
-            <GetQuote />
+            <ClientProjects initialData={projects} />
+            <div className="cv-auto">
+                <Happimonials initialData={happimonials} />
+            </div>
+            <div className="cv-auto">
+                <TrustedClients initialData={logos} />
+            </div>
+            <div className="cv-auto">
+                <GetQuote />
+            </div>
         </div>
     );
 }

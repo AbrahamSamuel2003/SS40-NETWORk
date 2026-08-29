@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -19,9 +19,13 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { hoverLift, slideUp, staggerContainer } from "@/lib/animations";
 import { FeaturedProductSkeleton } from "@/components/ui/Skeleton";
 
-export function FeaturedProduct() {
-    const [products, setProducts] = React.useState<any[]>([]);
-    const [isLoading, setIsLoading] = React.useState(true);
+interface FeaturedProductProps {
+    initialData?: any[];
+}
+
+export function FeaturedProduct({ initialData }: FeaturedProductProps = {}) {
+    const [products, setProducts] = React.useState<any[]>(initialData || []);
+    const [isLoading, setIsLoading] = React.useState(!initialData || initialData.length === 0);
     const displayedProducts = React.useMemo(() => {
         const featured = products.filter(product => product.isFeatured);
         const source = featured.length > 0 ? featured : products;
@@ -36,6 +40,12 @@ export function FeaturedProduct() {
     }, [products]);
 
     React.useEffect(() => {
+        if (initialData && initialData.length > 0) {
+            setProducts(initialData);
+            setIsLoading(false);
+            return;
+        }
+
         fetch('/api/products')
             .then(res => res.json())
             .then(data => {
@@ -45,7 +55,7 @@ export function FeaturedProduct() {
                 setIsLoading(false);
             })
             .catch(() => setIsLoading(false));
-    }, []);
+    }, [initialData]);
 
     React.useEffect(() => {
         if (!isLoading && typeof window !== 'undefined' && (window.location.hash === '#featured-product' || window.location.hash === '#view-all-featured-products')) {
@@ -187,199 +197,220 @@ export function FeaturedProduct() {
                                      </motion.div>
                                  </div>
 
-                                 <motion.div 
-                                      initial="hidden"
-                                      whileInView="visible"
-                                      whileHover="hover"
-                                      viewport={{ once: true, margin: "-100px" }}
-                                      className="w-full lg:w-[55%] relative flex justify-center items-center min-h-[280px] lg:min-h-[420px]"
-                                  >
-                                      {/* Subtle Stage Background */}
-                                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] z-0 pointer-events-none select-none overflow-visible flex items-center justify-center">
-                                          {/* Restrained radial glow */}
-                                          <div className="absolute w-[80%] h-[80%] bg-[radial-gradient(ellipse_at_center,rgba(45,212,191,0.06)_0%,transparent_70%)] blur-[40px] rounded-full" />
-                                          
-                                          {/* Mini SVG Grid pattern */}
-                                          <svg className="absolute w-full h-full opacity-[0.03]" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
-                                              <defs>
-                                                  <pattern id={`stage-grid-${product.id}`} width="24" height="24" patternUnits="userSpaceOnUse">
-                                                      <path d="M 24 0 L 0 0 0 24" fill="none" stroke="currentColor" strokeWidth="1"/>
-                                                  </pattern>
-                                              </defs>
-                                              <rect width="100%" height="100%" fill={`url(#stage-grid-${product.id})`} />
-                                          </svg>
+                                  <motion.div 
+                                       initial="hidden"
+                                       whileInView="visible"
+                                       whileHover="hover"
+                                       viewport={{ once: true, margin: "-100px" }}
+                                       className="w-full lg:w-[55%] relative flex justify-center items-center min-h-[280px] lg:min-h-[420px] transform-gpu"
+                                   >
+                                       {/* Subtle Stage Background */}
+                                       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] z-0 pointer-events-none select-none overflow-visible flex items-center justify-center transform-gpu">
+                                           {/* Restrained radial glow (Pure GPU-accelerated) */}
+                                           <div
+                                               className="absolute w-[80%] h-[80%] rounded-full pointer-events-none transform-gpu"
+                                               style={{
+                                                   background: 'radial-gradient(ellipse at center, rgba(45,212,191,0.12) 0%, rgba(45,212,191,0) 70%)',
+                                                   willChange: 'transform'
+                                               }}
+                                           />
+                                           
+                                           {/* Mini SVG Grid pattern */}
+                                           <svg className="absolute w-full h-full opacity-[0.03]" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+                                               <defs>
+                                                   <pattern id={`stage-grid-${product.id}`} width="24" height="24" patternUnits="userSpaceOnUse">
+                                                       <path d="M 24 0 L 0 0 0 24" fill="none" stroke="currentColor" strokeWidth="1"/>
+                                                   </pattern>
+                                               </defs>
+                                               <rect width="100%" height="100%" fill={`url(#stage-grid-${product.id})`} />
+                                           </svg>
 
-                                          {/* Outer circle — slow clockwise */}
-                                          <motion.div
-                                              animate={{ rotate: 360 }}
-                                              transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
-                                              className="absolute w-[85%] h-[85%]"
-                                          >
-                                              <span className="absolute top-0 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-[#2DD4BF]/60" />
-                                          </motion.div>
+                                           {/* Outer circle — slow clockwise */}
+                                           <motion.div
+                                               animate={{ rotate: 360 }}
+                                               transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+                                               className="absolute w-[85%] h-[85%] transform-gpu"
+                                               style={{ willChange: "transform", transform: "translateZ(0)" }}
+                                           >
+                                               <span className="absolute top-0 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-[#2DD4BF]/60" />
+                                           </motion.div>
 
-                                          {/* Inner circle — counter-clockwise */}
-                                          <motion.div
-                                              animate={{ rotate: -360 }}
-                                              transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-                                              className="absolute w-[50%] h-[50%]"
-                                          >
-                                              <span className="absolute top-0 left-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-[#6B9F91]/60" />
-                                          </motion.div>
-                                      </div>
+                                           {/* Inner circle — counter-clockwise */}
+                                           <motion.div
+                                               animate={{ rotate: -360 }}
+                                               transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                                               className="absolute w-[50%] h-[50%] transform-gpu"
+                                               style={{ willChange: "transform", transform: "translateZ(0)" }}
+                                           >
+                                               <span className="absolute top-0 left-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-[#6B9F91]/60" />
+                                           </motion.div>
+                                       </div>
 
-                                      {/* Main Product Screenshot (Browser Mockup Shell) */}
-                                      <motion.div
-                                          variants={{
-                                              hidden: { opacity: 0, scale: 0.96, y: 30 },
-                                              visible: { opacity: 1, scale: 1, y: 0, transition: { type: "spring", stiffness: 90, damping: 15, duration: 0.8 } },
-                                              hover: { y: -6, transition: { duration: 0.3 } }
-                                          }}
-                                          className="relative z-10 w-full max-w-[500px] aspect-[16/11] bg-white border border-gray-200/80 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
-                                      >
-                                          {/* Browser Header Bar */}
-                                          <div className="h-8 bg-gray-50 flex items-center px-4 justify-between border-b border-gray-200 shrink-0 select-none">
-                                              <div className="flex gap-1.5 shrink-0">
-                                                  <span className="w-2.5 h-2.5 rounded-full bg-red-400/80" />
-                                                  <span className="w-2.5 h-2.5 rounded-full bg-yellow-400/80" />
-                                                  <span className="w-2.5 h-2.5 rounded-full bg-green-400/80" />
-                                              </div>
-                                              <div className="bg-white/80 border border-gray-200/60 rounded px-8 py-0.5 text-[9px] font-mono text-gray-400 truncate max-w-[200px]">
-                                                  {product.name.toLowerCase()}.com
-                                              </div>
-                                              <div className="w-12" /> {/* Spacer */}
-                                          </div>
-
-                                          <div className="flex-grow flex items-center justify-center p-1 relative bg-gradient-to-tr from-[#E0F2FE] via-[#D8E8E2] to-[#CCFBF1] overflow-hidden">
-                                               {/* Light Sun/Halo glow */}
-                                               <div className="absolute top-[-10%] right-[-10%] w-40 h-40 bg-[#99F6E4]/40 blur-[30px] rounded-full pointer-events-none" />
-                                               
-                                               {/* Abstract vector hills / ocean waves */}
-                                               <svg className="absolute bottom-0 left-0 w-full h-[55%] opacity-[0.70] pointer-events-none select-none" style={{color:'#6EE7B7'}} viewBox="0 0 1440 320" fill="currentColor" preserveAspectRatio="none">
-                                                   <path d="M0,192L48,197.3C96,203,192,213,288,192C384,171,480,117,576,117C672,117,768,171,864,186.7C960,203,1056,181,1152,154.7C1248,128,1344,96,1392,80L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z" />
-                                               </svg>
-                                               <svg className="absolute bottom-0 left-0 w-full h-[40%] opacity-[0.55] pointer-events-none select-none" style={{color:'#93C5FD'}} viewBox="0 0 1440 320" fill="currentColor" preserveAspectRatio="none">
-                                                   <path d="M0,96L48,112C96,128,192,160,288,154.7C384,149,480,107,576,112C672,117,768,171,864,197.3C960,224,1056,224,1152,202.7C1248,181,1344,139,1392,117L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z" />
-                                               </svg>
-
-                                               {product.screenshotUrl ? (
-                                                   <img 
-                                                       src={product.screenshotUrl} 
-                                                       alt={`${product.name} - Featured Custom Software Solution by SS40 NETWORK Tirunelveli`} 
-                                                       className="w-full h-full object-contain select-none transition-all duration-300 relative z-10 filter drop-shadow-[0_12px_24px_rgba(15,118,110,0.15)]" 
-                                                   />
-                                               ) : (
-                                                   <div className="flex flex-col items-center justify-center text-gray-400 gap-4 p-8 text-center select-none relative z-10">
-                                                       <CloudIcon className="w-16 h-16 opacity-20" />
-                                                       <p>No screenshot available for {product.name}</p>
-                                                   </div>
-                                               )}
+                                       {/* Main Product Screenshot (Browser Mockup Shell) */}
+                                       <motion.div
+                                           variants={{
+                                               hidden: { opacity: 0, scale: 0.96, y: 30 },
+                                               visible: { opacity: 1, scale: 1, y: 0, transition: { type: "spring", stiffness: 90, damping: 15, duration: 0.8 } },
+                                               hover: { y: -6, transition: { duration: 0.3 } }
+                                           }}
+                                           className="relative z-10 w-full max-w-[500px] aspect-[16/11] bg-white border border-gray-200/80 rounded-2xl shadow-2xl flex flex-col overflow-hidden transform-gpu"
+                                           style={{ willChange: "transform", transform: "translateZ(0)" }}
+                                       >
+                                           {/* Browser Header Bar */}
+                                           <div className="h-8 bg-gray-50 flex items-center px-4 justify-between border-b border-gray-200 shrink-0 select-none">
+                                               <div className="flex gap-1.5 shrink-0">
+                                                   <span className="w-2.5 h-2.5 rounded-full bg-red-400/80" />
+                                                   <span className="w-2.5 h-2.5 rounded-full bg-yellow-400/80" />
+                                                   <span className="w-2.5 h-2.5 rounded-full bg-green-400/80" />
+                                               </div>
+                                               <div className="bg-white/80 border border-gray-200/60 rounded px-8 py-0.5 text-[9px] font-mono text-gray-400 truncate max-w-[200px]">
+                                                   {product.name.toLowerCase()}.com
+                                               </div>
+                                               <div className="w-12" /> {/* Spacer */}
                                            </div>
-                                      </motion.div>
 
-                                      {/* Floating Perimeter Cards */}
-                                      <div className="absolute inset-0 z-20 pointer-events-none hidden md:block">
-                                          {/* Top-Left */}
-                                          {badgeSource[0] && (
-                                              <motion.div
-                                                  variants={{
-                                                      hidden: { opacity: 0, scale: 0.8, x: -10, y: -10 },
-                                                      visible: { 
-                                                          opacity: 1, 
-                                                          scale: 1, 
-                                                          x: 0, 
-                                                          y: 0, 
-                                                          transition: { delay: 0.1, duration: 0.5, type: "spring" } 
-                                                      },
-                                                      hover: { x: -6, y: -6, transition: { duration: 0.3 } }
-                                                  }}
-                                                  animate={{
-                                                      y: [0, -4, 0],
-                                                      transition: { repeat: Infinity, duration: 4.5, ease: "easeInOut", delay: 0.1 }
-                                                  }}
-                                                  className="absolute top-2 left-2 bg-[#0F766E]/5 backdrop-blur-md border border-[#2DD4BF]/25 px-3.5 py-2.5 rounded-2xl shadow-xl text-xs font-bold text-[#0F766E] flex items-center gap-2 select-none"
-                                              >
-                                                  <BadgeCheck className="w-4 h-4 text-[#2DD4BF]" />
-                                                  <span>{badgeSource[0]}</span>
-                                              </motion.div>
-                                          )}
+                                           <div className="flex-grow flex items-center justify-center p-1 relative bg-gradient-to-tr from-[#E0F2FE] via-[#D8E8E2] to-[#CCFBF1] overflow-hidden">
+                                                {/* Light Sun/Halo glow (Pure GPU-accelerated) */}
+                                                <div
+                                                    className="absolute top-[-10%] right-[-10%] w-40 h-40 rounded-full pointer-events-none transform-gpu"
+                                                    style={{
+                                                        background: 'radial-gradient(circle at center, rgba(153,246,228,0.6) 0%, rgba(153,246,228,0) 70%)',
+                                                        willChange: 'transform'
+                                                    }}
+                                                />
+                                                
+                                                {/* Abstract vector hills / ocean waves */}
+                                                <svg className="absolute bottom-0 left-0 w-full h-[55%] opacity-[0.70] pointer-events-none select-none" style={{color:'#6EE7B7'}} viewBox="0 0 1440 320" fill="currentColor" preserveAspectRatio="none">
+                                                    <path d="M0,192L48,197.3C96,203,192,213,288,192C384,171,480,117,576,117C672,117,768,171,864,186.7C960,203,1056,181,1152,154.7C1248,128,1344,96,1392,80L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z" />
+                                                </svg>
+                                                <svg className="absolute bottom-0 left-0 w-full h-[40%] opacity-[0.55] pointer-events-none select-none" style={{color:'#93C5FD'}} viewBox="0 0 1440 320" fill="currentColor" preserveAspectRatio="none">
+                                                    <path d="M0,96L48,112C96,128,192,160,288,154.7C384,149,480,107,576,112C672,117,768,171,864,197.3C960,224,1056,224,1152,202.7C1248,181,1344,139,1392,117L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z" />
+                                                </svg>
 
-                                          {/* Top-Right */}
-                                          {badgeSource[1] && (
-                                              <motion.div
-                                                  variants={{
-                                                      hidden: { opacity: 0, scale: 0.8, x: 10, y: -10 },
-                                                      visible: { 
-                                                          opacity: 1, 
-                                                          scale: 1, 
-                                                          x: 0, 
-                                                          y: 0, 
-                                                          transition: { delay: 0.2, duration: 0.5, type: "spring" } 
-                                                      },
-                                                      hover: { x: 6, y: -6, transition: { duration: 0.3 } }
-                                                  }}
-                                                  animate={{
-                                                      y: [0, 4, 0],
-                                                      transition: { repeat: Infinity, duration: 4, ease: "easeInOut", delay: 0.2 }
-                                                  }}
-                                                  className="absolute top-4 right-2 bg-[#0F766E]/5 backdrop-blur-md border border-[#2DD4BF]/25 px-3.5 py-2.5 rounded-2xl shadow-xl text-xs font-bold text-[#0F766E] flex items-center gap-2 select-none"
-                                              >
-                                                  <BadgeCheck className="w-4 h-4 text-[#2DD4BF]" />
-                                                  <span>{badgeSource[1]}</span>
-                                              </motion.div>
-                                          )}
+                                                {product.screenshotUrl ? (
+                                                    <img 
+                                                        src={product.screenshotUrl} 
+                                                        alt={`${product.name} - Featured Custom Software Solution by SS40 NETWORK`} 
+                                                        loading="lazy"
+                                                        decoding="async"
+                                                        className="w-full h-full object-contain select-none transition-all duration-300 relative z-10 filter drop-shadow-[0_12px_24px_rgba(15,118,110,0.15)]" 
+                                                    />
+                                                ) : (
+                                                    <div className="flex flex-col items-center justify-center text-gray-400 gap-4 p-8 text-center select-none relative z-10">
+                                                        <CloudIcon className="w-16 h-16 opacity-20" />
+                                                        <p>No screenshot available for {product.name}</p>
+                                                    </div>
+                                                )}
+                                            </div>
+                                       </motion.div>
 
-                                          {/* Bottom-Left */}
-                                          {badgeSource[2] && (
-                                              <motion.div
-                                                  variants={{
-                                                      hidden: { opacity: 0, scale: 0.8, x: -10, y: 10 },
-                                                      visible: { 
-                                                          opacity: 1, 
-                                                          scale: 1, 
-                                                          x: 0, 
-                                                          y: 0, 
-                                                          transition: { delay: 0.3, duration: 0.5, type: "spring" } 
-                                                      },
-                                                      hover: { x: -6, y: 6, transition: { duration: 0.3 } }
-                                                  }}
-                                                  animate={{
-                                                      y: [0, 4, 0],
-                                                      transition: { repeat: Infinity, duration: 4.2, ease: "easeInOut", delay: 0.3 }
-                                                  }}
-                                                  className="absolute bottom-4 left-2 bg-[#0F766E]/5 backdrop-blur-md border border-[#2DD4BF]/25 px-3.5 py-2.5 rounded-2xl shadow-xl text-xs font-bold text-[#0F766E] flex items-center gap-2 select-none"
-                                              >
-                                                  <BadgeCheck className="w-4 h-4 text-[#2DD4BF]" />
-                                                  <span>{badgeSource[2]}</span>
-                                              </motion.div>
-                                          )}
+                                       {/* Floating Perimeter Cards */}
+                                       <div className="absolute inset-0 z-20 pointer-events-none hidden md:block">
+                                           {/* Top-Left */}
+                                           {badgeSource[0] && (
+                                               <motion.div
+                                                   variants={{
+                                                       hidden: { opacity: 0, scale: 0.8, x: -10, y: -10 },
+                                                       visible: { 
+                                                           opacity: 1, 
+                                                           scale: 1, 
+                                                           x: 0, 
+                                                           y: 0, 
+                                                           transition: { delay: 0.1, duration: 0.5, type: "spring" } 
+                                                       },
+                                                       hover: { x: -6, y: -6, transition: { duration: 0.3 } }
+                                                   }}
+                                                   animate={{
+                                                       y: [0, -4, 0],
+                                                       transition: { repeat: Infinity, duration: 4.5, ease: "easeInOut", delay: 0.1 }
+                                                   }}
+                                                   className="absolute top-2 left-2 bg-[#0F766E]/5 backdrop-blur-md border border-[#2DD4BF]/25 px-3.5 py-2.5 rounded-2xl shadow-xl text-xs font-bold text-[#0F766E] flex items-center gap-2 select-none transform-gpu"
+                                                   style={{ willChange: "transform", transform: "translateZ(0)" }}
+                                               >
+                                                   <BadgeCheck className="w-4 h-4 text-[#2DD4BF]" />
+                                                   <span>{badgeSource[0]}</span>
+                                               </motion.div>
+                                           )}
 
-                                          {/* Bottom-Right */}
-                                          {badgeSource[3] && (
-                                              <motion.div
-                                                  variants={{
-                                                      hidden: { opacity: 0, scale: 0.8, x: 10, y: 10 },
-                                                      visible: { 
-                                                          opacity: 1, 
-                                                          scale: 1, 
-                                                          x: 0, 
-                                                          y: 0, 
-                                                          transition: { delay: 0.4, duration: 0.5, type: "spring" } 
-                                                      },
-                                                      hover: { x: 6, y: 6, transition: { duration: 0.3 } }
-                                                  }}
-                                                  animate={{
-                                                     y: [0, -4, 0],
-                                                     transition: { repeat: Infinity, duration: 4.8, ease: "easeInOut", delay: 0.4 }
-                                                  }}
-                                                  className="absolute bottom-2 right-2 bg-[#0F766E]/5 backdrop-blur-md border border-[#2DD4BF]/25 px-3.5 py-2.5 rounded-2xl shadow-xl text-xs font-bold text-[#0F766E] flex items-center gap-2 select-none"
-                                              >
-                                                  <BadgeCheck className="w-4 h-4 text-[#2DD4BF]" />
-                                                  <span>{badgeSource[3]}</span>
-                                              </motion.div>
-                                          )}
-                                      </div>
-                                  </motion.div>
+                                           {/* Top-Right */}
+                                           {badgeSource[1] && (
+                                               <motion.div
+                                                   variants={{
+                                                       hidden: { opacity: 0, scale: 0.8, x: 10, y: -10 },
+                                                       visible: { 
+                                                           opacity: 1, 
+                                                           scale: 1, 
+                                                           x: 0, 
+                                                           y: 0, 
+                                                           transition: { delay: 0.2, duration: 0.5, type: "spring" } 
+                                                       },
+                                                       hover: { x: 6, y: -6, transition: { duration: 0.3 } }
+                                                   }}
+                                                   animate={{
+                                                       y: [0, 4, 0],
+                                                       transition: { repeat: Infinity, duration: 4, ease: "easeInOut", delay: 0.2 }
+                                                   }}
+                                                   className="absolute top-4 right-2 bg-[#0F766E]/5 backdrop-blur-md border border-[#2DD4BF]/25 px-3.5 py-2.5 rounded-2xl shadow-xl text-xs font-bold text-[#0F766E] flex items-center gap-2 select-none transform-gpu"
+                                                   style={{ willChange: "transform", transform: "translateZ(0)" }}
+                                               >
+                                                   <BadgeCheck className="w-4 h-4 text-[#2DD4BF]" />
+                                                   <span>{badgeSource[1]}</span>
+                                               </motion.div>
+                                           )}
+
+                                           {/* Bottom-Left */}
+                                           {badgeSource[2] && (
+                                               <motion.div
+                                                   variants={{
+                                                       hidden: { opacity: 0, scale: 0.8, x: -10, y: 10 },
+                                                       visible: { 
+                                                           opacity: 1, 
+                                                           scale: 1, 
+                                                           x: 0, 
+                                                           y: 0, 
+                                                           transition: { delay: 0.3, duration: 0.5, type: "spring" } 
+                                                       },
+                                                       hover: { x: -6, y: 6, transition: { duration: 0.3 } }
+                                                   }}
+                                                   animate={{
+                                                       y: [0, 4, 0],
+                                                       transition: { repeat: Infinity, duration: 4.2, ease: "easeInOut", delay: 0.3 }
+                                                   }}
+                                                   className="absolute bottom-4 left-2 bg-[#0F766E]/5 backdrop-blur-md border border-[#2DD4BF]/25 px-3.5 py-2.5 rounded-2xl shadow-xl text-xs font-bold text-[#0F766E] flex items-center gap-2 select-none transform-gpu"
+                                                   style={{ willChange: "transform", transform: "translateZ(0)" }}
+                                               >
+                                                   <BadgeCheck className="w-4 h-4 text-[#2DD4BF]" />
+                                                   <span>{badgeSource[2]}</span>
+                                               </motion.div>
+                                           )}
+
+                                           {/* Bottom-Right */}
+                                           {badgeSource[3] && (
+                                               <motion.div
+                                                   variants={{
+                                                       hidden: { opacity: 0, scale: 0.8, x: 10, y: 10 },
+                                                       visible: { 
+                                                           opacity: 1, 
+                                                           scale: 1, 
+                                                           x: 0, 
+                                                           y: 0, 
+                                                           transition: { delay: 0.4, duration: 0.5, type: "spring" } 
+                                                       },
+                                                       hover: { x: 6, y: 6, transition: { duration: 0.3 } }
+                                                   }}
+                                                   animate={{
+                                                       y: [0, -4, 0],
+                                                       transition: { repeat: Infinity, duration: 4.8, ease: "easeInOut", delay: 0.4 }
+                                                   }}
+                                                   className="absolute bottom-2 right-2 bg-[#0F766E]/5 backdrop-blur-md border border-[#2DD4BF]/25 px-3.5 py-2.5 rounded-2xl shadow-xl text-xs font-bold text-[#0F766E] flex items-center gap-2 select-none transform-gpu"
+                                                   style={{ willChange: "transform", transform: "translateZ(0)" }}
+                                               >
+                                                   <BadgeCheck className="w-4 h-4 text-[#2DD4BF]" />
+                                                   <span>{badgeSource[3]}</span>
+                                               </motion.div>
+                                           )}
+                                       </div>
+                                   </motion.div>
                             </div>
                         </div>
                     );

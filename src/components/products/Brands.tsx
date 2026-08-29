@@ -10,11 +10,21 @@ import { cn } from "@/utils/cn";
 import { shuffleArray } from "@/utils/shuffle";
 import { LogoMarqueeSkeleton } from "@/components/ui/Skeleton";
 
-export function Brands() {
-    const [logos, setLogos] = React.useState<any[]>([]);
-    const [isLoading, setIsLoading] = React.useState(true);
+interface BrandsProps {
+    initialData?: any[];
+}
+
+export function Brands({ initialData }: BrandsProps = {}) {
+    const [logos, setLogos] = React.useState<any[]>(initialData || []);
+    const [isLoading, setIsLoading] = React.useState(!initialData || initialData.length === 0);
 
     React.useEffect(() => {
+        if (initialData && initialData.length > 0) {
+            setLogos(initialData);
+            setIsLoading(false);
+            return;
+        }
+
         fetch('/api/organization-logos?pageScope=PRODUCTS')
             .then(res => res.json())
             .then(data => {
@@ -24,10 +34,10 @@ export function Brands() {
                 setIsLoading(false);
             })
             .catch(() => setIsLoading(false));
-    }, []);
+    }, [initialData]);
 
-    const ROW_1 = React.useMemo(() => shuffleArray(logos), [logos]);
-    const ROW_2 = React.useMemo(() => shuffleArray(logos), [logos]);
+    const ROW_1 = React.useMemo(() => logos, [logos]);
+    const ROW_2 = React.useMemo(() => (logos.length > 3 ? [...logos].reverse() : logos), [logos]);
     const showRow2 = ROW_2.length > 0;
 
     if (isLoading || logos.length === 0) {
@@ -49,13 +59,19 @@ export function Brands() {
     return (
         <SectionWrapper id="brands" className="bg-[#D8E8E2] relative overflow-hidden">
 
-            {/* Soft Ambient Background Enhancements */}
-            <div className="absolute inset-0 pointer-events-none z-0">
+            {/* Soft Ambient Background Enhancements (Pure GPU-accelerated) */}
+            <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden transform-gpu">
                 <div
                     className="absolute inset-0 opacity-[0.02] mix-blend-multiply"
                     style={{ backgroundImage: 'linear-gradient(#6B9F91 1px, transparent 1px), linear-gradient(90deg, #6B9F91 1px, transparent 1px)', backgroundSize: '40px 40px' }}
                 />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-[#6B9F91]/5 blur-[120px] rounded-full" />
+                <div
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] rounded-full pointer-events-none transform-gpu"
+                    style={{
+                        background: 'radial-gradient(ellipse at center, rgba(107,159,145,0.12) 0%, rgba(107,159,145,0) 70%)',
+                        willChange: 'transform'
+                    }}
+                />
             </div>
 
             <Container className="relative z-10">
@@ -67,26 +83,30 @@ export function Brands() {
                 />
             </Container>
 
-            {/* Inline styles for seamless infinite CSS Marquee */}
+            {/* Inline styles for seamless infinite CSS Marquee with 120fps GPU acceleration */}
             <style dangerouslySetInnerHTML={{
                 __html: `
                 @keyframes scroll-left {
-                    0% { transform: translateX(0); }
-                    100% { transform: translateX(calc(-50% - 12px)); }
+                    0% { transform: translate3d(0, 0, 0); }
+                    100% { transform: translate3d(calc(-50% - 12px), 0, 0); }
                 }
                 @keyframes scroll-right {
-                    0% { transform: translateX(calc(-50% - 12px)); }
-                    100% { transform: translateX(0); }
+                    0% { transform: translate3d(calc(-50% - 12px), 0, 0); }
+                    100% { transform: translate3d(0, 0, 0); }
                 }
                 .animate-marquee-left {
                     animation: scroll-left var(--duration, 40s) linear infinite;
                     will-change: transform;
-                    transform: translateZ(0);
+                    transform: translate3d(0, 0, 0);
+                    backface-visibility: hidden;
+                    perspective: 1000px;
                 }
                 .animate-marquee-right {
                     animation: scroll-right var(--duration, 40s) linear infinite;
                     will-change: transform;
-                    transform: translateZ(0);
+                    transform: translate3d(0, 0, 0);
+                    backface-visibility: hidden;
+                    perspective: 1000px;
                 }
                 @media (hover: hover) and (pointer: fine) {
                     .group:hover .animate-marquee-left,
@@ -111,7 +131,7 @@ export function Brands() {
             `}} />
 
             {/* Marquee Section (Full Bleed) */}
-            <div className="relative z-10 w-full flex flex-col gap-6 md:gap-8 overflow-hidden py-4">
+            <div className="relative z-10 w-full flex flex-col gap-6 md:gap-8 overflow-hidden py-4 transform-gpu">
 
                 {/* Left/Right Fade Gradients for visual smoothness (Mint Teal Dissolve Blend) */}
                 <div className="absolute top-0 bottom-0 left-0 w-14 md:w-28 bg-gradient-to-r from-[#EDF5F2] via-[#EDF5F2]/40 to-transparent z-20 pointer-events-none" />

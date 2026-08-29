@@ -114,7 +114,8 @@ export function Hero() {
                             initial={{ scale: 0 }}
                             animate={{ scale: 1 }}
                             transition={{ type: "spring", duration: 1.5, bounce: 0.4 }}
-                            className="relative z-10 w-28 h-28 sm:w-32 sm:h-32 md:w-40 md:h-40 rounded-full bg-white shadow-[0_0_60px_-15px_rgba(107,159,145,0.4)] border-4 border-[#6B9F91]/20 flex flex-col items-center justify-center group"
+                            className="relative z-10 w-28 h-28 sm:w-32 sm:h-32 md:w-40 md:h-40 rounded-full bg-white shadow-[0_0_60px_-15px_rgba(107,159,145,0.4)] border-4 border-[#6B9F91]/20 flex flex-col items-center justify-center group transform-gpu"
+                            style={{ willChange: "transform", transform: "translateZ(0)" }}
                         >
                             <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#6B9F91]/10 to-transparent group-hover:rotate-180 transition-transform duration-1000" />
                             <Box className="w-8 h-8 sm:w-10 sm:h-10 text-[#6B9F91] mb-2" />
@@ -130,7 +131,8 @@ export function Hero() {
                                 x: { duration: 0.8, delay: 0.2 },
                                 y: { repeat: Infinity, duration: 5, ease: "easeInOut", delay: 0.2 }
                             }}
-                            className="absolute top-[10%] left-[10%] md:top-[15%] md:left-[15%] z-20"
+                            className="absolute top-[10%] left-[10%] md:top-[15%] md:left-[15%] z-20 transform-gpu"
+                            style={{ willChange: "transform", transform: "translateZ(0)" }}
                         >
                             <div className="bg-white/90 backdrop-blur-md p-3 sm:p-4 rounded-2xl shadow-xl border border-gray-100 flex items-center gap-3 sm:gap-4">
                                 <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#FFC900]/10 flex items-center justify-center text-[#FFC900] shrink-0">
@@ -152,7 +154,8 @@ export function Hero() {
                                 x: { duration: 0.8, delay: 0.4 },
                                 y: { repeat: Infinity, duration: 6, ease: "easeInOut", delay: 0.4 }
                             }}
-                            className="absolute top-[15%] right-[5%] md:top-[20%] md:right-[10%] z-20"
+                            className="absolute top-[15%] right-[5%] md:top-[20%] md:right-[10%] z-20 transform-gpu"
+                            style={{ willChange: "transform", transform: "translateZ(0)" }}
                         >
                             <div className="bg-white/90 backdrop-blur-md p-3 sm:p-4 rounded-2xl shadow-xl border border-gray-100 flex items-center gap-3 sm:gap-4">
                                 <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-500 shrink-0">
@@ -174,7 +177,8 @@ export function Hero() {
                                 x: { duration: 0.8, delay: 0.6 },
                                 y: { repeat: Infinity, duration: 4.5, ease: "easeInOut", delay: 0.6 }
                             }}
-                            className="absolute bottom-[20%] left-[5%] md:bottom-[25%] md:left-[5%] z-20"
+                            className="absolute bottom-[20%] left-[5%] md:bottom-[25%] md:left-[5%] z-20 transform-gpu"
+                            style={{ willChange: "transform", transform: "translateZ(0)" }}
                         >
                             <div className="bg-white/90 backdrop-blur-md p-3 sm:p-4 rounded-2xl shadow-xl border border-gray-100 flex items-center gap-3 sm:gap-4">
                                 <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#6B9F91]/10 flex items-center justify-center text-[#6B9F91] shrink-0">
@@ -196,7 +200,8 @@ export function Hero() {
                                 x: { duration: 0.8, delay: 0.8 },
                                 y: { repeat: Infinity, duration: 5.5, ease: "easeInOut", delay: 0.8 }
                             }}
-                            className="absolute bottom-[15%] right-[5%] md:bottom-[15%] md:right-[15%] z-20"
+                            className="absolute bottom-[15%] right-[5%] md:bottom-[15%] md:right-[15%] z-20 transform-gpu"
+                            style={{ willChange: "transform", transform: "translateZ(0)" }}
                         >
                             <div className="bg-white/90 backdrop-blur-md p-3 sm:p-4 rounded-2xl shadow-xl border border-gray-100 flex items-center gap-3 sm:gap-4">
                                 <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 shrink-0">
@@ -210,7 +215,7 @@ export function Hero() {
                         </motion.div>
 
                         {/* Floating Micro Nodes */}
-                        <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 20, ease: "linear" }} className="absolute inset-0 pointer-events-none">
+                        <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 20, ease: "linear" }} className="absolute inset-0 pointer-events-none transform-gpu" style={{ willChange: "transform" }}>
                             <div className="absolute top-[30%] right-[30%] w-3 h-3 bg-[#FFC900] rounded-full shadow-[0_0_10px_#FFC900]" />
                             <div className="absolute bottom-[30%] left-[30%] w-2 h-2 bg-[#6B9F91] rounded-full shadow-[0_0_10px_#6B9F91]" />
                             <div className="absolute top-[40%] left-[40%] w-2 h-2 bg-blue-400 rounded-full shadow-[0_0_10px_#60A5FA]" />

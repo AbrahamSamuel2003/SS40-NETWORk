@@ -36,7 +36,33 @@ export const metadata: Metadata = {
 
 export const revalidate = 60;
 
-export default function ProductsPage() {
+import { prisma } from "@/lib/prisma";
+
+export default async function ProductsPage() {
+    const [products, happimonials, logos] = await Promise.all([
+        prisma.product.findMany({
+            where: { isActive: true },
+            orderBy: [
+                { sortOrder: 'asc' },
+                { createdAt: 'asc' }
+            ]
+        }),
+        prisma.happimonial.findMany({
+            where: { pageScope: 'PRODUCTS', isActive: true },
+            orderBy: [
+                { sortOrder: 'asc' },
+                { createdAt: 'desc' }
+            ]
+        }),
+        prisma.organizationLogo.findMany({
+            where: { pageScope: 'PRODUCTS', isActive: true },
+            orderBy: [
+                { sortOrder: 'asc' },
+                { createdAt: 'desc' }
+            ]
+        })
+    ]);
+
     const jsonLd = {
         "@context": "https://schema.org",
         "@graph": [
@@ -83,12 +109,18 @@ export default function ProductsPage() {
             />
             {/* Above the fold (Critical Path) */}
             <Hero />
-            <FeaturedProduct />
+            <FeaturedProduct initialData={products} />
 
-            {/* Below the fold (Clean direct imports, 0 preload fragmentation) */}
-            <ProductImpacts />
-            <Brands />
-            <BookDemo />
+            {/* Below the fold (GPU-accelerated with content-visibility containment) */}
+            <div className="cv-auto">
+                <ProductImpacts initialData={happimonials} />
+            </div>
+            <div className="cv-auto">
+                <Brands initialData={logos} />
+            </div>
+            <div className="cv-auto">
+                <BookDemo />
+            </div>
         </div>
     );
 }

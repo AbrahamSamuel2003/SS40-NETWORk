@@ -38,7 +38,7 @@ export function Collaborations({ logos = [] }: { logos?: any[] }) {
     const [hoveredNode, setHoveredNode] = React.useState<string | null>(null);
     const [isMarqueePaused, setIsMarqueePaused] = React.useState(false);
 
-    const shuffledLogos = React.useMemo(() => shuffleArray(logos), [logos]);
+    const shuffledLogos = React.useMemo(() => logos, [logos]);
 
     if (!logos || logos.length === 0) {
         return (
