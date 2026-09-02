@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, CheckCircle2, AlertCircle, Upload, X, Image as ImageIcon, Sparkles } from 'lucide-react';
@@ -239,20 +239,20 @@ export default function ProductTestimonialsPage() {
             </div>
 
             {isModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#111827]/40 backdrop-blur-sm">
-                    <div className="admin-card w-full max-w-xl overflow-hidden shadow-2xl flex flex-col max-h-[88vh]">
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-[#111827]/40 backdrop-blur-sm">
+                    <div className="admin-card w-full max-w-xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
                         <div className="px-4 py-3 border-b border-gray-200 flex justify-between items-center bg-[#D8E8E2]/80 shrink-0">
                             <div>
-                                <h3 className="text-sm font-bold text-[#111827]">{editingId ? 'Edit Success Story' : 'Add Success Story'}</h3>
+                                <h3 className="text-sm sm:text-base font-bold text-[#111827]">{editingId ? 'Edit Success Story' : 'Add Success Story'}</h3>
                                 <p className="text-[10px] text-[#9CA3AF] mt-0.5">Products testimonials</p>
                             </div>
                             <button onClick={() => setIsModalOpen(false)} className="text-[#9CA3AF] hover:text-[#111827] p-1"><X className="w-4 h-4" /></button>
                         </div>
-                        <div className="p-4 overflow-y-auto w-full custom-scrollbar">
+                        <div className="p-3.5 sm:p-4 overflow-y-auto w-full custom-scrollbar">
                             {errorMsg && <div className="mb-3 text-xs text-[#B91C1C] bg-[#FEE2E2] px-3 py-2 rounded border border-[#FCA5A5] flex gap-2"><AlertCircle className="w-3.5 h-3.5 mt-0.5 shrink-0" /> {errorMsg}</div>}
 
                             <form id="happimonialForm" onSubmit={handleSave} className="space-y-3">
-                                <div className="grid grid-cols-2 gap-3">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     <div><label className="block text-xs font-medium text-[#374151] mb-1">Client Name *</label><input required value={clientName} onChange={e => setClientName(e.target.value)} className="w-full bg-white border border-gray-200 rounded-md px-3 py-1.5 text-sm text-[#111827] focus:outline-none focus:border-[#6B9F91]" /></div>
                                     <div><label className="block text-xs font-medium text-[#374151] mb-1">Company Name *</label><input required value={companyName} onChange={e => setCompanyName(e.target.value)} className="w-full bg-white border border-gray-200 rounded-md px-3 py-1.5 text-sm text-[#111827] focus:outline-none focus:border-[#6B9F91]" /></div>
                                 </div>
@@ -263,23 +263,23 @@ export default function ProductTestimonialsPage() {
                                 <div>
                                     <label className="block text-xs font-medium text-[#374151] mb-1">Avatar / Thumbnail Image</label>
                                     <div className="flex flex-col gap-2">
-                                        <input value={thumbnailUrl} onChange={e => setThumbnailUrl(e.target.value)} className="w-full bg-white border border-gray-200 rounded-md px-3 py-1.5 text-sm text-[#111827] focus:outline-none focus:border-[#6B9F91]" placeholder="URL..." />
+                                        <input value={thumbnailUrl} onChange={e => setThumbnailUrl(e.target.value)} className="w-full bg-white border border-gray-200 rounded-md px-3 py-1.5 text-sm text-[#111827] focus:outline-none focus:border-[#6B9F91]" placeholder="Avatar URL / Upload path..." />
                                         
                                         {thumbnailUrl && (
-                                            <div className="relative w-24 h-24 bg-gray-50 rounded-lg overflow-hidden border border-gray-200 group">
+                                            <div className="relative w-20 h-20 bg-gray-50 rounded-lg overflow-hidden border border-gray-200 group">
                                                 <img src={thumbnailUrl} alt="Thumbnail" className="w-full h-full object-cover" />
-                                                <button type="button" onClick={() => setThumbnailUrl('')} className="absolute top-1 right-1 bg-white/90 p-1 rounded-full text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity hover:text-red-500 shadow-sm">
+                                                <button type="button" onClick={() => setThumbnailUrl('')} className="absolute top-1 right-1 bg-white/90 p-1 rounded-full text-gray-500 opacity-90 hover:text-red-500 shadow-sm transition-opacity" title="Remove">
                                                     <X className="w-3 h-3" />
                                                 </button>
                                             </div>
                                         )}
                                         
-                                        <div className="flex flex-wrap gap-2">
-                                            <label className={`cursor-pointer bg-[#D8E8E2]/70 hover:bg-[#D8E8E2] text-[#111827] px-3 py-1.5 rounded-md text-xs font-medium transition-colors flex items-center gap-1.5 ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}>
-                                                <Upload className="w-3.5 h-3.5" /> {isUploading ? 'Uploading...' : 'Upload Local File'}
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                            <label className={`cursor-pointer bg-[#D8E8E2]/70 hover:bg-[#D8E8E2] text-[#111827] px-3 py-1.5 rounded-md text-xs font-medium transition-colors flex items-center justify-center gap-1.5 ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}>
+                                                <Upload className="w-3.5 h-3.5 text-[#6B9F91]" /> {isUploading ? 'Uploading...' : 'Upload Local File'}
                                                 <input type="file" accept="image/*" onChange={handleUpload} className="hidden" disabled={isUploading} />
                                             </label>
-                                            <button type="button" onClick={() => setIsMediaSelectorOpen(true)} className="cursor-pointer bg-[#D8E8E2]/70 hover:bg-[#D8E8E2] text-[#111827] px-3 py-1.5 rounded-md text-xs font-medium transition-colors flex items-center gap-1.5">
+                                            <button type="button" onClick={() => setIsMediaSelectorOpen(true)} className="cursor-pointer bg-[#D8E8E2]/70 hover:bg-[#D8E8E2] text-[#111827] px-3 py-1.5 rounded-md text-xs font-medium transition-colors flex items-center justify-center gap-1.5">
                                                 <ImageIcon className="w-3.5 h-3.5 text-[#6B9F91]" /> Select from Media
                                             </button>
                                         </div>
@@ -304,9 +304,9 @@ export default function ProductTestimonialsPage() {
                                 </label>
                             </form>
                         </div>
-                        <div className="px-4 py-2.5 border-t border-gray-200 flex justify-end gap-2 bg-[#D8E8E2]/50 shrink-0">
-                            <button type="button" onClick={() => setIsModalOpen(false)} className="px-3 py-1.5 rounded-md text-xs text-[#6B7280] hover:bg-[#D8E8E2]/70 font-medium">Cancel</button>
-                            <button type="submit" form="happimonialForm" disabled={isSaving} className="bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-5 py-1.5 rounded-md text-xs font-medium disabled:opacity-50">Save Testimonial</button>
+                        <div className="px-4 py-2.5 border-t border-gray-200 flex flex-col-reverse sm:flex-row sm:justify-end gap-2 bg-[#D8E8E2]/50 shrink-0">
+                            <button type="button" onClick={() => setIsModalOpen(false)} className="w-full sm:w-auto px-3 py-1.5 rounded-md text-xs text-[#6B7280] hover:bg-[#D8E8E2]/70 font-medium text-center">Cancel</button>
+                            <button type="submit" form="happimonialForm" disabled={isSaving} className="w-full sm:w-auto bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-5 py-1.5 rounded-md text-xs font-medium disabled:opacity-50 text-center">Save Testimonial</button>
                         </div>
                     </div>
                 </div>

@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, CheckCircle2, AlertCircle, Upload, X, Image as ImageIcon, Sparkles } from 'lucide-react';
@@ -271,16 +271,16 @@ export default function AcademicPartnerLogosPage() {
 
             {/* Modal */}
             {isModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#111827]/40 backdrop-blur-sm">
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-[#111827]/40 backdrop-blur-sm">
                     <div className="admin-card w-full max-w-lg overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
-                        <div className="p-5 border-b border-gray-200 flex items-center justify-between shrink-0">
-                            <h3 className="text-lg font-bold text-[#111827]">{editingId ? 'Edit Partner Logo' : 'Add Partner Logo'}</h3>
-                            <button onClick={handleCloseModal} className="text-[#9CA3AF] hover:text-[#111827] transition-colors">
+                        <div className="px-4 py-3 sm:px-5 sm:py-4 border-b border-gray-200 flex items-center justify-between shrink-0 bg-[#D8E8E2]/70">
+                            <h3 className="text-base sm:text-lg font-bold text-[#111827]">{editingId ? 'Edit Partner Logo' : 'Add Partner Logo'}</h3>
+                            <button onClick={handleCloseModal} className="text-[#9CA3AF] hover:text-[#111827] transition-colors p-1">
                                 <X className="w-5 h-5" />
                             </button>
                         </div>
 
-                        <div className="p-5 overflow-y-auto custom-scrollbar">
+                        <div className="p-4 sm:p-5 overflow-y-auto custom-scrollbar">
                             {errorMsg && (
                                 <div className="mb-4 bg-[#FEE2E2] border border-[#FCA5A5] text-[#B91C1C] p-3 rounded-lg text-sm flex gap-2">
                                     <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" /> {errorMsg}
@@ -292,7 +292,7 @@ export default function AcademicPartnerLogosPage() {
                                     <label className="block text-sm font-medium text-[#374151] mb-2">Institution Name *</label>
                                     <input required type="text" value={name} onChange={e => setName(e.target.value)} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#6B9F91]" />
                                 </div>
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
                                         <label className="block text-sm font-medium text-[#374151] mb-2">Type / Category *</label>
                                         <input required type="text" value={category} placeholder="e.g. University MoU" onChange={e => setCategory(e.target.value)} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] focus:outline-none focus:border-[#6B9F91]" />
@@ -313,27 +313,32 @@ export default function AcademicPartnerLogosPage() {
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-[#374151] mb-2">Logo Image</label>
-                                    <div className="flex gap-4 items-center">
+                                    <div className="flex flex-col gap-2.5">
+                                        <input type="text" value={logoUrl} onChange={e => setLogoUrl(e.target.value)} placeholder="/uploads/... or https://..." className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-[#111827] focus:outline-none focus:border-[#6B9F91]" />
+                                        
                                         {logoUrl && (
-                                            <div className="w-12 h-12 shrink-0 bg-[#D8E8E2] rounded border border-gray-100 flex items-center justify-center p-1">
+                                            <div className="w-20 h-20 bg-[#D8E8E2] rounded-lg border border-gray-200 flex items-center justify-center p-2 relative group">
                                                 <img src={logoUrl} alt="Preview" className="max-w-full max-h-full object-contain" />
+                                                <button type="button" onClick={() => setLogoUrl('')} className="absolute top-1 right-1 bg-white/90 p-1 rounded-full text-gray-500 opacity-90 hover:text-red-500 shadow-sm transition-opacity" title="Remove">
+                                                    <X className="w-3 h-3" />
+                                                </button>
                                             </div>
                                         )}
-                                        <div className="flex-1 flex gap-2 items-center flex-wrap">
-                                            <input type="text" value={logoUrl} onChange={e => setLogoUrl(e.target.value)} placeholder="/uploads/... or https://..." className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-[#111827] focus:outline-none focus:border-[#6B9F91] mb-1" />
-                                            <label className={`cursor-pointer inline-flex items-center gap-2 bg-[#D8E8E2]/70 hover:bg-[#D8E8E2] border border-gray-200 text-[#111827] px-4 py-2 rounded-lg text-sm font-medium transition-colors ${isUploading ? 'opacity-50' : ''}`}>
-                                                <Upload className="w-4 h-4" /> {isUploading ? 'Uploading...' : 'Upload Local File'}
+                                        
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                            <label className={`cursor-pointer inline-flex items-center justify-center gap-2 bg-[#D8E8E2]/70 hover:bg-[#D8E8E2] border border-gray-200 text-[#111827] px-4 py-2 rounded-lg text-sm font-medium transition-colors ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}>
+                                                <Upload className="w-4 h-4 text-[#6B9F91]" /> {isUploading ? 'Uploading...' : 'Upload Local File'}
                                                 <input type="file" accept="image/*" onChange={handleUpload} className="hidden" disabled={isUploading} />
                                             </label>
-                                            <button type="button" onClick={() => setIsMediaSelectorOpen(true)} className="cursor-pointer inline-flex items-center gap-2 bg-[#D8E8E2]/70 hover:bg-[#D8E8E2] border border-gray-200 text-[#111827] px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                            <button type="button" onClick={() => setIsMediaSelectorOpen(true)} className="cursor-pointer inline-flex items-center justify-center gap-2 bg-[#D8E8E2]/70 hover:bg-[#D8E8E2] border border-gray-200 text-[#111827] px-4 py-2 rounded-lg text-sm font-medium transition-colors">
                                                 <ImageIcon className="w-4 h-4 text-[#6B9F91]" /> Select from Media
                                             </button>
-                                            <p className="text-[#9CA3AF] text-[10px] w-full mt-1">* Prefer SVG, PNG or WebP with transparent backgrounds.</p>
                                         </div>
+                                        <p className="text-[#9CA3AF] text-[10px] w-full">* Prefer SVG, PNG or WebP with transparent backgrounds.</p>
                                     </div>
                                 </div>
 
-                                <div className="pt-2">
+                                <div className="pt-2 flex flex-wrap gap-4">
                                     <label className="flex items-center gap-3 cursor-pointer group">
                                         <div className="relative">
                                             <input type="checkbox" checked={isActive} onChange={e => setIsActive(e.target.checked)} className="sr-only" />
@@ -342,9 +347,7 @@ export default function AcademicPartnerLogosPage() {
                                         </div>
                                         <span className="text-sm font-medium text-[#374151]">Active</span>
                                     </label>
-                                </div>
 
-                                <div className="pt-2">
                                     <label className="flex items-center gap-3 cursor-pointer group">
                                         <div className="relative">
                                             <input type="checkbox" checked={showTextOnCard} onChange={e => setShowTextOnCard(e.target.checked)} className="sr-only" />
@@ -357,9 +360,9 @@ export default function AcademicPartnerLogosPage() {
                             </form>
                         </div>
 
-                        <div className="p-5 border-t border-gray-200 bg-[#D8E8E2]/70 flex justify-end gap-3 shrink-0">
-                            <button type="button" onClick={handleCloseModal} className="px-4 py-2 rounded-lg text-[#6B7280] hover:text-[#111827] hover:bg-[#D8E8E2]/70 font-medium transition-colors">Cancel</button>
-                            <button form="logoForm" type="submit" disabled={isSaving} className="bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-6 py-2 rounded-lg font-medium transition-colors disabled:opacity-50">
+                        <div className="p-4 sm:p-5 border-t border-gray-200 bg-[#D8E8E2]/70 flex flex-col-reverse sm:flex-row sm:justify-end gap-2.5 sm:gap-3 shrink-0">
+                            <button type="button" onClick={handleCloseModal} className="w-full sm:w-auto px-4 py-2 rounded-lg text-[#6B7280] hover:text-[#111827] hover:bg-[#D8E8E2]/70 text-sm font-medium transition-colors text-center">Cancel</button>
+                            <button form="logoForm" type="submit" disabled={isSaving} className="w-full sm:w-auto bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-6 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 text-center">
                                 {isSaving ? 'Saving...' : 'Save Logo'}
                             </button>
                         </div>

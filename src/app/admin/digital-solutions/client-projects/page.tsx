@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, CheckCircle2, AlertCircle, Upload, X, Image as ImageIcon, Sparkles } from 'lucide-react';
@@ -282,22 +282,22 @@ export default function ClientProjectsPage() {
             </div>
 
             {isModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#111827]/40 backdrop-blur-sm">
-                    <div className="admin-card w-full max-w-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
-                        <div className="p-5 border-b border-gray-200 flex justify-between items-center bg-[#D8E8E2]/70">
-                            <h3 className="text-lg font-bold text-[#111827]">{editingId ? 'Edit Project' : 'Add Project'}</h3>
-                            <button onClick={() => setIsModalOpen(false)} className="text-[#9CA3AF] hover:text-[#111827]"><X className="w-5 h-5" /></button>
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-[#111827]/40 backdrop-blur-sm">
+                    <div className="admin-card w-full max-w-3xl overflow-hidden shadow-2xl flex flex-col max-h-[92vh]">
+                        <div className="px-4 py-3.5 sm:px-5 sm:py-4 border-b border-gray-200 flex justify-between items-center bg-[#D8E8E2]/70">
+                            <h3 className="text-base sm:text-lg font-bold text-[#111827]">{editingId ? 'Edit Project' : 'Add Project'}</h3>
+                            <button onClick={() => setIsModalOpen(false)} className="text-[#9CA3AF] hover:text-[#111827] p-1"><X className="w-5 h-5" /></button>
                         </div>
-                        <div className="p-6 overflow-y-auto w-full custom-scrollbar">
+                        <div className="p-4 sm:p-6 overflow-y-auto w-full custom-scrollbar">
                             {errorMsg && <div className="mb-4 text-sm text-[#B91C1C] bg-[#FEE2E2] p-3 rounded-lg border border-[#FCA5A5] flex gap-2"><AlertCircle className="w-4 h-4 mt-0.5 shrink-0" /> {errorMsg}</div>}
 
-                            <form id="projectForm" onSubmit={handleSave} className="space-y-5">
-                                <div className="grid grid-cols-2 gap-4">
+                            <form id="projectForm" onSubmit={handleSave} className="space-y-4 sm:space-y-5">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div><label className="block text-sm text-[#374151] mb-1.5">Project Title *</label><input required value={title} onChange={e => setTitle(e.target.value)} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-[#111827]" /></div>
                                     <div><label className="block text-sm text-[#374151] mb-1.5">Industry *</label><input required value={industry} onChange={e => setIndustry(e.target.value)} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-[#111827]" /></div>
                                 </div>
 
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div><label className="block text-sm text-[#374151] mb-1.5">Tags (comma separated) *</label><input required value={tagsInput} onChange={e => setTagsInput(e.target.value)} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-[#111827]" placeholder="React, Node.js, Next.js..." /></div>
                                     <div><label className="block text-sm text-[#374151] mb-1.5">Status (optional)</label><input value={status} onChange={e => setStatus(e.target.value)} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-[#111827]" placeholder="e.g. Completed, Ongoing" /></div>
                                 </div>
@@ -306,15 +306,27 @@ export default function ClientProjectsPage() {
 
                                 <div>
                                     <label className="block text-sm text-[#374151] mb-1.5">Project Image (Media Library)</label>
-                                    <div className="flex gap-4">
-                                        <input value={imageUrl} onChange={e => setImageUrl(e.target.value)} className="flex-1 bg-white border border-gray-200 rounded-lg px-4 py-2 text-[#111827]" placeholder="URL..." />
-                                        <label className={`cursor-pointer shrink-0 bg-[#D8E8E2]/70 hover:bg-[#D8E8E2] text-[#111827] px-4 py-2 rounded-lg text-sm transition-colors flex items-center gap-2 ${isUploading ? 'opacity-50' : ''}`}>
-                                            <Upload className="w-4 h-4" /> Upload Local File
-                                            <input type="file" accept="image/*" onChange={handleUpload} className="hidden" disabled={isUploading} />
-                                        </label>
-                                        <button type="button" onClick={() => setIsMediaSelectorOpen(true)} className="cursor-pointer shrink-0 bg-[#D8E8E2]/70 hover:bg-[#D8E8E2] text-[#111827] px-4 py-2 rounded-lg text-sm transition-colors flex items-center gap-2">
-                                            <ImageIcon className="w-4 h-4 text-[#6B9F91]" /> Select from Media
-                                        </button>
+                                    <div className="flex flex-col gap-2.5">
+                                        <input value={imageUrl} onChange={e => setImageUrl(e.target.value)} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-[#111827] text-sm focus:outline-none focus:border-[#6B9F91]" placeholder="URL / Upload path..." />
+                                        
+                                        {imageUrl && (
+                                            <div className="relative w-full max-w-xs aspect-video bg-gray-50 rounded-lg overflow-hidden border border-gray-200 group">
+                                                <img src={imageUrl} alt="Project Preview" className="w-full h-full object-contain p-1" />
+                                                <button type="button" onClick={() => setImageUrl('')} className="absolute top-1.5 right-1.5 bg-white/90 p-1 rounded-full text-gray-500 opacity-90 hover:text-red-500 shadow-sm transition-opacity" title="Remove image">
+                                                    <X className="w-3.5 h-3.5" />
+                                                </button>
+                                            </div>
+                                        )}
+
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                            <label className={`cursor-pointer bg-[#D8E8E2]/70 hover:bg-[#D8E8E2] text-[#111827] px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors flex items-center justify-center gap-2 ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}>
+                                                <Upload className="w-4 h-4 text-[#6B9F91]" /> {isUploading ? 'Uploading...' : 'Upload Local File'}
+                                                <input type="file" accept="image/*" onChange={handleUpload} className="hidden" disabled={isUploading} />
+                                            </label>
+                                            <button type="button" onClick={() => setIsMediaSelectorOpen(true)} className="cursor-pointer bg-[#D8E8E2]/70 hover:bg-[#D8E8E2] text-[#111827] px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors flex items-center justify-center gap-2">
+                                                <ImageIcon className="w-4 h-4 text-[#6B9F91]" /> Select from Media
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -348,9 +360,11 @@ export default function ClientProjectsPage() {
                                 </div>
                             </form>
                         </div>
-                        <div className="p-5 border-t border-gray-200 flex justify-end gap-3 bg-[#D8E8E2]/70">
-                            <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 rounded-lg text-[#6B7280] hover:bg-[#D8E8E2]/70">Cancel</button>
-                            <button type="submit" form="projectForm" disabled={isSaving} className="bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-6 py-2 rounded-lg disabled:opacity-50">Save Project</button>
+                        <div className="p-4 sm:p-5 border-t border-gray-200 flex flex-col-reverse sm:flex-row sm:justify-end gap-2.5 sm:gap-3 bg-[#D8E8E2]/70">
+                            <button type="button" onClick={() => setIsModalOpen(false)} className="w-full sm:w-auto px-4 py-2 rounded-lg text-[#6B7280] hover:bg-[#D8E8E2] text-sm font-medium transition-colors text-center">Cancel</button>
+                            <button type="submit" form="projectForm" disabled={isSaving} className="w-full sm:w-auto bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-6 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 text-center">
+                                {isSaving ? 'Saving...' : 'Save Project'}
+                            </button>
                         </div>
                     </div>
                 </div>

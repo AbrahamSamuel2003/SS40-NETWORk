@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import { X, Search, Image as ImageIcon } from 'lucide-react';
@@ -38,16 +38,16 @@ export function MediaSelectorModal({ onSelect, onClose }: MediaSelectorModalProp
     );
 
     return (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-[#111827]/40 backdrop-blur-sm shadow-2xl">
-            <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[85vh] flex flex-col overflow-hidden">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-2 sm:p-4 bg-[#111827]/40 backdrop-blur-sm shadow-2xl">
+            <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden">
                 {/* Header */}
-                <div className="px-5 py-4 border-b border-gray-200 flex justify-between items-center bg-[#D8E8E2]/80">
+                <div className="px-4 py-3 sm:px-5 sm:py-4 border-b border-gray-200 flex justify-between items-center bg-[#D8E8E2]/80">
                     <div>
-                        <h3 className="text-base font-bold text-[#111827] flex items-center gap-2">
-                            <ImageIcon className="w-5 h-5 text-[#6B9F91]" />
+                        <h3 className="text-sm sm:text-base font-bold text-[#111827] flex items-center gap-2">
+                            <ImageIcon className="w-4 h-4 sm:w-5 sm:h-5 text-[#6B9F91]" />
                             Select from Media Library
                         </h3>
-                        <p className="text-xs text-[#6B7280] mt-0.5">Click on an image or video to select it</p>
+                        <p className="text-[11px] sm:text-xs text-[#6B7280] mt-0.5">Click on an image or video to select it</p>
                     </div>
                     <button onClick={onClose} className="p-1.5 text-[#9CA3AF] hover:text-[#111827] hover:bg-gray-200/50 rounded-lg transition-colors">
                         <X className="w-5 h-5" />
@@ -55,7 +55,7 @@ export function MediaSelectorModal({ onSelect, onClose }: MediaSelectorModalProp
                 </div>
 
                 {/* Search & Filters */}
-                <div className="px-5 py-3 border-b border-gray-100 bg-white">
+                <div className="px-4 py-2.5 sm:px-5 sm:py-3 border-b border-gray-100 bg-white">
                     <div className="relative max-w-md">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                         <input
@@ -69,7 +69,7 @@ export function MediaSelectorModal({ onSelect, onClose }: MediaSelectorModalProp
                 </div>
 
                 {/* Grid */}
-                <div className="flex-1 overflow-y-auto p-5 custom-scrollbar bg-gray-50/50">
+                <div className="flex-1 overflow-y-auto p-3 sm:p-5 custom-scrollbar bg-gray-50/50">
                     {isLoading ? (
                         <div className="flex justify-center items-center h-full">
                             <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#6B9F91]"></div>
@@ -80,7 +80,7 @@ export function MediaSelectorModal({ onSelect, onClose }: MediaSelectorModalProp
                             <p className="text-gray-500 font-medium text-sm">No media found.</p>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5 sm:gap-4">
                             {filteredMedia.map((media) => (
                                 <button
                                     type="button"

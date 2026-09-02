@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Plus, Edit2, Trash2, CheckCircle2, AlertCircle, Upload, X, Crop, Move, ZoomIn, ZoomOut, Check, ArrowUp, ArrowDown, Image as ImageIcon, Sparkles, ExternalLink, RefreshCw } from 'lucide-react';
@@ -332,20 +332,20 @@ export default function ManagedProductsPage() {
             </div>
 
             {isModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#111827]/40 backdrop-blur-sm">
-                    <div className="admin-card w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col max-h-[88vh]">
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-[#111827]/40 backdrop-blur-sm">
+                    <div className="admin-card w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
                         <div className="px-4 py-3 border-b border-gray-200 flex justify-between items-center bg-[#D8E8E2]/80 shrink-0">
                             <div>
-                                <h3 className="text-sm font-bold text-[#111827]">{editingId ? 'Edit Product' : 'Add Product'}</h3>
+                                <h3 className="text-sm sm:text-base font-bold text-[#111827]">{editingId ? 'Edit Product' : 'Add Product'}</h3>
                                 <p className="text-[10px] text-[#9CA3AF] mt-0.5">Fill in the product details below</p>
                             </div>
                             <button onClick={() => setIsModalOpen(false)} className="text-[#9CA3AF] hover:text-[#111827] p-1"><X className="w-4 h-4" /></button>
                         </div>
-                        <div className="p-4 overflow-y-auto w-full custom-scrollbar">
+                        <div className="p-3.5 sm:p-4 overflow-y-auto w-full custom-scrollbar">
                             {errorMsg && <div className="mb-3 text-xs text-[#B91C1C] bg-[#FEE2E2] px-3 py-2 rounded border border-[#FCA5A5] flex gap-2"><AlertCircle className="w-3.5 h-3.5 mt-0.5 shrink-0" /> {errorMsg}</div>}
 
                             <form id="productForm" onSubmit={handleSave} className="space-y-3">
-                                <div className="grid grid-cols-2 gap-3">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     <div>
                                         <label className="block text-xs font-medium text-[#374151] mb-1">Product Name *</label>
                                         <input required value={name} onChange={e => setName(e.target.value)} className="w-full bg-white border border-gray-200 rounded-md px-3 py-1.5 text-sm text-[#111827] focus:outline-none focus:border-[#6B9F91]" placeholder="e.g. ClearInvoice" />
@@ -356,7 +356,7 @@ export default function ManagedProductsPage() {
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-2 gap-3">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     <div>
                                         <label className="block text-xs font-medium text-[#374151] mb-1">Badge Text <span className="text-[#9CA3AF] font-normal">(optional)</span></label>
                                         <input value={badgeText} onChange={e => setBadgeText(e.target.value)} className="w-full bg-white border border-gray-200 rounded-md px-3 py-1.5 text-sm text-[#111827] focus:outline-none focus:border-[#6B9F91]" placeholder="e.g. OUR PRODUCT" />
@@ -432,18 +432,18 @@ export default function ManagedProductsPage() {
                                         </div>
                                     )}
 
-                                    <div className="flex flex-wrap gap-2">
-                                        <label className={`flex-1 flex items-center justify-center gap-2 border border-gray-200 bg-white hover:bg-gray-50 rounded-lg px-4 py-2 cursor-pointer transition-colors ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                        <label className={`flex items-center justify-center gap-2 border border-gray-200 bg-white hover:bg-gray-50 rounded-lg px-4 py-2 cursor-pointer transition-colors ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}>
                                             <Upload className="w-4 h-4 text-gray-500" />
                                             <span className="text-xs font-medium text-[#374151]">{isUploading ? 'Uploading...' : 'Upload Local File'}</span>
                                             <input type="file" accept="image/*" onChange={handleUploadLocal} className="hidden" disabled={isUploading} />
                                         </label>
-                                        <button type="button" onClick={() => setIsMediaSelectorOpen(true)} className="flex-1 flex items-center justify-center gap-2 border border-[#6B9F91]/30 bg-[#D8E8E2]/50 hover:bg-[#D8E8E2] rounded-lg px-4 py-2 transition-colors">
+                                        <button type="button" onClick={() => setIsMediaSelectorOpen(true)} className="flex items-center justify-center gap-2 border border-[#6B9F91]/30 bg-[#D8E8E2]/50 hover:bg-[#D8E8E2] rounded-lg px-4 py-2 transition-colors">
                                             <ImageIcon className="w-4 h-4 text-[#6B9F91]" />
                                             <span className="text-xs font-medium text-[#111827]">Select from Media</span>
                                         </button>
                                         {screenshotUrl && !editorImage && (
-                                            <button type="button" onClick={() => { setEditorImage(screenshotUrl); setZoom(1); setPosition({ x: 0, y: 0 }); }} className="flex-1 flex items-center justify-center gap-2 border border-blue-200 bg-blue-50/50 hover:bg-blue-50 text-blue-600 rounded-lg px-4 py-2 transition-colors">
+                                            <button type="button" onClick={() => { setEditorImage(screenshotUrl); setZoom(1); setPosition({ x: 0, y: 0 }); }} className="col-span-1 sm:col-span-2 flex items-center justify-center gap-2 border border-blue-200 bg-blue-50/50 hover:bg-blue-50 text-blue-600 rounded-lg px-4 py-2 transition-colors">
                                                 <RefreshCw className="w-4 h-4" />
                                                 <span className="text-xs font-medium">Edit / Recrop</span>
                                             </button>
@@ -463,9 +463,9 @@ export default function ManagedProductsPage() {
                                 </div>
                             </form>
                         </div>
-                        <div className="px-4 py-2.5 border-t border-gray-200 flex justify-end gap-2 bg-[#D8E8E2]/50 shrink-0">
-                            <button type="button" onClick={() => setIsModalOpen(false)} className="px-3 py-1.5 rounded-md text-xs text-[#6B7280] hover:bg-[#D8E8E2]/70 font-medium">Cancel</button>
-                            <button type="submit" form="productForm" disabled={isSaving} className="bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-5 py-1.5 rounded-md text-xs font-medium disabled:opacity-50">Save Product</button>
+                        <div className="px-4 py-2.5 border-t border-gray-200 flex flex-col-reverse sm:flex-row sm:justify-end gap-2 bg-[#D8E8E2]/50 shrink-0">
+                            <button type="button" onClick={() => setIsModalOpen(false)} className="w-full sm:w-auto px-3 py-1.5 rounded-md text-xs text-[#6B7280] hover:bg-[#D8E8E2]/70 font-medium text-center">Cancel</button>
+                            <button type="submit" form="productForm" disabled={isSaving} className="w-full sm:w-auto bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-5 py-1.5 rounded-md text-xs font-medium disabled:opacity-50 text-center">Save Product</button>
                         </div>
                     </div>
                 </div>
