@@ -28,10 +28,11 @@ export function FeaturedProduct({ initialData }: FeaturedProductProps = {}) {
     const [isLoading, setIsLoading] = React.useState(!initialData || initialData.length === 0);
     const displayedProducts = React.useMemo(() => {
         const featured = products.filter(product => product.isFeatured);
-        const source = featured.length > 0 ? featured : products;
+        const nonFeatured = products.filter(product => !product.isFeatured);
+        const combined = [...featured, ...nonFeatured];
         const seenNames = new Set<string>();
 
-        return source.filter(product => {
+        return combined.filter(product => {
             const key = String(product.name || product.id).trim().toLowerCase();
             if (seenNames.has(key)) return false;
             seenNames.add(key);

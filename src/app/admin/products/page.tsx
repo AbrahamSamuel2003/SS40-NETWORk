@@ -20,6 +20,7 @@ export default function ManagedProductsPage() {
     const [description, setDescription] = useState('');
     const [tagsInput, setTagsInput] = useState('');
     const [isActive, setIsActive] = useState(true);
+    const [isFeatured, setIsFeatured] = useState(false);
     const [sortOrder, setSortOrder] = useState(0);
     const [screenshotUrl, setScreenshotUrl] = useState('');
     const [isMediaSelectorOpen, setIsMediaSelectorOpen] = useState(false);
@@ -129,6 +130,7 @@ export default function ManagedProductsPage() {
             setTagsInput(Array.isArray(item.tags) ? item.tags.join(', ') : '');
             setScreenshotUrl(item.screenshotUrl || '');
             setIsActive(item.isActive ?? true);
+            setIsFeatured(item.isFeatured ?? false);
             setSortOrder(item.sortOrder || 0);
         } else {
             setEditingId(null);
@@ -140,6 +142,7 @@ export default function ManagedProductsPage() {
             setTagsInput('');
             setScreenshotUrl('');
             setIsActive(true);
+            setIsFeatured(false);
             setSortOrder(0);
         }
         setErrorMsg('');
@@ -186,6 +189,7 @@ export default function ManagedProductsPage() {
             tags,
             screenshotUrl,
             isActive,
+            isFeatured,
             sortOrder
         };
 
@@ -256,7 +260,12 @@ export default function ManagedProductsPage() {
                                     </div>
                                     <p className="text-[#6B7280] text-xs leading-snug line-clamp-2">{item.description}</p>
                                     <div className="mt-auto pt-1 flex items-center justify-between">
-                                        <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-semibold ${item.isActive ? 'bg-[#6B9F91]/10 text-[#6B9F91] border border-[#6B9F91]/20' : 'bg-[#FEE2E2] text-[#B91C1C] border border-[#FCA5A5]'}`}>• {item.isActive ? 'Active' : 'Inactive'}</span>
+                                        <div className="flex items-center gap-1.5 flex-wrap">
+                                            <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-semibold ${item.isActive ? 'bg-[#6B9F91]/10 text-[#6B9F91] border border-[#6B9F91]/20' : 'bg-[#FEE2E2] text-[#B91C1C] border border-[#FCA5A5]'}`}>• {item.isActive ? 'Active' : 'Inactive'}</span>
+                                            {item.isFeatured && (
+                                                <span className="inline-flex px-2 py-0.5 rounded text-[10px] font-semibold bg-[#2DD4BF]/10 text-[#0F766E] border border-[#2DD4BF]/20">★ Featured</span>
+                                            )}
+                                        </div>
                                         <button onClick={() => handleDelete(item.id)} className="text-[#B91C1C]/50 hover:text-[#B91C1C] p-1">
                                             <Trash2 className="w-3.5 h-3.5" />
                                         </button>
@@ -313,9 +322,16 @@ export default function ManagedProductsPage() {
                                             </div>
                                         </td>
                                         <td className="p-4 text-center">
-                                            <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-semibold ${item.isActive ? 'bg-[#6B9F91]/10 text-[#6B9F91] border border-[#6B9F91]/20' : 'bg-[#FEE2E2] text-[#B91C1C] border border-[#FCA5A5]'}`}>
-                                                {item.isActive ? 'Active' : 'Inactive'}
-                                            </span>
+                                            <div className="flex flex-col items-center gap-1">
+                                                <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-semibold ${item.isActive ? 'bg-[#6B9F91]/10 text-[#6B9F91] border border-[#6B9F91]/20' : 'bg-[#FEE2E2] text-[#B91C1C] border border-[#FCA5A5]'}`}>
+                                                    {item.isActive ? 'Active' : 'Inactive'}
+                                                </span>
+                                                {item.isFeatured && (
+                                                    <span className="inline-flex px-2 py-0.5 rounded text-[10px] font-semibold bg-[#2DD4BF]/10 text-[#0F766E] border border-[#2DD4BF]/20">
+                                                        ★ Featured
+                                                    </span>
+                                                )}
+                                            </div>
                                         </td>
                                         <td className="p-3">
                                             <div className="flex flex-col xl:flex-row gap-1.5 justify-end ml-auto shrink-0">
@@ -379,24 +395,24 @@ export default function ManagedProductsPage() {
 
                                 <div>
                                     <label className="block text-xs font-medium text-[#374151] mb-1">Product Screenshot</label>
-                                    <p className="text-[10px] text-[#9CA3AF] mb-2">Fits standard aspect ratio 16:11 on website. You can edit/crop below after selection.</p>
+                                    <p className="text-[10px] text-[#9CA3AF] mb-2">Fits standard aspect ratio 16:9 on website. You can edit/crop below after selection.</p>
                                     
                                     {/* Crop Editor Canvas Workspace */}
                                     {editorImage && (
                                         <div className="border border-[#6B9F91]/40 rounded-xl p-3 bg-[#D8E8E2]/20 mb-3 space-y-3">
                                             <div className="flex justify-between items-center">
-                                                <span className="text-[10px] font-bold text-[#6B9F91] uppercase tracking-wider">Image Editor (Ratio: 16:11)</span>
+                                                <span className="text-[10px] font-bold text-[#6B9F91] uppercase tracking-wider">Image Editor (Ratio: 16:9)</span>
                                             </div>
                                             <div className="flex items-center justify-center bg-gray-900 rounded-lg overflow-hidden relative cursor-move">
                                                 <canvas 
                                                     ref={canvasRef} 
                                                     width={480} 
-                                                    height={330} 
+                                                    height={270} 
                                                     onMouseDown={handleMouseDown}
                                                     onMouseMove={handleMouseMove}
                                                     onMouseUp={handleMouseUp}
                                                     onMouseLeave={handleMouseUp}
-                                                    className="max-w-full aspect-[16/11] object-contain border border-gray-800"
+                                                    className="max-w-full aspect-video object-contain border border-gray-800"
                                                 />
                                                 <div className="absolute bottom-2 left-2 right-2 flex justify-between bg-black/60 backdrop-blur-sm p-1.5 rounded-lg">
                                                     <span className="text-[9px] text-white flex items-center">Drag image to position crop</span>
@@ -419,8 +435,8 @@ export default function ManagedProductsPage() {
                                     )}
 
                                     {screenshotUrl && !editorImage && (
-                                        <div className="relative w-full aspect-[16/11] bg-gray-50 rounded-lg overflow-hidden border border-gray-200 mb-3 group flex items-center justify-center">
-                                            <img src={screenshotUrl} alt="Screenshot" className="w-full h-full object-contain p-2" />
+                                        <div className="relative w-full aspect-video bg-gray-50 rounded-lg overflow-hidden border border-gray-200 mb-3 group flex items-center justify-center">
+                                            <img src={screenshotUrl} alt="Screenshot" className="w-full h-full object-cover" />
                                             <div className="absolute top-2 right-2 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
                                                 <button type="button" onClick={() => { setEditorImage(screenshotUrl); setZoom(1); setPosition({ x: 0, y: 0 }); }} className="bg-white/90 p-1.5 rounded-full text-gray-500 hover:text-[#6B9F91] shadow-sm" title="Edit / Recrop">
                                                     <RefreshCw className="w-3.5 h-3.5" />
@@ -455,6 +471,10 @@ export default function ManagedProductsPage() {
                                     <label className="flex items-center gap-2 cursor-pointer">
                                         <div className="relative shrink-0"><input type="checkbox" checked={isActive} onChange={e => setIsActive(e.target.checked)} className="sr-only" /><div className={`w-8 h-5 rounded-full transition-colors ${isActive ? 'bg-[#6B9F91]' : 'bg-[#D8E8E2]'}`}></div><div className={`absolute top-0.5 left-0.5 bg-white w-4 h-4 rounded-full transition-transform ${isActive ? 'translate-x-3' : 'translate-x-0'}`}></div></div>
                                         <span className="text-xs font-medium text-[#374151]">Active</span>
+                                    </label>
+                                    <label className="flex items-center gap-2 cursor-pointer">
+                                        <div className="relative shrink-0"><input type="checkbox" checked={isFeatured} onChange={e => setIsFeatured(e.target.checked)} className="sr-only" /><div className={`w-8 h-5 rounded-full transition-colors ${isFeatured ? 'bg-[#2DD4BF]' : 'bg-[#D8E8E2]'}`}></div><div className={`absolute top-0.5 left-0.5 bg-white w-4 h-4 rounded-full transition-transform ${isFeatured ? 'translate-x-3' : 'translate-x-0'}`}></div></div>
+                                        <span className="text-xs font-medium text-[#374151]">Featured Product</span>
                                     </label>
                                     <div className="flex items-center gap-2">
                                         <span className="text-xs font-medium text-[#374151]">Sort Order</span>

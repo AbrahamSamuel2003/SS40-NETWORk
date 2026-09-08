@@ -1,11 +1,9 @@
-﻿"use client";
+"use client";
 
 import React, { useState } from "react";
 import Link from "next/link";
 import { ArrowRight, ArrowLeft, CloudIcon, CheckCircle2, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CardMotion } from "@/components/ui/Card";
-import { hoverLift, slideUp } from "@/lib/animations";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
 import { CardGridSkeleton } from "@/components/ui/Skeleton";
@@ -63,32 +61,42 @@ export function AllProductsDisplay() {
                     >
                         <AnimatePresence mode="popLayout">
                             {products.map((product: any) => (
-                                <CardMotion
+                                <motion.div
                                     key={product.id}
                                     layout
                                     initial={{ opacity: 0, scale: 0.9 }}
                                     animate={{ opacity: 1, scale: 1 }}
                                     exit={{ opacity: 0, scale: 0.9 }}
-                                    transition={{ duration: 0.2 }}
-                                    {...hoverLift}
-                                    className="bg-white overflow-hidden rounded-2xl flex-col group border border-[var(--color-border)] hover:border-[#6B9F91]/30 hover:shadow-xl hover:shadow-[#6B9F91]/10 transition-all duration-300 flex cursor-pointer"
+                                    whileHover={{ 
+                                        y: -6, 
+                                        scale: 1.015, 
+                                        boxShadow: "0 20px 40px -8px rgba(107,159,145,0.18), 0 8px 16px -4px rgba(107,159,145,0.10)" 
+                                    }}
+                                    whileTap={{ scale: 0.98, y: -2 }}
+                                    transition={{ type: "spring", stiffness: 350, damping: 22 }}
+                                    role="button"
+                                    tabIndex={0}
+                                    className="cursor-pointer bg-white rounded-2xl flex flex-col group border border-[var(--color-border)] hover:border-[#6B9F91]/40 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 overflow-hidden shadow-sm"
                                     onClick={() => setActiveModalProduct(product)}
+                                    onKeyDown={(e: React.KeyboardEvent) => {
+                                        if (e.key === 'Enter' || e.key === 'Space') {
+                                            e.preventDefault();
+                                            setActiveModalProduct(product);
+                                        }
+                                    }}
                                 >
-                                    {/* Grid Visual Placeholder */}
-                                    <div className="relative w-full aspect-[16/10] bg-gray-50 overflow-hidden shrink-0 flex items-center justify-center border-b border-gray-100">
+                                    {/* Grid Visual Placeholder (16:9 aspect ratio, flush to top/left/right border with 0 gap) */}
+                                    <div className="relative w-full aspect-video bg-gray-50 overflow-hidden shrink-0 flex items-center justify-center border-b border-gray-100">
                                         {product.screenshotUrl ? (
-                                            <img src={product.screenshotUrl} alt={`${product.name} - Software Solution by SS40 NETWORK Tirunelveli`} className="w-full h-full object-contain p-2 bg-gray-50/50 transition-transform duration-500" />
+                                            <img 
+                                                src={product.screenshotUrl} 
+                                                alt={`${product.name} - Software Solution by SS40 NETWORK Tirunelveli`} 
+                                                className="w-full h-full object-cover scale-105 select-none" 
+                                            />
                                         ) : (
-                                            <div className="w-full h-full flex flex-col items-center justify-center p-4 gap-3 bg-[#6B9F91]/5 group-hover:scale-105 transition-transform duration-500">
+                                            <div className="w-full h-full flex flex-col items-center justify-center p-4 gap-3 bg-[#6B9F91]/5">
                                                 <CloudIcon className="w-12 h-12 text-gray-300 opacity-50" />
                                                 <span className="text-[10px] uppercase font-bold text-gray-400 tracking-widest">No Screenshot</span>
-                                            </div>
-                                        )}
-                                        {product.badgeText && (
-                                            <div className="absolute top-4 right-4 z-10 shadow-sm">
-                                                <span className="px-3 py-1.5 bg-[#2DD4BF]/90 text-white backdrop-blur-sm shadow-md rounded-md uppercase tracking-widest text-[9px] font-bold">
-                                                    {product.badgeText}
-                                                </span>
                                             </div>
                                         )}
                                     </div>
@@ -96,9 +104,16 @@ export function AllProductsDisplay() {
                                     {/* Grid Content Area */}
                                     <div className="p-6 md:p-8 flex flex-col flex-1">
                                         <div className="flex items-center justify-between gap-4 mb-3">
-                                            <span className="font-mono text-[#2DD4BF] text-[10px] font-bold uppercase tracking-wider rounded-md whitespace-nowrap overflow-hidden text-ellipsis">
-                                                {product.name}
-                                            </span>
+                                            <div className="flex items-center gap-2 flex-wrap">
+                                                <span className="font-mono text-[#2DD4BF] text-[10px] font-bold uppercase tracking-wider rounded-md whitespace-nowrap overflow-hidden text-ellipsis">
+                                                    {product.name}
+                                                </span>
+                                                {product.badgeText && (
+                                                    <span className="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-[9px] font-bold uppercase tracking-wider">
+                                                        {product.badgeText}
+                                                    </span>
+                                                )}
+                                            </div>
                                             {product.isFeatured && (
                                                 <div className="flex items-center gap-1 text-[9px] font-bold text-[#6B9F91] uppercase tracking-wider whitespace-nowrap overflow-hidden text-ellipsis">
                                                     <CheckCircle2 className="w-3 h-3" />
@@ -121,7 +136,7 @@ export function AllProductsDisplay() {
                                             <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 group-hover:translate-x-1 transition-transform" />
                                         </div>
                                     </div>
-                                </CardMotion>
+                                </motion.div>
                             ))}
                         </AnimatePresence>
                     </motion.div>

@@ -41,7 +41,7 @@ export async function POST(request: Request) {
                 ctaText: body.ctaText || null,
                 tags: body.tags || [],
                 features: body.features || [],
-                isFeatured: body.isFeatured || false,
+                isFeatured: body.isFeatured !== undefined ? !!body.isFeatured : false,
                 screenshotUrl: body.screenshotUrl || null,
                 sortOrder: isNaN(Number(body.sortOrder)) ? 0 : Number(body.sortOrder),
                 isActive: body.isActive !== undefined ? !!body.isActive : true
