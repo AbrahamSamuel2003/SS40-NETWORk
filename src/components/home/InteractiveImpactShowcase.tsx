@@ -64,13 +64,13 @@ const SCENES = [
         ctaText: "Explore Products",
         accentColor: "#0D9488",
         capabilities: [
-            { icon: BarChart3, label: "Real-Time Cloud Dashboards" },
-            { icon: TrendingUp, label: "Automated Workflows & Billing" },
-            { icon: Cloud, label: "99.99% Guaranteed Uptime" }
+            { icon: BarChart3, label: "ClearInvoice Billing Engine" },
+            { icon: TrendingUp, label: "GTC Suite Operations" },
+            { icon: Brain, label: "AI Email Agent Automation" }
         ],
         cards: [
-            { title: "Cloud Platform", text: "Accessible anytime with reliable cloud infrastructure." },
-            { title: "Business Automation", text: "Reduce manual work with streamlined digital processes." }
+            { title: "ClearInvoice & GTC Suite", text: "Automated billing, invoicing, and full enterprise workflows." },
+            { title: "AI Email Agent", text: "Smart automated customer and client communications." }
         ]
     },
     {
@@ -85,9 +85,8 @@ const SCENES = [
         ctaText: "Explore Academics",
         accentColor: "#0F766E",
         capabilities: [
-            { icon: Cpu, label: "Hands-on Project Sprints" },
-            { icon: Users, label: "Industry Mentorship & Prep" },
-            { icon: Briefcase, label: "Verified Placement Pipelines" }
+            { icon: Cpu, label: "Live Client Projects" },
+            { icon: Briefcase, label: "Career Launch & Placement" }
         ],
         cards: [
             { title: "Hands-on Learning", text: "Build practical skills through real-world projects." },
@@ -495,8 +494,8 @@ function DesktopDeckCard({ scene, index, activeScene, onSelect, onSwipeLeft, onS
             <div className="col-span-6 p-6 xl:p-8 flex flex-col justify-between h-full bg-white z-10">
                 <div>
                     {/* Badge */}
-                    <div className="inline-flex items-center gap-2 rounded-full bg-[#EDF5F2] px-3 py-1 text-[11px] font-extrabold uppercase tracking-wider text-[#0F766E] border border-[#0F766E]/20 mb-3.5">
-                        <span className="w-2 h-2 rounded-full bg-[#0F766E] animate-pulse" />
+                    <div className="inline-flex items-center gap-2 rounded-md bg-[#F59E0B]/15 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-[#D97706] border border-[#F59E0B]/20 mb-3.5">
+                        <span className="w-2 h-2 rounded-full bg-[#D97706] animate-pulse" />
                         {scene.wingTag}
                     </div>
 
