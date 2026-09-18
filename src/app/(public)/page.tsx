@@ -50,35 +50,22 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  // Ultra-fast direct Prisma data fetch in parallel with resilient fallback
-  let config = null;
-  let logos: any[] = [];
-  let happimonials: any[] = [];
-  let activities: any[] = [];
-
-  try {
-    const results = await Promise.all([
-      getSiteConfig().catch(() => null),
-      prisma.organizationLogo.findMany({
-        where: { pageScope: 'HOME', isActive: true },
-        orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }]
-      }).catch(() => []),
-      prisma.happimonial.findMany({
-        where: { pageScope: 'HOME', isActive: true },
-        orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }]
-      }).catch(() => []),
-      prisma.activityPost.findMany({
-        where: { showOnHome: true, isActive: true },
-        orderBy: [{ sortOrder: 'asc' }, { activityDate: 'desc' }]
-      }).catch(() => [])
-    ]);
-    config = results[0];
-    logos = results[1] || [];
-    happimonials = results[2] || [];
-    activities = results[3] || [];
-  } catch (e) {
-    console.error("Database query fallback on home page:", e);
-  }
+  // Ultra-fast direct Prisma data fetch in parallel
+  const [config, logos, happimonials, activities] = await Promise.all([
+    getSiteConfig(),
+    prisma.organizationLogo.findMany({
+      where: { pageScope: 'HOME', isActive: true },
+      orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }]
+    }),
+    prisma.happimonial.findMany({
+      where: { pageScope: 'HOME', isActive: true },
+      orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }]
+    }),
+    prisma.activityPost.findMany({
+      where: { showOnHome: true, isActive: true },
+      orderBy: [{ sortOrder: 'asc' }, { activityDate: 'desc' }]
+    })
+  ]);
 
   const sitelinksSchema = {
     "@context": "https://schema.org",
