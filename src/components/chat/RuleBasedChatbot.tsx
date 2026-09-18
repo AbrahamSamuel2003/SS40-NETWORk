@@ -331,9 +331,17 @@ export function RuleBasedChatbot({
     const initialBotMessage: ChatMessage = {
         id: "msg-welcome",
         sender: "bot",
-        text: "Hello! Welcome to SS40 NETWORK. I am SS40 SKY, your virtual assistant. How can I help you today?",
+        text: `- **Welcome to SS40 NETWORK**: I am SS40 SKY, your official virtual guide.
+- **Easy 1-Tap Navigation**: Tap any option below to instantly explore our services, products, or academic programs, or ask a question directly!`,
         timestamp: new Date(),
-        quickReplies: ["Our Three Wings", "SS40 Academics", "Digital Solutions", "SS40 Products", "Support Team"]
+        quickReplies: [
+            "About SS40",
+            "SS40 Digital Solutions",
+            "SS40 Products",
+            "SS40 Academics",
+            "Office Location",
+            "WhatsApp Support"
+        ]
     };
 
     const [messages, setMessages] = useState<ChatMessage[]>([initialBotMessage]);
@@ -451,12 +459,14 @@ export function RuleBasedChatbot({
         };
     }, [isOpen]);
 
-    // Initial focus on open
+    // Focus input and scroll down when opened
     useEffect(() => {
         if (isOpen) {
             const timer = setTimeout(() => {
-                inputRef.current?.focus();
-                scrollToBottom();
+                if (window.innerWidth >= 640 && inputRef.current) {
+                    inputRef.current.focus({ preventScroll: true });
+                }
+                scrollToBottom(false);
             }, 180);
             return () => clearTimeout(timer);
         }
@@ -469,10 +479,56 @@ export function RuleBasedChatbot({
         }
     }, [messages.length, isOpen, scrollToBottom]);
 
+    // Helper: Formatted text rendering with bold and bullet points
+    const renderFormattedMessage = (text: string) => {
+        const lines = text.split("\n");
+        return (
+            <div className="space-y-1.5 text-[13px] sm:text-[13.5px]">
+                {lines.map((line, idx) => {
+                    const trimmed = line.trim();
+                    if (!trimmed) {
+                        return <div key={idx} className="h-1" />;
+                    }
+
+                    if (trimmed.startsWith("- ") || trimmed.startsWith("• ") || /^\d+\.\s/.test(trimmed)) {
+                        const contentParts = trimmed.replace(/^[-•]\s+|\d+\.\s+/, "");
+                        const bulletTokens = contentParts.split(/(\*\*[^*]+\*\*)/g).map((part, pIdx) => {
+                            if (part.startsWith("**") && part.endsWith("**")) {
+                                return <strong key={pIdx} className="font-bold text-[#0F766E]">{part.slice(2, -2)}</strong>;
+                            }
+                            return part;
+                        });
+
+                        return (
+                            <div key={idx} className="flex items-start gap-2 pl-0.5 my-1">
+                                <span className="text-[#0F766E] font-black text-sm leading-none mt-0.5 select-none">-</span>
+                                <span className="flex-1 leading-relaxed text-gray-800">{bulletTokens}</span>
+                            </div>
+                        );
+                    }
+
+                    const parts = line.split(/(\*\*[^*]+\*\*)/g);
+                    const renderedParts = parts.map((part, pIdx) => {
+                        if (part.startsWith("**") && part.endsWith("**")) {
+                            return <strong key={pIdx} className="font-bold text-[#0F766E]">{part.slice(2, -2)}</strong>;
+                        }
+                        return part;
+                    });
+
+                    return (
+                        <p key={idx} className="leading-relaxed text-gray-800">
+                            {renderedParts}
+                        </p>
+                    );
+                })}
+            </div>
+        );
+    };
+
     // Handle user sending message
-    const handleSend = (textToSend?: string) => {
+    const handleSend = async (textToSend?: string) => {
         const text = (textToSend || inputValue).trim();
-        if (!text) return;
+        if (!text || isTyping) return;
 
         const userMsg: ChatMessage = {
             id: `user-${Date.now()}`,
@@ -481,17 +537,70 @@ export function RuleBasedChatbot({
             timestamp: new Date()
         };
 
-        setMessages(prev => [...prev, userMsg]);
+        const currentMessages = [...messages, userMsg];
+        setMessages(currentMessages);
         setInputValue("");
         setIsTyping(true);
 
-        // Process message through Rule Engine with realistic typing latency
-        setTimeout(() => {
+        const historyPayload = currentMessages.slice(-4).map(m => ({
+            role: m.sender === "user" ? "user" as const : "assistant" as const,
+            content: m.text
+        }));
+
+        try {
+            const res = await fetch("/api/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    message: text,
+                    history: historyPayload
+                })
+            });
+
+            if (!res.ok) {
+                throw new Error(`Chat API responded with status ${res.status}`);
+            }
+
+            const data = await res.json();
+            const lowerText = text.toLowerCase();
+
+            const isSupportQuery = /\b(human|agent|support|representative|talk\s*to\s*someone|call\s*us|whatsapp|contact|phone|email)\b/i.test(lowerText);
+            const isWingsQuery = /\b(three\s*wings?|3\s*wings?|our\s*wings?|business\s*wings?|divisions?)\b/i.test(lowerText);
+            const isAcademicQuery = /\b(academics?|admissions?|internships?|career\s*launch|placements?)\b/i.test(lowerText) && !isWingsQuery;
+
+            const botMsg: ChatMessage = {
+                id: `bot-${Date.now()}`,
+                sender: "bot",
+                text: data.replyText || "SS40 NETWORK operates Three Specialized Wings: SS40 Digital Solutions, SS40 Products, and SS40 Academics.",
+                timestamp: new Date(),
+                quickReplies: data.quickReplies && data.quickReplies.length > 0
+                    ? data.quickReplies
+                    : ["About SS40", "SS40 Digital Solutions", "SS40 Products", "SS40 Academics"],
+                link: data.link,
+                isWingsCard: isWingsQuery,
+                isAcademicCard: isAcademicQuery,
+                isSupportCard: isSupportQuery,
+                supportData: isSupportQuery ? {
+                    phone: cleanPhone,
+                    email,
+                    whatsappUrl: `https://wa.me/${cleanPhone}?text=${encodeURIComponent(`Hello SS40, I need assistance regarding: "${text}"`)}`,
+                    mailtoUrl: generateMailtoUrl(email, text),
+                    gmailUrl: generateGmailUrl(email, text),
+                    contactUrl: "/contact",
+                    mapsUrl: GOOGLE_MAPS_URL
+                } : undefined
+            };
+
+            setMessages(prev => [...prev, botMsg]);
+        } catch (err) {
+            console.warn("RAG Chat API unavailable, switching to local rule engine fallback:", err);
             const botResponse = matchRule(text);
             setMessages(prev => [...prev, botResponse]);
+        } finally {
             setIsTyping(false);
-        }, 400);
+        }
     };
+
 
     // ── INTELLIGENT RULE MATCHING ENGINE ──
     const matchRule = (query: string): ChatMessage => {
@@ -637,7 +746,10 @@ export function RuleBasedChatbot({
                                         <h3 className="font-bold text-sm sm:text-[15px] leading-tight text-white tracking-tight">
                                             SS40 SKY
                                         </h3>
-                                        <span className="text-[9.5px] bg-white/15 text-[#D8E8E2] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider border border-white/20">
+                                        <span className="text-[9px] bg-white/20 text-[#D8E8E2] font-extrabold px-1.5 py-0.5 rounded-md uppercase tracking-wider border border-white/25">
+                                            Groq RAG AI
+                                        </span>
+                                        <span className="text-[9px] bg-emerald-500/30 text-emerald-200 font-extrabold px-1.5 py-0.5 rounded-full uppercase tracking-wider border border-emerald-400/40">
                                             Online
                                         </span>
                                     </div>
@@ -690,7 +802,11 @@ export function RuleBasedChatbot({
                                                 : "bg-white text-[#111827] rounded-tl-xs border border-gray-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.04)]"
                                         }`}
                                     >
-                                        <p className="whitespace-pre-wrap leading-relaxed">{msg.text}</p>
+                                        {msg.sender === "user" ? (
+                                            <p className="whitespace-pre-wrap leading-relaxed">{msg.text}</p>
+                                        ) : (
+                                            renderFormattedMessage(msg.text)
+                                        )}
 
                                         {/* Action Link if provided */}
                                         {msg.link && (
@@ -700,20 +816,25 @@ export function RuleBasedChatbot({
                                                         href={msg.link.url}
                                                         target="_blank"
                                                         rel="noopener noreferrer"
-                                                        className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0F766E] hover:text-[#115E59] active:text-[#0c4a44] transition-colors touch-manipulation"
+                                                        className="inline-flex items-center justify-between w-full p-2 rounded-xl bg-teal-50/80 hover:bg-teal-100/90 active:scale-[0.98] border border-[#0F766E]/25 text-xs font-bold text-[#0F766E] transition-all touch-manipulation shadow-2xs group"
                                                     >
-                                                        <MapPin className="w-3.5 h-3.5 text-[#0F766E] shrink-0" />
-                                                        <span className="truncate">{msg.link.label}</span>
-                                                        <ExternalLink className="w-3.5 h-3.5 shrink-0" />
+                                                        <span className="flex items-center gap-1.5 truncate">
+                                                            <MapPin className="w-3.5 h-3.5 text-[#0F766E] shrink-0" />
+                                                            <span className="truncate">{msg.link.label}</span>
+                                                        </span>
+                                                        <ExternalLink className="w-3.5 h-3.5 shrink-0 group-hover:translate-x-0.5 transition-transform" />
                                                     </a>
                                                 ) : (
                                                     <Link
                                                         href={msg.link.url}
                                                         onClick={onClose}
-                                                        className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0F766E] hover:text-[#115E59] active:text-[#0c4a44] transition-colors touch-manipulation"
+                                                        className="inline-flex items-center justify-between w-full p-2 rounded-xl bg-[#E6F3EE] hover:bg-[#D4EBE1] active:scale-[0.98] border border-[#0F766E]/25 text-xs font-bold text-[#0F766E] transition-all touch-manipulation shadow-2xs group"
                                                     >
-                                                        <span className="truncate">{msg.link.label}</span>
-                                                        <ArrowRight className="w-3.5 h-3.5 shrink-0" />
+                                                        <span className="flex items-center gap-1.5 truncate">
+                                                            <Sparkles className="w-3.5 h-3.5 text-[#0F766E] shrink-0" />
+                                                            <span className="truncate">{msg.link.label}</span>
+                                                        </span>
+                                                        <ArrowRight className="w-3.5 h-3.5 shrink-0 group-hover:translate-x-0.5 transition-transform" />
                                                     </Link>
                                                 )}
                                             </div>

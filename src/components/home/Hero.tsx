@@ -1,75 +1,71 @@
 import * as React from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { ArrowRight, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/Button";
-import { Badge } from "@/components/ui/Badge";
+import { ShieldCheck, Building2, Award, Landmark } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { HERO_SPACING_CLASSES, cn } from "@/utils/cn";
-import { HeroDashboardMockup } from "./HeroDashboardMockup";
+import { SynchronizedWingHero } from "./SynchronizedWingHero";
 
 export function Hero() {
     return (
-        <section className={cn("relative w-full overflow-hidden bg-white", HERO_SPACING_CLASSES)}>
-            {/* Ambient Background Image & Gradients (Clean Stacking Context) */}
+        <section className={cn("relative w-full overflow-hidden bg-gradient-to-b from-[#D2E6DE] via-[#DCEDE6] to-[#CFE4DC] py-6 sm:py-8 lg:py-10", HERO_SPACING_CLASSES)}>
+            {/* Ambient Background Architectural Grid & Subtle Lighting */}
             <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
-                <Image
-                    src="/images/hero/home-hero-bg.jpg"
-                    alt=""
-                    fill
-                    loading="eager"
-                    sizes="100vw"
-                    className="object-cover object-center opacity-45 sm:opacity-55 mix-blend-multiply"
-                    quality={90}
+                <div 
+                    className="absolute inset-0 opacity-[0.035]"
+                    style={{
+                        backgroundImage: `radial-gradient(var(--color-heading) 1px, transparent 1px)`,
+                        backgroundSize: '28px 28px'
+                    }}
                 />
-                <div
-                    className="absolute inset-0"
-                    style={{ background: 'radial-gradient(ellipse at 50% 35%, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.85) 65%, #ffffff 100%)' }}
-                />
+                <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-[700px] h-[280px] bg-white/40 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute bottom-0 left-1/3 w-[500px] h-[200px] bg-[var(--color-primary)]/10 rounded-full blur-2xl pointer-events-none" />
             </div>
 
             <Container className="relative z-10">
-                <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-10">
-
-                    {/* Left Column - Content (Rendered instantly by server for 0ms LCP delay) */}
-                    <div
-                        className="w-full lg:w-[55%] flex flex-col items-center lg:items-start text-center lg:text-left"
-                    >
-                        <div className="mb-8">
-                            <Badge variant="primary" className="py-1.5 px-4 rounded-full flex items-center gap-2">
-                                <Sparkles className="w-4 h-4" />
-                                <span>The Future of Enterprise Tech</span>
-                            </Badge>
-                        </div>
-
-                        <h1 className="text-[clamp(40px,5vw,56px)] font-bold text-[var(--color-heading)] leading-[1.1] tracking-tight mb-6">
-                            One Company.<br />
-                            Three Business Wings.<br />
-                            <span className="text-[var(--color-primary-hover)]">Endless Possibilities.</span>
-                        </h1>
-
-                        <p className="text-lg md:text-xl text-[var(--color-body-text)] mb-10 max-w-xl leading-relaxed">
-                            Driving the modern era forward with world-class digital solutions, innovative SaaS products, and elite academic empowerment.
-                        </p>
-
-                        <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
-                            <Button asChild size="lg" className="w-full sm:w-auto shadow-lg shadow-[var(--color-primary)]/20 group">
-                                <Link href="/digital-solutions" className="inline-flex items-center justify-center whitespace-nowrap">
-                                    Explore Solutions
-                                    <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform shrink-0" />
-                                </Link>
-                            </Button>
-                            <Button asChild variant="outline" size="lg" className="w-full sm:w-auto bg-white/70 backdrop-blur-sm text-gray-800 border-gray-300 hover:bg-white hover:text-black">
-                                <Link href="/contact?source=HOME_CONTACT_US&sourcePage=/" className="inline-flex items-center justify-center whitespace-nowrap">
-                                    Contact Us
-                                </Link>
-                            </Button>
-                        </div>
+                {/* Center Focused Narrative Header */}
+                <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
+                    
+                    {/* Compliance Pill (Clean Vector Icon, No Emojis, No Initial Green Dot) */}
+                    <div className="mb-3 inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/90 backdrop-blur-xs border border-[rgba(15,118,110,0.18)] shadow-2xs">
+                        <Landmark className="w-3.5 h-3.5 text-[#0F766E]" />
+                        <span className="text-[11px] sm:text-xs font-bold text-[var(--color-heading)] tracking-wide">
+                            MCA Registered Enterprise Tech
+                        </span>
+                        <span className="w-1 h-1 rounded-full bg-slate-300" />
+                        <span className="text-[10px] sm:text-[11px] font-semibold text-[var(--color-primary-hover)]">
+                            Govt of India
+                        </span>
                     </div>
 
-                    {/* Right Column - Client Animated Showcase */}
-                    <HeroDashboardMockup />
+                    {/* Headline strictly in 2 lines across all viewports */}
+                    <h1 className="text-[clamp(30px,4.2vw,52px)] font-extrabold text-[var(--color-heading)] leading-[1.1] tracking-tight mb-2">
+                        One Company. Three Wings.<br />
+                        <span className="bg-gradient-to-r from-[var(--color-primary-hover)] via-[#0D9488] to-[#0F766E] bg-clip-text text-transparent">
+                            Endless Possibilities.
+                        </span>
+                    </h1>
                 </div>
+
+                {/* Main Visual Centerpiece: Synchronized Automated 3-Wing Hero (Left Content + Right Image) */}
+                <SynchronizedWingHero />
+
+                {/* Trust Floor (2 clean lines on mobile, 3 columns on desktop) */}
+                <div className="w-full mt-6 pt-3.5 border-t border-[rgba(15,118,110,0.15)] flex flex-wrap items-center justify-center sm:justify-between gap-x-6 gap-y-1.5 text-[11px] sm:text-xs font-semibold text-[var(--color-body-text)]">
+                    <div className="flex items-center gap-1.5">
+                        <Building2 className="w-3.5 h-3.5 text-[#0F766E] shrink-0" />
+                        <span><strong>MCA Registered</strong> • CIN Ready</span>
+                    </div>
+
+                    <div className="flex items-center gap-1.5">
+                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
+                        <span><strong>100% Fixed-Scope</strong> & SLA Warranty</span>
+                    </div>
+
+                    <div className="flex items-center gap-1.5">
+                        <Award className="w-3.5 h-3.5 text-amber-700 shrink-0" />
+                        <span><strong>Tirunelveli HQ</strong> • Pan-India Reach</span>
+                    </div>
+                </div>
+
             </Container>
         </section>
     );
