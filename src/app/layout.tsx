@@ -1,18 +1,9 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Inter } from "next/font/google";
+import { Inter } from "next/font/google";
 import NextTopLoader from "nextjs-toploader";
 import "./globals.css";
 import { getSiteConfig } from "@/lib/site-config";
 import { VisitorTracker } from "@/components/analytics/VisitorTracker";
-
-const plusJakartaSans = Plus_Jakarta_Sans({
-  variable: "--font-plus-jakarta",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
-  display: "swap",
-  adjustFontFallback: true,
-  preload: true,
-});
 
 const inter = Inter({
   variable: "--font-inter",
@@ -248,7 +239,7 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" className={`${plusJakartaSans.variable} ${inter.variable} antialiased`} suppressHydrationWarning>
+    <html lang="en" className={`${inter.variable} antialiased`} suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"
