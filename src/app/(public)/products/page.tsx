@@ -46,21 +46,21 @@ export default async function ProductsPage() {
                 { sortOrder: 'asc' },
                 { createdAt: 'asc' }
             ]
-        }),
+        }).catch(() => []),
         prisma.happimonial.findMany({
             where: { pageScope: 'PRODUCTS', isActive: true },
             orderBy: [
                 { sortOrder: 'asc' },
                 { createdAt: 'desc' }
             ]
-        }),
+        }).catch(() => []),
         prisma.organizationLogo.findMany({
             where: { pageScope: 'PRODUCTS', isActive: true },
             orderBy: [
                 { sortOrder: 'asc' },
                 { createdAt: 'desc' }
             ]
-        })
+        }).catch(() => [])
     ]);
 
     const jsonLd = {

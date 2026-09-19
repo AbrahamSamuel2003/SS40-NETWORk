@@ -38,13 +38,13 @@ export const metadata: Metadata = {
 export const revalidate = 0; // Dynamic route
 
 export default async function AllBlogsPage() {
-    // Fetch all active activity posts
+    // Fetch all active activity posts with safe fallback
     const activities = await prisma.activityPost.findMany({
         where: {
             isActive: true
         },
         orderBy: [{ sortOrder: 'asc' }, { activityDate: 'desc' }, { createdAt: 'desc' }]
-    });
+    }).catch(() => []);
 
     const jsonLd = {
         "@context": "https://schema.org",

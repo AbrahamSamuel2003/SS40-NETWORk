@@ -45,7 +45,7 @@ export default async function AllHappimonialsPage() {
             pageScope: 'DIGITAL_SOLUTIONS'
         },
         orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }]
-    });
+    }).catch(() => []);
 
     const jsonLd = {
         "@context": "https://schema.org",

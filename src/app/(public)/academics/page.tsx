@@ -44,17 +44,17 @@ export default async function AcademicsPage() {
     const studentProjects = await prisma.studentProject.findMany({
         where: { isActive: true },
         orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }]
-    });
+    }).catch(() => []);
 
     const studentImpactRecords = await prisma.studentImpact.findMany({
         where: { isActive: true },
         orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }]
-    });
+    }).catch(() => []);
 
     const academicLogos = await prisma.organizationLogo.findMany({
         where: { pageScope: 'ACADEMICS', isActive: true },
         orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }]
-    });
+    }).catch(() => []);
 
     const jsonLd = {
         "@context": "https://schema.org",

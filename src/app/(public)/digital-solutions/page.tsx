@@ -48,21 +48,21 @@ export default async function DigitalSolutionsPage() {
                 { sortOrder: 'asc' },
                 { createdAt: 'asc' }
             ]
-        }),
+        }).catch(() => []),
         prisma.happimonial.findMany({
             where: { pageScope: 'DIGITAL_SOLUTIONS', isActive: true },
             orderBy: [
                 { sortOrder: 'asc' },
                 { createdAt: 'desc' }
             ]
-        }),
+        }).catch(() => []),
         prisma.organizationLogo.findMany({
             where: { pageScope: 'DIGITAL_SOLUTIONS', isActive: true },
             orderBy: [
                 { sortOrder: 'asc' },
                 { createdAt: 'desc' }
             ]
-        })
+        }).catch(() => [])
     ]);
 
     const jsonLd = {

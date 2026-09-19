@@ -50,21 +50,21 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  // Ultra-fast direct Prisma data fetch in parallel
+  // Ultra-fast direct Prisma data fetch in parallel with safe fallbacks
   const [config, logos, happimonials, activities] = await Promise.all([
     getSiteConfig(),
     prisma.organizationLogo.findMany({
       where: { pageScope: 'HOME', isActive: true },
       orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }]
-    }),
+    }).catch(() => []),
     prisma.happimonial.findMany({
       where: { pageScope: 'HOME', isActive: true },
       orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }]
-    }),
+    }).catch(() => []),
     prisma.activityPost.findMany({
       where: { showOnHome: true, isActive: true },
       orderBy: [{ sortOrder: 'asc' }, { activityDate: 'desc' }]
-    })
+    }).catch(() => [])
   ]);
 
   const sitelinksSchema = {

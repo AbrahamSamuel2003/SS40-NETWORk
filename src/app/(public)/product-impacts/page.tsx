@@ -45,7 +45,7 @@ export default async function ProductImpactsPage() {
             pageScope: 'PRODUCTS'
         },
         orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }]
-    });
+    }).catch(() => []);
 
     const jsonLd = {
         "@context": "https://schema.org",

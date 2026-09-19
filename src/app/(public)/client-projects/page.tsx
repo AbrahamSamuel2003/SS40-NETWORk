@@ -42,7 +42,7 @@ export default async function AllClientProjectsPage() {
     const projects = await prisma.clientProject.findMany({
         where: { isActive: true },
         orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }]
-    });
+    }).catch(() => []);
 
     const jsonLd = {
         "@context": "https://schema.org",

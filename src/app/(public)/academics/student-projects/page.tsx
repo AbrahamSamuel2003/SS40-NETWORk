@@ -21,7 +21,7 @@ export default async function AllStudentProjectsPage() {
     const projects = await prisma.studentProject.findMany({
         where: { isActive: true },
         orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }]
-    });
+    }).catch(() => []);
 
     return (
         <div className="w-full flex-col flex bg-white min-h-screen">

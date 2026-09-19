@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: ClientProjectPageProps): Prom
     const { id } = await params;
     const project = await prisma.clientProject.findUnique({
         where: { id }
-    });
+    }).catch(() => null);
 
     if (!project) {
         return {
@@ -38,7 +38,7 @@ export default async function ClientProjectDetailPage({ params }: ClientProjectP
     const { id } = await params;
     const project = await prisma.clientProject.findUnique({
         where: { id }
-    });
+    }).catch(() => null);
 
     if (!project || !project.isActive) {
         notFound();
