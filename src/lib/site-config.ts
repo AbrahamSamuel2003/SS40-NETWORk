@@ -20,8 +20,30 @@ export interface SiteConfigData {
     seoDefaultDescription: string;
 }
 
+export const DEFAULT_SITE_CONFIG: SiteConfigData = {
+    companyName: "SS40 NETWORK PRIVATE LIMITED",
+    legalName: "SS40 NETWORK PRIVATE LIMITED",
+    logoUrl: "/icon.jpg",
+    uploadedLogoUrl: null,
+    contactEmail: "support@ss40network.com",
+    contactPhone: "+91 83005 91750",
+    whatsappNumber: "+91 83005 91750",
+    addressText: "1st Floor, Municipal Corporation Incubation Centre (Near by trade centre), Sree Puram, Tirunelveli, Tamil Nadu 627001",
+    businessHours: "Monday - Saturday: 09:00 AM - 06:00 PM",
+    footerDescription: "Architecting high-scale digital systems, intelligent SaaS products, and career-launching tech academics. Built in India. Thinking Globally.",
+    googleMapsIframeUrl: null,
+    urlLinkedin: "https://www.linkedin.com/company/ss40-network",
+    urlYoutube: null,
+    urlInstagram: null,
+    seoDefaultTitle: "SS40 NETWORK PRIVATE LIMITED — Enterprise Digital Solutions, SaaS Products & Tech Academics",
+    seoDefaultDescription: "Architecting high-scale digital systems, intelligent SaaS products, and career-launching tech academics by SS40 NETWORK PRIVATE LIMITED. Built in India. Thinking Globally."
+};
+
 export const getSiteConfig = unstable_cache(
     async function (): Promise<SiteConfigData | null> {
+        if (!process.env.DATABASE_URL) {
+            return DEFAULT_SITE_CONFIG;
+        }
         try {
             const config = await prisma.siteConfig.findUnique({
                 where: { id: 1 },
@@ -44,10 +66,10 @@ export const getSiteConfig = unstable_cache(
                     seoDefaultDescription: true,
                 }
             });
-            return config;
+            return config || DEFAULT_SITE_CONFIG;
         } catch (e) {
-            console.error('Error fetching site config server-side:', e);
-            return null;
+            console.warn('Database offline or unreachable, returning default site config fallback.');
+            return DEFAULT_SITE_CONFIG;
         }
     },
     ['site-config'],
