@@ -45,7 +45,7 @@ const WINGS: WingData[] = [
         imageSrc: "/images/hero/digital-solutions-illustration.jpg",
         imageAlt: "SS40 Digital Solutions Custom Software and Cloud Architecture",
         icon: <Code2 className="w-3.5 h-3.5 text-[#D97706]" />,
-        chips: ["Web Apps", "Mobile Apps", "Cloud & AI"],
+        chips: ["Web Apps", "Mobile Apps", "Cloud and AI"],
         buttonClass: "bg-[#0F766E] hover:bg-[#115E59] text-white shadow-lg shadow-[#0F766E]/20",
         accentColor: "#0F766E"
     },
@@ -72,7 +72,7 @@ const WINGS: WingData[] = [
         badge: "SS40 ACADEMICS",
         badgeStyle: "bg-[#F59E0B]/15 text-[#D97706] hover:bg-[#F59E0B]/25 border border-[#F59E0B]/20",
         title: "Hands-on Tech Training",
-        highlight: "& Career Launch.",
+        highlight: "Career Launch Pad.",
         description: "Production-grade software training with real client projects, code reviews, and career acceleration.",
         ctaText: "Explore Academics",
         ctaHref: "/academics",
@@ -143,7 +143,7 @@ export function SynchronizedWingHero() {
                             </div>
 
                             {/* Wing Title (Hidden on mobile for compact view, shown on sm+) */}
-                            <h3 className="hidden sm:block text-2xl sm:text-3xl font-bold text-[var(--color-heading)] leading-[1.15] tracking-tight">
+                            <h3 className="hidden sm:block text-2xl sm:text-3xl font-bold text-[var(--color-heading)] leading-[1.15] tracking-tight font-serif">
                                 {activeWing.title} <br className="hidden sm:inline" />
                                 <span className="text-[#6B9F91]">{activeWing.highlight}</span>
                             </h3>
@@ -360,24 +360,8 @@ export function SynchronizedWingHero() {
 
                 {/* Right Column: Application Mockup Box */}
                 <div className="lg:col-span-6 relative flex justify-center">
-                    <div className="animate-float-slow relative w-full max-w-[540px] aspect-[4/3] bg-white rounded-2xl shadow-[var(--shadow-hover)] border border-[var(--color-border)] overflow-hidden flex flex-col z-10">
-                        
-                        {/* Browser Header Bar */}
-                        <div className="h-9 bg-gray-50 border-b border-[var(--color-border)] flex items-center px-4 gap-2 shrink-0 z-20">
-                            <div className="flex gap-1.5">
-                                <div className="w-2.5 h-2.5 rounded-full bg-red-400" />
-                                <div className="w-2.5 h-2.5 rounded-full bg-yellow-400" />
-                                <div className="w-2.5 h-2.5 rounded-full bg-green-400" />
-                            </div>
-                            <div className="ml-3 w-32 sm:w-48 h-5 bg-white rounded-md border border-[var(--color-border)] flex items-center px-2">
-                                <div className="w-20 sm:w-32 h-2 bg-gray-100 rounded-sm" />
-                            </div>
-                            <span className="ml-auto text-[10px] font-mono text-gray-400 font-medium">
-                                ss40.io/{activeWing.id}
-                            </span>
-                        </div>
-
-                        {/* Image Showcase inside Browser Mockup Frame */}
+                    <div className="animate-float-slow relative w-full max-w-[540px] aspect-[4/3] bg-slate-950 rounded-2xl shadow-[var(--shadow-hover)] border border-[var(--color-border)] overflow-hidden flex flex-col z-10">
+                        {/* Image Showcase Frame */}
                         <div className="relative flex-1 bg-slate-950 overflow-hidden">
                             <AnimatePresence mode="wait">
                                 <motion.div
@@ -415,8 +399,7 @@ export function SynchronizedWingHero() {
                             </div>
 
                             {/* Live Badge in Bottom Left of Frame */}
-                            <div className="absolute bottom-3 left-3 z-20 bg-slate-900/85 backdrop-blur-md px-3 py-1 rounded-lg border border-slate-700 text-white text-xs font-semibold flex items-center gap-1.5 shadow-md">
-                                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                            <div className="absolute bottom-3 left-3 z-20 bg-slate-900/85 backdrop-blur-md px-3 py-1 rounded-lg border border-slate-700 text-white text-xs font-semibold flex items-center shadow-md">
                                 <span>{activeWing.wingName}</span>
                             </div>
                         </div>

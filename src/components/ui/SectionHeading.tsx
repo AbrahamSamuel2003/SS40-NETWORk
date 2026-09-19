@@ -17,7 +17,7 @@ export const SectionHeading = React.forwardRef<HTMLDivElement, SectionHeadingPro
                 return title;
             }
 
-            const trimmedTitle = title.trim();
+            const trimmedTitle = title.replace(/\s*&\s*/g, " and ").trim();
 
             // 1. Explicit highlight prop
             if (highlight && trimmedTitle.includes(highlight)) {
@@ -96,7 +96,7 @@ export const SectionHeading = React.forwardRef<HTMLDivElement, SectionHeadingPro
                     </div>
                 )}
 
-                <h2 className="text-2xl sm:text-3xl lg:text-[34px] xl:text-[36px] font-extrabold tracking-[-0.03em] leading-[1.18] text-[#0F172A]">
+                <h2 className="text-2xl sm:text-3xl lg:text-[34px] xl:text-[36px] font-bold tracking-tight leading-[1.18] text-[#0F172A] font-serif">
                     {renderTitle()}
                 </h2>
 

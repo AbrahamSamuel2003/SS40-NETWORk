@@ -47,7 +47,7 @@ export function Hero() {
                     </div>
 
                     {/* Headline strictly in 2 lines across all viewports */}
-                    <h1 className="text-[clamp(30px,4.2vw,52px)] font-bold text-[var(--color-heading)] leading-[1.1] tracking-tight mb-2">
+                    <h1 className="text-[clamp(30px,4.2vw,52px)] font-bold text-[var(--color-heading)] leading-[1.1] tracking-tight mb-2 font-serif">
                         One Company. Three Wings.<br />
                         <span className="text-[#6B9F91]">
                             Endless Possibilities.

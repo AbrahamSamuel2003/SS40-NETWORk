@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Playfair_Display } from "next/font/google";
 import NextTopLoader from "nextjs-toploader";
 import "./globals.css";
 import { getSiteConfig } from "@/lib/site-config";
@@ -7,6 +7,14 @@ import { VisitorTracker } from "@/components/analytics/VisitorTracker";
 
 const inter = Inter({
   variable: "--font-inter",
+  subsets: ["latin"],
+  display: "swap",
+  adjustFontFallback: true,
+  preload: true,
+});
+
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
   subsets: ["latin"],
   display: "swap",
   adjustFontFallback: true,
@@ -239,7 +247,7 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" className={`${inter.variable} antialiased`} suppressHydrationWarning>
+    <html lang="en" className={`${inter.variable} ${playfair.variable} antialiased`} suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"

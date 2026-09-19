@@ -43,6 +43,9 @@
 
   /* Fonts */
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-playfair), Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-heading: var(--font-playfair), Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-times: "Times New Roman", Times, Baskerville, Georgia, serif;
 }
 
 @layer base {
@@ -95,6 +98,18 @@
 }
 
 @layer utilities {
+  .font-serif {
+    font-family: var(--font-serif);
+  }
+
+  .font-heading {
+    font-family: var(--font-heading);
+  }
+
+  .font-times {
+    font-family: var(--font-times);
+  }
+
   .text-hero-title {
     font-size: clamp(56px, 5vw, 64px);
     line-height: 1.1;

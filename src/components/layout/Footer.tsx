@@ -44,7 +44,7 @@ export async function Footer() {
                                     className="h-7 md:h-9 w-auto object-contain shrink-0 mix-blend-multiply"
                                 />
                             )}
-                            <span className="text-lg md:text-2xl font-bold tracking-tight text-[var(--color-heading)] shrink-0 min-w-0 truncate max-w-[220px] sm:max-w-none">
+                            <span className="text-lg md:text-2xl font-black tracking-tight text-[var(--color-heading)] shrink-0 min-w-0 truncate max-w-[220px] sm:max-w-none font-times">
                                 {companyName}
                             </span>
                         </Link>

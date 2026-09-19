@@ -36,9 +36,6 @@ export function FloatingWhatsApp({ config }: { config?: SiteConfigData | null })
         <div
             className="fixed bottom-4 right-4 md:bottom-6 md:right-8 lg:bottom-8 lg:right-10 z-30 flex items-center justify-center pointer-events-none animate-in fade-in slide-in-from-bottom-4 duration-700"
         >
-            {/* The idle pulse ring behind the button */}
-            <div className="absolute inset-0 bg-[#25D366] rounded-full animate-ping opacity-25 pointer-events-none" style={{ animationDuration: '3s' }} />
-
             <Link
                 href={whatsappUrl}
                 target="_blank"

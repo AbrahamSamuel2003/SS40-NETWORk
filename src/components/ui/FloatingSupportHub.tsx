@@ -108,14 +108,6 @@ export function FloatingSupportHub({ config }: { config?: SiteConfigData | null 
                     }`}
                     aria-label="Open support and assistant menu"
                 >
-                    {/* Idle pulse glow */}
-                    {!isMenuOpen && !isChatOpen && (
-                        <div
-                            className="absolute inset-0 bg-[#2DD4BF] rounded-full animate-ping opacity-25 pointer-events-none"
-                            style={{ animationDuration: '3s' }}
-                        />
-                    )}
-
                     <AnimatePresence mode="wait">
                         {isChatOpen ? (
                             <motion.div

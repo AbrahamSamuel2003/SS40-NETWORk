@@ -43,13 +43,13 @@ const SCENES = [
         ctaText: "Explore Digital Solutions",
         accentColor: "#0F766E",
         capabilities: [
-            { icon: Globe, label: "Custom Cloud & Web Apps" },
-            { icon: Brain, label: "AI & Process Automation" },
+            { icon: Globe, label: "Custom Cloud and Web Apps" },
+            { icon: Brain, label: "AI and Process Automation" },
             { icon: Shield, label: "Enterprise Security Architecture" }
         ],
         cards: [
             { title: "Enterprise Software", text: "Custom-built solutions tailored to business operations." },
-            { title: "AI & Automation", text: "Improve efficiency with intelligent workflows." }
+            { title: "AI and Automation", text: "Improve efficiency with intelligent workflows." }
         ]
     },
     {
@@ -69,7 +69,7 @@ const SCENES = [
             { icon: Brain, label: "AI Email Agent Automation" }
         ],
         cards: [
-            { title: "ClearInvoice & GTC Suite", text: "Automated billing, invoicing, and full enterprise workflows." },
+            { title: "ClearInvoice and GTC Suite", text: "Automated billing, invoicing, and full enterprise workflows." },
             { title: "AI Email Agent", text: "Smart automated customer and client communications." }
         ]
     },
@@ -77,7 +77,7 @@ const SCENES = [
         id: "academics",
         wingNumber: "03",
         wingTag: "WING 03 • SS40 ACADEMICS",
-        title: "Bridging Education & Real-World Industry Practice",
+        title: "Bridging Education and Real-World Industry Practice",
         mobileTitle: "SS40 Academics",
         shortTitle: "Academics",
         description: "Empowering students and institutions through immersive hands-on technology training, industry mentorship, sprint projects, and direct placement pipelines.",
@@ -86,7 +86,7 @@ const SCENES = [
         accentColor: "#0F766E",
         capabilities: [
             { icon: Cpu, label: "Live Client Projects" },
-            { icon: Briefcase, label: "Career Launch & Placement" }
+            { icon: Briefcase, label: "Career Launch and Placement" }
         ],
         cards: [
             { title: "Hands-on Learning", text: "Build practical skills through real-world projects." },
@@ -500,7 +500,7 @@ function DesktopDeckCard({ scene, index, activeScene, onSelect, onSwipeLeft, onS
                     </div>
 
                     {/* Heading */}
-                    <h3 className="text-2xl font-extrabold text-[#0F172A] tracking-tight leading-snug mb-2.5">
+                    <h3 className="text-2xl font-bold text-[#0F172A] tracking-tight leading-snug mb-2.5 font-serif">
                         {scene.title}
                     </h3>
 
@@ -586,7 +586,7 @@ const MobileSwipeCard = ({ scene, idx }: { scene: typeof SCENES[0], idx: number 
                 <div className="w-10 h-10 rounded-xl bg-[#EDF5F2] text-[#2E544A] flex items-center justify-center font-extrabold text-base mb-4 border border-gray-100 shrink-0">
                     0{idx + 1}
                 </div>
-                <h3 className="text-2xl font-black text-[#111827] tracking-tight mb-2">{scene.mobileTitle || scene.title}</h3>
+                <h3 className="text-2xl font-bold text-[#111827] tracking-tight mb-2 font-serif">{scene.mobileTitle || scene.title}</h3>
                 <p className="text-gray-600 text-sm leading-snug mb-5 shrink-0 line-clamp-2">{scene.description}</p>
 
                 <div className="flex flex-col gap-2">
@@ -680,7 +680,7 @@ export function InteractiveImpactShowcase() {
                     </motion.div>
                     <motion.h2
                         initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}
-                        className="text-2xl sm:text-3xl lg:text-[38px] font-extrabold text-[#0F172A] tracking-[-0.03em] leading-[1.18] mb-3"
+                        className="text-2xl sm:text-3xl lg:text-[38px] font-extrabold text-[#0F172A] tracking-[-0.03em] leading-[1.18] mb-3 font-serif"
                     >
                         <span>How We </span>
                         <span className="bg-gradient-to-r from-[#0F766E] via-[#0D9488] to-[#2DD4BF] bg-clip-text text-transparent block sm:inline mt-1 sm:mt-0">

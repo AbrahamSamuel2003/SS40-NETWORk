@@ -109,8 +109,8 @@ export function Navbar({ config }: { config?: SiteConfigData | null }) {
                                 priority
                             />
                         )}
-                        <span className="text-xl md:text-2xl font-bold tracking-tight text-[var(--color-heading)] shrink-0 min-w-0 truncate max-w-[180px] sm:max-w-none">
-                            {companyName.replace('NETWORK', '').trim()} <span className="text-[var(--color-primary-hover)]">{companyName.includes('NETWORK') ? 'NETWORK' : ''}</span>
+                        <span className="text-xl md:text-2xl font-black tracking-tight text-[var(--color-heading)] shrink-0 min-w-0 truncate max-w-[180px] sm:max-w-none font-times">
+                            {companyName.replace('NETWORK', '').trim()} <span className="text-[var(--color-primary-hover)] font-black">{companyName.includes('NETWORK') ? 'NETWORK' : ''}</span>
                         </span>
                     </Link>
 

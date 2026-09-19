@@ -19,8 +19,8 @@ export function TrustedBy({ data }: { data?: any[] }) {
             <SectionWrapper id="trusted-by" className="bg-white relative overflow-hidden pb-8 md:pb-12">
                 <Container className="relative z-10">
                     <SectionHeading
-                        badge="Our Partners & Clients"
-                        title="Trusted by Businesses, Institutions & Partners"
+                        badge="Our Partners and Clients"
+                        title="Trusted by Businesses, Institutions and Partners"
                         description="Organizations that trust SS40 NETWORK across digital solutions, products, and industry-focused academics."
                         className="mb-12 lg:mb-20"
                     />
@@ -48,8 +48,8 @@ export function TrustedBy({ data }: { data?: any[] }) {
 
             <Container className="relative z-10">
                 <SectionHeading
-                    badge="Our Partners & Clients"
-                    title="Trusted by Businesses, Institutions & Partners"
+                    badge="Our Partners and Clients"
+                    title="Trusted by Businesses, Institutions and Partners"
                     description="Organizations that trust SS40 NETWORK across digital solutions, products, and industry-focused academics."
                     className="mb-12 lg:mb-20"
                 />

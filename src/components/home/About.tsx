@@ -32,7 +32,7 @@ export function About() {
                     <div className="inline-flex items-center rounded-full bg-white/90 backdrop-blur-md px-4 py-1.5 text-[11px] font-extrabold uppercase tracking-widest text-[#0F766E] border border-[#0F766E]/20 shadow-xs mb-3">
                         About SS40 NETWORK
                     </div>
-                    <h2 className="text-2xl sm:text-3xl lg:text-[36px] font-extrabold tracking-[-0.03em] leading-[1.18] text-[#0F172A]">
+                    <h2 className="text-2xl sm:text-3xl lg:text-[36px] font-bold tracking-tight leading-[1.18] text-[#0F172A] font-serif">
                         <span>Built in India. </span>
                         <span className="bg-gradient-to-r from-[#0F766E] via-[#0D9488] to-[#2DD4BF] bg-clip-text text-transparent block sm:inline mt-1 sm:mt-0">
                             Thinking Globally.
@@ -60,7 +60,7 @@ export function About() {
                                 </div>
                             </div>
 
-                            <h3 className="text-xl sm:text-2xl font-bold text-[var(--color-heading)] leading-snug">
+                            <h3 className="text-xl sm:text-2xl font-bold text-[var(--color-heading)] leading-snug font-serif">
                                 High-velocity engineering with zero compromises on stability.
                             </h3>
 
