@@ -110,7 +110,7 @@ export function Navbar({ config }: { config?: SiteConfigData | null }) {
                             />
                         )}
                         <span className="text-xl md:text-2xl font-black tracking-tight text-[var(--color-heading)] shrink-0 min-w-0 truncate max-w-[180px] sm:max-w-none font-times">
-                            {companyName.replace('NETWORK', '').trim()} <span className="text-[var(--color-primary-hover)] font-black">{companyName.includes('NETWORK') ? 'NETWORK' : ''}</span>
+                            SS40 <span className="text-[var(--color-primary-hover)] font-black">NETWORK</span>
                         </span>
                     </Link>
 

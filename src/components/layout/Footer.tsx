@@ -45,7 +45,7 @@ export async function Footer() {
                                 />
                             )}
                             <span className="text-lg md:text-2xl font-black tracking-tight text-[var(--color-heading)] shrink-0 min-w-0 truncate max-w-[220px] sm:max-w-none font-times">
-                                {companyName}
+                                SS40 <span className="text-[var(--color-primary-hover)] font-black">NETWORK</span>
                             </span>
                         </Link>
                         {config?.footerDescription && (
