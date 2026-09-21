@@ -144,7 +144,7 @@ export function Navbar({ config }: { config?: SiteConfigData | null }) {
                     </div>
 
                     {/* Mobile Navigation */}
-                    <MobileNav navLinks={NAV_LINKS} />
+                    <MobileNav navLinks={NAV_LINKS} config={config} />
                 </div>
             </div>
         </header>
