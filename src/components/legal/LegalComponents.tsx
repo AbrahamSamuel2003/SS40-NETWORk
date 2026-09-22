@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import * as React from "react";
 import { motion } from "framer-motion";
@@ -38,7 +38,7 @@ export function LegalHero({ title, description, lastUpdated }: { title: string, 
                 </motion.span>
                 <motion.h1
                     initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-                    className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#111827] mb-6 tracking-tight"
+                    className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#111827] mb-6 tracking-tight font-serif"
                 >
                     {title}
                 </motion.h1>
@@ -77,7 +77,7 @@ export function LegalSummaryBlocks({ summaries }: { summaries: { title: string, 
                                 <div className="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center mb-4 group-hover:bg-[#6B9F91]/5 transition-colors border border-gray-50">
                                     <Icon className="w-5 h-5 text-[#6B9F91]" />
                                 </div>
-                                <h3 className="font-bold text-[#111827] text-base mb-2">{item.title}</h3>
+                                <h3 className="font-bold text-[#111827] text-base mb-2 font-serif">{item.title}</h3>
                                 <p className="text-gray-500 text-sm leading-relaxed">{item.description}</p>
                             </motion.div>
                         );
@@ -108,7 +108,7 @@ export function LegalSidebarLayout({ sections }: { sections: { id: string, title
                                     <div className="w-8 h-8 rounded-full bg-[#D8E8E2] text-[#6B9F91] font-bold text-xs flex items-center justify-center mb-6 border border-gray-100">
                                         {idx + 1}
                                     </div>
-                                    <h2 className="text-2xl md:text-3xl font-extrabold text-[#111827] mb-6 tracking-tight">
+                                    <h2 className="text-2xl md:text-3xl font-extrabold text-[#111827] mb-6 tracking-tight font-serif">
                                         {sec.title}
                                     </h2>
                                     <div className="prose prose-gray max-w-none text-gray-500 leading-loose">
@@ -134,7 +134,7 @@ export function LegalCTA({ heading, text }: { heading: string, text: string }) {
             <Container className="text-center max-w-3xl mx-auto flex flex-col items-center">
                 <div className="w-24 h-px bg-gray-200 mb-16" />
 
-                <h3 className="text-3xl md:text-4xl font-extrabold text-[#111827] mb-4 tracking-tight">
+                <h3 className="text-3xl md:text-4xl font-extrabold text-[#111827] mb-4 tracking-tight font-serif">
                     {heading}
                 </h3>
                 <p className="text-gray-500 text-base md:text-lg leading-relaxed mb-10">

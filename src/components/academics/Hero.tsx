@@ -66,7 +66,7 @@ export function Hero() {
                                 SS40 ACADEMICS
                             </Badge>
 
-                            <h1 className="text-[clamp(44px,5vw,72px)] font-bold text-[#111827] leading-[1.1] tracking-tight mb-6">
+                            <h1 className="text-[clamp(44px,5vw,72px)] font-bold text-[#111827] leading-[1.1] tracking-tight mb-6 font-serif">
                                 Learn. <br className="hidden md:block" />
                                 Build. <br className="hidden md:block" />
                                 <span className="text-[#6B9F91]">Grow.</span>

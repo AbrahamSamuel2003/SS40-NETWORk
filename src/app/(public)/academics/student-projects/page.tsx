@@ -48,7 +48,7 @@ export default async function AllStudentProjectsPage() {
                         </span>
                     </div>
 
-                    <h1 className="text-3xl md:text-4xl border-transparent lg:text-5xl font-bold text-[var(--color-heading)] mb-4 leading-tight tracking-tight">
+                    <h1 className="text-3xl md:text-4xl border-transparent lg:text-5xl font-bold text-[var(--color-heading)] mb-4 leading-tight tracking-tight font-serif">
                         Student work built through practical learning.
                     </h1>
                 </Container>

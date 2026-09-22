@@ -61,9 +61,9 @@ export function Hero() {
                                 SS40 Digital Solutions
                             </Badge>
 
-                            <h1 className="text-[clamp(40px,5vw,56px)] font-bold text-[var(--color-heading)] leading-[1.1] tracking-tight mb-6 max-w-2xl">
+                            <h1 className="text-[clamp(40px,5vw,56px)] font-bold text-[var(--color-heading)] leading-[1.1] tracking-tight mb-6 max-w-2xl font-serif">
                                 Engineering Digital<br />
-                                Experiences <span className="text-[var(--color-primary)]">That Scale.</span>
+                                Experiences <span className="text-[#6B9F91]">That Scale.</span>
                             </h1>
 
                             <p className="text-lg md:text-xl text-[var(--color-body-text)] mb-10 max-w-xl leading-relaxed">

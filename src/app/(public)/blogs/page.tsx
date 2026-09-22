@@ -95,7 +95,7 @@ export default async function AllBlogsPage() {
                         </span>
                     </div>
 
-                    <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#111827] mb-4 leading-tight tracking-tight">
+                    <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#111827] mb-4 leading-tight tracking-tight font-serif">
                         Moments That Shape Our Impact
                     </h1>
 

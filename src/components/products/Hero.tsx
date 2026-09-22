@@ -59,7 +59,7 @@ export function Hero() {
                                 SS40 PRODUCTS
                             </Badge>
 
-                            <h1 className="text-[clamp(40px,5vw,56px)] font-bold text-[#111827] leading-[1.1] tracking-tight mb-6 max-w-2xl">
+                            <h1 className="text-[clamp(40px,5vw,56px)] font-bold text-[#111827] leading-[1.1] tracking-tight mb-6 max-w-2xl font-serif">
                                 Products Built<br />
                                 for Real Business <span className="text-[#6B9F91]">Challenges.</span>
                             </h1>

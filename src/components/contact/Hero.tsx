@@ -58,7 +58,7 @@ export function Hero() {
 
                         <motion.h1
                             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }}
-                            className="text-[clamp(30px,5vw,40px)] font-bold text-[#111827] leading-[1.1] tracking-tight mb-4 max-w-2xl"
+                            className="text-[clamp(30px,5vw,40px)] font-bold text-[#111827] leading-[1.1] tracking-tight mb-4 max-w-2xl font-serif"
                         >
                             Let's Build Something <br className="hidden lg:block" /> Meaningful <span className="text-[#6B9F91]">Together.</span>
                         </motion.h1>

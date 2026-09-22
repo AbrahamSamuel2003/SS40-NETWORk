@@ -44,7 +44,7 @@ export function AllProductsDisplay() {
 
                 {/* Common Heading Block */}
                 <div className="w-full flex flex-col justify-center mb-10 md:mb-16 gap-4 text-center items-center">
-                    <h2 className="text-3xl lg:text-4xl font-bold text-[var(--color-heading)] tracking-tight relative text-center">
+                    <h2 className="text-3xl lg:text-4xl font-bold text-[var(--color-heading)] tracking-tight relative text-center font-serif">
                         Explore All Products
                         <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-16 h-1.5 bg-[#6B9F91] rounded-full"></div>
                     </h2>
