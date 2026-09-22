@@ -4,7 +4,8 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { MessageSquare, Bot, X, Sparkles } from "lucide-react";
+import Image from "next/image";
+import { MessageSquare, Bot, X } from "lucide-react";
 import type { SiteConfigData } from "@/lib/site-config";
 import { RuleBasedChatbot } from "@/components/chat/RuleBasedChatbot";
 
@@ -159,8 +160,14 @@ export function FloatingSupportHub({ config }: { config?: SiteConfigData | null 
                                 <span className="text-xs font-bold text-[#0F172A] tracking-tight">
                                     SS40 SKY
                                 </span>
-                                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#0F766E] text-white flex items-center justify-center shadow-md group-hover/chat:scale-105 transition-transform">
-                                    <Sparkles className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-[#D8E8E2]" />
+                                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white p-1 overflow-hidden flex items-center justify-center shadow-md group-hover/chat:scale-105 transition-transform border border-gray-100">
+                                    <Image
+                                        src="/images/ss40-sky-logo.png"
+                                        alt="SS40 SKY"
+                                        width={36}
+                                        height={36}
+                                        className="w-full h-full object-contain"
+                                    />
                                 </div>
                             </motion.button>
 
