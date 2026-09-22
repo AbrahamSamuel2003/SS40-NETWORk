@@ -16,7 +16,7 @@ import { LogoMarqueeSkeleton } from "@/components/ui/Skeleton";
 export function TrustedBy({ data }: { data?: any[] }) {
     if (!data || data.length === 0) {
         return (
-            <SectionWrapper id="trusted-by" className="bg-white relative overflow-hidden pb-8 md:pb-12">
+            <SectionWrapper id="trusted-by" className="bg-[#D8E8E2] lg:bg-white relative overflow-hidden pb-8 md:pb-12">
                 <Container className="relative z-10">
                     <SectionHeading
                         badge="Our Partners and Clients"
@@ -36,7 +36,7 @@ export function TrustedBy({ data }: { data?: any[] }) {
     };
 
     return (
-        <SectionWrapper id="trusted-by" className="bg-white relative overflow-hidden">
+        <SectionWrapper id="trusted-by" className="bg-[#D8E8E2] lg:bg-white relative overflow-hidden">
             {/* Soft Ambient Background Enhancements */}
             <div className="absolute inset-0 pointer-events-none z-0">
                 <div
@@ -101,9 +101,9 @@ export function TrustedBy({ data }: { data?: any[] }) {
             {/* Marquee Section (Full Bleed) */}
             <div className="relative z-10 w-full flex flex-col gap-6 md:gap-8 overflow-hidden py-4">
 
-                {/* Left/Right Fade Gradients for visual smoothness (Mint Teal Dissolve Blend) */}
-                <div className="absolute top-0 bottom-0 left-0 w-14 md:w-28 bg-gradient-to-r from-[#EDF5F2] via-[#EDF5F2]/40 to-transparent z-20 pointer-events-none" />
-                <div className="absolute top-0 bottom-0 right-0 w-14 md:w-28 bg-gradient-to-l from-[#EDF5F2] via-[#EDF5F2]/40 to-transparent z-20 pointer-events-none" />
+                {/* Left/Right Fade Gradients for visual smoothness */}
+                <div className="absolute top-0 bottom-0 left-0 w-14 md:w-28 bg-gradient-to-r from-[#D8E8E2] lg:from-white via-[#D8E8E2]/40 lg:via-white/40 to-transparent z-20 pointer-events-none" />
+                <div className="absolute top-0 bottom-0 right-0 w-14 md:w-28 bg-gradient-to-l from-[#D8E8E2] lg:from-white via-[#D8E8E2]/40 lg:via-white/40 to-transparent z-20 pointer-events-none" />
 
                 {/* ROW 1: Scroll Left */}
                 <MarqueeRow items={rows.row1} direction="left" speed={35} />

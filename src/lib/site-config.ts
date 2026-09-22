@@ -35,7 +35,7 @@ export const DEFAULT_SITE_CONFIG: SiteConfigData = {
     urlLinkedin: "https://www.linkedin.com/company/ss40-network",
     urlYoutube: null,
     urlInstagram: null,
-    seoDefaultTitle: "SS40 NETWORK PRIVATE LIMITED — Enterprise Digital Solutions, SaaS Products & Tech Academics",
+    seoDefaultTitle: "SS40 NETWORK PRIVATE LIMITED — Enterprise Digital Solutions, SaaS Products and Tech Academics",
     seoDefaultDescription: "Architecting high-scale digital systems, intelligent SaaS products, and career-launching tech academics by SS40 NETWORK PRIVATE LIMITED. Built in India. Thinking Globally."
 };
 

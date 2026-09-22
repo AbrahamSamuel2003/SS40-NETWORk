@@ -1,5 +1,5 @@
 export const refundPolicyData = {
-    title: "Refund & Cancellation Policy",
+    title: "Refund and Cancellation Policy",
     description: "Our goal is to provide clear expectations regarding refunds, cancellations, and service commitments.",
     lastUpdated: "August 2026",
 

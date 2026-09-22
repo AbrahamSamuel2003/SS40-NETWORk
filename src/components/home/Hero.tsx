@@ -1,6 +1,6 @@
 import * as React from "react";
 import Image from "next/image";
-import { ShieldCheck, Building2, Award, Landmark } from "lucide-react";
+import { ShieldCheck, Building2, Award } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { HERO_SPACING_CLASSES, cn } from "@/utils/cn";
 import { SynchronizedWingHero } from "./SynchronizedWingHero";
@@ -33,19 +33,6 @@ export function Hero() {
             <Container className="relative z-10">
                 {/* Center Focused Narrative Header */}
                 <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
-                    
-                    {/* Compliance Pill */}
-                    <div className="mb-3 inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/90 backdrop-blur-xs border border-[rgba(107,159,145,0.25)] shadow-2xs">
-                        <Landmark className="w-3.5 h-3.5 text-[#6B9F91]" />
-                        <span className="text-[11px] sm:text-xs font-bold text-[var(--color-heading)] tracking-wide">
-                            MCA Registered Enterprise Tech
-                        </span>
-                        <span className="w-1 h-1 rounded-full bg-slate-300" />
-                        <span className="text-[10px] sm:text-[11px] font-semibold text-[#6B9F91]">
-                            Govt of India
-                        </span>
-                    </div>
-
                     {/* Headline strictly in 2 lines across all viewports */}
                     <h1 className="text-[clamp(30px,4.2vw,52px)] font-bold text-[var(--color-heading)] leading-[1.1] tracking-tight mb-2 font-serif">
                         One Company. Three Wings.<br />
@@ -67,7 +54,7 @@ export function Hero() {
 
                     <div className="flex items-center gap-1.5">
                         <ShieldCheck className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
-                        <span><strong>100% Fixed-Scope</strong> & SLA Warranty</span>
+                        <span><strong>100% Fixed-Scope</strong> and SLA Warranty</span>
                     </div>
 
                     <div className="flex items-center gap-1.5">

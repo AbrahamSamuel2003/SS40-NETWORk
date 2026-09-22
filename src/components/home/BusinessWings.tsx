@@ -15,7 +15,7 @@ const WINGS = [
         link: "/digital-solutions",
         cta: "Explore Solutions",
         mobileCta: "Explore",
-        chips: ["Web Apps", "Mobile Apps", "Cloud & AI"],
+        chips: ["Web Apps", "Mobile Apps", "Cloud and AI"],
         accentColor: "#0F766E",
         glowHover: "hover:border-[#0F766E]/40 hover:shadow-[#0F766E]/15",
     },

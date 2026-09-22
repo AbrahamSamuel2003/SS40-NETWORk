@@ -73,7 +73,7 @@ const WINGS: WingData[] = [
         badgeStyle: "bg-[#F59E0B]/15 text-[#D97706] hover:bg-[#F59E0B]/25 border border-[#F59E0B]/20",
         title: "Hands-on Tech Training",
         highlight: "Career Launch Pad.",
-        description: "Production-grade software training with real client projects, code reviews, and career acceleration.",
+        description: "Project-based training that prepares students and freshers for top tech careers with real client sprint experience.",
         ctaText: "Explore Academics",
         ctaHref: "/academics",
         imageSrc: "/images/hero/tech-academics-illustration.jpg",
@@ -85,16 +85,12 @@ const WINGS: WingData[] = [
     }
 ];
 
-// Node Coordinates within SVG viewBox
-const NODE_Y_POSITIONS = [24, 140, 256]; // Desktop Vertical (viewBox 0 0 32 280)
-const NODE_X_POSITIONS = [24, 140, 256]; // Mobile Horizontal (viewBox 0 0 280 32)
-const WING_INTERVAL = 5000; // 5s per wing
+const WING_INTERVAL = 2000; // 2s per wing
 
 export function SynchronizedWingHero() {
     const [activeIndex, setActiveIndex] = React.useState(0);
     const [isPaused, setIsPaused] = React.useState(false);
 
-    // Optimized 5000ms timer without main-thread 60fps React state thrashing
     React.useEffect(() => {
         if (isPaused) return;
 
@@ -106,71 +102,65 @@ export function SynchronizedWingHero() {
     }, [isPaused]);
 
     const activeWing = WINGS[activeIndex];
-    const currentY = NODE_Y_POSITIONS[activeIndex];
-    const currentX = NODE_X_POSITIONS[activeIndex];
-
-    const handleNodeClick = (idx: number) => {
-        setActiveIndex(idx);
-    };
 
     return (
         <div 
-            className="w-full relative mt-4 lg:mt-6 select-none"
+            className="w-full relative mt-2 sm:mt-4 select-none"
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
         >
-            {/* Seamless Stage */}
+            {/* Compact 2-Column Synchronized Stage */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center relative z-10">
                 
                 {/* Left Column: Wing Narrative */}
-                <div className="lg:col-span-5 flex flex-col justify-center items-center lg:items-start text-center lg:text-left">
+                <div className="lg:col-span-6 flex flex-col justify-center items-center lg:items-start text-center lg:text-left min-h-[200px] sm:min-h-[220px]">
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={activeWing.id}
-                            initial={{ opacity: 0, y: 14 }}
+                            initial={{ opacity: 0, y: 6 }}
                             animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -14 }}
-                            transition={{ duration: 0.35, ease: "easeOut" }}
-                            className="space-y-4 flex flex-col items-center lg:items-start w-full"
+                            exit={{ opacity: 0, y: -6 }}
+                            transition={{ duration: 0.25, ease: "easeOut" }}
+                            className="space-y-3 flex flex-col items-center lg:items-start w-full"
                         >
-                            {/* Wing Badge (All Gold/Yellow Design Matching SS40 DS) */}
+                            {/* Wing Badge */}
                             <div className={cn(
-                                "inline-flex items-center gap-1.5 px-3 py-1 rounded-md uppercase tracking-widest text-[10px] font-bold border shadow-2xs w-fit",
+                                "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md uppercase tracking-wider text-[10px] font-bold border shadow-2xs w-fit",
                                 activeWing.badgeStyle
                             )}>
                                 {activeWing.icon}
                                 <span>{activeWing.badge}</span>
                             </div>
 
-                            {/* Wing Title (Hidden on mobile for compact view, shown on sm+) */}
-                            <h3 className="hidden sm:block text-2xl sm:text-3xl font-bold text-[var(--color-heading)] leading-[1.15] tracking-tight font-serif">
+                            {/* Wing Title */}
+                            <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[var(--color-heading)] leading-[1.18] tracking-tight font-serif">
                                 {activeWing.title} <br className="hidden sm:inline" />
                                 <span className="text-[#6B9F91]">{activeWing.highlight}</span>
                             </h3>
 
                             {/* Wing Description */}
-                            <p className="text-sm sm:text-base text-[var(--color-body-text)] leading-relaxed font-normal max-w-lg lg:max-w-none">
+                            <p className="text-xs sm:text-sm text-[var(--color-body-text)] leading-relaxed font-normal max-w-lg lg:max-w-none">
                                 {activeWing.description}
                             </p>
 
                             {/* Feature Chips */}
-                            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 pt-0.5">
+                            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-1.5 pt-0.5">
                                 {activeWing.chips.map((chip, idx) => (
                                     <span 
                                         key={idx} 
-                                        className="px-2.5 py-1 bg-white border border-gray-200 text-gray-700 rounded-md text-[10px] sm:text-xs font-semibold uppercase tracking-wider shadow-2xs whitespace-nowrap"
+                                        className="px-2.5 py-0.5 bg-white border border-gray-200 text-gray-700 rounded text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider shadow-2xs whitespace-nowrap"
                                     >
                                         {chip}
                                     </span>
                                 ))}
                             </div>
 
-                            {/* Action Button (Explore Products Teal Tone) */}
-                            <div className="pt-3 flex items-center justify-center lg:justify-start w-full sm:w-auto">
-                                <Button asChild size="lg" className={cn("px-6 py-3 rounded-xl transition-all duration-200 group font-bold text-xs sm:text-sm", activeWing.buttonClass)}>
+                            {/* Action Button */}
+                            <div className="pt-1.5 flex items-center justify-center lg:justify-start w-full sm:w-auto">
+                                <Button asChild size="md" className={cn("px-5 py-2.5 rounded-xl transition-all duration-200 group font-bold text-xs sm:text-sm", activeWing.buttonClass)}>
                                     <Link href={activeWing.ctaHref} className="inline-flex items-center justify-center whitespace-nowrap">
                                         {activeWing.ctaText}
-                                        <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform shrink-0" />
+                                        <ArrowRight className="ml-2 w-3.5 h-3.5 group-hover:translate-x-1 transition-transform shrink-0" />
                                     </Link>
                                 </Button>
                             </div>
@@ -178,232 +168,40 @@ export function SynchronizedWingHero() {
                     </AnimatePresence>
                 </div>
 
-                {/* Mobile Horizontal Laser Line Connector (Positioned between Content & Bottom Mockup Box) */}
-                <div className="flex lg:hidden flex-col items-center justify-center w-full my-1">
-                    <svg className="w-full max-w-[280px] sm:max-w-[340px] h-7 overflow-visible" viewBox="0 0 280 32" fill="none">
-                        <defs>
-                            <linearGradient id="laserBeamGradH" x1="0%" y1="0%" x2="100%" y2="0%">
-                                <stop offset="0%" stopColor="#0F766E" stopOpacity="0.4" />
-                                <stop offset="85%" stopColor="#2DD4BF" stopOpacity="1" />
-                                <stop offset="100%" stopColor="#5EEAD4" stopOpacity="1" />
-                            </linearGradient>
-
-                            <filter id="laserGlowFilterH" x="-40%" y="-40%" width="180%" height="180%">
-                                <feGaussianBlur stdDeviation="2.5" result="blur" />
-                                <feMerge>
-                                    <feMergeNode in="blur" />
-                                    <feMergeNode in="SourceGraphic" />
-                                </feMerge>
-                            </filter>
-                        </defs>
-
-                        {/* Background Track */}
-                        <line 
-                            x1={NODE_X_POSITIONS[0]} 
-                            y1="16" 
-                            x2={NODE_X_POSITIONS[2]} 
-                            y2="16" 
-                            stroke="#CBD5E1" 
-                            strokeWidth="2" 
-                            strokeDasharray="3 3"
-                            strokeOpacity="0.8" 
-                        />
-
-                        {/* Active Laser Line */}
-                        <line 
-                            x1={NODE_X_POSITIONS[0]} 
-                            y1="16" 
-                            x2={currentX} 
-                            y2="16" 
-                            stroke="url(#laserBeamGradH)" 
-                            strokeWidth="3" 
-                            strokeLinecap="round"
-                            filter="url(#laserGlowFilterH)" 
-                            className="transition-all duration-400 ease-out"
-                        />
-
-                        {/* Traveling Pulse Laser Head */}
-                        <g transform={`translate(${currentX}, 16)`} className="transition-transform duration-400 ease-out">
-                            <circle r="6" fill="#2DD4BF" opacity="0.4" className="animate-ping" />
-                            <circle r="4" fill="#0F766E" />
-                            <circle r="2" fill="#FFFFFF" />
-                        </g>
-
-                        {/* 3 Step Interactive Nodes */}
-                        {NODE_X_POSITIONS.map((xPos, idx) => {
-                            const isCurrent = activeIndex === idx;
-                            const isReached = currentX >= xPos;
-
-                            return (
-                                <g 
-                                    key={idx} 
-                                    transform={`translate(${xPos}, 16)`} 
-                                    onClick={() => handleNodeClick(idx)}
-                                    className="cursor-pointer group/node"
-                                >
-                                    {isCurrent && (
-                                        <circle 
-                                            r="9" 
-                                            fill="#0F766E" 
-                                            fillOpacity="0.2" 
-                                            className="animate-pulse" 
-                                        />
-                                    )}
-
-                                    <circle 
-                                        r="5.5" 
-                                        fill={isReached ? "#0F766E" : "#FFFFFF"} 
-                                        stroke={isReached ? "#2DD4BF" : "#94A3B8"} 
-                                        strokeWidth="2"
-                                        className="transition-all duration-300"
-                                    />
-
-                                    <circle 
-                                        r="2.5" 
-                                        fill={isReached ? "#FFFFFF" : "#CBD5E1"} 
-                                    />
-                                </g>
-                            );
-                        })}
-                    </svg>
-                </div>
-
-                {/* Center Column: Precision SVG Vertical Line */}
-                <div className="hidden lg:flex lg:col-span-1 justify-center items-center h-full min-h-[360px] relative">
-                    <svg className="w-10 h-[280px] overflow-visible" viewBox="0 0 32 280" fill="none">
-                        <defs>
-                            <linearGradient id="laserBeamGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" stopColor="#0F766E" stopOpacity="0.4" />
-                                <stop offset="85%" stopColor="#2DD4BF" stopOpacity="1" />
-                                <stop offset="100%" stopColor="#5EEAD4" stopOpacity="1" />
-                            </linearGradient>
-
-                            <filter id="laserGlowFilter" x="-40%" y="-40%" width="180%" height="180%">
-                                <feGaussianBlur stdDeviation="3" result="blur" />
-                                <feMerge>
-                                    <feMergeNode in="blur" />
-                                    <feMergeNode in="SourceGraphic" />
-                                </feMerge>
-                            </filter>
-                        </defs>
-
-                        {/* Background Straight Reference Track */}
-                        <line 
-                            x1="16" 
-                            y1={NODE_Y_POSITIONS[0]} 
-                            x2="16" 
-                            y2={NODE_Y_POSITIONS[2]} 
-                            stroke="#CBD5E1" 
-                            strokeWidth="2" 
-                            strokeDasharray="3 3"
-                            strokeOpacity="0.8" 
-                        />
-
-                        {/* Active Laser Line */}
-                        <line 
-                            x1="16" 
-                            y1={NODE_Y_POSITIONS[0]} 
-                            x2="16" 
-                            y2={currentY} 
-                            stroke="url(#laserBeamGrad)" 
-                            strokeWidth="3" 
-                            strokeLinecap="round"
-                            filter="url(#laserGlowFilter)" 
-                            className="transition-all duration-400 ease-out"
-                        />
-
-                        {/* Traveling Pulse Laser Head */}
-                        <g transform={`translate(16, ${currentY})`} className="transition-transform duration-400 ease-out">
-                            <circle r="6" fill="#2DD4BF" opacity="0.4" className="animate-ping" />
-                            <circle r="4" fill="#0F766E" />
-                            <circle r="2" fill="#FFFFFF" />
-                        </g>
-
-                        {/* 3 Step Interactive Nodes */}
-                        {NODE_Y_POSITIONS.map((yPos, idx) => {
-                            const isCurrent = activeIndex === idx;
-                            const isReached = currentY >= yPos;
-
-                            return (
-                                <g 
-                                    key={idx} 
-                                    transform={`translate(16, ${yPos})`} 
-                                    onClick={() => handleNodeClick(idx)}
-                                    className="cursor-pointer group/node"
-                                >
-                                    {isCurrent && (
-                                        <circle 
-                                            r="10" 
-                                            fill="#0F766E" 
-                                            fillOpacity="0.2" 
-                                            className="animate-pulse" 
-                                        />
-                                    )}
-
-                                    <circle 
-                                        r="6" 
-                                        fill={isReached ? "#0F766E" : "#FFFFFF"} 
-                                        stroke={isReached ? "#2DD4BF" : "#94A3B8"} 
-                                        strokeWidth="2"
-                                        className="transition-all duration-300"
-                                    />
-
-                                    <circle 
-                                        r="2.5" 
-                                        fill={isReached ? "#FFFFFF" : "#CBD5E1"} 
-                                    />
-                                </g>
-                            );
-                        })}
-                    </svg>
-                </div>
-
-                {/* Right Column: Application Mockup Box */}
-                <div className="lg:col-span-6 relative flex justify-center">
-                    <div className="animate-float-slow relative w-full max-w-[540px] aspect-[4/3] bg-slate-950 rounded-2xl shadow-[var(--shadow-hover)] border border-[var(--color-border)] overflow-hidden flex flex-col z-10">
+                {/* Right Column: Application Mockup Frame with Fluid Zero-Latency Cross-Fade */}
+                <div className="lg:col-span-6 relative flex justify-center w-full">
+                    <div className="relative w-full max-w-[480px] aspect-[16/10] bg-white rounded-xl shadow-[var(--shadow-hover)] border border-gray-200/80 overflow-hidden flex flex-col z-10">
                         {/* Image Showcase Frame */}
-                        <div className="relative flex-1 bg-slate-950 overflow-hidden">
-                            <AnimatePresence mode="wait">
-                                <motion.div
-                                    key={activeWing.id}
-                                    initial={{ opacity: 0, scale: 0.96 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    exit={{ opacity: 0, scale: 1.02 }}
-                                    transition={{ duration: 0.35, ease: "easeOut" }}
-                                    className="absolute inset-0"
-                                >
-                                    <Image
-                                        src={activeWing.imageSrc}
-                                        alt={activeWing.imageAlt}
-                                        fill
-                                        sizes="(max-width: 1024px) 100vw, 540px"
-                                        className="object-cover object-center"
-                                        priority
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/25 via-transparent to-transparent pointer-events-none" />
-                                </motion.div>
-                            </AnimatePresence>
-
-                            {/* Preload other images in background for 0 latency switching */}
-                            <div className="hidden" aria-hidden="true">
-                                {WINGS.map((w) => (
-                                    <Image
+                        <div className="relative flex-1 bg-gray-50 overflow-hidden">
+                            {WINGS.map((w, idx) => {
+                                const isActive = activeIndex === idx;
+                                return (
+                                    <div
                                         key={w.id}
-                                        src={w.imageSrc}
-                                        alt=""
-                                        width={540}
-                                        height={405}
-                                        priority
-                                    />
-                                ))}
-                            </div>
+                                        className={cn(
+                                            "absolute inset-0 transition-opacity duration-500 ease-in-out will-change-[opacity]",
+                                            isActive ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
+                                        )}
+                                    >
+                                        <Image
+                                            src={w.imageSrc}
+                                            alt={w.imageAlt}
+                                            fill
+                                            sizes="(max-width: 1024px) 100vw, 480px"
+                                            className="object-cover object-center"
+                                            priority
+                                            loading="eager"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent pointer-events-none" />
+                                    </div>
+                                );
+                            })}
 
                             {/* Live Badge in Bottom Left of Frame */}
-                            <div className="absolute bottom-3 left-3 z-20 bg-slate-900/85 backdrop-blur-md px-3 py-1 rounded-lg border border-slate-700 text-white text-xs font-semibold flex items-center shadow-md">
+                            <div className="absolute bottom-2.5 left-2.5 z-20 bg-slate-900/85 backdrop-blur-md px-2.5 py-1 rounded-md border border-slate-700 text-white text-[11px] font-semibold flex items-center shadow-md">
                                 <span>{activeWing.wingName}</span>
                             </div>
                         </div>
-
                     </div>
                 </div>
 

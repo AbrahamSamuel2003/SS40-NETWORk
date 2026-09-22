@@ -667,7 +667,7 @@ export function InteractiveImpactShowcase() {
     }, []);
 
     return (
-        <section className="bg-[#D8E8E2] border-t border-b border-gray-200/60 relative overflow-hidden">
+        <section className="hidden lg:block bg-[#D8E8E2] border-t border-b border-gray-200/60 relative overflow-hidden">
 
             {/* Header Section */}
             <div className="w-full bg-[#D8E8E2] pt-12 md:pt-14 pb-3 md:pb-4 relative z-20">
@@ -698,7 +698,7 @@ export function InteractiveImpactShowcase() {
 
             {/* ── DESKTOP 3D COVERFLOW (COMPACT TIGHTLY STACKED CARDS) ── */}
             <div
-                className="hidden lg:block relative w-full pb-14 pt-2"
+                className="relative w-full pb-14 pt-2"
                 onWheel={handleWheel}
             >
                 <div className="w-full flex flex-col justify-center items-center overflow-hidden">
@@ -749,36 +749,6 @@ export function InteractiveImpactShowcase() {
                             </button>
                         ))}
                     </div>
-                </div>
-            </div>
-
-            {/* ── MOBILE HORIZONTAL SWIPE DECK (RESTORED ORIGINAL) ── */}
-            <div className="flex flex-col lg:hidden w-full bg-[#D8E8E2] pt-4 pb-16 relative">
-                <div
-                    ref={mobileScrollRef}
-                    className="flex w-full overflow-x-auto snap-x snap-mandatory px-6 gap-5 items-stretch [&::-webkit-scrollbar]:hidden"
-                    style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-                >
-                    {SCENES.map((scene, idx) => (
-                        <MobileSwipeCard key={`mobile-card-${idx}`} scene={scene} idx={idx} />
-                    ))}
-                    <div className="w-[10vw] sm:w-[4vw] shrink-0" />
-                </div>
-
-                {/* Mobile Pagination */}
-                <div className="w-full flex justify-center items-center gap-3 mt-8 z-10 relative">
-                    {SCENES.map((_, i) => (
-                        <button
-                            key={`dot-${i}`}
-                            onClick={() => scrollToMobileScene(i)}
-                            aria-label={`Scroll to scene ${i + 1}`}
-                            className="p-3 focus:outline-none min-w-[44px] min-h-[44px] flex items-center justify-center touch-manipulation cursor-pointer"
-                        >
-                            <div className={`h-2.5 rounded-full transition-all duration-400 ease-out ${
-                                activeMobileIdx === i ? 'bg-[#0F766E] w-8 shadow-sm scale-100' : 'bg-gray-300 w-2.5 hover:bg-gray-400 scale-90'
-                            }`} />
-                        </button>
-                    ))}
                 </div>
             </div>
         </section>

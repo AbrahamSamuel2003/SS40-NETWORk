@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import * as React from "react";
 import { motion } from "framer-motion";
@@ -21,7 +21,7 @@ import { slideUp, staggerContainer, hoverLift } from "@/lib/animations";
 const DEMO_BENEFITS = [
     { text: "Personalized Product Tour", icon: MonitorPlay },
     { text: "Business Use Cases", icon: Briefcase },
-    { text: "Questions & Answers", icon: MessageCircleQuestion },
+    { text: "Questions and Answers", icon: MessageCircleQuestion },
     { text: "No Commitment Required", icon: ShieldCheck },
 ];
 

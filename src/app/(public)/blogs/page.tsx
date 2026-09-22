@@ -7,13 +7,13 @@ import { Container } from "@/components/ui/Container";
 import { BlogsList } from "./BlogsList";
 
 export const metadata: Metadata = {
-    title: "Blogs & Field Updates | SS40 NETWORK PRIVATE LIMITED",
+    title: "Blogs and Field Updates | SS40 NETWORK PRIVATE LIMITED",
     description: "Explore government official dialogues, academic MoUs, industry visits, conclaves, and founder activities by SS40 NETWORK PRIVATE LIMITED.",
     alternates: {
         canonical: "https://www.ss40network.com/blogs",
     },
     openGraph: {
-        title: "Blogs & Field Updates | SS40 NETWORK PRIVATE LIMITED",
+        title: "Blogs and Field Updates | SS40 NETWORK PRIVATE LIMITED",
         description: "Explore government official dialogues, academic MoUs, industry visits, conclaves, and founder activities by SS40 NETWORK PRIVATE LIMITED.",
         url: "https://www.ss40network.com/blogs",
         siteName: "SS40 NETWORK PRIVATE LIMITED",
@@ -23,13 +23,13 @@ export const metadata: Metadata = {
                 url: "https://www.ss40network.com/og-image.jpg",
                 width: 1200,
                 height: 630,
-                alt: "Blogs & Field Updates — SS40 NETWORK PRIVATE LIMITED",
+                alt: "Blogs and Field Updates — SS40 NETWORK PRIVATE LIMITED",
             },
         ],
     },
     twitter: {
         card: "summary_large_image",
-        title: "Blogs & Field Updates | SS40 NETWORK PRIVATE LIMITED",
+        title: "Blogs and Field Updates | SS40 NETWORK PRIVATE LIMITED",
         description: "Explore government official dialogues, academic MoUs, industry visits, conclaves, and founder activities by SS40 NETWORK PRIVATE LIMITED.",
         images: ["https://www.ss40network.com/og-image.jpg"],
     },
@@ -48,35 +48,27 @@ export default async function AllBlogsPage() {
 
     const jsonLd = {
         "@context": "https://schema.org",
-        "@graph": [
-            {
-                "@type": "BreadcrumbList",
-                "itemListElement": [
-                    {
-                        "@type": "ListItem",
-                        "position": 1,
-                        "name": "Home",
-                        "item": "https://www.ss40network.com/"
-                    },
-                    {
-                        "@type": "ListItem",
-                        "position": 2,
-                        "name": "Blogs & Field Updates",
-                        "item": "https://www.ss40network.com/blogs"
-                    }
-                ]
-            }
-        ]
+        "@type": "CollectionPage",
+        "name": "Blogs and Field Updates",
+        "description": "Explore government official dialogues, academic MoUs, industry visits, conclaves, and founder activities by SS40 NETWORK PRIVATE LIMITED.",
+        "url": "https://www.ss40network.com/blogs",
+        "publisher": {
+            "@type": "Organization",
+            "name": "SS40 NETWORK PRIVATE LIMITED"
+        }
     };
 
     return (
-        <div className="w-full flex-col flex bg-white min-h-screen">
+        <div className="w-full bg-[#FAFAF9] min-h-screen">
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
             />
-            {/* Header Hero Section */}
-            <div className="w-full relative pt-24 pb-10 lg:pt-28 lg:pb-14 overflow-hidden bg-[#D8E8E2]">
+            {/* Premium Header Banner */}
+            <div className="w-full bg-[#D8E8E2] pt-28 pb-12 md:pt-36 md:pb-16 relative overflow-hidden border-b border-gray-200/80">
+                <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
+                    style={{ backgroundImage: 'radial-gradient(#000 1.5px, transparent 1.5px)', backgroundSize: '24px 24px' }}
+                />
                 <div className="absolute top-0 right-0 w-96 h-96 bg-[#6B9F91]/10 blur-[100px] rounded-full translate-x-1/3 -translate-y-1/3" />
                 <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#6B9F91]/10 blur-[100px] rounded-full -translate-x-1/3 translate-y-1/3" />
 
@@ -91,7 +83,7 @@ export default async function AllBlogsPage() {
                     <div className="flex items-center justify-center mb-4">
                         <span className="px-5 py-1.5 bg-white text-[#6B9F91] text-xs font-bold uppercase tracking-widest rounded-full shadow-sm border border-[#6B9F91]/10 flex items-center gap-1.5">
                             <Sparkles className="w-3.5 h-3.5" />
-                            Blogs & Field Updates
+                            Blogs and Field Updates
                         </span>
                     </div>
 

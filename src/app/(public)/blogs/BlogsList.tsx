@@ -19,6 +19,7 @@ import {
     ChevronRight,
     Sparkles
 } from 'lucide-react';
+import { formatCleanText } from '@/utils/text';
 
 interface BlogsListProps {
     initialActivities: ActivityItem[];
@@ -363,23 +364,23 @@ function ActivityStoryModal({ activity, onClose }: { activity: ActivityItem; onC
                         {activity.location && (
                             <span className="flex items-center gap-1.5 text-xs text-gray-600 font-medium bg-gray-100 px-3.5 py-1.5 rounded-full">
                                 <MapPin className="w-3.5 h-3.5 text-gray-400" />
-                                {activity.location}
+                                {formatCleanText(activity.location)}
                             </span>
                         )}
                     </div>
 
                     <h2 className="text-2xl sm:text-3xl font-extrabold text-[#111827] leading-tight">
-                        {activity.title}
+                        {formatCleanText(activity.title)}
                     </h2>
 
                     <div className="space-y-4 text-sm sm:text-base text-[#374151] leading-relaxed">
                         <p className="font-semibold text-gray-800 bg-[#D8E8E2]/60 p-5 rounded-2xl border border-[#6B9F91]/25">
-                            {activity.summary}
+                            {formatCleanText(activity.summary)}
                         </p>
 
                         {activity.content ? (
                             <div className="whitespace-pre-line text-gray-700 leading-relaxed pt-2">
-                                {activity.content}
+                                {formatCleanText(activity.content)}
                             </div>
                         ) : null}
                     </div>
@@ -390,7 +391,7 @@ function ActivityStoryModal({ activity, onClose }: { activity: ActivityItem; onC
                                 href={activity.externalLink}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                aria-label={`Read story on LinkedIn for ${activity.title}`}
+                                aria-label={`Read story on LinkedIn for ${formatCleanText(activity.title)}`}
                                 className="inline-flex items-center gap-2 bg-[#0A66C2] hover:bg-[#004182] text-white px-5 py-2.5 rounded-xl font-bold text-xs shadow-md transition-all"
                             >
                                 <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">

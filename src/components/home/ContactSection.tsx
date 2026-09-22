@@ -63,7 +63,7 @@ export function ContactSection({ config }: { config?: SiteConfigData | null }) {
     };
 
     return (
-        <SectionWrapper id="contact" className="bg-[#D8E8E2]">
+        <SectionWrapper id="contact" className="bg-white lg:bg-[#D8E8E2]">
             <Container className="space-y-12 lg:space-y-16">
 
                 {/* Section Header */}
@@ -101,7 +101,7 @@ export function ContactSection({ config }: { config?: SiteConfigData | null }) {
                                 const Icon = item.icon;
                                 const content = (
                                     <div className="flex items-start gap-3">
-                                        <div className="w-12 h-12 shrink-0 rounded-full bg-gray-50 flex items-center justify-center text-[var(--color-primary)] group-hover:bg-[var(--color-primary)] group-hover:text-white transition-colors duration-300">
+                                        <div className="w-12 h-12 shrink-0 rounded-full bg-white lg:bg-gray-50 border border-gray-100 lg:border-transparent flex items-center justify-center text-[var(--color-primary)] group-hover:bg-[var(--color-primary)] group-hover:text-white transition-colors duration-300 shadow-2xs">
                                             <Icon className="w-5 h-5" />
                                         </div>
                                         <div className="pt-0.5 text-left">
@@ -116,7 +116,7 @@ export function ContactSection({ config }: { config?: SiteConfigData | null }) {
                                         key={idx}
                                         variants={slideUp}
                                         {...hoverLift}
-                                        className="p-4 group bg-white border border-[var(--color-border)] hover:border-[var(--color-primary)]/30 transition-colors cursor-pointer"
+                                        className="p-4 group bg-gray-50/70 lg:bg-white border border-[var(--color-border)] hover:border-[var(--color-primary)]/30 transition-colors cursor-pointer shadow-2xs"
                                     >
                                         {item.href ? (
                                             <a href={item.href} target={item.href?.startsWith('http') ? "_blank" : undefined} rel="noopener noreferrer" className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md">

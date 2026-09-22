@@ -73,7 +73,7 @@ export async function Footer() {
                         <ul className="flex flex-col items-center md:items-start gap-4 text-sm text-[var(--color-body-text)]">
                             <li><Link href="/privacy-policy" className="hover:text-[var(--color-primary)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] rounded">Privacy Policy</Link></li>
                             <li><Link href="/terms" className="hover:text-[var(--color-primary)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] rounded">Terms of Service</Link></li>
-                            <li><Link href="/refund-policy" className="hover:text-[var(--color-primary)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] rounded">Refund & Cancellation</Link></li>
+                            <li><Link href="/refund-policy" className="hover:text-[var(--color-primary)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] rounded">Refund and Cancellation</Link></li>
                         </ul>
                     </div>
 
