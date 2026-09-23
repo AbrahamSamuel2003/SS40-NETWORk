@@ -227,12 +227,12 @@ export function AdminSidebar({ adminName, isOpen, setIsOpen }: SidebarProps) {
                                             className={cn(
                                                 "w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-colors",
                                                 isActiveGroup && !isExpanded
-                                                    ? "bg-[#6B9F91]/10 text-[#111827]"
+                                                    ? "bg-[#0F766E]/10 text-[#111827]"
                                                     : "text-[#6B7280] hover:bg-[#D8E8E2] hover:text-[#111827]"
                                             )}
                                         >
                                             <div className="flex items-center gap-3">
-                                                <Icon size={18} className={isActiveGroup ? "text-[#6B9F91] opacity-100" : "opacity-75"} />
+                                                <Icon size={18} className={isActiveGroup ? "text-[#0F766E] opacity-100" : "opacity-75"} />
                                                 {item.name}
                                             </div>
                                             <ChevronDown size={16} className={cn("transition-transform duration-200", isExpanded ? "rotate-180" : "rotate-0")} />
@@ -256,7 +256,7 @@ export function AdminSidebar({ adminName, isOpen, setIsOpen }: SidebarProps) {
                                                             className={cn(
                                                                 "flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors",
                                                                 isSubActive
-                                                                    ? "bg-[#6B9F91]/10 text-[#6B9F91] font-semibold"
+                                                                    ? "bg-[#0F766E]/10 text-[#0F766E] font-semibold"
                                                                     : "text-[#6B7280] hover:text-[#111827] hover:bg-[#D8E8E2]"
                                                             )}
                                                         >
@@ -280,11 +280,11 @@ export function AdminSidebar({ adminName, isOpen, setIsOpen }: SidebarProps) {
                                     className={cn(
                                         "flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors",
                                         isActive
-                                            ? "bg-[#6B9F91]/10 text-[#111827] font-semibold"
+                                            ? "bg-[#0F766E]/10 text-[#111827] font-semibold"
                                             : "text-[#6B7280] hover:bg-[#D8E8E2] hover:text-[#111827]"
                                     )}
                                 >
-                                    <Icon size={18} className={isActive ? "text-[#6B9F91]" : "opacity-75"} />
+                                    <Icon size={18} className={isActive ? "text-[#0F766E]" : "opacity-75"} />
                                     {item.name}
                                 </Link>
                             );

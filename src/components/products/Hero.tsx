@@ -55,13 +55,13 @@ export function Hero() {
                             transition={{ duration: 0.6, ease: "easeOut" }}
                             className="flex flex-col items-center lg:items-start w-full"
                         >
-                            <Badge className="mb-6 rounded-md uppercase tracking-widest text-[10px] font-bold bg-[#F59E0B]/15 text-[#D97706] hover:bg-[#F59E0B]/25 border border-[#F59E0B]/20 shadow-sm">
+                            <Badge className="mb-6 rounded-md uppercase tracking-widest text-[10px] font-bold bg-[#FFC900]/15 text-[#92400E] hover:bg-[#FFC900]/25 border border-[#FFC900]/30 shadow-sm">
                                 SS40 PRODUCTS
                             </Badge>
 
                             <h1 className="text-[clamp(40px,5vw,56px)] font-bold text-[#111827] leading-[1.1] tracking-tight mb-6 max-w-2xl font-serif">
                                 Products Built<br />
-                                for Real Business <span className="text-[#6B9F91]">Challenges.</span>
+                                for Real Business <span className="text-[#0F766E]">Challenges.</span>
                             </h1>
 
                             <p className="text-lg md:text-xl text-[#6B7280] mb-10 max-w-xl leading-relaxed">
@@ -89,12 +89,12 @@ export function Hero() {
                         <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0 }}>
                             <motion.line
                                 x1="50%" y1="50%" x2="25%" y2="25%"
-                                stroke="#6B9F91" strokeWidth="2" strokeDasharray="4 4" opacity="0.3"
+                                stroke="#2DD4BF" strokeWidth="2" strokeDasharray="4 4" opacity="0.3"
                                 initial={{ strokeDashoffset: 100 }} animate={{ strokeDashoffset: 0 }} transition={{ repeat: Infinity, duration: 4, ease: "linear" }}
                             />
                             <motion.line
                                 x1="50%" y1="50%" x2="75%" y2="25%"
-                                stroke="#6B9F91" strokeWidth="2" strokeDasharray="4 4" opacity="0.3"
+                                stroke="#2DD4BF" strokeWidth="2" strokeDasharray="4 4" opacity="0.3"
                                 initial={{ strokeDashoffset: 100 }} animate={{ strokeDashoffset: 0 }} transition={{ repeat: Infinity, duration: 4, ease: "linear" }}
                             />
                             <motion.line
@@ -104,7 +104,7 @@ export function Hero() {
                             />
                             <motion.line
                                 x1="50%" y1="50%" x2="80%" y2="75%"
-                                stroke="#6B9F91" strokeWidth="2" strokeDasharray="4 4" opacity="0.3"
+                                stroke="#2DD4BF" strokeWidth="2" strokeDasharray="4 4" opacity="0.3"
                                 initial={{ strokeDashoffset: -100 }} animate={{ strokeDashoffset: 0 }} transition={{ repeat: Infinity, duration: 3, ease: "linear" }}
                             />
                         </svg>
@@ -114,11 +114,11 @@ export function Hero() {
                             initial={{ scale: 0 }}
                             animate={{ scale: 1 }}
                             transition={{ type: "spring", duration: 1.5, bounce: 0.4 }}
-                            className="relative z-10 w-28 h-28 sm:w-32 sm:h-32 md:w-40 md:h-40 rounded-full bg-white shadow-[0_0_60px_-15px_rgba(107,159,145,0.4)] border-4 border-[#6B9F91]/20 flex flex-col items-center justify-center group transform-gpu"
+                            className="relative z-10 w-28 h-28 sm:w-32 sm:h-32 md:w-40 md:h-40 rounded-full bg-white shadow-[0_0_60px_-15px_rgba(45,212,191,0.4)] border-4 border-[#2DD4BF]/30 flex flex-col items-center justify-center group transform-gpu"
                             style={{ willChange: "transform", transform: "translateZ(0)" }}
                         >
-                            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#6B9F91]/10 to-transparent group-hover:rotate-180 transition-transform duration-1000" />
-                            <Box className="w-8 h-8 sm:w-10 sm:h-10 text-[#6B9F91] mb-2" />
+                            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#2DD4BF]/10 to-transparent group-hover:rotate-180 transition-transform duration-1000" />
+                            <Box className="w-8 h-8 sm:w-10 sm:h-10 text-[#0F766E] mb-2" />
                             <span className="text-[10px] font-bold text-gray-800 tracking-widest uppercase sm:text-xs">SS40 Product</span>
                         </motion.div>
 

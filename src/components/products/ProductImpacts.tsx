@@ -134,7 +134,7 @@ export function ProductImpacts({ initialData }: ProductImpactsProps = {}) {
                     title={
                         <>
                             Real Businesses.<br />
-                            Real Product <span className="text-[#6B9F91]">Success.</span>
+                            Real Product <span className="text-[#0F766E]">Success.</span>
                         </>
                     }
                     description="See how organizations use SS40 NETWORK products to simplify operations, improve productivity, and achieve better business outcomes."
@@ -165,7 +165,7 @@ export function ProductImpacts({ initialData }: ProductImpactsProps = {}) {
                                 <motion.div
                                     key={item.id}
                                     variants={slideUp}
-                                    whileHover={{ y: -6, scale: 1.015, boxShadow: "0 20px 40px -8px rgba(107,159,145,0.18), 0 8px 16px -4px rgba(107,159,145,0.10)" }}
+                                    whileHover={{ y: -6, scale: 1.015, boxShadow: "0 20px 40px -8px rgba(45,212,191,0.18), 0 8px 16px -4px rgba(15,118,110,0.10)" }}
                                     whileTap={{ scale: 0.98, y: -2 }}
                                     transition={{ type: "spring", stiffness: 350, damping: 22 }}
                                     role="button"
@@ -180,7 +180,7 @@ export function ProductImpacts({ initialData }: ProductImpactsProps = {}) {
                                             setActiveModalStory(item);
                                         }
                                     }}
-                                    className="cursor-pointer bg-white rounded-2xl flex flex-col group border border-[var(--color-border)] hover:border-[#6B9F91]/40 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 overflow-hidden"
+                                    className="cursor-pointer bg-white rounded-2xl flex flex-col group border border-[var(--color-border)] hover:border-[#2DD4BF]/50 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2DD4BF] focus-visible:ring-offset-2 overflow-hidden"
                                 >
                                     {/* Video: flushed to top/left/right of card with matching rounded corners */}
                                     <div className="relative w-full aspect-video bg-gray-900 shrink-0">
@@ -194,9 +194,9 @@ export function ProductImpacts({ initialData }: ProductImpactsProps = {}) {
                                                 />
                                             </div>
                                         ) : (
-                                            <div className="absolute inset-0 bg-gradient-to-br from-[#6B9F91]/20 to-[#6B9F91]/5 flex items-center justify-center">
-                                                <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#6B9F91 1px, transparent 1px)', backgroundSize: '16px 16px' }} />
-                                                <Video className="w-10 h-10 text-[#6B9F91]/40" />
+                                            <div className="absolute inset-0 bg-gradient-to-br from-[#2DD4BF]/20 to-[#2DD4BF]/5 flex items-center justify-center">
+                                                <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#0F766E 1px, transparent 1px)', backgroundSize: '16px 16px' }} />
+                                                <Video className="w-10 h-10 text-[#0F766E]/40" />
                                             </div>
                                         )}
                                     </div>
@@ -204,7 +204,7 @@ export function ProductImpacts({ initialData }: ProductImpactsProps = {}) {
                                     {/* Content */}
                                     <div className="p-5 md:p-6 flex flex-col flex-1">
                                         {/* Large quote mark for visual richness */}
-                                        <span className="text-5xl font-serif leading-none text-[#6B9F91]/20 select-none mb-1">&ldquo;</span>
+                                        <span className="text-5xl font-serif leading-none text-[#2DD4BF]/30 select-none mb-1">&ldquo;</span>
 
                                         <p className="text-[var(--color-body-text)] text-sm italic flex-1 leading-relaxed line-clamp-3 mb-5 text-gray-600 -mt-2">
                                             {item.testimonial}
@@ -222,7 +222,7 @@ export function ProductImpacts({ initialData }: ProductImpactsProps = {}) {
                                                 </div>
                                             </div>
                                             <div className="flex items-center gap-2 shrink-0">
-                                                <span className="px-2 py-0.5 bg-[#6B9F91]/10 text-[#6B9F91] text-[9px] font-bold uppercase tracking-wider rounded whitespace-nowrap">
+                                                <span className="px-2 py-0.5 bg-[#2DD4BF]/15 text-[#0F766E] text-[9px] font-bold uppercase tracking-wider rounded whitespace-nowrap">
                                                     {item.industry}
                                                 </span>
                                                 <button
@@ -230,7 +230,7 @@ export function ProductImpacts({ initialData }: ProductImpactsProps = {}) {
                                                         e.stopPropagation();
                                                         setActiveModalStory(item);
                                                     }}
-                                                    className="flex items-center text-xs font-bold text-[#6B9F91] hover:text-[#588478] transition-colors group/btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] rounded-sm"
+                                                    className="flex items-center text-xs font-bold text-[#0F766E] hover:text-[#0D645D] transition-colors group/btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2DD4BF] rounded-sm"
                                                 >
                                                     <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" />
                                                 </button>
@@ -264,7 +264,7 @@ export function ProductImpacts({ initialData }: ProductImpactsProps = {}) {
                                                 setActiveModalStory(item);
                                             }
                                         }}
-                                        className="cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 happimonial-mobile-card w-[82vw] sm:w-[350px] flex-shrink-0 flex flex-col bg-white overflow-hidden rounded-3xl snap-center relative scroll-ml-6 border border-[var(--color-border)] shadow-xl shadow-gray-200/50"
+                                        className="cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2DD4BF] focus-visible:ring-offset-2 happimonial-mobile-card w-[82vw] sm:w-[350px] flex-shrink-0 flex flex-col bg-white overflow-hidden rounded-3xl snap-center relative scroll-ml-6 border border-[var(--color-border)] shadow-xl shadow-gray-200/50"
                                     >
                                         {/* Video: flushed to top/left/right of card with matching rounded corners */}
                                         <div className="relative w-full aspect-video bg-gray-900 shrink-0">
@@ -278,9 +278,9 @@ export function ProductImpacts({ initialData }: ProductImpactsProps = {}) {
                                                     />
                                                 </div>
                                             ) : (
-                                                <div className="absolute inset-0 bg-gradient-to-br from-[#6B9F91]/20 to-[#6B9F91]/5 flex items-center justify-center">
-                                                    <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#6B9F91 1px, transparent 1px)', backgroundSize: '16px 16px' }} />
-                                                    <Video className="w-10 h-10 text-[#6B9F91]/40" />
+                                                <div className="absolute inset-0 bg-gradient-to-br from-[#2DD4BF]/20 to-[#2DD4BF]/5 flex items-center justify-center">
+                                                    <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#0F766E 1px, transparent 1px)', backgroundSize: '16px 16px' }} />
+                                                    <Video className="w-10 h-10 text-[#0F766E]/40" />
                                                 </div>
                                             )}
                                         </div>
@@ -288,7 +288,7 @@ export function ProductImpacts({ initialData }: ProductImpactsProps = {}) {
                                         {/* Content */}
                                         <div className="p-5 flex flex-col flex-1 text-left relative z-10 bg-white">
                                             {/* Large quote mark */}
-                                            <span className="text-5xl font-serif leading-none text-[#6B9F91]/20 select-none mb-1">&ldquo;</span>
+                                            <span className="text-5xl font-serif leading-none text-[#2DD4BF]/30 select-none mb-1">&ldquo;</span>
                                             <p className="text-[var(--color-body-text)] text-sm italic leading-relaxed line-clamp-3 mb-4 text-gray-600 -mt-2">
                                                 {item.testimonial}
                                             </p>
@@ -304,7 +304,7 @@ export function ProductImpacts({ initialData }: ProductImpactsProps = {}) {
                                                     </div>
                                                 </div>
                                                 <div className="flex items-center gap-2 shrink-0">
-                                                    <span className="w-max px-2 py-0.5 bg-[#6B9F91]/10 text-[#6B9F91] text-[9px] font-bold uppercase tracking-wider rounded whitespace-nowrap">
+                                                    <span className="w-max px-2 py-0.5 bg-[#2DD4BF]/15 text-[#0F766E] text-[9px] font-bold uppercase tracking-wider rounded whitespace-nowrap">
                                                         {item.industry}
                                                     </span>
                                                     <button
@@ -312,7 +312,7 @@ export function ProductImpacts({ initialData }: ProductImpactsProps = {}) {
                                                             e.stopPropagation();
                                                             setActiveModalStory(item);
                                                         }}
-                                                        className="flex items-center text-xs font-bold text-[#6B9F91] hover:text-[#588478] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] rounded-sm"
+                                                        className="flex items-center text-xs font-bold text-[#0F766E] hover:text-[#0D645D] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2DD4BF] rounded-sm"
                                                     >
                                                         <ArrowRight className="w-4 h-4" />
                                                     </button>
@@ -331,7 +331,7 @@ export function ProductImpacts({ initialData }: ProductImpactsProps = {}) {
                                             key={`mob-dot-${i}`}
                                             onClick={() => scrollToMobileTestimonial(i)}
                                             aria-label={`View testimonial ${i + 1}`}
-                                            className={`h-2.5 rounded-full transition-all duration-400 ease-out ${activeMobileIdx === i ? 'bg-[#6B9F91] w-8 shadow-sm scale-100' : 'bg-gray-300 w-2.5 hover:bg-gray-400 scale-90'} border-none cursor-pointer`}
+                                            className={`h-2.5 rounded-full transition-all duration-400 ease-out ${activeMobileIdx === i ? 'bg-[#0F766E] w-8 shadow-sm scale-100' : 'bg-gray-300 w-2.5 hover:bg-gray-400 scale-90'} border-none cursor-pointer`}
                                         />
                                     ))}
                                 </div>
@@ -341,7 +341,7 @@ export function ProductImpacts({ initialData }: ProductImpactsProps = {}) {
                         {/* View All Button */}
                         {!isLoading && happimonials.length > 3 && (
                             <div id="view-all-product-impacts" className="w-full flex justify-center mt-8 md:mt-12 md:mb-6 mb-4 scroll-mt-24">
-                                <Link href="/product-impacts" className="inline-flex items-center justify-center font-bold text-lg text-[#6B9F91] hover:text-[#588478] transition-colors group">
+                                <Link href="/product-impacts" className="inline-flex items-center justify-center font-bold text-lg text-[#0F766E] hover:text-[#0D645D] transition-colors group">
                                     View All Stories
                                     <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                                 </Link>
@@ -404,14 +404,14 @@ function ProductImpactModal({ story, onClose }: { story: any; onClose: () => voi
                                 <img src={story.thumbnailUrl} alt={story.clientName} className="w-14 h-14 rounded-full object-cover border border-gray-100 shadow-sm shrink-0" />
                             )}
                             <div>
-                                <span className="inline-block px-3 py-1 bg-[#6B9F91]/10 text-[#6B9F91] text-xs font-bold uppercase tracking-wider rounded-md mb-2">
+                                <span className="inline-block px-3 py-1 bg-[#2DD4BF]/15 text-[#0F766E] text-xs font-bold uppercase tracking-wider rounded-md mb-2">
                                     {story.industry}
                                 </span>
                                 <h3 className="text-xl md:text-2xl font-bold text-[var(--color-heading)] leading-tight">{story.clientName}</h3>
                                 <p className="text-sm md:text-base text-gray-500 font-medium mt-1">{story.companyName}</p>
                             </div>
                         </div>
-                        <button onClick={onClose} aria-label="Close modal" className="p-2 -mr-2 -mt-2 text-gray-400 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91]">
+                        <button onClick={onClose} aria-label="Close modal" className="p-2 -mr-2 -mt-2 text-gray-400 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2DD4BF]">
                             <X className="w-5 h-5" />
                         </button>
                     </div>
@@ -427,7 +427,7 @@ function ProductImpactModal({ story, onClose }: { story: any; onClose: () => voi
                                 />
                             </div>
                         )}
-                        <blockquote className="border-l-4 border-[#6B9F91] pl-4 italic text-gray-700 text-lg md:text-xl font-medium leading-relaxed my-0">
+                        <blockquote className="border-l-4 border-[#0F766E] pl-4 italic text-gray-700 text-lg md:text-xl font-medium leading-relaxed my-0">
                             "{story.testimonial}"
                         </blockquote>
                     </div>

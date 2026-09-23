@@ -62,14 +62,14 @@ export function Hero() {
                             transition={{ duration: 0.6, ease: "easeOut" }}
                             className="flex flex-col items-center lg:items-start w-full"
                         >
-                            <Badge className="mb-6 rounded-md uppercase tracking-widest text-[10px] font-bold bg-[#F59E0B]/15 text-[#D97706] hover:bg-[#F59E0B]/25 border border-[#F59E0B]/20 shadow-sm">
+                            <Badge className="mb-6 rounded-md uppercase tracking-widest text-[10px] font-bold bg-[#FFC900]/15 text-[#92400E] hover:bg-[#FFC900]/25 border border-[#FFC900]/30 shadow-2xs">
                                 SS40 ACADEMICS
                             </Badge>
 
                             <h1 className="text-[clamp(44px,5vw,72px)] font-bold text-[#111827] leading-[1.1] tracking-tight mb-6 font-serif">
                                 Learn. <br className="hidden md:block" />
                                 Build. <br className="hidden md:block" />
-                                <span className="text-[#6B9F91]">Grow.</span>
+                                <span className="text-[#0F766E]">Grow.</span>
                             </h1>
 
                             <p className="text-lg md:text-xl text-[#6B7280] mb-10 max-w-lg leading-relaxed">

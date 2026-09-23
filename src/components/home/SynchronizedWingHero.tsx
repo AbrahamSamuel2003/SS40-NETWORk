@@ -36,7 +36,7 @@ const WINGS: WingData[] = [
         id: "solutions",
         wingName: "SS40 Digital Solutions",
         badge: "SS40 DIGITAL SOLUTIONS",
-        badgeStyle: "bg-[#F59E0B]/15 text-[#D97706] hover:bg-[#F59E0B]/25 border border-[#F59E0B]/20",
+        badgeStyle: "bg-[#FFC900]/15 text-[#92400E] hover:bg-[#FFC900]/25 border border-[#FFC900]/30",
         title: "Custom Software Engineering",
         highlight: "Built to Scale.",
         description: "We build high-performance web applications, mobile platforms, and AI automation tailored to your business.",
@@ -44,7 +44,7 @@ const WINGS: WingData[] = [
         ctaHref: "/digital-solutions",
         imageSrc: "/images/hero/digital-solutions-illustration.jpg",
         imageAlt: "SS40 Digital Solutions Custom Software and Cloud Architecture",
-        icon: <Code2 className="w-3.5 h-3.5 text-[#D97706]" />,
+        icon: <Code2 className="w-3.5 h-3.5 text-[#B45309]" />,
         chips: ["Web Apps", "Mobile Apps", "Cloud and AI"],
         buttonClass: "bg-[#0F766E] hover:bg-[#115E59] text-white shadow-lg shadow-[#0F766E]/20",
         accentColor: "#0F766E"
@@ -53,7 +53,7 @@ const WINGS: WingData[] = [
         id: "products",
         wingName: "SS40 Products",
         badge: "SS40 PRODUCTS",
-        badgeStyle: "bg-[#F59E0B]/15 text-[#D97706] hover:bg-[#F59E0B]/25 border border-[#F59E0B]/20",
+        badgeStyle: "bg-[#FFC900]/15 text-[#92400E] hover:bg-[#FFC900]/25 border border-[#FFC900]/30",
         title: "Intelligent SaaS Tools",
         highlight: "For Real Business.",
         description: "Ready-to-deploy software tools that automate invoicing, daily workflows, and enterprise operations.",
@@ -61,7 +61,7 @@ const WINGS: WingData[] = [
         ctaHref: "/products",
         imageSrc: "/images/hero/saas-products-illustration.jpg",
         imageAlt: "SS40 Products SaaS Invoicing and ERP Workflows",
-        icon: <Box className="w-3.5 h-3.5 text-[#D97706]" />,
+        icon: <Box className="w-3.5 h-3.5 text-[#B45309]" />,
         chips: ["ClearInvoice", "GTC Suite", "AI Email Agent"],
         buttonClass: "bg-[#0F766E] hover:bg-[#115E59] text-white shadow-lg shadow-[#0F766E]/20",
         accentColor: "#0F766E"
@@ -70,7 +70,7 @@ const WINGS: WingData[] = [
         id: "academics",
         wingName: "SS40 Academics",
         badge: "SS40 ACADEMICS",
-        badgeStyle: "bg-[#F59E0B]/15 text-[#D97706] hover:bg-[#F59E0B]/25 border border-[#F59E0B]/20",
+        badgeStyle: "bg-[#FFC900]/15 text-[#92400E] hover:bg-[#FFC900]/25 border border-[#FFC900]/30",
         title: "Hands-on Tech Training",
         highlight: "Career Launch Pad.",
         description: "Project-based training that prepares students and freshers for top tech careers with real client sprint experience.",
@@ -78,7 +78,7 @@ const WINGS: WingData[] = [
         ctaHref: "/academics",
         imageSrc: "/images/hero/tech-academics-illustration.jpg",
         imageAlt: "SS40 Academics Software Engineering and Mentorship Hub",
-        icon: <GraduationCap className="w-3.5 h-3.5 text-[#D97706]" />,
+        icon: <GraduationCap className="w-3.5 h-3.5 text-[#B45309]" />,
         chips: ["Live Client Projects", "Career Launch"],
         buttonClass: "bg-[#0F766E] hover:bg-[#115E59] text-white shadow-lg shadow-[#0F766E]/20",
         accentColor: "#0F766E"
@@ -135,7 +135,7 @@ export function SynchronizedWingHero() {
                             {/* Wing Title */}
                             <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[var(--color-heading)] leading-[1.18] tracking-tight font-serif">
                                 {activeWing.title} <br className="hidden sm:inline" />
-                                <span className="text-[#6B9F91]">{activeWing.highlight}</span>
+                                <span className="text-[#0F766E]">{activeWing.highlight}</span>
                             </h3>
 
                             {/* Wing Description */}

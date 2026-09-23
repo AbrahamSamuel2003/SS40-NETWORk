@@ -266,7 +266,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen flex flex-col bg-white" suppressHydrationWarning>
         <NextTopLoader
-          color="#6B9F91"
+          color="#2DD4BF"
           initialPosition={0.08}
           crawlSpeed={200}
           height={3}
@@ -274,7 +274,7 @@ export default function RootLayout({
           showSpinner={false}
           easing="ease"
           speed={200}
-          shadow="0 0 10px #6B9F91,0 0 5px #2DD4BF"
+          shadow="0 0 10px #2DD4BF, 0 0 5px #0F766E"
           zIndex={99999}
         />
         <VisitorTracker />

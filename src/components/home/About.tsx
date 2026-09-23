@@ -23,7 +23,7 @@ export function About() {
                 />
             </div>
             {/* Ambient Background Glow matching Success Stories */}
-            <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-[#6B9F91]/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-[#2DD4BF]/10 rounded-full blur-3xl pointer-events-none" />
 
             <Container className="relative z-10 space-y-10 lg:space-y-12">
                 
@@ -104,7 +104,7 @@ export function About() {
 
                         <div className="space-y-4 relative z-10">
                             {/* Vision Block (Soft Brand Mint/Sage) */}
-                            <div className="p-4 sm:p-5 rounded-xl bg-[#EDF5F2]/80 border border-[#6B9F91]/25 hover:bg-[#EDF5F2] transition-colors">
+                            <div className="p-4 sm:p-5 rounded-xl bg-[#EDF5F2]/80 border border-[#0F766E]/20 hover:bg-[#EDF5F2] transition-colors">
                                 <div className="flex items-center gap-2.5 mb-2">
                                     <div className="w-7 h-7 rounded-lg bg-white text-[#0F766E] flex items-center justify-center shadow-2xs">
                                         <Eye className="w-4 h-4" />
@@ -117,7 +117,7 @@ export function About() {
                             </div>
 
                             {/* Mission Block (Same Soft Brand Mint/Sage Design as Our Vision) */}
-                            <div className="p-4 sm:p-5 rounded-xl bg-[#EDF5F2]/80 border border-[#6B9F91]/25 hover:bg-[#EDF5F2] transition-colors">
+                            <div className="p-4 sm:p-5 rounded-xl bg-[#EDF5F2]/80 border border-[#0F766E]/20 hover:bg-[#EDF5F2] transition-colors">
                                 <div className="flex items-center gap-2.5 mb-2">
                                     <div className="w-7 h-7 rounded-lg bg-white text-[#0F766E] flex items-center justify-center shadow-2xs">
                                         <Target className="w-4 h-4" />
