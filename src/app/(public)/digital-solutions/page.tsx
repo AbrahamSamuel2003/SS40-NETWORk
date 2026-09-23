@@ -39,9 +39,11 @@ export const metadata: Metadata = {
 export const revalidate = 60;
 
 import { prisma } from "@/lib/prisma";
+import { getSiteConfig, isSectionVisible } from "@/lib/site-config";
 
 export default async function DigitalSolutionsPage() {
-    const [projects, happimonials, logos] = await Promise.all([
+    const [config, projects, happimonials, logos] = await Promise.all([
+        getSiteConfig(),
         prisma.clientProject.findMany({
             where: { isActive: true },
             orderBy: [
@@ -113,13 +115,19 @@ export default async function DigitalSolutionsPage() {
 
             {/* Below the fold (GPU-accelerated with content-visibility containment) */}
             <DevelopmentLifecycle />
-            <ClientProjects initialData={projects} />
-            <div className="cv-auto">
-                <Happimonials initialData={happimonials} />
-            </div>
-            <div className="cv-auto">
-                <TrustedClients initialData={logos} />
-            </div>
+            {isSectionVisible(config, 'digitalSolutions_projects') && (
+                <ClientProjects initialData={projects} />
+            )}
+            {isSectionVisible(config, 'digitalSolutions_happimonials') && (
+                <div className="cv-auto">
+                    <Happimonials initialData={happimonials} />
+                </div>
+            )}
+            {isSectionVisible(config, 'digitalSolutions_logos') && (
+                <div className="cv-auto">
+                    <TrustedClients initialData={logos} />
+                </div>
+            )}
             <div className="cv-auto">
                 <GetQuote />
             </div>

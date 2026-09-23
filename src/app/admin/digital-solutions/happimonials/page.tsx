@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, CheckCircle2, AlertCircle, Upload, X, Image as ImageIcon, Sparkles } from 'lucide-react';
 import { compressImageFile } from '@/utils/imageCompressor';
 import { MediaSelectorModal } from '@/components/admin/MediaSelectorModal';
+import { SectionVisibilityToggle } from '@/components/admin/SectionVisibilityToggle';
 
 export default function DigitalSolutionsHappimonialsPage() {
     const [happimonials, setHappimonials] = useState<any[]>([]);
@@ -153,14 +154,20 @@ export default function DigitalSolutionsHappimonialsPage() {
 
     return (
         <div className="max-w-6xl mx-auto pb-12">
-            <div className="mb-8 flex justify-between items-end">
+            <div className="mb-8 flex flex-col sm:flex-row justify-between sm:items-end gap-4">
                 <div>
                     <h2 className="text-2xl font-bold tracking-tight text-[#111827] mb-2">Digital Solutions Happimonials</h2>
                     <p className="text-[#6B7280]">Manage client success stories for the Digital Solutions section.</p>
                 </div>
-                <button onClick={() => handleOpenModal()} className="bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-2">
-                    <Plus className="w-4 h-4" /> Add Testimonial
-                </button>
+                <div className="flex flex-wrap items-center gap-3 self-start sm:self-auto">
+                    <SectionVisibilityToggle
+                        sectionKey="digitalSolutions_happimonials"
+                        sectionLabel="Happimonials Section"
+                    />
+                    <button onClick={() => handleOpenModal()} className="bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-2">
+                        <Plus className="w-4 h-4" /> Add Testimonial
+                    </button>
+                </div>
             </div>
 
             <div className="admin-card overflow-hidden">

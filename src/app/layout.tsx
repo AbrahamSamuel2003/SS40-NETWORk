@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Inter, Playfair_Display, Crimson_Pro } from "next/font/google";
 import NextTopLoader from "nextjs-toploader";
 import "./globals.css";
 import { getSiteConfig } from "@/lib/site-config";
@@ -16,6 +16,16 @@ const inter = Inter({
 const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],
+  display: "swap",
+  adjustFontFallback: true,
+  preload: true,
+});
+
+const crimsonPro = Crimson_Pro({
+  variable: "--font-crimson-pro",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  style: ["normal", "italic"],
   display: "swap",
   adjustFontFallback: true,
   preload: true,
@@ -247,7 +257,7 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" className={`${inter.variable} ${playfair.variable} antialiased`} suppressHydrationWarning>
+    <html lang="en" className={`${inter.variable} ${playfair.variable} ${crimsonPro.variable} antialiased`} suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"

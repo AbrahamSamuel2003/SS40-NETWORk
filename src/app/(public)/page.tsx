@@ -8,7 +8,7 @@ import { InteractiveImpactShowcase } from "@/components/home/InteractiveImpactSh
 import { TrustedBy } from "@/components/home/TrustedBy";
 import { ContactSection } from "@/components/home/ContactSection";
 import { prisma } from "@/lib/prisma";
-import { getSiteConfig } from "@/lib/site-config";
+import { getSiteConfig, isSectionVisible } from "@/lib/site-config";
 
 // Sub-15ms TTFB: ISR memory caching with 60s background revalidation
 export const revalidate = 60;
@@ -136,12 +136,14 @@ export default async function Home() {
 
       {/* Below the fold (GPU-accelerated with content-visibility containment) */}
       <BusinessWings />
-      <SuccessStories data={happimonials} />
-      <ActivityUpdates data={activities} />
+      {isSectionVisible(config, 'home_happimonials') && <SuccessStories data={happimonials} />}
+      {isSectionVisible(config, 'home_activities') && <ActivityUpdates data={activities} />}
       <InteractiveImpactShowcase />
-      <div className="cv-auto">
-        <TrustedBy data={logos} />
-      </div>
+      {isSectionVisible(config, 'home_logos') && (
+        <div className="cv-auto">
+          <TrustedBy data={logos} />
+        </div>
+      )}
       <div className="cv-auto">
         <ContactSection config={config} />
       </div>

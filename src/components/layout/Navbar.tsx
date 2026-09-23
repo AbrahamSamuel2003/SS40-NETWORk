@@ -82,7 +82,7 @@ export function Navbar({ config }: { config?: SiteConfigData | null }) {
             // Mobile: Always solid frosted background.
             // Desktop: 100% transparent at the top of all pages (no bg, no blur), high-transparency frosted glass on scroll.
             className={cn(
-                "fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] transform-gpu",
+                "fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] transform-gpu font-crimson font-serif",
                 "bg-white/95 backdrop-blur-xl shadow-xs border-b border-gray-200/50",
                 isTop
                     ? "md:bg-transparent md:border-transparent md:shadow-none md:backdrop-blur-none"
@@ -109,13 +109,13 @@ export function Navbar({ config }: { config?: SiteConfigData | null }) {
                                 priority
                             />
                         )}
-                        <span className="text-xl md:text-2xl font-black tracking-tight text-[var(--color-heading)] shrink-0 min-w-0 truncate max-w-[180px] sm:max-w-none font-times">
+                        <span className="text-xl md:text-2xl font-black tracking-tight text-[var(--color-heading)] shrink-0 min-w-0 truncate max-w-[180px] sm:max-w-none font-crimson">
                             SS40 <span className="text-[var(--color-primary-hover)] font-black">NETWORK</span>
                         </span>
                     </Link>
 
                     {/* Desktop Navigation */}
-                    <nav aria-label="Main Navigation" className="hidden md:flex items-center gap-1 xl:gap-2">
+                    <nav aria-label="Main Navigation" className="hidden md:flex items-center gap-1 xl:gap-2 font-crimson">
                         {NAV_LINKS.map((link) => {
                             const isActive = pathname === link.href;
                             return (
@@ -123,7 +123,7 @@ export function Navbar({ config }: { config?: SiteConfigData | null }) {
                                     key={link.name}
                                     href={link.href}
                                     className={cn(
-                                        "px-4 py-2 text-sm transition-all duration-200 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F766E] outline-offset-2",
+                                        "px-4 py-2 text-base transition-all duration-200 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F766E] outline-offset-2 font-crimson",
                                         isActive
                                             ? "text-[#0F766E] font-bold bg-[#D8E8E2]"
                                             : "text-[#374151] font-medium hover:text-[#111827] hover:bg-gray-100"
@@ -137,8 +137,8 @@ export function Navbar({ config }: { config?: SiteConfigData | null }) {
                     </nav>
 
                     {/* Desktop CTA */}
-                    <div className="hidden md:flex items-center gap-3">
-                        <Button asChild size="sm" className="md:px-6">
+                    <div className="hidden md:flex items-center gap-3 font-crimson">
+                        <Button asChild size="sm" className="md:px-6 font-crimson font-bold text-sm">
                             <Link href="/contact">Contact Us</Link>
                         </Button>
                     </div>

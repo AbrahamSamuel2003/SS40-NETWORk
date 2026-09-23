@@ -18,6 +18,7 @@ export interface SiteConfigData {
     urlInstagram: string | null;
     seoDefaultTitle: string;
     seoDefaultDescription: string;
+    sectionVisibility?: Record<string, boolean> | null;
 }
 
 export const DEFAULT_SITE_CONFIG: SiteConfigData = {
@@ -36,8 +37,18 @@ export const DEFAULT_SITE_CONFIG: SiteConfigData = {
     urlYoutube: null,
     urlInstagram: null,
     seoDefaultTitle: "SS40 NETWORK PRIVATE LIMITED — Enterprise Digital Solutions, SaaS Products and Tech Academics",
-    seoDefaultDescription: "Architecting high-scale digital systems, intelligent SaaS products, and career-launching tech academics by SS40 NETWORK PRIVATE LIMITED. Built in India. Thinking Globally."
+    seoDefaultDescription: "Architecting high-scale digital systems, intelligent SaaS products, and career-launching tech academics by SS40 NETWORK PRIVATE LIMITED. Built in India. Thinking Globally.",
+    sectionVisibility: {}
 };
+
+export function isSectionVisible(config: SiteConfigData | null | undefined, sectionKey: string): boolean {
+    if (!config || !config.sectionVisibility) return true; // Visible by default
+    const visibility = config.sectionVisibility as Record<string, boolean>;
+    if (typeof visibility[sectionKey] === 'boolean') {
+        return visibility[sectionKey];
+    }
+    return true; // Default to visible
+}
 
 export const getSiteConfig = unstable_cache(
     async function (): Promise<SiteConfigData | null> {
@@ -45,8 +56,7 @@ export const getSiteConfig = unstable_cache(
             return DEFAULT_SITE_CONFIG;
         }
         try {
-            const config = await prisma.siteConfig.findUnique({
-                where: { id: 1 },
+            const config = await prisma.siteConfig.findFirst({
                 select: {
                     companyName: true,
                     legalName: true,
@@ -64,14 +74,33 @@ export const getSiteConfig = unstable_cache(
                     urlInstagram: true,
                     seoDefaultTitle: true,
                     seoDefaultDescription: true,
+                    sectionVisibility: true,
                 }
             });
-            return config || DEFAULT_SITE_CONFIG;
+            if (!config) return DEFAULT_SITE_CONFIG;
+            return {
+                ...config,
+                sectionVisibility: (config.sectionVisibility as Record<string, boolean>) || {}
+            };
         } catch (e) {
-            console.warn('Database offline or unreachable, returning default site config fallback.');
+            try {
+                const rows: any = await prisma.$queryRawUnsafe(`SELECT * FROM "SiteConfig" LIMIT 1`);
+                if (rows && rows.length > 0) {
+                    const row = rows[0];
+                    let secVis = {};
+                    if (row.sectionVisibility) {
+                        secVis = typeof row.sectionVisibility === 'string' ? JSON.parse(row.sectionVisibility) : row.sectionVisibility;
+                    }
+                    return {
+                        ...DEFAULT_SITE_CONFIG,
+                        ...row,
+                        sectionVisibility: secVis
+                    };
+                }
+            } catch {}
             return DEFAULT_SITE_CONFIG;
         }
     },
     ['site-config'],
-    { tags: ['site-config'], revalidate: 3600 }
+    { tags: ['site-config'], revalidate: 60 }
 );

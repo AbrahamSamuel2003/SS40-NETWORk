@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import { Plus, Edit2, Trash2, CheckCircle2, AlertCircle, Upload, X, Crop, Move, ZoomIn, ZoomOut, Check, ArrowUp, ArrowDown, Image as ImageIcon, Sparkles, ExternalLink, RefreshCw } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Plus, Edit2, Trash2, CheckCircle2, AlertCircle, Upload, X, ArrowUp, ArrowDown, Image as ImageIcon, Sparkles, ExternalLink } from 'lucide-react';
 import { compressImageFile } from '@/utils/imageCompressor';
 import { MediaSelectorModal } from '@/components/admin/MediaSelectorModal';
+import { SectionVisibilityToggle } from '@/components/admin/SectionVisibilityToggle';
 
 export default function ManagedProductsPage() {
     const [products, setProducts] = useState<any[]>([]);
@@ -26,78 +27,6 @@ export default function ManagedProductsPage() {
     const [isMediaSelectorOpen, setIsMediaSelectorOpen] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
-
-    // Image Cropper States
-    const [editorImage, setEditorImage] = useState<string | null>(null);
-    const [zoom, setZoom] = useState(1);
-    const [position, setPosition] = useState({ x: 0, y: 0 });
-    const [isDragging, setIsDragging] = useState(false);
-    const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-    const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
-    // Redraw canvas on changes
-    useEffect(() => {
-        if (!editorImage || !canvasRef.current) return;
-        const canvas = canvasRef.current;
-        const ctx = canvas.getContext('2d');
-        if (!ctx) return;
-
-        const img = new Image();
-        img.crossOrigin = 'anonymous'; // prevent tainted canvas issues
-        img.onload = () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // Draw image relative to current zoom and drag position
-            const w = img.width * zoom;
-            const h = img.height * zoom;
-            ctx.drawImage(img, position.x, position.y, w, h);
-        };
-        img.src = editorImage;
-    }, [editorImage, zoom, position]);
-
-    const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
-        setIsDragging(true);
-        setDragStart({ x: e.clientX - position.x, y: e.clientY - position.y });
-    };
-
-    const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
-        if (!isDragging) return;
-        setPosition({
-            x: e.clientX - dragStart.x,
-            y: e.clientY - dragStart.y
-        });
-    };
-
-    const handleMouseUp = () => {
-        setIsDragging(false);
-    };
-
-    const handleApplyCrop = () => {
-        if (!canvasRef.current) return;
-        setIsUploading(true);
-        canvasRef.current.toBlob(async (blob) => {
-            if (!blob) {
-                setIsUploading(false);
-                return;
-            }
-            try {
-                const formData = new FormData();
-                formData.append('file', blob, 'cropped-product.png');
-                const res = await fetch('/api/admin/media/upload', { method: 'POST', body: formData });
-                const data = await res.json();
-                if (data.success) {
-                    setScreenshotUrl(data.data.url);
-                    setEditorImage(null); // Hide editor
-                } else {
-                    alert('Failed to save cropped image.');
-                }
-            } catch (e) {
-                alert('Upload error.');
-            } finally {
-                setIsUploading(false);
-            }
-        }, 'image/png');
-    };
 
     useEffect(() => {
         fetchData();
@@ -154,19 +83,19 @@ export default function ManagedProductsPage() {
         const rawFile = e.target.files[0];
         setIsUploading(true);
         try {
-            const file = await compressImageFile(rawFile);
+            const file = await compressImageFile(rawFile, { maxWidth: 1600, maxHeight: 1600, quality: 0.85 });
             const formData = new FormData();
             formData.append('file', file);
             formData.append('pageScope', 'PRODUCTS');
             const res = await fetch('/api/admin/media/upload', { method: 'POST', body: formData });
             const data = await res.json();
             if (data.success) {
-                setEditorImage(data.data.url);
-                setZoom(1);
-                setPosition({ x: 0, y: 0 });
+                setScreenshotUrl(data.data.url);
             } else {
                 alert('Upload failed');
             }
+        } catch (err) {
+            alert('Upload error occurred');
         } finally {
             setIsUploading(false);
             if (e.target) e.target.value = '';
@@ -233,14 +162,20 @@ export default function ManagedProductsPage() {
 
     return (
         <div className="max-w-6xl mx-auto pb-12">
-            <div className="mb-8 flex justify-between items-end">
+            <div className="mb-8 flex flex-col sm:flex-row justify-between sm:items-end gap-4">
                 <div>
                     <h2 className="text-2xl font-bold tracking-tight text-[#111827] mb-2">Managed Products</h2>
                     <p className="text-[#6B7280]">Manage software products displayed on the Products page.</p>
                 </div>
-                <button onClick={() => handleOpenModal()} className="bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-2">
-                    <Plus className="w-4 h-4" /> Add Product
-                </button>
+                <div className="flex flex-wrap items-center gap-3 self-start sm:self-auto">
+                    <SectionVisibilityToggle
+                        sectionKey="products_showcase"
+                        sectionLabel="Products Showcase"
+                    />
+                    <button onClick={() => handleOpenModal()} className="bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-2">
+                        <Plus className="w-4 h-4" /> Add Product
+                    </button>
+                </div>
             </div>
 
             <div className="admin-card overflow-hidden">
@@ -394,54 +329,14 @@ export default function ManagedProductsPage() {
                                 </div>
 
                                 <div>
-                                    <label className="block text-xs font-medium text-[#374151] mb-1">Product Screenshot</label>
-                                    <p className="text-[10px] text-[#9CA3AF] mb-2">Fits standard aspect ratio 16:9 on website. You can edit/crop below after selection.</p>
-                                    
-                                    {/* Crop Editor Canvas Workspace */}
-                                    {editorImage && (
-                                        <div className="border border-[#6B9F91]/40 rounded-xl p-3 bg-[#D8E8E2]/20 mb-3 space-y-3">
-                                            <div className="flex justify-between items-center">
-                                                <span className="text-[10px] font-bold text-[#6B9F91] uppercase tracking-wider">Image Editor (Ratio: 16:9)</span>
-                                            </div>
-                                            <div className="flex items-center justify-center bg-gray-900 rounded-lg overflow-hidden relative cursor-move">
-                                                <canvas 
-                                                    ref={canvasRef} 
-                                                    width={480} 
-                                                    height={270} 
-                                                    onMouseDown={handleMouseDown}
-                                                    onMouseMove={handleMouseMove}
-                                                    onMouseUp={handleMouseUp}
-                                                    onMouseLeave={handleMouseUp}
-                                                    className="max-w-full aspect-video object-contain border border-gray-800"
-                                                />
-                                                <div className="absolute bottom-2 left-2 right-2 flex justify-between bg-black/60 backdrop-blur-sm p-1.5 rounded-lg">
-                                                    <span className="text-[9px] text-white flex items-center">Drag image to position crop</span>
-                                                    <div className="flex items-center gap-2">
-                                                        <button type="button" onClick={() => setZoom(z => Math.max(0.2, z - 0.1))} className="p-1 hover:bg-white/10 rounded text-white" title="Zoom Out"><ZoomOut className="w-3.5 h-3.5" /></button>
-                                                        <span className="text-[9px] text-white font-mono">{Math.round(zoom * 100)}%</span>
-                                                        <button type="button" onClick={() => setZoom(z => Math.min(5, z + 0.1))} className="p-1 hover:bg-white/10 rounded text-white" title="Zoom In"><ZoomIn className="w-3.5 h-3.5" /></button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="flex gap-2">
-                                                <button type="button" onClick={handleApplyCrop} disabled={isUploading} className="flex-1 flex items-center justify-center gap-1.5 bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] py-1.5 rounded-lg text-xs font-medium disabled:opacity-50">
-                                                    <Check className="w-3.5 h-3.5" /> {isUploading ? 'Saving...' : 'Apply & Save Crop'}
-                                                </button>
-                                                <button type="button" onClick={() => setEditorImage(null)} className="px-3 bg-white hover:bg-gray-50 border border-gray-200 text-gray-500 rounded-lg text-xs font-medium">
-                                                    Cancel
-                                                </button>
-                                            </div>
-                                        </div>
-                                    )}
+                                    <label className="block text-xs font-medium text-[#374151] mb-1">Product Screenshot / Artwork</label>
+                                    <p className="text-[10px] text-[#9CA3AF] mb-2">Upload your clean product UI screenshot or mockup. It will automatically adapt and display at its original aspect ratio.</p>
 
-                                    {screenshotUrl && !editorImage && (
-                                        <div className="relative w-full aspect-video bg-gray-50 rounded-lg overflow-hidden border border-gray-200 mb-3 group flex items-center justify-center">
-                                            <img src={screenshotUrl} alt="Screenshot" className="w-full h-full object-cover" />
+                                    {screenshotUrl && (
+                                        <div className="relative w-full max-h-[220px] bg-gray-50 rounded-xl overflow-hidden border border-gray-200 mb-3 group flex items-center justify-center p-2">
+                                            <img src={screenshotUrl} alt="Product preview" className="max-h-[200px] w-auto max-w-full object-contain rounded-lg shadow-xs select-none" />
                                             <div className="absolute top-2 right-2 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <button type="button" onClick={() => { setEditorImage(screenshotUrl); setZoom(1); setPosition({ x: 0, y: 0 }); }} className="bg-white/90 p-1.5 rounded-full text-gray-500 hover:text-[#6B9F91] shadow-sm" title="Edit / Recrop">
-                                                    <RefreshCw className="w-3.5 h-3.5" />
-                                                </button>
-                                                <button type="button" onClick={() => setScreenshotUrl('')} className="bg-white/90 p-1.5 rounded-full text-gray-500 hover:text-red-500 shadow-sm" title="Delete">
+                                                <button type="button" onClick={() => setScreenshotUrl('')} className="bg-white/95 p-1.5 rounded-full text-gray-500 hover:text-red-500 shadow-md transition-colors" title="Remove image">
                                                     <X className="w-3.5 h-3.5" />
                                                 </button>
                                             </div>
@@ -451,19 +346,13 @@ export default function ManagedProductsPage() {
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                         <label className={`flex items-center justify-center gap-2 border border-gray-200 bg-white hover:bg-gray-50 rounded-lg px-4 py-2 cursor-pointer transition-colors ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}>
                                             <Upload className="w-4 h-4 text-gray-500" />
-                                            <span className="text-xs font-medium text-[#374151]">{isUploading ? 'Uploading...' : 'Upload Local File'}</span>
+                                            <span className="text-xs font-medium text-[#374151]">{isUploading ? 'Uploading...' : screenshotUrl ? 'Replace with Local File' : 'Upload Local File'}</span>
                                             <input type="file" accept="image/*" onChange={handleUploadLocal} className="hidden" disabled={isUploading} />
                                         </label>
                                         <button type="button" onClick={() => setIsMediaSelectorOpen(true)} className="flex items-center justify-center gap-2 border border-[#6B9F91]/30 bg-[#D8E8E2]/50 hover:bg-[#D8E8E2] rounded-lg px-4 py-2 transition-colors">
                                             <ImageIcon className="w-4 h-4 text-[#6B9F91]" />
                                             <span className="text-xs font-medium text-[#111827]">Select from Media</span>
                                         </button>
-                                        {screenshotUrl && !editorImage && (
-                                            <button type="button" onClick={() => { setEditorImage(screenshotUrl); setZoom(1); setPosition({ x: 0, y: 0 }); }} className="col-span-1 sm:col-span-2 flex items-center justify-center gap-2 border border-blue-200 bg-blue-50/50 hover:bg-blue-50 text-blue-600 rounded-lg px-4 py-2 transition-colors">
-                                                <RefreshCw className="w-4 h-4" />
-                                                <span className="text-xs font-medium">Edit / Recrop</span>
-                                            </button>
-                                        )}
                                     </div>
                                 </div>
 
@@ -495,9 +384,7 @@ export default function ManagedProductsPage() {
                 <MediaSelectorModal
                     onClose={() => setIsMediaSelectorOpen(false)}
                     onSelect={(url) => {
-                        setEditorImage(url);
-                        setZoom(1);
-                        setPosition({ x: 0, y: 0 });
+                        setScreenshotUrl(url);
                         setIsMediaSelectorOpen(false);
                     }}
                 />

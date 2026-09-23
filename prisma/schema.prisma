@@ -32,6 +32,7 @@ model SiteConfig {
   urlInstagram           String?
   seoDefaultTitle        String
   seoDefaultDescription  String
+  sectionVisibility      Json?
   createdAt              DateTime @default(now())
   updatedAt              DateTime @updatedAt
 }

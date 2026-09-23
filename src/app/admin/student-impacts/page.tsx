@@ -1,10 +1,11 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, CheckCircle2, AlertCircle, Upload, X, Film, Image as ImageIcon, Sparkles, Star } from 'lucide-react';
 import { compressImageFile } from '@/utils/imageCompressor';
 import { useRouter } from 'next/navigation';
 import { MediaSelectorModal } from '@/components/admin/MediaSelectorModal';
+import { SectionVisibilityToggle } from '@/components/admin/SectionVisibilityToggle';
 
 export default function StudentImpactsPage() {
     const router = useRouter();
@@ -178,17 +179,23 @@ export default function StudentImpactsPage() {
 
     return (
         <div className="max-w-6xl mx-auto pb-12 pt-8">
-            <div className="mb-8 flex justify-between items-end">
+            <div className="mb-8 flex flex-col sm:flex-row justify-between sm:items-end gap-4">
                 <div>
                     <h2 className="text-2xl font-bold tracking-tight text-[#111827] mb-2">Student Impacts</h2>
                     <p className="text-[#6B7280]">Manage student testimonials and videos displayed in Academics.</p>
                 </div>
-                <button
-                    onClick={() => handleOpenModal()}
-                    className="bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-4 py-2 rounded-lg font-medium text-sm transition-colors flex items-center gap-2"
-                >
-                    <Plus className="w-4 h-4" /> Add Impact
-                </button>
+                <div className="flex flex-wrap items-center gap-3 self-start sm:self-auto">
+                    <SectionVisibilityToggle
+                        sectionKey="academics_studentImpacts"
+                        sectionLabel="Student Impacts"
+                    />
+                    <button
+                        onClick={() => handleOpenModal()}
+                        className="bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-4 py-2 rounded-lg font-medium text-sm transition-colors flex items-center gap-2"
+                    >
+                        <Plus className="w-4 h-4" /> Add Impact
+                    </button>
+                </div>
             </div>
 
             <div className="admin-card overflow-hidden">

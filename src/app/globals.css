@@ -41,11 +41,12 @@
   --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
   --shadow-surface: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
 
-  /* Fonts */
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-playfair), Georgia, Cambria, "Times New Roman", Times, serif;
-  --font-heading: var(--font-playfair), Georgia, Cambria, "Times New Roman", Times, serif;
-  --font-times: "Times New Roman", Times, Baskerville, Georgia, serif;
+  /* Fonts - Universal Crimson Pro Typography System */
+  --font-sans: var(--font-crimson-pro), Georgia, "Times New Roman", serif;
+  --font-serif: var(--font-crimson-pro), Georgia, "Times New Roman", serif;
+  --font-heading: var(--font-crimson-pro), Georgia, "Times New Roman", serif;
+  --font-times: var(--font-crimson-pro), Georgia, "Times New Roman", serif;
+  --font-crimson: var(--font-crimson-pro), Georgia, "Times New Roman", serif;
 }
 
 @layer base {
@@ -53,6 +54,7 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-family: var(--font-crimson-pro), Georgia, "Times New Roman", serif;
   }
 
   /* Lenis Smooth Scroll Engine Architecture */
@@ -79,7 +81,7 @@
   body {
     background-color: var(--color-background);
     color: var(--color-body-text);
-    font-family: var(--font-sans);
+    font-family: var(--font-crimson-pro), Georgia, "Times New Roman", serif;
     line-height: 1.6;
     overflow-x: hidden;
   }
@@ -91,24 +93,46 @@
   h5,
   h6 {
     color: var(--color-heading);
-    font-family: var(--font-heading);
+    font-family: var(--font-crimson-pro), Georgia, "Times New Roman", serif;
     font-weight: 700;
     line-height: 1.2;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.015em;
+  }
+
+  p,
+  span,
+  a,
+  button,
+  input,
+  textarea,
+  select,
+  label,
+  li,
+  blockquote,
+  th,
+  td,
+  nav,
+  header,
+  footer {
+    font-family: var(--font-crimson-pro), Georgia, "Times New Roman", serif;
+  }
+
+  code,
+  kbd,
+  samp,
+  pre {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   }
 }
 
 @layer utilities {
-  .font-serif {
-    font-family: var(--font-serif);
-  }
-
-  .font-heading {
-    font-family: var(--font-heading);
-  }
-
+  .home-crimson-page,
+  .font-crimson,
+  .font-serif,
+  .font-sans,
+  .font-heading,
   .font-times {
-    font-family: var(--font-times);
+    font-family: var(--font-crimson-pro), Georgia, "Times New Roman", serif !important;
   }
 
   .text-hero-title {

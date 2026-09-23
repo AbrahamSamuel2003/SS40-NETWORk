@@ -37,9 +37,11 @@ export const metadata: Metadata = {
 export const revalidate = 60;
 
 import { prisma } from "@/lib/prisma";
+import { getSiteConfig, isSectionVisible } from "@/lib/site-config";
 
 export default async function ProductsPage() {
-    const [products, happimonials, logos] = await Promise.all([
+    const [config, products, happimonials, logos] = await Promise.all([
+        getSiteConfig(),
         prisma.product.findMany({
             where: { isActive: true },
             orderBy: [
@@ -109,15 +111,21 @@ export default async function ProductsPage() {
             />
             {/* Above the fold (Critical Path) */}
             <Hero />
-            <FeaturedProduct initialData={products} />
+            {isSectionVisible(config, 'products_showcase') && (
+                <FeaturedProduct initialData={products} />
+            )}
 
             {/* Below the fold (GPU-accelerated with content-visibility containment) */}
-            <div className="cv-auto">
-                <ProductImpacts initialData={happimonials} />
-            </div>
-            <div className="cv-auto">
-                <Brands initialData={logos} />
-            </div>
+            {isSectionVisible(config, 'products_testimonials') && (
+                <div className="cv-auto">
+                    <ProductImpacts initialData={happimonials} />
+                </div>
+            )}
+            {isSectionVisible(config, 'products_logos') && (
+                <div className="cv-auto">
+                    <Brands initialData={logos} />
+                </div>
+            )}
             <div className="cv-auto">
                 <BookDemo />
             </div>

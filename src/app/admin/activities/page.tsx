@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
 import { compressImageFile } from '@/utils/imageCompressor';
@@ -34,6 +34,7 @@ import {
     Users
 } from 'lucide-react';
 import { MediaSelectorModal } from '@/components/admin/MediaSelectorModal';
+import { SectionVisibilityToggle } from '@/components/admin/SectionVisibilityToggle';
 
 export const ACTIVITY_TYPES = [
     { value: 'GOVERNMENT_OFFICIAL', label: 'Government / Official', icon: Building2, color: 'bg-amber-100 text-amber-800 border-amber-300' },
@@ -321,12 +322,18 @@ export default function ManagedActivitiesPage() {
                         Manage company field visits, government dialogues, partnerships, and founder updates displayed on the Home page.
                     </p>
                 </div>
-                <button
-                    onClick={() => handleOpenModal()}
-                    className="bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-4 py-2.5 rounded-lg font-semibold text-sm flex items-center gap-2 shadow-sm transition-colors self-start sm:self-auto"
-                >
-                    <Plus className="w-4 h-4" /> Add Activity / Blog
-                </button>
+                <div className="flex flex-wrap items-center gap-3 self-start sm:self-auto">
+                    <SectionVisibilityToggle
+                        sectionKey="home_activities"
+                        sectionLabel="Home Blogs & Activities"
+                    />
+                    <button
+                        onClick={() => handleOpenModal()}
+                        className="bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-4 py-2.5 rounded-lg font-semibold text-sm flex items-center gap-2 shadow-sm transition-colors"
+                    >
+                        <Plus className="w-4 h-4" /> Add Activity / Blog
+                    </button>
+                </div>
             </div>
 
             {/* Filter & Search Bar */}

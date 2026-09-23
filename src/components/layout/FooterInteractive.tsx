@@ -19,7 +19,7 @@ export function FooterInteractive({ children }: { children: React.ReactNode }) {
     return (
         <footer 
             ref={containerRef}
-            className="relative w-full bg-gray-50 border-t border-[var(--color-border)] pt-16 pb-8 overflow-hidden"
+            className="relative w-full bg-gray-50 border-t border-[var(--color-border)] pt-16 pb-8 overflow-hidden font-crimson font-serif"
             onMouseMove={handleMouseMove}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}

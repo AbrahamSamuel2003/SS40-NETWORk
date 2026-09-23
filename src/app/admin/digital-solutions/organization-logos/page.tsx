@@ -5,6 +5,7 @@ import { Plus, Edit2, Trash2, CheckCircle2, AlertCircle, Upload, X, Image as Ima
 import { compressImageFile } from '@/utils/imageCompressor';
 import { useRouter } from 'next/navigation';
 import { MediaSelectorModal } from '@/components/admin/MediaSelectorModal';
+import { SectionVisibilityToggle } from '@/components/admin/SectionVisibilityToggle';
 
 export default function DigitalSolutionsLogosPage() {
     const router = useRouter();
@@ -165,17 +166,23 @@ export default function DigitalSolutionsLogosPage() {
 
     return (
         <div className="max-w-5xl mx-auto pb-12">
-            <div className="mb-8 flex justify-between items-end">
+            <div className="mb-8 flex flex-col sm:flex-row justify-between sm:items-end gap-4">
                 <div>
                     <h2 className="text-2xl font-bold tracking-tight text-[#111827] mb-2">Digital Solutions Logos</h2>
                     <p className="text-[#6B7280]">Manage logos for the Digital Solutions "Trusted Clients" section.</p>
                 </div>
-                <button
-                    onClick={() => handleOpenModal()}
-                    className="bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-4 py-2 rounded-lg font-medium text-sm transition-colors flex items-center gap-2"
-                >
-                    <Plus className="w-4 h-4" /> Add Logo
-                </button>
+                <div className="flex flex-wrap items-center gap-3 self-start sm:self-auto">
+                    <SectionVisibilityToggle
+                        sectionKey="digitalSolutions_logos"
+                        sectionLabel="Organization Logos"
+                    />
+                    <button
+                        onClick={() => handleOpenModal()}
+                        className="bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-4 py-2 rounded-lg font-medium text-sm transition-colors flex items-center gap-2"
+                    >
+                        <Plus className="w-4 h-4" /> Add Logo
+                    </button>
+                </div>
             </div>
 
             <div className="admin-card overflow-hidden">

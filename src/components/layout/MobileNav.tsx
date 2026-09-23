@@ -134,7 +134,7 @@ export function MobileNav({ navLinks, config }: MobileNavProps) {
                                 animate={{ x: 0 }}
                                 exit={{ x: "100%" }}
                                 transition={{ type: "tween", ease: [0.16, 1, 0.3, 1], duration: 0.24 }}
-                                className="fixed top-0 right-0 z-[110] h-full w-full max-w-[360px] sm:max-w-sm bg-white shadow-2xl md:hidden flex flex-col overflow-hidden border-l border-gray-100"
+                                className="fixed top-0 right-0 z-[110] h-full w-full max-w-[360px] sm:max-w-sm bg-white shadow-2xl md:hidden flex flex-col overflow-hidden border-l border-gray-100 font-crimson font-serif"
                                 role="dialog"
                                 aria-modal="true"
                                 aria-label="Mobile Navigation Menu"

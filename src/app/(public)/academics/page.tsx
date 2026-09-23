@@ -5,6 +5,7 @@ import { Placements } from "@/components/academics/Placements";
 import { Collaborations } from "@/components/academics/Collaborations";
 import { Collaborate } from "@/components/academics/Collaborate";
 import { prisma } from "@/lib/prisma";
+import { getSiteConfig, isSectionVisible } from "@/lib/site-config";
 
 import type { Metadata } from "next";
 
@@ -41,20 +42,21 @@ export const metadata: Metadata = {
 export const revalidate = 60;
 
 export default async function AcademicsPage() {
-    const studentProjects = await prisma.studentProject.findMany({
-        where: { isActive: true },
-        orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }]
-    }).catch(() => []);
-
-    const studentImpactRecords = await prisma.studentImpact.findMany({
-        where: { isActive: true },
-        orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }]
-    }).catch(() => []);
-
-    const academicLogos = await prisma.organizationLogo.findMany({
-        where: { pageScope: 'ACADEMICS', isActive: true },
-        orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }]
-    }).catch(() => []);
+    const [config, studentProjects, studentImpactRecords, academicLogos] = await Promise.all([
+        getSiteConfig(),
+        prisma.studentProject.findMany({
+            where: { isActive: true },
+            orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }]
+        }).catch(() => []),
+        prisma.studentImpact.findMany({
+            where: { isActive: true },
+            orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }]
+        }).catch(() => []),
+        prisma.organizationLogo.findMany({
+            where: { pageScope: 'ACADEMICS', isActive: true },
+            orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }]
+        }).catch(() => [])
+    ]);
 
     const jsonLd = {
         "@context": "https://schema.org",
@@ -98,12 +100,18 @@ export default async function AcademicsPage() {
             />
             {/* Above the fold (Critical Path) */}
             <Hero />
-            <StudentImpacts impacts={studentImpactRecords} />
+            {isSectionVisible(config, 'academics_studentImpacts') && (
+                <StudentImpacts impacts={studentImpactRecords} />
+            )}
 
             {/* Below the fold */}
-            <BestProjects projects={studentProjects} />
+            {isSectionVisible(config, 'academics_studentProjects') && (
+                <BestProjects projects={studentProjects} />
+            )}
             <Placements />
-            <Collaborations logos={academicLogos} />
+            {isSectionVisible(config, 'academics_logos') && (
+                <Collaborations logos={academicLogos} />
+            )}
             <Collaborate />
         </div>
     );
