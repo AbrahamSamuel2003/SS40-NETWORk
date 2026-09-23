@@ -7,10 +7,10 @@ import { Container } from "@/components/ui/Container";
 import { StudentProjectsList } from "./StudentProjectsList";
 
 export const metadata: Metadata = {
-    title: 'Student Projects | SS40 NETWORK PRIVATE LIMITED',
+    title: 'Live Capstone & Industry Student Projects | SS40 NETWORK PRIVATE LIMITED',
     description: 'Explore live software capstone projects, full-stack web applications, and AI models built by students at SS40 NETWORK PRIVATE LIMITED.',
     alternates: {
-        canonical: 'https://www.ss40network.com/academics/student-projects',
+        canonical: 'https://ss40network.com/academics/student-projects',
     },
 };
 

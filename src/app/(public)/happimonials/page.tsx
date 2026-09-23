@@ -7,31 +7,31 @@ import { Container } from "@/components/ui/Container";
 import { HappimonialsList } from "./HappimonialsList";
 
 export const metadata: Metadata = {
-    title: "Happimonials | SS40 NETWORK PRIVATE LIMITED",
+    title: "Client Stories & Software Success Stories | SS40 NETWORK PRIVATE LIMITED",
     description: "Read verified client testimonials and software development success stories delivered by SS40 NETWORK PRIVATE LIMITED.",
     alternates: {
-        canonical: "https://www.ss40network.com/happimonials",
+        canonical: "https://ss40network.com/happimonials",
     },
     openGraph: {
-        title: "Happimonials | SS40 NETWORK PRIVATE LIMITED",
+        title: "Client Stories & Software Success Stories | SS40 NETWORK PRIVATE LIMITED",
         description: "Read verified client testimonials and software development success stories delivered by SS40 NETWORK PRIVATE LIMITED.",
-        url: "https://www.ss40network.com/happimonials",
+        url: "https://ss40network.com/happimonials",
         siteName: "SS40 NETWORK PRIVATE LIMITED",
         type: "website",
         images: [
             {
-                url: "https://www.ss40network.com/og-image.jpg",
+                url: "https://ss40network.com/og-image.jpg",
                 width: 1200,
                 height: 630,
-                alt: "Happimonials — SS40 NETWORK PRIVATE LIMITED",
+                alt: "Client Stories & Software Success Stories — SS40 NETWORK PRIVATE LIMITED",
             },
         ],
     },
     twitter: {
         card: "summary_large_image",
-        title: "Happimonials | SS40 NETWORK PRIVATE LIMITED",
+        title: "Client Stories & Software Success Stories | SS40 NETWORK PRIVATE LIMITED",
         description: "Read verified client testimonials and software development success stories delivered by SS40 NETWORK PRIVATE LIMITED.",
-        images: ["https://www.ss40network.com/og-image.jpg"],
+        images: ["https://ss40network.com/og-image.jpg"],
     },
 };
 
@@ -57,19 +57,19 @@ export default async function AllHappimonialsPage() {
                         "@type": "ListItem",
                         "position": 1,
                         "name": "Home",
-                        "item": "https://www.ss40network.com/"
+                        "item": "https://ss40network.com/"
                     },
                     {
                         "@type": "ListItem",
                         "position": 2,
                         "name": "Digital Solutions",
-                        "item": "https://www.ss40network.com/digital-solutions"
+                        "item": "https://ss40network.com/digital-solutions"
                     },
                     {
                         "@type": "ListItem",
                         "position": 3,
                         "name": "Happimonials",
-                        "item": "https://www.ss40network.com/happimonials"
+                        "item": "https://ss40network.com/happimonials"
                     }
                 ]
             }

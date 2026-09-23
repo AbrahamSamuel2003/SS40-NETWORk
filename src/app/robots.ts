@@ -5,8 +5,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/admin/', '/api/admin/', '/siva/', '/siva'],
+      disallow: ['/admin/', '/api/admin/', '/siva/', '/siva', '/login'],
     },
-    sitemap: 'https://www.ss40network.com/sitemap.xml',
+    sitemap: 'https://ss40network.com/sitemap.xml',
   };
 }

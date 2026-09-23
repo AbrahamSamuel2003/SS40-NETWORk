@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: ClientProjectPageProps): Prom
         title: `${project.title} | SS40 NETWORK PRIVATE LIMITED`,
         description: project.description || `Enterprise software and digital solutions delivered by SS40 NETWORK PRIVATE LIMITED in ${project.industry || 'technology'}.`,
         alternates: {
-            canonical: `https://www.ss40network.com/client-projects/${id}`,
+            canonical: `https://ss40network.com/client-projects/${id}`,
         },
     };
 }

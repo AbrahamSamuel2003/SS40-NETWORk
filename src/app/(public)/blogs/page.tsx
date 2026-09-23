@@ -7,31 +7,31 @@ import { Container } from "@/components/ui/Container";
 import { BlogsList } from "./BlogsList";
 
 export const metadata: Metadata = {
-    title: "Blogs and Field Updates | SS40 NETWORK PRIVATE LIMITED",
+    title: "Field Updates, Conclaves & Founder Initiatives | SS40 NETWORK PRIVATE LIMITED",
     description: "Explore government official dialogues, academic MoUs, industry visits, conclaves, and founder activities by SS40 NETWORK PRIVATE LIMITED.",
     alternates: {
-        canonical: "https://www.ss40network.com/blogs",
+        canonical: "https://ss40network.com/blogs",
     },
     openGraph: {
-        title: "Blogs and Field Updates | SS40 NETWORK PRIVATE LIMITED",
+        title: "Field Updates, Conclaves & Founder Initiatives | SS40 NETWORK PRIVATE LIMITED",
         description: "Explore government official dialogues, academic MoUs, industry visits, conclaves, and founder activities by SS40 NETWORK PRIVATE LIMITED.",
-        url: "https://www.ss40network.com/blogs",
+        url: "https://ss40network.com/blogs",
         siteName: "SS40 NETWORK PRIVATE LIMITED",
         type: "website",
         images: [
             {
-                url: "https://www.ss40network.com/og-image.jpg",
+                url: "https://ss40network.com/og-image.jpg",
                 width: 1200,
                 height: 630,
-                alt: "Blogs and Field Updates — SS40 NETWORK PRIVATE LIMITED",
+                alt: "Field Updates, Conclaves & Founder Initiatives — SS40 NETWORK PRIVATE LIMITED",
             },
         ],
     },
     twitter: {
         card: "summary_large_image",
-        title: "Blogs and Field Updates | SS40 NETWORK PRIVATE LIMITED",
+        title: "Field Updates, Conclaves & Founder Initiatives | SS40 NETWORK PRIVATE LIMITED",
         description: "Explore government official dialogues, academic MoUs, industry visits, conclaves, and founder activities by SS40 NETWORK PRIVATE LIMITED.",
-        images: ["https://www.ss40network.com/og-image.jpg"],
+        images: ["https://ss40network.com/og-image.jpg"],
     },
 };
 
@@ -49,9 +49,9 @@ export default async function AllBlogsPage() {
     const jsonLd = {
         "@context": "https://schema.org",
         "@type": "CollectionPage",
-        "name": "Blogs and Field Updates",
+        "name": "Field Updates, Conclaves & Founder Initiatives",
         "description": "Explore government official dialogues, academic MoUs, industry visits, conclaves, and founder activities by SS40 NETWORK PRIVATE LIMITED.",
-        "url": "https://www.ss40network.com/blogs",
+        "url": "https://ss40network.com/blogs",
         "publisher": {
             "@type": "Organization",
             "name": "SS40 NETWORK PRIVATE LIMITED"

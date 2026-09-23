@@ -6,20 +6,20 @@ import { Brands } from "@/components/products/Brands";
 import { BookDemo } from "@/components/products/BookDemo";
 
 export const metadata: Metadata = {
-    title: "Products | SS40 NETWORK PRIVATE LIMITED",
-    description: "Explore proprietary high-performance SaaS tools, enterprise ERP systems, and automated software products built by SS40 NETWORK PRIVATE LIMITED.",
+    title: "Innovative Tools. Built for Real Impact. | SS40 NETWORK PRIVATE LIMITED",
+    description: "Discover business-ready SaaS products, invoicing tools, and automated software solutions engineered by SS40 NETWORK PRIVATE LIMITED in Tirunelveli, Tamil Nadu.",
     alternates: {
-        canonical: "https://www.ss40network.com/products",
+        canonical: "https://ss40network.com/products",
     },
     openGraph: {
-        title: "Products | SS40 NETWORK PRIVATE LIMITED",
-        description: "Explore proprietary high-performance SaaS tools, enterprise ERP systems, and automated software products built by SS40 NETWORK PRIVATE LIMITED.",
-        url: "https://www.ss40network.com/products",
+        title: "Innovative Tools. Built for Real Impact. | SS40 NETWORK PRIVATE LIMITED",
+        description: "Discover business-ready SaaS products, invoicing tools, and automated software solutions engineered by SS40 NETWORK PRIVATE LIMITED in Tirunelveli, Tamil Nadu.",
+        url: "https://ss40network.com/products",
         siteName: "SS40 NETWORK PRIVATE LIMITED",
         type: "website",
         images: [
             {
-                url: "https://www.ss40network.com/og-image.jpg",
+                url: "https://ss40network.com/og-image.jpg",
                 width: 1200,
                 height: 630,
                 alt: "Products — SS40 NETWORK PRIVATE LIMITED",
@@ -28,9 +28,9 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: "summary_large_image",
-        title: "Products | SS40 NETWORK PRIVATE LIMITED",
-        description: "Explore proprietary high-performance SaaS tools, enterprise ERP systems, and automated software products built by SS40 NETWORK PRIVATE LIMITED.",
-        images: ["https://www.ss40network.com/og-image.jpg"],
+        title: "Innovative Tools. Built for Real Impact. | SS40 NETWORK PRIVATE LIMITED",
+        description: "Discover business-ready SaaS products, invoicing tools, and automated software solutions engineered by SS40 NETWORK PRIVATE LIMITED in Tirunelveli, Tamil Nadu.",
+        images: ["https://ss40network.com/og-image.jpg"],
     },
 };
 
@@ -75,19 +75,19 @@ export default async function ProductsPage() {
                         "@type": "ListItem",
                         "position": 1,
                         "name": "Home",
-                        "item": "https://www.ss40network.com/"
+                        "item": "https://ss40network.com/"
                     },
                     {
                         "@type": "ListItem",
                         "position": 2,
                         "name": "Products",
-                        "item": "https://www.ss40network.com/products"
+                        "item": "https://ss40network.com/products"
                     }
                 ]
             },
             {
                 "@type": "Product",
-                "@id": "https://www.ss40network.com/products#software",
+                "@id": "https://ss40network.com/products#software",
                 "name": "Enterprise Software & SaaS Suite",
                 "brand": {
                     "@type": "Brand",
@@ -96,7 +96,7 @@ export default async function ProductsPage() {
                 "manufacturer": {
                     "@type": "Organization",
                     "name": "SS40 NETWORK PRIVATE LIMITED",
-                    "url": "https://www.ss40network.com"
+                    "url": "https://ss40network.com"
                 },
                 "description": "Comprehensive SaaS products and automated enterprise tools engineered for modern business scalability by SS40 NETWORK PRIVATE LIMITED."
             }

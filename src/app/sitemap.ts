@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { prisma } from '@/lib/prisma';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const baseUrl = 'https://www.ss40network.com';
+    const baseUrl = 'https://ss40network.com';
 
     // Static routes with explicit priority + changeFrequency per page.
     // Priority signal is used by Google to determine sitelink prominence order.

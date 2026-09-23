@@ -8,20 +8,20 @@ import { TrustedClients } from "@/components/digital-solutions/TrustedClients";
 import { GetQuote } from "@/components/digital-solutions/GetQuote";
 
 export const metadata: Metadata = {
-    title: "Digital Solutions | SS40 NETWORK PRIVATE LIMITED",
-    description: "Empowering enterprises with custom software, full-stack web applications, AI automation, and cloud infrastructure engineered by SS40 NETWORK PRIVATE LIMITED.",
+    title: "Engineering Digital Experiences That Scale | SS40 NETWORK PRIVATE LIMITED",
+    description: "Custom software development company in Tirunelveli delivering enterprise web applications, mobile apps, and scalable AI solutions by SS40 NETWORK PRIVATE LIMITED.",
     alternates: {
-        canonical: "https://www.ss40network.com/digital-solutions",
+        canonical: "https://ss40network.com/digital-solutions",
     },
     openGraph: {
-        title: "Digital Solutions | SS40 NETWORK PRIVATE LIMITED",
-        description: "Empowering enterprises with custom software, full-stack web applications, AI automation, and cloud infrastructure engineered by SS40 NETWORK PRIVATE LIMITED.",
-        url: "https://www.ss40network.com/digital-solutions",
+        title: "Engineering Digital Experiences That Scale | SS40 NETWORK PRIVATE LIMITED",
+        description: "Custom software development company in Tirunelveli delivering enterprise web applications, mobile apps, and scalable AI solutions by SS40 NETWORK PRIVATE LIMITED.",
+        url: "https://ss40network.com/digital-solutions",
         siteName: "SS40 NETWORK PRIVATE LIMITED",
         type: "website",
         images: [
             {
-                url: "https://www.ss40network.com/og-image.jpg",
+                url: "https://ss40network.com/og-image.jpg",
                 width: 1200,
                 height: 630,
                 alt: "Digital Solutions — SS40 NETWORK PRIVATE LIMITED",
@@ -30,9 +30,9 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: "summary_large_image",
-        title: "Digital Solutions | SS40 NETWORK PRIVATE LIMITED",
-        description: "Empowering enterprises with custom software, full-stack web applications, AI automation, and cloud infrastructure engineered by SS40 NETWORK PRIVATE LIMITED.",
-        images: ["https://www.ss40network.com/og-image.jpg"],
+        title: "Engineering Digital Experiences That Scale | SS40 NETWORK PRIVATE LIMITED",
+        description: "Custom software development company in Tirunelveli delivering enterprise web applications, mobile apps, and scalable AI solutions by SS40 NETWORK PRIVATE LIMITED.",
+        images: ["https://ss40network.com/og-image.jpg"],
     },
 };
 
@@ -77,24 +77,24 @@ export default async function DigitalSolutionsPage() {
                         "@type": "ListItem",
                         "position": 1,
                         "name": "Home",
-                        "item": "https://www.ss40network.com/"
+                        "item": "https://ss40network.com/"
                     },
                     {
                         "@type": "ListItem",
                         "position": 2,
                         "name": "Digital Solutions",
-                        "item": "https://www.ss40network.com/digital-solutions"
+                        "item": "https://ss40network.com/digital-solutions"
                     }
                 ]
             },
             {
                 "@type": "Service",
-                "@id": "https://www.ss40network.com/digital-solutions#service",
+                "@id": "https://ss40network.com/digital-solutions#service",
                 "name": "Enterprise Digital Solutions",
                 "provider": {
                     "@type": "Organization",
                     "name": "SS40 NETWORK PRIVATE LIMITED",
-                    "url": "https://www.ss40network.com"
+                    "url": "https://ss40network.com"
                 },
                 "serviceType": "Custom Software Development, Web Applications, AI & Cloud Systems",
                 "areaServed": "Global",

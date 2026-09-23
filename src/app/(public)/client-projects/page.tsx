@@ -7,20 +7,20 @@ import { Container } from "@/components/ui/Container";
 import { ClientProjectsList } from "./ClientProjectsList";
 
 export const metadata: Metadata = {
-    title: "Client Projects | SS40 NETWORK PRIVATE LIMITED",
+    title: "Enterprise Client Projects & Case Studies | SS40 NETWORK PRIVATE LIMITED",
     description: "Explore enterprise client success stories, web apps, and custom software delivered by SS40 NETWORK PRIVATE LIMITED.",
     alternates: {
-        canonical: "https://www.ss40network.com/client-projects",
+        canonical: "https://ss40network.com/client-projects",
     },
     openGraph: {
-        title: "Client Projects | SS40 NETWORK PRIVATE LIMITED",
+        title: "Enterprise Client Projects & Case Studies | SS40 NETWORK PRIVATE LIMITED",
         description: "Explore enterprise client success stories, web apps, and custom software delivered by SS40 NETWORK PRIVATE LIMITED.",
-        url: "https://www.ss40network.com/client-projects",
+        url: "https://ss40network.com/client-projects",
         siteName: "SS40 NETWORK PRIVATE LIMITED",
         type: "website",
         images: [
             {
-                url: "https://www.ss40network.com/og-image.jpg",
+                url: "https://ss40network.com/og-image.jpg",
                 width: 1200,
                 height: 630,
                 alt: "Client Projects — SS40 NETWORK PRIVATE LIMITED",
@@ -29,9 +29,9 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: "summary_large_image",
-        title: "Client Projects | SS40 NETWORK PRIVATE LIMITED",
+        title: "Enterprise Client Projects & Case Studies | SS40 NETWORK PRIVATE LIMITED",
         description: "Explore enterprise client success stories, web apps, and custom software delivered by SS40 NETWORK PRIVATE LIMITED.",
-        images: ["https://www.ss40network.com/og-image.jpg"],
+        images: ["https://ss40network.com/og-image.jpg"],
     },
 };
 
@@ -54,13 +54,13 @@ export default async function AllClientProjectsPage() {
                         "@type": "ListItem",
                         "position": 1,
                         "name": "Home",
-                        "item": "https://www.ss40network.com/"
+                        "item": "https://ss40network.com/"
                     },
                     {
                         "@type": "ListItem",
                         "position": 2,
                         "name": "Client Projects",
-                        "item": "https://www.ss40network.com/client-projects"
+                        "item": "https://ss40network.com/client-projects"
                     }
                 ]
             }

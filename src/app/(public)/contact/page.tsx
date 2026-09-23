@@ -10,20 +10,20 @@ import { getSiteConfig } from "@/lib/site-config";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Contact | SS40 NETWORK PRIVATE LIMITED",
-    description: "Connect with SS40 NETWORK PRIVATE LIMITED in Tirunelveli for custom enterprise software development, product demos, and academic collaborations.",
+    title: "Let's Build Something Amazing Together | SS40 NETWORK PRIVATE LIMITED",
+    description: "Connect with SS40 NETWORK PRIVATE LIMITED in Tirunelveli for custom digital solutions, software products, and academic tech training consultations.",
     alternates: {
-        canonical: "https://www.ss40network.com/contact",
+        canonical: "https://ss40network.com/contact",
     },
     openGraph: {
-        title: "Contact | SS40 NETWORK PRIVATE LIMITED",
-        description: "Connect with SS40 NETWORK PRIVATE LIMITED in Tirunelveli for custom enterprise software development, product demos, and academic collaborations.",
-        url: "https://www.ss40network.com/contact",
+        title: "Let's Build Something Amazing Together | SS40 NETWORK PRIVATE LIMITED",
+        description: "Connect with SS40 NETWORK PRIVATE LIMITED in Tirunelveli for custom digital solutions, software products, and academic tech training consultations.",
+        url: "https://ss40network.com/contact",
         siteName: "SS40 NETWORK PRIVATE LIMITED",
         type: "website",
         images: [
             {
-                url: "https://www.ss40network.com/og-image.jpg",
+                url: "https://ss40network.com/og-image.jpg",
                 width: 1200,
                 height: 630,
                 alt: "Contact — SS40 NETWORK PRIVATE LIMITED",
@@ -32,9 +32,9 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: "summary_large_image",
-        title: "Contact | SS40 NETWORK PRIVATE LIMITED",
-        description: "Connect with SS40 NETWORK PRIVATE LIMITED in Tirunelveli for custom enterprise software development, product demos, and academic collaborations.",
-        images: ["https://www.ss40network.com/og-image.jpg"],
+        title: "Let's Build Something Amazing Together | SS40 NETWORK PRIVATE LIMITED",
+        description: "Connect with SS40 NETWORK PRIVATE LIMITED in Tirunelveli for custom digital solutions, software products, and academic tech training consultations.",
+        images: ["https://ss40network.com/og-image.jpg"],
     },
 };
 
@@ -53,21 +53,21 @@ export default async function ContactPage() {
                         "@type": "ListItem",
                         "position": 1,
                         "name": "Home",
-                        "item": "https://www.ss40network.com/"
+                        "item": "https://ss40network.com/"
                     },
                     {
                         "@type": "ListItem",
                         "position": 2,
                         "name": "Contact",
-                        "item": "https://www.ss40network.com/contact"
+                        "item": "https://ss40network.com/contact"
                     }
                 ]
             },
             {
                 "@type": "ContactPage",
-                "@id": "https://www.ss40network.com/contact#page",
+                "@id": "https://ss40network.com/contact#page",
                 "name": "Contact SS40 NETWORK PRIVATE LIMITED",
-                "url": "https://www.ss40network.com/contact",
+                "url": "https://ss40network.com/contact",
                 "mainEntity": {
                     "@type": "Organization",
                     "name": "SS40 NETWORK PRIVATE LIMITED",

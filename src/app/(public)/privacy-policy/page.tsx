@@ -7,17 +7,17 @@ export const metadata: Metadata = {
     title: "Privacy Policy | SS40 NETWORK PRIVATE LIMITED",
     description: "Learn about how personal information is protected and managed by SS40 NETWORK PRIVATE LIMITED in accordance with international data security standards.",
     alternates: {
-        canonical: "https://www.ss40network.com/privacy-policy",
+        canonical: "https://ss40network.com/privacy-policy",
     },
     openGraph: {
         title: "Privacy Policy | SS40 NETWORK PRIVATE LIMITED",
         description: "Learn about how personal information is protected and managed by SS40 NETWORK PRIVATE LIMITED in accordance with international data security standards.",
-        url: "https://www.ss40network.com/privacy-policy",
+        url: "https://ss40network.com/privacy-policy",
         siteName: "SS40 NETWORK PRIVATE LIMITED",
         type: "website",
         images: [
             {
-                url: "https://www.ss40network.com/og-image.jpg",
+                url: "https://ss40network.com/og-image.jpg",
                 width: 1200,
                 height: 630,
                 alt: "Privacy Policy — SS40 NETWORK PRIVATE LIMITED",
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
         card: "summary_large_image",
         title: "Privacy Policy | SS40 NETWORK PRIVATE LIMITED",
         description: "Learn about how personal information is protected and managed by SS40 NETWORK PRIVATE LIMITED in accordance with international data security standards.",
-        images: ["https://www.ss40network.com/og-image.jpg"],
+        images: ["https://ss40network.com/og-image.jpg"],
     },
 };
 
@@ -43,13 +43,13 @@ export default function PrivacyPolicyPage() {
                         "@type": "ListItem",
                         "position": 1,
                         "name": "Home",
-                        "item": "https://www.ss40network.com/"
+                        "item": "https://ss40network.com/"
                     },
                     {
                         "@type": "ListItem",
                         "position": 2,
                         "name": "Privacy Policy",
-                        "item": "https://www.ss40network.com/privacy-policy"
+                        "item": "https://ss40network.com/privacy-policy"
                     }
                 ]
             }

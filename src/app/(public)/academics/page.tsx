@@ -10,20 +10,20 @@ import { getSiteConfig, isSectionVisible } from "@/lib/site-config";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Academics | SS40 NETWORK PRIVATE LIMITED",
-    description: "Accelerate tech careers with industry-grade software engineering training, AI development, and live capstone projects at SS40 NETWORK PRIVATE LIMITED.",
+    title: "Learn. Build. Grow. | SS40 NETWORK PRIVATE LIMITED",
+    description: "Hands-on tech training and software engineering academy in Tirunelveli empowering students with real client sprint experience and placement prep.",
     alternates: {
-        canonical: "https://www.ss40network.com/academics",
+        canonical: "https://ss40network.com/academics",
     },
     openGraph: {
-        title: "Academics | SS40 NETWORK PRIVATE LIMITED",
-        description: "Accelerate tech careers with industry-grade software engineering training, AI development, and live capstone projects at SS40 NETWORK PRIVATE LIMITED.",
-        url: "https://www.ss40network.com/academics",
+        title: "Learn. Build. Grow. | SS40 NETWORK PRIVATE LIMITED",
+        description: "Hands-on tech training and software engineering academy in Tirunelveli empowering students with real client sprint experience and placement prep.",
+        url: "https://ss40network.com/academics",
         siteName: "SS40 NETWORK PRIVATE LIMITED",
         type: "website",
         images: [
             {
-                url: "https://www.ss40network.com/og-image.jpg",
+                url: "https://ss40network.com/og-image.jpg",
                 width: 1200,
                 height: 630,
                 alt: "Academics — SS40 NETWORK PRIVATE LIMITED",
@@ -32,9 +32,9 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: "summary_large_image",
-        title: "Academics | SS40 NETWORK PRIVATE LIMITED",
-        description: "Accelerate tech careers with industry-grade software engineering training, AI development, and live capstone projects at SS40 NETWORK PRIVATE LIMITED.",
-        images: ["https://www.ss40network.com/og-image.jpg"],
+        title: "Learn. Build. Grow. | SS40 NETWORK PRIVATE LIMITED",
+        description: "Hands-on tech training and software engineering academy in Tirunelveli empowering students with real client sprint experience and placement prep.",
+        images: ["https://ss40network.com/og-image.jpg"],
     },
 };
 
@@ -68,24 +68,24 @@ export default async function AcademicsPage() {
                         "@type": "ListItem",
                         "position": 1,
                         "name": "Home",
-                        "item": "https://www.ss40network.com/"
+                        "item": "https://ss40network.com/"
                     },
                     {
                         "@type": "ListItem",
                         "position": 2,
                         "name": "Academics",
-                        "item": "https://www.ss40network.com/academics"
+                        "item": "https://ss40network.com/academics"
                     }
                 ]
             },
             {
                 "@type": "EducationalOrganization",
-                "@id": "https://www.ss40network.com/academics#organization",
+                "@id": "https://ss40network.com/academics#organization",
                 "name": "SS40 NETWORK PRIVATE LIMITED Academics",
                 "parentOrganization": {
                     "@type": "Organization",
                     "name": "SS40 NETWORK PRIVATE LIMITED",
-                    "url": "https://www.ss40network.com"
+                    "url": "https://ss40network.com"
                 },
                 "description": "Industry-aligned software development and AI engineering practical training and academic capstone project development programs."
             }

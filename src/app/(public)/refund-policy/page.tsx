@@ -4,31 +4,31 @@ import { refundPolicyData } from "@/data/refund-policy";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Refund & Cancellation Policy | SS40 NETWORK PRIVATE LIMITED",
+    title: "Refund and Cancellation Policy | SS40 NETWORK PRIVATE LIMITED",
     description: "Read the policies on refunds, cancellations, and service commitments for SS40 NETWORK PRIVATE LIMITED.",
     alternates: {
-        canonical: "https://www.ss40network.com/refund-policy",
+        canonical: "https://ss40network.com/refund-policy",
     },
     openGraph: {
-        title: "Refund & Cancellation Policy | SS40 NETWORK PRIVATE LIMITED",
+        title: "Refund and Cancellation Policy | SS40 NETWORK PRIVATE LIMITED",
         description: "Read the policies on refunds, cancellations, and service commitments for SS40 NETWORK PRIVATE LIMITED.",
-        url: "https://www.ss40network.com/refund-policy",
+        url: "https://ss40network.com/refund-policy",
         siteName: "SS40 NETWORK PRIVATE LIMITED",
         type: "website",
         images: [
             {
-                url: "https://www.ss40network.com/og-image.jpg",
+                url: "https://ss40network.com/og-image.jpg",
                 width: 1200,
                 height: 630,
-                alt: "Refund & Cancellation Policy — SS40 NETWORK PRIVATE LIMITED",
+                alt: "Refund and Cancellation Policy — SS40 NETWORK PRIVATE LIMITED",
             },
         ],
     },
     twitter: {
         card: "summary_large_image",
-        title: "Refund & Cancellation Policy | SS40 NETWORK PRIVATE LIMITED",
+        title: "Refund and Cancellation Policy | SS40 NETWORK PRIVATE LIMITED",
         description: "Read the policies on refunds, cancellations, and service commitments for SS40 NETWORK PRIVATE LIMITED.",
-        images: ["https://www.ss40network.com/og-image.jpg"],
+        images: ["https://ss40network.com/og-image.jpg"],
     },
 };
 
@@ -43,13 +43,13 @@ export default function RefundPolicyPage() {
                         "@type": "ListItem",
                         "position": 1,
                         "name": "Home",
-                        "item": "https://www.ss40network.com/"
+                        "item": "https://ss40network.com/"
                     },
                     {
                         "@type": "ListItem",
                         "position": 2,
-                        "name": "Refund & Cancellation Policy",
-                        "item": "https://www.ss40network.com/refund-policy"
+                        "name": "Refund and Cancellation Policy",
+                        "item": "https://ss40network.com/refund-policy"
                     }
                 ]
             }

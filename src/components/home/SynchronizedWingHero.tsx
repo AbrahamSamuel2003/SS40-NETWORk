@@ -42,8 +42,8 @@ const WINGS: WingData[] = [
         description: "We build high-performance web applications, mobile platforms, and AI automation tailored to your business.",
         ctaText: "Explore Digital Solutions",
         ctaHref: "/digital-solutions",
-        imageSrc: "/images/hero/digital-solutions-illustration.jpg",
-        imageAlt: "SS40 Digital Solutions Custom Software and Cloud Architecture",
+        imageSrc: "/images/hero/wing-digital-solutions.jpg",
+        imageAlt: "SS40 Digital Solutions — Custom Software Development and Cloud Architecture in Tirunelveli",
         icon: <Code2 className="w-3.5 h-3.5 text-[#B45309]" />,
         chips: ["Web Apps", "Mobile Apps", "Cloud and AI"],
         buttonClass: "bg-[#0F766E] hover:bg-[#115E59] text-white shadow-lg shadow-[#0F766E]/20",
@@ -59,8 +59,8 @@ const WINGS: WingData[] = [
         description: "Ready-to-deploy software tools that automate invoicing, daily workflows, and enterprise operations.",
         ctaText: "Explore Products",
         ctaHref: "/products",
-        imageSrc: "/images/hero/saas-products-illustration.jpg",
-        imageAlt: "SS40 Products SaaS Invoicing and ERP Workflows",
+        imageSrc: "/images/hero/wing-products.jpg",
+        imageAlt: "SS40 Products — Enterprise Business Growth and Automated SaaS Software Solutions",
         icon: <Box className="w-3.5 h-3.5 text-[#B45309]" />,
         chips: ["ClearInvoice", "GTC Suite", "AI Email Agent"],
         buttonClass: "bg-[#0F766E] hover:bg-[#115E59] text-white shadow-lg shadow-[#0F766E]/20",
@@ -76,8 +76,8 @@ const WINGS: WingData[] = [
         description: "Project-based training that prepares students and freshers for top tech careers with real client sprint experience.",
         ctaText: "Explore Academics",
         ctaHref: "/academics",
-        imageSrc: "/images/hero/tech-academics-illustration.jpg",
-        imageAlt: "SS40 Academics Software Engineering and Mentorship Hub",
+        imageSrc: "/images/hero/wing-academics.jpg",
+        imageAlt: "SS40 Academics — Student Tech Career Launch and Placement Success in Tirunelveli",
         icon: <GraduationCap className="w-3.5 h-3.5 text-[#B45309]" />,
         chips: ["Live Client Projects", "Career Launch"],
         buttonClass: "bg-[#0F766E] hover:bg-[#115E59] text-white shadow-lg shadow-[#0F766E]/20",
@@ -168,40 +168,31 @@ export function SynchronizedWingHero() {
                     </AnimatePresence>
                 </div>
 
-                {/* Right Column: Application Mockup Frame with Fluid Zero-Latency Cross-Fade */}
-                <div className="lg:col-span-6 relative flex justify-center w-full">
-                    <div className="relative w-full max-w-[480px] aspect-[16/10] bg-white rounded-xl shadow-[var(--shadow-hover)] border border-gray-200/80 overflow-hidden flex flex-col z-10">
-                        {/* Image Showcase Frame */}
-                        <div className="relative flex-1 bg-gray-50 overflow-hidden">
-                            {WINGS.map((w, idx) => {
-                                const isActive = activeIndex === idx;
-                                return (
-                                    <div
-                                        key={w.id}
-                                        className={cn(
-                                            "absolute inset-0 transition-opacity duration-500 ease-in-out will-change-[opacity]",
-                                            isActive ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
-                                        )}
-                                    >
-                                        <Image
-                                            src={w.imageSrc}
-                                            alt={w.imageAlt}
-                                            fill
-                                            sizes="(max-width: 1024px) 100vw, 480px"
-                                            className="object-cover object-center"
-                                            priority
-                                            loading="eager"
-                                        />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent pointer-events-none" />
-                                    </div>
-                                );
-                            })}
-
-                            {/* Live Badge in Bottom Left of Frame */}
-                            <div className="absolute bottom-2.5 left-2.5 z-20 bg-slate-900/85 backdrop-blur-md px-2.5 py-1 rounded-md border border-slate-700 text-white text-[11px] font-semibold flex items-center shadow-md">
-                                <span>{activeWing.wingName}</span>
-                            </div>
-                        </div>
+                {/* Right Column: Clean Unboxed Vector Illustration with Seamless Cross-Fade */}
+                <div className="lg:col-span-6 relative flex items-center justify-center w-full">
+                    <div className="relative w-full max-w-[380px] sm:max-w-[420px] lg:max-w-[440px] aspect-square flex items-center justify-center">
+                        {WINGS.map((w, idx) => {
+                            const isActive = activeIndex === idx;
+                            return (
+                                <div
+                                    key={w.id}
+                                    className={cn(
+                                        "absolute inset-0 transition-opacity duration-500 ease-in-out will-change-[opacity] flex items-center justify-center",
+                                        isActive ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
+                                    )}
+                                >
+                                    <Image
+                                        src={w.imageSrc}
+                                        alt={w.imageAlt}
+                                        fill
+                                        sizes="(max-width: 1024px) 100vw, 440px"
+                                        className="object-contain object-center select-none"
+                                        priority
+                                        loading="eager"
+                                    />
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
 

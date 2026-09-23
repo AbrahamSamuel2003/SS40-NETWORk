@@ -14,36 +14,39 @@ import { getSiteConfig, isSectionVisible } from "@/lib/site-config";
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: "SS40 NETWORK PRIVATE LIMITED — Enterprise Digital Solutions, SaaS Products & Tech Academics",
-  description: "Architecting high-scale digital systems, intelligent SaaS products, and career-launching tech academics by SS40 NETWORK PRIVATE LIMITED. Built in India. Thinking Globally.",
+  title: "One Company. Three Wings. Endless Possibilities. | SS40 NETWORK PRIVATE LIMITED",
+  description: "SS40 NETWORK PRIVATE LIMITED is a technology company in Tirunelveli architecting enterprise digital solutions, intelligent SaaS products, and career-launching tech academics.",
+  alternates: {
+    canonical: "https://ss40network.com",
+  },
   openGraph: {
-    title: "SS40 NETWORK PRIVATE LIMITED — Enterprise Digital Solutions, SaaS Products & Tech Academics",
-    description: "Architecting high-scale digital systems, intelligent SaaS products, and career-launching tech academics by SS40 NETWORK PRIVATE LIMITED. Built in India. Thinking Globally.",
-    url: "https://www.ss40network.com",
+    title: "One Company. Three Wings. Endless Possibilities. | SS40 NETWORK PRIVATE LIMITED",
+    description: "SS40 NETWORK PRIVATE LIMITED is a technology company in Tirunelveli architecting enterprise digital solutions, intelligent SaaS products, and career-launching tech academics.",
+    url: "https://ss40network.com",
     siteName: "SS40 NETWORK PRIVATE LIMITED",
     locale: "en_US",
     type: "website",
     images: [
       {
-        url: "https://www.ss40network.com/og-image.jpg",
-        secureUrl: "https://www.ss40network.com/og-image.jpg",
+        url: "https://ss40network.com/og-image.jpg",
+        secureUrl: "https://ss40network.com/og-image.jpg",
         width: 1200,
         height: 630,
         type: "image/jpeg",
-        alt: "SS40 NETWORK PRIVATE LIMITED — Digital Solutions, SaaS Products & Academics",
+        alt: "SS40 NETWORK PRIVATE LIMITED — Digital Solutions, SaaS Products & Tech Academics",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "SS40 NETWORK PRIVATE LIMITED — Enterprise Digital Solutions, SaaS Products & Tech Academics",
-    description: "Architecting high-scale digital systems, intelligent SaaS products, and career-launching tech academics by SS40 NETWORK PRIVATE LIMITED. Built in India. Thinking Globally.",
+    title: "One Company. Three Wings. Endless Possibilities. | SS40 NETWORK PRIVATE LIMITED",
+    description: "SS40 NETWORK PRIVATE LIMITED is a technology company in Tirunelveli architecting enterprise digital solutions, intelligent SaaS products, and career-launching tech academics.",
     images: [
       {
-        url: "https://www.ss40network.com/og-image.jpg",
+        url: "https://ss40network.com/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "SS40 NETWORK PRIVATE LIMITED — Digital Solutions, SaaS Products & Academics",
+        alt: "SS40 NETWORK PRIVATE LIMITED — Digital Solutions, SaaS Products & Tech Academics",
       },
     ],
   },
@@ -76,50 +79,43 @@ export default async function Home() {
         "@type": "SiteNavigationElement",
         "position": 1,
         "name": "Digital Solutions",
-        "description": "Custom enterprise software development, web applications, and AI systems by SS40 NETWORK PRIVATE LIMITED.",
-        "url": "https://www.ss40network.com/digital-solutions"
+        "description": "Engineering Digital Experiences That Scale | Custom software development, web applications, and AI systems.",
+        "url": "https://ss40network.com/digital-solutions"
       },
       {
         "@type": "SiteNavigationElement",
         "position": 2,
         "name": "Products",
-        "description": "Proprietary SaaS products, enterprise ERPs, and automated software solutions engineered by SS40 NETWORK PRIVATE LIMITED.",
-        "url": "https://www.ss40network.com/products"
+        "description": "Innovative Tools. Built for Real Impact. | Proprietary SaaS products and automated software tools.",
+        "url": "https://ss40network.com/products"
       },
       {
         "@type": "SiteNavigationElement",
         "position": 3,
         "name": "Academics",
-        "description": "Industry-grade tech training, software engineering programs, and student capstone projects by SS40 NETWORK PRIVATE LIMITED.",
-        "url": "https://www.ss40network.com/academics"
+        "description": "Learn. Build. Grow. | Industry-grade tech training, software engineering programs, and live capstone projects.",
+        "url": "https://ss40network.com/academics"
       },
       {
         "@type": "SiteNavigationElement",
         "position": 4,
         "name": "Contact",
-        "description": "Connect with SS40 NETWORK PRIVATE LIMITED in Tirunelveli for consultations, inquiries, and partnerships.",
-        "url": "https://www.ss40network.com/contact"
+        "description": "Let's Build Something Amazing Together | Connect with SS40 NETWORK PRIVATE LIMITED in Tirunelveli.",
+        "url": "https://ss40network.com/contact"
       },
       {
         "@type": "SiteNavigationElement",
         "position": 5,
         "name": "Blogs & Field Updates",
-        "description": "Field visits, institutional partnerships, conclaves, and founder initiatives by SS40 NETWORK PRIVATE LIMITED.",
-        "url": "https://www.ss40network.com/blogs"
+        "description": "Field Updates, Conclaves & Founder Initiatives | Institutional partnerships and founder activities.",
+        "url": "https://ss40network.com/blogs"
       },
       {
         "@type": "SiteNavigationElement",
         "position": 6,
-        "name": "Terms of Service",
-        "description": "Terms of service and legal conditions for SS40 NETWORK PRIVATE LIMITED.",
-        "url": "https://www.ss40network.com/terms"
-      },
-      {
-        "@type": "SiteNavigationElement",
-        "position": 7,
-        "name": "Privacy Policy",
-        "description": "Privacy policy and data protection standards of SS40 NETWORK PRIVATE LIMITED.",
-        "url": "https://www.ss40network.com/privacy-policy"
+        "name": "Client Projects",
+        "description": "Enterprise Client Projects & Case Studies | Custom software systems delivered for enterprise clients.",
+        "url": "https://ss40network.com/client-projects"
       }
     ]
   };

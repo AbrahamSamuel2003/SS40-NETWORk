@@ -7,31 +7,31 @@ import { Container } from "@/components/ui/Container";
 import { HappimonialsList } from "../happimonials/HappimonialsList";
 
 export const metadata: Metadata = {
-    title: "Product Impacts | SS40 NETWORK PRIVATE LIMITED",
+    title: "Real Businesses. Real Product Success. | SS40 NETWORK PRIVATE LIMITED",
     description: "Read comprehensive client success stories and enterprise impacts from organizations leveraging products by SS40 NETWORK PRIVATE LIMITED.",
     alternates: {
-        canonical: "https://www.ss40network.com/product-impacts",
+        canonical: "https://ss40network.com/product-impacts",
     },
     openGraph: {
-        title: "Product Impacts | SS40 NETWORK PRIVATE LIMITED",
+        title: "Real Businesses. Real Product Success. | SS40 NETWORK PRIVATE LIMITED",
         description: "Read comprehensive client success stories and enterprise impacts from organizations leveraging products by SS40 NETWORK PRIVATE LIMITED.",
-        url: "https://www.ss40network.com/product-impacts",
+        url: "https://ss40network.com/product-impacts",
         siteName: "SS40 NETWORK PRIVATE LIMITED",
         type: "website",
         images: [
             {
-                url: "https://www.ss40network.com/og-image.jpg",
+                url: "https://ss40network.com/og-image.jpg",
                 width: 1200,
                 height: 630,
-                alt: "Product Impacts — SS40 NETWORK PRIVATE LIMITED",
+                alt: "Real Businesses. Real Product Success. — SS40 NETWORK PRIVATE LIMITED",
             },
         ],
     },
     twitter: {
         card: "summary_large_image",
-        title: "Product Impacts | SS40 NETWORK PRIVATE LIMITED",
+        title: "Real Businesses. Real Product Success. | SS40 NETWORK PRIVATE LIMITED",
         description: "Read comprehensive client success stories and enterprise impacts from organizations leveraging products by SS40 NETWORK PRIVATE LIMITED.",
-        images: ["https://www.ss40network.com/og-image.jpg"],
+        images: ["https://ss40network.com/og-image.jpg"],
     },
 };
 
@@ -57,19 +57,19 @@ export default async function ProductImpactsPage() {
                         "@type": "ListItem",
                         "position": 1,
                         "name": "Home",
-                        "item": "https://www.ss40network.com/"
+                        "item": "https://ss40network.com/"
                     },
                     {
                         "@type": "ListItem",
                         "position": 2,
                         "name": "Products",
-                        "item": "https://www.ss40network.com/products"
+                        "item": "https://ss40network.com/products"
                     },
                     {
                         "@type": "ListItem",
                         "position": 3,
                         "name": "Product Impacts",
-                        "item": "https://www.ss40network.com/product-impacts"
+                        "item": "https://ss40network.com/product-impacts"
                     }
                 ]
             }
