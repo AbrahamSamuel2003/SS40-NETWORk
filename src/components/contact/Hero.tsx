@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowDown, PhoneCall, Mail, Phone, Video, HelpCircle, Network } from "lucide-react";
 import { cn } from "@/utils/cn";
@@ -20,17 +19,8 @@ export function Hero() {
     return (
         <section id="contact-hero" className={cn("relative w-full overflow-hidden bg-white border-b border-gray-100 pt-24 pb-12 sm:pt-28 sm:pb-14 lg:pt-32 lg:pb-20 lg:min-h-[min(70vh,650px)] flex items-center")}>
 
-            {/* Ambient Background Image & Gradients (Clean Stacking Context) */}
+            {/* Ambient Background & Gradients (Clean Stacking Context) */}
             <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
-                <Image
-                    src="/images/hero/contact-hero-bg.png"
-                    alt=""
-                    fill
-                    loading="eager"
-                    sizes="100vw"
-                    className="object-cover object-center opacity-45 sm:opacity-55 mix-blend-multiply"
-                    quality={90}
-                />
                 <div 
                     className="absolute inset-0"
                     style={{ background: 'radial-gradient(ellipse at 50% 35%, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.75) 65%, #ffffff 100%)' }}

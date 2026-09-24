@@ -1,38 +1,35 @@
 "use client";
 
 import * as React from "react";
-import Image from "next/image";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import {
     ArrowRight,
-    Box,
-    Sparkles,
-    Database,
-    Shield,
-    Cloud,
-    Cpu
+    TrendingUp
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Container } from "@/components/ui/Container";
 import { HERO_SPACING_CLASSES, cn } from "@/utils/cn";
 
+// Chart data points representing company growth trajectory powered by SS40 products
+const CHART_DATA = [
+    { label: "ClearInvoice", barH: 48, barY: 112, lineY: 96 },
+    { label: "ClearInvoice", barH: 82, barY: 78, lineY: 62 },
+    { label: "ClearInvoice", barH: 74, barY: 86, lineY: 70 },
+    { label: "GTC", barH: 64, barY: 96, lineY: 80 },
+    { label: "GTC", barH: 98, barY: 62, lineY: 48 },
+    { label: "AI Email Agent", barH: 126, barY: 34, lineY: 22 },
+    { label: "AI Email Agent", barH: 112, barY: 48, lineY: 36 },
+    { label: "Enterprise Scale", barH: 142, barY: 18, lineY: 8 },
+];
+
 export function Hero() {
     return (
         <section className={cn("relative w-full overflow-hidden bg-white", HERO_SPACING_CLASSES)}>
 
-            {/* Ambient Background Image & Gradients (Clean Stacking Context) */}
+            {/* Ambient Background & Gradients */}
             <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
-                <Image
-                    src="/images/hero/products-hero-bg.jpg"
-                    alt=""
-                    fill
-                    loading="eager"
-                    sizes="100vw"
-                    className="object-cover object-center opacity-10 sm:opacity-15 mix-blend-multiply"
-                    quality={90}
-                />
                 <div
                     className="absolute inset-0"
                     style={{ background: 'radial-gradient(ellipse at 50% 35%, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.85) 65%, #ffffff 100%)' }}
@@ -45,7 +42,7 @@ export function Hero() {
             </div>
 
             <Container className="relative z-10 w-full">
-                <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-12">
+                <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-14">
 
                     {/* Left Column - Content (50%) */}
                     <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left">
@@ -84,146 +81,256 @@ export function Hero() {
                         </motion.div>
                     </div>
 
-                    {/* Right Column - The Constellation (50%) */}
-                    <div className="w-full lg:w-1/2 relative flex justify-center items-center min-h-[280px] sm:min-h-[340px] lg:min-h-[380px]">
-                        <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0 }}>
-                            <motion.line
-                                x1="50%" y1="50%" x2="25%" y2="25%"
-                                stroke="#2DD4BF" strokeWidth="2" strokeDasharray="4 4" opacity="0.3"
-                                initial={{ strokeDashoffset: 100 }} animate={{ strokeDashoffset: 0 }} transition={{ repeat: Infinity, duration: 4, ease: "linear" }}
-                            />
-                            <motion.line
-                                x1="50%" y1="50%" x2="75%" y2="25%"
-                                stroke="#2DD4BF" strokeWidth="2" strokeDasharray="4 4" opacity="0.3"
-                                initial={{ strokeDashoffset: 100 }} animate={{ strokeDashoffset: 0 }} transition={{ repeat: Infinity, duration: 4, ease: "linear" }}
-                            />
-                            <motion.line
-                                x1="50%" y1="50%" x2="20%" y2="70%"
-                                stroke="#FFC900" strokeWidth="2" strokeDasharray="4 4" opacity="0.4"
-                                initial={{ strokeDashoffset: -100 }} animate={{ strokeDashoffset: 0 }} transition={{ repeat: Infinity, duration: 5, ease: "linear" }}
-                            />
-                            <motion.line
-                                x1="50%" y1="50%" x2="80%" y2="75%"
-                                stroke="#2DD4BF" strokeWidth="2" strokeDasharray="4 4" opacity="0.3"
-                                initial={{ strokeDashoffset: -100 }} animate={{ strokeDashoffset: 0 }} transition={{ repeat: Infinity, duration: 3, ease: "linear" }}
-                            />
-                        </svg>
+                    {/* Right Column - Enterprise Product-Driven Company Growth Dashboard */}
+                    <div className="w-full lg:w-1/2 flex justify-center items-center select-none">
+                        <div className="relative w-full max-w-[500px]">
 
-                        {/* Central Core Sphere */}
-                        <motion.div
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            transition={{ type: "spring", duration: 1.5, bounce: 0.4 }}
-                            className="relative z-10 w-22 h-22 sm:w-26 sm:h-26 md:w-30 md:h-30 rounded-full bg-white shadow-[0_0_50px_-15px_rgba(45,212,191,0.35)] border-4 border-[#2DD4BF]/30 flex flex-col items-center justify-center group transform-gpu"
-                            style={{ willChange: "transform", transform: "translateZ(0)" }}
-                        >
-                            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#2DD4BF]/10 to-transparent group-hover:rotate-180 transition-transform duration-1000" />
-                            <Box className="w-6 h-6 sm:w-8 sm:h-8 text-[#0F766E] mb-1.5" />
-                            <span className="text-[9px] font-bold text-gray-800 tracking-widest uppercase sm:text-[10px]">SS40 Product</span>
-                        </motion.div>
+                            {/* Soft Ambient Stage Glow */}
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-tr from-[#2DD4BF]/20 to-[#0F766E]/10 rounded-full blur-3xl pointer-events-none -z-0" />
 
-                        {/* Node 1: Intelligence (Top Left) */}
-                        <motion.div
-                            initial={{ opacity: 0, x: 50, y: 50 }}
-                            animate={{ opacity: 1, x: 0, y: [-5, 5, -5] }}
-                            transition={{
-                                opacity: { duration: 0.8, delay: 0.2 },
-                                x: { duration: 0.8, delay: 0.2 },
-                                y: { repeat: Infinity, duration: 5, ease: "easeInOut", delay: 0.2 }
-                            }}
-                            className="absolute top-[10%] left-[8%] md:top-[12%] md:left-[12%] z-20 transform-gpu"
-                            style={{ willChange: "transform", transform: "translateZ(0)" }}
-                        >
-                            <div className="bg-white/95 backdrop-blur-md p-2.5 sm:p-3 rounded-xl shadow-lg border border-gray-100 flex items-center gap-2.5 sm:gap-3">
-                                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#FFC900]/10 flex items-center justify-center text-[#FFC900] shrink-0">
-                                    <Sparkles className="w-4 h-4" />
-                                </div>
-                                <div>
-                                    <p className="text-xs sm:text-sm font-bold text-gray-900 leading-tight">Intelligence</p>
-                                    <p className="text-[10px] text-gray-500 font-medium">AI Automation</p>
-                                </div>
-                            </div>
-                        </motion.div>
+                            {/* MAIN GLASS TERMINAL */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 24, scale: 0.98 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                transition={{ duration: 0.6, ease: "easeOut" }}
+                                className="relative z-10 w-full bg-white/95 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-gray-200/90 shadow-2xl p-5 sm:p-6 flex flex-col justify-between overflow-hidden transform-gpu"
+                            >
+                                {/* Inner Top Sheen */}
+                                <div className="absolute top-0 inset-x-0 h-24 bg-gradient-to-b from-teal-50/40 via-white/20 to-transparent pointer-events-none" />
 
-                        {/* Node 2: Data (Top Right) */}
-                        <motion.div
-                            initial={{ opacity: 0, x: -50, y: 50 }}
-                            animate={{ opacity: 1, x: 0, y: [5, -5, 5] }}
-                            transition={{
-                                opacity: { duration: 0.8, delay: 0.4 },
-                                x: { duration: 0.8, delay: 0.4 },
-                                y: { repeat: Infinity, duration: 6, ease: "easeInOut", delay: 0.4 }
-                            }}
-                            className="absolute top-[12%] right-[5%] md:top-[16%] md:right-[8%] z-20 transform-gpu"
-                            style={{ willChange: "transform", transform: "translateZ(0)" }}
-                        >
-                            <div className="bg-white/95 backdrop-blur-md p-2.5 sm:p-3 rounded-xl shadow-lg border border-gray-100 flex items-center gap-2.5 sm:gap-3">
-                                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-500 shrink-0">
-                                    <Database className="w-4 h-4" />
-                                </div>
-                                <div>
-                                    <p className="text-xs sm:text-sm font-bold text-gray-900 leading-tight">Data Sync</p>
-                                    <p className="text-[10px] text-gray-500 font-medium">Zero Latency</p>
-                                </div>
-                            </div>
-                        </motion.div>
+                                {/* Header: Company Scaling Hub & Growth Pill (No dot) */}
+                                <div className="flex items-center justify-between z-10 pb-3 border-b border-gray-100">
+                                    <div className="flex items-center gap-2.5">
+                                        <div className="w-9 h-9 rounded-xl bg-[#0F766E]/10 border border-[#0F766E]/20 flex items-center justify-center text-[#0F766E] shadow-2xs">
+                                            <TrendingUp className="w-4 h-4" />
+                                        </div>
+                                        <div>
+                                            <h4 className="text-xs sm:text-sm font-bold text-gray-900 leading-tight">Company Growth Velocity</h4>
+                                            <p className="text-[10px] sm:text-[11px] text-gray-500 font-medium">Powered by SS40 Product Ecosystem</p>
+                                        </div>
+                                    </div>
 
-                        {/* Node 3: Infrastructure (Bottom Left) */}
-                        <motion.div
-                            initial={{ opacity: 0, x: 50, y: -50 }}
-                            animate={{ opacity: 1, x: 0, y: [-4, 4, -4] }}
-                            transition={{
-                                opacity: { duration: 0.8, delay: 0.6 },
-                                x: { duration: 0.8, delay: 0.6 },
-                                y: { repeat: Infinity, duration: 4.5, ease: "easeInOut", delay: 0.6 }
-                            }}
-                            className="absolute bottom-[16%] left-[4%] md:bottom-[20%] md:left-[5%] z-20 transform-gpu"
-                            style={{ willChange: "transform", transform: "translateZ(0)" }}
-                        >
-                            <div className="bg-white/95 backdrop-blur-md p-2.5 sm:p-3 rounded-xl shadow-lg border border-gray-100 flex items-center gap-2.5 sm:gap-3">
-                                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#6B9F91]/10 flex items-center justify-center text-[#6B9F91] shrink-0">
-                                    <Cloud className="w-4 h-4" />
+                                    {/* Clean Growth Badge (Dot Removed) */}
+                                    <div className="px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200/80 shadow-2xs">
+                                        <span className="text-[11px] sm:text-xs font-black text-emerald-700 tracking-tight">+184.6% YoY</span>
+                                    </div>
                                 </div>
-                                <div>
-                                    <p className="text-xs sm:text-sm font-bold text-gray-900 leading-tight">Cloud Native</p>
-                                    <p className="text-[10px] text-gray-500 font-medium">99.9% Uptime</p>
-                                </div>
-                            </div>
-                        </motion.div>
 
-                        {/* Node 4: Security (Bottom Right) */}
-                        <motion.div
-                            initial={{ opacity: 0, x: -50, y: -50 }}
-                            animate={{ opacity: 1, x: 0, y: [4, -4, 4] }}
-                            transition={{
-                                opacity: { duration: 0.8, delay: 0.8 },
-                                x: { duration: 0.8, delay: 0.8 },
-                                y: { repeat: Infinity, duration: 5.5, ease: "easeInOut", delay: 0.8 }
-                            }}
-                            className="absolute bottom-[14%] right-[4%] md:bottom-[15%] md:right-[10%] z-20 transform-gpu"
-                            style={{ willChange: "transform", transform: "translateZ(0)" }}
-                        >
-                            <div className="bg-white/95 backdrop-blur-md p-2.5 sm:p-3 rounded-xl shadow-lg border border-gray-100 flex items-center gap-2.5 sm:gap-3">
-                                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 shrink-0">
-                                    <Shield className="w-4 h-4" />
+                                {/* Minimal Product Adoption Pipeline Chips */}
+                                <div className="grid grid-cols-3 gap-1.5 pt-3 z-10">
+                                    <div className="px-2 py-1 bg-gray-50/90 rounded-lg border border-gray-100 text-center">
+                                        <span className="text-[10px] sm:text-[11px] font-bold text-gray-800 block truncate">ClearInvoice</span>
+                                        <span className="text-[8px] sm:text-[9px] text-gray-500 block">Billing & GST</span>
+                                    </div>
+                                    <div className="px-2 py-1 bg-teal-50/60 rounded-lg border border-teal-100 text-center">
+                                        <span className="text-[10px] sm:text-[11px] font-bold text-[#0F766E] block truncate">GTC</span>
+                                        <span className="text-[8px] sm:text-[9px] text-teal-600 block">Enterprise Ops</span>
+                                    </div>
+                                    <div className="px-2 py-1 bg-gray-50/90 rounded-lg border border-gray-100 text-center">
+                                        <span className="text-[10px] sm:text-[11px] font-bold text-gray-800 block truncate">AI Email Agent</span>
+                                        <span className="text-[8px] sm:text-[9px] text-gray-500 block">Automation</span>
+                                    </div>
                                 </div>
-                                <div>
-                                    <p className="text-xs sm:text-sm font-bold text-gray-900 leading-tight">Enterprise</p>
-                                    <p className="text-[10px] text-gray-500 font-medium">End-to-End Secure</p>
+
+                                {/* Dynamic Interactive Growth Graph Area */}
+                                <div className="relative w-full my-3 min-h-[175px] sm:min-h-[195px] flex items-end">
+                                    <svg className="w-full h-full overflow-visible" viewBox="0 0 460 185" preserveAspectRatio="none">
+                                        <defs>
+                                            {/* Bar Gradient */}
+                                            <linearGradient id="barGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                                <stop offset="0%" stopColor="#2DD4BF" stopOpacity="0.9" />
+                                                <stop offset="60%" stopColor="#14B8A6" stopOpacity="0.8" />
+                                                <stop offset="100%" stopColor="#0F766E" stopOpacity="0.95" />
+                                            </linearGradient>
+
+                                            {/* Bar Highlight Accent */}
+                                            <linearGradient id="barPeakGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                                <stop offset="0%" stopColor="#5EEAD4" />
+                                                <stop offset="100%" stopColor="#0D9488" />
+                                            </linearGradient>
+
+                                            {/* Line Gradient */}
+                                            <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                                <stop offset="0%" stopColor="#0D9488" />
+                                                <stop offset="50%" stopColor="#0284C7" />
+                                                <stop offset="100%" stopColor="#0F766E" />
+                                            </linearGradient>
+
+                                            {/* Under Area Gradient */}
+                                            <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                                <stop offset="0%" stopColor="#38BDF8" stopOpacity="0.22" />
+                                                <stop offset="50%" stopColor="#2DD4BF" stopOpacity="0.08" />
+                                                <stop offset="100%" stopColor="#0F766E" stopOpacity="0.0" />
+                                            </linearGradient>
+
+                                            {/* Arrow Marker Definition */}
+                                            <marker
+                                                id="arrowHead"
+                                                viewBox="0 0 10 10"
+                                                refX="6"
+                                                refY="5"
+                                                markerWidth="6"
+                                                markerHeight="6"
+                                                orient="auto-start-reverse"
+                                            >
+                                                <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#0F766E" />
+                                            </marker>
+
+                                            <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+                                                <feGaussianBlur stdDeviation="2.5" result="blur" />
+                                                <feMerge>
+                                                    <feMergeNode in="blur" />
+                                                    <feMergeNode in="SourceGraphic" />
+                                                </feMerge>
+                                            </filter>
+                                        </defs>
+
+                                        {/* Subtle Horizontal Guide Lines */}
+                                        <line x1="15" y1="40" x2="445" y2="40" stroke="#E5E7EB" strokeWidth="1" strokeDasharray="3 3" opacity="0.6" />
+                                        <line x1="15" y1="80" x2="445" y2="80" stroke="#E5E7EB" strokeWidth="1" strokeDasharray="3 3" opacity="0.6" />
+                                        <line x1="15" y1="120" x2="445" y2="120" stroke="#E5E7EB" strokeWidth="1" strokeDasharray="3 3" opacity="0.6" />
+                                        <line x1="15" y1="160" x2="445" y2="160" stroke="#E5E7EB" strokeWidth="1" />
+
+                                        {/* Dynamic Rising Column Bars */}
+                                        {CHART_DATA.map((item, idx) => {
+                                            const x = 32 + idx * 52;
+                                            const isPeak = idx === CHART_DATA.length - 1 || idx === 5;
+                                            return (
+                                                <g key={idx}>
+                                                    {/* Vertical Bar Base */}
+                                                    <motion.rect
+                                                        x={x - 12}
+                                                        y={item.barY}
+                                                        width="24"
+                                                        height={item.barH}
+                                                        rx="6"
+                                                        fill={isPeak ? "url(#barPeakGrad)" : "url(#barGrad)"}
+                                                        initial={{ scaleY: 0, originY: "160px" }}
+                                                        animate={{ scaleY: 1 }}
+                                                        transition={{
+                                                            duration: 0.6,
+                                                            delay: 0.1 + idx * 0.07,
+                                                            ease: "easeOut"
+                                                        }}
+                                                    />
+
+                                                    {/* Soft Bar Header Highlight */}
+                                                    <motion.rect
+                                                        x={x - 10}
+                                                        y={item.barY + 2}
+                                                        width="20"
+                                                        height="3"
+                                                        rx="1.5"
+                                                        fill="#FFFFFF"
+                                                        opacity={0.5}
+                                                        initial={{ opacity: 0 }}
+                                                        animate={{ opacity: 0.5 }}
+                                                        transition={{ delay: 0.3 + idx * 0.07 }}
+                                                    />
+                                                </g>
+                                            );
+                                        })}
+
+                                        {/* Under-Curve Shaded Gradient Area */}
+                                        <motion.path
+                                            d="M 32,96 L 84,62 L 136,70 L 188,80 L 240,48 L 292,22 L 344,36 L 396,8 L 396,160 L 32,160 Z"
+                                            fill="url(#areaGradient)"
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            transition={{ duration: 0.8, delay: 0.3 }}
+                                        />
+
+                                        {/* Animated Connecting Trendline (Fluctuating with Ups & Downs) */}
+                                        <motion.path
+                                            d="M 32,96 L 84,62 L 136,70 L 188,80 L 240,48 L 292,22 L 344,36 L 396,8"
+                                            fill="none"
+                                            stroke="url(#lineGrad)"
+                                            strokeWidth="3.5"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            filter="url(#softGlow)"
+                                            initial={{ pathLength: 0 }}
+                                            animate={{ pathLength: 1 }}
+                                            transition={{ duration: 1.4, delay: 0.2, ease: "easeOut" }}
+                                        />
+
+                                        {/* Growth Trajectory Arrow at Peak End */}
+                                        <motion.path
+                                            d="M 396,8 L 428,-4"
+                                            fill="none"
+                                            stroke="#0F766E"
+                                            strokeWidth="3.5"
+                                            strokeLinecap="round"
+                                            markerEnd="url(#arrowHead)"
+                                            initial={{ pathLength: 0 }}
+                                            animate={{ pathLength: 1 }}
+                                            transition={{ duration: 0.4, delay: 1.4, ease: "easeOut" }}
+                                        />
+
+                                        {/* Data Node Dots */}
+                                        {CHART_DATA.map((item, idx) => {
+                                            const x = 32 + idx * 52;
+                                            return (
+                                                <g key={`node-${idx}`}>
+                                                    <motion.circle
+                                                        cx={x}
+                                                        cy={item.lineY}
+                                                        r="4.5"
+                                                        fill="#0F766E"
+                                                        stroke="#FFFFFF"
+                                                        strokeWidth="2.5"
+                                                        initial={{ scale: 0 }}
+                                                        animate={{ scale: 1 }}
+                                                        transition={{
+                                                            duration: 0.3,
+                                                            delay: 0.3 + idx * 0.1,
+                                                            ease: "backOut"
+                                                        }}
+                                                    />
+                                                </g>
+                                            );
+                                        })}
+
+                                        {/* Gliding Live Pulse Orb */}
+                                        <motion.circle r="5" fill="#0284C7" stroke="#FFFFFF" strokeWidth="2">
+                                            <animateMotion
+                                                path="M 32,96 L 84,62 L 136,70 L 188,80 L 240,48 L 292,22 L 344,36 L 396,8"
+                                                dur="4.5s"
+                                                repeatCount="indefinite"
+                                            />
+                                        </motion.circle>
+
+                                        {/* Peak Breakthrough Beacon Animation */}
+                                        <circle cx="426" cy="-3" r="5" fill="#0F766E" className="animate-ping" opacity="0.6" />
+                                        <circle cx="426" cy="-3" r="3.5" fill="#0F766E" />
+                                    </svg>
                                 </div>
-                            </div>
-                        </motion.div>
 
-                        {/* Floating Micro Nodes */}
-                        <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 20, ease: "linear" }} className="absolute inset-0 pointer-events-none transform-gpu" style={{ willChange: "transform" }}>
-                            <div className="absolute top-[30%] right-[30%] w-3 h-3 bg-[#FFC900] rounded-full shadow-[0_0_10px_#FFC900]" />
-                            <div className="absolute bottom-[30%] left-[30%] w-2 h-2 bg-[#6B9F91] rounded-full shadow-[0_0_10px_#6B9F91]" />
-                            <div className="absolute top-[40%] left-[40%] w-2 h-2 bg-blue-400 rounded-full shadow-[0_0_10px_#60A5FA]" />
-                        </motion.div>
+                                {/* Bottom Product Impact Bar */}
+                                <div className="grid grid-cols-3 gap-2 pt-3 border-t border-gray-100 text-center z-10">
+                                    <div className="py-1.5 px-1 bg-gray-50/80 rounded-xl border border-gray-100/90">
+                                        <span className="text-[9px] sm:text-[10px] text-gray-500 font-bold block uppercase tracking-wider">ClearInvoice</span>
+                                        <span className="text-xs sm:text-sm font-black text-[#111827]">99.9% Automated</span>
+                                    </div>
+                                    <div className="py-1.5 px-1 bg-teal-50/50 rounded-xl border border-teal-100/80">
+                                        <span className="text-[9px] sm:text-[10px] text-teal-700 font-bold block uppercase tracking-wider">
+                                            GTC Suite
+                                        </span>
+                                        <span className="text-xs sm:text-sm font-black text-[#0F766E]">Enterprise Scale</span>
+                                    </div>
+                                    <div className="py-1.5 px-1 bg-gray-50/80 rounded-xl border border-gray-100/90">
+                                        <span className="text-[9px] sm:text-[10px] text-gray-500 font-bold block uppercase tracking-wider">AI Email Agent</span>
+                                        <span className="text-xs sm:text-sm font-black text-[#111827]">Zero Latency</span>
+                                    </div>
+                                </div>
+                            </motion.div>
 
+                        </div>
                     </div>
                 </div>
             </Container>
         </section>
     );
 }
+
+

@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import Image from "next/image";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import {
@@ -24,17 +23,8 @@ export function Hero() {
     return (
         <section className={cn("relative w-full overflow-hidden bg-white", HERO_SPACING_CLASSES)}>
 
-            {/* Ambient Background Image & Gradients (Clean Stacking Context) */}
+            {/* Ambient Background & Gradients (Clean Stacking Context) */}
             <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
-                <Image
-                    src="/images/hero/digital-hero-bg.jpg"
-                    alt=""
-                    fill
-                    loading="eager"
-                    sizes="100vw"
-                    className="object-cover object-center opacity-10 sm:opacity-15 mix-blend-multiply"
-                    quality={90}
-                />
                 <div
                     className="absolute inset-0"
                     style={{ background: 'radial-gradient(ellipse at 50% 35%, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.85) 65%, #ffffff 100%)' }}

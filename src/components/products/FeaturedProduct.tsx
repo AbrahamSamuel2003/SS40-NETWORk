@@ -6,8 +6,7 @@ import Link from "next/link";
 import {
     ArrowRight,
     CloudIcon,
-    BadgeCheck,
-    Sparkles
+    BadgeCheck
 } from "lucide-react";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
@@ -163,8 +162,7 @@ export function FeaturedProduct({ initialData }: FeaturedProductProps = {}) {
                                     className="flex flex-col items-center lg:items-start w-full"
                                 >
                                     {/* Product Badge Pill */}
-                                    <div className="inline-flex items-center gap-1.5 rounded-full bg-[#2DD4BF]/15 border border-[#2DD4BF]/30 px-2.5 py-0.5 text-[10px] sm:text-[11px] font-extrabold uppercase tracking-widest text-[#0F766E] shadow-2xs mb-2 sm:mb-2.5">
-                                        <Sparkles className="w-3 h-3 text-[#2DD4BF]" />
+                                    <div className="inline-flex items-center rounded-full bg-[#2DD4BF]/15 border border-[#2DD4BF]/30 px-2.5 py-0.5 text-[10px] sm:text-[11px] font-extrabold uppercase tracking-widest text-[#0F766E] shadow-2xs mb-2 sm:mb-2.5">
                                         <span>{currentProduct?.badgeText || "SS40 PRODUCT"}</span>
                                     </div>
 
