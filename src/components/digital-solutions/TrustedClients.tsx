@@ -79,22 +79,26 @@ export function TrustedClients({ initialData }: TrustedClientsProps = {}) {
             <style dangerouslySetInnerHTML={{
                 __html: `
                 @keyframes scroll-left {
-                    0% { transform: translateX(0); }
-                    100% { transform: translateX(calc(-50% - 12px)); }
+                    0% { transform: translate3d(0, 0, 0); }
+                    100% { transform: translate3d(-50%, 0, 0); }
                 }
                 @keyframes scroll-right {
-                    0% { transform: translateX(calc(-50% - 12px)); }
-                    100% { transform: translateX(0); }
+                    0% { transform: translate3d(-50%, 0, 0); }
+                    100% { transform: translate3d(0, 0, 0); }
                 }
                 .animate-marquee-left {
                     animation: scroll-left var(--duration, 40s) linear infinite;
                     will-change: transform;
-                    transform: translateZ(0);
+                    transform: translate3d(0, 0, 0);
+                    backface-visibility: hidden;
+                    -webkit-backface-visibility: hidden;
                 }
                 .animate-marquee-right {
                     animation: scroll-right var(--duration, 40s) linear infinite;
                     will-change: transform;
-                    transform: translateZ(0);
+                    transform: translate3d(0, 0, 0);
+                    backface-visibility: hidden;
+                    -webkit-backface-visibility: hidden;
                 }
                 @media (hover: hover) and (pointer: fine) {
                     .group:hover .animate-marquee-left,
@@ -177,7 +181,7 @@ function MarqueeRow({ items, direction, speed }: MarqueeRowProps) {
         >
             <div
                 className={cn(
-                    "flex items-center gap-4 sm:gap-6 px-3 w-max",
+                    "flex items-center gap-4 sm:gap-6 pr-4 sm:pr-6 w-max transform-gpu",
                     direction === "left" ? "animate-marquee-left" : "animate-marquee-right"
                 )}
                 style={{ "--duration": `${speed}s` } as React.CSSProperties}

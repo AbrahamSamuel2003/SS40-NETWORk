@@ -209,7 +209,7 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
     if (variant === 'mobile-swipe') {
         return (
             <div
-                className="mobile-activity-card w-[82vw] sm:w-[350px] shrink-0 snap-center flex flex-col bg-white rounded-3xl overflow-hidden shadow-xl shadow-gray-200/50 border border-gray-100 h-full select-none relative scroll-ml-6 transform-gpu"
+                className="mobile-activity-card w-[82vw] sm:w-[350px] shrink-0 snap-center flex flex-col bg-white rounded-3xl overflow-hidden border border-gray-200/90 h-full select-none relative scroll-ml-6 transform-gpu"
                 style={{ transform: 'translateZ(0)', willChange: 'transform' }}
             >
                 {/* Standard Fixed Aspect Image */}
@@ -220,14 +220,14 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
                     onClick={() => onReadStory && onReadStory(activity)}
                     className="relative w-full h-[200px] sm:h-[220px] bg-gray-950 overflow-hidden cursor-pointer shrink-0 z-0"
                 >
-                    <AnimatePresence mode="wait">
+                    <AnimatePresence>
                         {images[currentIndex] && (
                             <motion.div
                                 key={images[currentIndex].url || currentIndex}
-                                initial={{ opacity: 0.85 }}
+                                initial={{ opacity: 0.9 }}
                                 animate={{ opacity: 1 }}
-                                exit={{ opacity: 0.85 }}
-                                transition={{ duration: 0.25 }}
+                                exit={{ opacity: 0.9 }}
+                                transition={{ duration: 0.12 }}
                                 className="absolute inset-0 w-full h-full"
                             >
                                 <Image
@@ -246,14 +246,13 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
 
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
 
-                    <div className="absolute top-3 inset-x-3 flex items-center justify-between pointer-events-none z-10">
-                        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold shadow-md backdrop-blur-md border ${meta.color}`}>
-                            <Icon className="w-3.5 h-3.5" />
+                    <div className="absolute top-2.5 inset-x-2.5 sm:top-3 sm:inset-x-3 flex items-center justify-between pointer-events-none z-10">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-semibold tracking-wider uppercase text-white/90 bg-black/40 backdrop-blur-md border border-white/20 shadow-2xs select-none">
                             {meta.label}
                         </span>
 
                         {totalImages > 1 && (
-                            <span className="bg-black/75 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow-sm">
+                            <span className="bg-black/50 backdrop-blur-md text-white/80 text-[9px] font-medium px-1.5 py-0.5 rounded-full border border-white/15 shadow-2xs">
                                 {currentIndex + 1} / {totalImages}
                             </span>
                         )}
@@ -300,7 +299,7 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
                         </p>
                     </div>
 
-                    <div className="pt-3 border-t border-gray-100 flex items-center justify-between mt-auto">
+                    <div className="pt-1 flex items-center justify-between mt-auto">
                         <button
                             type="button"
                             onClick={() => onReadStory && onReadStory(activity)}
@@ -344,14 +343,14 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
                     onClick={() => onReadStory && onReadStory(activity)}
                     className="relative w-full aspect-[16/10] bg-gray-950 overflow-hidden cursor-pointer select-none shrink-0"
                 >
-                    <AnimatePresence mode="wait">
+                    <AnimatePresence>
                         {images[currentIndex] && (
                             <motion.div
                                 key={images[currentIndex].url || currentIndex}
-                                initial={{ opacity: 0.85 }}
+                                initial={{ opacity: 0.9 }}
                                 animate={{ opacity: 1 }}
-                                exit={{ opacity: 0.85 }}
-                                transition={{ duration: 0.25 }}
+                                exit={{ opacity: 0.9 }}
+                                transition={{ duration: 0.12 }}
                                 className="absolute inset-0 w-full h-full group-hover/card:scale-105 transition-transform duration-500"
                             >
                                 <Image
@@ -369,14 +368,13 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
 
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
 
-                    <div className="absolute top-3 inset-x-3 flex items-center justify-between pointer-events-none z-10">
-                        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold shadow-md backdrop-blur-md border ${meta.color}`}>
-                            <Icon className="w-3.5 h-3.5" />
+                    <div className="absolute top-2.5 inset-x-2.5 sm:top-3 sm:inset-x-3 flex items-center justify-between pointer-events-none z-10">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-semibold tracking-wider uppercase text-white/90 bg-black/40 backdrop-blur-md border border-white/20 shadow-2xs select-none">
                             {meta.label}
                         </span>
 
                         {totalImages > 1 && (
-                            <span className="bg-black/75 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow-sm">
+                            <span className="bg-black/50 backdrop-blur-md text-white/80 text-[9px] font-medium px-1.5 py-0.5 rounded-full border border-white/15 shadow-2xs">
                                 {currentIndex + 1} / {totalImages}
                             </span>
                         )}
@@ -423,7 +421,7 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
                         </p>
                     </div>
 
-                    <div className="pt-3 border-t border-gray-100 flex items-center justify-between mt-auto">
+                    <div className="pt-1 flex items-center justify-between mt-auto">
                         <button
                             type="button"
                             onClick={() => onReadStory && onReadStory(activity)}
@@ -471,14 +469,14 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
                 onClick={() => onReadStory && onReadStory(activity)}
                 className="relative w-full lg:w-1/2 h-[240px] sm:h-[300px] lg:h-[320px] xl:h-[350px] bg-gray-950 overflow-hidden cursor-pointer select-none shrink-0"
             >
-                <AnimatePresence mode="wait">
+                <AnimatePresence>
                     {images[currentIndex] && (
                         <motion.div
                             key={images[currentIndex].url || currentIndex}
-                            initial={{ opacity: 0.85 }}
+                            initial={{ opacity: 0.9 }}
                             animate={{ opacity: 1 }}
-                            exit={{ opacity: 0.85 }}
-                            transition={{ duration: 0.25 }}
+                            exit={{ opacity: 0.9 }}
+                            transition={{ duration: 0.12 }}
                             className="absolute inset-0 w-full h-full group-hover/card:scale-105 transition-transform duration-700"
                         >
                             <Image
@@ -499,14 +497,13 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-black/30 pointer-events-none" />
 
                 {/* Top Badges */}
-                <div className="absolute top-3 inset-x-3 lg:top-4 lg:inset-x-4 flex items-center justify-between pointer-events-none z-10">
-                    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] lg:text-xs font-bold shadow-lg backdrop-blur-md border ${meta.color}`}>
-                        <Icon className="w-3.5 h-3.5" />
+                <div className="absolute top-2.5 inset-x-2.5 lg:top-3.5 lg:inset-x-3.5 flex items-center justify-between pointer-events-none z-10">
+                    <span className="inline-flex items-center px-2 py-0.5 lg:px-2.5 lg:py-0.5 rounded-full text-[9px] sm:text-[10px] lg:text-[11px] font-semibold tracking-wider uppercase text-white/90 bg-black/40 backdrop-blur-md border border-white/20 shadow-2xs select-none">
                         {meta.label}
                     </span>
 
                     {totalImages > 1 && (
-                        <span className="bg-black/75 backdrop-blur-md text-white text-[10px] lg:text-[11px] font-bold px-2.5 py-1 rounded-full shadow-md">
+                        <span className="bg-black/50 backdrop-blur-md text-white/80 text-[9px] lg:text-[10px] font-medium px-2 py-0.5 rounded-full border border-white/15 shadow-2xs">
                             {currentIndex + 1} / {totalImages}
                         </span>
                     )}

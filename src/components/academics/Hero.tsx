@@ -52,10 +52,10 @@ export function Hero() {
             </div>
 
             <Container className="relative z-10 w-full">
-                <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-12 w-full">
+                <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-12 w-full">
 
                     {/* Left Column: Content */}
-                    <div className="w-full lg:w-[45%] flex flex-col items-center lg:items-start text-center lg:text-left">
+                    <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left">
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -66,13 +66,13 @@ export function Hero() {
                                 SS40 ACADEMICS
                             </Badge>
 
-                            <h1 className="text-[clamp(44px,5vw,72px)] font-bold text-[#111827] leading-[1.1] tracking-tight mb-6 font-serif">
-                                Learn. <br className="hidden md:block" />
-                                Build. <br className="hidden md:block" />
-                                <span className="text-[#0F766E]">Grow.</span>
+                            <h1 className="text-[clamp(40px,5vw,56px)] font-bold text-[#111827] leading-[1.1] tracking-tight mb-6 max-w-2xl font-serif">
+                                Learn by Doing.<br />
+                                Build Fast.<br />
+                                <span className="text-[#0F766E]">Grow Beyond.</span>
                             </h1>
 
-                            <p className="text-lg md:text-xl text-[#6B7280] mb-10 max-w-lg leading-relaxed">
+                            <p className="text-lg md:text-xl text-[#6B7280] mb-10 max-w-xl leading-relaxed">
                                 We empower the next generation of engineers with real-world technical skills, deep industry project experience, and career-accelerating placements.
                             </p>
 
@@ -93,9 +93,8 @@ export function Hero() {
                     </div>
 
                     {/* Right Column: Career Launch Pad Visual */}
-                    {/* Hidden on mobile completely for a cleaner layout */}
-                    <div className="w-full lg:w-[55%] relative hidden lg:flex justify-center items-center h-[350px] lg:h-[450px] perspective-1000">
-                        <div className="relative w-full max-w-[550px] aspect-square">
+                    <div className="w-full lg:w-1/2 relative flex justify-center items-center min-h-[280px] sm:min-h-[340px] lg:min-h-[380px] perspective-1000">
+                        <div className="relative w-full max-w-[440px] aspect-square">
 
                             {/* SVG Connection Lines for Progression Sequence */}
                             <svg className="absolute inset-0 w-full h-full pointer-events-none z-0 overflow-visible" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -125,19 +124,19 @@ export function Hero() {
                             </svg>
 
                             {/* Ambient Glow */}
-                            <motion.div animate={{ opacity: [0.2, 0.4, 0.2] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-[#6B9F91]/5 rounded-full blur-2xl z-0" />
+                            <motion.div animate={{ opacity: [0.2, 0.4, 0.2] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-[#6B9F91]/5 rounded-full blur-2xl z-0" />
 
                             {/* CENTER: Career Launch Pad Platform */}
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, type: "spring" }}
-                                className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 z-10 w-44 h-44 bg-white/80 backdrop-blur-xl rounded-full border border-white shadow-2xl flex flex-col items-center justify-center p-6 text-center ring-8 ring-[#D8E8E2]/50"
+                                className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 z-10 w-36 h-36 bg-white/80 backdrop-blur-xl rounded-full border border-white shadow-xl flex flex-col items-center justify-center p-4 text-center ring-6 ring-[#D8E8E2]/50"
                             >
                                 <div className="absolute inset-0 rounded-full bg-gradient-to-t from-[#6B9F91]/5 to-transparent pointer-events-none" />
-                                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#111827] to-gray-800 flex items-center justify-center shadow-lg border border-gray-700 mb-3 group">
-                                    <Rocket className="w-5 h-5 text-white transform group-hover:-translate-y-1 transition-transform" />
+                                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#111827] to-gray-800 flex items-center justify-center shadow-md border border-gray-700 mb-2 group">
+                                    <Rocket className="w-4 h-4 text-white transform group-hover:-translate-y-1 transition-transform" />
                                 </div>
-                                <span className="text-[9px] uppercase tracking-widest text-[#6B9F91] font-bold mb-1">SS40 Network</span>
-                                <h3 className="text-sm font-black text-[#111827] leading-tight">Career<br />Launch Pad</h3>
+                                <span className="text-[8px] uppercase tracking-widest text-[#6B9F91] font-bold mb-0.5">SS40 Network</span>
+                                <h3 className="text-xs font-black text-[#111827] leading-tight">Career<br />Launch Pad</h3>
                             </motion.div>
 
                             {/* NODE 1: Learn - Center: (20, 25) */}

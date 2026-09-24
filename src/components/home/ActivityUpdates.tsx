@@ -142,8 +142,8 @@ export function ActivityUpdates({ data = [] }: ActivityUpdatesProps) {
                                             pointerEvents: isActive ? 'auto' : 'none'
                                         }}
                                         transition={{
-                                            duration: 0.36,
-                                            ease: [0.22, 1, 0.36, 1]
+                                            duration: 0.18,
+                                            ease: 'easeOut'
                                         }}
                                         className={`w-full transform-gpu ${idx === 0 ? 'relative' : 'absolute inset-x-0'}`}
                                         style={{

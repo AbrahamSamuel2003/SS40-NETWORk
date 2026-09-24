@@ -198,22 +198,22 @@ export function FeaturedProduct({ initialData }: FeaturedProductProps = {}) {
                                         <Button
                                             asChild
                                             size="sm"
-                                            className="w-full sm:w-auto bg-[#0F766E] hover:bg-[#115E59] text-white shadow-md shadow-[#0F766E]/20 rounded-xl group px-6 py-2.5 text-xs sm:text-sm font-bold"
+                                            className="w-auto max-w-max bg-[#0F766E] hover:bg-[#115E59] text-white shadow-md shadow-[#0F766E]/20 rounded-xl group px-5 sm:px-6 py-2.5 text-xs sm:text-sm font-bold"
                                         >
-                                            <a href={currentProduct.productUrl} target="_blank" rel="noopener noreferrer">
+                                            <a href={currentProduct.productUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center whitespace-nowrap">
                                                 {currentProduct.ctaText || `Start using ${currentProduct.name}`}
-                                                <ArrowRight className="ml-1.5 w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                                                <ArrowRight className="ml-1.5 w-3.5 h-3.5 group-hover:translate-x-1 transition-transform shrink-0" />
                                             </a>
                                         </Button>
                                     ) : (
                                         <Button
                                             asChild
                                             size="sm"
-                                            className="w-full sm:w-auto bg-[#0F766E] hover:bg-[#115E59] text-white shadow-md shadow-[#0F766E]/20 rounded-xl group px-6 py-2.5 text-xs sm:text-sm font-bold"
+                                            className="w-auto max-w-max bg-[#0F766E] hover:bg-[#115E59] text-white shadow-md shadow-[#0F766E]/20 rounded-xl group px-5 sm:px-6 py-2.5 text-xs sm:text-sm font-bold"
                                         >
-                                            <Link href="/contact">
+                                            <Link href="/contact" className="inline-flex items-center justify-center whitespace-nowrap">
                                                 Request Product Demo
-                                                <ArrowRight className="ml-1.5 w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                                                <ArrowRight className="ml-1.5 w-3.5 h-3.5 group-hover:translate-x-1 transition-transform shrink-0" />
                                             </Link>
                                         </Button>
                                     )}

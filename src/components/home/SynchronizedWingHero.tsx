@@ -105,7 +105,7 @@ export function SynchronizedWingHero() {
 
     return (
         <div 
-            className="w-full relative mt-2 sm:mt-4 select-none"
+            className="w-full relative mt-3 sm:mt-4 lg:mt-0 select-none"
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
         >

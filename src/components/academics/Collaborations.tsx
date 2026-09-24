@@ -1,29 +1,16 @@
 "use client";
 
 import * as React from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-    Building2, Network, Library, GraduationCap, Briefcase,
-    Rocket, Presentation, Users, Lightbulb, ArrowRight, BookOpen, Target
-} from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
+import {
+    Building2, Briefcase, Rocket, Presentation, Users, Lightbulb
+} from "lucide-react";
+import { motion } from "framer-motion";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Button } from "@/components/ui/Button";
+import { cn } from "@/utils/cn";
 import { LogoMarqueeSkeleton } from "@/components/ui/Skeleton";
-
-import { shuffleArray } from "@/utils/shuffle";
-
-// --- Data ---
-const NETWORK_NODES = [
-    { id: "uni", label: "Universities", tooltip: "Global academic partnerships", icon: Library, x: -140, y: -60 },
-    { id: "col", label: "Colleges", tooltip: "Regional college collaborations", icon: GraduationCap, x: 140, y: -60 },
-    { id: "part", label: "Academic Partners", tooltip: "Curriculum co-creation", icon: Network, x: -100, y: 100 },
-    { id: "train", label: "Training Institutions", tooltip: "Vocational & technical training", icon: BookOpen, x: 100, y: 100 },
-    { id: "res", label: "Research Partners", tooltip: "Innovation & R&D", icon: Target, x: 0, y: -130 },
-];
 
 const BENEFITS = [
     { title: "Industry Projects", description: "Students solve real business challenges.", icon: Rocket },
@@ -35,20 +22,15 @@ const BENEFITS = [
 ];
 
 export function Collaborations({ logos = [] }: { logos?: any[] }) {
-    const [hoveredNode, setHoveredNode] = React.useState<string | null>(null);
-    const [isMarqueePaused, setIsMarqueePaused] = React.useState(false);
-
-    const shuffledLogos = React.useMemo(() => logos, [logos]);
-
     if (!logos || logos.length === 0) {
         return (
-            <SectionWrapper id="collaborations" className="bg-white relative overflow-hidden pb-8 md:pb-12">
-                <Container className="relative z-10 flex flex-col items-center">
+            <SectionWrapper id="collaborations" className="bg-[#D8E8E2] lg:bg-white relative overflow-hidden pb-8 md:pb-12">
+                <Container className="relative z-10">
                     <SectionHeading
                         badge="UNIVERSITIES & COLLEGE COLLABORATIONS"
                         title="Building Strong Academic Partnerships"
                         description="Collaborating with educational institutions to create practical learning experiences, industry exposure, and career opportunities."
-                        className="mb-10"
+                        className="mb-12 lg:mb-20"
                     />
                     <LogoMarqueeSkeleton count={6} title="" />
                 </Container>
@@ -56,189 +38,94 @@ export function Collaborations({ logos = [] }: { logos?: any[] }) {
         );
     }
 
-    const expandedItems = shuffledLogos.length < 5 ? [...shuffledLogos, ...shuffledLogos, ...shuffledLogos, ...shuffledLogos] : shuffledLogos;
-    const half = [...expandedItems, ...expandedItems, ...expandedItems];
-    const marqueeItems = [...half, ...half];
-
-    // State-based pause/resume instead of class toggling — reliable across all browsers
-    const handlePointerDown = () => setIsMarqueePaused(true);
-    const handlePointerUp = () => setIsMarqueePaused(false);
-    const handleMouseEnter = () => setIsMarqueePaused(true);
-    const handleMouseLeave = () => setIsMarqueePaused(false);
+    const rows = {
+        row1: logos,
+        row2: logos.length > 3 ? [...logos].reverse() : logos,
+    };
 
     return (
-        <SectionWrapper id="collaborations" className="bg-white relative overflow-hidden pb-8 md:pb-12">
-
-            {/* Ambient background */}
+        <SectionWrapper id="collaborations" className="bg-[#D8E8E2] lg:bg-white relative overflow-hidden">
+            {/* Soft Ambient Background Enhancements */}
             <div className="absolute inset-0 pointer-events-none z-0">
-                <div className="absolute top-[20%] right-[10%] w-[500px] h-[500px] bg-[#6B9F91]/5 blur-[100px] rounded-full mix-blend-multiply" />
-                <div className="absolute bottom-[20%] left-[5%] w-[400px] h-[400px] bg-[#FFC900]/5 blur-[80px] rounded-full mix-blend-multiply" />
+                <div
+                    className="absolute inset-0 opacity-[0.02] mix-blend-multiply"
+                    style={{ backgroundImage: 'linear-gradient(#6B9F91 1px, transparent 1px), linear-gradient(90deg, #6B9F91 1px, transparent 1px)', backgroundSize: '40px 40px' }}
+                />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-[#6B9F91]/5 blur-[120px] rounded-full" />
             </div>
 
-            <Container className="relative z-10 flex flex-col items-center">
-
-                {/* SECTION HEADER */}
+            <Container className="relative z-10">
                 <SectionHeading
                     badge="UNIVERSITIES & COLLEGE COLLABORATIONS"
                     title="Building Strong Academic Partnerships"
                     description="Collaborating with educational institutions to create practical learning experiences, industry exposure, and career opportunities."
-                    className="mb-10"
+                    className="mb-12 lg:mb-16"
                 />
+            </Container>
 
-                {/* 1. PARTNERSHIP NETWORK */}
-                <div className="w-full max-w-[340px] sm:max-w-[420px] md:max-w-[440px] mx-auto relative flex items-center justify-center mb-8 isolate">
-                    {/* Square inner wrapper: nodes positioned via % so the diagram scales with container width */}
-                    <div className="relative w-full aspect-square flex items-center justify-center">
+            {/* Inline styles for seamless infinite CSS Marquee */}
+            <style dangerouslySetInnerHTML={{
+                __html: `
+                @keyframes scroll-left {
+                    0% { transform: translate3d(0, 0, 0); }
+                    100% { transform: translate3d(-50%, 0, 0); }
+                }
+                @keyframes scroll-right {
+                    0% { transform: translate3d(-50%, 0, 0); }
+                    100% { transform: translate3d(0, 0, 0); }
+                }
+                .animate-marquee-left {
+                    animation: scroll-left var(--duration, 40s) linear infinite;
+                    will-change: transform;
+                    transform: translate3d(0, 0, 0);
+                    backface-visibility: hidden;
+                    -webkit-backface-visibility: hidden;
+                }
+                .animate-marquee-right {
+                    animation: scroll-right var(--duration, 40s) linear infinite;
+                    will-change: transform;
+                    transform: translate3d(0, 0, 0);
+                    backface-visibility: hidden;
+                    -webkit-backface-visibility: hidden;
+                }
+                @media (hover: hover) and (pointer: fine) {
+                    .group:hover .animate-marquee-left,
+                    .group:hover .animate-marquee-right {
+                        animation-play-state: paused !important;
+                    }
+                    .marquee-logo-card:hover {
+                        transform: translateY(-0.25rem);
+                        border-color: #6B9F91;
+                        box-shadow: 0 10px 15px -3px rgb(107 159 145 / 0.2), 0 4px 6px -4px rgb(107 159 145 / 0.2);
+                    }
+                    .group:hover .marquee-logo-icon {
+                        transform: scale(1.1);
+                    }
+                }
+                @media (hover: none), (pointer: coarse) {
+                    .marquee-touch-paused .animate-marquee-left,
+                    .marquee-touch-paused .animate-marquee-right {
+                        animation-play-state: paused !important;
+                    }
+                }
+            `}} />
 
-                        {/* SVG Connecting Lines */}
-                        <svg className="absolute inset-0 w-full h-full -z-10" viewBox="-200 -200 400 400" preserveAspectRatio="xMidYMid meet">
-                            {NETWORK_NODES.map((node) => {
-                                const isHovered = hoveredNode === node.id;
-                                const isFaded = hoveredNode && !isHovered;
-                                return (
-                                    <g key={`line-${node.id}`}>
-                                        <line
-                                            x1="0" y1="0" x2={node.x} y2={node.y}
-                                            stroke="#6B9F91"
-                                            strokeWidth="1.5"
-                                            strokeDasharray="4 4"
-                                            className={`transition-opacity duration-300 ${isFaded ? 'opacity-10' : 'opacity-30'}`}
-                                        />
-                                        {isHovered && (
-                                            <motion.line
-                                                x1="0" y1="0" x2={node.x} y2={node.y}
-                                                stroke="#6B9F91"
-                                                strokeWidth="2.5"
-                                                initial={{ pathLength: 0 }}
-                                                animate={{ pathLength: 1 }}
-                                                transition={{ duration: 0.4, ease: "easeOut" }}
-                                                className="opacity-80"
-                                            />
-                                        )}
-                                    </g>
-                                )
-                            })}
-                        </svg>
+            {/* Marquee Section (Full Bleed) */}
+            <div className="relative z-10 w-full flex flex-col gap-6 md:gap-8 overflow-hidden py-4 mb-16 md:mb-20">
+                {/* Left/Right Fade Gradients for visual smoothness */}
+                <div className="absolute top-0 bottom-0 left-0 w-14 md:w-28 bg-gradient-to-r from-[#D8E8E2] lg:from-white via-[#D8E8E2]/40 lg:via-white/40 to-transparent z-20 pointer-events-none" />
+                <div className="absolute top-0 bottom-0 right-0 w-14 md:w-28 bg-gradient-to-l from-[#D8E8E2] lg:from-white via-[#D8E8E2]/40 lg:via-white/40 to-transparent z-20 pointer-events-none" />
 
-                        {/* Central Node */}
-                        <div className="relative z-20 flex flex-col items-center justify-center w-28 h-28 md:w-36 md:h-36 lg:w-44 lg:h-44 bg-white rounded-full shadow-[0_15px_50px_rgba(107,159,145,0.15)] border-4 border-[#D8E8E2]">
-                            <div className="absolute inset-0 bg-[#6B9F91]/5 rounded-full animate-pulse -z-10" />
-                            <Network className="w-8 h-8 text-[#6B9F91] mb-2" />
-                            <span className="font-extrabold text-[#111827] text-[10px] md:text-xs tracking-wider text-center">SS40<br />ACADEMICS</span>
-                        </div>
+                {/* ROW 1: Scroll Left */}
+                <MarqueeRow items={rows.row1} direction="left" speed={35} />
 
-                        {/* Outer Nodes: positioned via % derived from SVG viewBox (400 units wide) */}
-                        {NETWORK_NODES.map((node) => {
-                            const Icon = node.icon;
-                            const isHovered = hoveredNode === node.id;
-                            const isFaded = hoveredNode && !isHovered;
-                            return (
-                                <div
-                                    key={node.id}
-                                    className="absolute z-30"
-                                    style={{
-                                        left: `${50 + (node.x / 400) * 100}%`,
-                                        top: `${50 + (node.y / 400) * 100}%`,
-                                    }}
-                                    onMouseEnter={() => setHoveredNode(node.id)}
-                                    onMouseLeave={() => setHoveredNode(null)}
-                                >
-                                    <motion.div
-                                        className={`absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-full bg-white shadow-xl cursor-default transition-all duration-300 border-2
-                                            ${isHovered ? 'border-[#6B9F91] shadow-[#6B9F91]/20 scale-110 z-40' : 'border-gray-50 scale-100 z-30'}
-                                            ${isFaded ? 'opacity-40 grayscale blur-[1px]' : 'opacity-100'}
-                                        `}
-                                    >
-                                        <Icon className={`w-5 h-5 mb-1.5 transition-colors ${isHovered ? 'text-[#6B9F91]' : 'text-gray-400'}`} />
-                                        <span className={`text-[9px] md:text-[10px] font-bold text-center leading-tight px-2 ${isHovered ? 'text-[#111827]' : 'text-gray-500'}`}>
-                                            {node.label}
-                                        </span>
+                {/* ROW 2: Scroll Right */}
+                <MarqueeRow items={rows.row2} direction="right" speed={40} />
+            </div>
 
-                                        {/* Tooltip */}
-                                        <AnimatePresence>
-                                            {isHovered && (
-                                                <motion.div
-                                                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                                                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                                                    exit={{ opacity: 0, y: 5, scale: 0.95 }}
-                                                    className="absolute -bottom-10 whitespace-nowrap bg-[#111827] text-white text-[10px] font-medium px-3 py-1.5 rounded-lg shadow-lg pointer-events-none"
-                                                >
-                                                    {node.tooltip}
-                                                    <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-[#111827] transform rotate-45" />
-                                                </motion.div>
-                                            )}
-                                        </AnimatePresence>
-                                    </motion.div>
-                                </div>
-                            )
-                        })}
-                    </div>
-                </div>
-
-                {/* 2. INSTITUTION SHOWCASE (MARQUEE) */}
-                <div className="w-full relative py-2 mb-16 md:mb-24">
-                    <div className="absolute inset-y-0 left-0 w-14 md:w-28 bg-gradient-to-r from-[#EDF5F2] via-[#EDF5F2]/40 to-transparent z-10 hidden md:block" />
-                    <div className="absolute inset-y-0 right-0 w-14 md:w-28 bg-gradient-to-l from-[#EDF5F2] via-[#EDF5F2]/40 to-transparent z-10 hidden md:block" />
-
-                    <div
-                        className="academic-marquee-row flex overflow-hidden group touch-pan-y select-none"
-                        onPointerDown={handlePointerDown}
-                        onPointerUp={handlePointerUp}
-                        onPointerCancel={handlePointerUp}
-                        onMouseEnter={handleMouseEnter}
-                        onMouseLeave={handleMouseLeave}
-                    >
-                        <div
-                            className="academic-marquee-track flex animate-[scroll-left_35s_linear_infinite] gap-4 sm:gap-6 pr-6 w-max will-change-transform"
-                            style={{ animationPlayState: isMarqueePaused ? 'paused' : 'running' }}
-                        >
-                            {marqueeItems.map((inst, idx) => (
-                                <div
-                                    key={`inst-${idx}`}
-                                    className={`academic-marquee-card bg-white rounded-2xl border border-gray-100 shadow-[0_2px_8px_-3px_rgba(0,0,0,0.05)] hover:shadow-[0_10px_20px_-5px_rgba(0,0,0,0.08)] flex items-center shrink-0 transition-all cursor-pointer group ${
-                                        inst.showTextOnCard
-                                            ? 'p-3 sm:p-4 gap-3 sm:gap-4 w-max h-[64px] sm:h-[72px] md:h-[80px] justify-start'
-                                            : 'px-4 py-2 sm:px-5 sm:py-2.5 h-[64px] sm:h-[72px] md:h-[80px] w-auto justify-center'
-                                    }`}
-                                    title={inst.name}
-                                >
-                                    {/* Logo Container */}
-                                    <div className={`flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105 ${
-                                        inst.showTextOnCard 
-                                            ? 'w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12' 
-                                            : 'h-11 sm:h-12 md:h-14 w-auto min-w-[36px]'
-                                    }`}>
-                                        {inst.logoUrl ? (
-                                            <img 
-                                                src={inst.logoUrl} 
-                                                alt={inst.showTextOnCard ? inst.name : ''} 
-                                                className={`object-contain ${
-                                                    inst.showTextOnCard 
-                                                        ? 'w-full h-full' 
-                                                        : 'w-auto h-full max-w-[160px] sm:max-w-[200px] md:max-w-[240px]'
-                                                }`} 
-                                            />
-                                        ) : (
-                                            <Building2 className="w-7 h-7 sm:w-8 sm:h-8 text-[#6B9F91]" />
-                                        )}
-                                    </div>
-                                    {inst.showTextOnCard && (
-                                        <div className="flex flex-col overflow-hidden max-w-[200px] pr-2">
-                                            <h4 className="text-sm sm:text-base font-extrabold text-[#111827] leading-tight mb-0.5 whitespace-nowrap overflow-hidden text-ellipsis">{inst.name}</h4>
-                                            {inst.category && (
-                                                <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider overflow-hidden text-ellipsis whitespace-nowrap">{inst.category}</p>
-                                            )}
-                                        </div>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-
-                {/* 3. PARTNERSHIP BENEFITS */}
+            {/* PARTNERSHIP BENEFITS */}
+            <Container className="relative z-10">
                 <div className="w-full max-w-6xl mx-auto mb-4 md:mb-8">
-
                     <SectionHeading
                         badge="COLLABORATION BENEFITS"
                         title={<>How We Bring <span className="text-[#6B9F91]">Value.</span></>}
@@ -257,35 +144,119 @@ export function Collaborations({ logos = [] }: { logos?: any[] }) {
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ margin: "-50px", once: true }}
                                     transition={{ delay: idx * 0.1, duration: 0.5 }}
-                                    className="p-6 md:p-8 bg-[#D8E8E2] rounded-[2rem] border border-gray-100 hover:bg-white hover:shadow-xl hover:shadow-[#6B9F91]/5 transition-all duration-300 group"
+                                    className="p-6 md:p-8 bg-white rounded-[2rem] border border-gray-100 hover:border-[#6B9F91]/40 hover:shadow-xl hover:shadow-[#6B9F91]/5 transition-all duration-300 group"
                                 >
-                                    <div className="w-12 h-12 bg-white rounded-2xl shadow-sm border border-gray-100 flex items-center justify-center mb-5 group-hover:bg-[#6B9F91]/10 group-hover:border-[#6B9F91]/20 transition-colors">
+                                    <div className="w-12 h-12 bg-[#D8E8E2]/50 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-center mb-5 group-hover:bg-[#6B9F91]/10 group-hover:border-[#6B9F91]/20 transition-colors">
                                         <Icon className="w-6 h-6 text-[#6B9F91]" />
                                     </div>
                                     <h4 className="text-lg font-bold text-[#111827] mb-2">{benefit.title}</h4>
                                     <p className="text-gray-500 text-sm leading-relaxed">{benefit.description}</p>
                                 </motion.div>
-                            )
+                            );
                         })}
                     </div>
                 </div>
-
-
-
             </Container>
-
-            {/* Inline styles for marquee (can optionally go to global CSS) */}
-            <style dangerouslySetInnerHTML={{
-                __html: `
-                @keyframes scroll-left {
-                    0% { transform: translateX(0); }
-                    100% { transform: translateX(calc(-50% - 12px)); } /* accounting for gap */
-                }
-                .academic-marquee-card:hover {
-                    transform: translateY(-0.25rem);
-                    box-shadow: 0 10px 15px -3px rgb(229 231 235 / 0.5), 0 4px 6px -4px rgb(229 231 235 / 0.5);
-                }
-            `}} />
         </SectionWrapper>
+    );
+}
+
+interface MarqueeRowProps {
+    items: { id: string; name: string; icon?: React.ElementType; logoUrl?: string; showTextOnCard?: boolean }[];
+    direction: "left" | "right";
+    speed: number;
+}
+
+function MarqueeRow({ items, direction, speed }: MarqueeRowProps) {
+    const baseItems = React.useMemo(() => {
+        if (!items || items.length === 0) return [];
+        let list = [...items];
+        while (list.length < 8) {
+            list = [...list, ...items];
+        }
+        return list;
+    }, [items]);
+
+    const duplicatedItems = React.useMemo(() => [...baseItems, ...baseItems], [baseItems]);
+
+    const pauseMarquee = (event: React.PointerEvent<HTMLDivElement>) => {
+        if (event.pointerType === "touch") {
+            event.currentTarget.classList.add("marquee-touch-paused");
+            event.currentTarget.setPointerCapture(event.pointerId);
+        }
+    };
+    const resumeMarquee = (event: React.PointerEvent<HTMLDivElement>) => {
+        if (event.pointerType === "touch") {
+            event.currentTarget.classList.remove("marquee-touch-paused");
+            if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+                event.currentTarget.releasePointerCapture(event.pointerId);
+            }
+        }
+    };
+
+    return (
+        <div
+            className="flex w-max relative group touch-pan-y select-none"
+            onPointerDown={pauseMarquee}
+            onPointerUp={resumeMarquee}
+            onPointerCancel={resumeMarquee}
+            onLostPointerCapture={(e) => e.currentTarget.classList.remove("marquee-touch-paused")}
+        >
+            <div
+                className={cn(
+                    "flex items-center gap-4 sm:gap-6 pr-4 sm:pr-6 w-max transform-gpu",
+                    direction === "left" ? "animate-marquee-left" : "animate-marquee-right"
+                )}
+                style={{ "--duration": `${speed}s` } as React.CSSProperties}
+            >
+                {duplicatedItems.map((item, idx) => {
+                    const Icon = item.icon;
+                    return (
+                        <div
+                            key={`${item.id}-${idx}`}
+                            style={{ contain: 'paint layout' }}
+                            className={`marquee-logo-card bg-white border border-gray-100 rounded-2xl flex items-center shadow-[0_2px_8px_-3px_rgba(0,0,0,0.05)] hover:shadow-[0_10px_20px_-5px_rgba(0,0,0,0.08)] transition-all duration-300 cursor-pointer overflow-hidden group shrink-0 transform-gpu ${
+                                item.showTextOnCard
+                                    ? 'p-3 sm:p-4 gap-3 sm:gap-4 w-max h-[64px] sm:h-[72px] md:h-[80px] justify-start'
+                                    : 'px-4 py-2 sm:px-5 sm:py-2.5 h-[64px] sm:h-[72px] md:h-[80px] w-auto justify-center'
+                            }`}
+                            title={item.name}
+                        >
+                            <div className={`flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105 ${
+                                item.showTextOnCard
+                                    ? 'w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12'
+                                    : 'h-11 sm:h-12 md:h-14 w-auto min-w-[36px]'
+                            }`}>
+                                {item.logoUrl ? (
+                                    <Image
+                                        src={item.logoUrl}
+                                        alt={item.showTextOnCard ? item.name : (item.name || 'Partner Logo')}
+                                        width={160}
+                                        height={80}
+                                        decoding="async"
+                                        sizes="(max-width: 768px) 120px, 160px"
+                                        className={`object-contain ${
+                                            item.showTextOnCard
+                                                ? 'w-full h-full'
+                                                : 'w-auto h-full max-w-[160px] sm:max-w-[200px] md:max-w-[240px]'
+                                        }`}
+                                    />
+                                ) : Icon ? (
+                                    <Icon className="w-7 h-7 sm:w-8 sm:h-8 text-[#6B9F91]" />
+                                ) : (
+                                    <Building2 className="w-7 h-7 sm:w-8 sm:h-8 text-[#6B9F91]" />
+                                )}
+                            </div>
+
+                            {item.showTextOnCard && (
+                                <span className="font-bold text-gray-800 text-sm sm:text-base whitespace-nowrap text-left pr-2">
+                                    {item.name}
+                                </span>
+                            )}
+                        </div>
+                    );
+                })}
+            </div>
+        </div>
     );
 }

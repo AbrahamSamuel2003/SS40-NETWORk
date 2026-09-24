@@ -79,7 +79,7 @@ export function BusinessWings() {
 
                             {/* Background Tall Building (Left) */}
                             <div
-                                className="animate-float-delayed-1 transform-gpu absolute left-[15%] bottom-[6px] sm:bottom-[8px] w-[22%] h-[75px] sm:h-[95px] lg:h-[115px] bg-gradient-to-t from-gray-50 to-white/95 rounded-tl-[0.75rem] rounded-tr-xs shadow-md border border-white/80 backdrop-blur-xs z-10 overflow-hidden flex flex-col p-1 gap-0.5"
+                                className="transform-gpu absolute left-[15%] bottom-[6px] sm:bottom-[8px] w-[22%] h-[75px] sm:h-[95px] lg:h-[115px] bg-gradient-to-t from-gray-50 to-white/95 rounded-tl-[0.75rem] rounded-tr-xs shadow-md border border-white/80 backdrop-blur-xs z-10 overflow-hidden flex flex-col p-1 gap-0.5"
                             >
                                 <div className="absolute top-0 inset-x-0 h-3 bg-gradient-to-b from-white to-transparent" />
                                 {[...Array(3)].map((_, i) => (
@@ -93,7 +93,7 @@ export function BusinessWings() {
 
                             {/* Background Tall Building (Right) */}
                             <div
-                                className="animate-float-delayed-2 transform-gpu absolute right-[15%] bottom-[6px] sm:bottom-[8px] w-[22%] h-[70px] sm:h-[88px] lg:h-[105px] bg-gradient-to-t from-gray-50 to-white/95 rounded-tr-[0.75rem] rounded-tl-xs shadow-md border border-white/80 backdrop-blur-xs z-10 overflow-hidden flex flex-col p-1 gap-0.5"
+                                className="transform-gpu absolute right-[15%] bottom-[6px] sm:bottom-[8px] w-[22%] h-[70px] sm:h-[88px] lg:h-[105px] bg-gradient-to-t from-gray-50 to-white/95 rounded-tr-[0.75rem] rounded-tl-xs shadow-md border border-white/80 backdrop-blur-xs z-10 overflow-hidden flex flex-col p-1 gap-0.5"
                             >
                                 <div className="absolute top-0 inset-x-0 h-3 bg-gradient-to-b from-white to-transparent" />
                                 {[...Array(3)].map((_, i) => (
@@ -107,7 +107,7 @@ export function BusinessWings() {
 
                             {/* Main Center HQ Tower */}
                             <div
-                                className="animate-float-slow transform-gpu relative w-[48%] h-[105px] sm:h-[135px] lg:h-[165px] bg-white rounded-t-xl sm:rounded-t-2xl shadow-xl border border-gray-100/80 z-20 flex flex-col items-center p-1.5 sm:p-2.5 overflow-hidden"
+                                className="transform-gpu relative w-[48%] h-[105px] sm:h-[135px] lg:h-[165px] bg-white rounded-t-xl sm:rounded-t-2xl shadow-xl border border-gray-100/80 z-20 flex flex-col items-center p-1.5 sm:p-2.5 overflow-hidden"
                             >
                                 {/* Frosted Glass Window Grid */}
                                 <div className="w-full flex-1 grid grid-cols-3 gap-1 sm:gap-1.5 p-1 bg-gradient-to-b from-[var(--color-primary)]/[0.04] to-transparent rounded-lg border border-[var(--color-primary)]/10 relative">

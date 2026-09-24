@@ -9,7 +9,7 @@ export function Hero() {
 
             <Container className="relative z-10">
                 {/* Center Focused Narrative Header */}
-                <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
+                <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-8 sm:mb-6 lg:mb-1">
                     {/* Compact Eyebrow Tag */}
                     <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[11px] sm:text-xs font-extrabold uppercase tracking-widest bg-[#2DD4BF]/15 border border-[#2DD4BF]/30 text-[#0F766E] mb-2.5 shadow-2xs font-crimson">
                         &ldquo;A LITTLE BIT MORE&rdquo;

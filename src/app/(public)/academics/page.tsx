@@ -110,9 +110,13 @@ export default async function AcademicsPage() {
             )}
             <Placements />
             {isSectionVisible(config, 'academics_logos') && (
-                <Collaborations logos={academicLogos} />
+                <div className="cv-auto">
+                    <Collaborations logos={academicLogos} />
+                </div>
             )}
-            <Collaborate />
+            <div className="cv-auto">
+                <Collaborate />
+            </div>
         </div>
     );
 }

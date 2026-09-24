@@ -1,4 +1,4 @@
-﻿import { prisma } from '@/lib/prisma';
+import { prisma } from '@/lib/prisma';
 import { Activity, Package, Briefcase, GraduationCap, Inbox, Image } from 'lucide-react';
 
 export default async function AdminDashboardPage() {
@@ -45,16 +45,16 @@ export default async function AdminDashboardPage() {
                 <p className="admin-page-description">High-level summary of your platform&apos;s content and engagement.</p>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-4">
                 {stats.map((stat, idx) => {
                     const Icon = stat.icon;
                     return (
-                        <div key={idx} className="admin-card p-6 flex flex-col items-center justify-center text-center hover:border-[#6B9F91]/30 transition-colors">
-                            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#D8E8E2] border border-[#6B9F91]/10">
-                                <Icon className={`w-6 h-6 ${stat.color}`} />
+                        <div key={idx} className="admin-card p-3 sm:p-4 lg:p-5 flex flex-col items-center justify-center text-center hover:border-[#6B9F91]/40 hover:shadow-xs transition-all rounded-xl sm:rounded-2xl">
+                            <div className="mb-2 sm:mb-3 flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-lg sm:rounded-xl bg-[#D8E8E2] border border-[#6B9F91]/15">
+                                <Icon className={`w-4 h-4 sm:w-5 sm:h-5 ${stat.color}`} />
                             </div>
-                            <div className="text-3xl font-extrabold text-[#111827] mb-1">{stat.value}</div>
-                            <div className="text-xs font-bold text-[#6B7280] uppercase tracking-wider">{stat.label}</div>
+                            <div className="text-2xl sm:text-3xl font-extrabold text-[#111827] leading-none mb-1">{stat.value}</div>
+                            <div className="text-[10px] sm:text-[11px] font-bold text-[#6B7280] uppercase tracking-wider line-clamp-1">{stat.label}</div>
                         </div>
                     );
                 })}
