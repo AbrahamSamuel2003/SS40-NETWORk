@@ -93,7 +93,8 @@ export function Hero() {
                     </div>
 
                     {/* Right Column: Career Launch Pad Visual */}
-                    <div className="w-full lg:w-1/2 relative flex justify-center items-center min-h-[280px] sm:min-h-[340px] lg:min-h-[380px] perspective-1000">
+                    {/* Hidden on mobile view only for a clean, focused mobile layout */}
+                    <div className="w-full lg:w-1/2 relative hidden sm:flex justify-center items-center sm:min-h-[340px] lg:min-h-[380px] perspective-1000">
                         <div className="relative w-full max-w-[440px] aspect-square">
 
                             {/* SVG Connection Lines for Progression Sequence */}
