@@ -299,10 +299,6 @@ export function Hero() {
                                                 repeatCount="indefinite"
                                             />
                                         </motion.circle>
-
-                                        {/* Peak Breakthrough Beacon Animation */}
-                                        <circle cx="426" cy="-3" r="5" fill="#0F766E" className="animate-ping" opacity="0.6" />
-                                        <circle cx="426" cy="-3" r="3.5" fill="#0F766E" />
                                     </svg>
                                 </div>
 
