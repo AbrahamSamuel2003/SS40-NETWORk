@@ -234,7 +234,8 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
                                     src={images[currentIndex].url}
                                     alt={images[currentIndex].altText || activity.title}
                                     fill
-                                    sizes="(max-width: 640px) 82vw, 350px"
+                                    quality={75}
+                                    sizes="(max-width: 640px) 350px, 350px"
                                     className="object-cover"
                                     priority={priority}
                                     loading={priority ? 'eager' : 'lazy'}
@@ -483,6 +484,7 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
                                 src={images[currentIndex].url}
                                 alt={images[currentIndex].altText || cleanTitle}
                                 fill
+                                quality={75}
                                 sizes="(max-width: 1024px) 100vw, 50vw"
                                 className="object-cover"
                                 priority={priority}

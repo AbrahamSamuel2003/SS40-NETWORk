@@ -113,13 +113,13 @@ export async function Footer() {
                 {/* Bottom Row - Social Media Icons, Centered Copyright */}
                 <div className="relative border-t border-[var(--color-border)] pt-8 pb-4 flex flex-col md:flex-row items-center justify-between gap-6">
                     {/* Left: Social Media Icons (LinkedIn, Instagram, YouTube) */}
-                    <div className="flex items-center gap-6 text-[#111827] order-2 md:order-1">
+                    <div className="flex items-center gap-3 text-[#111827] order-2 md:order-1">
                         <a
                             href={config?.urlLinkedin || "https://www.linkedin.com/company/ss40-network"}
                             target="_blank"
                             rel="noopener noreferrer"
-                            aria-label="LinkedIn"
-                            className="hover:text-[var(--color-primary)] transition-all hover:scale-110 p-0.5 text-[#111827]"
+                            aria-label="Follow SS40 Network on LinkedIn"
+                            className="hover:text-[var(--color-primary)] transition-all hover:scale-110 w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 text-[#111827]"
                         >
                             <Linkedin className="w-5 h-5" />
                         </a>
@@ -127,8 +127,8 @@ export async function Footer() {
                             href={config?.urlInstagram || "https://instagram.com"}
                             target="_blank"
                             rel="noopener noreferrer"
-                            aria-label="Instagram"
-                            className="hover:text-[var(--color-primary)] transition-all hover:scale-110 p-0.5 text-[#111827]"
+                            aria-label="Follow SS40 Network on Instagram"
+                            className="hover:text-[var(--color-primary)] transition-all hover:scale-110 w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 text-[#111827]"
                         >
                             <Instagram className="w-5 h-5" />
                         </a>
@@ -136,8 +136,8 @@ export async function Footer() {
                             href={config?.urlYoutube || "https://youtube.com"}
                             target="_blank"
                             rel="noopener noreferrer"
-                            aria-label="YouTube"
-                            className="hover:text-[var(--color-primary)] transition-all hover:scale-110 p-0.5 text-[#111827]"
+                            aria-label="Follow SS40 Network on YouTube"
+                            className="hover:text-[var(--color-primary)] transition-all hover:scale-110 w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 text-[#111827]"
                         >
                             <Youtube className="w-5 h-5" />
                         </a>

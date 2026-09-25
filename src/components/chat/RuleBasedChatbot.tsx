@@ -523,14 +523,24 @@ We specialize in custom software engineering (Digital Solutions), scalable SaaS 
                         {/* Header - Enterprise Brand Palette */}
                         <div className="bg-gradient-to-r from-[#0F766E] via-[#0D6E66] to-[#0A5751] text-white px-4 py-3 flex items-center justify-between shadow-xs relative z-10 shrink-0 border-b border-[#0F766E]/40">
                             <div className="flex items-center gap-3">
-                                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white flex items-center justify-center p-1 shadow-xs border border-white/30 shrink-0 overflow-hidden">
-                                    <Image
-                                        src="/images/ss40-sky-logo.png"
-                                        alt="SS40 SKY Logo"
-                                        width={40}
-                                        height={40}
-                                        className="w-full h-full object-contain"
-                                    />
+                                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white text-[#0F766E] flex items-center justify-center shadow-xs border border-white/30 shrink-0">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        className="w-5 h-5 sm:w-6 sm:h-6"
+                                        fill="currentColor"
+                                    >
+                                        <circle cx="12" cy="2.5" r="1.5" />
+                                        <path d="M11 4h2v2h-2z" />
+                                        <rect x="4" y="6" width="16" height="12" rx="4.5" />
+                                        <rect x="2" y="9.5" width="2" height="5" rx="1" />
+                                        <rect x="20" y="9.5" width="2" height="5" rx="1" />
+                                        <rect x="6.5" y="8.5" width="11" height="7" rx="2.5" fill="#FFFFFF" />
+                                        <circle cx="9.5" cy="11.5" r="1.3" fill="#0F766E" />
+                                        <circle cx="14.5" cy="11.5" r="1.3" fill="#0F766E" />
+                                        <path d="M10 13.5c.7.6 1.8.6 2.5 0" stroke="#0F766E" strokeWidth="1" strokeLinecap="round" fill="none" />
+                                        <path d="M8 19h8a2 2 0 0 1 2 2v1H6v-1a2 2 0 0 1 2-2z" opacity="0.9" />
+                                    </svg>
                                 </div>
                                 <div>
                                     <h3 className="font-bold text-sm sm:text-[15px] leading-tight text-white tracking-tight">

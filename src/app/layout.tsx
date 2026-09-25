@@ -24,7 +24,7 @@ const playfair = Playfair_Display({
 const crimsonPro = Crimson_Pro({
   variable: "--font-crimson-pro",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  weight: ["400", "600", "700"],
   style: ["normal", "italic"],
   display: "swap",
   adjustFontFallback: true,

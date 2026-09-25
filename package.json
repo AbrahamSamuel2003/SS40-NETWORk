@@ -52,10 +52,10 @@
     "seed": "npx tsx prisma/seed.ts"
   },
   "browserslist": [
-    "Chrome >= 94",
-    "Firefox >= 93",
-    "Safari >= 15.4",
-    "Edge >= 94",
+    "Chrome >= 109",
+    "Firefox >= 109",
+    "Safari >= 16.4",
+    "Edge >= 109",
     "not dead"
   ]
 }

@@ -85,7 +85,7 @@ const WINGS: WingData[] = [
     }
 ];
 
-const WING_INTERVAL = 2000; // 2s per wing
+const WING_INTERVAL = 3500; // 3.5s comfortable cadence
 
 export function SynchronizedWingHero() {
     const [activeIndex, setActiveIndex] = React.useState(0);
@@ -94,11 +94,23 @@ export function SynchronizedWingHero() {
     React.useEffect(() => {
         if (isPaused) return;
 
+        const handleVisibility = () => {
+            if (document.hidden) {
+                setIsPaused(true);
+            } else {
+                setIsPaused(false);
+            }
+        };
+
+        document.addEventListener("visibilitychange", handleVisibility);
         const timer = setInterval(() => {
             setActiveIndex((prev) => (prev + 1) % WINGS.length);
         }, WING_INTERVAL);
 
-        return () => clearInterval(timer);
+        return () => {
+            clearInterval(timer);
+            document.removeEventListener("visibilitychange", handleVisibility);
+        };
     }, [isPaused]);
 
     const activeWing = WINGS[activeIndex];
@@ -185,10 +197,10 @@ export function SynchronizedWingHero() {
                                         src={w.imageSrc}
                                         alt={w.imageAlt}
                                         fill
-                                        sizes="(max-width: 1024px) 100vw, 440px"
+                                        sizes="(max-width: 640px) 90vw, (max-width: 1024px) 50vw, 440px"
                                         className="object-contain object-center select-none"
-                                        priority
-                                        loading="eager"
+                                        priority={idx === 0}
+                                        loading={idx === 0 ? "eager" : "lazy"}
                                     />
                                 </div>
                             );

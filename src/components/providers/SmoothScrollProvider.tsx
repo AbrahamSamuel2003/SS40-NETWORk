@@ -8,10 +8,11 @@ export function SmoothScrollProvider({ children }: { children: React.ReactNode }
     const pathname = usePathname();
 
     useEffect(() => {
-        // Respect accessibility reduced motion preference
+        // Respect accessibility reduced motion preference or touch devices
         if (typeof window === "undefined") return;
         const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        if (prefersReducedMotion) return;
+        const isTouchDevice = window.matchMedia("(pointer: coarse)").matches || 'ontouchstart' in window;
+        if (prefersReducedMotion || isTouchDevice) return;
 
         const lenis = new Lenis({
             duration: 1.1,

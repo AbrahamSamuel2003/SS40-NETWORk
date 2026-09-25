@@ -1,14 +1,27 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { Hero } from "@/components/home/Hero";
 import { About } from "@/components/home/About";
 import { BusinessWings } from "@/components/home/BusinessWings";
-import { SuccessStories } from "@/components/home/SuccessStories";
-import { ActivityUpdates } from "@/components/home/ActivityUpdates";
-import { InteractiveImpactShowcase } from "@/components/home/InteractiveImpactShowcase";
-import { TrustedBy } from "@/components/home/TrustedBy";
-import { ContactSection } from "@/components/home/ContactSection";
 import { prisma } from "@/lib/prisma";
 import { getSiteConfig, isSectionVisible } from "@/lib/site-config";
+
+// Code-split below-the-fold components to reduce initial mobile JS bundle & TBT
+const InteractiveImpactShowcase = dynamic(
+  () => import("@/components/home/InteractiveImpactShowcase").then((mod) => mod.InteractiveImpactShowcase)
+);
+const SuccessStories = dynamic(
+  () => import("@/components/home/SuccessStories").then((mod) => mod.SuccessStories)
+);
+const ActivityUpdates = dynamic(
+  () => import("@/components/home/ActivityUpdates").then((mod) => mod.ActivityUpdates)
+);
+const TrustedBy = dynamic(
+  () => import("@/components/home/TrustedBy").then((mod) => mod.TrustedBy)
+);
+const ContactSection = dynamic(
+  () => import("@/components/home/ContactSection").then((mod) => mod.ContactSection)
+);
 
 // Sub-15ms TTFB: ISR memory caching with 60s background revalidation
 export const revalidate = 60;

@@ -24,6 +24,7 @@ import { cn } from "@/utils/cn";
 import type { SiteConfigData } from "@/lib/site-config";
 
 interface MobileNavProps {
+    
     navLinks: { name: string; href: string }[];
     config?: SiteConfigData | null;
 }
@@ -103,7 +104,7 @@ export function MobileNav({ navLinks, config }: MobileNavProps) {
             <button
                 type="button"
                 onClick={() => setIsOpen(true)}
-                className="p-2 text-[#0F172A] md:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F766E] rounded-xl hover:bg-gray-100 active:scale-95 transition-all"
+                className="w-11 h-11 flex items-center justify-center text-[#0F172A] md:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F766E] rounded-xl hover:bg-gray-100 active:scale-95 transition-all cursor-pointer touch-manipulation"
                 aria-label="Open navigation menu"
                 aria-expanded={isOpen}
             >
@@ -121,8 +122,9 @@ export function MobileNav({ navLinks, config }: MobileNavProps) {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
-                                transition={{ duration: 0.18 }}
-                                className="fixed inset-0 z-[100] bg-slate-950/50 backdrop-blur-xs md:hidden"
+                                transition={{ duration: 0.15, ease: "easeOut" }}
+                                style={{ willChange: "opacity" }}
+                                className="fixed inset-0 z-[100] bg-slate-950/60 md:hidden touch-manipulation"
                                 onClick={() => setIsOpen(false)}
                                 aria-hidden="true"
                             />
@@ -133,8 +135,9 @@ export function MobileNav({ navLinks, config }: MobileNavProps) {
                                 initial={{ x: "100%" }}
                                 animate={{ x: 0 }}
                                 exit={{ x: "100%" }}
-                                transition={{ type: "tween", ease: [0.16, 1, 0.3, 1], duration: 0.24 }}
-                                className="fixed top-0 right-0 z-[110] h-full w-full max-w-[360px] sm:max-w-sm bg-white shadow-2xl md:hidden flex flex-col overflow-hidden border-l border-gray-100 font-crimson font-serif"
+                                transition={{ type: "tween", ease: [0.16, 1, 0.3, 1], duration: 0.2 }}
+                                style={{ willChange: "transform" }}
+                                className="fixed top-0 right-0 z-[110] h-full w-full max-w-[360px] sm:max-w-sm bg-white shadow-2xl md:hidden flex flex-col overflow-hidden border-l border-gray-100 font-crimson font-serif transform-gpu touch-manipulation overscroll-contain"
                                 role="dialog"
                                 aria-modal="true"
                                 aria-label="Mobile Navigation Menu"
@@ -160,7 +163,7 @@ export function MobileNav({ navLinks, config }: MobileNavProps) {
                                     <button
                                         type="button"
                                         onClick={() => setIsOpen(false)}
-                                        className="w-9 h-9 flex items-center justify-center rounded-xl bg-white border border-gray-200 text-gray-500 hover:text-[#0F172A] hover:bg-gray-100 active:scale-95 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F766E]"
+                                        className="w-9 h-9 flex items-center justify-center rounded-xl bg-white border border-gray-200 text-gray-500 hover:text-[#0F172A] hover:bg-gray-100 active:scale-95 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F766E] cursor-pointer touch-manipulation"
                                         aria-label="Close menu"
                                     >
                                         <X className="w-4 h-4" />
