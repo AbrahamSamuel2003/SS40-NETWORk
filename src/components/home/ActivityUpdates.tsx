@@ -32,24 +32,10 @@ export function ActivityUpdates({ data = [] }: ActivityUpdatesProps) {
     const [activeMobileIdx, setActiveMobileIdx] = useState(0);
     const [activeDesktopIdx, setActiveDesktopIdx] = useState(0);
 
-    const desktopTrackRef = useRef<HTMLDivElement | null>(null);
     const mobileScrollRef = useRef<HTMLDivElement | null>(null);
-
-    // Track scroll progression through the pinned desktop track
-    const { scrollYProgress } = useScroll({
-        target: desktopTrackRef,
-        offset: ['start start', 'end end']
-    });
 
     const homeActivities = data.slice(0, 3);
     const count = homeActivities.length;
-
-    useMotionValueEvent(scrollYProgress, 'change', (latest) => {
-        if (count === 0) return;
-        // Divide progression into equal slots
-        const index = Math.min(Math.floor(latest * count), count - 1);
-        setActiveDesktopIdx((prev) => (prev !== index ? index : prev));
-    });
 
     // If no activities, hide section
     if (!data || data.length === 0) {
@@ -83,128 +69,134 @@ export function ActivityUpdates({ data = [] }: ActivityUpdatesProps) {
     const scrollToMobileCard = (idx: number) => {
         if (!mobileScrollRef.current) return;
         const container = mobileScrollRef.current;
-        const cardWidth = container.clientWidth * 0.82 + 20; // Exact match to scroll math
+        const cardWidth = container.clientWidth * 0.82 + 20;
         container.scrollTo({
             left: idx * cardWidth,
             behavior: "smooth"
         });
     };
 
-    const scrollToDesktopCard = (idx: number) => {
-        const el = desktopTrackRef.current;
-        if (!el) return;
-        const trackTop = el.offsetTop;
-        const trackHeight = el.offsetHeight;
-        const targetScroll = trackTop + (idx / count) * (trackHeight - window.innerHeight) + 20;
-        window.scrollTo({ top: targetScroll, behavior: "smooth" });
+    const nextDesktopCard = () => {
+        setActiveDesktopIdx(prev => (prev + 1) % count);
+    };
+
+    const prevDesktopCard = () => {
+        setActiveDesktopIdx(prev => (prev - 1 + count) % count);
     };
 
     return (
         <>
             {/* ═════════════════════════════════════════════════════════════════════ */}
-            {/* DESKTOP PINNED IN-SECTION SCROLL ENGINE (hidden on mobile)            */}
+            {/* DESKTOP SHOWCASE (Natural Flow, Zero Scroll Lag)                      */}
             {/* ═════════════════════════════════════════════════════════════════════ */}
             <div
                 id="activities"
-                ref={desktopTrackRef}
-                className="hidden lg:block relative bg-white border-t border-gray-100"
-                style={{ height: `${Math.max(200, count * 100)}vh` }}
+                className="hidden lg:block relative bg-white border-t border-gray-100 py-12 lg:py-16 overflow-hidden"
             >
-                {/* Pinned Viewport Container with Optimized Vertical Budget */}
-                <div className="sticky top-0 h-screen w-full flex flex-col justify-between overflow-hidden py-4 lg:py-6 px-4 relative">
-                    {/* Ambient Glow */}
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-[#6B9F91]/5 rounded-full blur-3xl pointer-events-none" />
+                {/* Subtle Ambient Glow */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-[#0F766E]/5 rounded-full blur-3xl pointer-events-none" />
 
-                    <Container className="relative z-10 w-full flex flex-col justify-between h-full max-w-6xl">
-                        {/* Section Header */}
-                        <div className="text-center pt-1 shrink-0">
-                            <SectionHeading
-                                badge="Blogs and Field Activities"
-                                title="Moments That Shape Our Impact"
-                                highlight="Our Impact"
-                                description="Explore our field visits, institutional partnerships, and official dialogues driving modern technology empowerment."
-                                align="center"
-                            />
-                        </div>
+                <Container className="relative z-10 w-full max-w-6xl space-y-8">
+                    {/* Section Header */}
+                    <div className="text-center pt-1 shrink-0">
+                        <SectionHeading
+                            badge="Blogs and Field Activities"
+                            title="Moments That Shape Our Impact"
+                            highlight="Our Impact"
+                            description="Explore our field visits, institutional partnerships, and official dialogues driving modern technology empowerment."
+                            align="center"
+                        />
+                    </div>
 
-                        {/* Pre-Mounted Zero-Latency Desktop Blog Card Deck with GPU-Accelerated Smooth Transitions */}
-                        <div className="relative w-full my-auto flex items-center justify-center py-2">
-                            {homeActivities.map((act, idx) => {
-                                const isActive = activeDesktopIdx === idx;
-                                return (
-                                    <motion.div
-                                        key={`desktop-card-${act.id}`}
-                                        initial={false}
-                                        animate={{
-                                            opacity: isActive ? 1 : 0,
-                                            y: isActive ? 0 : idx < activeDesktopIdx ? -18 : 18,
-                                            scale: isActive ? 1 : 0.985,
-                                            pointerEvents: isActive ? 'auto' : 'none'
-                                        }}
-                                        transition={{
-                                            duration: 0.18,
-                                            ease: 'easeOut'
-                                        }}
-                                        className={`w-full transform-gpu ${idx === 0 ? 'relative' : 'absolute inset-x-0'}`}
-                                        style={{
-                                            willChange: 'transform, opacity',
-                                            visibility: isActive || Math.abs(activeDesktopIdx - idx) <= 1 ? 'visible' : 'hidden'
-                                        }}
-                                    >
-                                        <ActivityCard
-                                            activity={act}
-                                            reversed={idx % 2 === 1}
-                                            variant="alternating"
-                                            priority={idx === 0 || idx === 1}
-                                            onReadStory={(item) => setActiveModalItem(item)}
-                                        />
-                                    </motion.div>
-                                );
-                            })}
-                        </div>
+                    {/* Desktop Card Showcase with Smooth Fade & Slide */}
+                    <div className="relative w-full min-h-[380px] flex items-center justify-center">
+                        <AnimatePresence mode="wait">
+                            {homeActivities[activeDesktopIdx] && (
+                                <motion.div
+                                    key={`desktop-card-${homeActivities[activeDesktopIdx].id}`}
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    transition={{ duration: 0.22, ease: "easeOut" }}
+                                    className="w-full transform-gpu"
+                                >
+                                    <ActivityCard
+                                        activity={homeActivities[activeDesktopIdx]}
+                                        reversed={activeDesktopIdx % 2 === 1}
+                                        variant="alternating"
+                                        priority={true}
+                                        onReadStory={(item) => setActiveModalItem(item)}
+                                    />
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </div>
 
-                        {/* Bottom Bar: Step Tracker & Scroll / View All Link (Guaranteed Visible) */}
-                        <div className="w-full flex items-center justify-between pt-2.5 pb-1 shrink-0 border-t border-gray-100 z-20">
-                            {/* Step Progress Tracker */}
-                            <div className="flex items-center gap-3">
-                                <span className="text-xs font-bold text-[#1F3D35] tracking-widest uppercase">
-                                    0{activeDesktopIdx + 1} / 0{count}
-                                </span>
-                                <div className="flex items-center gap-1.5">
-                                    {homeActivities.map((_, i) => (
-                                        <button
-                                            key={`step-${i}`}
-                                            type="button"
-                                            onClick={() => scrollToDesktopCard(i)}
-                                            aria-label={`Go to blog slide ${i + 1}`}
-                                            className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                                                activeDesktopIdx === i
-                                                    ? 'w-8 bg-[#0F766E]'
-                                                    : 'w-2 bg-gray-300 hover:bg-gray-400'
-                                            }`}
-                                            title={`Go to blog slide ${i + 1}`}
-                                        />
-                                    ))}
-                                </div>
+                    {/* Bottom Controls Bar */}
+                    <div className="w-full flex items-center justify-between pt-4 border-t border-gray-100 z-20">
+                        {/* Step Progress Tracker & Controls */}
+                        <div className="flex items-center gap-4">
+                            <span className="text-xs font-bold text-[#1F3D35] tracking-widest uppercase font-mono">
+                                0{activeDesktopIdx + 1} / 0{count}
+                            </span>
+                            <div className="flex items-center gap-1.5">
+                                {homeActivities.map((_, i) => (
+                                    <button
+                                        key={`step-${i}`}
+                                        type="button"
+                                        onClick={() => setActiveDesktopIdx(i)}
+                                        aria-label={`Go to blog slide ${i + 1}`}
+                                        className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
+                                            activeDesktopIdx === i
+                                                ? 'w-8 bg-[#0F766E]'
+                                                : 'w-2.5 bg-gray-200 hover:bg-gray-400'
+                                        }`}
+                                    />
+                                ))}
                             </div>
 
-                            {/* View All Blogs / Scroll Indicator */}
-                            {data.length > 3 ? (
-                                <Link
-                                    href="/blogs"
-                                    className="inline-flex items-center justify-center font-bold text-sm text-[#1F3D35] hover:text-[#11221E] transition-colors group"
-                                >
-                                    View All Blogs
-                                    <ArrowRight className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" />
-                                </Link>
-                            ) : (
-                                <span className="text-xs font-semibold text-[#1F3D35] bg-[#D8E8E2] px-3 py-1 rounded-full">
-                                    Scroll down to continue
-                                </span>
+                            {/* Prev / Next Arrows */}
+                            {count > 1 && (
+                                <div className="flex items-center gap-1.5 ml-2">
+                                    <button
+                                        type="button"
+                                        onClick={prevDesktopCard}
+                                        className="w-8 h-8 rounded-full border border-gray-200 bg-white hover:bg-gray-50 flex items-center justify-center text-gray-700 hover:text-[#0F766E] transition-colors cursor-pointer active:scale-95"
+                                        aria-label="Previous blog"
+                                    >
+                                        <ChevronLeft className="w-4 h-4" />
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={nextDesktopCard}
+                                        className="w-8 h-8 rounded-full border border-gray-200 bg-white hover:bg-gray-50 flex items-center justify-center text-gray-700 hover:text-[#0F766E] transition-colors cursor-pointer active:scale-95"
+                                        aria-label="Next blog"
+                                    >
+                                        <ChevronRight className="w-4 h-4" />
+                                    </button>
+                                </div>
                             )}
                         </div>
-                    </Container>
-                </div>
+
+                        {/* View All Blogs Navigation Link */}
+                        {data.length > 3 ? (
+                            <Link
+                                href="/blogs"
+                                className="inline-flex items-center justify-center font-bold text-sm text-[#0F766E] hover:text-[#115E59] transition-colors group"
+                            >
+                                View All Blogs
+                                <ArrowRight className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" />
+                            </Link>
+                        ) : (
+                            <Link
+                                href="/blogs"
+                                className="inline-flex items-center justify-center font-bold text-xs text-[#0F766E] hover:underline"
+                            >
+                                Browse all articles →
+                            </Link>
+                        )}
+                    </div>
+                </Container>
             </div>
 
             {/* ═════════════════════════════════════════════════════════════════════ */}

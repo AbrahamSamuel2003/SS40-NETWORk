@@ -125,10 +125,7 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
     const [currentIndex, setCurrentIndex] = useState(0);
     const totalImages = images.length;
 
-    // Wheel event handler with non-passive listener for horizontal scroll only
     const imageBoxRef = useRef<HTMLDivElement | null>(null);
-    const lastWheelTime = useRef<number>(0);
-    const WHEEL_THROTTLE_MS = 220;
 
     const nextImage = useCallback((e?: React.MouseEvent) => {
         if (e) e.stopPropagation();
@@ -140,34 +137,6 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
         if (e) e.stopPropagation();
         if (totalImages <= 1) return;
         setCurrentIndex(prev => (prev - 1 + totalImages) % totalImages);
-    }, [totalImages]);
-
-    // Active wheel listener: Intercept ONLY when user scrolls horizontally (e.deltaX)
-    useEffect(() => {
-        const el = imageBoxRef.current;
-        if (!el || totalImages <= 1) return;
-
-        const onWheel = (e: WheelEvent) => {
-            const absX = Math.abs(e.deltaX);
-            const absY = Math.abs(e.deltaY);
-
-            // Trigger ONLY on horizontal scroll gestures (leave vertical page scroll completely untouched)
-            if (absX > absY && absX > 8) {
-                e.preventDefault();
-                const now = Date.now();
-                if (now - lastWheelTime.current >= WHEEL_THROTTLE_MS) {
-                    lastWheelTime.current = now;
-                    if (e.deltaX > 0) {
-                        setCurrentIndex(prev => (prev + 1) % totalImages);
-                    } else {
-                        setCurrentIndex(prev => (prev - 1 + totalImages) % totalImages);
-                    }
-                }
-            }
-        };
-
-        el.addEventListener('wheel', onWheel, { passive: false });
-        return () => el.removeEventListener('wheel', onWheel);
     }, [totalImages]);
 
     // Touch swipe handling

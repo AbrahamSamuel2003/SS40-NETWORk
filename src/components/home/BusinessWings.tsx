@@ -67,25 +67,26 @@ export function BusinessWings() {
 
                     {/* Central Hub: Compact Corporate Headquarters Visual */}
                     <div
-                        className="relative z-20 flex flex-col items-center justify-center w-full max-w-[200px] sm:max-w-[240px] lg:max-w-[280px] mx-auto h-[115px] sm:h-[145px] lg:h-[175px]"
+                        className="relative z-20 flex flex-col items-center justify-center w-full max-w-[200px] sm:max-w-[240px] lg:max-w-[280px] mx-auto h-[115px] sm:h-[145px] lg:h-[175px] transform-gpu"
+                        style={{ contain: 'paint' }}
                     >
-                        {/* Ambient Glow */}
+                        {/* Static Ambient Radial Glow */}
                         <div
-                            className="animate-pulse absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[160px] sm:w-[200px] lg:w-[240px] h-[160px] sm:h-[200px] lg:h-[240px] bg-[var(--color-primary)]/10 blur-[40px] rounded-full z-0 pointer-events-none"
+                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[160px] sm:w-[200px] lg:w-[240px] h-[160px] sm:h-[200px] lg:h-[240px] bg-radial from-[#0F766E]/12 via-[#0F766E]/4 to-transparent rounded-full z-0 pointer-events-none"
                         />
 
                         {/* HQ Architecture Wrapper */}
-                        <div className="relative z-10 w-full h-full flex items-end justify-center perspective-[1000px]">
+                        <div className="relative z-10 w-full h-full flex items-end justify-center transform-gpu">
 
                             {/* Background Tall Building (Left) */}
                             <div
-                                className="transform-gpu absolute left-[15%] bottom-[6px] sm:bottom-[8px] w-[22%] h-[75px] sm:h-[95px] lg:h-[115px] bg-gradient-to-t from-gray-50 to-white/95 rounded-tl-[0.75rem] rounded-tr-xs shadow-md border border-white/80 backdrop-blur-xs z-10 overflow-hidden flex flex-col p-1 gap-0.5"
+                                className="transform-gpu absolute left-[15%] bottom-[6px] sm:bottom-[8px] w-[22%] h-[75px] sm:h-[95px] lg:h-[115px] bg-gradient-to-t from-gray-50 to-white rounded-tl-[0.75rem] rounded-tr-xs shadow-md border border-gray-100 z-10 overflow-hidden flex flex-col p-1 gap-0.5"
                             >
                                 <div className="absolute top-0 inset-x-0 h-3 bg-gradient-to-b from-white to-transparent" />
                                 {[...Array(3)].map((_, i) => (
                                     <div key={`l-row-${i}`} className="flex-1 flex gap-0.5 z-10">
                                         {[...Array(3)].map((_, j) => (
-                                            <div key={`l-col-${j}`} className="flex-1 bg-[var(--color-primary)]/5 rounded-[1px] border border-[var(--color-primary)]/10 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8)] relative overflow-hidden" />
+                                            <div key={`l-col-${j}`} className="flex-1 bg-[#0F766E]/5 rounded-[1px] border border-[#0F766E]/10 relative overflow-hidden" />
                                         ))}
                                     </div>
                                 ))}
@@ -93,13 +94,13 @@ export function BusinessWings() {
 
                             {/* Background Tall Building (Right) */}
                             <div
-                                className="transform-gpu absolute right-[15%] bottom-[6px] sm:bottom-[8px] w-[22%] h-[70px] sm:h-[88px] lg:h-[105px] bg-gradient-to-t from-gray-50 to-white/95 rounded-tr-[0.75rem] rounded-tl-xs shadow-md border border-white/80 backdrop-blur-xs z-10 overflow-hidden flex flex-col p-1 gap-0.5"
+                                className="transform-gpu absolute right-[15%] bottom-[6px] sm:bottom-[8px] w-[22%] h-[70px] sm:h-[88px] lg:h-[105px] bg-gradient-to-t from-gray-50 to-white rounded-tr-[0.75rem] rounded-tl-xs shadow-md border border-gray-100 z-10 overflow-hidden flex flex-col p-1 gap-0.5"
                             >
                                 <div className="absolute top-0 inset-x-0 h-3 bg-gradient-to-b from-white to-transparent" />
                                 {[...Array(3)].map((_, i) => (
                                     <div key={`r-row-${i}`} className="flex-1 flex gap-0.5 z-10">
                                         {[...Array(3)].map((_, j) => (
-                                            <div key={`r-col-${j}`} className="flex-1 bg-[var(--color-primary)]/5 rounded-[1px] border border-[var(--color-primary)]/10 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8)] relative overflow-hidden" />
+                                            <div key={`r-col-${j}`} className="flex-1 bg-[#0F766E]/5 rounded-[1px] border border-[#0F766E]/10 relative overflow-hidden" />
                                         ))}
                                     </div>
                                 ))}
@@ -109,20 +110,20 @@ export function BusinessWings() {
                             <div
                                 className="transform-gpu relative w-[48%] h-[105px] sm:h-[135px] lg:h-[165px] bg-white rounded-t-xl sm:rounded-t-2xl shadow-xl border border-gray-100/80 z-20 flex flex-col items-center p-1.5 sm:p-2.5 overflow-hidden"
                             >
-                                {/* Frosted Glass Window Grid */}
-                                <div className="w-full flex-1 grid grid-cols-3 gap-1 sm:gap-1.5 p-1 bg-gradient-to-b from-[var(--color-primary)]/[0.04] to-transparent rounded-lg border border-[var(--color-primary)]/10 relative">
+                                {/* Window Grid */}
+                                <div className="w-full flex-1 grid grid-cols-3 gap-1 sm:gap-1.5 p-1 bg-gradient-to-b from-[#0F766E]/[0.04] to-transparent rounded-lg border border-[#0F766E]/10 relative">
                                     {[...Array(9)].map((_, i) => (
                                         <div
                                             key={`w-${i}`}
-                                            className="bg-white/80 rounded-[2px] border border-gray-100 shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)] flex items-center justify-center relative overflow-hidden"
+                                            className="bg-white rounded-[2px] border border-gray-100 shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)] flex items-center justify-center relative overflow-hidden"
                                         />
                                     ))}
 
                                     {/* Minimal Entrance / Lobby indication */}
                                     <div className="w-full h-3 sm:h-4 mt-[2px] flex gap-[2px] relative z-10">
-                                        <div className="flex-1 bg-white rounded-[1px] border border-[var(--color-primary)]/10" />
-                                        <div className="w-[35%] h-full bg-gradient-to-t from-[var(--color-primary)]/20 to-[var(--color-primary)]/5 border border-[var(--color-primary)]/20 rounded-[1px]" />
-                                        <div className="flex-1 bg-white rounded-[1px] border border-[var(--color-primary)]/10" />
+                                        <div className="flex-1 bg-white rounded-[1px] border border-[#0F766E]/10" />
+                                        <div className="w-[35%] h-full bg-gradient-to-t from-[#0F766E]/20 to-[#0F766E]/5 border border-[#0F766E]/20 rounded-[1px]" />
+                                        <div className="flex-1 bg-white rounded-[1px] border border-[#0F766E]/10" />
                                     </div>
                                 </div>
 
@@ -131,13 +132,13 @@ export function BusinessWings() {
                                     <span className="text-xs sm:text-sm font-black tracking-widest text-[#111827] leading-none mb-0.5">
                                         SS40
                                     </span>
-                                    <span className="text-[7px] sm:text-[8px] font-bold tracking-[0.1em] text-[var(--color-primary-hover)] uppercase leading-none">
+                                    <span className="text-[7px] sm:text-[8px] font-bold tracking-[0.1em] text-[#0F766E] uppercase leading-none">
                                         Network
                                     </span>
                                 </div>
 
                                 {/* Bottom Accent Line */}
-                                <div className="absolute bottom-0 w-full h-1 bg-[var(--color-primary-hover)] opacity-90" />
+                                <div className="absolute bottom-0 w-full h-1 bg-[#0F766E] opacity-90" />
                             </div>
 
                             {/* Ground Base / Foundation */}
