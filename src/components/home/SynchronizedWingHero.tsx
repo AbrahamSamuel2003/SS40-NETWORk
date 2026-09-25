@@ -145,10 +145,10 @@ export function SynchronizedWingHero() {
                             </div>
 
                             {/* Wing Title */}
-                            <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[var(--color-heading)] leading-[1.18] tracking-tight font-serif">
+                            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[var(--color-heading)] leading-[1.18] tracking-tight font-serif">
                                 {activeWing.title} <br className="hidden sm:inline" />
                                 <span className="text-[#0F766E]">{activeWing.highlight}</span>
-                            </h3>
+                            </h2>
 
                             {/* Wing Description */}
                             <p className="text-xs sm:text-sm text-[var(--color-body-text)] leading-relaxed font-normal max-w-lg lg:max-w-none">

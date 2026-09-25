@@ -237,6 +237,7 @@ export function BusinessWings() {
                                     <div className="mt-auto pt-1.5 sm:pt-3 border-t border-gray-100 flex items-center justify-center sm:justify-between">
                                         <Link 
                                             href={wing.link} 
+                                            aria-label={`${wing.cta} — SS40 ${wing.name}`}
                                             className="inline-flex items-center text-[10px] sm:text-xs font-bold text-[#0F766E] group/btn focus-visible:outline-none rounded-md hover:underline"
                                         >
                                             <span className="hidden sm:inline">{wing.cta}</span>

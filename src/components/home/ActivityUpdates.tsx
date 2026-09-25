@@ -269,7 +269,7 @@ export function ActivityUpdates({ data = [] }: ActivityUpdatesProps) {
                     <div className="w-full flex justify-center mt-4 px-6">
                         <Link
                             href="/blogs"
-                            className="inline-flex items-center justify-center font-bold text-base text-[#6B9F91] hover:text-[#588478] transition-colors group"
+                            className="inline-flex items-center justify-center font-bold text-base text-[#0F766E] hover:text-[#115E59] transition-colors group"
                         >
                             View All Blogs
                             <ArrowRight className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" />

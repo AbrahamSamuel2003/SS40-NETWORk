@@ -99,12 +99,12 @@ export function MobileNav({ navLinks, config }: MobileNavProps) {
     });
 
     return (
-        <>
+        <div className="md:hidden flex items-center">
             {/* Hamburger Trigger Button */}
             <button
                 type="button"
                 onClick={() => setIsOpen(true)}
-                className="w-11 h-11 flex items-center justify-center text-[#0F172A] md:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F766E] rounded-xl hover:bg-gray-100 active:scale-95 transition-all cursor-pointer touch-manipulation"
+                className="w-11 h-11 flex items-center justify-center text-[#0F172A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F766E] rounded-xl hover:bg-gray-100 active:scale-95 transition-all cursor-pointer touch-manipulation"
                 aria-label="Open navigation menu"
                 aria-expanded={isOpen}
             >
@@ -112,7 +112,7 @@ export function MobileNav({ navLinks, config }: MobileNavProps) {
             </button>
 
             {/* Portal Drawer Overlay */}
-            {mounted && createPortal(
+            {mounted && typeof document !== "undefined" && createPortal(
                 <AnimatePresence>
                     {isOpen && (
                         <>
@@ -278,6 +278,6 @@ export function MobileNav({ navLinks, config }: MobileNavProps) {
                 </AnimatePresence>,
                 document.body
             )}
-        </>
+        </div>
     );
 }
