@@ -47,8 +47,8 @@ interface HappimonialsProps {
 }
 
 export function Happimonials({ initialData }: HappimonialsProps = {}) {
-    const [happimonials, setHappimonials] = React.useState<any[]>(initialData || []);
-    const [isLoading, setIsLoading] = React.useState(!initialData || initialData.length === 0);
+    const [happimonials, setHappimonials] = React.useState<any[]>(Array.isArray(initialData) ? initialData : []);
+    const [isLoading, setIsLoading] = React.useState(!initialData || (Array.isArray(initialData) && initialData.length === 0));
     const [activeMobileIdx, setActiveMobileIdx] = React.useState(0);
     const [activeModalStory, setActiveModalStory] = React.useState<any | null>(null);
 
@@ -56,31 +56,32 @@ export function Happimonials({ initialData }: HappimonialsProps = {}) {
     
     // Adaptive layout: determine layout type based on content count and featured status
     const layoutConfig = React.useMemo(() => {
-        if (happimonials.length === 0) return { type: 'empty', featured: null, grid: [] };
+        const safeHappimonials = Array.isArray(happimonials) ? happimonials : [];
+        if (safeHappimonials.length === 0) return { type: 'empty', featured: null, grid: [] };
         
         // If there's a featured item, use featured-grid layout regardless of count
-        const featuredItem = happimonials.find(h => h.isFeatured);
+        const featuredItem = safeHappimonials.find(h => h && h.isFeatured);
         if (featuredItem) {
-            const gridItems = happimonials.filter(h => h.id !== featuredItem.id);
+            const gridItems = safeHappimonials.filter(h => h && h.id !== featuredItem.id);
             return { type: 'featured-grid', featured: featuredItem, grid: gridItems };
         }
         
         // No featured item - use count-based layouts
-        if (happimonials.length === 1) return { type: 'single', featured: happimonials[0], grid: [] };
-        if (happimonials.length === 2) return { type: 'two-grid', featured: null, grid: happimonials };
-        if (happimonials.length === 3) return { type: 'three-grid', featured: null, grid: happimonials };
+        if (safeHappimonials.length === 1) return { type: 'single', featured: safeHappimonials[0], grid: [] };
+        if (safeHappimonials.length === 2) return { type: 'two-grid', featured: null, grid: safeHappimonials };
+        if (safeHappimonials.length === 3) return { type: 'three-grid', featured: null, grid: safeHappimonials };
         
         // 4+ items with no featured: use first item as featured
-        const defaultFeatured = happimonials[0];
-        const gridItems = happimonials.slice(1);
+        const defaultFeatured = safeHappimonials[0];
+        const gridItems = safeHappimonials.slice(1);
         return { type: 'featured-grid', featured: defaultFeatured, grid: gridItems };
     }, [happimonials]);
 
     const displayedHappimonials = React.useMemo(() => {
         if (layoutConfig.type === 'featured-grid') {
-            return [layoutConfig.featured, ...layoutConfig.grid.slice(0, 3)];
+            return [layoutConfig.featured, ...(layoutConfig.grid || []).slice(0, 3)].filter(Boolean);
         }
-        return layoutConfig.grid.length > 0 ? layoutConfig.grid : [layoutConfig.featured].filter(Boolean);
+        return (layoutConfig.grid && layoutConfig.grid.length > 0) ? layoutConfig.grid : [layoutConfig.featured].filter(Boolean);
     }, [layoutConfig]);
 
     const scrollToMobileTestimonial = (idx: number) => {
@@ -93,7 +94,7 @@ export function Happimonials({ initialData }: HappimonialsProps = {}) {
     };
 
     React.useEffect(() => {
-        if (initialData && initialData.length > 0) {
+        if (initialData && Array.isArray(initialData) && initialData.length > 0) {
             setHappimonials(initialData);
             setIsLoading(false);
             return;
@@ -102,7 +103,7 @@ export function Happimonials({ initialData }: HappimonialsProps = {}) {
         fetch('/api/happimonials?pageScope=DIGITAL_SOLUTIONS')
             .then(res => res.json())
             .then(data => {
-                if (data.success) setHappimonials(data.data);
+                if (data && data.success && Array.isArray(data.data)) setHappimonials(data.data);
                 setIsLoading(false);
             })
             .catch(() => setIsLoading(false));
@@ -110,20 +111,26 @@ export function Happimonials({ initialData }: HappimonialsProps = {}) {
 
     React.useEffect(() => {
         if (isLoading || displayedHappimonials.length === 0) return;
+        if (typeof window === 'undefined' || typeof IntersectionObserver === 'undefined') return;
 
         setActiveMobileIdx(0);
 
         const mobileObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    setActiveMobileIdx(Number(entry.target.getAttribute("data-mobile-id")));
+                if (entry && entry.isIntersecting) {
+                    const id = entry.target.getAttribute("data-mobile-id");
+                    if (id !== null) {
+                        setActiveMobileIdx(Number(id));
+                    }
                 }
             });
         }, { root: mobileScrollRef.current, threshold: 0.6 });
 
         if (mobileScrollRef.current) {
             const mobileCards = mobileScrollRef.current.querySelectorAll<HTMLElement>(".happimonial-mobile-card");
-            mobileCards.forEach(c => mobileObserver.observe(c));
+            mobileCards.forEach(c => {
+                if (c) mobileObserver.observe(c);
+            });
             mobileScrollRef.current.scrollLeft = 0;
         }
 

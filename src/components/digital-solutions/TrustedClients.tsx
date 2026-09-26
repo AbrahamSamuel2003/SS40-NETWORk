@@ -15,11 +15,11 @@ interface TrustedClientsProps {
 }
 
 export function TrustedClients({ initialData }: TrustedClientsProps = {}) {
-    const [logos, setLogos] = React.useState<any[]>(initialData || []);
-    const [isLoading, setIsLoading] = React.useState(!initialData || initialData.length === 0);
+    const [logos, setLogos] = React.useState<any[]>(Array.isArray(initialData) ? initialData : []);
+    const [isLoading, setIsLoading] = React.useState(!initialData || (Array.isArray(initialData) && initialData.length === 0));
 
     React.useEffect(() => {
-        if (initialData && initialData.length > 0) {
+        if (initialData && Array.isArray(initialData) && initialData.length > 0) {
             setLogos(initialData);
             setIsLoading(false);
             return;
@@ -28,7 +28,7 @@ export function TrustedClients({ initialData }: TrustedClientsProps = {}) {
         fetch('/api/organization-logos?pageScope=DIGITAL_SOLUTIONS')
             .then(res => res.json())
             .then(data => {
-                if (data.success && data.data) {
+                if (data && data.success && Array.isArray(data.data)) {
                     setLogos(data.data);
                 }
                 setIsLoading(false);
@@ -36,10 +36,10 @@ export function TrustedClients({ initialData }: TrustedClientsProps = {}) {
             .catch(() => setIsLoading(false));
     }, [initialData]);
 
-    const row1 = React.useMemo(() => logos, [logos]);
-    const row2 = React.useMemo(() => (logos.length > 3 ? [...logos].reverse() : logos), [logos]);
+    const row1 = React.useMemo(() => (Array.isArray(logos) ? logos : []), [logos]);
+    const row2 = React.useMemo(() => (Array.isArray(logos) && logos.length > 3 ? [...logos].reverse() : (Array.isArray(logos) ? logos : [])), [logos]);
 
-    if (isLoading || logos.length === 0) {
+    if (isLoading || !Array.isArray(logos) || logos.length === 0) {
         return (
             <SectionWrapper id="trusted-clients" className="bg-[#D8E8E2] relative overflow-hidden pb-8 md:pb-12 !pt-0 md:!pt-0 lg:!pt-0">
                 <Container className="relative z-10">

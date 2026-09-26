@@ -90,9 +90,18 @@ export function WhatWeBuild() {
 
     React.useEffect(() => {
         if (!sectionRef.current) return;
-        const observer = new IntersectionObserver(([entry]) => {
-            setIsInView(entry.isIntersecting);
+        if (typeof window === 'undefined' || typeof IntersectionObserver === 'undefined') {
+            setIsInView(true);
+            return;
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            const entry = entries && entries[0];
+            if (entry) {
+                setIsInView(entry.isIntersecting);
+            }
         }, { threshold: 0.1 });
+
         observer.observe(sectionRef.current);
         return () => observer.disconnect();
     }, []);
@@ -100,13 +109,14 @@ export function WhatWeBuild() {
     React.useEffect(() => {
         if (activeId !== "mobile" || !isInView) return;
 
+        let resetTimer: NodeJS.Timeout | null = null;
         const interval = setInterval(() => {
             // Trigger "Add to Cart" click
             setButtonState('added');
             setCartCount(prev => prev + 1);
 
             // Reset button state and transition to next shoe after visual delay
-            setTimeout(() => {
+            resetTimer = setTimeout(() => {
                 setButtonState('idle');
                 setShoeIndex(prev => (prev + 1) % shoes.length);
                 setActiveSize(prev => {
@@ -117,7 +127,10 @@ export function WhatWeBuild() {
 
         }, 3500);
 
-        return () => clearInterval(interval);
+        return () => {
+            clearInterval(interval);
+            if (resetTimer) clearTimeout(resetTimer);
+        };
     }, [activeId, isInView]);
 
     const handleTopicClick = (id: string) => {

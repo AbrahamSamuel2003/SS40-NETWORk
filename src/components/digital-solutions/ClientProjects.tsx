@@ -186,8 +186,8 @@ interface ClientProjectsProps {
 }
 
 export function ClientProjects({ initialData }: ClientProjectsProps = {}) {
-    const [projects, setProjects] = React.useState<any[]>(initialData || []);
-    const [isLoading, setIsLoading] = React.useState(!initialData || initialData.length === 0);
+    const [projects, setProjects] = React.useState<any[]>(Array.isArray(initialData) ? initialData : []);
+    const [isLoading, setIsLoading] = React.useState(!initialData || (Array.isArray(initialData) && initialData.length === 0));
     const [activeModalProject, setActiveModalProject] = React.useState<any | null>(null);
 
     const [activeMobileIdx, setActiveMobileIdx] = React.useState(0);
@@ -195,36 +195,37 @@ export function ClientProjects({ initialData }: ClientProjectsProps = {}) {
     
     // Adaptive layout: determine layout type based on content count and featured status
     const layoutConfig = React.useMemo(() => {
-        if (projects.length === 0) return { type: 'empty', featured: null, grid: [] };
+        const safeProjects = Array.isArray(projects) ? projects : [];
+        if (safeProjects.length === 0) return { type: 'empty', featured: null, grid: [] };
         
         // If there's a featured item, use featured-grid layout regardless of count
-        const featuredItem = projects.find(p => p.isFeatured);
+        const featuredItem = safeProjects.find(p => p && p.isFeatured);
         if (featuredItem) {
-            const gridItems = projects.filter(p => p.id !== featuredItem.id);
+            const gridItems = safeProjects.filter(p => p && p.id !== featuredItem.id);
             return { type: 'featured-grid', featured: featuredItem, grid: gridItems };
         }
         
         // No featured item - use count-based layouts
-        if (projects.length === 1) return { type: 'single', featured: projects[0], grid: [] };
-        if (projects.length === 2) return { type: 'two-grid', featured: null, grid: projects };
-        if (projects.length === 3) return { type: 'three-grid', featured: null, grid: projects };
+        if (safeProjects.length === 1) return { type: 'single', featured: safeProjects[0], grid: [] };
+        if (safeProjects.length === 2) return { type: 'two-grid', featured: null, grid: safeProjects };
+        if (safeProjects.length === 3) return { type: 'three-grid', featured: null, grid: safeProjects };
         
         // 4+ items with no featured: use first item as featured
-        const defaultFeatured = projects[0];
-        const gridItems = projects.slice(1);
+        const defaultFeatured = safeProjects[0];
+        const gridItems = safeProjects.slice(1);
         return { type: 'featured-grid', featured: defaultFeatured, grid: gridItems };
     }, [projects]);
 
     const displayedProjects = React.useMemo(() => {
         if (layoutConfig.type === 'featured-grid') {
             // Show featured + up to 3 grid items
-            return [layoutConfig.featured, ...layoutConfig.grid.slice(0, 3)];
+            return [layoutConfig.featured, ...(layoutConfig.grid || []).slice(0, 3)].filter(Boolean);
         }
-        return layoutConfig.grid.length > 0 ? layoutConfig.grid : [layoutConfig.featured].filter(Boolean);
+        return (layoutConfig.grid && layoutConfig.grid.length > 0) ? layoutConfig.grid : [layoutConfig.featured].filter(Boolean);
     }, [layoutConfig]);
 
     React.useEffect(() => {
-        if (initialData && initialData.length > 0) {
+        if (initialData && Array.isArray(initialData) && initialData.length > 0) {
             setProjects(initialData);
             setIsLoading(false);
             return;
@@ -233,7 +234,7 @@ export function ClientProjects({ initialData }: ClientProjectsProps = {}) {
         fetch('/api/client-projects')
             .then(res => res.json())
             .then(data => {
-                if (data.success) {
+                if (data && data.success && Array.isArray(data.data)) {
                     setProjects(data.data);
                 }
                 setIsLoading(false);
@@ -257,7 +258,7 @@ export function ClientProjects({ initialData }: ClientProjectsProps = {}) {
     const updateActiveMobileIdx = React.useCallback(() => {
         if (!mobileScrollRef.current) return;
         const mobileCards = mobileScrollRef.current.querySelectorAll<HTMLElement>(".client-project-mobile-card");
-        if (mobileCards.length === 0) return;
+        if (!mobileCards || mobileCards.length === 0) return;
 
         const containerRect = mobileScrollRef.current.getBoundingClientRect();
         const containerCenter = containerRect.left + containerRect.width / 2;
@@ -266,6 +267,7 @@ export function ClientProjects({ initialData }: ClientProjectsProps = {}) {
         let minDistance = Infinity;
 
         mobileCards.forEach((card, idx) => {
+            if (!card) return;
             const cardRect = card.getBoundingClientRect();
             const cardCenter = cardRect.left + cardRect.width / 2;
             const distance = Math.abs(containerCenter - cardCenter);
