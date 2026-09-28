@@ -40,8 +40,8 @@ export function ContactSection({ config }: { config?: SiteConfigData | null }) {
         {
             icon: MapPin,
             label: "Location",
-            value: config?.addressText || "SS40 NETWORK PRIVATE LIMITED, 1st Floor, Municipal Corporation Incubation Centre\n(Near by trade centre), Sree Puram, Tirunelveli, Tamil Nadu 627001.",
-            href: config?.googleMapsIframeUrl ? "https://goo.gl/maps/DWiCMVGgqKi2r5188" : "https://goo.gl/maps/DWiCMVGgqKi2r5188"
+            value: config?.addressText || "1st Floor, Municipal Corporation Incubation Centre\n(Near by trade centre), Sree Puram, Tirunelveli, Tamil Nadu 627001",
+            href: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((config?.companyName || "SS40 NETWORK PRIVATE LIMITED") + " " + (config?.addressText || "1st Floor, Municipal Corporation Incubation Centre, Sree Puram, Tirunelveli, Tamil Nadu 627001"))}`
         },
         {
             icon: MessageCircle,

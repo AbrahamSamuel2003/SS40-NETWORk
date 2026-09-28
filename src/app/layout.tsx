@@ -113,11 +113,19 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const config = await getSiteConfig();
+  const companyName = config?.companyName || "SS40 NETWORK PRIVATE LIMITED";
+  const legalName = config?.legalName || "SS40 NETWORK PRIVATE LIMITED";
+  const contactEmail = config?.contactEmail || "support@ss40network.com";
+  const contactPhone = config?.contactPhone || "+91 83005 91750";
+  const addressText = config?.addressText || "1st Floor, Municipal Corporation Incubation Centre (Near by trade centre), Sree Puram, Tirunelveli, Tamil Nadu 627001";
+  const logoUrl = config?.uploadedLogoUrl || config?.logoUrl || "https://ss40network.com/icon.jpg";
+
   // Advanced SEO Sitelinks & Brand Schema Markup (JSON-LD)
   const jsonLd = {
     "@context": "https://schema.org",
@@ -125,40 +133,40 @@ export default function RootLayout({
       {
         "@type": "Organization",
         "@id": "https://ss40network.com/#organization",
-        "name": "SS40 NETWORK PRIVATE LIMITED",
-        "legalName": "SS40 NETWORK PRIVATE LIMITED",
+        "name": companyName,
+        "legalName": legalName,
         "url": "https://ss40network.com",
         "logo": {
           "@type": "ImageObject",
-          "url": "https://ss40network.com/icon.jpg"
+          "url": logoUrl.startsWith('http') ? logoUrl : `https://ss40network.com${logoUrl.startsWith('/') ? '' : '/'}${logoUrl}`
         },
-        "description": "SS40 NETWORK PRIVATE LIMITED is a technology company in Tirunelveli architecting enterprise digital solutions, intelligent SaaS products, and career-launching tech academics.",
+        "description": config?.seoDefaultDescription || "SS40 NETWORK PRIVATE LIMITED is a technology company in Tirunelveli architecting enterprise digital solutions, intelligent SaaS products, and career-launching tech academics.",
         "address": {
           "@type": "PostalAddress",
-          "streetAddress": "1st Floor, Municipal Corporation Incubation Centre (Near by trade centre), Sree Puram",
+          "streetAddress": addressText,
           "addressLocality": "Tirunelveli",
           "addressRegion": "Tamil Nadu",
           "postalCode": "627001",
           "addressCountry": "IN"
         },
-        "telephone": "+91 83005 91750",
-        "email": "support@ss40network.com",
+        "telephone": contactPhone,
+        "email": contactEmail,
         "areaServed": "India, Global",
         "sameAs": [
-          "https://www.linkedin.com/company/ss40-network"
+          config?.urlLinkedin || "https://www.linkedin.com/company/ss40-network"
         ]
       },
       {
         "@type": "LocalBusiness",
         "@id": "https://ss40network.com/#localbusiness",
-        "name": "SS40 NETWORK PRIVATE LIMITED",
-        "legalName": "SS40 NETWORK PRIVATE LIMITED",
+        "name": companyName,
+        "legalName": legalName,
         "url": "https://ss40network.com",
-        "telephone": "+91 83005 91750",
-        "email": "support@ss40network.com",
+        "telephone": contactPhone,
+        "email": contactEmail,
         "address": {
           "@type": "PostalAddress",
-          "streetAddress": "1st Floor, Municipal Corporation Incubation Centre (Near by trade centre), Sree Puram",
+          "streetAddress": addressText,
           "addressLocality": "Tirunelveli",
           "addressRegion": "Tamil Nadu",
           "postalCode": "627001",
@@ -166,7 +174,7 @@ export default function RootLayout({
         },
         "geo": {
           "@type": "GeoCoordinates",
-          "url": "https://goo.gl/maps/DWiCMVGgqKi2r5188"
+          "url": `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(companyName + " " + addressText)}`
         },
         "openingHoursSpecification": {
           "@type": "OpeningHoursSpecification",

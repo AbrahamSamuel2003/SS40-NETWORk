@@ -66,16 +66,16 @@ export default async function ContactPage() {
             {
                 "@type": "ContactPage",
                 "@id": "https://ss40network.com/contact#page",
-                "name": "Contact SS40 NETWORK PRIVATE LIMITED",
+                "name": `Contact ${config?.companyName || "SS40 NETWORK PRIVATE LIMITED"}`,
                 "url": "https://ss40network.com/contact",
                 "mainEntity": {
                     "@type": "Organization",
-                    "name": "SS40 NETWORK PRIVATE LIMITED",
-                    "telephone": "+91 83005 91750",
-                    "email": "support@ss40network.com",
+                    "name": config?.companyName || "SS40 NETWORK PRIVATE LIMITED",
+                    "telephone": config?.contactPhone || "+91 83005 91750",
+                    "email": config?.contactEmail || "support@ss40network.com",
                     "address": {
                         "@type": "PostalAddress",
-                        "streetAddress": "1st Floor, Municipal Corporation Incubation Centre (Near by trade centre), Sree Puram",
+                        "streetAddress": config?.addressText || "1st Floor, Municipal Corporation Incubation Centre (Near by trade centre), Sree Puram",
                         "addressLocality": "Tirunelveli",
                         "addressRegion": "Tamil Nadu",
                         "postalCode": "627001",

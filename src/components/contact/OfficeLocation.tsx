@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { motion } from "framer-motion";
-import { MapPin, Navigation, Phone, Clock, Map } from "lucide-react";
+import { MapPin, Navigation, Phone, Clock, Map, ExternalLink } from "lucide-react";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
@@ -11,141 +11,117 @@ import type { SiteConfigData } from "@/lib/site-config";
 export function OfficeLocation({ config }: { config?: SiteConfigData | null }) {
     const companyName = config?.companyName || "SS40 NETWORK PRIVATE LIMITED";
     const addressText = config?.addressText || "1st Floor, Municipal Corporation Incubation Centre\n(Near by trade centre), Sree Puram, Tirunelveli, Tamil Nadu 627001";
-    const businessHours = config?.businessHours || "Monday – Saturday: 09:00 AM – 06:00 PM";
+    const businessHours = config?.businessHours || "Monday – Friday: 9:30 AM – 6:30 PM";
     const phoneValue = config?.contactPhone || "+91 83005 91750";
 
+    const mapDirectionsUrl = "https://goo.gl/maps/DWiCMVGgqKi2r5188";
+
     return (
-        <SectionWrapper id="office-location" className="bg-white py-16 md:py-24 relative border-t border-gray-100">
+        <SectionWrapper id="office-location" className="bg-[#EDF5F2] py-12 md:py-16">
             <Container className="max-w-6xl mx-auto flex flex-col items-center">
 
                 {/* HEADINGS */}
-                <div className="text-center mb-10 md:mb-14">
-                    <motion.div
-                        initial={{ opacity: 0, y: 15 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.4 }}
-                        className="inline-block px-3.5 py-1 rounded-full bg-[#EDF5F2] border border-[#0F766E]/20 text-[#0F766E] text-[10px] font-extrabold uppercase tracking-widest mb-3 shadow-2xs"
-                    >
-                        PHYSICAL LOCATION
-                    </motion.div>
-
+                <div className="text-center mb-4 sm:mb-6">
                     <motion.h2
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5 }}
-                        className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#0F172A] mb-3 tracking-tight font-serif"
+                        initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}
+                        className="text-xl sm:text-2xl md:text-3xl font-extrabold text-[#111827] mb-3 tracking-tight"
                     >
-                        Visit Our <span className="text-[#0F766E]">Headquarters</span>
+                        Visit Our <span className="text-[#0F766E]">Office</span>
                     </motion.h2>
-
                     <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: 0.1 }}
-                        className="text-[#334155] text-sm sm:text-base max-w-xl mx-auto leading-relaxed font-normal"
+                        initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }}
+                        className="text-gray-500 text-sm sm:text-base max-w-xl mx-auto leading-relaxed font-medium"
                     >
-                        Meet our founding engineers and educators at our municipal incubation facility in Tirunelveli.
+                        Meet our team or connect with us for business discussions and collaborations.
                     </motion.p>
                 </div>
 
                 {/* LOCATION CARD */}
                 <motion.div
-                    initial={{ opacity: 0, y: 25 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5 }}
-                    className="w-full bg-[#FAFCFB] rounded-3xl border border-gray-200/80 shadow-xl shadow-gray-200/40 p-6 sm:p-8 md:p-10 flex flex-col lg:flex-row gap-8 items-stretch"
+                    initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}
+                    className="w-full bg-white rounded-2xl border border-gray-100 shadow-xl shadow-gray-200/50 p-4 md:p-6 lg:p-8 flex flex-col lg:flex-row gap-6"
                 >
 
-                    {/* Left: Physical Info */}
-                    <div className="flex-1 flex flex-col justify-between">
-                        <div>
-                            <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center border border-[#0F766E]/20 mb-5 text-[#0F766E] shadow-2xs">
-                                <MapPin className="w-6 h-6" />
-                            </div>
+                    {/* Left: Info */}
+                    <div className="flex-1 flex flex-col">
+                        <div className="w-12 h-12 bg-[#EDF5F2] rounded-2xl flex items-center justify-center border border-gray-100 mb-4">
+                            <MapPin className="w-6 h-6 text-[#0F766E]" />
+                        </div>
 
-                            <h3 className="text-xl md:text-2xl font-bold text-[#0F172A] mb-3 font-serif">
-                                {companyName}
-                            </h3>
+                        <h3 className="text-xl md:text-2xl font-bold text-[#111827] mb-4">{companyName}</h3>
 
-                            <address className="not-italic text-[#334155] text-sm sm:text-base leading-relaxed mb-6 whitespace-pre-line font-normal">
-                                {addressText}
-                            </address>
+                        <address className="not-italic text-gray-500 text-base leading-relaxed mb-4 whitespace-pre-line">
+                            {addressText}
+                        </address>
 
-                            {/* Office Hours Pill */}
-                            <div className="flex items-start gap-3 text-xs sm:text-sm font-semibold text-[#0F172A] mb-6 bg-white p-4 rounded-2xl border border-gray-200/70">
-                                <div className="w-8 h-8 rounded-xl bg-[#EDF5F2] flex items-center justify-center shrink-0 text-[#0F766E] mt-0.5">
-                                    <Clock className="w-4 h-4" />
-                                </div>
-                                <div className="flex flex-col min-w-0">
-                                    <div className="flex items-center gap-2 mb-0.5">
-                                        <span className="text-gray-400 text-[10px] font-bold uppercase tracking-widest">Office Hours</span>
-                                    </div>
-                                    <span className="text-gray-700 font-medium">{businessHours}</span>
-                                </div>
+                        <div className="flex items-center gap-3 md:gap-4 text-[13px] md:text-sm font-bold text-[#111827] mb-4 bg-[#EDF5F2] w-full md:w-max px-3 md:px-4 py-3 rounded-xl border border-gray-100">
+                            <Clock className="w-5 h-5 text-[#0F766E] shrink-0" />
+                            <div className="flex flex-col min-w-0">
+                                <span className="text-gray-500 text-[10px] uppercase tracking-widest whitespace-nowrap">Office Hours</span>
+                                <span className="mt-1 md:mt-0 md:whitespace-nowrap break-words min-w-0">{businessHours}</span>
                             </div>
                         </div>
 
-                        {/* Directions & Call Buttons */}
-                        <div className="flex flex-wrap gap-3 pt-2">
-                            <a
-                                href="https://goo.gl/maps/DWiCMVGgqKi2r5188"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex-1 sm:flex-none"
-                            >
-                                <Button className="w-full sm:w-auto bg-[#0F766E] text-white hover:bg-[#115E59] font-bold px-6 py-3.5 rounded-xl group shadow-md shadow-[#0F766E]/20 cursor-pointer">
-                                    <Navigation className="w-4 h-4 mr-2 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
+                        <div className="flex flex-wrap gap-4 mt-auto">
+                            <a href={mapDirectionsUrl} target="_blank" rel="noopener noreferrer">
+                                <Button className="bg-[#0F766E] text-white hover:bg-[#115E59] font-bold px-5 py-3 rounded-xl group shadow-md shadow-[#0F766E]/20">
+                                    <Navigation className="w-4 h-4 mr-2 group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform" />
                                     Get Directions
                                 </Button>
                             </a>
-
-                            <a
-                                href={`tel:${phoneValue.replace(/\s+/g, '')}`}
-                                className="flex-1 sm:flex-none"
-                            >
-                                <Button
-                                    variant="outline"
-                                    className="w-full sm:w-auto bg-white border-gray-200 text-[#0F172A] hover:bg-gray-100 font-bold px-6 py-3.5 rounded-xl group"
-                                >
-                                    <Phone className="w-4 h-4 mr-2 text-[#0F766E]" />
-                                    Call Reception
-                                </Button>
-                            </a>
+                            {phoneValue && (
+                                <a href={`tel:${phoneValue.replace(/\s+/g, '')}`}>
+                                    <Button variant="outline" className="bg-transparent border-gray-200 text-[#111827] hover:bg-gray-50 font-bold px-5 py-3 rounded-xl group">
+                                        <Phone className="w-4 h-4 mr-2 text-[#0F766E]" />
+                                        Call Now
+                                    </Button>
+                                </a>
+                            )}
                         </div>
                     </div>
 
                     {/* Right: Embedded Interactive Map */}
-                    <div className="flex-1 w-full bg-white rounded-2xl border border-gray-200/80 overflow-hidden relative min-h-[300px] lg:min-h-[360px] group shadow-inner">
-                        {/* Live Google Map Iframe */}
+                    <div className="flex-1 w-full bg-[#EDF5F2] rounded-2xl border border-gray-100 overflow-hidden relative min-h-[280px] lg:min-h-[100%] group shadow-inner">
+
+                        {/* Live Map Iframe in background */}
                         <iframe
                             title={`${companyName} Office Location`}
-                            src={`https://maps.google.com/maps?q=${encodeURIComponent(companyName + " " + addressText)}&t=m&z=15&output=embed&iwloc=near`}
+                            src={
+                                config?.googleMapsIframeUrl && config.googleMapsIframeUrl.includes("embed")
+                                    ? config.googleMapsIframeUrl
+                                    : "https://www.openstreetmap.org/export/embed.html?bbox=77.6980%2C8.7150%2C77.7380%2C8.7420&layer=mapnik&marker=8.7284%2C77.7122"
+                            }
                             className="absolute inset-0 w-full h-full border-0 contrast-[1.05]"
                             allowFullScreen
                             loading="lazy"
-                            referrerPolicy="no-referrer-when-downgrade"
                         />
 
-                        {/* Floating Action Bar */}
-                        <div className="absolute inset-x-0 bottom-4 flex justify-center z-10 pointer-events-none">
-                            <a
-                                href={`https://maps.google.com/maps?q=${encodeURIComponent(companyName + " " + addressText)}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="pointer-events-auto"
-                            >
-                                <Button className="bg-[#0F766E] hover:bg-[#115E59] text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-lg flex items-center gap-2 group/btn cursor-pointer">
-                                    <Map className="w-3.5 h-3.5 text-[#2DD4BF] group-hover/btn:scale-110 transition-transform" />
-                                    <span>Open Full Map</span>
+                        {/* Custom Google Places Mock Overlay */}
+                        <div className="absolute top-3 left-3 right-3 sm:right-auto md:top-4 md:left-4 bg-white rounded-md shadow-[0_2px_6px_rgba(0,0,0,0.3)] p-3 md:p-4 z-20 w-auto sm:w-[260px] md:w-[280px] pointer-events-auto">
+                            <h4 className="text-[14px] md:text-[15px] font-semibold text-gray-900 leading-tight mb-1 flex justify-between items-start">
+                                {companyName}
+                                <a href={mapDirectionsUrl} target="_blank" rel="noopener noreferrer" className="text-[#0F766E] hover:text-[#115E59] p-1 shrink-0 ml-2">
+                                    <ExternalLink className="w-4 h-4" />
+                                </a>
+                            </h4>
+                            <p className="text-[11px] md:text-[12px] text-gray-600 leading-snug whitespace-pre-line">
+                                {addressText}
+                            </p>
+                        </div>
+
+                        {/* Floating protection gradient for button */}
+                        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#111827]/30 to-transparent pointer-events-none" />
+
+                        {/* Floating Action Button */}
+                        <div className="absolute inset-x-0 bottom-6 flex justify-center z-10 pointer-events-none">
+                            <a href={mapDirectionsUrl} target="_blank" rel="noopener noreferrer" className="pointer-events-auto">
+                                <Button className="bg-[#111827] text-white hover:bg-[#1f2937] font-bold px-5 py-3 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.2)] hover:-translate-y-1 transition-all border border-gray-700/50 flex items-center group/btn">
+                                    <Map className="w-4 h-4 mr-2 text-[#2DD4BF] group-hover/btn:text-white transition-colors" />
+                                    View on Google Maps
                                 </Button>
                             </a>
                         </div>
                     </div>
-
                 </motion.div>
             </Container>
         </SectionWrapper>
