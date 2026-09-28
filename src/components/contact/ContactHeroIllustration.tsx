@@ -20,8 +20,8 @@ export function ContactHeroIllustration() {
                     <defs>
                         {/* Background Arch Gradient */}
                         <linearGradient id="heroBackdrop" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stopColor="#2DD4BF" stopOpacity="0.3" />
-                            <stop offset="100%" stopColor="#0F766E" stopOpacity="0.15" />
+                            <stop offset="0%" stopColor="#2DD4BF" stopOpacity="0.25" />
+                            <stop offset="100%" stopColor="#0F766E" stopOpacity="0.12" />
                         </linearGradient>
                         {/* Skin Gradients for Realistic Depth */}
                         <linearGradient id="skinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -56,8 +56,47 @@ export function ContactHeroIllustration() {
                     />
 
                     {/* Ambient Background Circles */}
-                    <circle cx="90" cy="110" r="32" fill="#2DD4BF" fillOpacity="0.18" />
-                    <circle cx="470" cy="120" r="40" fill="#0F766E" fillOpacity="0.12" />
+                    <circle cx="90" cy="110" r="32" fill="#2DD4BF" fillOpacity="0.15" />
+                    <circle cx="470" cy="120" r="40" fill="#0F766E" fillOpacity="0.1" />
+
+                    {/* ================= FLOATING COMMUNICATION ICONS ================= */}
+                    
+                    {/* 1. Floating Phone Call Token (Top Left) */}
+                    <g transform="translate(60, 110)">
+                        <rect width="46" height="46" rx="15" fill="#FFFFFF" filter="drop-shadow(0 6px 14px rgba(15,118,110,0.12))" stroke="#E2E8F0" strokeWidth="1" />
+                        <rect x="7" y="7" width="32" height="32" rx="10" fill="#EDF5F2" />
+                        {/* Phone Icon Path */}
+                        <path
+                            d="M17 19 C17 24.5 21.5 29 27 29 C28.5 29 29.5 28 29 26.5 L27.5 24 C27 23.5 26 23.5 25.5 24 L24.8 24.7 C23.2 23.8 22.2 22.8 21.3 21.2 L22 20.5 C22.5 20 22.5 19 22 18.5 L19.5 17 C18 16.5 17 17.5 17 19 Z"
+                            fill="#0F766E"
+                        />
+                    </g>
+
+                    {/* 2. Floating Email Envelope Token (Top Right) */}
+                    <g transform="translate(425, 65)">
+                        <rect width="52" height="44" rx="14" fill="#FFFFFF" filter="drop-shadow(0 6px 14px rgba(15,118,110,0.12))" stroke="#E2E8F0" strokeWidth="1" />
+                        <rect x="6" y="6" width="40" height="32" rx="10" fill="#EDF5F2" />
+                        {/* Envelope Lines */}
+                        <rect x="13" y="14" width="26" height="16" rx="3" fill="#FFFFFF" stroke="#0F766E" strokeWidth="1.5" />
+                        <path d="M13 16 L26 23 L39 16" stroke="#0F766E" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+                    </g>
+
+                    {/* 3. Floating Chat Bubble Token (Mid Left) */}
+                    <g transform="translate(45, 195)">
+                        <rect width="54" height="40" rx="14" fill="#FFFFFF" filter="drop-shadow(0 6px 14px rgba(15,118,110,0.12))" stroke="#E2E8F0" strokeWidth="1" />
+                        {/* Chat bubble tail */}
+                        <polygon points="58,225 68,225 54,233" fill="#FFFFFF" />
+                        {/* Chat Lines */}
+                        <rect x="57" y="206" width="28" height="4" rx="2" fill="#0F766E" />
+                        <rect x="57" y="214" width="18" height="4" rx="2" fill="#2DD4BF" />
+                    </g>
+
+                    {/* 4. Floating Question / Support Query Token (Mid Right) */}
+                    <g transform="translate(470, 190)">
+                        <rect width="44" height="44" rx="14" fill="#FFFFFF" filter="drop-shadow(0 6px 14px rgba(15,118,110,0.12))" stroke="#E2E8F0" strokeWidth="1" />
+                        <rect x="6" y="6" width="32" height="32" rx="10" fill="#EDF5F2" />
+                        <path d="M22 15 C19 15 17.5 17 17.5 19 M22 15 C25 15 26.5 17 26.5 19.5 C26.5 22 23 23 22 25.5 M22 29 L22 30" stroke="#0F766E" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+                    </g>
 
                     {/* Ergonomic Office Chair Behind Character */}
                     <rect x="135" y="150" width="80" height="120" rx="20" fill="#1E293B" opacity="0.9" />
