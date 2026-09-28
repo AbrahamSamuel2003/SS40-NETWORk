@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Menu, LogOut, ExternalLink, User } from 'lucide-react';
+import { Menu, LogOut, ExternalLink, User, Smartphone } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 
@@ -53,12 +53,25 @@ export function AdminTopbar({ adminName, onMenuClick }: TopbarProps) {
                 </div>
             </div>
 
-            <div className="flex items-center gap-2 sm:gap-3">
+            <div className="flex items-center gap-1.5 sm:gap-2.5">
+                {/* Admin Mobile App APK Download */}
+                <a
+                    href="/downloads/ss40-admin.apk"
+                    download="ss40-admin.apk"
+                    className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 hover:text-[#0F766E] transition-colors px-2.5 sm:px-3 py-2 rounded-xl hover:bg-[#EDF5F2] border border-transparent hover:border-[#0F766E]/20"
+                    title="Download SS40 Admin Android App (APK)"
+                >
+                    <Smartphone className="w-4 h-4 text-[#0F766E]" />
+                    <span className="hidden sm:inline">Admin App (APK)</span>
+                </a>
+
+                <div className="h-4 w-px bg-gray-200 hidden sm:block" />
+
                 <a
                     href="/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 hover:text-[#0F766E] transition-colors px-3 py-2 rounded-xl hover:bg-[#EDF5F2] border border-transparent hover:border-[#0F766E]/20"
+                    className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 hover:text-[#0F766E] transition-colors px-2.5 sm:px-3 py-2 rounded-xl hover:bg-[#EDF5F2] border border-transparent hover:border-[#0F766E]/20"
                     title="View Public Site"
                 >
                     <ExternalLink className="w-4 h-4 text-[#0F766E]" />
