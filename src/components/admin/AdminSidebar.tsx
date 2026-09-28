@@ -57,7 +57,6 @@ const MENU_ITEMS: MenuBlock[] = [
             { name: 'Brand Logos', href: '/siva/home/logos' },
             { name: 'Happimonials', href: '/siva/home/happimonials' },
             { name: 'Activities & Blogs', href: '/siva/activities' },
-            { name: 'Home Media Assets', href: '/siva/home/media' },
         ]
     },
     {
