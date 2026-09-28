@@ -7,11 +7,8 @@ import { Headphones } from "lucide-react";
 export function ContactHeroIllustration() {
     return (
         <div className="relative w-full max-w-[540px] mx-auto select-none">
-            {/* Ambient Soft Glow Behind Illustration */}
-            <div className="absolute -inset-4 bg-gradient-to-tr from-[#2DD4BF]/20 via-[#0F766E]/10 to-transparent rounded-3xl blur-2xl pointer-events-none" />
-
             {/* Main Illustration Container Frame */}
-            <div className="relative bg-gradient-to-b from-[#F3F8F6] via-[#E8F4EF] to-[#DDEEE7] rounded-3xl p-6 sm:p-8 border border-[#2DD4BF]/30 shadow-2xl shadow-[#0F766E]/12 overflow-hidden">
+            <div className="relative bg-[#FAFCFB] rounded-3xl p-6 sm:p-8 border border-gray-200/90 shadow-xl shadow-gray-200/50 overflow-hidden">
                 
                 {/* SVG Vector Scene */}
                 <svg

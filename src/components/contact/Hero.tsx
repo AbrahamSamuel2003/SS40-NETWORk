@@ -12,16 +12,6 @@ export function Hero() {
     return (
         <section id="contact-hero" className={cn("relative w-full overflow-hidden bg-white border-b border-gray-100 pt-24 pb-14 sm:pt-28 sm:pb-16 lg:pt-32 lg:pb-20 lg:min-h-[min(74vh,700px)] flex items-center")}>
 
-            {/* Ambient Background & Soft Radial Color Blends */}
-            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
-                <div 
-                    className="absolute inset-0"
-                    style={{ background: 'radial-gradient(ellipse at 50% 30%, rgba(223, 233, 212, 0.45) 0%, rgba(216, 232, 226, 0.25) 50%, #ffffff 100%)' }}
-                />
-                {/* Soft ambient gradient orbs */}
-                <div className="absolute top-10 left-1/4 w-96 h-96 bg-[#2DD4BF]/10 rounded-full blur-3xl pointer-events-none" />
-                <div className="absolute bottom-10 right-1/4 w-80 h-80 bg-[#DFE9D4]/40 rounded-full blur-3xl pointer-events-none" />
-            </div>
 
             <Container className="relative z-10 w-full">
                 <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-12">
