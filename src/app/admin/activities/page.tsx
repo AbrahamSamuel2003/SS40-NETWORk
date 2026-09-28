@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import { compressImageFile } from '@/utils/imageCompressor';
@@ -30,6 +30,8 @@ import {
 } from 'lucide-react';
 import { MediaSelectorModal } from '@/components/admin/MediaSelectorModal';
 import { SectionVisibilityToggle } from '@/components/admin/SectionVisibilityToggle';
+import { toast } from '@/components/admin/AdminToast';
+import { ConfirmDialog } from '@/components/admin/ConfirmDialog';
 
 export const ACTIVITY_TYPES = [
     { value: 'GOVERNMENT_OFFICIAL', label: 'Government / Official', icon: Building2, color: 'bg-amber-50 text-amber-800 border-amber-200' },
@@ -60,6 +62,8 @@ export default function ManagedActivitiesPage() {
     const [errorMsg, setErrorMsg] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingId, setEditingId] = useState<string | null>(null);
+    const [deleteTarget, setDeleteTarget] = useState<{ id: string; title: string } | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     // Filter & Search states
     const [searchQuery, setSearchQuery] = useState('');
@@ -154,7 +158,7 @@ export default function ManagedActivitiesPage() {
     const handleUploadLocal = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files?.length) return;
         if (images.length >= 5) {
-            alert('Maximum 5 images allowed per activity post.');
+            toast.warning('Maximum 5 images allowed per activity post.');
             return;
         }
 
@@ -180,9 +184,10 @@ export default function ManagedActivitiesPage() {
             if (uploadedUrls.length > 0) {
                 const newImageItems: ImageItem[] = uploadedUrls.map(url => ({ url, caption: '', altText: title || 'Activity Photo' }));
                 setImages(prev => [...prev, ...newImageItems].slice(0, 5));
+                toast.success(`${uploadedUrls.length} image${uploadedUrls.length > 1 ? 's' : ''} uploaded and compressed.`);
             }
         } catch {
-            alert('Upload failed');
+            toast.error('Image upload failed. Please check network connection.');
         } finally {
             setIsUploading(false);
             if (e.target) e.target.value = '';
@@ -191,11 +196,12 @@ export default function ManagedActivitiesPage() {
 
     const handleSelectMedia = (url: string) => {
         if (images.length >= 5) {
-            alert('Maximum 5 images allowed per activity post.');
+            toast.warning('Maximum 5 images allowed per activity post.');
             return;
         }
         setImages(prev => [...prev, { url, caption: '', altText: title || 'Activity Photo' }].slice(0, 5));
         setIsMediaSelectorOpen(false);
+        toast.info('Media asset attached.');
     };
 
     const handleRemoveImage = (index: number) => {
@@ -260,28 +266,38 @@ export default function ManagedActivitiesPage() {
             const data = await res.json();
             if (data.success) {
                 setIsModalOpen(false);
+                toast.success(editingId ? 'Activity post updated successfully!' : 'Activity post published successfully!');
                 fetchActivities();
             } else {
-                setErrorMsg(data.error || 'Failed to save activity');
+                const err = data.error || 'Failed to save activity';
+                setErrorMsg(err);
+                toast.error(err);
             }
         } catch {
             setErrorMsg('Failed to save activity');
+            toast.error('Failed to save activity');
         } finally {
             setIsSaving(false);
         }
     };
 
-    const handleDelete = async (id: string) => {
-        if (!confirm('Are you sure you want to delete this activity post?')) return;
+    const handleConfirmDelete = async () => {
+        if (!deleteTarget) return;
+        setIsDeleting(true);
         try {
-            const res = await fetch(`/api/admin/activities/${id}`, { method: 'DELETE' });
-            if ((await res.json()).success) {
+            const res = await fetch(`/api/admin/activities/${deleteTarget.id}`, { method: 'DELETE' });
+            const data = await res.json();
+            if (data.success) {
+                toast.success('Activity post deleted successfully.');
                 fetchActivities();
             } else {
-                alert('Failed to delete activity post');
+                toast.error(data.error || 'Failed to delete activity post.');
             }
         } catch {
-            alert('Error deleting activity post');
+            toast.error('Error deleting activity post.');
+        } finally {
+            setIsDeleting(false);
+            setDeleteTarget(null);
         }
     };
 
@@ -445,7 +461,7 @@ export default function ManagedActivitiesPage() {
                                                     <Edit2 className="w-3.5 h-3.5" />
                                                 </button>
                                                 <button
-                                                    onClick={() => handleDelete(item.id)}
+                                                    onClick={() => setDeleteTarget({ id: item.id, title: item.title })}
                                                     className="p-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg border border-rose-200 transition-colors flex items-center justify-center flex-1"
                                                     title="Delete"
                                                 >
@@ -557,7 +573,7 @@ export default function ManagedActivitiesPage() {
                                                         Edit
                                                     </button>
                                                     <button
-                                                        onClick={() => handleDelete(item.id)}
+                                                        onClick={() => setDeleteTarget({ id: item.id, title: item.title })}
                                                         className="px-2.5 py-1.5 text-xs font-medium text-rose-600 hover:bg-rose-50 rounded-md transition-colors"
                                                     >
                                                         Delete
@@ -839,6 +855,21 @@ export default function ManagedActivitiesPage() {
                     onSelect={handleSelectMedia}
                 />
             )}
+
+            {/* Confirm Delete Dialog */}
+            <ConfirmDialog
+                isOpen={!!deleteTarget}
+                title="Delete Activity Post?"
+                description={`Are you sure you want to delete "${deleteTarget?.title || 'this post'}"? This action cannot be undone.`}
+                confirmText="Delete Post"
+                cancelText="Cancel"
+                isDestructive={true}
+                isLoading={isDeleting}
+                onConfirm={handleConfirmDelete}
+                onCancel={() => {
+                    if (!isDeleting) setDeleteTarget(null);
+                }}
+            />
         </div>
     );
 }
