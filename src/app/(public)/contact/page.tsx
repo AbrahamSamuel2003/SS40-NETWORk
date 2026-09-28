@@ -101,7 +101,11 @@ export default async function ContactPage() {
             <Suspense fallback={<div className="w-full py-16 text-center text-gray-400" />}>
                 <ContactForm />
             </Suspense>
-            <Faq />
+
+            {/* Standalone FAQ section for mobile screens only */}
+            <div className="block lg:hidden">
+                <Faq />
+            </div>
         </div>
     );
 }
