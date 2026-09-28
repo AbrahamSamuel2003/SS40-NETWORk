@@ -15,6 +15,8 @@ import {
     Activity,
     X,
     ChevronDown,
+    ChevronLeft,
+    ChevronRight,
     Home,
     Monitor,
     Database,
@@ -26,6 +28,8 @@ interface SidebarProps {
     adminName: string;
     isOpen: boolean;
     setIsOpen: (open: boolean) => void;
+    isDesktopCollapsed?: boolean;
+    onToggleDesktopCollapse?: () => void;
 }
 
 type MenuItem = {
@@ -116,7 +120,13 @@ const MENU_ITEMS: MenuBlock[] = [
     },
 ];
 
-export function AdminSidebar({ adminName, isOpen, setIsOpen }: SidebarProps) {
+export function AdminSidebar({
+    adminName,
+    isOpen,
+    setIsOpen,
+    isDesktopCollapsed = false,
+    onToggleDesktopCollapse
+}: SidebarProps) {
     const pathname = usePathname();
 
     const getInitialExpanded = React.useCallback(() => {
@@ -160,12 +170,35 @@ export function AdminSidebar({ adminName, isOpen, setIsOpen }: SidebarProps) {
                 />
             )}
 
+            {/* Unified Desktop Middle Toggle Button */}
+            {onToggleDesktopCollapse && (
+                <button
+                    type="button"
+                    onClick={onToggleDesktopCollapse}
+                    title={isDesktopCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+                    aria-label={isDesktopCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+                    className={cn(
+                        "hidden lg:flex fixed top-1/2 -translate-y-1/2 z-50 items-center justify-center bg-white border border-gray-200/90 shadow-md hover:shadow-lg transition-all duration-300 ease-in-out cursor-pointer group select-none",
+                        isDesktopCollapsed
+                            ? "left-0 translate-x-0 w-6 h-12 rounded-r-xl rounded-l-none border-l-0 text-gray-500 hover:text-[#0F766E] hover:w-7.5 hover:bg-[#EDF5F2]/80 hover:border-[#0F766E]/40"
+                            : "left-64 -translate-x-1/2 w-7 h-7 rounded-full text-gray-600 hover:text-[#0F766E] hover:bg-[#EDF5F2] hover:border-[#0F766E]/50 hover:scale-105 active:scale-95"
+                    )}
+                >
+                    {isDesktopCollapsed ? (
+                        <ChevronRight className="w-4 h-4 text-gray-600 group-hover:text-[#0F766E] transition-transform duration-200 group-hover:translate-x-0.5" />
+                    ) : (
+                        <ChevronLeft className="w-4 h-4 text-gray-600 group-hover:text-[#0F766E] transition-transform duration-200 group-hover:-translate-x-0.5" />
+                    )}
+                </button>
+            )}
+
             {/* Sidebar Shell */}
             <aside
                 data-lenis-prevent="true"
                 className={cn(
-                    "fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200/90 text-[#0F172A] flex flex-col h-full transition-transform duration-300 ease-out lg:translate-x-0 shadow-xl shadow-gray-200/50",
-                    isOpen ? "translate-x-0 pointer-events-auto" : "-translate-x-full pointer-events-none lg:pointer-events-auto"
+                    "fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-gray-200/90 text-[#0F172A] flex flex-col h-full transition-transform duration-300 ease-in-out shadow-xl shadow-gray-200/50",
+                    isOpen ? "translate-x-0 pointer-events-auto" : "-translate-x-full pointer-events-none lg:pointer-events-auto",
+                    isDesktopCollapsed ? "lg:-translate-x-full lg:pointer-events-none" : "lg:translate-x-0 lg:pointer-events-auto"
                 )}
             >
                 {/* Header */}
