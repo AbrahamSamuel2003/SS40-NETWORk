@@ -1,19 +1,9 @@
 import type { Metadata } from "next";
-import dynamic from "next/dynamic";
 import { Hero } from "@/components/products/Hero";
-
-const FeaturedProduct = dynamic(
-    () => import("@/components/products/FeaturedProduct").then((mod) => mod.FeaturedProduct)
-);
-const ProductImpacts = dynamic(
-    () => import("@/components/products/ProductImpacts").then((mod) => mod.ProductImpacts)
-);
-const Brands = dynamic(
-    () => import("@/components/products/Brands").then((mod) => mod.Brands)
-);
-const BookDemo = dynamic(
-    () => import("@/components/products/BookDemo").then((mod) => mod.BookDemo)
-);
+import { FeaturedProduct } from "@/components/products/FeaturedProduct";
+import { ProductImpacts } from "@/components/products/ProductImpacts";
+import { Brands } from "@/components/products/Brands";
+import { BookDemo } from "@/components/products/BookDemo";
 
 export const metadata: Metadata = {
     title: "Innovative Tools. Built for Real Impact. | SS40 NETWORK PRIVATE LIMITED",

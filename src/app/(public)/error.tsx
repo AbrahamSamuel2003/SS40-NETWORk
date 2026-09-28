@@ -17,18 +17,26 @@ export default function PublicError({ error, reset }: ErrorProps) {
         // Log the error to console for diagnostics
         console.error("Public Route Error Caught:", error);
 
-        // Auto-heal stale chunk load errors caused by new Vercel deployments
-        const errorMsg = error?.message || "";
+        // Auto-heal stale chunk load errors caused by new VPS deployments
+        const errorMsg = error?.message?.toLowerCase() || "";
+        const errorName = error?.name || "";
         const isChunkError =
-            error?.name === "ChunkLoadError" ||
-            errorMsg.includes("Loading chunk") ||
-            errorMsg.includes("Failed to fetch dynamically imported module") ||
-            errorMsg.includes("Failed to load script");
+            errorName === "ChunkLoadError" ||
+            errorMsg.includes("loading chunk") ||
+            errorMsg.includes("dynamically imported module") ||
+            errorMsg.includes("failed to load script") ||
+            errorMsg.includes("failed to fetch") ||
+            errorMsg.includes("importing a module script failed") ||
+            errorMsg.includes("text/html is not a valid javascript mime type") ||
+            errorMsg.includes("unexpected token '<'") ||
+            errorMsg.includes("chunk");
 
         if (isChunkError && typeof window !== "undefined") {
-            const hasAutoReloaded = sessionStorage.getItem("ss40_auto_chunk_reload");
-            if (!hasAutoReloaded) {
-                sessionStorage.setItem("ss40_auto_chunk_reload", "true");
+            const lastReload = sessionStorage.getItem("ss40_auto_chunk_reload_time");
+            const now = Date.now();
+            // Prevent reload loop: allow 1 auto-reload every 15 seconds
+            if (!lastReload || now - parseInt(lastReload, 10) > 15000) {
+                sessionStorage.setItem("ss40_auto_chunk_reload_time", now.toString());
                 window.location.reload();
                 return;
             }

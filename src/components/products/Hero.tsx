@@ -5,7 +5,10 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import {
     ArrowRight,
-    TrendingUp
+    TrendingUp,
+    Receipt,
+    Layers,
+    Bot
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -76,12 +79,81 @@ export function Hero() {
                         </div>
                     </div>
 
-                    {/* Right Column - Enterprise Product-Driven Company Growth Dashboard */}
-                    <div className="w-full lg:w-1/2 flex justify-center items-center select-none">
+                    {/* Right Column - Enterprise Product-Driven Company Growth Dashboard with 3D Floating Tags */}
+                    <div className="w-full lg:w-1/2 flex justify-center items-center select-none py-4 sm:py-6">
                         <div className="relative w-full max-w-[500px]">
 
                             {/* Soft Ambient Stage Glow */}
                             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-tr from-[#2DD4BF]/20 to-[#0F766E]/10 rounded-full blur-3xl pointer-events-none -z-0" />
+
+                            {/* FLOATING TAG 1: ClearInvoice (Positioned in Open Upper-Left Chart Area) */}
+                            <motion.div
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{
+                                    opacity: 1,
+                                    y: [0, -6, 0]
+                                }}
+                                transition={{
+                                    opacity: { duration: 0.5, delay: 0.2 },
+                                    y: { duration: 4.5, repeat: Infinity, ease: "easeInOut" }
+                                }}
+                                style={{
+                                    top: '85px'
+                                }}
+                                className="absolute -left-2 sm:-left-5 z-20 bg-white/95 backdrop-blur-md px-3 sm:px-3.5 py-2 rounded-2xl border border-[#2DD4BF]/40 shadow-xl shadow-[#0F766E]/10 flex items-center gap-2.5 will-change-transform hover:scale-105 transition-transform cursor-default"
+                            >
+                                <div className="w-7 h-7 rounded-xl bg-[#EDF5F2] border border-[#0F766E]/20 text-[#0F766E] flex items-center justify-center shrink-0">
+                                    <Receipt className="w-3.5 h-3.5 text-[#0F766E]" />
+                                </div>
+                                <div className="text-left">
+                                    <p className="text-xs font-bold text-[#0F172A] leading-tight">ClearInvoice</p>
+                                    <p className="text-[10px] text-[#0F766E] font-semibold">Smart GST &amp; Billing</p>
+                                </div>
+                            </motion.div>
+
+                            {/* FLOATING TAG 2: GTC Suite (Mid-Right) */}
+                            <motion.div
+                                initial={{ opacity: 0, x: 10 }}
+                                animate={{
+                                    opacity: 1,
+                                    y: [0, 7, 0]
+                                }}
+                                transition={{
+                                    opacity: { duration: 0.5, delay: 0.35 },
+                                    y: { duration: 5.2, repeat: Infinity, ease: "easeInOut", delay: 0.6 }
+                                }}
+                                className="absolute top-1/4 -right-2 sm:-right-7 z-20 bg-white/95 backdrop-blur-md px-3 sm:px-3.5 py-2 rounded-2xl border border-[#0F766E]/30 shadow-xl shadow-[#0F766E]/10 flex items-center gap-2.5 will-change-transform hover:scale-105 transition-transform cursor-default"
+                            >
+                                <div className="w-7 h-7 rounded-xl bg-[#EDF5F2] border border-[#0F766E]/20 text-[#0F766E] flex items-center justify-center shrink-0">
+                                    <Layers className="w-3.5 h-3.5 text-[#0F766E]" />
+                                </div>
+                                <div className="text-left">
+                                    <p className="text-xs font-bold text-[#0F172A] leading-tight">GTC Suite</p>
+                                    <p className="text-[10px] text-gray-500 font-medium">Enterprise Scale</p>
+                                </div>
+                            </motion.div>
+
+                            {/* FLOATING TAG 3: AI Email Agent (Bottom-Left) */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{
+                                    opacity: 1,
+                                    y: [0, -6, 0]
+                                }}
+                                transition={{
+                                    opacity: { duration: 0.5, delay: 0.5 },
+                                    y: { duration: 4.8, repeat: Infinity, ease: "easeInOut", delay: 1.2 }
+                                }}
+                                className="absolute -bottom-4 -left-2 sm:-left-6 z-20 bg-white/95 backdrop-blur-md px-3 sm:px-3.5 py-2 rounded-2xl border border-[#2DD4BF]/40 shadow-xl shadow-[#0F766E]/10 flex items-center gap-2.5 will-change-transform hover:scale-105 transition-transform cursor-default"
+                            >
+                                <div className="w-7 h-7 rounded-xl bg-[#EDF5F2] border border-[#0F766E]/20 text-[#0F766E] flex items-center justify-center shrink-0">
+                                    <Bot className="w-3.5 h-3.5 text-[#0F766E]" />
+                                </div>
+                                <div className="text-left">
+                                    <p className="text-xs font-bold text-[#0F172A] leading-tight">AI Email Agent</p>
+                                    <p className="text-[10px] text-gray-500 font-medium">Zero-Latency Inbox</p>
+                                </div>
+                            </motion.div>
 
                             {/* MAIN GLASS TERMINAL */}
                             <motion.div
@@ -111,24 +183,8 @@ export function Hero() {
                                     </div>
                                 </div>
 
-                                {/* Minimal Product Adoption Pipeline Chips */}
-                                <div className="grid grid-cols-3 gap-1.5 pt-3 z-10">
-                                    <div className="px-2 py-1 bg-gray-50/90 rounded-lg border border-gray-100 text-center">
-                                        <span className="text-[10px] sm:text-[11px] font-bold text-gray-800 block truncate">ClearInvoice</span>
-                                        <span className="text-[8px] sm:text-[9px] text-gray-500 block">Billing & GST</span>
-                                    </div>
-                                    <div className="px-2 py-1 bg-teal-50/60 rounded-lg border border-teal-100 text-center">
-                                        <span className="text-[10px] sm:text-[11px] font-bold text-[#0F766E] block truncate">GTC</span>
-                                        <span className="text-[8px] sm:text-[9px] text-teal-600 block">Enterprise Ops</span>
-                                    </div>
-                                    <div className="px-2 py-1 bg-gray-50/90 rounded-lg border border-gray-100 text-center">
-                                        <span className="text-[10px] sm:text-[11px] font-bold text-gray-800 block truncate">AI Email Agent</span>
-                                        <span className="text-[8px] sm:text-[9px] text-gray-500 block">Automation</span>
-                                    </div>
-                                </div>
-
                                 {/* Dynamic Interactive Growth Graph Area */}
-                                <div className="relative w-full my-3 min-h-[175px] sm:min-h-[195px] flex items-end">
+                                <div className="relative w-full my-3 min-h-[185px] sm:min-h-[205px] flex items-end">
                                     <svg className="w-full h-full overflow-visible" viewBox="0 0 460 185" preserveAspectRatio="none">
                                         <defs>
                                             {/* Bar Gradient */}
@@ -235,7 +291,7 @@ export function Hero() {
                                             transition={{ duration: 0.8, delay: 0.3 }}
                                         />
 
-                                        {/* Animated Connecting Trendline (Fluctuating with Ups & Downs) */}
+                                        {/* Animated Connecting Trendline */}
                                         <motion.path
                                             d="M 32,96 L 84,62 L 136,70 L 188,80 L 240,48 L 292,22 L 344,36 L 396,8"
                                             fill="none"
@@ -297,7 +353,7 @@ export function Hero() {
                                     </svg>
                                 </div>
 
-                                {/* Bottom Product Impact Bar */}
+                                {/* Bottom Live Metric Strip */}
                                 <div className="grid grid-cols-3 gap-2 pt-3 border-t border-gray-100 text-center z-10">
                                     <div className="py-1.5 px-1 bg-gray-50/80 rounded-xl border border-gray-100/90">
                                         <span className="text-[9px] sm:text-[10px] text-gray-500 font-bold block uppercase tracking-wider">ClearInvoice</span>
