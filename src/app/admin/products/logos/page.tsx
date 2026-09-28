@@ -277,18 +277,20 @@ export default function ProductLogosPage() {
                                             </span>
                                         </td>
                                         <td className="text-right">
-                                            <div className="flex items-center justify-end gap-1.5">
+                                            <div className="flex items-center justify-end gap-2">
                                                 <button
                                                     onClick={() => handleOpenModal(logo)}
-                                                    className="px-2.5 py-1.5 text-xs font-medium text-[#334151] hover:text-[#0F766E] hover:bg-[#EDF5F2] rounded-md transition-colors"
+                                                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-[#0F766E] bg-[#EDF5F2] hover:bg-[#0F766E] hover:text-white rounded-lg transition-colors"
                                                 >
-                                                    Edit
+                                                    <Edit2 className="w-3.5 h-3.5" />
+                                                    <span>Edit</span>
                                                 </button>
                                                 <button
                                                     onClick={() => handleDelete(logo.id)}
-                                                    className="px-2.5 py-1.5 text-xs font-medium text-rose-600 hover:bg-rose-50 rounded-md transition-colors"
+                                                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-rose-600 bg-rose-50 hover:bg-rose-600 hover:text-white rounded-lg transition-colors border border-rose-200/60"
                                                 >
-                                                    Delete
+                                                    <Trash2 className="w-3.5 h-3.5" />
+                                                    <span>Delete</span>
                                                 </button>
                                             </div>
                                         </td>

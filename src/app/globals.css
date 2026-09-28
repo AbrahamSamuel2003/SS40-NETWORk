@@ -233,16 +233,65 @@
     text-align: left;
     font-size: 0.875rem;
     color: #0F172A;
+    border-collapse: separate;
+    border-spacing: 0;
   }
 
+  .admin-table thead,
   .admin-table-head {
+    background: #F8FAFC;
     border-bottom: 1px solid #E2E8F0;
+  }
+
+  .admin-table th {
+    padding: 0.875rem 1.25rem;
     background: #F8FAFC;
     color: #475569;
     font-size: 0.75rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    border-bottom: 1px solid #E2E8F0;
+    white-space: nowrap;
+  }
+
+  .admin-table th:first-child {
+    padding-left: 1.5rem;
+  }
+
+  .admin-table th:last-child {
+    padding-right: 1.5rem;
+  }
+
+  .admin-table tbody {
+    background: #FFFFFF;
+  }
+
+  .admin-table td {
+    padding: 1rem 1.25rem;
+    vertical-align: middle;
+    color: #0F172A;
+    border-bottom: 1px solid #F1F5F9;
+  }
+
+  .admin-table td:first-child {
+    padding-left: 1.5rem;
+  }
+
+  .admin-table td:last-child {
+    padding-right: 1.5rem;
+  }
+
+  .admin-table tbody tr {
+    transition: background-color 150ms ease;
+  }
+
+  .admin-table tbody tr:hover {
+    background: #F8FAFC;
+  }
+
+  .admin-table tbody tr:last-child td {
+    border-bottom: none;
   }
 
   .admin-table-body {
