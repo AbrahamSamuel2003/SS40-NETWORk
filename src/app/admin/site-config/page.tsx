@@ -1,7 +1,7 @@
-﻿'use client';
+'use client';
 
 import * as React from 'react';
-import { Save, AlertCircle, CheckCircle2, Upload, Trash2, Image as ImageIcon } from 'lucide-react';
+import { Save, AlertCircle, CheckCircle2, Upload, Trash2, Image as ImageIcon, Globe, MapPin, Phone, Mail, Building, Clock } from 'lucide-react';
 import { compressImageFile } from '@/utils/imageCompressor';
 import { useRouter } from 'next/navigation';
 import { MediaSelectorModal } from '@/components/admin/MediaSelectorModal';
@@ -105,7 +105,6 @@ export default function SiteConfigPage() {
         const { name, value } = e.target;
         setConfig(prev => prev ? { ...prev, [name]: value } : prev);
 
-        // Clear status messages on new input edit
         if (errorMsg) setErrorMsg('');
         if (successMsg) setSuccessMsg('');
     };
@@ -144,7 +143,7 @@ export default function SiteConfigPage() {
             setErrorMsg('An error occurred during upload.');
         } finally {
             setIsUploadingLogo(false);
-            if (e.target) e.target.value = ''; // Reset input to allow re-upload if needed
+            if (e.target) e.target.value = '';
         }
     };
 
@@ -157,7 +156,6 @@ export default function SiteConfigPage() {
 
         if (!config) return;
 
-        // Basic frontend validation for required fields
         const requiredFields = [
             'companyName', 'legalName', 'contactEmail', 'contactPhone',
             'whatsappNumber', 'addressText', 'businessHours', 'footerDescription',
@@ -173,7 +171,6 @@ export default function SiteConfigPage() {
             }
         }
 
-        // Email validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(config.contactEmail)) {
             setErrorMsg('Please enter a valid email address.');
@@ -214,7 +211,7 @@ export default function SiteConfigPage() {
                     urlYoutube: data.data.urlYoutube || '',
                     urlInstagram: data.data.urlInstagram || '',
                 });
-                router.refresh(); // Refresh router aggressively to update server components downstream if any
+                router.refresh();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             } else {
                 if (res.status === 401 || res.status === 403) {
@@ -235,151 +232,166 @@ export default function SiteConfigPage() {
     if (isLoading) {
         return (
             <div className="flex items-center justify-center min-h-[50vh]">
-                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-200"></div>
+                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#0F766E]"></div>
             </div>
         );
     }
 
     if (isUninitialized) {
         return (
-            <div className="flex flex-col items-center justify-center min-h-[50vh] text-center border border-dashed border-gray-200/20 rounded-xl p-8 bg-white">
-                <AlertCircle className="w-12 h-12 text-[#9CA3AF] mb-4" />
-                <h3 className="text-xl font-bold text-[#111827] mb-2">Not Initialized</h3>
-                <p className="text-[#6B7280]">Global configuration has not been initialized yet. Please contact support or run the database seeder.</p>
+            <div className="flex flex-col items-center justify-center min-h-[50vh] text-center border border-dashed border-[#CBD5E1] rounded-2xl p-8 bg-white">
+                <AlertCircle className="w-12 h-12 text-[#94A3B8] mb-4" />
+                <h3 className="text-xl font-bold text-[#0F172A] mb-2">Not Initialized</h3>
+                <p className="text-[#64748B]">Global configuration has not been initialized yet. Please contact support or run the database seeder.</p>
             </div>
         );
     }
 
     if (!config) {
         return (
-            <div className="bg-[#FEE2E2] border border-[#FCA5A5] text-[#B91C1C] p-4 rounded-xl text-sm mt-4">
+            <div className="bg-rose-50 border border-rose-200 text-rose-700 p-4 rounded-xl text-sm mt-4">
                 {errorMsg || 'Failed to load configuration.'}
             </div>
         );
     }
 
     return (
-        <div className="max-w-5xl mx-auto pb-12">
-            <div className="mb-8">
-                <h2 className="text-2xl font-bold tracking-tight text-[#111827] mb-2">Site Configuration</h2>
-                <p className="text-[#6B7280]">Manage the global information and website settings used across the website.</p>
+        <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+                <div>
+                    <h1 className="text-xl sm:text-2xl font-bold text-[#0F172A] tracking-tight">Site Configuration</h1>
+                    <p className="text-sm text-[#475569] mt-0.5">Manage global company metadata, contact credentials, branding, and SEO.</p>
+                </div>
+                <button
+                    type="button"
+                    onClick={handleSave}
+                    disabled={isSaving}
+                    className="admin-button-primary"
+                >
+                    <Save className="w-4 h-4" />
+                    {isSaving ? 'Saving Changes...' : 'Save Configuration'}
+                </button>
             </div>
 
             {/* Status Feedback */}
             {errorMsg && (
-                <div className="mb-6 bg-[#FEE2E2] border border-[#FCA5A5] text-[#991B1B] px-4 py-3 rounded-lg flex items-start gap-3">
-                    <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-[#B91C1C]" />
+                <div className="bg-rose-50 border border-rose-200 text-rose-800 px-4 py-3 rounded-xl flex items-start gap-3 text-sm">
+                    <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-rose-600" />
                     <div>{errorMsg}</div>
                 </div>
             )}
 
             {successMsg && (
-                <div className="mb-6 bg-[#6B9F91]/10 border border-[#6B9F91]/30 text-[#111827] px-4 py-3 rounded-lg flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5 text-[#6B9F91]" />
+                <div className="bg-[#EDF5F2] border border-[#2DD4BF]/40 text-[#0F766E] px-4 py-3 rounded-xl flex items-start gap-3 text-sm font-medium">
+                    <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5 text-[#0F766E]" />
                     <div>{successMsg}</div>
                 </div>
             )}
 
-            <form onSubmit={handleSave} className="space-y-8">
-
+            <form onSubmit={handleSave} className="space-y-6">
                 {/* A. Company Information */}
-                <div className="admin-card overflow-hidden p-6">
-                    <h3 className="text-lg font-semibold text-[#111827] mb-4 border-b border-gray-200 pb-2">Company Information</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="admin-card p-5 sm:p-6 space-y-5">
+                    <div className="flex items-center gap-2 pb-3 border-b border-[#E2E8F0]">
+                        <Building className="w-4 h-4 text-[#0F766E]" />
+                        <h2 className="text-base font-bold text-[#0F172A]">Company Identity &amp; Contact</h2>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-sm font-medium text-[#374151] mb-2">Company Name *</label>
+                            <label className="block text-xs font-semibold text-[#334151] mb-1.5">Company Display Name *</label>
                             <input
                                 type="text"
                                 name="companyName"
                                 value={config.companyName}
                                 onChange={handleChange}
                                 required
-                                className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] placeholder:text-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 transition-all"
+                                className="admin-input"
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-[#374151] mb-2">Legal Name *</label>
+                            <label className="block text-xs font-semibold text-[#334151] mb-1.5">Legal Entity Name *</label>
                             <input
                                 type="text"
                                 name="legalName"
                                 value={config.legalName}
                                 onChange={handleChange}
                                 required
-                                className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] placeholder:text-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 transition-all"
+                                className="admin-input"
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-[#374151] mb-2">Contact Email *</label>
+                            <label className="block text-xs font-semibold text-[#334151] mb-1.5">Official Support Email *</label>
                             <input
                                 type="email"
                                 name="contactEmail"
                                 value={config.contactEmail}
                                 onChange={handleChange}
                                 required
-                                className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] placeholder:text-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 transition-all"
+                                className="admin-input"
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-[#374151] mb-2">Contact Phone *</label>
+                            <label className="block text-xs font-semibold text-[#334151] mb-1.5">Contact Phone *</label>
                             <input
                                 type="text"
                                 name="contactPhone"
                                 value={config.contactPhone}
                                 onChange={handleChange}
                                 required
-                                className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] placeholder:text-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 transition-all"
+                                className="admin-input"
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-[#374151] mb-2">WhatsApp Number *</label>
+                            <label className="block text-xs font-semibold text-[#334151] mb-1.5">WhatsApp Number *</label>
                             <input
                                 type="text"
                                 name="whatsappNumber"
                                 value={config.whatsappNumber}
                                 onChange={handleChange}
                                 required
-                                className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] placeholder:text-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 transition-all"
+                                className="admin-input"
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-[#374151] mb-2">Business Hours *</label>
+                            <label className="block text-xs font-semibold text-[#334151] mb-1.5">Business Hours *</label>
                             <input
                                 type="text"
                                 name="businessHours"
                                 value={config.businessHours}
                                 onChange={handleChange}
                                 required
-                                className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] placeholder:text-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 transition-all"
+                                className="admin-input"
                             />
                         </div>
                     </div>
                 </div>
 
                 {/* B. Branding & Content */}
-                <div className="admin-card overflow-hidden p-6">
-                    <h3 className="text-lg font-semibold text-[#111827] mb-4 border-b border-gray-200 pb-2">Branding & Content</h3>
-                    <div className="space-y-6">
+                <div className="admin-card p-5 sm:p-6 space-y-5">
+                    <div className="flex items-center gap-2 pb-3 border-b border-[#E2E8F0]">
+                        <ImageIcon className="w-4 h-4 text-[#0F766E]" />
+                        <h2 className="text-base font-bold text-[#0F172A]">Branding Assets &amp; Footer</h2>
+                    </div>
+                    <div className="space-y-4">
                         <div>
-                            <label className="block text-sm font-medium text-[#374151] mb-2">Upload Company Logo</label>
+                            <label className="block text-xs font-semibold text-[#334151] mb-1.5">Global Brand Logo</label>
                             {config.uploadedLogoUrl ? (
-                                <div className="flex items-center gap-4 bg-[#D8E8E2]/70 border border-gray-200 rounded-lg p-4">
-                                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                                    <img src={config.uploadedLogoUrl} alt="Uploaded Logo" className="h-12 w-auto object-contain bg-[#D8E8E2] rounded" />
-                                    <div className="flex-1 text-sm text-[#6B7280]">
-                                        Using uploaded logo. (Takes priority over URL)
+                                <div className="flex items-center gap-4 bg-slate-50 border border-[#E2E8F0] rounded-xl p-4">
+                                    <img src={config.uploadedLogoUrl} alt="Uploaded Logo" className="h-12 w-auto object-contain bg-white rounded-lg p-1 border border-[#E2E8F0]" />
+                                    <div className="flex-1 text-xs text-[#64748B]">
+                                        Custom uploaded logo active. Takes highest priority across all pages.
                                     </div>
                                     <button
                                         type="button"
                                         onClick={handleRemoveUploadedLogo}
-                                        className="text-[#B91C1C] hover:text-[#991B1B] p-2 border border-[#FCA5A5] rounded-lg hover:bg-[#FEE2E2] transition-colors"
+                                        className="text-rose-600 hover:text-rose-700 p-2 border border-rose-200 rounded-lg hover:bg-rose-50 transition-colors"
                                         title="Remove uploaded logo"
                                     >
-                                        <Trash2 className="w-5 h-5" />
+                                        <Trash2 className="w-4 h-4" />
                                     </button>
                                 </div>
                             ) : (
-                                <div className="border border-dashed border-gray-200/20 rounded-lg p-6 bg-[#D8E8E2]/70 flex flex-col items-center justify-center text-center">
-                                    <div className="flex flex-wrap gap-4 justify-center">
+                                <div className="border border-dashed border-[#CBD5E1] rounded-xl p-6 bg-slate-50/70 flex flex-col items-center justify-center text-center">
+                                    <div className="flex flex-wrap gap-3 justify-center">
                                         <div>
                                             <input
                                                 type="file"
@@ -390,174 +402,165 @@ export default function SiteConfigPage() {
                                             />
                                             <label
                                                 htmlFor="logo-upload-input"
-                                                className={`cursor-pointer inline-flex items-center gap-2 px-4 py-2 ${isUploadingLogo ? 'bg-[#D8E8E2] text-[#6B7280]' : 'bg-[#6B9F91] text-[#111827] hover:bg-[#5C8C80]'} rounded-lg transition-colors font-medium text-sm`}
+                                                className={`cursor-pointer admin-button-primary text-xs ${isUploadingLogo ? 'opacity-50 pointer-events-none' : ''}`}
                                             >
-                                                {isUploadingLogo ? (
-                                                    <>
-                                                        <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                                                        Uploading...
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        <Upload className="w-4 h-4" />
-                                                        Upload Local File
-                                                    </>
-                                                )}
+                                                <Upload className="w-3.5 h-3.5" />
+                                                {isUploadingLogo ? 'Uploading...' : 'Upload Logo File'}
                                             </label>
                                         </div>
                                         <button
                                             type="button"
                                             onClick={() => setIsMediaSelectorOpen(true)}
-                                            className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-[#D8E8E2] text-[#111827] hover:bg-[#E5F0EC] border border-[#6B9F91]/20 rounded-lg transition-colors font-medium text-sm"
+                                            className="admin-button-secondary text-xs"
                                         >
-                                            <ImageIcon className="w-4 h-4 text-[#6B9F91]" /> Select from Media
+                                            <ImageIcon className="w-3.5 h-3.5 text-[#0F766E]" /> Select from Media
                                         </button>
                                     </div>
-                                    <p className="text-xs text-[#9CA3AF] mt-3">Upload your custom logo or select from media library. To fallback to an external URL, specify it below.</p>
+                                    <p className="text-[11px] text-[#94A3B8] mt-2">Recommended: transparent PNG or SVG logo file.</p>
                                 </div>
                             )}
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-[#374151] mb-2">External Logo URL (Fallback)</label>
+                            <label className="block text-xs font-semibold text-[#334151] mb-1.5">External Logo Fallback URL</label>
                             <input
                                 type="url"
                                 name="logoUrl"
                                 value={config.logoUrl || ''}
                                 onChange={handleChange}
-                                className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] placeholder:text-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 transition-all"
+                                className="admin-input"
                                 placeholder="https://example.com/logo.png"
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-[#374151] mb-2">Footer Description *</label>
+                            <label className="block text-xs font-semibold text-[#334151] mb-1.5">Global Footer Description *</label>
                             <textarea
                                 name="footerDescription"
                                 value={config.footerDescription}
                                 onChange={handleChange}
                                 required
                                 rows={3}
-                                className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] placeholder:text-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 transition-all resize-none"
+                                className="admin-input resize-none"
                             ></textarea>
                         </div>
                     </div>
                 </div>
 
-                {/* C. Social / External Links */}
-                <div className="admin-card overflow-hidden p-6">
-                    <h3 className="text-lg font-semibold text-[#111827] mb-4 border-b border-gray-200 pb-2">Social Links</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* C. Social Links */}
+                <div className="admin-card p-5 sm:p-6 space-y-5">
+                    <div className="flex items-center gap-2 pb-3 border-b border-[#E2E8F0]">
+                        <Globe className="w-4 h-4 text-[#0F766E]" />
+                        <h2 className="text-base font-bold text-[#0F172A]">Social &amp; Community Channels</h2>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
-                            <label className="block text-sm font-medium text-[#374151] mb-2">LinkedIn URL</label>
+                            <label className="block text-xs font-semibold text-[#334151] mb-1.5">LinkedIn Profile URL</label>
                             <input
                                 type="url"
                                 name="urlLinkedin"
                                 value={config.urlLinkedin || ''}
                                 onChange={handleChange}
-                                className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] placeholder:text-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 transition-all"
+                                className="admin-input"
+                                placeholder="https://linkedin.com/company/..."
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-[#374151] mb-2">YouTube URL</label>
+                            <label className="block text-xs font-semibold text-[#334151] mb-1.5">YouTube Channel URL</label>
                             <input
                                 type="url"
                                 name="urlYoutube"
                                 value={config.urlYoutube || ''}
                                 onChange={handleChange}
-                                className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] placeholder:text-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 transition-all"
+                                className="admin-input"
+                                placeholder="https://youtube.com/@..."
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-[#374151] mb-2">Instagram URL</label>
+                            <label className="block text-xs font-semibold text-[#334151] mb-1.5">Instagram Profile URL</label>
                             <input
                                 type="url"
                                 name="urlInstagram"
                                 value={config.urlInstagram || ''}
                                 onChange={handleChange}
-                                className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] placeholder:text-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 transition-all"
+                                className="admin-input"
+                                placeholder="https://instagram.com/..."
                             />
                         </div>
                     </div>
                 </div>
 
                 {/* D. Location / Contact */}
-                <div className="admin-card overflow-hidden p-6">
-                    <h3 className="text-lg font-semibold text-[#111827] mb-4 border-b border-gray-200 pb-2">Location</h3>
-                    <div className="space-y-6">
+                <div className="admin-card p-5 sm:p-6 space-y-5">
+                    <div className="flex items-center gap-2 pb-3 border-b border-[#E2E8F0]">
+                        <MapPin className="w-4 h-4 text-[#0F766E]" />
+                        <h2 className="text-base font-bold text-[#0F172A]">HQ Location &amp; Map Coordinates</h2>
+                    </div>
+                    <div className="space-y-4">
                         <div>
-                            <label className="block text-sm font-medium text-[#374151] mb-2">Address Text *</label>
+                            <label className="block text-xs font-semibold text-[#334151] mb-1.5">Physical HQ Address *</label>
                             <textarea
                                 name="addressText"
                                 value={config.addressText}
                                 onChange={handleChange}
                                 required
                                 rows={2}
-                                className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] placeholder:text-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 transition-all resize-none"
+                                className="admin-input resize-none"
                             ></textarea>
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-[#374151] mb-2">Google Maps Iframe URL</label>
+                            <label className="block text-xs font-semibold text-[#334151] mb-1.5">Google Maps Embed URL</label>
                             <input
                                 type="url"
                                 name="googleMapsIframeUrl"
                                 value={config.googleMapsIframeUrl || ''}
                                 onChange={handleChange}
-                                className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] placeholder:text-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 transition-all"
+                                className="admin-input"
                                 placeholder="https://www.google.com/maps/embed?pb=..."
                             />
-                            <p className="mt-1 text-xs text-[#9CA3AF]">Enter the src URL from the Google Maps embed code.</p>
+                            <p className="mt-1 text-[11px] text-[#94A3B8]">Enter the src URL from Google Maps Embed iframe.</p>
                         </div>
                     </div>
                 </div>
 
                 {/* E. SEO */}
-                <div className="admin-card overflow-hidden p-6">
-                    <h3 className="text-lg font-semibold text-[#111827] mb-4 border-b border-gray-200 pb-2">Search Engine Optimization</h3>
-                    <div className="space-y-6">
+                <div className="admin-card p-5 sm:p-6 space-y-5">
+                    <div className="flex items-center gap-2 pb-3 border-b border-[#E2E8F0]">
+                        <Globe className="w-4 h-4 text-[#0F766E]" />
+                        <h2 className="text-base font-bold text-[#0F172A]">Default Search Engine Optimization (SEO)</h2>
+                    </div>
+                    <div className="space-y-4">
                         <div>
-                            <label className="block text-sm font-medium text-[#374151] mb-2">Default SEO Title *</label>
+                            <label className="block text-xs font-semibold text-[#334151] mb-1.5">Default Meta Title *</label>
                             <input
                                 type="text"
                                 name="seoDefaultTitle"
                                 value={config.seoDefaultTitle}
                                 onChange={handleChange}
                                 required
-                                className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] placeholder:text-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 transition-all"
+                                className="admin-input"
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-[#374151] mb-2">Default SEO Description *</label>
+                            <label className="block text-xs font-semibold text-[#334151] mb-1.5">Default Meta Description *</label>
                             <textarea
                                 name="seoDefaultDescription"
                                 value={config.seoDefaultDescription}
                                 onChange={handleChange}
                                 required
                                 rows={3}
-                                className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] placeholder:text-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#6B9F91]/30 transition-all resize-none"
+                                className="admin-input resize-none"
                             ></textarea>
                         </div>
                     </div>
                 </div>
 
-                <div className="flex justify-end pt-4">
+                <div className="flex justify-end pt-2">
                     <button
                         type="submit"
                         disabled={isSaving}
-                        className="bg-[#6B9F91] text-[#111827] font-medium px-6 py-2.5 rounded-lg hover:bg-[#5C8C80] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                        className="admin-button-primary px-8 py-2.5 text-sm"
                     >
-                        {isSaving ? (
-                            <>
-                                <svg className="animate-spin h-4 w-4 text-[#111827]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                </svg>
-                                Saving...
-                            </>
-                        ) : (
-                            <>
-                                <Save className="w-4 h-4" />
-                                Save Changes
-                            </>
-                        )}
+                        <Save className="w-4 h-4" />
+                        {isSaving ? 'Saving Changes...' : 'Save All Changes'}
                     </button>
                 </div>
             </form>

@@ -2,155 +2,221 @@
 
 import * as React from "react";
 import { motion } from "framer-motion";
-import { ArrowDown, PhoneCall, Mail, Phone, Video, HelpCircle, Network } from "lucide-react";
+import { 
+    ArrowDown, 
+    MessageSquare, 
+    Phone, 
+    Code2, 
+    Box, 
+    GraduationCap, 
+    Layers,
+    ArrowRight
+} from "lucide-react";
 import { cn } from "@/utils/cn";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 
-// -- Content Data --
-const NODES = [
-    { id: "email", label: "Email", icon: Mail, x: -100, y: -90, delay: 0 },
-    { id: "phone", label: "Phone", icon: Phone, x: 100, y: -60, delay: 0.2 },
-    { id: "meeting", label: "Meeting", icon: Video, x: -90, y: 80, delay: 0.4 },
-    { id: "support", label: "Support", icon: HelpCircle, x: 110, y: 90, delay: 0.6 },
+const SS40_WINGS = [
+    {
+        id: "digital-solutions",
+        title: "SS40 Digital Solutions",
+        description: "Custom Software, Web & Cloud Systems",
+        tag: "Engineering Desk",
+        icon: Code2,
+        accentBg: "bg-[#EDF5F2]",
+        accentText: "text-[#0F766E]",
+    },
+    {
+        id: "products",
+        title: "SS40 Products",
+        description: "ClearInvoice SaaS & Cloud Tools",
+        tag: "Product Demo",
+        icon: Box,
+        accentBg: "bg-[#EDF5F2]",
+        accentText: "text-[#0F766E]",
+    },
+    {
+        id: "academics",
+        title: "SS40 Academics",
+        description: "Tech Programs & Institutional MoUs",
+        tag: "Admissions",
+        icon: GraduationCap,
+        accentBg: "bg-[#EDF5F2]",
+        accentText: "text-[#0F766E]",
+    },
 ];
 
 export function Hero() {
     return (
-        <section id="contact-hero" className={cn("relative w-full overflow-hidden bg-white border-b border-gray-100 pt-24 pb-12 sm:pt-28 sm:pb-14 lg:pt-32 lg:pb-20 lg:min-h-[min(70vh,650px)] flex items-center")}>
+        <section id="contact-hero" className={cn("relative w-full overflow-hidden bg-white border-b border-gray-100 pt-24 pb-14 sm:pt-28 sm:pb-16 lg:pt-32 lg:pb-20 lg:min-h-[min(72vh,680px)] flex items-center")}>
 
-            {/* Ambient Background & Gradients (Clean Stacking Context) */}
+            {/* Ambient Background & Soft Radial Color Blends */}
             <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
                 <div 
                     className="absolute inset-0"
-                    style={{ background: 'radial-gradient(ellipse at 50% 35%, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.75) 65%, #ffffff 100%)' }}
+                    style={{ background: 'radial-gradient(ellipse at 50% 30%, rgba(223, 233, 212, 0.45) 0%, rgba(216, 232, 226, 0.25) 50%, #ffffff 100%)' }}
                 />
-                {/* Dotted texture */}
-                <div
-                    className="absolute inset-0 opacity-[0.03]"
-                    style={{ backgroundImage: 'radial-gradient(#111827 2px, transparent 2px)', backgroundSize: '32px 32px' }}
-                />
+                {/* Soft ambient gradient orbs */}
+                <div className="absolute top-10 left-1/4 w-96 h-96 bg-[#2DD4BF]/10 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute bottom-10 right-1/4 w-80 h-80 bg-[#DFE9D4]/40 rounded-full blur-3xl pointer-events-none" />
             </div>
 
             <Container className="relative z-10 w-full">
-                <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-6">
+                <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-12">
 
                     {/* LEFT: CONTENT */}
                     <div className="w-full lg:w-1/2 flex flex-col text-center lg:text-left z-20">
                         <motion.div
-                            initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
+                            initial={{ opacity: 0, y: 15 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5 }}
                             className="mb-4"
                         >
-                            <span className="inline-block px-3 py-1.5 rounded-full bg-[#6B9F91]/10 text-[#6B9F91] border border-[#6B9F91]/20 text-[10px] font-bold uppercase tracking-widest">
-                                CONTACT US
+                            <span className="inline-block px-3.5 py-1 rounded-full bg-[#DFE9D4] text-[#0F766E] border border-[#0F766E]/20 text-[11px] font-extrabold uppercase tracking-widest shadow-2xs">
+                                SS40 Contact &amp; Advisory
                             </span>
                         </motion.div>
 
                         <motion.h1
-                            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }}
-                            className="text-[clamp(30px,5vw,40px)] font-bold text-[#111827] leading-[1.1] tracking-tight mb-4 max-w-2xl font-serif"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.1 }}
+                            className="text-[clamp(32px,5vw,46px)] font-bold text-[#0F172A] leading-[1.12] tracking-tight mb-4 max-w-2xl font-serif"
                         >
-                            Let's Build Something <br className="hidden lg:block" /> Meaningful <span className="text-[#6B9F91]">Together.</span>
+                            Let's Build Something <br className="hidden lg:block" />
+                            Exceptional <span className="text-[#0F766E]">Together.</span>
                         </motion.h1>
 
                         <motion.p
-                            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}
-                            className="text-base md:text-lg text-[#6B7280] mb-5 max-w-xl mx-auto lg:mx-0 leading-relaxed"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.2 }}
+                            className="text-base md:text-lg text-[#334155] mb-6 max-w-xl mx-auto lg:mx-0 leading-relaxed font-normal"
                         >
-                            Whether you're looking for digital solutions, exploring our products, or interested in academic collaborations, our team is ready to help you take the next step.
+                            Whether you're exploring enterprise software, integrating ClearInvoice SaaS, or collaborating on university tech training, our core engineering team is ready to assist.
                         </motion.p>
 
                         <motion.div
-                            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }}
-                            className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.3 }}
+                            className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5"
                         >
                             <Button
                                 onClick={() => {
                                     document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' });
                                 }}
-                                className="w-full sm:w-auto bg-[#6B9F91] text-white hover:bg-[#5C8C80] font-bold text-base px-6 py-4 rounded-full group shadow-lg shadow-[#6B9F91]/20 inline-flex items-center justify-center whitespace-nowrap"
+                                className="w-full sm:w-auto bg-[#0F766E] text-white hover:bg-[#115E59] font-bold text-sm sm:text-base px-6 py-3.5 rounded-xl group shadow-lg shadow-[#0F766E]/20 inline-flex items-center justify-center whitespace-nowrap cursor-pointer transition-all active:scale-[0.98]"
                             >
-                                Get in Touch
+                                Start a Conversation
                                 <ArrowDown className="w-4 h-4 ml-2 group-hover:translate-y-1 transition-transform shrink-0" />
                             </Button>
 
-                            <a href="tel:+918300591750" className="w-full sm:w-auto inline-flex items-center justify-center">
+                            <a
+                                href="https://wa.me/918300591750?text=Hello%20SS40%20Network%2C%20I%20would%20like%20to%20connect%20with%20your%20team."
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-full sm:w-auto inline-flex items-center justify-center"
+                            >
                                 <Button
                                     variant="outline"
-                                    className="w-full bg-[#D8E8E2] border-gray-200 text-[#111827] hover:bg-gray-50 hover:border-gray-300 font-bold text-base px-6 py-4 rounded-full group transition-all inline-flex items-center justify-center whitespace-nowrap"
+                                    className="w-full bg-[#D8E8E2]/60 border-gray-200 text-[#0F172A] hover:bg-white hover:border-[#0F766E]/30 font-bold text-sm sm:text-base px-5 py-3.5 rounded-xl group transition-all inline-flex items-center justify-center whitespace-nowrap"
                                 >
-                                    <PhoneCall className="w-4 h-4 mr-2 text-[#6B9F91] shrink-0" />
-                                    Call Us
+                                    <MessageSquare className="w-4 h-4 mr-2 text-[#0F766E] shrink-0" />
+                                    WhatsApp Desk
                                 </Button>
                             </a>
                         </motion.div>
                     </div>
 
-                    {/* RIGHT: VISUAL COMMUNICATION HUB */}
-                    <div className="w-full lg:w-1/2 flex justify-center items-center h-[260px] md:h-[340px] relative">
+                    {/* RIGHT: SIMPLE, ATTRACTIVE, OUT-OF-THE-BOX ILLUSTRATION (SS40 Ecosystem Console) */}
+                    <div className="w-full lg:w-1/2 flex justify-center items-center relative">
+                        <div className="relative w-full max-w-[440px]">
 
-                        <div className="relative w-full max-w-[400px] aspect-square flex items-center justify-center">
-
-                            {/* SVG Connecting Lines */}
-                            <svg className="absolute inset-0 w-full h-full overflow-visible pointer-events-none" viewBox="-200 -200 400 400">
-                                {NODES.map((node, i) => (
-                                    <motion.g key={`line-${node.id}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 + i * 0.2 }}>
-                                        <motion.line
-                                            x1="0" y1="0" x2={node.x} y2={node.y}
-                                            stroke="#6B9F91" strokeWidth="1.5" strokeDasharray="4 4"
-                                            initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1, ease: "easeOut", delay: 0.5 + i * 0.2 }}
-                                            className="opacity-40"
-                                        />
-                                    </motion.g>
-                                ))}
-                            </svg>
-
-                            {/* Center Node */}
+                            {/* MAIN SS40 ECOSYSTEM ILLUSTRATOR CARD */}
                             <motion.div
-                                initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 0.5, type: "spring" }}
-                                className="relative z-20 flex flex-col items-center justify-center w-28 h-28 md:w-32 md:h-32 bg-white rounded-full shadow-[0_15px_50px_rgba(107,159,145,0.15)] border-4 border-[#D8E8E2]"
+                                initial={{ opacity: 0, scale: 0.96 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ duration: 0.6, delay: 0.2 }}
+                                className="w-full bg-white rounded-3xl border border-gray-200/80 shadow-[0_20px_50px_-12px_rgba(15,118,110,0.14)] p-5 sm:p-6 flex flex-col gap-4 relative z-10"
                             >
-                                <motion.div
-                                    animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-                                    transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-                                    className="absolute inset-0 bg-[#6B9F91]/10 rounded-full blur-md -z-10"
-                                />
-                                <Network className="w-7 h-7 text-[#6B9F91] mb-1.5" />
-                                <span className="font-extrabold text-[#111827] text-[10px] md:text-xs tracking-wider text-center leading-tight">SS40<br />NETWORK</span>
-                            </motion.div>
-
-                            {/* Outer Nodes */}
-                            {NODES.map((node, i) => {
-                                const Icon = node.icon;
-                                return (
-                                    <div
-                                        key={node.id}
-                                        className="absolute z-30"
-                                        style={{ transform: `translate(${node.x}px, ${node.y}px)` }}
-                                    >
-                                        <motion.div
-                                            initial={{ opacity: 0, scale: 0 }}
-                                            animate={{ opacity: 1, scale: 1, y: [-4, 4, -4] }}
-                                            transition={{
-                                                 opacity: { duration: 0.4, delay: 0.6 + i * 0.2 },
-                                                 scale: { duration: 0.5, type: "spring", delay: 0.6 + i * 0.2 },
-                                                 y: { repeat: Infinity, duration: 4 + i, ease: "easeInOut", delay: node.delay }
-                                            }}
-                                            className="relative flex flex-col items-center justify-center w-16 h-16 rounded-2xl bg-white shadow-xl shadow-gray-200/50 border border-gray-100"
-                                        >
-                                            <Icon className="w-5 h-5 text-[#6B9F91] mb-1" />
-                                            <span className="text-[9px] md:text-[10px] font-bold text-[#111827]">{node.label}</span>
-                                        </motion.div>
+                                {/* Header */}
+                                <div className="flex items-center justify-between pb-3.5 border-b border-gray-100">
+                                    <div className="flex items-center gap-2.5">
+                                        <div className="w-9 h-9 rounded-xl bg-[#0F766E] text-white flex items-center justify-center shadow-xs">
+                                            <Layers className="w-4.5 h-4.5" />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-xs font-bold text-[#0F172A] uppercase tracking-wider font-serif">
+                                                SS40 Ecosystem Direct
+                                            </h3>
+                                            <span className="text-[10px] text-gray-500 font-medium">
+                                                One Company. Three Wings.
+                                            </span>
+                                        </div>
                                     </div>
-                                );
-                            })}
 
-                            {/* Floating Particles Around Hub */}
-                            <motion.div animate={{ y: [-10, 10, -10] }} transition={{ repeat: Infinity, duration: 3 }} className="absolute text-[#A6CBBE] top-0 left-[20%] text-sm">✦</motion.div>
-                            <motion.div animate={{ y: [10, -10, 10] }} transition={{ repeat: Infinity, duration: 5 }} className="absolute text-[#FFC900] bottom-[10%] right-[10%] text-xs opacity-60">✦</motion.div>
+                                    <span className="px-2.5 py-1 rounded-full bg-[#EDF5F2] text-[#0F766E] text-[10px] font-bold">
+                                        Active
+                                    </span>
+                                </div>
+
+                                {/* Three SS40 Wings */}
+                                <div className="flex flex-col gap-2.5">
+                                    {SS40_WINGS.map((wing) => {
+                                        const Icon = wing.icon;
+                                        return (
+                                            <div
+                                                key={wing.id}
+                                                className="p-3.5 rounded-2xl bg-[#FAFCFB] border border-gray-100 hover:border-[#0F766E]/40 hover:bg-white hover:shadow-sm transition-all duration-200 flex items-center justify-between group"
+                                            >
+                                                <div className="flex items-center gap-3">
+                                                    <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-colors shadow-2xs", wing.accentBg, wing.accentText, "group-hover:bg-[#0F766E] group-hover:text-white")}>
+                                                        <Icon className="w-4.5 h-4.5" />
+                                                    </div>
+                                                    <div>
+                                                        <div className="text-xs sm:text-sm font-bold text-[#0F172A] group-hover:text-[#0F766E] transition-colors font-serif">
+                                                            {wing.title}
+                                                        </div>
+                                                        <div className="text-[10px] sm:text-[11px] text-gray-500">
+                                                            {wing.description}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <span className="text-[10px] font-bold text-[#0F766E] bg-[#EDF5F2] px-2.5 py-1 rounded-lg shrink-0 group-hover:bg-[#0F766E] group-hover:text-white transition-colors">
+                                                    {wing.tag}
+                                                </span>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+
+                                {/* Quick Connect Footer Strip */}
+                                <div className="pt-2 border-t border-gray-100 grid grid-cols-2 gap-2.5">
+                                    <a 
+                                        href="https://wa.me/918300591750" 
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        className="flex items-center justify-center gap-1.5 p-2.5 rounded-xl bg-[#EDF5F2] hover:bg-[#0F766E] text-[#0F766E] hover:text-white transition-all text-xs font-bold text-center shadow-2xs"
+                                    >
+                                        <MessageSquare className="w-3.5 h-3.5" />
+                                        <span>WhatsApp Chat</span>
+                                    </a>
+
+                                    <a 
+                                        href="tel:+918300591750" 
+                                        className="flex items-center justify-center gap-1.5 p-2.5 rounded-xl bg-[#FAFCFB] hover:bg-gray-100 text-[#0F172A] transition-all text-xs font-bold text-center border border-gray-200/80"
+                                    >
+                                        <Phone className="w-3.5 h-3.5 text-[#0F766E]" />
+                                        <span>Direct Call</span>
+                                    </a>
+                                </div>
+                            </motion.div>
 
                         </div>
                     </div>
+
                 </div>
             </Container>
         </section>

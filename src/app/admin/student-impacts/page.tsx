@@ -1,14 +1,12 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit2, Trash2, CheckCircle2, AlertCircle, Upload, X, Film, Image as ImageIcon, Sparkles, Star } from 'lucide-react';
+import { Plus, Edit2, Trash2, CheckCircle2, AlertCircle, Upload, X, Image as ImageIcon, Star, Video } from 'lucide-react';
 import { compressImageFile } from '@/utils/imageCompressor';
-import { useRouter } from 'next/navigation';
 import { MediaSelectorModal } from '@/components/admin/MediaSelectorModal';
 import { SectionVisibilityToggle } from '@/components/admin/SectionVisibilityToggle';
 
 export default function StudentImpactsPage() {
-    const router = useRouter();
     const [impacts, setImpacts] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [errorMsg, setErrorMsg] = useState('');
@@ -43,7 +41,7 @@ export default function StudentImpactsPage() {
             } else {
                 setErrorMsg(data.error);
             }
-        } catch (e) {
+        } catch {
             setErrorMsg('Failed to load student impacts.');
         } finally {
             setIsLoading(false);
@@ -77,10 +75,6 @@ export default function StudentImpactsPage() {
 
         setErrorMsg('');
         setIsModalOpen(true);
-    };
-
-    const handleCloseModal = () => {
-        setIsModalOpen(false);
     };
 
     const handleUploadMedia = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -147,7 +141,7 @@ export default function StudentImpactsPage() {
             } else {
                 setErrorMsg(data.error);
             }
-        } catch (err) {
+        } catch {
             setErrorMsg('Failed to save.');
         } finally {
             setIsSaving(false);
@@ -164,34 +158,34 @@ export default function StudentImpactsPage() {
             } else {
                 alert(data.error);
             }
-        } catch (e) {
+        } catch {
             alert('Failed to delete');
         }
     };
 
     if (isLoading) {
         return (
-            <div className="flex items-center justify-center p-12">
-                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-200"></div>
+            <div className="flex items-center justify-center p-16">
+                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#0F766E]"></div>
             </div>
         );
     }
 
     return (
-        <div className="max-w-6xl mx-auto pb-12 pt-8">
-            <div className="mb-8 flex flex-col sm:flex-row justify-between sm:items-end gap-4">
+        <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
                 <div>
-                    <h2 className="text-2xl font-bold tracking-tight text-[#111827] mb-2">Student Impacts</h2>
-                    <p className="text-[#6B7280]">Manage student testimonials and videos displayed in Academics.</p>
+                    <h1 className="text-xl sm:text-2xl font-bold text-[#0F172A] tracking-tight">Student Impacts</h1>
+                    <p className="text-sm text-[#475569] mt-0.5">Manage student success stories, testimonials, and video interviews.</p>
                 </div>
-                <div className="flex flex-wrap items-center gap-3 self-start sm:self-auto">
+                <div className="flex flex-wrap items-center gap-2.5">
                     <SectionVisibilityToggle
                         sectionKey="academics_studentImpacts"
                         sectionLabel="Student Impacts"
                     />
                     <button
                         onClick={() => handleOpenModal()}
-                        className="bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-4 py-2 rounded-lg font-medium text-sm transition-colors flex items-center gap-2"
+                        className="admin-button-primary"
                     >
                         <Plus className="w-4 h-4" /> Add Impact
                     </button>
@@ -199,24 +193,68 @@ export default function StudentImpactsPage() {
             </div>
 
             <div className="admin-card overflow-hidden">
-                {/* ── MOBILE CARD GRID (hidden on sm+) ── */}
-                <div className="sm:hidden">
+                {/* Mobile Cards: 2-Column Grid */}
+                <div className="sm:hidden p-2.5">
                     {impacts.length === 0 ? (
-                        <div className="p-8 text-center text-[#9CA3AF]">No student impacts found.</div>
+                        <div className="p-8 text-center text-sm text-[#64748B]">No student impacts found.</div>
                     ) : (
-                        <div className="grid grid-cols-2 gap-3 p-3">
+                        <div className="grid grid-cols-2 gap-2.5">
                             {impacts.map(imp => (
-                                <div key={imp.id} className="admin-card p-3 flex flex-col gap-2 rounded-xl">
-                                    <div className="flex items-start justify-between gap-1">
-                                        <span className="font-semibold text-[#111827] text-sm leading-tight line-clamp-2">{imp.studentName}</span>
-                                        <button onClick={() => handleOpenModal(imp)} className="shrink-0 p-1 text-[#9CA3AF] hover:text-[#111827]">
-                                            <Edit2 className="w-4 h-4" />
-                                        </button>
+                                <div key={imp.id} className="p-3 rounded-xl border border-gray-200/90 bg-white flex flex-col justify-between gap-2 shadow-xs hover:border-[#2DD4BF]/50 transition-colors">
+                                    <div className="space-y-1.5">
+                                        <div className="flex items-center gap-2">
+                                            {imp.photoUrl ? (
+                                                <div className="w-8 h-8 rounded-full bg-slate-100 border border-[#E2E8F0] overflow-hidden shrink-0">
+                                                    <img src={imp.photoUrl} alt="" className="w-full h-full object-cover" />
+                                                </div>
+                                            ) : (
+                                                <div className="w-8 h-8 rounded-full bg-[#EDF5F2] text-[#0F766E] border border-[#2DD4BF]/30 flex items-center justify-center font-bold text-xs shrink-0">
+                                                    {imp.studentName.charAt(0)}
+                                                </div>
+                                            )}
+                                            <div className="min-w-0 flex-1">
+                                                <h3 className="font-bold text-xs text-[#0F172A] leading-tight truncate" title={imp.studentName}>
+                                                    {imp.studentName}
+                                                </h3>
+                                                <p className="text-[10px] text-[#64748B] truncate">{imp.designation || imp.academicRoute}</p>
+                                            </div>
+                                        </div>
+
+                                        <p className="text-[10px] text-[#334151] italic line-clamp-3 leading-relaxed bg-[#F8FAFC] p-1.5 rounded border border-gray-100">
+                                            &ldquo;{imp.quote}&rdquo;
+                                        </p>
+
+                                        <div className="flex flex-wrap items-center gap-1 pt-0.5">
+                                            <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-semibold ${imp.isActive ? 'bg-[#EDF5F2] text-[#0F766E]' : 'bg-slate-100 text-slate-500'}`}>
+                                                {imp.isActive ? 'Active' : 'Draft'}
+                                            </span>
+                                            {imp.isFeatured && (
+                                                <span className="inline-flex items-center gap-0.5 text-[9px] font-semibold text-amber-700 bg-amber-50 border border-amber-200 px-1 py-0.2 rounded">
+                                                    <Star className="w-2.5 h-2.5 fill-amber-500 text-amber-500" /> Feat
+                                                </span>
+                                            )}
+                                            {imp.youtubeUrl && (
+                                                <span className="inline-flex items-center gap-0.5 text-[9px] font-semibold text-rose-700 bg-rose-50 border border-rose-200 px-1 py-0.2 rounded">
+                                                    <Video className="w-2.5 h-2.5 text-rose-600" /> Video
+                                                </span>
+                                            )}
+                                        </div>
                                     </div>
-                                    <p className="text-[#6B7280] text-xs leading-snug line-clamp-1">{imp.academicRoute} · {imp.designation}</p>
-                                    <div className="mt-auto pt-1 flex items-center justify-between">
-                                        <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-semibold ${imp.isActive ? 'bg-[#6B9F91]/10 text-[#6B9F91] border border-[#6B9F91]/20' : 'bg-[#D8E8E2]/70 text-[#9CA3AF]'}`}>• {imp.isActive ? 'ACTIVE' : 'INACTIVE'}</span>
-                                        <button onClick={() => handleDelete(imp.id)} className="text-[#B91C1C]/50 hover:text-[#B91C1C] p-1">
+
+                                    {/* Action Buttons */}
+                                    <div className="pt-2 border-t border-gray-100 flex items-center justify-end gap-1">
+                                        <button
+                                            onClick={() => handleOpenModal(imp)}
+                                            className="p-1.5 bg-[#0F766E] hover:bg-[#115E59] text-white rounded-lg transition-colors flex items-center justify-center flex-1"
+                                            title="Edit"
+                                        >
+                                            <Edit2 className="w-3.5 h-3.5" />
+                                        </button>
+                                        <button
+                                            onClick={() => handleDelete(imp.id)}
+                                            className="p-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg border border-rose-200 transition-colors flex items-center justify-center flex-1"
+                                            title="Delete"
+                                        >
                                             <Trash2 className="w-3.5 h-3.5" />
                                         </button>
                                     </div>
@@ -226,54 +264,69 @@ export default function StudentImpactsPage() {
                     )}
                 </div>
 
-                {/* ── DESKTOP TABLE (hidden on mobile) ── */}
-                <div className="hidden sm:block overflow-x-auto w-full touch-auto">
-                    <table className="w-full text-left text-sm text-[#374151] min-w-[600px]">
-                        <thead className="bg-[#D8E8E2]/70 border-b border-gray-200 text-[#111827]">
+                {/* Desktop Table */}
+                <div className="hidden sm:block overflow-x-auto">
+                    <table className="admin-table">
+                        <thead>
                             <tr>
-                                <th className="p-4 font-medium min-w-[150px]">Student Name</th>
-                                <th className="p-4 font-medium min-w-[150px] hidden sm:table-cell">Route / Designation</th>
-                                <th className="p-4 font-medium min-w-[100px] hidden md:table-cell">Featured</th>
-                                <th className="p-4 font-medium min-w-[80px] hidden md:table-cell">Order</th>
-                                <th className="p-4 font-medium min-w-[100px]">Status</th>
-                                <th className="p-4 font-medium text-right min-w-[120px]">Actions</th>
+                                <th>Student Name</th>
+                                <th>Route &amp; Role</th>
+                                <th>Quote Summary</th>
+                                <th className="text-center">Order</th>
+                                <th className="text-center">Status</th>
+                                <th className="text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-gray-100">
+                        <tbody>
                             {impacts.length === 0 ? (
                                 <tr>
-                                    <td colSpan={6} className="p-8 text-center text-[#9CA3AF]">No student impacts found.</td>
+                                    <td colSpan={6} className="text-center py-12 text-[#64748B]">No student impacts found.</td>
                                 </tr>
                             ) : (
                                 impacts.map(imp => (
-                                    <tr key={imp.id} className="hover:bg-[#D8E8E2]/50 transition-colors">
-                                        <td className="p-4 font-medium">{imp.studentName}</td>
-                                        <td className="p-4 text-[#6B7280] hidden sm:table-cell">{imp.academicRoute} <span className="opacity-50">· {imp.designation}</span></td>
-                                        <td className="p-4 hidden md:table-cell">
-                                            {imp.isFeatured ? (
-                                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-500">
-                                                    <Star className="w-3 h-3 fill-current" /> YES
-                                                </span>
-                                            ) : (
-                                                <span className="text-[#9CA3AF] text-xs">NO</span>
-                                            )}
-                                        </td>
-                                        <td className="p-4 text-[#6B7280] hidden md:table-cell">{imp.sortOrder}</td>
-                                        <td className="p-4">
-                                            {imp.isActive ? (
-                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#6B9F91]/10 text-[#6B9F91]">
-                                                    <CheckCircle2 className="w-3 h-3" /> ACTIVE
-                                                </span>
-                                            ) : (
-                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#D8E8E2]/70 text-[#9CA3AF]">
-                                                    INACTIVE
+                                    <tr key={imp.id}>
+                                        <td>
+                                            <div className="font-semibold text-sm text-[#0F172A]">{imp.studentName}</div>
+                                            {imp.youtubeUrl && (
+                                                <span className="text-[10px] text-rose-600 font-medium inline-flex items-center gap-1 mt-0.5">
+                                                    <Video className="w-3 h-3" /> Video Attached
                                                 </span>
                                             )}
                                         </td>
-                                        <td className="p-3">
-                                            <div className="flex flex-col xl:flex-row gap-1.5 justify-end ml-auto shrink-0">
-                                                <button onClick={() => handleOpenModal(imp)} className="px-3 py-1 rounded border border-gray-300 text-[#374151] text-xs font-medium hover:bg-[#D8E8E2]/70 hover:border-[#6B9F91] transition-colors whitespace-nowrap">Edit</button>
-                                                <button onClick={() => handleDelete(imp.id)} className="px-3 py-1 rounded border border-[#FCA5A5] text-[#B91C1C] text-xs font-medium hover:bg-red-50 transition-colors whitespace-nowrap">Delete</button>
+                                        <td>
+                                            <div className="text-xs font-semibold text-[#0F172A]">{imp.academicRoute}</div>
+                                            <div className="text-xs text-[#64748B]">{imp.designation}</div>
+                                        </td>
+                                        <td className="max-w-xs">
+                                            <p className="text-xs text-[#334151] line-clamp-1 italic">&ldquo;{imp.quote}&rdquo;</p>
+                                        </td>
+                                        <td className="text-center text-xs text-[#64748B] font-mono">{imp.sortOrder}</td>
+                                        <td className="text-center">
+                                            <div className="flex flex-col items-center gap-1">
+                                                <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold ${imp.isActive ? 'bg-[#EDF5F2] text-[#0F766E]' : 'bg-slate-100 text-slate-500'}`}>
+                                                    <CheckCircle2 className="w-3 h-3" /> {imp.isActive ? 'Active' : 'Inactive'}
+                                                </span>
+                                                {imp.isFeatured && (
+                                                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-50 text-amber-700 border border-amber-200">
+                                                        <Star className="w-2.5 h-2.5 fill-amber-500 text-amber-500" /> Featured
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </td>
+                                        <td className="text-right">
+                                            <div className="flex items-center justify-end gap-1.5">
+                                                <button
+                                                    onClick={() => handleOpenModal(imp)}
+                                                    className="px-2.5 py-1.5 text-xs font-medium text-[#334151] hover:text-[#0F766E] hover:bg-[#EDF5F2] rounded-md transition-colors"
+                                                >
+                                                    Edit
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDelete(imp.id)}
+                                                    className="px-2.5 py-1.5 text-xs font-medium text-rose-600 hover:bg-rose-50 rounded-md transition-colors"
+                                                >
+                                                    Delete
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>
@@ -286,109 +339,109 @@ export default function StudentImpactsPage() {
 
             {/* Modal */}
             {isModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#111827]/40 backdrop-blur-sm overflow-hidden">
-                    <div className="admin-card w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col max-h-[95vh]">
-                        <div className="p-5 border-b border-gray-200 flex items-center justify-between shrink-0">
-                            <h3 className="text-lg font-bold text-[#111827]">{editingId ? 'Edit Student Impact' : 'Add Student Impact'}</h3>
-                            <button onClick={handleCloseModal} className="text-[#9CA3AF] hover:text-[#111827] transition-colors">
+                <div className="admin-modal-overlay">
+                    <div className="admin-modal-panel max-w-2xl">
+                        <div className="px-5 py-4 border-b border-[#E2E8F0] flex items-center justify-between bg-[#F8FAF9]">
+                            <div>
+                                <h3 className="text-base font-bold text-[#0F172A]">{editingId ? 'Edit Student Impact' : 'Add Student Impact'}</h3>
+                                <p className="text-xs text-[#64748B]">Academics student success testimonial &amp; media</p>
+                            </div>
+                            <button onClick={() => setIsModalOpen(false)} className="text-[#64748B] hover:text-[#0F172A] p-1 rounded-lg">
                                 <X className="w-5 h-5" />
                             </button>
                         </div>
 
-                        <div className="p-5 overflow-y-auto flex-1 custom-scrollbar">
+                        <div className="p-5 sm:p-6 overflow-y-auto max-h-[calc(90vh-130px)] custom-scrollbar">
                             {errorMsg && (
-                                <div className="mb-4 bg-[#FEE2E2] border border-[#FCA5A5] text-[#B91C1C] p-3 rounded-lg text-sm flex gap-2">
-                                    <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" /> {errorMsg}
+                                <div className="mb-4 text-xs sm:text-sm text-rose-700 bg-rose-50 border border-rose-200 p-3 rounded-lg flex items-center gap-2">
+                                    <AlertCircle className="w-4 h-4 shrink-0" /> {errorMsg}
                                 </div>
                             )}
 
-                            <form id="impForm" onSubmit={handleSave} className="space-y-6">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <form id="impForm" onSubmit={handleSave} className="space-y-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-sm font-medium text-[#374151] mb-2">Student Name *</label>
-                                        <input required type="text" value={studentName} onChange={e => setStudentName(e.target.value)} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#6B9F91]" />
+                                        <label className="block text-xs font-semibold text-[#334151] mb-1.5">Student Name *</label>
+                                        <input required type="text" value={studentName} onChange={e => setStudentName(e.target.value)} className="admin-input" placeholder="e.g. Rahul Sharma" />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-[#374151] mb-2">Designation / Role *</label>
-                                        <input required type="text" value={designation} placeholder="e.g. Frontend Developer" onChange={e => setDesignation(e.target.value)} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] focus:outline-none focus:border-[#6B9F91]" />
-                                    </div>
-                                </div>
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="block text-sm font-medium text-[#374151] mb-2">Academic Route *</label>
-                                        <input required type="text" value={academicRoute} placeholder="e.g. Web Development Track" onChange={e => setAcademicRoute(e.target.value)} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] focus:outline-none focus:border-[#6B9F91]" />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-[#374151] mb-2">Sort Order</label>
-                                        <input type="number" required value={sortOrder} onChange={e => setSortOrder(Number(e.target.value))} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] focus:outline-none focus:border-[#6B9F91]" />
+                                        <label className="block text-xs font-semibold text-[#334151] mb-1.5">Designation / Placed At *</label>
+                                        <input required type="text" value={designation} placeholder="e.g. SDE at Zoho" onChange={e => setDesignation(e.target.value)} className="admin-input" />
                                     </div>
                                 </div>
 
-                                <div>
-                                    <label className="block text-sm font-medium text-[#374151] mb-2">Quote / Testimonial *</label>
-                                    <textarea required value={quote} onChange={e => setQuote(e.target.value)} rows={3} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] focus:outline-none focus:border-[#6B9F91]"></textarea>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-xs font-semibold text-[#334151] mb-1.5">Academic Route *</label>
+                                        <input required type="text" value={academicRoute} placeholder="e.g. Full Stack Engineering Batch '24" onChange={e => setAcademicRoute(e.target.value)} className="admin-input" />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-semibold text-[#334151] mb-1.5">Sort Order</label>
+                                        <input type="number" required value={sortOrder} onChange={e => setSortOrder(Number(e.target.value))} className="admin-input" />
+                                    </div>
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-[#374151] mb-2">Local Video URL (Alternative to YouTube)</label>
-                                    <div className="flex flex-col gap-3">
-                                        <input type="text" value={videoUrl} onChange={e => setVideoUrl(e.target.value)} placeholder="https://..." className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] text-sm focus:outline-none focus:border-[#6B9F91]" />
+                                    <label className="block text-xs font-semibold text-[#334151] mb-1.5">Quote / Testimonial *</label>
+                                    <textarea required value={quote} onChange={e => setQuote(e.target.value)} rows={3} className="admin-input resize-none" placeholder="Student testimonial quote..."></textarea>
+                                </div>
+
+                                <div>
+                                    <label className="block text-xs font-semibold text-[#334151] mb-1.5">Local Video / Reel URL</label>
+                                    <div className="flex flex-col gap-2.5">
+                                        <input type="text" value={videoUrl} onChange={e => setVideoUrl(e.target.value)} placeholder="Video file URL or select from Media library..." className="admin-input text-xs" />
                                         
                                         {videoUrl && (
-                                            <div className="relative w-full max-w-sm aspect-video bg-gray-50 rounded-lg overflow-hidden border border-gray-200 group">
+                                            <div className="relative w-full max-w-sm aspect-video bg-slate-900 rounded-lg overflow-hidden border border-[#E2E8F0]">
                                                 <video src={videoUrl} className="w-full h-full object-contain" />
-                                                <button type="button" onClick={() => setVideoUrl('')} className="absolute top-2 right-2 bg-white/90 p-1.5 rounded-full text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity hover:text-red-500 shadow-sm">
+                                                <button type="button" onClick={() => setVideoUrl('')} className="absolute top-2 right-2 bg-white/90 p-1.5 rounded-full text-slate-500 hover:text-rose-600 shadow-sm">
                                                     <X className="w-4 h-4" />
                                                 </button>
                                             </div>
                                         )}
                                         
-                                        <div className="flex flex-wrap gap-3">
-                                            <label className={`cursor-pointer bg-[#D8E8E2]/70 hover:bg-[#D8E8E2] text-[#111827] px-4 py-2.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${isUploadingMedia ? 'opacity-50 pointer-events-none' : ''}`}>
-                                                <Upload className="w-4 h-4" /> {isUploadingMedia ? 'Uploading...' : 'Upload Local File'}
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                            <label className={`cursor-pointer admin-button-secondary justify-center text-xs ${isUploadingMedia ? 'opacity-50 pointer-events-none' : ''}`}>
+                                                <Upload className="w-4 h-4 text-[#0F766E]" /> {isUploadingMedia ? 'Uploading...' : 'Upload Video File'}
                                                 <input type="file" accept="video/mp4,video/webm" onChange={handleUploadMedia} className="hidden" disabled={isUploadingMedia} />
                                             </label>
-                                            <button type="button" onClick={() => setIsMediaSelectorOpen(true)} className="cursor-pointer bg-[#D8E8E2]/70 hover:bg-[#D8E8E2] text-[#111827] px-4 py-2.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
-                                                <ImageIcon className="w-4 h-4 text-[#6B9F91]" /> Select from Media
+                                            <button type="button" onClick={() => setIsMediaSelectorOpen(true)} className="admin-button-secondary justify-center text-xs">
+                                                <ImageIcon className="w-4 h-4 text-[#0F766E]" /> Select from Media
                                             </button>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-[#374151] mb-2">YouTube Video URL (Only ONE allowed globally)</label>
-                                    <div className="flex gap-4 items-center">
-                                        <input type="text" value={youtubeUrl} onChange={e => setYoutubeUrl(e.target.value)} placeholder="https://youtube.com/watch?v=..." className="flex-1 bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] text-sm focus:outline-none focus:border-[#6B9F91]" />
-                                    </div>
-                                    <p className="text-[#9CA3AF] text-[10px] mt-1.5">Academics UI displays exactly 1 YouTube featured record with a video player on the left.</p>
+                                    <label className="block text-xs font-semibold text-[#334151] mb-1.5">YouTube Video URL</label>
+                                    <input type="text" value={youtubeUrl} onChange={e => setYoutubeUrl(e.target.value)} placeholder="https://youtube.com/watch?v=..." className="admin-input" />
                                 </div>
 
-                                <div className="pt-2 flex gap-6">
-                                    <label className="flex items-center gap-3 cursor-pointer group">
+                                <div className="pt-3 flex flex-wrap gap-5 border-t border-[#E2E8F0]">
+                                    <label className="flex items-center gap-2.5 cursor-pointer">
                                         <div className="relative">
                                             <input type="checkbox" checked={isActive} onChange={e => setIsActive(e.target.checked)} className="sr-only" />
-                                            <div className={`w-10 h-6 rounded-full transition-colors ${isActive ? 'bg-[#6B9F91]' : 'bg-[#D8E8E2] group-hover:bg-[#D8E8E2]'}`}></div>
-                                            <div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${isActive ? 'translate-x-4' : 'translate-x-0'}`}></div>
+                                            <div className={`w-9 h-5 rounded-full transition-colors ${isActive ? 'bg-[#0F766E]' : 'bg-slate-300'}`}></div>
+                                            <div className={`absolute top-0.5 left-0.5 bg-white w-4 h-4 rounded-full transition-transform ${isActive ? 'translate-x-4' : 'translate-x-0'}`}></div>
                                         </div>
-                                        <span className="text-sm font-medium text-[#374151]">Active</span>
+                                        <span className="text-xs font-semibold text-[#334151]">Active</span>
                                     </label>
 
-                                    <label className="flex items-center gap-3 cursor-pointer group">
+                                    <label className="flex items-center gap-2.5 cursor-pointer">
                                         <div className="relative">
                                             <input type="checkbox" checked={isFeatured} onChange={e => setIsFeatured(e.target.checked)} className="sr-only" />
-                                            <div className={`w-10 h-6 rounded-full transition-colors ${isFeatured ? 'bg-amber-500' : 'bg-[#D8E8E2] group-hover:bg-[#D8E8E2]'}`}></div>
-                                            <div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${isFeatured ? 'translate-x-4' : 'translate-x-0'}`}></div>
+                                            <div className={`w-9 h-5 rounded-full transition-colors ${isFeatured ? 'bg-amber-500' : 'bg-slate-300'}`}></div>
+                                            <div className={`absolute top-0.5 left-0.5 bg-white w-4 h-4 rounded-full transition-transform ${isFeatured ? 'translate-x-4' : 'translate-x-0'}`}></div>
                                         </div>
-                                        <span className="text-sm font-medium text-[#374151]">Featured (Large Card w/ Video)</span>
+                                        <span className="text-xs font-semibold text-[#334151]">Featured (Large Hero Card w/ Video)</span>
                                     </label>
                                 </div>
                             </form>
                         </div>
 
-                        <div className="p-5 border-t border-gray-200 bg-[#D8E8E2]/70 flex justify-end gap-3 shrink-0">
-                            <button type="button" onClick={handleCloseModal} className="px-4 py-2 rounded-lg text-[#6B7280] hover:text-[#111827] hover:bg-[#D8E8E2]/70 font-medium transition-colors">Cancel</button>
-                            <button form="impForm" type="submit" disabled={isSaving} className="bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-6 py-2 rounded-lg font-medium transition-colors disabled:opacity-50">
+                        <div className="p-4 border-t border-[#E2E8F0] bg-[#F8FAF9] flex flex-col-reverse sm:flex-row sm:justify-end gap-2.5">
+                            <button type="button" onClick={() => setIsModalOpen(false)} className="admin-button-secondary justify-center">Cancel</button>
+                            <button form="impForm" type="submit" disabled={isSaving} className="admin-button-primary justify-center disabled:opacity-50">
                                 {isSaving ? 'Saving...' : 'Save Impact'}
                             </button>
                         </div>

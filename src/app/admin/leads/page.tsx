@@ -1,7 +1,7 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Edit2, Trash2, AlertCircle, X, Search } from 'lucide-react';
+import { Edit2, Trash2, AlertCircle, X, Search, Phone, Mail, User, Clock, ArrowRight, CheckCircle2, ChevronDown, Archive } from 'lucide-react';
 
 export default function LeadsPage() {
     const [leads, setLeads] = useState<any[]>([]);
@@ -12,7 +12,7 @@ export default function LeadsPage() {
 
     // Filters and Search
     const [searchTerm, setSearchTerm] = useState('');
-    const [statusFilter, setStatusFilter] = useState('active'); // 'active' (not spam), 'all', 'NEW', 'CONTACTED', 'CONVERTED', 'SPAM'
+    const [statusFilter, setStatusFilter] = useState('active');
     const [archivedFilter, setArchivedFilter] = useState('false');
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
@@ -37,8 +37,7 @@ export default function LeadsPage() {
             if (searchTerm) params.append('search', searchTerm);
 
             if (statusFilter === 'active') {
-                // defaults to not spam on backend without explicit filter, but we can pass 'all' 
-                // Wait, if it's 'active', we just don't pass status parameter assuming backend excludes SPAM by default
+                // defaults to active without spam
             } else if (statusFilter === 'all') {
                 params.append('status', 'all');
             } else {
@@ -104,99 +103,165 @@ export default function LeadsPage() {
     };
 
     const handleDelete = async (id: string) => {
-        if (!confirm('Delete this lead? This action cannot be undone.')) return;
+        if (!confirm('Are you sure you want to delete this inquiry? This cannot be undone.')) return;
         try {
             const res = await fetch(`/api/admin/leads/${id}`, { method: 'DELETE' });
             if ((await res.json()).success) {
                 fetchData();
             } else {
-                alert('Failed to delete');
+                alert('Failed to delete inquiry');
             }
         } catch (e) {
-            alert('Error deleting lead');
+            alert('Error deleting inquiry');
         }
     };
 
-    const getStatusColor = (s: string) => {
+    const getStatusBadge = (s: string) => {
         switch (s) {
-            case 'NEW': return 'bg-[#6B9F91]/10 text-[#6B9F91] border border-[#6B9F91]/20';
-            case 'CONTACTED': return 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20';
-            case 'CONVERTED': return 'bg-[#6B9F91]/10 text-[#6B9F91] border border-[#6B9F91]/20';
-            case 'SPAM': return 'bg-[#FEE2E2] text-[#B91C1C] border border-[#FCA5A5]';
-            default: return 'bg-[#D8E8E2] text-[#6B7280] border border-gray-200/20';
+            case 'NEW':
+                return 'bg-[#EDF5F2] text-[#0F766E] border border-[#0F766E]/30';
+            case 'CONTACTED':
+                return 'bg-amber-50 text-amber-700 border border-amber-200';
+            case 'CONVERTED':
+                return 'bg-emerald-50 text-emerald-700 border border-emerald-200';
+            case 'SPAM':
+                return 'bg-rose-50 text-rose-700 border border-rose-200';
+            default:
+                return 'bg-gray-100 text-gray-700 border border-gray-200';
         }
     };
 
     return (
-        <div className="max-w-7xl mx-auto pb-12">
-            <div className="mb-8">
-                <h2 className="text-2xl font-bold tracking-tight text-[#111827] mb-2">Lead CRM</h2>
-                <p className="text-[#6B7280]">Manage inbound leads and inquiries.</p>
+        <div className="space-y-6 max-w-7xl mx-auto pb-12">
+            {/* Header */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-[#EDF5F2] border border-[#0F766E]/20 text-[#0F766E] text-[10px] font-extrabold uppercase tracking-wider">
+                        CRM Management
+                    </span>
+                    <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0F172A] tracking-tight mt-1.5">
+                        Inquiries & Leads
+                    </h2>
+                    <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
+                        Manage prospective client project inquiries, MoUs, and sales requests.
+                    </p>
+                </div>
             </div>
 
-            <div className="mb-6 flex flex-col md:flex-row gap-4 items-center justify-between">
-                <div className="relative w-full md:w-96">
-                    <Search className="w-5 h-5 absolute left-3 top-2.5 text-[#9CA3AF]" />
+            {/* Filter Bar */}
+            <div className="bg-white border border-gray-200/90 rounded-2xl p-3.5 sm:p-4 shadow-xs flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
+                <div className="relative flex-1 max-w-md">
+                    <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
                     <input
                         type="text"
-                        placeholder="Search name, email, company..."
+                        placeholder="Search by name, email, company, or service..."
                         value={searchTerm}
                         onChange={e => setSearchTerm(e.target.value)}
-                        onKeyDown={e => e.key === 'Enter' && fetchData()}
-                        className="w-full admin-card rounded-lg pl-10 pr-4 py-2 text-[#111827]"
+                        className="admin-input !pl-10 !text-xs"
                     />
                 </div>
-                <div className="flex gap-4 w-full md:w-auto">
-                    <select
-                        value={statusFilter}
-                        onChange={e => setStatusFilter(e.target.value)}
-                        className="admin-card rounded-lg px-4 py-2 text-[#111827] text-sm outline-none"
-                    >
-                        <option value="active">Active (Exclude Spam)</option>
-                        <option value="all">All Statuses</option>
-                        <option value="NEW">New</option>
-                        <option value="CONTACTED">Contacted</option>
-                        <option value="CONVERTED">Converted</option>
-                        <option value="SPAM">Spam</option>
-                    </select>
-                    <select
-                        value={archivedFilter}
-                        onChange={e => setArchivedFilter(e.target.value)}
-                        className="admin-card rounded-lg px-4 py-2 text-[#111827] text-sm outline-none"
-                    >
-                        <option value="false">Active Only</option>
-                        <option value="true">Archived Only</option>
-                        <option value="all">Show All</option>
-                    </select>
+
+                <div className="flex flex-wrap items-center gap-2.5">
+                    <div className="relative min-w-[150px] flex-1 sm:flex-none">
+                        <select
+                            value={statusFilter}
+                            onChange={e => setStatusFilter(e.target.value)}
+                            className="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-xs font-semibold text-[#0F172A] appearance-none pr-8 cursor-pointer focus:outline-none focus:border-[#0F766E]"
+                        >
+                            <option value="active">Active (Exclude Spam)</option>
+                            <option value="all">All Statuses</option>
+                            <option value="NEW">New</option>
+                            <option value="CONTACTED">Contacted</option>
+                            <option value="CONVERTED">Converted</option>
+                            <option value="SPAM">Spam</option>
+                        </select>
+                        <ChevronDown className="w-3.5 h-3.5 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    </div>
+
+                    <div className="relative min-w-[130px] flex-1 sm:flex-none">
+                        <select
+                            value={archivedFilter}
+                            onChange={e => setArchivedFilter(e.target.value)}
+                            className="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-xs font-semibold text-[#0F172A] appearance-none pr-8 cursor-pointer focus:outline-none focus:border-[#0F766E]"
+                        >
+                            <option value="false">Active Records</option>
+                            <option value="true">Archived</option>
+                            <option value="all">Show All</option>
+                        </select>
+                        <ChevronDown className="w-3.5 h-3.5 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    </div>
                 </div>
             </div>
 
-            <div className="admin-card overflow-hidden">
-                {/* ── MOBILE CARD GRID (hidden on sm+) ── */}
-                <div className="sm:hidden">
+            {/* Container for Cards & Table */}
+            <div className="bg-white border border-gray-200/90 rounded-2xl overflow-hidden shadow-xs">
+                {/* ── MOBILE VIEW: 2-Column Grid Cards ── */}
+                <div className="block lg:hidden p-2.5">
                     {isLoading ? (
-                        <div className="p-8 text-center text-[#9CA3AF]">
-                            <div className="animate-spin rounded-full h-6 w-6 mx-auto border-t-2 border-b-2 border-gray-200 mb-2"></div>
+                        <div className="p-10 text-center text-gray-400 text-xs font-medium">
+                            <div className="animate-spin rounded-full h-5 w-5 mx-auto border-2 border-[#0F766E] border-t-transparent mb-2" />
                             Loading leads...
                         </div>
                     ) : leads.length === 0 ? (
-                        <div className="p-8 text-center text-[#9CA3AF]">No leads found.</div>
+                        <div className="p-10 text-center text-gray-400 text-xs font-medium">
+                            No inquiries match your current filters.
+                        </div>
                     ) : (
-                        <div className="grid grid-cols-2 gap-3 p-3">
-                            {leads.map(item => (
-                                <div key={item.id} className="admin-card p-3 flex flex-col gap-2 rounded-xl">
-                                    <div className="flex items-start justify-between gap-1">
-                                        <span className="font-semibold text-[#111827] text-sm leading-tight line-clamp-2">{item.fullName}</span>
-                                        <button onClick={() => handleOpenModal(item)} className="shrink-0 p-1 text-[#6B9F91]">
-                                            <Edit2 className="w-4 h-4" />
-                                        </button>
+                        <div className="grid grid-cols-2 gap-2.5">
+                            {leads.map((item) => (
+                                <div key={item.id} className="p-3 rounded-xl border border-gray-200/90 bg-white flex flex-col justify-between gap-2 shadow-xs hover:border-[#2DD4BF]/50 transition-colors">
+                                    <div className="space-y-1.5">
+                                        <div className="flex items-start justify-between gap-1">
+                                            <span className={`inline-flex px-1.5 py-0.5 rounded text-[9px] font-extrabold uppercase tracking-wider ${getStatusBadge(item.status)}`}>
+                                                {item.status}
+                                            </span>
+                                            <span className="text-[10px] text-gray-400 shrink-0">
+                                                {new Date(item.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}
+                                            </span>
+                                        </div>
+
+                                        <div>
+                                            <h4 className="text-xs font-bold text-[#0F172A] leading-tight truncate" title={item.fullName}>
+                                                {item.fullName}
+                                            </h4>
+                                            <p className="text-[10px] text-gray-500 truncate" title={item.company || 'Individual Client'}>
+                                                {item.company || 'Individual'}
+                                            </p>
+                                        </div>
+
+                                        <div className="bg-[#EDF5F2]/60 rounded-lg p-2 text-[11px] text-[#0F766E] border border-[#2DD4BF]/20 font-medium line-clamp-1">
+                                            {item.serviceInterest || 'General Inquiry'}
+                                        </div>
+
+                                        {item.message && (
+                                            <p className="text-[10px] text-gray-600 line-clamp-2 italic bg-gray-50 p-1.5 rounded border border-gray-100">
+                                                "{item.message}"
+                                            </p>
+                                        )}
                                     </div>
-                                    <p className="text-[#6B7280] text-xs leading-snug line-clamp-1">{item.email}</p>
-                                    <p className="text-[#9CA3AF] text-[10px] leading-snug line-clamp-1">{item.serviceInterest || 'General'}</p>
-                                    <div className="mt-auto pt-1 flex items-center justify-between">
-                                        <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-semibold ${getStatusColor(item.status)}`}>• {item.status}</span>
-                                        <button onClick={() => handleDelete(item.id)} className="text-[#B91C1C]/50 hover:text-[#B91C1C] p-1">
-                                            <Trash2 className="w-3.5 h-3.5" />
+
+                                    {/* Action Buttons */}
+                                    <div className="pt-2 border-t border-gray-100 flex items-center justify-between gap-1">
+                                        <a
+                                            href={`tel:${item.phone.replace(/\s+/g, '')}`}
+                                            className="p-1.5 bg-gray-50 hover:bg-[#EDF5F2] text-[#0F766E] rounded-lg border border-gray-200 transition-colors flex-1 flex items-center justify-center"
+                                            title="Call Lead"
+                                        >
+                                            <Phone className="w-3.5 h-3.5" />
+                                        </a>
+                                        <a
+                                            href={`mailto:${item.email}`}
+                                            className="p-1.5 bg-gray-50 hover:bg-[#EDF5F2] text-[#0F766E] rounded-lg border border-gray-200 transition-colors flex-1 flex items-center justify-center"
+                                            title="Email Lead"
+                                        >
+                                            <Mail className="w-3.5 h-3.5" />
+                                        </a>
+                                        <button
+                                            onClick={() => handleOpenModal(item)}
+                                            className="p-1.5 bg-[#0F766E] hover:bg-[#115E59] text-white rounded-lg transition-colors flex-1 flex items-center justify-center"
+                                            title="View Details"
+                                        >
+                                            <Edit2 className="w-3.5 h-3.5" />
                                         </button>
                                     </div>
                                 </div>
@@ -205,58 +270,80 @@ export default function LeadsPage() {
                     )}
                 </div>
 
-                {/* ── DESKTOP TABLE (hidden on mobile) ── */}
-                <div className="hidden sm:block overflow-x-auto w-full touch-auto">
-                    <table className="w-full text-left text-sm text-[#374151] min-w-[600px]">
-                        <thead className="bg-[#D8E8E2]/70 border-b border-gray-200 text-[#111827]">
+                {/* ── DESKTOP VIEW: Full Data Table ── */}
+                <div className="hidden lg:block overflow-x-auto">
+                    <table className="admin-table">
+                        <thead className="admin-table-head">
                             <tr>
-                                <th className="p-4 font-medium min-w-[180px]">Contact</th>
-                                <th className="p-4 font-medium min-w-[150px] hidden sm:table-cell">Service Interest</th>
-                                <th className="p-4 font-medium min-w-[120px] hidden md:table-cell">Source</th>
-                                <th className="p-4 font-medium min-w-[120px] hidden md:table-cell">Date</th>
-                                <th className="p-4 font-medium text-center min-w-[100px]">Status</th>
-                                <th className="p-4 font-medium text-right min-w-[120px]">Actions</th>
+                                <th className="p-4">Contact</th>
+                                <th className="p-4">Service Interest</th>
+                                <th className="p-4">Source Channel</th>
+                                <th className="p-4">Date</th>
+                                <th className="p-4 text-center">Status</th>
+                                <th className="p-4 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100">
                             {isLoading ? (
                                 <tr>
-                                    <td colSpan={6} className="p-12 text-center text-[#9CA3AF]">
-                                        <div className="animate-spin rounded-full h-6 w-6 mx-auto border-t-2 border-b-2 border-gray-200 mb-2"></div>
-                                        Loading leads...
+                                    <td colSpan={6} className="p-12 text-center text-gray-400">
+                                        <div className="animate-spin rounded-full h-5 w-5 mx-auto border-2 border-[#0F766E] border-t-transparent mb-2" />
+                                        Loading inquiries...
                                     </td>
                                 </tr>
                             ) : leads.length === 0 ? (
-                                <tr><td colSpan={6} className="p-8 text-center text-[#9CA3AF]">No leads found.</td></tr>
+                                <tr>
+                                    <td colSpan={6} className="p-10 text-center text-gray-400 text-xs font-medium">
+                                        No inquiries found matching your filters.
+                                    </td>
+                                </tr>
                             ) : (
-                                leads.map(item => (
-                                    <tr key={item.id} className="hover:bg-[#D8E8E2]/50">
+                                leads.map((item) => (
+                                    <tr key={item.id} className="admin-table-row">
                                         <td className="p-4">
-                                            <div className="font-medium text-[#111827]">{item.fullName}</div>
-                                            <div className="text-[#6B7280] text-xs">{item.email}</div>
-                                            <div className="text-[#9CA3AF] text-xs">{item.phone} {item.company ? `• ${item.company}` : ''}</div>
+                                            <div className="font-bold text-[#0F172A] text-sm">{item.fullName}</div>
+                                            <div className="text-gray-500 text-xs">{item.email}</div>
+                                            <div className="text-gray-400 text-xs">{item.phone} {item.company ? `• ${item.company}` : ''}</div>
                                         </td>
-                                        <td className="p-4 hidden sm:table-cell">
-                                            <div className="text-[#111827] text-xs max-w-xs truncate">{item.serviceInterest}</div>
+                                        <td className="p-4">
+                                            <span className="text-xs font-semibold text-[#0F172A] block max-w-xs truncate">
+                                                {item.serviceInterest || 'General Inquiry'}
+                                            </span>
+                                            <span className="text-[11px] text-gray-400 line-clamp-1 italic max-w-xs">
+                                                "{item.message}"
+                                            </span>
                                         </td>
-                                        <td className="p-4 hidden md:table-cell">
-                                            <div className="text-[#374151] text-xs">{item.source || 'Unknown'}</div>
+                                        <td className="p-4 text-xs font-medium text-gray-600">
+                                            <span className="bg-gray-100 px-2 py-0.5 rounded-md font-mono text-[10px]">
+                                                {item.source || 'Website Form'}
+                                            </span>
                                         </td>
-                                        <td className="p-4 text-xs text-[#6B7280] hidden md:table-cell">
+                                        <td className="p-4 text-xs text-gray-500">
                                             {new Date(item.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
                                         </td>
                                         <td className="p-4 text-center">
-                                            <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-semibold ${getStatusColor(item.status)}`}>
+                                            <span className={`inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wide ${getStatusBadge(item.status)}`}>
                                                 {item.status}
                                             </span>
                                             {item.isArchived && (
-                                                <div className="mt-1"><span className="text-[10px] text-[#9CA3AF] border border-gray-200 px-1.5 rounded">Archived</span></div>
+                                                <span className="block text-[9px] text-gray-400 uppercase font-bold mt-1">Archived</span>
                                             )}
                                         </td>
-                                        <td className="p-3">
-                                            <div className="flex flex-col xl:flex-row gap-1.5 justify-end ml-auto shrink-0">
-                                                <button onClick={() => handleOpenModal(item)} className="px-3 py-1 rounded border border-[#6B9F91] text-[#6B9F91] text-xs font-medium hover:bg-[#6B9F91]/10 transition-colors whitespace-nowrap">View</button>
-                                                <button onClick={() => handleDelete(item.id)} className="px-3 py-1 rounded border border-[#FCA5A5] text-[#B91C1C] text-xs font-medium hover:bg-red-50 transition-colors whitespace-nowrap">Delete</button>
+                                        <td className="p-4 text-right">
+                                            <div className="flex items-center justify-end gap-2">
+                                                <button
+                                                    onClick={() => handleOpenModal(item)}
+                                                    className="px-3 py-1.5 rounded-xl border border-[#0F766E]/30 text-[#0F766E] text-xs font-bold hover:bg-[#EDF5F2] transition-colors cursor-pointer"
+                                                >
+                                                    View Details
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDelete(item.id)}
+                                                    className="p-1.5 rounded-xl text-gray-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                                                    title="Delete Inquiry"
+                                                >
+                                                    <Trash2 className="w-4 h-4" />
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>
@@ -267,112 +354,158 @@ export default function LeadsPage() {
                 </div>
             </div>
 
+            {/* Pagination Controls */}
             {!isLoading && totalPages > 1 && (
-                <div className="mt-6 flex justify-center gap-2">
+                <div className="flex items-center justify-between bg-white border border-gray-200/90 rounded-2xl px-4 py-3 shadow-xs">
                     <button
                         disabled={page === 1}
                         onClick={() => setPage(p => Math.max(1, p - 1))}
-                        className="px-4 py-2 rounded-lg admin-card text-[#111827] disabled:opacity-50"
+                        className="admin-button-secondary text-xs !py-1.5 !px-3 disabled:opacity-40"
                     >
-                        Prev
+                        Previous
                     </button>
-                    <span className="px-4 py-2 text-[#6B7280]">Page {page} of {totalPages}</span>
+                    <span className="text-xs font-semibold text-gray-500">
+                        Page {page} of {totalPages}
+                    </span>
                     <button
                         disabled={page === totalPages}
                         onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                        className="px-4 py-2 rounded-lg admin-card text-[#111827] disabled:opacity-50"
+                        className="admin-button-secondary text-xs !py-1.5 !px-3 disabled:opacity-40"
                     >
                         Next
                     </button>
                 </div>
             )}
 
+            {/* Lead Detail / Edit Modal */}
             {isModalOpen && leadData && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#111827]/40 backdrop-blur-sm">
-                    <div className="admin-card w-full max-w-3xl overflow-hidden shadow-2xl flex flex-col max-h-[88vh]">
-                        {/* Header */}
-                        <div className="px-4 py-3 border-b border-gray-200 flex justify-between items-center bg-[#D8E8E2]/80 shrink-0">
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-[#0F172A]/50 backdrop-blur-xs">
+                    <div className="bg-white border border-gray-200 rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh] animate-fade-in">
+                        {/* Modal Header */}
+                        <div className="px-5 py-4 border-b border-gray-100 flex justify-between items-center bg-[#EDF5F2]/50 shrink-0">
                             <div>
-                                <h3 className="text-sm font-bold text-[#111827]">Lead Details</h3>
-                                <p className="text-[10px] text-[#9CA3AF] mt-0.5">{leadData.fullName} · {leadData.email}</p>
+                                <h3 className="text-base font-bold text-[#0F172A]">Inquiry Details</h3>
+                                <p className="text-xs text-gray-500">{leadData.fullName} · {leadData.email}</p>
                             </div>
-                            <button onClick={() => setIsModalOpen(false)} className="text-[#9CA3AF] hover:text-[#111827] p-1"><X className="w-4 h-4" /></button>
+                            <button
+                                onClick={() => setIsModalOpen(false)}
+                                className="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-xl transition-colors cursor-pointer"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
                         </div>
 
-                        {/* Body */}
-                        <div className="p-4 overflow-y-auto w-full custom-scrollbar grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {/* LEFT — Read-only data */}
-                            <div className="space-y-4">
-                                {/* Client Info */}
+                        {/* Modal Body */}
+                        <div className="p-5 sm:p-6 overflow-y-auto space-y-5">
+                            {/* Read-only details */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-2xl border border-gray-100 text-xs">
                                 <div>
-                                    <p className="text-[10px] font-bold uppercase tracking-wider text-[#9CA3AF] pb-1 border-b border-gray-100 mb-2">Client Information</p>
-                                    <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
-                                        <div><span className="text-[#9CA3AF] block text-[10px]">Name</span><span className="text-[#111827]">{leadData.fullName}</span></div>
-                                        <div><span className="text-[#9CA3AF] block text-[10px]">Phone</span><span className="text-[#111827]">{leadData.phone}</span></div>
-                                        <div className="col-span-2"><span className="text-[#9CA3AF] block text-[10px]">Email</span><span className="text-[#111827]">{leadData.email}</span></div>
-                                        <div className="col-span-2"><span className="text-[#9CA3AF] block text-[10px]">Company</span><span className="text-[#111827]">{leadData.company || 'N/A'}</span></div>
-                                    </div>
+                                    <span className="text-gray-400 font-bold uppercase text-[10px] block">Contact Phone</span>
+                                    <a href={`tel:${leadData.phone}`} className="font-bold text-[#0F766E] hover:underline flex items-center gap-1 mt-0.5">
+                                        <Phone className="w-3 h-3" />
+                                        {leadData.phone}
+                                    </a>
                                 </div>
-
-                                {/* Request */}
                                 <div>
-                                    <p className="text-[10px] font-bold uppercase tracking-wider text-[#9CA3AF] pb-1 border-b border-gray-100 mb-2">Request</p>
-                                    <div className="space-y-2 text-xs">
-                                        <div><span className="text-[#9CA3AF] block text-[10px]">Service</span><span className="text-[#111827]">{leadData.serviceInterest}</span></div>
-                                        <div>
-                                            <span className="text-[#9CA3AF] block text-[10px] mb-1">Message</span>
-                                            <div className="bg-[#D8E8E2]/70 px-2.5 py-2 rounded text-[#374151] whitespace-pre-wrap text-xs leading-relaxed max-h-28 overflow-y-auto">{leadData.message}</div>
-                                        </div>
-                                    </div>
+                                    <span className="text-gray-400 font-bold uppercase text-[10px] block">Company / Institution</span>
+                                    <span className="font-bold text-[#0F172A] block mt-0.5">{leadData.company || 'Not Specified'}</span>
                                 </div>
-
-                                {/* Attribution */}
                                 <div>
-                                    <p className="text-[10px] font-bold uppercase tracking-wider text-[#9CA3AF] pb-1 border-b border-gray-100 mb-2">Attribution</p>
-                                    <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
-                                        <div><span className="text-[#9CA3AF] block text-[10px]">Source</span><span className="text-[#111827]">{leadData.source || 'N/A'}</span></div>
-                                        <div><span className="text-[#9CA3AF] block text-[10px]">Source Page</span><span className="text-[#111827]">{leadData.sourcePage || 'N/A'}</span></div>
-                                        <div className="col-span-2"><span className="text-[#9CA3AF] block text-[10px]">Landing Page</span><span className="text-[#111827]">{leadData.landingPage || 'N/A'}</span></div>
-                                        <div className="col-span-2"><span className="text-[#9CA3AF] block text-[10px]">Created</span><span className="text-[#111827]">{new Date(leadData.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span></div>
-                                    </div>
+                                    <span className="text-gray-400 font-bold uppercase text-[10px] block">Area of Interest</span>
+                                    <span className="font-bold text-[#0F766E] block mt-0.5">{leadData.serviceInterest || 'General Enquiry'}</span>
+                                </div>
+                                <div>
+                                    <span className="text-gray-400 font-bold uppercase text-[10px] block">Submitted Date</span>
+                                    <span className="text-gray-600 block mt-0.5">
+                                        {new Date(leadData.createdAt).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })}
+                                    </span>
                                 </div>
                             </div>
 
-                            {/* RIGHT — CRM edit */}
-                            <form id="leadForm" onSubmit={handleSave} className="space-y-3">
-                                <p className="text-[10px] font-bold uppercase tracking-wider text-[#9CA3AF] pb-1 border-b border-gray-100">CRM Management</p>
-                                {errorMsg && <div className="text-xs text-[#B91C1C] bg-[#FEE2E2] px-3 py-2 rounded border border-[#FCA5A5] flex gap-2"><AlertCircle className="w-3.5 h-3.5 mt-0.5 shrink-0" /> {errorMsg}</div>}
-
-                                <div>
-                                    <label className="block text-xs font-medium text-[#374151] mb-1">Status</label>
-                                    <select value={status} onChange={e => setStatus(e.target.value)} className="w-full bg-white border border-gray-200 rounded-md px-3 py-1.5 text-sm text-[#111827] focus:outline-none focus:border-[#6B9F91]">
-                                        <option value="NEW">New</option>
-                                        <option value="CONTACTED">Contacted</option>
-                                        <option value="CONVERTED">Converted</option>
-                                        <option value="SPAM">Spam</option>
-                                    </select>
-                                </div>
-
-                                <div>
-                                    <label className="block text-xs font-medium text-[#374151] mb-1">Internal Notes <span className="text-[#9CA3AF] font-normal">(private)</span></label>
-                                    <textarea rows={3} value={internalNotes} onChange={e => setInternalNotes(e.target.value)} className="w-full bg-white border border-gray-200 rounded-md px-3 py-1.5 text-sm text-[#111827] resize-y focus:outline-none focus:border-[#6B9F91]" placeholder="Add internal notes about this lead..." />
-                                </div>
-
-                                <label className="flex items-center gap-2.5 cursor-pointer pt-1">
-                                    <div className="relative shrink-0">
-                                        <input type="checkbox" checked={isArchived} onChange={e => setIsArchived(e.target.checked)} className="sr-only" />
-                                        <div className={`w-8 h-5 rounded-full transition-colors ${isArchived ? 'bg-[#FFC900]' : 'bg-[#D8E8E2]'}`}></div>
-                                        <div className={`absolute top-0.5 left-0.5 bg-white w-4 h-4 rounded-full transition-transform ${isArchived ? 'translate-x-3' : 'translate-x-0'}`}></div>
-                                    </div>
-                                    <span className="text-xs font-medium text-[#374151]">Archived Record</span>
+                            {/* Message Block */}
+                            <div>
+                                <label className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block mb-1.5">
+                                    Project Brief / Message
                                 </label>
+                                <div className="bg-[#EDF5F2]/40 border border-[#0F766E]/15 p-4 rounded-2xl text-xs text-[#0F172A] leading-relaxed whitespace-pre-wrap">
+                                    {leadData.message}
+                                </div>
+                            </div>
+
+                            {/* CRM Form Controls */}
+                            <form id="leadForm" onSubmit={handleSave} className="space-y-4 pt-2 border-t border-gray-100">
+                                {errorMsg && (
+                                    <div className="p-3 bg-rose-50 border border-rose-200 text-rose-700 text-xs rounded-xl flex items-center gap-2">
+                                        <AlertCircle className="w-4 h-4 shrink-0" />
+                                        <span>{errorMsg}</span>
+                                    </div>
+                                )}
+
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="text-xs font-bold text-[#0F172A] block mb-1.5">
+                                            Status Pipeline
+                                        </label>
+                                        <div className="relative">
+                                            <select
+                                                value={status}
+                                                onChange={e => setStatus(e.target.value)}
+                                                className="w-full bg-white border border-gray-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-[#0F172A] appearance-none pr-8 cursor-pointer focus:outline-none focus:border-[#0F766E]"
+                                            >
+                                                <option value="NEW">New (Uncontacted)</option>
+                                                <option value="CONTACTED">Contacted</option>
+                                                <option value="CONVERTED">Converted / Closed</option>
+                                                <option value="SPAM">Spam</option>
+                                            </select>
+                                            <ChevronDown className="w-4 h-4 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-end">
+                                        <label className="flex items-center gap-3 p-2.5 bg-gray-50 border border-gray-200 rounded-xl w-full cursor-pointer hover:bg-gray-100 transition-colors">
+                                            <input
+                                                type="checkbox"
+                                                checked={isArchived}
+                                                onChange={e => setIsArchived(e.target.checked)}
+                                                className="w-4 h-4 rounded text-[#0F766E] focus:ring-[#0F766E]"
+                                            />
+                                            <span className="text-xs font-bold text-[#0F172A]">Archive this Record</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label className="text-xs font-bold text-[#0F172A] block mb-1.5">
+                                        Internal Notes <span className="text-gray-400 font-normal">(Visible only to Admins)</span>
+                                    </label>
+                                    <textarea
+                                        rows={3}
+                                        value={internalNotes}
+                                        onChange={e => setInternalNotes(e.target.value)}
+                                        className="admin-input !text-xs resize-none"
+                                        placeholder="Add follow-up notes, assigned team member, quotes..."
+                                    />
+                                </div>
                             </form>
                         </div>
 
-                        {/* Footer */}
-                        <div className="px-4 py-2.5 border-t border-gray-200 flex justify-end gap-2 bg-[#D8E8E2]/50 shrink-0">
-                            <button type="button" onClick={() => setIsModalOpen(false)} className="px-3 py-1.5 rounded-md text-xs text-[#6B7280] hover:bg-[#D8E8E2]/70 font-medium">Close</button>
-                            <button type="submit" form="leadForm" disabled={isSaving} className="bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-5 py-1.5 rounded-md text-xs font-medium disabled:opacity-50">Save Changes</button>
+                        {/* Modal Footer */}
+                        <div className="px-5 py-3.5 border-t border-gray-100 flex justify-end gap-2.5 bg-gray-50 shrink-0">
+                            <button
+                                type="button"
+                                onClick={() => setIsModalOpen(false)}
+                                className="admin-button-secondary text-xs !py-2 !px-4"
+                            >
+                                Close
+                            </button>
+                            <button
+                                type="submit"
+                                form="leadForm"
+                                disabled={isSaving}
+                                className="admin-button-primary text-xs !py-2 !px-5 disabled:opacity-50"
+                            >
+                                {isSaving ? 'Saving...' : 'Save Updates'}
+                            </button>
                         </div>
                     </div>
                 </div>

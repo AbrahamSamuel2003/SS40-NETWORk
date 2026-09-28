@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Search, X, Bot, Globe, Shield, Trash2, Eye, RefreshCw, Play, Pause, Calendar } from 'lucide-react';
@@ -23,7 +23,6 @@ export default function VisitorsPage() {
     const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null);
     const POLLING_INTERVAL = 5000; // 5 seconds
 
-    // Initialize lastUpdated only on client to avoid hydration mismatch
     useEffect(() => {
         setLastUpdated(new Date());
     }, []);
@@ -53,7 +52,7 @@ export default function VisitorsPage() {
             } else {
                 setErrorMsg(data.error || 'Failed to load visitors');
             }
-        } catch (e) {
+        } catch {
             setErrorMsg('Failed to load visitors.');
         } finally {
             setIsLoading(false);
@@ -81,7 +80,6 @@ export default function VisitorsPage() {
         };
     }, [isPolling, isModalOpen, page, searchTerm]);
 
-    // Page Visibility API - Pause polling when tab is hidden
     useEffect(() => {
         const handleVisibilityChange = () => {
             if (document.hidden) {
@@ -129,7 +127,7 @@ export default function VisitorsPage() {
             } else {
                 alert(data.error || 'Cleanup failed');
             }
-        } catch (e) {
+        } catch {
             alert('Error during cleanup');
         } finally {
             setIsCleaningUp(false);
@@ -151,7 +149,7 @@ export default function VisitorsPage() {
             } else {
                 alert('Failed to delete');
             }
-        } catch (e) {
+        } catch {
             alert('Error deleting visitor');
         }
     };
@@ -164,97 +162,123 @@ export default function VisitorsPage() {
     };
 
     return (
-        <div className="max-w-7xl mx-auto pb-12">
-            <div className="mb-8">
-                <div className="flex items-center justify-between mb-2">
-                    <div>
-                        <h2 className="text-2xl font-bold tracking-tight text-[#111827]">Visitors CRM</h2>
-                        <p className="text-[#6B7280]">Monitor and inspect localized website session traffic dynamically.</p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <button
-                            onClick={handleOpenCleanupModal}
-                            className="admin-card px-3 py-2 rounded-lg flex items-center gap-2 text-sm font-medium text-[#B91C1C] hover:bg-red-50 transition-colors"
-                            title="Clear visitor history"
-                        >
-                            <Calendar className="w-4 h-4" />
-                            <span className="hidden sm:inline">Clear History</span>
-                        </button>
-                        <button
-                            onClick={handleManualRefresh}
-                            className="admin-card p-2 rounded-lg text-[#6B9F91] hover:bg-[#6B9F91]/10 transition-colors"
-                            title="Manual refresh"
-                        >
-                            <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
-                        </button>
-                        <button
-                            onClick={togglePolling}
-                            className={`admin-card px-3 py-2 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors ${isPolling ? 'text-[#6B9F91] bg-[#6B9F91]/10' : 'text-[#6B7280] bg-[#D8E8E2]/50'}`}
-                            title={isPolling ? 'Pause auto-refresh' : 'Resume auto-refresh'}
-                        >
-                            {isPolling ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-                            <span className="hidden sm:inline">{isPolling ? 'Live' : 'Paused'}</span>
-                        </button>
-                    </div>
+        <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+                <div>
+                    <h1 className="text-xl sm:text-2xl font-bold text-[#0F172A] tracking-tight">Visitors CRM</h1>
+                    <p className="text-sm text-[#475569] mt-0.5">
+                        Live traffic telemetry and session intelligence. Last updated:{' '}
+                        <span className="font-mono text-xs text-[#0F766E]">
+                            {lastUpdated ? lastUpdated.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : '...'}
+                        </span>
+                    </p>
                 </div>
-                <div className="text-xs text-[#9CA3AF]">
-                    Last updated: {lastUpdated ? lastUpdated.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : 'Loading...'}
-                    {isPolling && ' • Auto-refreshing every 5 seconds'}
-                </div>
-                {errorMsg && (
-                    <div className="mt-4 p-4 text-sm text-[#B91C1C] bg-[#FEE2E2] border border-[#FCA5A5] rounded-lg">
-                        {errorMsg}
-                    </div>
-                )}
-            </div>
-
-            <div className="mb-6 flex flex-col md:flex-row gap-4 items-center justify-between">
-                <div className="relative w-full md:w-[450px]">
-                    <Search className="w-5 h-5 absolute left-3 top-2.5 text-[#9CA3AF]" />
-                    <input
-                        type="text"
-                        placeholder="Search session ID, browser, city, landing page..."
-                        value={searchTerm}
-                        onChange={e => {
-                            setSearchTerm(e.target.value);
-                            setPage(1); // reset to page 1 on search
-                        }}
-                        onKeyDown={e => e.key === 'Enter' && fetchData()}
-                        className="w-full admin-card rounded-lg pl-10 pr-4 py-2 text-[#111827]"
-                    />
-                </div>
-                <div className="flex gap-4 w-full md:w-auto">
-                    {/* Additional client filters could go here, but relying on server 'search' encompasses them */}
+                <div className="flex items-center gap-2">
+                    <button
+                        onClick={handleOpenCleanupModal}
+                        className="admin-button-secondary text-rose-600 hover:bg-rose-50 text-xs"
+                        title="Clear old logs"
+                    >
+                        <Calendar className="w-3.5 h-3.5" />
+                        <span>Clear History</span>
+                    </button>
+                    <button
+                        onClick={handleManualRefresh}
+                        className="p-2 admin-button-secondary"
+                        title="Manual refresh"
+                    >
+                        <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin text-[#0F766E]' : ''}`} />
+                    </button>
+                    <button
+                        onClick={togglePolling}
+                        className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 text-xs font-semibold transition-colors ${isPolling ? 'bg-[#EDF5F2] text-[#0F766E] border border-[#2DD4BF]/30' : 'bg-slate-100 text-slate-600'}`}
+                        title={isPolling ? 'Pause live stream' : 'Resume live stream'}
+                    >
+                        {isPolling ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+                        <span>{isPolling ? 'Live Active' : 'Paused'}</span>
+                    </button>
                 </div>
             </div>
 
-            <div className="admin-card overflow-hidden shadow-sm">
-                {/* ── MOBILE CARD GRID (hidden on sm+) ── */}
-                <div className="sm:hidden">
+            {errorMsg && (
+                <div className="p-3 text-xs sm:text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg">
+                    {errorMsg}
+                </div>
+            )}
+
+            <div className="relative w-full max-w-md">
+                <Search className="w-4 h-4 absolute left-3 top-2.5 text-slate-400" />
+                <input
+                    type="text"
+                    placeholder="Search session ID, browser, city, landing page..."
+                    value={searchTerm}
+                    onChange={e => {
+                        setSearchTerm(e.target.value);
+                        setPage(1);
+                    }}
+                    onKeyDown={e => e.key === 'Enter' && fetchData()}
+                    className="admin-input pl-9"
+                />
+            </div>
+
+            <div className="admin-card overflow-hidden">
+                {/* Mobile Cards: 2-Column Grid */}
+                <div className="sm:hidden p-2.5">
                     {isLoading ? (
-                        <div className="p-8 text-center text-[#9CA3AF]">
-                            <div className="animate-spin rounded-full h-6 w-6 mx-auto border-t-2 border-b-2 border-gray-200 mb-2"></div>
-                            Fetching visitors securely...
+                        <div className="p-8 text-center text-sm text-[#64748B]">
+                            <div className="animate-spin rounded-full h-6 w-6 mx-auto border-t-2 border-b-2 border-[#0F766E] mb-2"></div>
+                            Loading visitor sessions...
                         </div>
                     ) : visitors.length === 0 ? (
-                        <div className="p-8 text-center text-[#9CA3AF]">No tracked visitors match your query.</div>
+                        <div className="p-8 text-center text-sm text-[#64748B]">No tracked visitors match your query.</div>
                     ) : (
-                        <div className="grid grid-cols-2 gap-3 p-3">
+                        <div className="grid grid-cols-2 gap-2.5">
                             {visitors.map(item => (
-                                <div key={item.id} className="admin-card p-3 flex flex-col gap-2 rounded-xl">
-                                    <div className="flex items-start justify-between gap-1">
-                                        <span className="font-semibold text-[#111827] text-xs leading-tight line-clamp-2 font-mono">{item.sessionId.substring(0, 10)}…</span>
-                                        <button onClick={() => handleOpenModal(item)} className="shrink-0 p-1 text-[#6B9F91]">
-                                            <Eye className="w-4 h-4" />
-                                        </button>
+                                <div key={item.id} className="p-3 rounded-xl border border-gray-200/90 bg-white flex flex-col justify-between gap-2 shadow-xs hover:border-[#2DD4BF]/50 transition-colors">
+                                    <div className="space-y-1.5">
+                                        <div className="flex items-center justify-between gap-1">
+                                            <div className="flex items-center gap-1 font-mono text-[10px] font-bold text-[#0F172A] truncate">
+                                                {item.isBot && <Bot className="w-3 h-3 text-amber-600 shrink-0" />}
+                                                <span className="truncate">{item.sessionId.substring(0, 8)}...</span>
+                                            </div>
+                                            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold bg-[#EDF5F2] text-[#0F766E] shrink-0">
+                                                {item.pageViews}v
+                                            </span>
+                                        </div>
+
+                                        <div className="text-[10px] text-[#475569] space-y-0.5">
+                                            <div className="font-semibold text-[#0F172A] truncate">{item.deviceType || 'Device'} · {item.browser || 'Browser'}</div>
+                                            <div className="flex items-center gap-1 text-[#64748B] truncate">
+                                                <Globe className="w-2.5 h-2.5 text-[#0F766E] shrink-0" />
+                                                <span className="truncate">{formatLocation(item.city, item.country)}</span>
+                                            </div>
+                                            <div className="text-[9px] text-[#94A3B8] font-mono truncate">
+                                                {item.landingPage || '/'}
+                                            </div>
+                                        </div>
                                     </div>
-                                    <p className="text-[#6B7280] text-[10px] leading-snug line-clamp-1">{item.deviceType || 'Unknown'} · {item.browser || 'Unknown'}</p>
-                                    <p className="text-[#9CA3AF] text-[10px] leading-snug line-clamp-1">{item.landingPage || 'Direct'}</p>
-                                    <div className="mt-auto pt-1 flex items-center justify-between">
-                                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-[#D8E8E2]/70 text-[#111827] border border-gray-200">• {item.pageViews} views</span>
-                                        <button onClick={() => handleDelete(item.id)} className="text-[#B91C1C]/50 hover:text-[#B91C1C] p-1">
-                                            <Trash2 className="w-3.5 h-3.5" />
-                                        </button>
+
+                                    {/* Action Buttons */}
+                                    <div className="pt-2 border-t border-gray-100 flex items-center justify-between gap-1">
+                                        <span className="text-[9px] text-[#94A3B8]">
+                                            {new Date(item.lastVisitedAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
+                                        </span>
+                                        <div className="flex items-center gap-1">
+                                            <button
+                                                onClick={() => handleOpenModal(item)}
+                                                className="p-1.5 bg-[#0F766E] hover:bg-[#115E59] text-white rounded-lg transition-colors flex items-center justify-center"
+                                                title="Inspect Session"
+                                            >
+                                                <Eye className="w-3.5 h-3.5" />
+                                            </button>
+                                            <button
+                                                onClick={() => handleDelete(item.id)}
+                                                className="p-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg border border-rose-200 transition-colors flex items-center justify-center"
+                                                title="Delete"
+                                            >
+                                                <Trash2 className="w-3.5 h-3.5" />
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             ))}
@@ -262,64 +286,74 @@ export default function VisitorsPage() {
                     )}
                 </div>
 
-                {/* ── DESKTOP TABLE (hidden on mobile) ── */}
-                <div className="hidden sm:block overflow-x-auto w-full touch-auto">
-                    <table className="w-full text-left text-sm text-[#374151] min-w-[600px]">
-                        <thead className="bg-[#D8E8E2]/70 border-b border-gray-200 text-[#111827]">
+                {/* Desktop Table */}
+                <div className="hidden sm:block overflow-x-auto">
+                    <table className="admin-table">
+                        <thead>
                             <tr>
-                                <th className="p-4 font-medium min-w-[180px]">Session ID</th>
-                                <th className="p-4 font-medium min-w-[150px] hidden sm:table-cell">Platform / OS</th>
-                                <th className="p-4 font-medium min-w-[120px] hidden md:table-cell">Location</th>
-                                <th className="p-4 font-medium text-center min-w-[100px]">Views</th>
-                                <th className="p-4 font-medium min-w-[120px] hidden sm:table-cell">Last Visited</th>
-                                <th className="p-4 font-medium text-right min-w-[120px]">Actions</th>
+                                <th>Session ID</th>
+                                <th>Platform &amp; Engine</th>
+                                <th>Location &amp; IP</th>
+                                <th className="text-center">Views</th>
+                                <th>Last Sighted</th>
+                                <th className="text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-gray-100">
+                        <tbody>
                             {isLoading ? (
                                 <tr>
-                                    <td colSpan={6} className="p-12 text-center text-[#9CA3AF]">
-                                        <div className="animate-spin rounded-full h-6 w-6 mx-auto border-t-2 border-b-2 border-gray-200 mb-2"></div>
-                                        Fetching visitors securely...
+                                    <td colSpan={6} className="p-12 text-center text-[#64748B]">
+                                        <div className="animate-spin rounded-full h-6 w-6 mx-auto border-t-2 border-b-2 border-[#0F766E] mb-2"></div>
+                                        Fetching visitor sessions...
                                     </td>
                                 </tr>
                             ) : visitors.length === 0 ? (
-                                <tr><td colSpan={6} className="p-10 text-center text-[#9CA3AF]">No tracked visitors match your query.</td></tr>
+                                <tr>
+                                    <td colSpan={6} className="text-center py-12 text-[#64748B]">No tracked visitors match your query.</td>
+                                </tr>
                             ) : (
                                 visitors.map(item => (
-                                    <tr key={item.id} className="hover:bg-[#D8E8E2]/50 transition-colors">
-                                        <td className="p-4">
-                                            <div className="flex items-center gap-2">
-                                                {item.isBot && (
-                                                    <span title="Bot Detected">
-                                                        <Bot className="w-4 h-4 text-[#92400E]" />
-                                                    </span>
-                                                )}
-                                                <div className="font-mono text-[#111827] text-xs">{item.sessionId.substring(0, 14)}...</div>
+                                    <tr key={item.id}>
+                                        <td>
+                                            <div className="flex items-center gap-1.5 font-mono text-xs font-semibold text-[#0F172A]">
+                                                {item.isBot && <span title="Bot Detected"><Bot className="w-3.5 h-3.5 text-amber-600" /></span>}
+                                                <span>{item.sessionId.substring(0, 16)}...</span>
                                             </div>
-                                            <div className="text-[#9CA3AF] text-[10px] mt-1 truncate max-w-[150px]">{item.landingPage || 'Direct'}</div>
+                                            <div className="text-[11px] text-[#64748B] font-mono mt-0.5 truncate max-w-[160px]">{item.landingPage || '/'}</div>
                                         </td>
-                                        <td className="p-4 hidden sm:table-cell">
-                                            <div className="text-[#111827] text-xs font-semibold">{item.deviceType || 'Unknown Device'}</div>
-                                            <div className="text-[#6B7280] text-[11px] mt-0.5">{item.browser || 'Unknown'} • {item.operatingSystem || 'N/A'}</div>
+                                        <td>
+                                            <div className="text-xs font-semibold text-[#0F172A]">{item.deviceType || 'Unknown'}</div>
+                                            <div className="text-[11px] text-[#64748B]">{item.browser || 'Unknown'} · {item.operatingSystem || 'N/A'}</div>
                                         </td>
-                                        <td className="p-4 hidden md:table-cell">
-                                            <div className="text-[#111827] text-xs flex items-center gap-1.5"><Globe className="w-3.5 h-3.5 opacity-60" /> {formatLocation(item.city, item.country)}</div>
-                                            {item.ipAddress && <div className="text-[#9CA3AF] text-[10px] font-mono mt-1">{item.ipAddress}</div>}
+                                        <td>
+                                            <div className="text-xs text-[#0F172A] flex items-center gap-1">
+                                                <Globe className="w-3.5 h-3.5 text-[#0F766E]" /> {formatLocation(item.city, item.country)}
+                                            </div>
+                                            {item.ipAddress && <div className="text-[10px] text-[#94A3B8] font-mono mt-0.5">{item.ipAddress}</div>}
                                         </td>
-                                        <td className="p-4 text-center">
-                                            <span className="inline-flex items-center justify-center bg-[#D8E8E2]/70 border border-gray-200 rounded-md px-2 py-0.5 text-xs font-bold text-[#111827]/90">
+                                        <td className="text-center">
+                                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-[#EDF5F2] text-[#0F766E]">
                                                 {item.pageViews}
                                             </span>
                                         </td>
-                                        <td className="p-4 text-xs text-[#6B7280] hidden sm:table-cell">
-                                            {new Date(item.lastVisitedAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
-                                            <div className="text-[10px] text-[#9CA3AF]">{new Date(item.lastVisitedAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}</div>
+                                        <td className="text-xs text-[#475569]">
+                                            <div>{new Date(item.lastVisitedAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}</div>
+                                            <div className="text-[10px] text-[#94A3B8]">{new Date(item.lastVisitedAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}</div>
                                         </td>
-                                        <td className="p-3">
-                                            <div className="flex flex-col xl:flex-row gap-1.5 justify-end ml-auto shrink-0">
-                                                <button onClick={() => handleOpenModal(item)} className="px-3 py-1 rounded border border-[#6B9F91] text-[#6B9F91] text-xs font-medium hover:bg-[#6B9F91]/10 transition-colors whitespace-nowrap">View</button>
-                                                <button onClick={() => handleDelete(item.id)} className="px-3 py-1 rounded border border-[#FCA5A5] text-[#B91C1C] text-xs font-medium hover:bg-red-50 transition-colors whitespace-nowrap">Delete</button>
+                                        <td className="text-right">
+                                            <div className="flex items-center justify-end gap-1.5">
+                                                <button
+                                                    onClick={() => handleOpenModal(item)}
+                                                    className="px-2.5 py-1.5 text-xs font-medium text-[#0F766E] hover:bg-[#EDF5F2] rounded-md transition-colors"
+                                                >
+                                                    Inspect
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDelete(item.id)}
+                                                    className="px-2.5 py-1.5 text-xs font-medium text-rose-600 hover:bg-rose-50 rounded-md transition-colors"
+                                                >
+                                                    Delete
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>
@@ -331,200 +365,111 @@ export default function VisitorsPage() {
             </div>
 
             {!isLoading && totalPages > 1 && (
-                <div className="mt-6 flex justify-center gap-2">
+                <div className="flex justify-center items-center gap-2 pt-2">
                     <button
                         disabled={page === 1}
                         onClick={() => setPage(p => Math.max(1, p - 1))}
-                        className="px-4 py-2 rounded-lg admin-card text-[#111827] disabled:opacity-50"
+                        className="admin-button-secondary text-xs disabled:opacity-50"
                     >
                         Prev
                     </button>
-                    <span className="px-4 py-2 text-[#6B7280] flex items-center">Page {page} of {totalPages}</span>
+                    <span className="text-xs font-semibold text-[#475569] px-2">Page {page} of {totalPages}</span>
                     <button
                         disabled={page === totalPages}
                         onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                        className="px-4 py-2 rounded-lg admin-card text-[#111827] disabled:opacity-50"
+                        className="admin-button-secondary text-xs disabled:opacity-50"
                     >
                         Next
                     </button>
                 </div>
             )}
 
+            {/* Inspect Modal */}
             {isModalOpen && visitorData && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#111827]/40 backdrop-blur-sm">
-                    <div className="admin-card w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col max-h-[88vh]">
-                        <div className="px-4 py-3 border-b border-gray-200 flex justify-between items-center bg-[#D8E8E2]/80 shrink-0">
+                <div className="admin-modal-overlay">
+                    <div className="admin-modal-panel max-w-2xl">
+                        <div className="px-5 py-4 border-b border-[#E2E8F0] flex justify-between items-center bg-[#F8FAF9]">
                             <div className="flex items-center gap-2">
-                                <Shield className="w-4 h-4 text-[#6B9F91]" />
+                                <Shield className="w-4 h-4 text-[#0F766E]" />
                                 <div>
-                                    <h3 className="text-sm font-bold text-[#111827]">Visitor Integrity Details</h3>
-                                    <p className="text-[10px] text-[#9CA3AF] mt-0.5">Session inspection report</p>
+                                    <h3 className="text-base font-bold text-[#0F172A]">Visitor Session Inspection</h3>
+                                    <p className="text-xs text-[#64748B]">Real-time telemetry trace</p>
                                 </div>
                             </div>
-                            <button onClick={() => setIsModalOpen(false)} className="text-[#9CA3AF] hover:text-[#111827] p-1"><X className="w-4 h-4" /></button>
+                            <button onClick={() => setIsModalOpen(false)} className="text-[#64748B] hover:text-[#0F172A] p-1 rounded-lg">
+                                <X className="w-5 h-5" />
+                            </button>
                         </div>
 
-                        <div className="p-4 overflow-y-auto w-full custom-scrollbar">
+                        <div className="p-5 overflow-y-auto max-h-[calc(90vh-130px)] custom-scrollbar space-y-4">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-                                {/* Session Identity */}
-                                <div className="bg-[#D8E8E2]/40 rounded-md border border-gray-100 overflow-hidden">
-                                    <div className="px-3 py-2 bg-[#D8E8E2]/70 border-b border-gray-200">
-                                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B9F91]">Session Identity</span>
+                                <div className="bg-slate-50 p-3.5 rounded-xl border border-[#E2E8F0] space-y-2">
+                                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#0F766E]">Session Identity</span>
+                                    <div>
+                                        <span className="text-[10px] text-[#64748B] block">Session ID</span>
+                                        <span className="text-[#0F172A] font-mono text-xs break-all font-semibold">{visitorData.sessionId}</span>
                                     </div>
-                                    <div className="divide-y divide-gray-100">
-                                        <div className="px-3 py-2">
-                                            <span className="text-[10px] text-[#9CA3AF] block">Session ID</span>
-                                            <span className="text-[#111827] font-mono text-[11px] break-all">{visitorData.sessionId}</span>
-                                        </div>
-                                        <div className="px-3 py-2">
-                                            <span className="text-[10px] text-[#9CA3AF] block">Bot Trajectory</span>
-                                            {visitorData.isBot ? (
-                                                <span className="text-[#92400E] bg-[#FFC900]/15 px-2 py-0.5 rounded text-[10px] font-bold">BOT DETECTED</span>
-                                            ) : (
-                                                <span className="text-[#6B9F91] bg-[#6B9F91]/10 px-2 py-0.5 rounded text-[10px] font-bold">ORGANIC VISITOR</span>
-                                            )}
-                                        </div>
-                                        <div className="px-3 py-2">
-                                            <span className="text-[10px] text-[#9CA3AF] block">IP Address</span>
-                                            <span className="text-[#111827] font-mono text-xs">{visitorData.ipAddress || 'Unavailable'}</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Hardware / Geography */}
-                                <div className="bg-[#D8E8E2]/40 rounded-md border border-gray-100 overflow-hidden">
-                                    <div className="px-3 py-2 bg-[#D8E8E2]/70 border-b border-gray-200">
-                                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B9F91]">Hardware / Geography</span>
-                                    </div>
-                                    <div className="divide-y divide-gray-100">
-                                        <div className="px-3 py-2">
-                                            <span className="text-[10px] text-[#9CA3AF] block">Device Class</span>
-                                            <span className="text-[#111827] text-xs">{visitorData.deviceType || 'Unknown'}</span>
-                                        </div>
-                                        <div className="px-3 py-2">
-                                            <span className="text-[10px] text-[#9CA3AF] block">Browser Engine</span>
-                                            <span className="text-[#111827] text-xs">{visitorData.browser || 'Unknown'}</span>
-                                        </div>
-                                        <div className="px-3 py-2">
-                                            <span className="text-[10px] text-[#9CA3AF] block">Operating System</span>
-                                            <span className="text-[#111827] text-xs">{visitorData.operatingSystem || 'N/A'}</span>
-                                        </div>
-                                        <div className="px-3 py-2">
-                                            <span className="text-[10px] text-[#9CA3AF] block">Geographic Location</span>
-                                            <span className="text-[#111827] text-xs">{formatLocation(visitorData.city, visitorData.country)}</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Interactivity Logs */}
-                                <div className="bg-[#D8E8E2]/40 rounded-md border border-gray-100 overflow-hidden">
-                                    <div className="px-3 py-2 bg-[#D8E8E2]/70 border-b border-gray-200">
-                                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B9F91]">Interactivity Logs</span>
-                                    </div>
-                                    <div className="divide-y divide-gray-100">
-                                        <div className="px-3 py-2">
-                                            <span className="text-[10px] text-[#9CA3AF] block">Landing Path</span>
-                                            <span className="text-[#111827] font-mono text-[11px]">{visitorData.landingPage || '/'}</span>
-                                        </div>
-                                        <div className="px-3 py-2">
-                                            <span className="text-[10px] text-[#9CA3AF] block">Referrer Origin</span>
-                                            <span className="text-[#6B9F91] break-all text-xs">{visitorData.referrerUrl || 'Direct / None'}</span>
-                                        </div>
-                                        <div className="px-3 py-2">
-                                            <span className="text-[10px] text-[#9CA3AF] block">Total Page Views</span>
-                                            <span className="text-[#111827] font-bold text-base">{visitorData.pageViews}</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Timestamps */}
-                                <div className="bg-[#D8E8E2]/40 rounded-md border border-gray-100 overflow-hidden">
-                                    <div className="px-3 py-2 bg-[#D8E8E2]/70 border-b border-gray-200">
-                                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B9F91]">Timestamps</span>
-                                    </div>
-                                    <div className="divide-y divide-gray-100">
-                                        <div className="px-3 py-2">
-                                            <span className="text-[10px] text-[#9CA3AF] block">Initial Contact</span>
-                                            <span className="text-[#111827] text-xs">{new Date(visitorData.firstVisitedAt).toLocaleString('en-GB')}</span>
-                                        </div>
-                                        <div className="px-3 py-2">
-                                            <span className="text-[10px] text-[#9CA3AF] block">Last Sighted</span>
-                                            <span className="text-[#111827] text-xs">{new Date(visitorData.lastVisitedAt).toLocaleString('en-GB')}</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* User-Agent */}
-                                <div className="md:col-span-2 bg-[#D8E8E2]/40 rounded-md border border-gray-100 overflow-hidden">
-                                    <div className="px-3 py-2 bg-[#D8E8E2]/70 border-b border-gray-200">
-                                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B9F91]">Raw User-Agent Blob</span>
-                                    </div>
-                                    <div className="px-3 py-2">
-                                        <span className="text-[#6B7280] text-[10px] break-all font-mono leading-relaxed">{visitorData.userAgent || 'No user agent signature captured.'}</span>
-                                    </div>
-                                </div>
-
-                                {/* Page Visit History */}
-                                <div className="md:col-span-2 bg-[#D8E8E2]/40 rounded-md border border-gray-100 overflow-hidden">
-                                    <div className="px-3 py-2 bg-[#D8E8E2]/70 border-b border-gray-200">
-                                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B9F91]">Page Visit History</span>
-                                    </div>
-                                    <div className="px-3 py-2 max-h-48 overflow-y-auto custom-scrollbar">
-                                        {visitorData.pageVisits && Array.isArray(visitorData.pageVisits) && visitorData.pageVisits.length > 0 ? (
-                                            <div className="space-y-2">
-                                                {visitorData.pageVisits.slice(0, 20).map((visit: any, index: number) => (
-                                                    <div key={index} className="flex items-center justify-between text-xs">
-                                                        <span className="text-[#111827] font-mono">{visit.path || '/'}</span>
-                                                        <span className="text-[#9CA3AF]">
-                                                            {new Date(visit.timestamp).toLocaleString('en-GB', { 
-                                                                day: '2-digit', 
-                                                                month: 'short', 
-                                                                hour: '2-digit', 
-                                                                minute: '2-digit' 
-                                                            })}
-                                                        </span>
-                                                    </div>
-                                                ))}
-                                                {visitorData.pageVisits.length > 20 && (
-                                                    <div className="text-center text-[10px] text-[#9CA3AF] pt-2">
-                                                        Showing 20 of {visitorData.pageVisits.length} visits
-                                                    </div>
-                                                )}
-                                            </div>
+                                    <div>
+                                        <span className="text-[10px] text-[#64748B] block">Bot Signature</span>
+                                        {visitorData.isBot ? (
+                                            <span className="text-amber-800 bg-amber-100 px-2 py-0.5 rounded text-[10px] font-bold">BOT DETECTED</span>
                                         ) : (
-                                            <div className="text-[10px] text-[#9CA3AF]">No page visit history available</div>
+                                            <span className="text-[#0F766E] bg-[#EDF5F2] px-2 py-0.5 rounded text-[10px] font-bold">ORGANIC USER</span>
                                         )}
                                     </div>
+                                    <div>
+                                        <span className="text-[10px] text-[#64748B] block">IP Address</span>
+                                        <span className="text-[#0F172A] font-mono text-xs">{visitorData.ipAddress || 'Unavailable'}</span>
+                                    </div>
                                 </div>
 
+                                <div className="bg-slate-50 p-3.5 rounded-xl border border-[#E2E8F0] space-y-2">
+                                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#0F766E]">Hardware &amp; Location</span>
+                                    <div>
+                                        <span className="text-[10px] text-[#64748B] block">Device / Browser</span>
+                                        <span className="text-[#0F172A] text-xs font-semibold">{visitorData.deviceType || 'Unknown'} · {visitorData.browser || 'Unknown'}</span>
+                                    </div>
+                                    <div>
+                                        <span className="text-[10px] text-[#64748B] block">Operating System</span>
+                                        <span className="text-[#0F172A] text-xs">{visitorData.operatingSystem || 'N/A'}</span>
+                                    </div>
+                                    <div>
+                                        <span className="text-[10px] text-[#64748B] block">Location</span>
+                                        <span className="text-[#0F172A] text-xs">{formatLocation(visitorData.city, visitorData.country)}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="bg-slate-50 p-3.5 rounded-xl border border-[#E2E8F0]">
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-[#0F766E] block mb-2">User Agent</span>
+                                <p className="text-[11px] font-mono text-[#475569] break-all leading-relaxed bg-white p-2.5 rounded-lg border border-[#E2E8F0]">
+                                    {visitorData.userAgent || 'No user agent captured.'}
+                                </p>
                             </div>
                         </div>
 
-                        <div className="px-4 py-2.5 border-t border-gray-200 flex justify-end bg-[#D8E8E2]/50 shrink-0">
-                            <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-1.5 rounded-md text-xs font-medium bg-[#D8E8E2] text-[#111827] hover:bg-[#D8E8E2]/80 transition-colors">Close Inspection</button>
+                        <div className="p-4 border-t border-[#E2E8F0] bg-[#F8FAF9] flex justify-end">
+                            <button type="button" onClick={() => setIsModalOpen(false)} className="admin-button-secondary">
+                                Close Inspection
+                            </button>
                         </div>
                     </div>
                 </div>
             )}
 
+            {/* Cleanup Modal */}
             {isCleanupModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#111827]/40 backdrop-blur-sm">
-                    <div className="admin-card w-full max-w-md overflow-hidden shadow-2xl flex flex-col">
-                        <div className="px-4 py-3 border-b border-gray-200 flex justify-between items-center bg-[#D8E8E2]/80 shrink-0">
-                            <div className="flex items-center gap-2">
-                                <Calendar className="w-4 h-4 text-[#B91C1C]" />
-                                <div>
-                                    <h3 className="text-sm font-bold text-[#111827]">Clear Visitor History</h3>
-                                    <p className="text-[10px] text-[#9CA3AF] mt-0.5">Delete old visitor records</p>
-                                </div>
-                            </div>
-                            <button onClick={() => setIsCleanupModalOpen(false)} className="text-[#9CA3AF] hover:text-[#111827] p-1"><X className="w-4 h-4" /></button>
+                <div className="admin-modal-overlay">
+                    <div className="admin-modal-panel max-w-md">
+                        <div className="px-5 py-4 border-b border-[#E2E8F0] flex justify-between items-center bg-[#F8FAF9]">
+                            <h3 className="text-base font-bold text-[#0F172A]">Clear Visitor Logs</h3>
+                            <button onClick={() => setIsCleanupModalOpen(false)} className="text-[#64748B] hover:text-[#0F172A] p-1 rounded-lg">
+                                <X className="w-5 h-5" />
+                            </button>
                         </div>
-
-                        <div className="p-4">
-                            <div className="mb-4">
-                                <label className="block text-xs font-medium text-[#111827] mb-2">
+                        <div className="p-5 space-y-4">
+                            <div>
+                                <label className="block text-xs font-semibold text-[#334151] mb-1.5">
                                     Delete records older than (days):
                                 </label>
                                 <input
@@ -533,34 +478,17 @@ export default function VisitorsPage() {
                                     onChange={(e) => setCleanupDays(parseInt(e.target.value) || 30)}
                                     min="1"
                                     max="365"
-                                    className="w-full admin-card rounded-lg px-3 py-2 text-sm text-[#111827]"
+                                    className="admin-input"
                                 />
                             </div>
-
-                            <div className="mb-4 p-3 bg-[#FEF3C7] border border-[#FCD34D] rounded-lg">
-                                <p className="text-xs text-[#92400E]">
-                                    This will permanently delete all visitor records older than {cleanupDays} days. This action cannot be undone.
-                                </p>
-                            </div>
-
-                            <div className="flex gap-2">
-                                <button
-                                    onClick={handleCleanup}
-                                    disabled={isCleaningUp}
-                                    className="flex-1 px-3 py-2 rounded-lg bg-[#B91C1C] text-white text-xs font-medium hover:bg-red-700 transition-colors disabled:opacity-50"
-                                >
-                                    {isCleaningUp ? 'Deleting...' : 'Delete Records'}
-                                </button>
+                            <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-800">
+                                This will permanently delete all visitor traces older than {cleanupDays} days.
                             </div>
                         </div>
-
-                        <div className="px-4 py-2.5 border-t border-gray-200 flex justify-end bg-[#D8E8E2]/50 shrink-0">
-                            <button 
-                                type="button" 
-                                onClick={() => setIsCleanupModalOpen(false)} 
-                                className="px-4 py-1.5 rounded-md text-xs font-medium bg-[#D8E8E2] text-[#111827] hover:bg-[#D8E8E2]/80 transition-colors"
-                            >
-                                Cancel
+                        <div className="p-4 border-t border-[#E2E8F0] bg-[#F8FAF9] flex justify-end gap-2.5">
+                            <button type="button" onClick={() => setIsCleanupModalOpen(false)} className="admin-button-secondary">Cancel</button>
+                            <button onClick={handleCleanup} disabled={isCleaningUp} className="admin-button-primary bg-rose-600 hover:bg-rose-700">
+                                {isCleaningUp ? 'Cleaning...' : 'Delete Old Logs'}
                             </button>
                         </div>
                     </div>

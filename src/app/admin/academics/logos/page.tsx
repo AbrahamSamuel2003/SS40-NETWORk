@@ -1,14 +1,12 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit2, Trash2, CheckCircle2, AlertCircle, Upload, X, Image as ImageIcon, Sparkles } from 'lucide-react';
+import { Plus, Edit2, Trash2, CheckCircle2, AlertCircle, Upload, X, Image as ImageIcon } from 'lucide-react';
 import { compressImageFile } from '@/utils/imageCompressor';
-import { useRouter } from 'next/navigation';
 import { MediaSelectorModal } from '@/components/admin/MediaSelectorModal';
 import { SectionVisibilityToggle } from '@/components/admin/SectionVisibilityToggle';
 
 export default function AcademicPartnerLogosPage() {
-    const router = useRouter();
     const [logos, setLogos] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [errorMsg, setErrorMsg] = useState('');
@@ -41,7 +39,7 @@ export default function AcademicPartnerLogosPage() {
             } else {
                 setErrorMsg(data.error);
             }
-        } catch (e) {
+        } catch {
             setErrorMsg('Failed to load logos.');
         } finally {
             setIsLoading(false);
@@ -70,10 +68,6 @@ export default function AcademicPartnerLogosPage() {
         }
         setErrorMsg('');
         setIsModalOpen(true);
-    };
-
-    const handleCloseModal = () => {
-        setIsModalOpen(false);
     };
 
     const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -139,7 +133,7 @@ export default function AcademicPartnerLogosPage() {
             } else {
                 setErrorMsg(data.error);
             }
-        } catch (err) {
+        } catch {
             setErrorMsg('Failed to save.');
         } finally {
             setIsSaving(false);
@@ -156,34 +150,34 @@ export default function AcademicPartnerLogosPage() {
             } else {
                 alert(data.error);
             }
-        } catch (e) {
+        } catch {
             alert('Failed to delete');
         }
     };
 
     if (isLoading) {
         return (
-            <div className="flex items-center justify-center p-12">
-                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-200"></div>
+            <div className="flex items-center justify-center p-16">
+                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#0F766E]"></div>
             </div>
         );
     }
 
     return (
-        <div className="max-w-5xl mx-auto pb-12">
-            <div className="mb-8 flex flex-col sm:flex-row justify-between sm:items-end gap-4">
+        <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
                 <div>
-                    <h2 className="text-2xl font-bold tracking-tight text-[#111827] mb-2">Academic Partner Logos</h2>
-                    <p className="text-[#6B7280]">Manage collaborative university and institutional logos for Academics.</p>
+                    <h1 className="text-xl sm:text-2xl font-bold text-[#0F172A] tracking-tight">Academic Partner Logos</h1>
+                    <p className="text-sm text-[#475569] mt-0.5">Manage university MoUs and institutional logos for Academics.</p>
                 </div>
-                <div className="flex flex-wrap items-center gap-3 self-start sm:self-auto">
+                <div className="flex flex-wrap items-center gap-2.5">
                     <SectionVisibilityToggle
                         sectionKey="academics_logos"
                         sectionLabel="Academic Partner Logos"
                     />
                     <button
                         onClick={() => handleOpenModal()}
-                        className="bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-4 py-2 rounded-lg font-medium text-sm transition-colors flex items-center gap-2"
+                        className="admin-button-primary"
                     >
                         <Plus className="w-4 h-4" /> Add Partner
                     </button>
@@ -191,24 +185,50 @@ export default function AcademicPartnerLogosPage() {
             </div>
 
             <div className="admin-card overflow-hidden">
-                {/* ── MOBILE CARD GRID (hidden on sm+) ── */}
-                <div className="sm:hidden">
+                {/* Mobile Cards: 2-Column Grid */}
+                <div className="sm:hidden p-2.5">
                     {logos.length === 0 ? (
-                        <div className="p-8 text-center text-[#9CA3AF]">No academic partners found.</div>
+                        <div className="p-8 text-center text-sm text-[#64748B]">No academic partners found.</div>
                     ) : (
-                        <div className="grid grid-cols-2 gap-3 p-3">
+                        <div className="grid grid-cols-2 gap-2.5">
                             {logos.map(logo => (
-                                <div key={logo.id} className="admin-card p-3 flex flex-col gap-2 rounded-xl">
-                                    <div className="flex items-start justify-between gap-1">
-                                        <span className="font-semibold text-[#111827] text-sm leading-tight line-clamp-2">{logo.name}</span>
-                                        <button onClick={() => handleOpenModal(logo)} className="shrink-0 p-1 text-[#9CA3AF] hover:text-[#111827]">
-                                            <Edit2 className="w-4 h-4" />
-                                        </button>
+                                <div key={logo.id} className="p-3 rounded-xl border border-gray-200/90 bg-white flex flex-col justify-between gap-2 shadow-xs hover:border-[#2DD4BF]/50 transition-colors">
+                                    <div className="space-y-1.5">
+                                        <div className="w-full h-16 bg-slate-50 border border-[#E2E8F0] rounded-lg flex items-center justify-center p-2 relative">
+                                            {logo.logoUrl ? (
+                                                <img src={logo.logoUrl} alt={logo.name} className="max-w-full max-h-full object-contain" />
+                                            ) : (
+                                                <span className="text-xs text-[#94A3B8] font-bold">{logo.name.slice(0, 2).toUpperCase()}</span>
+                                            )}
+                                        </div>
+
+                                        <div>
+                                            <div className="flex items-center justify-between gap-1">
+                                                <h3 className="font-bold text-xs text-[#0F172A] leading-tight truncate" title={logo.name}>
+                                                    {logo.name}
+                                                </h3>
+                                                <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-semibold shrink-0 ${logo.isActive ? 'bg-[#EDF5F2] text-[#0F766E]' : 'bg-slate-100 text-slate-500'}`}>
+                                                    {logo.isActive ? 'Active' : 'Draft'}
+                                                </span>
+                                            </div>
+                                            <p className="text-[10px] text-[#64748B] truncate mt-0.5">{logo.category}</p>
+                                        </div>
                                     </div>
-                                    <p className="text-[#6B7280] text-xs leading-snug line-clamp-1">{logo.category}</p>
-                                    <div className="mt-auto pt-1 flex items-center justify-between">
-                                        <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-semibold ${logo.isActive ? 'bg-[#6B9F91]/10 text-[#6B9F91] border border-[#6B9F91]/20' : 'bg-[#D8E8E2]/70 text-[#9CA3AF]'}`}>• {logo.isActive ? 'ACTIVE' : 'INACTIVE'}</span>
-                                        <button onClick={() => handleDelete(logo.id)} className="text-[#B91C1C]/50 hover:text-[#B91C1C] p-1">
+
+                                    {/* Action Buttons */}
+                                    <div className="pt-2 border-t border-gray-100 flex items-center justify-end gap-1">
+                                        <button
+                                            onClick={() => handleOpenModal(logo)}
+                                            className="p-1.5 bg-[#0F766E] hover:bg-[#115E59] text-white rounded-lg transition-colors flex items-center justify-center flex-1"
+                                            title="Edit"
+                                        >
+                                            <Edit2 className="w-3.5 h-3.5" />
+                                        </button>
+                                        <button
+                                            onClick={() => handleDelete(logo.id)}
+                                            className="p-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg border border-rose-200 transition-colors flex items-center justify-center flex-1"
+                                            title="Delete"
+                                        >
                                             <Trash2 className="w-3.5 h-3.5" />
                                         </button>
                                     </div>
@@ -218,54 +238,60 @@ export default function AcademicPartnerLogosPage() {
                     )}
                 </div>
 
-                {/* ── DESKTOP TABLE (hidden on mobile) ── */}
-                <div className="hidden sm:block overflow-x-auto w-full touch-auto">
-                    <table className="w-full text-left text-sm text-[#374151] min-w-[600px]">
-                        <thead className="bg-[#D8E8E2]/70 border-b border-gray-200 text-[#111827]">
+                {/* Desktop Table */}
+                <div className="hidden sm:block overflow-x-auto">
+                    <table className="admin-table">
+                        <thead>
                             <tr>
-                                <th className="p-4 font-medium min-w-[80px] hidden sm:table-cell">Logo</th>
-                                <th className="p-4 font-medium min-w-[150px]">Institution Name</th>
-                                <th className="p-4 font-medium min-w-[100px] hidden sm:table-cell">Type</th>
-                                <th className="p-4 font-medium min-w-[80px] hidden md:table-cell">Order</th>
-                                <th className="p-4 font-medium min-w-[100px]">Status</th>
-                                <th className="p-4 font-medium text-right min-w-[120px]">Actions</th>
+                                <th className="w-16">Logo</th>
+                                <th>Institution Name</th>
+                                <th>Type / Category</th>
+                                <th className="text-center">Order</th>
+                                <th className="text-center">Status</th>
+                                <th className="text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-gray-100">
+                        <tbody>
                             {logos.length === 0 ? (
                                 <tr>
-                                    <td colSpan={6} className="p-8 text-center text-[#9CA3AF]">No academic partners found.</td>
+                                    <td colSpan={6} className="text-center py-12 text-[#64748B]">No academic partners found.</td>
                                 </tr>
                             ) : (
                                 logos.map(logo => (
-                                    <tr key={logo.id} className="hover:bg-[#D8E8E2]/50 transition-colors">
-                                        <td className="p-4 hidden sm:table-cell">
-                                            {logo.logoUrl ? (
-                                                <div className="w-12 h-12 bg-[#D8E8E2] rounded overflow-hidden flex items-center justify-center">
-                                                    <img src={logo.logoUrl} alt={logo.name} className="max-w-full max-h-full object-contain p-1" />
-                                                </div>
-                                            ) : (
-                                                <div className="w-12 h-12 bg-[#D8E8E2]/70 rounded flex items-center justify-center text-xs text-[#9CA3AF]">N/A</div>
-                                            )}
+                                    <tr key={logo.id}>
+                                        <td>
+                                            <div className="w-12 h-12 bg-slate-50 border border-[#E2E8F0] rounded-lg flex items-center justify-center p-1.5">
+                                                {logo.logoUrl ? (
+                                                    <img src={logo.logoUrl} alt={logo.name} className="max-w-full max-h-full object-contain" />
+                                                ) : (
+                                                    <span className="text-xs text-[#94A3B8]">N/A</span>
+                                                )}
+                                            </div>
                                         </td>
-                                        <td className="p-4 font-medium">{logo.name}</td>
-                                        <td className="p-4 text-[#6B7280] hidden sm:table-cell">{logo.category}</td>
-                                        <td className="p-4 text-[#6B7280] hidden md:table-cell">{logo.sortOrder}</td>
-                                        <td className="p-4">
-                                            {logo.isActive ? (
-                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#6B9F91]/10 text-[#6B9F91]">
-                                                    <CheckCircle2 className="w-3 h-3" /> ACTIVE
-                                                </span>
-                                            ) : (
-                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#D8E8E2]/70 text-[#9CA3AF]">
-                                                    INACTIVE
-                                                </span>
-                                            )}
+                                        <td>
+                                            <div className="font-semibold text-sm text-[#0F172A]">{logo.name}</div>
                                         </td>
-                                        <td className="p-3">
-                                            <div className="flex flex-col xl:flex-row gap-1.5 justify-end ml-auto shrink-0">
-                                                <button onClick={() => handleOpenModal(logo)} className="px-3 py-1 rounded border border-gray-300 text-[#374151] text-xs font-medium hover:bg-[#D8E8E2]/70 hover:border-[#6B9F91] transition-colors whitespace-nowrap">Edit</button>
-                                                <button onClick={() => handleDelete(logo.id)} className="px-3 py-1 rounded border border-[#FCA5A5] text-[#B91C1C] text-xs font-medium hover:bg-red-50 transition-colors whitespace-nowrap">Delete</button>
+                                        <td className="text-xs text-[#475569]">{logo.category}</td>
+                                        <td className="text-center text-xs text-[#64748B] font-mono">{logo.sortOrder}</td>
+                                        <td className="text-center">
+                                            <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold ${logo.isActive ? 'bg-[#EDF5F2] text-[#0F766E]' : 'bg-slate-100 text-slate-500'}`}>
+                                                <CheckCircle2 className="w-3 h-3" /> {logo.isActive ? 'Active' : 'Inactive'}
+                                            </span>
+                                        </td>
+                                        <td className="text-right">
+                                            <div className="flex items-center justify-end gap-1.5">
+                                                <button
+                                                    onClick={() => handleOpenModal(logo)}
+                                                    className="px-2.5 py-1.5 text-xs font-medium text-[#334151] hover:text-[#0F766E] hover:bg-[#EDF5F2] rounded-md transition-colors"
+                                                >
+                                                    Edit
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDelete(logo.id)}
+                                                    className="px-2.5 py-1.5 text-xs font-medium text-rose-600 hover:bg-rose-50 rounded-md transition-colors"
+                                                >
+                                                    Delete
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>
@@ -278,40 +304,43 @@ export default function AcademicPartnerLogosPage() {
 
             {/* Modal */}
             {isModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-[#111827]/40 backdrop-blur-sm">
-                    <div className="admin-card w-full max-w-lg overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
-                        <div className="px-4 py-3 sm:px-5 sm:py-4 border-b border-gray-200 flex items-center justify-between shrink-0 bg-[#D8E8E2]/70">
-                            <h3 className="text-base sm:text-lg font-bold text-[#111827]">{editingId ? 'Edit Partner Logo' : 'Add Partner Logo'}</h3>
-                            <button onClick={handleCloseModal} className="text-[#9CA3AF] hover:text-[#111827] transition-colors p-1">
+                <div className="admin-modal-overlay">
+                    <div className="admin-modal-panel max-w-lg">
+                        <div className="px-5 py-4 border-b border-[#E2E8F0] flex items-center justify-between bg-[#F8FAF9]">
+                            <div>
+                                <h3 className="text-base font-bold text-[#0F172A]">{editingId ? 'Edit Partner Logo' : 'Add Partner Logo'}</h3>
+                                <p className="text-xs text-[#64748B]">University MoU partner mark</p>
+                            </div>
+                            <button onClick={() => setIsModalOpen(false)} className="text-[#64748B] hover:text-[#0F172A] p-1 rounded-lg">
                                 <X className="w-5 h-5" />
                             </button>
                         </div>
 
-                        <div className="p-4 sm:p-5 overflow-y-auto custom-scrollbar">
+                        <div className="p-5 overflow-y-auto max-h-[calc(90vh-130px)] custom-scrollbar">
                             {errorMsg && (
-                                <div className="mb-4 bg-[#FEE2E2] border border-[#FCA5A5] text-[#B91C1C] p-3 rounded-lg text-sm flex gap-2">
-                                    <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" /> {errorMsg}
+                                <div className="mb-4 text-xs text-rose-700 bg-rose-50 border border-rose-200 p-3 rounded-lg flex items-center gap-2">
+                                    <AlertCircle className="w-4 h-4 shrink-0" /> {errorMsg}
                                 </div>
                             )}
 
                             <form id="logoForm" onSubmit={handleSave} className="space-y-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-[#374151] mb-2">Institution Name *</label>
-                                    <input required type="text" value={name} onChange={e => setName(e.target.value)} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#6B9F91]" />
+                                    <label className="block text-xs font-semibold text-[#334151] mb-1.5">Institution Name *</label>
+                                    <input required type="text" value={name} onChange={e => setName(e.target.value)} className="admin-input" placeholder="e.g. Anna University" />
                                 </div>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-sm font-medium text-[#374151] mb-2">Type / Category *</label>
-                                        <input required type="text" value={category} placeholder="e.g. University MoU" onChange={e => setCategory(e.target.value)} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] focus:outline-none focus:border-[#6B9F91]" />
+                                        <label className="block text-xs font-semibold text-[#334151] mb-1.5">Type / Category *</label>
+                                        <input required type="text" value={category} placeholder="e.g. University MoU" onChange={e => setCategory(e.target.value)} className="admin-input" />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-[#374151] mb-2">Sort Order</label>
-                                        <input type="number" required value={sortOrder} onChange={e => setSortOrder(Number(e.target.value))} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] focus:outline-none focus:border-[#6B9F91]" />
+                                        <label className="block text-xs font-semibold text-[#334151] mb-1.5">Sort Order</label>
+                                        <input type="number" required value={sortOrder} onChange={e => setSortOrder(Number(e.target.value))} className="admin-input" />
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-[#374151] mb-2">Internal Placement Type *</label>
-                                    <select value={placementType} onChange={e => setPlacementType(e.target.value)} className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-[#111827] focus:outline-none focus:border-[#6B9F91]">
+                                    <label className="block text-xs font-semibold text-[#334151] mb-1.5">Placement Type *</label>
+                                    <select value={placementType} onChange={e => setPlacementType(e.target.value)} className="admin-input">
                                         <option value="UNIVERSITY">University</option>
                                         <option value="PARTNER">Partner</option>
                                         <option value="CLIENT">Client</option>
@@ -319,57 +348,56 @@ export default function AcademicPartnerLogosPage() {
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-[#374151] mb-2">Logo Image</label>
+                                    <label className="block text-xs font-semibold text-[#334151] mb-1.5">Logo Image</label>
                                     <div className="flex flex-col gap-2.5">
-                                        <input type="text" value={logoUrl} onChange={e => setLogoUrl(e.target.value)} placeholder="/uploads/... or https://..." className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-[#111827] focus:outline-none focus:border-[#6B9F91]" />
+                                        <input type="text" value={logoUrl} onChange={e => setLogoUrl(e.target.value)} placeholder="URL or select from Media library..." className="admin-input text-xs" />
                                         
                                         {logoUrl && (
-                                            <div className="w-20 h-20 bg-[#D8E8E2] rounded-lg border border-gray-200 flex items-center justify-center p-2 relative group">
+                                            <div className="w-20 h-20 bg-slate-50 rounded-lg border border-[#E2E8F0] flex items-center justify-center p-2 relative group">
                                                 <img src={logoUrl} alt="Preview" className="max-w-full max-h-full object-contain" />
-                                                <button type="button" onClick={() => setLogoUrl('')} className="absolute top-1 right-1 bg-white/90 p-1 rounded-full text-gray-500 opacity-90 hover:text-red-500 shadow-sm transition-opacity" title="Remove">
+                                                <button type="button" onClick={() => setLogoUrl('')} className="absolute top-1 right-1 bg-white/90 p-1 rounded-full text-slate-500 hover:text-rose-600 shadow-sm" title="Remove">
                                                     <X className="w-3 h-3" />
                                                 </button>
                                             </div>
                                         )}
                                         
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                            <label className={`cursor-pointer inline-flex items-center justify-center gap-2 bg-[#D8E8E2]/70 hover:bg-[#D8E8E2] border border-gray-200 text-[#111827] px-4 py-2 rounded-lg text-sm font-medium transition-colors ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}>
-                                                <Upload className="w-4 h-4 text-[#6B9F91]" /> {isUploading ? 'Uploading...' : 'Upload Local File'}
+                                            <label className={`cursor-pointer admin-button-secondary justify-center text-xs ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}>
+                                                <Upload className="w-4 h-4 text-[#0F766E]" /> {isUploading ? 'Uploading...' : 'Upload Local File'}
                                                 <input type="file" accept="image/*" onChange={handleUpload} className="hidden" disabled={isUploading} />
                                             </label>
-                                            <button type="button" onClick={() => setIsMediaSelectorOpen(true)} className="cursor-pointer inline-flex items-center justify-center gap-2 bg-[#D8E8E2]/70 hover:bg-[#D8E8E2] border border-gray-200 text-[#111827] px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                                                <ImageIcon className="w-4 h-4 text-[#6B9F91]" /> Select from Media
+                                            <button type="button" onClick={() => setIsMediaSelectorOpen(true)} className="admin-button-secondary justify-center text-xs">
+                                                <ImageIcon className="w-4 h-4 text-[#0F766E]" /> Select from Media
                                             </button>
                                         </div>
-                                        <p className="text-[#9CA3AF] text-[10px] w-full">* Prefer SVG, PNG or WebP with transparent backgrounds.</p>
                                     </div>
                                 </div>
 
-                                <div className="pt-2 flex flex-wrap gap-4">
-                                    <label className="flex items-center gap-3 cursor-pointer group">
+                                <div className="pt-3 flex flex-wrap gap-5 border-t border-[#E2E8F0]">
+                                    <label className="flex items-center gap-2.5 cursor-pointer">
                                         <div className="relative">
                                             <input type="checkbox" checked={isActive} onChange={e => setIsActive(e.target.checked)} className="sr-only" />
-                                            <div className={`w-10 h-6 rounded-full transition-colors ${isActive ? 'bg-[#6B9F91]' : 'bg-[#D8E8E2] group-hover:bg-[#D8E8E2]'}`}></div>
-                                            <div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${isActive ? 'translate-x-4' : 'translate-x-0'}`}></div>
+                                            <div className={`w-9 h-5 rounded-full transition-colors ${isActive ? 'bg-[#0F766E]' : 'bg-slate-300'}`}></div>
+                                            <div className={`absolute top-0.5 left-0.5 bg-white w-4 h-4 rounded-full transition-transform ${isActive ? 'translate-x-4' : 'translate-x-0'}`}></div>
                                         </div>
-                                        <span className="text-sm font-medium text-[#374151]">Active</span>
+                                        <span className="text-xs font-semibold text-[#334151]">Active</span>
                                     </label>
 
-                                    <label className="flex items-center gap-3 cursor-pointer group">
+                                    <label className="flex items-center gap-2.5 cursor-pointer">
                                         <div className="relative">
                                             <input type="checkbox" checked={showTextOnCard} onChange={e => setShowTextOnCard(e.target.checked)} className="sr-only" />
-                                            <div className={`w-10 h-6 rounded-full transition-colors ${showTextOnCard ? 'bg-[#6B9F91]' : 'bg-[#D8E8E2] group-hover:bg-[#D8E8E2]'}`}></div>
-                                            <div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${showTextOnCard ? 'translate-x-4' : 'translate-x-0'}`}></div>
+                                            <div className={`w-9 h-5 rounded-full transition-colors ${showTextOnCard ? 'bg-[#0F766E]' : 'bg-slate-300'}`}></div>
+                                            <div className={`absolute top-0.5 left-0.5 bg-white w-4 h-4 rounded-full transition-transform ${showTextOnCard ? 'translate-x-4' : 'translate-x-0'}`}></div>
                                         </div>
-                                        <span className="text-sm font-medium text-[#374151]">Show text on card</span>
+                                        <span className="text-xs font-semibold text-[#334151]">Show text label</span>
                                     </label>
                                 </div>
                             </form>
                         </div>
 
-                        <div className="p-4 sm:p-5 border-t border-gray-200 bg-[#D8E8E2]/70 flex flex-col-reverse sm:flex-row sm:justify-end gap-2.5 sm:gap-3 shrink-0">
-                            <button type="button" onClick={handleCloseModal} className="w-full sm:w-auto px-4 py-2 rounded-lg text-[#6B7280] hover:text-[#111827] hover:bg-[#D8E8E2]/70 text-sm font-medium transition-colors text-center">Cancel</button>
-                            <button form="logoForm" type="submit" disabled={isSaving} className="w-full sm:w-auto bg-[#6B9F91] hover:bg-[#5C8C80] text-[#111827] px-6 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 text-center">
+                        <div className="p-4 border-t border-[#E2E8F0] bg-[#F8FAF9] flex flex-col-reverse sm:flex-row sm:justify-end gap-2.5">
+                            <button type="button" onClick={() => setIsModalOpen(false)} className="admin-button-secondary justify-center">Cancel</button>
+                            <button form="logoForm" type="submit" disabled={isSaving} className="admin-button-primary justify-center disabled:opacity-50">
                                 {isSaving ? 'Saving...' : 'Save Logo'}
                             </button>
                         </div>
