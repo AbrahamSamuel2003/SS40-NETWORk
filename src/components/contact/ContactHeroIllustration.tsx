@@ -2,28 +2,13 @@
 
 import * as React from "react";
 import { motion } from "framer-motion";
-import { Headphones, Phone, Mail, MessageSquare } from "lucide-react";
+import { Phone, Mail, MessageSquare } from "lucide-react";
 
 export function ContactHeroIllustration() {
     return (
         <div className="relative w-full max-w-[540px] mx-auto select-none flex items-center justify-center">
             
             {/* ================= FLOATING COMMUNICATION TOKENS (MATCHING SCREENSHOT) ================= */}
-
-            {/* 1. Advisory & Tech Desk Active Status Pill (Top Left) */}
-            <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-                className="absolute top-2 left-2 sm:top-4 sm:left-4 z-20 bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-2xl border border-[#2DD4BF]/40 shadow-lg shadow-[#0F766E]/10 flex items-center gap-2.5"
-            >
-                <div className="w-7 h-7 rounded-xl bg-[#EDF5F2] text-[#0F766E] flex items-center justify-center shrink-0 border border-[#0F766E]/20">
-                    <Headphones className="w-4 h-4 text-[#0F766E]" />
-                </div>
-                <span className="text-xs font-bold text-[#0F172A] tracking-tight font-serif">
-                    Advisory &amp; Tech Desk Active
-                </span>
-            </motion.div>
 
             {/* 2. Floating Phone Call Token (Mid-Left) */}
             <motion.div
