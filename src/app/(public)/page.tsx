@@ -122,10 +122,8 @@ export default async function Home() {
 
   return (
     <div className="w-full flex-col flex">
-      {/* Declarative Speculative Preload & Prefetch for Hero Wing Images */}
-      <link rel="preload" href="/images/hero/wing-digital-solutions.jpg" as="image" fetchPriority="high" />
-      <link rel="prefetch" href="/images/hero/wing-products.jpg" as="image" />
-      <link rel="prefetch" href="/images/hero/wing-academics.jpg" as="image" />
+      {/* Declarative Speculative Preload for Primary LCP Hero Visual */}
+      <link rel="preload" href="/images/hero/wing-digital-solutions.webp" as="image" type="image/webp" fetchPriority="high" />
 
       <script
         type="application/ld+json"

@@ -42,7 +42,7 @@ const WINGS: WingData[] = [
         description: "We build high-performance web applications, mobile platforms, and AI automation tailored to your business.",
         ctaText: "Explore Digital Solutions",
         ctaHref: "/digital-solutions",
-        imageSrc: "/images/hero/wing-digital-solutions.jpg",
+        imageSrc: "/images/hero/wing-digital-solutions.webp",
         imageAlt: "SS40 Digital Solutions — Custom Software Development and Cloud Architecture in Tirunelveli",
         icon: <Code2 className="w-3.5 h-3.5 text-[#B45309]" />,
         chips: ["Web Apps", "Mobile Apps", "Cloud and AI"],
@@ -59,7 +59,7 @@ const WINGS: WingData[] = [
         description: "Ready-to-deploy software tools that automate invoicing, daily workflows, and enterprise operations.",
         ctaText: "Explore Products",
         ctaHref: "/products",
-        imageSrc: "/images/hero/wing-products.jpg",
+        imageSrc: "/images/hero/wing-products.webp",
         imageAlt: "SS40 Products — Enterprise Business Growth and Automated SaaS Software Solutions",
         icon: <Box className="w-3.5 h-3.5 text-[#B45309]" />,
         chips: ["ClearInvoice", "GTC Suite", "AI Email Agent"],
@@ -76,7 +76,7 @@ const WINGS: WingData[] = [
         description: "Project-based training that prepares students and freshers for top tech careers with real client sprint experience.",
         ctaText: "Explore Academics",
         ctaHref: "/academics",
-        imageSrc: "/images/hero/wing-academics.jpg",
+        imageSrc: "/images/hero/wing-academics.webp",
         imageAlt: "SS40 Academics — Student Tech Career Launch and Placement Success in Tirunelveli",
         icon: <GraduationCap className="w-3.5 h-3.5 text-[#B45309]" />,
         chips: ["Live Client Projects", "Career Launch"],
@@ -93,66 +93,60 @@ const EXIT_EASE = [0.4, 0, 0.2, 1] as const;
 const contentVariants: Variants = {
     initial: {
         opacity: 0,
-        y: 16,
-        filter: "blur(6px)"
+        y: 14
     },
     animate: {
         opacity: 1,
         y: 0,
-        filter: "blur(0px)",
         transition: {
-            duration: 0.6,
+            duration: 0.55,
             ease: SMOOTH_EASE,
-            staggerChildren: 0.05,
-            delayChildren: 0.04
+            staggerChildren: 0.04,
+            delayChildren: 0.03
         }
     },
     exit: {
         opacity: 0,
-        y: -12,
-        filter: "blur(6px)",
+        y: -10,
         transition: {
-            duration: 0.4,
+            duration: 0.35,
             ease: EXIT_EASE
         }
     }
 };
 
 const itemVariants: Variants = {
-    initial: { opacity: 0, y: 10 },
+    initial: { opacity: 0, y: 8 },
     animate: { 
         opacity: 1, 
         y: 0, 
-        transition: { duration: 0.45, ease: SMOOTH_EASE } 
+        transition: { duration: 0.4, ease: SMOOTH_EASE } 
     },
     exit: { 
         opacity: 0, 
-        y: -6, 
-        transition: { duration: 0.25, ease: EXIT_EASE } 
+        y: -5, 
+        transition: { duration: 0.2, ease: EXIT_EASE } 
     }
 };
 
 const imageVariants: Variants = {
     initial: {
         opacity: 0,
-        scale: 0.94,
-        filter: "blur(8px)"
+        scale: 0.95
     },
     animate: {
         opacity: 1,
         scale: 1,
-        filter: "blur(0px)",
         transition: {
-            duration: 0.7,
+            duration: 0.6,
             ease: SMOOTH_EASE
         }
     },
     exit: {
         opacity: 0,
-        scale: 1.04,
-        filter: "blur(8px)",
+        scale: 1.03,
         transition: {
-            duration: 0.45,
+            duration: 0.4,
             ease: EXIT_EASE
         }
     }
