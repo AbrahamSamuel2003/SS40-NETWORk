@@ -96,14 +96,18 @@ export default async function ContactPage() {
             <Hero />
             <ContactMethods config={config} />
 
-            {/* Below the fold */}
-            <OfficeLocation config={config} />
-            <Suspense fallback={<div className="w-full py-16 text-center text-gray-400" />}>
-                <ContactForm />
-            </Suspense>
+            {/* Below the fold (GPU-accelerated with content-visibility containment for 0-latency paint) */}
+            <div className="cv-auto">
+                <OfficeLocation config={config} />
+            </div>
+            <div className="cv-auto">
+                <Suspense fallback={<div className="w-full py-16 text-center text-gray-400" />}>
+                    <ContactForm />
+                </Suspense>
+            </div>
 
             {/* Standalone FAQ section for mobile screens only */}
-            <div className="block lg:hidden">
+            <div className="block lg:hidden cv-auto">
                 <Faq />
             </div>
         </div>

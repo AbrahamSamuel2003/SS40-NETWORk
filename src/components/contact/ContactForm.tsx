@@ -4,10 +4,11 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import { useSearchParams, usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, CheckCircle2, AlertCircle, ChevronDown, Plus, Minus, HelpCircle, MessageSquare } from "lucide-react";
+import { ArrowRight, CheckCircle2, AlertCircle, ChevronDown, Check, Plus, Minus, HelpCircle, MessageSquare } from "lucide-react";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
+import { cn } from "@/utils/cn";
 
 const INTEREST_OPTIONS = [
     "Enterprise Software & Web Apps",
@@ -57,6 +58,27 @@ export function ContactForm() {
     const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
     const [errorMessage, setErrorMessage] = useState("");
     const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+    const [isSelectOpen, setIsSelectOpen] = useState(false);
+    const selectContainerRef = React.useRef<HTMLDivElement>(null);
+
+    // Click outside handler for custom select dropdown
+    useEffect(() => {
+        if (!isSelectOpen) return;
+
+        const handleClickOutside = (e: MouseEvent | TouchEvent) => {
+            if (selectContainerRef.current && !selectContainerRef.current.contains(e.target as Node)) {
+                setIsSelectOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        document.addEventListener("touchstart", handleClickOutside, { passive: true });
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("touchstart", handleClickOutside);
+        };
+    }, [isSelectOpen]);
 
     // Detect attribution sources on mount
     const [sourceContext, setSourceContext] = useState({
@@ -305,27 +327,85 @@ export function ContactForm() {
 
                                     {/* Service Interest Dropdown with Company Theme */}
                                     <div className="flex flex-col gap-1">
-                                        <label htmlFor="serviceInterest" className="text-[11px] font-bold uppercase tracking-wider text-[#0F172A]">
+                                        <label htmlFor="serviceInterest" className="text-[11px] font-bold uppercase tracking-wider text-[#0F172A] select-none">
                                             Area of Interest <span className="text-[#0F766E]">*</span>
                                         </label>
 
-                                        <div className="relative group">
-                                            <select
+                                        <div className="relative" ref={selectContainerRef}>
+                                            {/* Hidden input to preserve standard form submission & validation */}
+                                            <input
+                                                type="text"
                                                 required
-                                                disabled={status === "submitting"}
-                                                id="serviceInterest"
+                                                tabIndex={-1}
                                                 value={formData.serviceInterest}
-                                                onChange={handleChange}
-                                                className="w-full bg-[#FAFCFB] border border-[#0F766E]/30 rounded-xl px-3.5 py-2.5 pr-11 focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] transition-all text-[#0F172A] font-medium appearance-none disabled:opacity-50 text-xs sm:text-sm cursor-pointer hover:border-[#0F766E]/60 shadow-2xs"
+                                                onChange={() => {}}
+                                                className="sr-only"
+                                                aria-hidden="true"
+                                            />
+
+                                            {/* Custom Themed Dropdown Trigger */}
+                                            <button
+                                                type="button"
+                                                disabled={status === "submitting"}
+                                                onClick={() => setIsSelectOpen(prev => !prev)}
+                                                className={cn(
+                                                    "w-full bg-[#FAFCFB] border rounded-xl px-3.5 py-2.5 flex items-center justify-between text-left transition-all text-xs sm:text-sm cursor-pointer shadow-2xs outline-none touch-manipulation",
+                                                    isSelectOpen
+                                                        ? "border-[#0F766E] ring-2 ring-[#0F766E]/20"
+                                                        : "border-[#0F766E]/30 hover:border-[#0F766E]/60",
+                                                    formData.serviceInterest ? "text-[#0F172A] font-semibold" : "text-gray-400 font-normal"
+                                                )}
                                             >
-                                                <option value="" disabled className="text-gray-400">Select an area of interest / service</option>
-                                                {INTEREST_OPTIONS.map((opt) => (
-                                                    <option key={opt} value={opt} className="text-[#0F172A] bg-white py-1.5 font-medium">{opt}</option>
-                                                ))}
-                                            </select>
-                                            <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none w-6 h-6 rounded-lg bg-[#EDF5F2] flex items-center justify-center text-[#0F766E] border border-[#0F766E]/25 group-hover:bg-[#0F766E] group-hover:text-white transition-colors">
-                                                <ChevronDown className="w-3.5 h-3.5" />
-                                            </div>
+                                                <span className="truncate">
+                                                    {formData.serviceInterest || "Select an area of interest / service"}
+                                                </span>
+                                                <div className={cn(
+                                                    "w-6 h-6 rounded-lg flex items-center justify-center transition-all shrink-0 ml-2 border",
+                                                    isSelectOpen
+                                                        ? "bg-[#0F766E] text-white border-[#0F766E] rotate-180"
+                                                        : "bg-[#EDF5F2] text-[#0F766E] border-[#0F766E]/25 hover:bg-[#0F766E] hover:text-white"
+                                                )}>
+                                                    <ChevronDown className="w-3.5 h-3.5 transition-transform" />
+                                                </div>
+                                            </button>
+
+                                            {/* Custom Dropdown Options Popover with 100% SS40 Brand Theme */}
+                                            <AnimatePresence>
+                                                {isSelectOpen && (
+                                                    <motion.div
+                                                        initial={{ opacity: 0, y: -4, scale: 0.98 }}
+                                                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                        exit={{ opacity: 0, y: -4, scale: 0.98 }}
+                                                        transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
+                                                        className="absolute top-full left-0 right-0 mt-1.5 z-50 bg-white border border-[#0F766E]/25 rounded-2xl shadow-xl shadow-[#0F766E]/15 p-1.5 flex flex-col gap-1 max-h-60 overflow-y-auto"
+                                                    >
+                                                        {INTEREST_OPTIONS.map((opt) => {
+                                                            const isSelected = formData.serviceInterest === opt;
+                                                            return (
+                                                                <button
+                                                                    key={opt}
+                                                                    type="button"
+                                                                    onClick={() => {
+                                                                        setFormData(prev => ({ ...prev, serviceInterest: opt }));
+                                                                        setIsSelectOpen(false);
+                                                                    }}
+                                                                    className={cn(
+                                                                        "w-full text-left px-3 py-2.5 rounded-xl text-xs sm:text-sm transition-all flex items-center justify-between cursor-pointer touch-manipulation",
+                                                                        isSelected
+                                                                            ? "bg-[#EDF5F2] text-[#0F766E] font-bold"
+                                                                            : "text-[#0F172A] hover:bg-[#F0F8F6] hover:text-[#0F766E] font-medium"
+                                                                    )}
+                                                                >
+                                                                    <span>{opt}</span>
+                                                                    {isSelected && (
+                                                                        <Check className="w-4 h-4 text-[#0F766E] shrink-0" />
+                                                                    )}
+                                                                </button>
+                                                            );
+                                                        })}
+                                                    </motion.div>
+                                                )}
+                                            </AnimatePresence>
                                         </div>
                                     </div>
 
