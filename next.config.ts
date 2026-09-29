@@ -48,7 +48,7 @@ const nextConfig: NextConfig = {
     removeConsole: process.env.NODE_ENV === "production" ? { exclude: ["error"] } : false,
   },
   experimental: {
-    optimizePackageImports: ['lucide-react', 'clsx', 'tailwind-merge'],
+    optimizePackageImports: ['lucide-react', 'clsx', 'tailwind-merge', 'framer-motion'],
   },
   async rewrites() {
     return [

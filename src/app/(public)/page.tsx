@@ -122,6 +122,11 @@ export default async function Home() {
 
   return (
     <div className="w-full flex-col flex">
+      {/* Declarative Speculative Preload & Prefetch for Hero Wing Images */}
+      <link rel="preload" href="/images/hero/wing-digital-solutions.jpg" as="image" fetchPriority="high" />
+      <link rel="prefetch" href="/images/hero/wing-products.jpg" as="image" />
+      <link rel="prefetch" href="/images/hero/wing-academics.jpg" as="image" />
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(sitelinksSchema) }}
@@ -130,11 +135,23 @@ export default async function Home() {
       <Hero />
       <About />
 
-      {/* Below the fold (GPU-accelerated with content-visibility containment) */}
-      <BusinessWings />
-      {isSectionVisible(config, 'home_happimonials') && <SuccessStories data={happimonials} />}
-      {isSectionVisible(config, 'home_activities') && <ActivityUpdates data={activities} />}
-      <InteractiveImpactShowcase />
+      {/* Below the fold (GPU-accelerated with content-visibility containment to prevent main-thread layout thrashing) */}
+      <div className="cv-auto">
+        <BusinessWings />
+      </div>
+      {isSectionVisible(config, 'home_happimonials') && (
+        <div className="cv-auto">
+          <SuccessStories data={happimonials} />
+        </div>
+      )}
+      {isSectionVisible(config, 'home_activities') && (
+        <div className="cv-auto">
+          <ActivityUpdates data={activities} />
+        </div>
+      )}
+      <div className="cv-auto">
+        <InteractiveImpactShowcase />
+      </div>
       {isSectionVisible(config, 'home_logos') && (
         <div className="cv-auto">
           <TrustedBy data={logos} />
