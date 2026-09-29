@@ -8,9 +8,10 @@ import Link from "next/link";
 import { MessageSquare, X } from "lucide-react";
 import type { SiteConfigData } from "@/lib/site-config";
 
-// Lazy-load RuleBasedChatbot only when opened to save 120KB+ initial JS bundle
+// Pre-load RuleBasedChatbot in background for 0-latency instant opening
+const loadChatbot = () => import("@/components/chat/RuleBasedChatbot");
 const RuleBasedChatbot = dynamic(
-    () => import("@/components/chat/RuleBasedChatbot").then((mod) => mod.RuleBasedChatbot),
+    () => loadChatbot().then((mod) => mod.RuleBasedChatbot),
     { ssr: false }
 );
 
@@ -60,6 +61,17 @@ export function FloatingSupportHub({ config }: { config?: SiteConfigData | null 
 
     useEffect(() => {
         setMounted(true);
+        // Pre-warm the chatbot chunk during idle time for 0-latency opening
+        if (typeof window !== "undefined") {
+            if ("requestIdleCallback" in window) {
+                (window as unknown as { requestIdleCallback: (cb: () => void, opts?: { timeout: number }) => void }).requestIdleCallback(
+                    () => { loadChatbot(); },
+                    { timeout: 2500 }
+                );
+            } else {
+                setTimeout(() => { loadChatbot(); }, 1200);
+            }
+        }
     }, []);
 
     // ── CLICK OUTSIDE DETECTION TO CLOSE MENU ──
@@ -73,7 +85,7 @@ export function FloatingSupportHub({ config }: { config?: SiteConfigData | null 
         };
 
         document.addEventListener("mousedown", handleClickOutside);
-        document.addEventListener("touchstart", handleClickOutside);
+        document.addEventListener("touchstart", handleClickOutside, { passive: true });
 
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
@@ -98,16 +110,16 @@ export function FloatingSupportHub({ config }: { config?: SiteConfigData | null 
 
     return (
         <>
-            {/* Mobile menu backdrop dismiss overlay */}
+            {/* Mobile menu backdrop dismiss overlay with pure GPU alpha (zero backdrop-blur stall) */}
             <AnimatePresence>
                 {isMenuOpen && !isChatOpen && (
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        transition={{ duration: 0.15 }}
+                        transition={{ duration: 0.12 }}
                         onClick={() => setIsMenuOpen(false)}
-                        className="fixed inset-0 bg-black/25 backdrop-blur-[1px] z-30 sm:hidden cursor-pointer"
+                        className="fixed inset-0 bg-black/30 z-30 sm:hidden cursor-pointer"
                         aria-hidden="true"
                     />
                 )}
@@ -116,44 +128,48 @@ export function FloatingSupportHub({ config }: { config?: SiteConfigData | null 
             {/* Floating Action Menu Stack */}
             <div
                 ref={hubRef}
-                className="fixed bottom-4 right-4 md:bottom-6 md:right-8 lg:bottom-8 lg:right-10 z-40 flex flex-col-reverse items-end gap-2.5 sm:gap-3 group"
-                onMouseEnter={() => {
+                className="fixed bottom-4 right-4 md:bottom-6 md:right-8 lg:bottom-8 lg:right-10 z-40 flex flex-col-reverse items-end gap-2.5 sm:gap-3 group select-none"
+                onPointerEnter={() => {
+                    loadChatbot(); // Warm immediately on hover
                     if (typeof window !== "undefined" && window.matchMedia("(hover: hover)").matches) {
                         setIsMenuOpen(true);
                     }
                 }}
-                onMouseLeave={() => {
+                onPointerLeave={() => {
                     if (typeof window !== "undefined" && window.matchMedia("(hover: hover)").matches) {
                         setIsMenuOpen(false);
                     }
                 }}
+                onTouchStart={() => loadChatbot()} // Warm instantly on touch contact
             >
                 {/* ── Main Trigger Button (Message Icon) ── */}
                 <motion.button
                     onClick={handleMainButtonClick}
-                    whileHover={{ scale: 1.06 }}
-                    whileTap={{ scale: 0.94 }}
-                    className="relative flex items-center justify-center w-[52px] h-[52px] sm:w-[58px] sm:h-[58px] rounded-full shadow-[0_8px_30px_rgba(15,118,110,0.35)] hover:shadow-[0_12px_45px_rgba(15,118,110,0.5)] transition-all duration-300 outline-none z-20 cursor-pointer touch-manipulation bg-[#0F766E] text-white"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.92 }}
+                    className="relative flex items-center justify-center w-[52px] h-[52px] sm:w-[58px] sm:h-[58px] rounded-full shadow-[0_8px_30px_rgba(15,118,110,0.35)] hover:shadow-[0_12px_45px_rgba(15,118,110,0.5)] transition-shadow duration-200 outline-none z-20 cursor-pointer touch-manipulation bg-[#0F766E] text-white active:bg-[#115E59]"
                     aria-label="Open support and assistant menu"
                 >
-                    <AnimatePresence mode="wait">
+                    <AnimatePresence mode="wait" initial={false}>
                         {isChatOpen ? (
                             <motion.div
                                 key="close-icon"
                                 initial={{ rotate: -90, opacity: 0 }}
                                 animate={{ rotate: 0, opacity: 1 }}
                                 exit={{ rotate: 90, opacity: 0 }}
-                                transition={{ duration: 0.18 }}
+                                transition={{ duration: 0.15 }}
+                                className="flex items-center justify-center"
                             >
                                 <X className="w-5 h-5 sm:w-6 sm:h-6" />
                             </motion.div>
                         ) : (
                             <motion.div
                                 key="msg-icon"
-                                initial={{ scale: 0.8, opacity: 0 }}
+                                initial={{ scale: 0.85, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
-                                exit={{ scale: 0.8, opacity: 0 }}
-                                transition={{ duration: 0.18 }}
+                                exit={{ scale: 0.85, opacity: 0 }}
+                                transition={{ duration: 0.15 }}
+                                className="flex items-center justify-center"
                             >
                                 <MessageSquare className="w-5 h-5 sm:w-6 sm:h-6 drop-shadow-xs" />
                             </motion.div>
@@ -165,23 +181,19 @@ export function FloatingSupportHub({ config }: { config?: SiteConfigData | null 
                 <AnimatePresence>
                     {isMenuOpen && !isChatOpen && (
                         <motion.div
-                            initial={{ opacity: 0, y: 12 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: 12 }}
-                            transition={{ duration: 0.2, staggerChildren: 0.05 }}
-                            className="flex flex-col items-end gap-2.5 pointer-events-auto"
+                            initial={{ opacity: 0, y: 10, scale: 0.96 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: 10, scale: 0.96 }}
+                            transition={{ duration: 0.16, ease: [0.16, 1, 0.3, 1] }}
+                            className="flex flex-col items-end gap-2.5 pointer-events-auto will-change-[transform,opacity]"
                         >
-                            {/* 1. SS40 SKY Action Pill (Matching WhatsApp Solid Filled Round Badge) */}
-                            <motion.button
-                                initial={{ opacity: 0, x: 16, scale: 0.85 }}
-                                animate={{ opacity: 1, x: 0, scale: 1 }}
-                                exit={{ opacity: 0, x: 16, scale: 0.85 }}
-                                transition={{ duration: 0.18 }}
+                            {/* 1. SS40 SKY Action Pill */}
+                            <button
                                 onClick={() => {
                                     setIsChatOpen(true);
                                     setIsMenuOpen(false);
                                 }}
-                                className="flex items-center gap-2.5 pl-3.5 pr-2 py-1.5 sm:py-2 rounded-full bg-white text-[#0F766E] shadow-xl border border-gray-200/90 hover:border-[#0F766E]/40 hover:bg-[#0F766E]/10 active:scale-95 transition-all duration-200 cursor-pointer touch-manipulation group/chat"
+                                className="flex items-center gap-2.5 pl-3.5 pr-2 py-1.5 sm:py-2 rounded-full bg-white text-[#0F766E] shadow-xl border border-gray-200/90 hover:border-[#0F766E]/40 hover:bg-[#0F766E]/10 active:scale-95 transition-all duration-150 cursor-pointer touch-manipulation group/chat"
                                 aria-label="Open SS40 SKY Digital Assistant"
                             >
                                 <span className="text-xs font-bold text-[#0F172A] tracking-tight">
@@ -190,21 +202,16 @@ export function FloatingSupportHub({ config }: { config?: SiteConfigData | null 
                                 <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#0F766E] text-white flex items-center justify-center shadow-md group-hover/chat:scale-105 transition-transform">
                                     <SkyIcon className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
                                 </div>
-                            </motion.button>
+                            </button>
 
                             {/* 2. WhatsApp Action Pill */}
-                            <motion.div
-                                initial={{ opacity: 0, x: 16, scale: 0.85 }}
-                                animate={{ opacity: 1, x: 0, scale: 1 }}
-                                exit={{ opacity: 0, x: 16, scale: 0.85 }}
-                                transition={{ duration: 0.18, delay: 0.04 }}
-                            >
+                            <div className="w-fit">
                                 <Link
                                     href={whatsappUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     onClick={() => setIsMenuOpen(false)}
-                                    className="flex items-center gap-2.5 pl-3.5 pr-2 py-1.5 sm:py-2 rounded-full bg-white text-[#25D366] shadow-xl border border-gray-200/90 hover:border-[#25D366]/40 hover:bg-[#25D366]/10 active:scale-95 transition-all duration-200 cursor-pointer touch-manipulation group/wa"
+                                    className="flex items-center gap-2.5 pl-3.5 pr-2 py-1.5 sm:py-2 rounded-full bg-white text-[#25D366] shadow-xl border border-gray-200/90 hover:border-[#25D366]/40 hover:bg-[#25D366]/10 active:scale-95 transition-all duration-150 cursor-pointer touch-manipulation group/wa"
                                     aria-label="Chat with us on WhatsApp"
                                 >
                                     <span className="text-xs font-bold text-[#0F172A] tracking-tight">
@@ -214,7 +221,7 @@ export function FloatingSupportHub({ config }: { config?: SiteConfigData | null 
                                         <WhatsAppIcon className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
                                     </div>
                                 </Link>
-                            </motion.div>
+                            </div>
                         </motion.div>
                     )}
                 </AnimatePresence>
@@ -231,4 +238,3 @@ export function FloatingSupportHub({ config }: { config?: SiteConfigData | null 
         </>
     );
 }
-

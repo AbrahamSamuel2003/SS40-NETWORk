@@ -495,19 +495,19 @@ We specialize in custom software engineering (Digital Solutions), scalable SaaS 
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        transition={{ duration: 0.18 }}
+                        transition={{ duration: 0.15 }}
                         onClick={onClose}
-                        className="fixed inset-0 bg-black/50 backdrop-blur-xs z-50 sm:hidden cursor-pointer"
+                        className="fixed inset-0 bg-black/45 z-50 sm:hidden cursor-pointer"
                         aria-hidden="true"
                     />
 
                     {/* Chat Modal Window */}
                     <motion.div
                         ref={chatContainerRef}
-                        initial={{ opacity: 0, y: 20, scale: 0.96 }}
+                        initial={{ opacity: 0, y: 16, scale: 0.97 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 20, scale: 0.96 }}
-                        transition={{ duration: 0.2, ease: "easeOut" }}
+                        exit={{ opacity: 0, y: 16, scale: 0.97 }}
+                        transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
                         style={
                             viewportStyle.top !== undefined
                                 ? {
