@@ -71,27 +71,27 @@ export function About() {
 
                         {/* Provenance & Operations 6-Card Compact Grid */}
                         <div className="grid grid-cols-3 gap-2 sm:gap-2.5 pt-4 mt-4 border-t border-gray-100 relative z-10">
-                            <div className="bg-[#F8FAF9] p-2.5 rounded-xl border border-gray-100 text-center sm:text-left">
+                            <div className="bg-[#F8FAF9] p-2 sm:p-2.5 rounded-xl border border-gray-100 flex flex-col items-center justify-center text-center">
                                 <p className="text-[10px] sm:text-[11px] font-medium text-gray-500">Established</p>
                                 <p className="text-xs sm:text-sm font-bold text-[var(--color-heading)]">2023</p>
                             </div>
-                            <div className="bg-[#F8FAF9] p-2.5 rounded-xl border border-gray-100 text-center sm:text-left">
+                            <div className="bg-[#F8FAF9] p-2 sm:p-2.5 rounded-xl border border-gray-100 flex flex-col items-center justify-center text-center">
                                 <p className="text-[10px] sm:text-[11px] font-medium text-gray-500">Compliance</p>
                                 <p className="text-xs sm:text-sm font-bold text-[#0F766E]">100% MCA</p>
                             </div>
-                            <div className="bg-[#F8FAF9] p-2.5 rounded-xl border border-gray-100 text-center sm:text-left">
+                            <div className="bg-[#F8FAF9] p-2 sm:p-2.5 rounded-xl border border-gray-100 flex flex-col items-center justify-center text-center">
                                 <p className="text-[10px] sm:text-[11px] font-medium text-gray-500">Work with</p>
-                                <p className="text-xs sm:text-sm font-bold text-[var(--color-heading)]">International</p>
+                                <p className="text-[11px] sm:text-sm font-bold text-[var(--color-heading)] tracking-tight leading-tight text-center">International</p>
                             </div>
-                            <div className="bg-[#F8FAF9] p-2.5 rounded-xl border border-gray-100 text-center sm:text-left">
+                            <div className="bg-[#F8FAF9] p-2 sm:p-2.5 rounded-xl border border-gray-100 flex flex-col items-center justify-center text-center">
                                 <p className="text-[10px] sm:text-[11px] font-medium text-gray-500">Delivery</p>
                                 <p className="text-xs sm:text-sm font-bold text-[var(--color-heading)]">Fixed-Scope</p>
                             </div>
-                            <div className="bg-[#F8FAF9] p-2.5 rounded-xl border border-gray-100 text-center sm:text-left">
+                            <div className="bg-[#F8FAF9] p-2 sm:p-2.5 rounded-xl border border-gray-100 flex flex-col items-center justify-center text-center">
                                 <p className="text-[10px] sm:text-[11px] font-medium text-gray-500">Support</p>
                                 <p className="text-xs sm:text-sm font-bold text-[#0F766E]">30-Day Warranty</p>
                             </div>
-                            <div className="bg-[#F8FAF9] p-2.5 rounded-xl border border-gray-100 text-center sm:text-left">
+                            <div className="bg-[#F8FAF9] p-2 sm:p-2.5 rounded-xl border border-gray-100 flex flex-col items-center justify-center text-center">
                                 <p className="text-[10px] sm:text-[11px] font-medium text-gray-500">Security</p>
                                 <p className="text-xs sm:text-sm font-bold text-[var(--color-heading)]">100% Secure</p>
                             </div>

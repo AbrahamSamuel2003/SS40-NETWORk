@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -14,108 +14,6 @@ import {
     Sparkles
 } from 'lucide-react';
 import type { SiteConfigData } from '@/lib/site-config';
-
-// -----------------------------------------------------------------------------
-// MOBILE ANIMATED VECTOR SCENE (Skyline + Cruising Car + Swaying Leaves)
-// -----------------------------------------------------------------------------
-
-function MobileAnimatedScene() {
-    return (
-        <div className="relative w-full h-[210px] bg-gradient-to-b from-[#D4ECE2] via-[#E4F4ED] to-[#D8E8E2] overflow-hidden select-none">
-            {/* Drifting Clouds */}
-            <motion.div
-                animate={{ x: [-40, 360] }}
-                transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
-                className="absolute top-5 left-0 opacity-60 pointer-events-none"
-            >
-                <div className="w-16 h-5 bg-white rounded-full blur-[1px]" />
-            </motion.div>
-
-            {/* City Skyline Silhouette in Brand Palette */}
-            <div className="absolute bottom-5 inset-x-0 h-28 flex items-end justify-center pointer-events-none opacity-85">
-                <svg viewBox="0 0 400 140" className="w-full h-full" preserveAspectRatio="none">
-                    <rect x="30" y="50" width="35" height="90" fill="#B2D8CB" rx="2" />
-                    <rect x="75" y="30" width="40" height="110" fill="#9CCBB9" rx="2" />
-                    <rect x="125" y="60" width="30" height="80" fill="#B2D8CB" rx="2" />
-                    <rect x="280" y="45" width="45" height="95" fill="#B2D8CB" rx="2" />
-                    
-                    <rect x="180" y="15" width="50" height="125" fill="#6B9F91" rx="3" />
-                    <rect x="188" y="5" width="4" height="15" fill="#588478" />
-                    <rect x="218" y="5" width="4" height="15" fill="#588478" />
-                    <rect x="235" y="35" width="38" height="105" fill="#7EAEA0" rx="3" />
-                    <rect x="278" y="55" width="32" height="85" fill="#8EBEB1" rx="2" />
-                    <rect x="150" y="40" width="28" height="100" fill="#7EAEA0" rx="2" />
-                    
-                    <rect x="190" y="30" width="8" height="12" fill="#E8F6F1" opacity="0.7" />
-                    <rect x="212" y="30" width="8" height="12" fill="#E8F6F1" opacity="0.7" />
-                    <rect x="190" y="50" width="8" height="12" fill="#E8F6F1" opacity="0.7" />
-                    <rect x="212" y="50" width="8" height="12" fill="#E8F6F1" opacity="0.7" />
-                </svg>
-            </div>
-
-            {/* Swaying Tropical Leaves */}
-            <motion.div
-                animate={{ rotate: [-4, 6, -4], y: [-2, 2, -2] }}
-                transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
-                className="absolute -top-3 -right-3 w-28 h-28 pointer-events-none z-10 origin-top-right"
-            >
-                <svg viewBox="0 0 120 120" className="w-full h-full">
-                    <path d="M 120 0 Q 70 30 20 50 Q 60 70 120 0 Z" fill="#6B9F91" />
-                    <path d="M 120 0 Q 80 50 40 85 Q 75 95 120 0 Z" fill="#588478" />
-                    <path d="M 120 0 Q 95 65 65 110 Q 95 105 120 0 Z" fill="#84B5A7" />
-                </svg>
-            </motion.div>
-
-            {/* Road Strip */}
-            <div className="absolute bottom-0 inset-x-0 h-6 bg-[#E2EFE9] border-t border-[#CCE2D8] flex items-center justify-between" />
-
-            {/* Animated Cruising White Car */}
-            <motion.div
-                animate={{ x: [-90, 360] }}
-                transition={{ duration: 9, repeat: Infinity, ease: 'linear' }}
-                className="absolute bottom-1 left-0 z-20 pointer-events-none"
-            >
-                <motion.div
-                    animate={{ y: [-1, 1, -1] }}
-                    transition={{ duration: 0.6, repeat: Infinity, ease: 'easeInOut' }}
-                    className="relative w-28 h-12"
-                >
-                    <svg viewBox="0 0 160 70" className="w-full h-full">
-                        <ellipse cx="80" cy="62" rx="65" ry="5" fill="#000000" opacity="0.15" />
-                        <path
-                            d="M 15 48 C 15 42, 25 35, 45 35 L 60 22 C 70 15, 110 15, 125 25 L 145 38 C 152 40, 155 45, 155 50 L 148 52 C 145 42, 125 42, 122 52 L 48 52 C 45 42, 25 42, 22 52 Z"
-                            fill="#FFFFFF"
-                            stroke="#CBD5E1"
-                            strokeWidth="1.2"
-                        />
-                        <path d="M 62 25 L 90 25 L 90 35 L 48 35 Z" fill="#6B9F91" opacity="0.4" />
-                        <path d="M 94 25 L 122 27 L 138 36 L 94 36 Z" fill="#6B9F91" opacity="0.4" />
-                        <line x1="92" y1="25" x2="92" y2="50" stroke="#CBD5E1" strokeWidth="1" />
-                        <rect x="75" y="38" width="8" height="2" rx="1" fill="#94A3B8" />
-
-                        {/* SS40 Logo Emblem on car */}
-                        <circle cx="92" cy="42" r="4.5" fill="#D8E8E2" stroke="#6B9F91" strokeWidth="0.8" />
-                        <circle cx="92" cy="42" r="2" fill="#6B9F91" />
-
-                        <path d="M 152 45 L 155 48 L 150 49 Z" fill="#38BDF8" />
-                        <path d="M 15 44 L 17 48 L 15 48 Z" fill="#EF4444" />
-
-                        <g transform="translate(35, 50)">
-                            <circle cx="0" cy="0" r="10" fill="#1E293B" />
-                            <circle cx="0" cy="0" r="6" fill="#E2E8F0" />
-                            <circle cx="0" cy="0" r="2.5" fill="#6B9F91" />
-                        </g>
-                        <g transform="translate(133, 50)">
-                            <circle cx="0" cy="0" r="10" fill="#1E293B" />
-                            <circle cx="0" cy="0" r="6" fill="#E2E8F0" />
-                            <circle cx="0" cy="0" r="2.5" fill="#6B9F91" />
-                        </g>
-                    </svg>
-                </motion.div>
-            </motion.div>
-        </div>
-    );
-}
 
 // -----------------------------------------------------------------------------
 // DESKTOP VECTOR SVG ILLUSTRATION (Wave + Foliage + Phone + Sitting Person)
@@ -299,42 +197,66 @@ export default function LoginPage() {
             <div className="absolute bottom-0 right-0 w-[550px] h-[550px] bg-[#6B9F91]/10 rounded-full blur-[140px] pointer-events-none translate-x-1/3 translate-y-1/3" />
 
             {/* ═════════════════════════════════════════════════════════════ */}
-            {/* MOBILE CARD (Matches Skyline + Animated Car Screenshot)       */}
+            {/* MOBILE CARD (Solid Company Color Theme Inspired by Reference) */}
             {/* ═════════════════════════════════════════════════════════════ */}
-            <div className="flex md:hidden w-full max-w-sm bg-white rounded-[32px] shadow-2xl overflow-hidden flex-col max-h-[94vh] border border-gray-100 relative z-10">
-                {/* Top Skyline + Moving Car Scene */}
-                <MobileAnimatedScene />
+            <div className="flex md:hidden w-full max-w-sm bg-white rounded-[36px] shadow-2xl overflow-hidden flex-col max-h-[95vh] border border-gray-100 relative z-10">
+                {/* Top Curved Solid Pine Header Dome */}
+                <div className="bg-[#0F766E] pt-6 pb-8 px-6 flex flex-col items-center justify-center text-center rounded-b-[44px] relative select-none shadow-md">
+                    {/* Top utility row: Back link + SSL Shield */}
+                    <div className="w-full flex items-center justify-between mb-3.5">
+                        <Link
+                            href="/"
+                            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#D8E8E2] hover:text-white transition-colors"
+                        >
+                            <ArrowLeft className="w-3.5 h-3.5" />
+                            <span>Home</span>
+                        </Link>
 
-                {/* Bottom Form Card */}
-                <div className="p-6 bg-white flex flex-col justify-center -mt-4 rounded-t-[28px] relative z-20 shadow-lg">
-                    
-                    {/* Mobile Brand Header (Centered) */}
-                    <div className="flex flex-col items-center justify-center text-center gap-2 mb-3 pb-3 border-b border-gray-100">
+                        <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[#D8E8E2] bg-black/15 px-2.5 py-1 rounded-full border border-white/10">
+                            <ShieldCheck className="w-3 h-3 text-[#2DD4BF]" />
+                            <span>SSL Secure</span>
+                        </span>
+                    </div>
+
+                    {/* Properly Framed Company Logo */}
+                    <div className="bg-white rounded-2xl p-2.5 shadow-md shadow-black/10 inline-flex items-center justify-center mb-2.5 border border-white/40">
                         {(config?.uploadedLogoUrl || config?.logoUrl) ? (
                             <img
                                 src={(config?.uploadedLogoUrl || config?.logoUrl) as string}
                                 alt={`${companyName} Logo`}
-                                className="h-9 w-auto drop-shadow-xs"
+                                className="h-10 w-auto object-contain"
                             />
                         ) : (
                             <img
                                 src="/logos/ss40-logo.jpeg"
                                 alt={`${companyName} Logo`}
-                                className="h-9 w-auto rounded-md drop-shadow-xs"
+                                className="h-10 w-auto rounded-md object-contain"
                             />
                         )}
-                        <div className="flex flex-col items-center text-center">
-                            <span className="text-sm font-extrabold text-[#111827] tracking-tight">{companyName}</span>
-                            <span className="text-[10px] font-bold text-[#6B9F91] uppercase tracking-wider">Enterprise Portal</span>
-                        </div>
                     </div>
 
-                    {/* Welcome Text (Centered) */}
+                    {/* Company Identity */}
+                    <h1 className="text-base font-bold text-white tracking-tight font-serif">
+                        {companyName}
+                    </h1>
+                    <p className="text-[11px] font-medium text-[#D8E8E2] mt-0.5">
+                        Enterprise Administrative Portal
+                    </p>
+
+                    {/* Role Access Tag */}
+                    <div className="mt-2.5 px-3 py-0.5 rounded-full bg-black/20 border border-white/20 text-[#EDF5F2] text-[10px] font-bold tracking-wider uppercase">
+                        Admin Access
+                    </div>
+                </div>
+
+                {/* Bottom Form Body */}
+                <div className="p-6 bg-white flex flex-col justify-center relative z-20">
+                    {/* Centered Login Title */}
                     <div className="mb-4 text-center">
-                        <h2 className="text-xl font-extrabold text-[#111827] tracking-tight">
-                            Welcome Back
+                        <h2 className="text-2xl font-bold text-[#0F172A] tracking-tight font-serif">
+                            Login
                         </h2>
-                        <p className="text-xs text-gray-500 mt-0.5">
+                        <p className="text-xs text-[#475569] mt-0.5 font-normal">
                             Sign in to access your administrative dashboard.
                         </p>
                     </div>
@@ -343,47 +265,51 @@ export default function LoginPage() {
                         <motion.div
                             initial={{ opacity: 0, y: -6 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded-xl text-xs font-semibold text-center mb-3"
+                            className="bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded-xl text-xs font-semibold text-center mb-3.5"
                         >
                             {error}
                         </motion.div>
                     )}
 
                     <form onSubmit={handleLogin} className="space-y-3.5">
-                        <div className="relative">
+                        {/* Username Field */}
+                        <div className="flex items-center justify-between bg-[#EDF5F2] border border-[#0F766E]/20 rounded-2xl px-4 py-3.5 focus-within:bg-white focus-within:border-[#0F766E] focus-within:ring-2 focus-within:ring-[#0F766E]/20 transition-all">
                             <input
                                 type="text"
                                 required
                                 value={identifier}
                                 onChange={(e) => setIdentifier(e.target.value)}
-                                placeholder="Email or Username"
-                                className="w-full bg-[#D8E8E2] hover:bg-[#E4F2EC] focus:bg-white text-sm text-[#111827] placeholder-gray-400 rounded-2xl px-4 py-3.5 border border-transparent focus:border-[#6B9F91] focus:outline-none transition-all font-medium"
+                                placeholder="Username or Email"
+                                className="w-full bg-transparent text-sm text-[#0F172A] placeholder:text-gray-400 focus:outline-none font-medium pr-3"
                             />
+                            <User className="w-4 h-4 text-[#0F766E] shrink-0" />
                         </div>
 
-                        <div className="relative">
+                        {/* Password Field with Show/Hide Toggle */}
+                        <div className="flex items-center justify-between bg-[#EDF5F2] border border-[#0F766E]/20 rounded-2xl px-4 py-3.5 focus-within:bg-white focus-within:border-[#0F766E] focus-within:ring-2 focus-within:ring-[#0F766E]/20 transition-all">
                             <input
                                 type={showPassword ? 'text' : 'password'}
                                 required
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 placeholder="Password"
-                                className="w-full bg-[#D8E8E2] hover:bg-[#E4F2EC] focus:bg-white text-sm text-[#111827] placeholder-gray-400 rounded-2xl px-4 py-3.5 pr-11 border border-transparent focus:border-[#6B9F91] focus:outline-none transition-all font-medium"
+                                className="w-full bg-transparent text-sm text-[#0F172A] placeholder:text-gray-400 focus:outline-none font-medium pr-3"
                             />
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none p-1"
+                                className="text-[#0F766E] hover:text-[#115E59] focus:outline-none p-0.5 cursor-pointer shrink-0"
                                 title={showPassword ? 'Hide password' : 'Show password'}
                             >
                                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                             </button>
                         </div>
 
+                        {/* Submit Button (Solid Deep Pine) */}
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="w-full rounded-full bg-[#6B9F91] hover:bg-[#588478] text-white font-bold text-sm py-3.5 uppercase tracking-wider shadow-lg shadow-[#6B9F91]/25 hover:shadow-xl transition-all disabled:opacity-50 flex items-center justify-center cursor-pointer mt-1"
+                            className="w-full rounded-2xl bg-[#0F766E] hover:bg-[#115E59] active:bg-[#042F2E] text-white font-bold text-sm py-3.5 uppercase tracking-wider shadow-lg shadow-[#0F766E]/25 transition-all disabled:opacity-50 flex items-center justify-center cursor-pointer mt-2 touch-manipulation"
                         >
                             {isLoading ? (
                                 <span className="flex items-center gap-2">
@@ -391,22 +317,19 @@ export default function LoginPage() {
                                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                     </svg>
-                                    SIGNING IN...
+                                    AUTHENTICATING...
                                 </span>
                             ) : (
-                                'Sign In'
+                                'Login'
                             )}
                         </button>
                     </form>
 
-                    <div className="mt-3.5 text-center">
-                        <Link
-                            href="/"
-                            className="inline-flex items-center gap-1 text-xs font-semibold text-gray-400 hover:text-[#6B9F91] transition-colors"
-                        >
-                            <ArrowLeft className="w-3 h-3" />
-                            Back to Website
-                        </Link>
+                    {/* Bottom Security Note */}
+                    <div className="mt-4 text-center">
+                        <p className="text-[11px] text-gray-400 font-medium flex items-center justify-center gap-1.5">
+                            <Lock className="w-3 h-3 text-[#0F766E]" /> Authorized access only • SS40 Network
+                        </p>
                     </div>
                 </div>
             </div>
