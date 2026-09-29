@@ -80,7 +80,7 @@ export function About() {
                                 <p className="text-xs sm:text-sm font-bold text-[#0F766E]">100% MCA</p>
                             </div>
                             <div className="bg-[#F8FAF9] p-2.5 rounded-xl border border-gray-100 text-center sm:text-left">
-                                <p className="text-[10px] sm:text-[11px] font-medium text-gray-500">Reach</p>
+                                <p className="text-[10px] sm:text-[11px] font-medium text-gray-500">Work with</p>
                                 <p className="text-xs sm:text-sm font-bold text-[var(--color-heading)]">International</p>
                             </div>
                             <div className="bg-[#F8FAF9] p-2.5 rounded-xl border border-gray-100 text-center sm:text-left">

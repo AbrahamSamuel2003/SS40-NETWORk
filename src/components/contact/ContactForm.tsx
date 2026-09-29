@@ -248,7 +248,7 @@ export function ContactForm() {
                                                 value={formData.fullName}
                                                 onChange={handleChange}
                                                 className="w-full bg-[#FAFCFB] border border-gray-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] transition-all text-[#0F172A] placeholder:text-gray-400 text-xs sm:text-sm disabled:opacity-50"
-                                                placeholder="e.g. Samuel Raj"
+                                                placeholder="Enter your full name..."
                                             />
                                         </div>
 
@@ -264,7 +264,7 @@ export function ContactForm() {
                                                 value={formData.email}
                                                 onChange={handleChange}
                                                 className="w-full bg-[#FAFCFB] border border-gray-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] transition-all text-[#0F172A] placeholder:text-gray-400 text-xs sm:text-sm disabled:opacity-50"
-                                                placeholder="e.g. samuel@company.com"
+                                                placeholder="Enter your email address..."
                                             />
                                         </div>
                                     </div>
@@ -283,7 +283,7 @@ export function ContactForm() {
                                                 value={formData.phone}
                                                 onChange={handleChange}
                                                 className="w-full bg-[#FAFCFB] border border-gray-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] transition-all text-[#0F172A] placeholder:text-gray-400 text-xs sm:text-sm disabled:opacity-50"
-                                                placeholder="e.g. +91 98765 43210"
+                                                placeholder="Enter your phone number..."
                                             />
                                         </div>
 
@@ -298,32 +298,34 @@ export function ContactForm() {
                                                 value={formData.company}
                                                 onChange={handleChange}
                                                 className="w-full bg-[#FAFCFB] border border-gray-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] transition-all text-[#0F172A] placeholder:text-gray-400 text-xs sm:text-sm disabled:opacity-50"
-                                                placeholder="Organization Name"
+                                                placeholder="Enter your company or institution name..."
                                             />
                                         </div>
                                     </div>
 
-                                    {/* Service Interest Dropdown */}
+                                    {/* Service Interest Dropdown with Company Theme */}
                                     <div className="flex flex-col gap-1">
                                         <label htmlFor="serviceInterest" className="text-[11px] font-bold uppercase tracking-wider text-[#0F172A]">
                                             Area of Interest <span className="text-[#0F766E]">*</span>
                                         </label>
 
-                                        <div className="relative">
+                                        <div className="relative group">
                                             <select
                                                 required
                                                 disabled={status === "submitting"}
                                                 id="serviceInterest"
                                                 value={formData.serviceInterest}
                                                 onChange={handleChange}
-                                                className="w-full bg-[#FAFCFB] border border-gray-200 rounded-xl px-3.5 py-2.5 pr-10 focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] transition-all text-[#0F172A] appearance-none disabled:opacity-50 text-xs sm:text-sm cursor-pointer"
+                                                className="w-full bg-[#FAFCFB] border border-[#0F766E]/30 rounded-xl px-3.5 py-2.5 pr-11 focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] transition-all text-[#0F172A] font-medium appearance-none disabled:opacity-50 text-xs sm:text-sm cursor-pointer hover:border-[#0F766E]/60 shadow-2xs"
                                             >
-                                                <option value="" disabled>Select an area of interest / service</option>
+                                                <option value="" disabled className="text-gray-400">Select an area of interest / service</option>
                                                 {INTEREST_OPTIONS.map((opt) => (
-                                                    <option key={opt} value={opt}>{opt}</option>
+                                                    <option key={opt} value={opt} className="text-[#0F172A] bg-white py-1.5 font-medium">{opt}</option>
                                                 ))}
                                             </select>
-                                            <ChevronDown className="w-4 h-4 text-gray-500 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                                            <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none w-6 h-6 rounded-lg bg-[#EDF5F2] flex items-center justify-center text-[#0F766E] border border-[#0F766E]/25 group-hover:bg-[#0F766E] group-hover:text-white transition-colors">
+                                                <ChevronDown className="w-3.5 h-3.5" />
+                                            </div>
                                         </div>
                                     </div>
 
@@ -340,7 +342,7 @@ export function ContactForm() {
                                             onChange={handleChange}
                                             rows={3}
                                             className="w-full bg-[#FAFCFB] border border-gray-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] transition-all text-[#0F172A] placeholder:text-gray-400 resize-none disabled:opacity-50 text-xs sm:text-sm"
-                                            placeholder="Tell us about what you want to build or discuss..."
+                                            placeholder="Enter your message, project brief, or query..."
                                         />
                                     </div>
 
