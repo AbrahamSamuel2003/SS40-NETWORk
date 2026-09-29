@@ -10,7 +10,9 @@ import type { SiteConfigData } from "@/lib/site-config";
 
 export function OfficeLocation({ config }: { config?: SiteConfigData | null }) {
     const companyName = config?.companyName || "SS40 NETWORK PRIVATE LIMITED";
-    const addressText = config?.addressText || "1st Floor, Municipal Corporation Incubation Centre\n(Near by trade centre), Sree Puram, Tirunelveli, Tamil Nadu 627001";
+    const rawAddress = config?.addressText || "1st Floor, Municipal Corporation Incubation Centre\n(Near by trade centre), Sree Puram, Tirunelveli, Tamil Nadu 627001";
+    // Ensure address always starts with "1st Floor..." by stripping any leading duplicate company names
+    const addressText = rawAddress.replace(/^(SS40\s+NETWORK(\s+PRIVATE\s+LIMITED)?\s*[,-]?\s*)/i, "").trim();
     const businessHours = config?.businessHours || "Monday – Friday: 9:30 AM – 6:30 PM";
     const phoneValue = config?.contactPhone || "+91 83005 91750";
 

@@ -4,7 +4,17 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import { useSearchParams, usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, CheckCircle2, AlertCircle, ChevronDown, Check, Plus, Minus, HelpCircle, MessageSquare } from "lucide-react";
+import {
+    ArrowRight,
+    CheckCircle2,
+    AlertCircle,
+    ChevronDown,
+    Check,
+    Plus,
+    Minus,
+    HelpCircle,
+    MessageSquare
+} from "lucide-react";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
@@ -203,7 +213,7 @@ export function ContactForm() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.5 }}
-                        className="w-full lg:col-span-7 bg-white border border-gray-100 rounded-3xl p-6 sm:p-8 shadow-xl shadow-gray-200/50 relative overflow-hidden"
+                        className="w-full lg:col-span-7 bg-white border border-gray-100 rounded-3xl p-6 sm:p-8 shadow-xl shadow-gray-200/50 relative overflow-visible z-20"
                     >
                         <AnimatePresence mode="wait">
                             {status === "success" ? (
@@ -349,35 +359,35 @@ export function ContactForm() {
                                                 disabled={status === "submitting"}
                                                 onClick={() => setIsSelectOpen(prev => !prev)}
                                                 className={cn(
-                                                    "w-full bg-[#FAFCFB] border rounded-xl px-3.5 py-2.5 flex items-center justify-between text-left transition-all text-xs sm:text-sm cursor-pointer shadow-2xs outline-none touch-manipulation",
+                                                    "w-full bg-[#FAFCFB] border rounded-xl px-3.5 py-2.5 flex items-center justify-between text-left transition-all text-xs sm:text-sm cursor-pointer shadow-2xs outline-none touch-manipulation font-sans",
                                                     isSelectOpen
-                                                        ? "border-[#0F766E] ring-2 ring-[#0F766E]/20"
-                                                        : "border-[#0F766E]/30 hover:border-[#0F766E]/60",
-                                                    formData.serviceInterest ? "text-[#0F172A] font-semibold" : "text-gray-400 font-normal"
+                                                        ? "border-[#0F766E] ring-2 ring-[#0F766E]/20 bg-white"
+                                                        : "border-gray-200 hover:border-[#0F766E]/50",
+                                                    formData.serviceInterest ? "text-[#0F172A] font-medium" : "text-gray-400 font-normal"
                                                 )}
                                             >
-                                                <span className="truncate">
+                                                <span className="truncate pr-2">
                                                     {formData.serviceInterest || "Select an area of interest / service"}
                                                 </span>
-                                                <div className={cn(
-                                                    "w-6 h-6 rounded-lg flex items-center justify-center transition-all shrink-0 ml-2 border",
-                                                    isSelectOpen
-                                                        ? "bg-[#0F766E] text-white border-[#0F766E] rotate-180"
-                                                        : "bg-[#EDF5F2] text-[#0F766E] border-[#0F766E]/25 hover:bg-[#0F766E] hover:text-white"
-                                                )}>
-                                                    <ChevronDown className="w-3.5 h-3.5 transition-transform" />
-                                                </div>
+                                                <ChevronDown className={cn(
+                                                    "w-4 h-4 text-gray-400 transition-transform duration-200 shrink-0",
+                                                    isSelectOpen && "rotate-180 text-[#0F766E]"
+                                                )} />
                                             </button>
 
-                                            {/* Custom Dropdown Options Popover with 100% SS40 Brand Theme */}
+                                            {/* Custom Dropdown Options Popover (Clean Production Look - No Side Icons) */}
                                             <AnimatePresence>
                                                 {isSelectOpen && (
                                                     <motion.div
-                                                        initial={{ opacity: 0, y: -4, scale: 0.98 }}
+                                                        initial={{ opacity: 0, y: -4, scale: 0.99 }}
                                                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                                                        exit={{ opacity: 0, y: -4, scale: 0.98 }}
-                                                        transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
-                                                        className="absolute top-full left-0 right-0 mt-1.5 z-50 bg-white border border-[#0F766E]/25 rounded-2xl shadow-xl shadow-[#0F766E]/15 p-1.5 flex flex-col gap-1 max-h-60 overflow-y-auto"
+                                                        exit={{ opacity: 0, y: -4, scale: 0.99 }}
+                                                        transition={{ duration: 0.15, ease: "easeOut" }}
+                                                        className="absolute top-full left-0 right-0 mt-1.5 z-50 bg-white border border-gray-200/90 rounded-xl shadow-xl shadow-black/10 p-1.5 flex flex-col gap-0.5 max-h-56 overflow-y-auto overscroll-contain custom-scrollbar"
+                                                        style={{
+                                                            scrollbarWidth: 'thin',
+                                                            scrollbarColor: 'rgba(15, 118, 110, 0.3) transparent'
+                                                        }}
                                                     >
                                                         {INTEREST_OPTIONS.map((opt) => {
                                                             const isSelected = formData.serviceInterest === opt;
@@ -390,15 +400,15 @@ export function ContactForm() {
                                                                         setIsSelectOpen(false);
                                                                     }}
                                                                     className={cn(
-                                                                        "w-full text-left px-3 py-2.5 rounded-xl text-xs sm:text-sm transition-all flex items-center justify-between cursor-pointer touch-manipulation",
+                                                                        "w-full text-left px-3 py-2.5 rounded-lg text-xs sm:text-sm font-sans transition-colors flex items-center justify-between cursor-pointer touch-manipulation",
                                                                         isSelected
-                                                                            ? "bg-[#EDF5F2] text-[#0F766E] font-bold"
-                                                                            : "text-[#0F172A] hover:bg-[#F0F8F6] hover:text-[#0F766E] font-medium"
+                                                                            ? "bg-[#EDF5F2] text-[#0F766E] font-semibold"
+                                                                            : "text-[#0F172A] hover:bg-[#F8FAF9] hover:text-[#0F766E] font-normal"
                                                                     )}
                                                                 >
-                                                                    <span>{opt}</span>
+                                                                    <span className="truncate pr-2">{opt}</span>
                                                                     {isSelected && (
-                                                                        <Check className="w-4 h-4 text-[#0F766E] shrink-0" />
+                                                                        <Check className="w-4 h-4 text-[#0F766E] shrink-0 stroke-[2.5]" />
                                                                     )}
                                                                 </button>
                                                             );

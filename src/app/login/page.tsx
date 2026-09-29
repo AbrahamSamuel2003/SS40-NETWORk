@@ -191,19 +191,22 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="h-screen max-h-screen w-screen overflow-hidden flex items-center justify-center bg-[#F2F7F5] p-3 sm:p-6 lg:p-8 select-none relative">
-            {/* Soft Ambient Glow Orbs (Subtle Opacity Background) */}
-            <div className="absolute top-0 left-0 w-[550px] h-[550px] bg-[#6B9F91]/12 rounded-full blur-[140px] pointer-events-none -translate-x-1/3 -translate-y-1/3" />
-            <div className="absolute bottom-0 right-0 w-[550px] h-[550px] bg-[#6B9F91]/10 rounded-full blur-[140px] pointer-events-none translate-x-1/3 translate-y-1/3" />
+        <div className="min-h-screen w-full bg-white md:bg-[#F2F7F5] flex items-stretch md:items-center justify-center p-0 md:p-6 lg:p-8 select-none relative overflow-x-hidden overflow-y-auto md:overflow-hidden">
+            {/* Soft Ambient Glow Orbs (Subtle Opacity Background on Desktop) */}
+            <div className="hidden md:block absolute top-0 left-0 w-[550px] h-[550px] bg-[#6B9F91]/12 rounded-full blur-[140px] pointer-events-none -translate-x-1/3 -translate-y-1/3" />
+            <div className="hidden md:block absolute bottom-0 right-0 w-[550px] h-[550px] bg-[#6B9F91]/10 rounded-full blur-[140px] pointer-events-none translate-x-1/3 translate-y-1/3" />
 
             {/* ═════════════════════════════════════════════════════════════ */}
-            {/* MOBILE CARD (Solid Company Color Theme Inspired by Reference) */}
+            {/* MOBILE FULL-PAGE VIEW (Solid Brand Theme - Full Viewport)     */}
             {/* ═════════════════════════════════════════════════════════════ */}
-            <div className="flex md:hidden w-full max-w-sm bg-white rounded-[36px] shadow-2xl overflow-hidden flex-col max-h-[95vh] border border-gray-100 relative z-10">
-                {/* Top Curved Solid Pine Header Dome */}
-                <div className="bg-[#0F766E] pt-6 pb-8 px-6 flex flex-col items-center justify-center text-center rounded-b-[44px] relative select-none shadow-md">
+            <div className="flex md:hidden w-full min-h-[100dvh] bg-white flex-col justify-between relative z-10">
+                {/* Top Curved Solid Pine Header Dome Extended Downward */}
+                <div className="w-full bg-[#0F766E] pt-8 pb-12 px-6 flex flex-col items-center justify-center text-center rounded-b-[48px] relative select-none shadow-xl shadow-[#0F766E]/20 shrink-0 overflow-hidden">
+                    {/* Subtle Radial Atmosphere Overlay */}
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-white/10 via-transparent to-black/10 pointer-events-none" />
+
                     {/* Top utility row: Back link + SSL Shield */}
-                    <div className="w-full flex items-center justify-between mb-3.5">
+                    <div className="w-full flex items-center justify-between mb-4 relative z-10">
                         <Link
                             href="/"
                             className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#D8E8E2] hover:text-white transition-colors"
@@ -212,14 +215,14 @@ export default function LoginPage() {
                             <span>Home</span>
                         </Link>
 
-                        <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[#D8E8E2] bg-black/15 px-2.5 py-1 rounded-full border border-white/10">
+                        <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[#D8E8E2] bg-black/20 px-2.5 py-1 rounded-full border border-white/15 backdrop-blur-xs">
                             <ShieldCheck className="w-3 h-3 text-[#2DD4BF]" />
                             <span>SSL Secure</span>
                         </span>
                     </div>
 
                     {/* Properly Framed Company Logo */}
-                    <div className="bg-white rounded-2xl p-2.5 shadow-md shadow-black/10 inline-flex items-center justify-center mb-2.5 border border-white/40">
+                    <div className="bg-white rounded-2xl p-2.5 shadow-xl shadow-black/15 inline-flex items-center justify-center mb-3 ring-2 ring-white/30 relative z-10 transition-transform active:scale-95">
                         {(config?.uploadedLogoUrl || config?.logoUrl) ? (
                             <img
                                 src={(config?.uploadedLogoUrl || config?.logoUrl) as string}
@@ -236,27 +239,27 @@ export default function LoginPage() {
                     </div>
 
                     {/* Company Identity */}
-                    <h1 className="text-base font-bold text-white tracking-tight font-serif">
+                    <h1 className="text-base font-bold text-white tracking-tight font-serif relative z-10">
                         {companyName}
                     </h1>
-                    <p className="text-[11px] font-medium text-[#D8E8E2] mt-0.5">
+                    <p className="text-[11px] font-medium text-[#D8E8E2] mt-0.5 relative z-10">
                         Enterprise Administrative Portal
                     </p>
 
                     {/* Role Access Tag */}
-                    <div className="mt-2.5 px-3 py-0.5 rounded-full bg-black/20 border border-white/20 text-[#EDF5F2] text-[10px] font-bold tracking-wider uppercase">
+                    <div className="mt-3 px-3.5 py-0.5 rounded-full bg-black/25 border border-white/20 text-[#EDF5F2] text-[10px] font-bold tracking-wider uppercase backdrop-blur-xs relative z-10 shadow-xs">
                         Admin Access
                     </div>
                 </div>
 
-                {/* Bottom Form Body */}
-                <div className="p-6 bg-white flex flex-col justify-center relative z-20">
+                {/* Full-Width Form Body Area */}
+                <div className="w-full flex-1 max-w-sm sm:max-w-md mx-auto px-6 py-6 flex flex-col justify-center relative z-20">
                     {/* Centered Login Title */}
-                    <div className="mb-4 text-center">
+                    <div className="mb-5 text-center">
                         <h2 className="text-2xl font-bold text-[#0F172A] tracking-tight font-serif">
                             Login
                         </h2>
-                        <p className="text-xs text-[#475569] mt-0.5 font-normal">
+                        <p className="text-xs text-[#475569] mt-1 font-normal">
                             Sign in to access your administrative dashboard.
                         </p>
                     </div>
@@ -265,15 +268,15 @@ export default function LoginPage() {
                         <motion.div
                             initial={{ opacity: 0, y: -6 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded-xl text-xs font-semibold text-center mb-3.5"
+                            className="bg-red-50 border border-red-200 text-red-700 px-3.5 py-2.5 rounded-2xl text-xs font-semibold text-center mb-4 shadow-xs"
                         >
                             {error}
                         </motion.div>
                     )}
 
-                    <form onSubmit={handleLogin} className="space-y-3.5">
+                    <form onSubmit={handleLogin} className="space-y-4">
                         {/* Username Field */}
-                        <div className="flex items-center justify-between bg-[#EDF5F2] border border-[#0F766E]/20 rounded-2xl px-4 py-3.5 focus-within:bg-white focus-within:border-[#0F766E] focus-within:ring-2 focus-within:ring-[#0F766E]/20 transition-all">
+                        <div className="flex items-center justify-between bg-[#F8FAF9] border border-[#0F766E]/20 rounded-2xl px-4 py-3.5 focus-within:bg-white focus-within:border-[#0F766E] focus-within:ring-4 focus-within:ring-[#0F766E]/10 transition-all shadow-2xs">
                             <input
                                 type="text"
                                 required
@@ -286,7 +289,7 @@ export default function LoginPage() {
                         </div>
 
                         {/* Password Field with Show/Hide Toggle */}
-                        <div className="flex items-center justify-between bg-[#EDF5F2] border border-[#0F766E]/20 rounded-2xl px-4 py-3.5 focus-within:bg-white focus-within:border-[#0F766E] focus-within:ring-2 focus-within:ring-[#0F766E]/20 transition-all">
+                        <div className="flex items-center justify-between bg-[#F8FAF9] border border-[#0F766E]/20 rounded-2xl px-4 py-3.5 focus-within:bg-white focus-within:border-[#0F766E] focus-within:ring-4 focus-within:ring-[#0F766E]/10 transition-all shadow-2xs">
                             <input
                                 type={showPassword ? 'text' : 'password'}
                                 required
@@ -298,7 +301,7 @@ export default function LoginPage() {
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                className="text-[#0F766E] hover:text-[#115E59] focus:outline-none p-0.5 cursor-pointer shrink-0"
+                                className="text-[#0F766E] hover:text-[#115E59] focus:outline-none p-0.5 cursor-pointer shrink-0 transition-colors"
                                 title={showPassword ? 'Hide password' : 'Show password'}
                             >
                                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -309,7 +312,7 @@ export default function LoginPage() {
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="w-full rounded-2xl bg-[#0F766E] hover:bg-[#115E59] active:bg-[#042F2E] text-white font-bold text-sm py-3.5 uppercase tracking-wider shadow-lg shadow-[#0F766E]/25 transition-all disabled:opacity-50 flex items-center justify-center cursor-pointer mt-2 touch-manipulation"
+                            className="w-full rounded-2xl bg-[#0F766E] hover:bg-[#115E59] active:bg-[#042F2E] active:scale-[0.98] text-white font-bold text-sm py-3.5 uppercase tracking-wider shadow-lg shadow-[#0F766E]/25 hover:shadow-xl hover:shadow-[#0F766E]/35 transition-all disabled:opacity-50 flex items-center justify-center cursor-pointer mt-3 touch-manipulation"
                         >
                             {isLoading ? (
                                 <span className="flex items-center gap-2">
@@ -324,20 +327,20 @@ export default function LoginPage() {
                             )}
                         </button>
                     </form>
+                </div>
 
-                    {/* Bottom Security Note */}
-                    <div className="mt-4 text-center">
-                        <p className="text-[11px] text-gray-400 font-medium flex items-center justify-center gap-1.5">
-                            <Lock className="w-3 h-3 text-[#0F766E]" /> Authorized access only • SS40 Network
-                        </p>
-                    </div>
+                {/* Bottom Security Note */}
+                <div className="pb-6 pt-2 text-center shrink-0">
+                    <p className="text-[11px] text-gray-400 font-medium flex items-center justify-center gap-1.5">
+                        <Lock className="w-3 h-3 text-[#0F766E]" /> Authorized access only • SS40 Network
+                    </p>
                 </div>
             </div>
 
             {/* ═════════════════════════════════════════════════════════════ */}
             {/* DESKTOP CARD (Matches Desktop Split Screenshot + Brand Head)  */}
             {/* ═════════════════════════════════════════════════════════════ */}
-            <div className="hidden md:flex w-full max-w-4xl bg-white rounded-[32px] sm:rounded-[36px] shadow-2xl shadow-gray-200/80 overflow-hidden flex-row min-h-[480px] max-h-[540px] relative z-10 border border-gray-100">
+            <div className="hidden md:flex w-full max-w-4xl bg-white/95 backdrop-blur-xl rounded-[36px] shadow-[0_25px_60px_-15px_rgba(15,118,110,0.14),0_10px_30px_-10px_rgba(0,0,0,0.06)] overflow-hidden flex-row min-h-[490px] max-h-[550px] relative z-10 border border-white/80 ring-1 ring-black/5">
                 
                 {/* Left Side Illustration */}
                 <div className="w-1/2 h-full bg-white relative items-center justify-center overflow-hidden border-r border-gray-100 flex">
@@ -365,11 +368,11 @@ export default function LoginPage() {
                             )}
                             <div className="flex flex-col text-left">
                                 <span className="text-sm font-extrabold text-[#111827] tracking-tight">{companyName}</span>
-                                <span className="text-[10px] font-bold text-[#6B9F91] uppercase tracking-wider">Enterprise Portal</span>
+                                <span className="text-[10px] font-bold text-[#0F766E] uppercase tracking-wider">Enterprise Portal</span>
                             </div>
                         </Link>
 
-                        <span className="inline-flex items-center gap-1 bg-[#D8E8E2] text-[#6B9F91] text-[10px] font-bold px-2.5 py-1 rounded-full">
+                        <span className="inline-flex items-center gap-1 bg-[#EDF5F2] text-[#0F766E] text-[10px] font-bold px-3 py-1 rounded-full border border-[#0F766E]/20 shadow-2xs">
                             <ShieldCheck className="w-3 h-3" />
                             SSO Secure
                         </span>
@@ -391,19 +394,19 @@ export default function LoginPage() {
                             <motion.div
                                 initial={{ opacity: 0, y: -6 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded-xl text-xs font-semibold text-center"
+                                className="bg-red-50 border border-red-200 text-red-700 px-3.5 py-2.5 rounded-2xl text-xs font-semibold text-center shadow-xs"
                             >
                                 {error}
                             </motion.div>
                         )}
 
                         {/* Username Input with Underline Style */}
-                        <div className="space-y-1 text-left">
+                        <div className="space-y-1 text-left group">
                             <label className="block text-[11px] font-bold text-gray-600">
                                 Username or Email
                             </label>
-                            <div className="flex items-center gap-2.5 pb-1.5 border-b-2 border-[#6B9F91] transition-colors">
-                                <User className="w-4 h-4 text-[#6B9F91] shrink-0" />
+                            <div className="flex items-center gap-2.5 pb-1.5 border-b-2 border-[#0F766E] transition-colors">
+                                <User className="w-4 h-4 text-[#0F766E] shrink-0" />
                                 <input
                                     type="text"
                                     required
@@ -416,12 +419,12 @@ export default function LoginPage() {
                         </div>
 
                         {/* Password Input with Underline Style */}
-                        <div className="space-y-1 text-left pt-1">
+                        <div className="space-y-1 text-left pt-1 group">
                             <label className="block text-[11px] font-bold text-gray-600">
                                 Password
                             </label>
-                            <div className="flex items-center gap-2.5 pb-1.5 border-b-2 border-gray-200 focus-within:border-[#6B9F91] transition-colors relative">
-                                <Lock className="w-4 h-4 text-gray-400 shrink-0" />
+                            <div className="flex items-center gap-2.5 pb-1.5 border-b-2 border-gray-200 focus-within:border-[#0F766E] transition-colors relative">
+                                <Lock className="w-4 h-4 text-gray-400 group-focus-within:text-[#0F766E] shrink-0 transition-colors" />
                                 <input
                                     type={showPassword ? 'text' : 'password'}
                                     required
@@ -433,7 +436,7 @@ export default function LoginPage() {
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-0 text-gray-400 hover:text-gray-600 focus:outline-none p-1"
+                                    className="absolute right-0 text-gray-400 hover:text-[#0F766E] focus:outline-none p-1 transition-colors"
                                     title={showPassword ? 'Hide password' : 'Show password'}
                                 >
                                     {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
@@ -446,7 +449,7 @@ export default function LoginPage() {
                             <button
                                 type="submit"
                                 disabled={isLoading}
-                                className="w-full rounded-full bg-[#6B9F91] hover:bg-[#588478] text-white font-bold text-sm py-3.5 uppercase tracking-wider shadow-lg shadow-[#6B9F91]/25 hover:shadow-xl hover:shadow-[#6B9F91]/35 hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center cursor-pointer"
+                                className="w-full rounded-full bg-[#0F766E] hover:bg-[#115E59] active:bg-[#042F2E] text-white font-bold text-sm py-3.5 uppercase tracking-wider shadow-lg shadow-[#0F766E]/25 hover:shadow-xl hover:shadow-[#0F766E]/35 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.99] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center cursor-pointer"
                             >
                                 {isLoading ? (
                                     <span className="flex items-center gap-2">
@@ -467,7 +470,7 @@ export default function LoginPage() {
                     <div className="mt-4 text-center">
                         <Link
                             href="/"
-                            className="inline-flex items-center gap-1 text-xs font-semibold text-gray-400 hover:text-[#6B9F91] transition-colors"
+                            className="inline-flex items-center gap-1 text-xs font-semibold text-gray-400 hover:text-[#0F766E] transition-colors"
                         >
                             <ArrowLeft className="w-3 h-3" />
                             Back to Website
