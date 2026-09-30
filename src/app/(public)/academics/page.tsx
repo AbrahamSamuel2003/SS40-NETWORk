@@ -38,8 +38,8 @@ export const metadata: Metadata = {
     },
 };
 
-// Sub-15ms TTFB: ISR memory caching with 60s background revalidation
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export default async function AcademicsPage() {
     const [config, studentProjects, studentImpactRecords, academicLogos] = await Promise.all([

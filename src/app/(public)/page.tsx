@@ -10,8 +10,9 @@ import { ContactSection } from "@/components/home/ContactSection";
 import { prisma } from "@/lib/prisma";
 import { getSiteConfig, isSectionVisible } from "@/lib/site-config";
 
-// Sub-15ms TTFB: ISR memory caching with 60s background revalidation
-export const revalidate = 60;
+// Real-time instantaneous data reflection for admin updates
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: "One Company. Three Wings. Endless Possibilities. | SS40 NETWORK PRIVATE LIMITED",

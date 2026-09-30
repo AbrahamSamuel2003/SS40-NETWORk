@@ -50,57 +50,53 @@ export function isSectionVisible(config: SiteConfigData | null | undefined, sect
     return true; // Default to visible
 }
 
-export const getSiteConfig = unstable_cache(
-    async function (): Promise<SiteConfigData | null> {
-        if (!process.env.DATABASE_URL) {
-            return DEFAULT_SITE_CONFIG;
-        }
+export async function getSiteConfig(): Promise<SiteConfigData | null> {
+    if (!process.env.DATABASE_URL) {
+        return DEFAULT_SITE_CONFIG;
+    }
+    try {
+        const config = await prisma.siteConfig.findFirst({
+            select: {
+                companyName: true,
+                legalName: true,
+                logoUrl: true,
+                uploadedLogoUrl: true,
+                contactEmail: true,
+                contactPhone: true,
+                whatsappNumber: true,
+                addressText: true,
+                businessHours: true,
+                footerDescription: true,
+                googleMapsIframeUrl: true,
+                urlLinkedin: true,
+                urlYoutube: true,
+                urlInstagram: true,
+                seoDefaultTitle: true,
+                seoDefaultDescription: true,
+                sectionVisibility: true,
+            }
+        });
+        if (!config) return DEFAULT_SITE_CONFIG;
+        return {
+            ...config,
+            sectionVisibility: (config.sectionVisibility as Record<string, boolean>) || {}
+        };
+    } catch (e) {
         try {
-            const config = await prisma.siteConfig.findFirst({
-                select: {
-                    companyName: true,
-                    legalName: true,
-                    logoUrl: true,
-                    uploadedLogoUrl: true,
-                    contactEmail: true,
-                    contactPhone: true,
-                    whatsappNumber: true,
-                    addressText: true,
-                    businessHours: true,
-                    footerDescription: true,
-                    googleMapsIframeUrl: true,
-                    urlLinkedin: true,
-                    urlYoutube: true,
-                    urlInstagram: true,
-                    seoDefaultTitle: true,
-                    seoDefaultDescription: true,
-                    sectionVisibility: true,
+            const rows: any = await prisma.$queryRawUnsafe(`SELECT * FROM "SiteConfig" LIMIT 1`);
+            if (rows && rows.length > 0) {
+                const row = rows[0];
+                let secVis = {};
+                if (row.sectionVisibility) {
+                    secVis = typeof row.sectionVisibility === 'string' ? JSON.parse(row.sectionVisibility) : row.sectionVisibility;
                 }
-            });
-            if (!config) return DEFAULT_SITE_CONFIG;
-            return {
-                ...config,
-                sectionVisibility: (config.sectionVisibility as Record<string, boolean>) || {}
-            };
-        } catch (e) {
-            try {
-                const rows: any = await prisma.$queryRawUnsafe(`SELECT * FROM "SiteConfig" LIMIT 1`);
-                if (rows && rows.length > 0) {
-                    const row = rows[0];
-                    let secVis = {};
-                    if (row.sectionVisibility) {
-                        secVis = typeof row.sectionVisibility === 'string' ? JSON.parse(row.sectionVisibility) : row.sectionVisibility;
-                    }
-                    return {
-                        ...DEFAULT_SITE_CONFIG,
-                        ...row,
-                        sectionVisibility: secVis
-                    };
-                }
-            } catch {}
-            return DEFAULT_SITE_CONFIG;
-        }
-    },
-    ['site-config'],
-    { tags: ['site-config'], revalidate: 60 }
-);
+                return {
+                    ...DEFAULT_SITE_CONFIG,
+                    ...row,
+                    sectionVisibility: secVis
+                };
+            }
+        } catch {}
+        return DEFAULT_SITE_CONFIG;
+    }
+}
