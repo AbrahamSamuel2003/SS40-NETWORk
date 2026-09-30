@@ -151,13 +151,27 @@ export function Brands({ initialData }: BrandsProps = {}) {
 interface MarqueeRowProps {
     items: any[];
     direction: "left" | "right";
-    speed: number;
+    speed?: number;
 }
 
 function MarqueeRow({ items, direction, speed }: MarqueeRowProps) {
-    // Duplicate exactly to fit -50% perfectly. Note: must have a robust amount of duplicates if the initial array is small
-    const baseItems = items.length < 4 ? [...items, ...items, ...items] : (items.length < 6 ? [...items, ...items] : items);
-    const duplicatedItems = [...baseItems, ...baseItems];
+    const baseItems = React.useMemo(() => {
+        if (!items || items.length === 0) return [];
+        let list = [...items];
+        while (list.length < 8) {
+            list = [...list, ...items];
+        }
+        return list;
+    }, [items]);
+
+    const duplicatedItems = React.useMemo(() => [...baseItems, ...baseItems], [baseItems]);
+
+    // Velocity-locked duration matching Home Page speed exactly (4.375s per card for left, 5.0s for right)
+    const duration = React.useMemo(() => {
+        const secondsPerCard = direction === "left" ? 4.375 : 5.0;
+        return speed || Math.max(15, baseItems.length * secondsPerCard);
+    }, [baseItems.length, direction, speed]);
+
     const pauseMarquee = (event: React.PointerEvent<HTMLDivElement>) => {
         if (event.pointerType === "touch") {
             event.currentTarget.classList.add("marquee-touch-paused");
@@ -186,7 +200,7 @@ function MarqueeRow({ items, direction, speed }: MarqueeRowProps) {
                     "flex items-center gap-4 sm:gap-6 pr-4 sm:pr-6 w-max transform-gpu",
                     direction === "left" ? "animate-marquee-left" : "animate-marquee-right"
                 )}
-                style={{ "--duration": `${speed}s` } as React.CSSProperties}
+                style={{ "--duration": `${duration}s` } as React.CSSProperties}
             >
                 {duplicatedItems.map((item, idx) => {
                     return (

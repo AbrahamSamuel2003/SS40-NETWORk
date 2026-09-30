@@ -164,7 +164,7 @@ export function Collaborations({ logos = [] }: { logos?: any[] }) {
 interface MarqueeRowProps {
     items: { id: string; name: string; icon?: React.ElementType; logoUrl?: string; showTextOnCard?: boolean }[];
     direction: "left" | "right";
-    speed: number;
+    speed?: number;
 }
 
 function MarqueeRow({ items, direction, speed }: MarqueeRowProps) {
@@ -178,6 +178,12 @@ function MarqueeRow({ items, direction, speed }: MarqueeRowProps) {
     }, [items]);
 
     const duplicatedItems = React.useMemo(() => [...baseItems, ...baseItems], [baseItems]);
+
+    // Velocity-locked duration matching Home Page speed exactly (4.375s per card for left, 5.0s for right)
+    const duration = React.useMemo(() => {
+        const secondsPerCard = direction === "left" ? 4.375 : 5.0;
+        return speed || Math.max(15, baseItems.length * secondsPerCard);
+    }, [baseItems.length, direction, speed]);
 
     const pauseMarquee = (event: React.PointerEvent<HTMLDivElement>) => {
         if (event.pointerType === "touch") {
@@ -207,7 +213,7 @@ function MarqueeRow({ items, direction, speed }: MarqueeRowProps) {
                     "flex items-center gap-4 sm:gap-6 pr-4 sm:pr-6 w-max transform-gpu",
                     direction === "left" ? "animate-marquee-left" : "animate-marquee-right"
                 )}
-                style={{ "--duration": `${speed}s` } as React.CSSProperties}
+                style={{ "--duration": `${duration}s` } as React.CSSProperties}
             >
                 {duplicatedItems.map((item, idx) => {
                     const Icon = item.icon;
