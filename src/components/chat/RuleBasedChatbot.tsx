@@ -162,6 +162,8 @@ export function RuleBasedChatbot({
     const [messages, setMessages] = useState<ChatMessage[]>([INITIAL_BOT_MESSAGE]);
     const [inputValue, setInputValue] = useState("");
     const [isTyping, setIsTyping] = useState(false);
+    const [isThinking, setIsThinking] = useState(false);
+    const thinkingTimerRef = useRef<NodeJS.Timeout | null>(null);
     const [copiedMsgId, setCopiedMsgId] = useState<string | null>(null);
     const [copiedEmail, setCopiedEmail] = useState(false);
     const [leadSubmitting, setLeadSubmitting] = useState(false);
@@ -228,6 +230,16 @@ export function RuleBasedChatbot({
                 }
             }
         } catch {}
+    }, []);
+
+    // Cleanup thinking timer on unmount
+    useEffect(() => {
+        return () => {
+            if (thinkingTimerRef.current) {
+                clearTimeout(thinkingTimerRef.current);
+                thinkingTimerRef.current = null;
+            }
+        };
     }, []);
 
     // Save active conversation to sessionStorage with timestamp
@@ -384,6 +396,14 @@ export function RuleBasedChatbot({
         setMessages(currentMessages);
         setInputValue("");
         setIsTyping(true);
+        setIsThinking(false);
+
+        if (thinkingTimerRef.current) {
+            clearTimeout(thinkingTimerRef.current);
+        }
+        thinkingTimerRef.current = setTimeout(() => {
+            setIsThinking(true);
+        }, 3000);
 
         const historyPayload = currentMessages.slice(-14).map(m => ({
             role: m.sender === "user" ? ("user" as const) : ("assistant" as const),
@@ -460,7 +480,12 @@ export function RuleBasedChatbot({
 
             setMessages(prev => [...prev, botFallbackMsg]);
         } finally {
+            if (thinkingTimerRef.current) {
+                clearTimeout(thinkingTimerRef.current);
+                thinkingTimerRef.current = null;
+            }
             setIsTyping(false);
+            setIsThinking(false);
         }
     }, [inputValue, isTyping, messages, createSupportPayload]);
 
@@ -1049,14 +1074,27 @@ export function RuleBasedChatbot({
                                 );
                             })}
 
-                            {/* Typing Indicator with Bot Avatar */}
+                            {/* Typing / Thinking Indicator with Bot Avatar */}
                             {isTyping && (
                                 <div className="flex items-start gap-2 max-w-[85%]">
                                     <BotAvatar size="sm" />
-                                    <div className="bg-white border border-gray-200/80 rounded-2xl rounded-tl-xs p-3 shadow-xs flex items-center gap-1.5">
-                                        <span className="w-1.5 h-1.5 rounded-full bg-[#0F766E] animate-bounce" style={{ animationDelay: "0ms" }} />
-                                        <span className="w-1.5 h-1.5 rounded-full bg-[#0F766E] animate-bounce" style={{ animationDelay: "150ms" }} />
-                                        <span className="w-1.5 h-1.5 rounded-full bg-[#0F766E] animate-bounce" style={{ animationDelay: "300ms" }} />
+                                    <div className="bg-white border border-gray-200/80 rounded-2xl rounded-tl-xs px-3.5 py-2.5 shadow-xs flex items-center transition-all duration-300">
+                                        {isThinking ? (
+                                            <div className="flex items-center gap-1.5 text-xs font-semibold text-[#0F766E]">
+                                                <span>Thinking</span>
+                                                <span className="inline-flex gap-0.5">
+                                                    <span className="w-1 h-1 rounded-full bg-[#0F766E] animate-bounce" style={{ animationDelay: "0ms" }} />
+                                                    <span className="w-1 h-1 rounded-full bg-[#0F766E] animate-bounce" style={{ animationDelay: "150ms" }} />
+                                                    <span className="w-1 h-1 rounded-full bg-[#0F766E] animate-bounce" style={{ animationDelay: "300ms" }} />
+                                                </span>
+                                            </div>
+                                        ) : (
+                                            <div className="flex items-center gap-1.5 py-0.5">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-[#0F766E] animate-bounce" style={{ animationDelay: "0ms" }} />
+                                                <span className="w-1.5 h-1.5 rounded-full bg-[#0F766E] animate-bounce" style={{ animationDelay: "150ms" }} />
+                                                <span className="w-1.5 h-1.5 rounded-full bg-[#0F766E] animate-bounce" style={{ animationDelay: "300ms" }} />
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             )}
