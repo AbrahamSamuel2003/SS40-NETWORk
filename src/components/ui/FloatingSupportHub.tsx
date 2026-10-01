@@ -28,28 +28,31 @@ const WhatsAppIcon = ({ className }: { className?: string }) => (
 
 const SkyIcon = ({ className }: { className?: string }) => (
     <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
+        viewBox="0 0 100 100"
         className={className}
-        fill="currentColor"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
     >
-        {/* Antenna */}
-        <circle cx="12" cy="2.5" r="1.5" />
-        <path d="M11 4h2v2h-2z" />
-        {/* Robot Head */}
-        <rect x="4" y="6" width="16" height="12" rx="4.5" />
-        {/* Ears */}
-        <rect x="2" y="9.5" width="2" height="5" rx="1" />
-        <rect x="20" y="9.5" width="2" height="5" rx="1" />
-        {/* Contrast Face Plate */}
-        <rect x="6.5" y="8.5" width="11" height="7" rx="2.5" fill="#0F766E" />
-        {/* Expressive Glowing Eyes */}
-        <circle cx="9.5" cy="11.5" r="1.3" fill="#FFFFFF" />
-        <circle cx="14.5" cy="11.5" r="1.3" fill="#FFFFFF" />
-        {/* Friendly AI Smile */}
-        <path d="M10 13.5c.7.6 1.8.6 2.5 0" stroke="#FFFFFF" strokeWidth="1" strokeLinecap="round" fill="none" />
-        {/* Base Neck */}
-        <path d="M8 19h8a2 2 0 0 1 2 2v1H6v-1a2 2 0 0 1 2-2z" opacity="0.9" />
+        {/* Upper Visor Head - Enlarged */}
+        <path
+            d="M10 34C20 14 80 14 90 34C80 54 20 54 10 34Z"
+            fill="#FFFFFF"
+        />
+        {/* Visor Screen */}
+        <rect x="26" y="24" width="48" height="20" rx="10" fill="#0F172A" />
+        {/* Cyan Expressive Eyes */}
+        <circle cx="39" cy="34" r="4" fill="#2DD4BF" />
+        <circle cx="61" cy="34" r="4" fill="#2DD4BF" />
+
+        {/* Lower Body / Speech Bubble with Tail - Enlarged */}
+        <path
+            d="M24 56C33 52 67 52 76 56C74 70 63 78 52 78C47 78 43 82 39 92C39 85 34 79 31 75C24 69 22 62 24 56Z"
+            fill="#FFFFFF"
+        />
+        {/* Speech Ellipsis Dots */}
+        <circle cx="41" cy="67" r="3" fill="#0F172A" />
+        <circle cx="50" cy="67" r="3" fill="#0F172A" />
+        <circle cx="59" cy="67" r="3" fill="#0F172A" />
     </svg>
 );
 

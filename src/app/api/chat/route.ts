@@ -173,13 +173,13 @@ export async function POST(req: NextRequest) {
                 }
                 autoLeadSaved = true;
 
-                // Send instant Admin Email Notification if at least phone or email is present
-                if (extractedContact.phone || extractedContact.email || leadName !== "Chat Visitor") {
+                // Send instant Admin Email Notification only for newly captured leads
+                if (!existingLead && (extractedContact.phone || extractedContact.email || leadName !== "Chat Visitor")) {
                     sendAdminNewLeadNotificationEmail({
-                        fullName: leadName !== "Chat Visitor" ? leadName : (existingLead?.fullName || "Chat Visitor"),
-                        phone: extractedContact.phone || existingLead?.phone || null,
-                        email: extractedContact.email || existingLead?.email || null,
-                        company: extractedContact.company || existingLead?.company || null,
+                        fullName: leadName,
+                        phone: extractedContact.phone || null,
+                        email: extractedContact.email || null,
+                        company: extractedContact.company || null,
                         serviceInterest: service,
                         message: extractedContact.synthesizedBrief,
                         source: "SS40_SKY_CHATBOT",

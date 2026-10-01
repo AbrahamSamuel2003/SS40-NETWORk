@@ -88,6 +88,10 @@ export async function sendLeadAcknowledgementEmail({ fullName, email }: LeadAckn
     });
 }
 
+// In-memory lead notification cooldown cache to prevent spam/duplicate triggers (10 minutes)
+const recentLeadNotifications = new Map<string, number>();
+const LEAD_NOTIFICATION_COOLDOWN_MS = 10 * 60 * 1000;
+
 /**
  * Sends an instant admin notification email to support@ss40network.com whenever a new lead is captured.
  */
@@ -97,6 +101,17 @@ export async function sendAdminNewLeadNotificationEmail(lead: AdminLeadNotificat
     if (!config) {
         console.error('Admin lead notification email skipped: missing or invalid SMTP configuration', { missingKeys });
         return;
+    }
+
+    // Deduplication check: prevent multiple duplicate emails for the same contact within cooldown window
+    const identifier = (lead.phone?.trim() || lead.email?.trim() || lead.fullName?.trim() || '').toLowerCase();
+    if (identifier && identifier !== 'not provided' && identifier !== 'chat visitor') {
+        const lastSent = recentLeadNotifications.get(identifier);
+        if (lastSent && Date.now() - lastSent < LEAD_NOTIFICATION_COOLDOWN_MS) {
+            console.log(`[Mail] Duplicate admin lead notification suppressed for '${identifier}' (sent ${Math.round((Date.now() - lastSent) / 1000)}s ago)`);
+            return;
+        }
+        recentLeadNotifications.set(identifier, Date.now());
     }
 
     const adminRecipient = process.env.ADMIN_NOTIFICATION_EMAIL || 'support@ss40network.com';

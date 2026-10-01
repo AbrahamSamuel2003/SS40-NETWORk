@@ -106,27 +106,36 @@ function generateGmailUrl(email: string, query?: string) {
 // Bot Avatar Component
 // ----------------------------------------------------------------------------
 const BotAvatar = memo(function BotAvatar({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
-    const sizeClasses = size === "sm" ? "w-7 h-7" : size === "lg" ? "w-10 h-10" : "w-8 h-8";
-    const iconSize = size === "sm" ? "w-4 h-4" : size === "lg" ? "w-5.5 h-5.5" : "w-4.5 h-4.5";
+    const sizeClasses = size === "sm" ? "w-8 h-8" : size === "lg" ? "w-11 h-11" : "w-9 h-9";
 
     return (
-        <div className={`${sizeClasses} rounded-full bg-gradient-to-tr from-[#0F766E] to-[#14B8A6] text-white flex items-center justify-center shadow-xs shrink-0 border border-white/40 ring-1 ring-[#0F766E]/20`}>
+        <div className={`${sizeClasses} rounded-full bg-gradient-to-tr from-[#0F766E] to-[#14B8A6] p-0.5 flex items-center justify-center shadow-xs shrink-0 border border-white/40 ring-1 ring-[#0F766E]/20 overflow-hidden`}>
             <svg
+                viewBox="0 0 100 100"
+                className="w-full h-full drop-shadow-xs"
+                fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                className={iconSize}
-                fill="currentColor"
             >
-                <circle cx="12" cy="2.5" r="1.5" />
-                <path d="M11 4h2v2h-2z" />
-                <rect x="4" y="6" width="16" height="12" rx="4.5" />
-                <rect x="2" y="9.5" width="2" height="5" rx="1" />
-                <rect x="20" y="9.5" width="2" height="5" rx="1" />
-                <rect x="6.5" y="8.5" width="11" height="7" rx="2.5" fill="#FFFFFF" />
-                <circle cx="9.5" cy="11.5" r="1.3" fill="#0F766E" />
-                <circle cx="14.5" cy="11.5" r="1.3" fill="#0F766E" />
-                <path d="M10 13.5c.7.6 1.8.6 2.5 0" stroke="#0F766E" strokeWidth="1" strokeLinecap="round" fill="none" />
-                <path d="M8 19h8a2 2 0 0 1 2 2v1H6v-1a2 2 0 0 1 2-2z" opacity="0.9" />
+                {/* Upper Visor Head - Enlarged */}
+                <path
+                    d="M10 34C20 14 80 14 90 34C80 54 20 54 10 34Z"
+                    fill="#FFFFFF"
+                />
+                {/* Visor Screen */}
+                <rect x="26" y="24" width="48" height="20" rx="10" fill="#0F172A" />
+                {/* Cyan Expressive Eyes */}
+                <circle cx="39" cy="34" r="4" fill="#2DD4BF" />
+                <circle cx="61" cy="34" r="4" fill="#2DD4BF" />
+
+                {/* Lower Body / Speech Bubble with Tail - Enlarged */}
+                <path
+                    d="M24 56C33 52 67 52 76 56C74 70 63 78 52 78C47 78 43 82 39 92C39 85 34 79 31 75C24 69 22 62 24 56Z"
+                    fill="#FFFFFF"
+                />
+                {/* Speech Ellipsis Dots */}
+                <circle cx="41" cy="67" r="3" fill="#0F172A" />
+                <circle cx="50" cy="67" r="3" fill="#0F172A" />
+                <circle cx="59" cy="67" r="3" fill="#0F172A" />
             </svg>
         </div>
     );
