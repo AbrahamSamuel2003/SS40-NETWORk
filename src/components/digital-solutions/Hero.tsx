@@ -88,12 +88,7 @@ export function Hero() {
                         >
                             {/* Browser Header */}
                             <div className="h-8 sm:h-9 bg-gray-50 border-b border-[var(--color-border)] flex items-center px-3.5 gap-2 shrink-0">
-                                <div className="flex gap-1.5">
-                                    <div className="w-2.5 h-2.5 rounded-full bg-red-400" />
-                                    <div className="w-2.5 h-2.5 rounded-full bg-yellow-400" />
-                                    <div className="w-2.5 h-2.5 rounded-full bg-green-400" />
-                                </div>
-                                <div className="ml-3 w-28 sm:w-36 h-4 bg-white rounded-md border border-[var(--color-border)] flex items-center px-2">
+                                <div className="w-28 sm:w-36 h-4 bg-white rounded-md border border-[var(--color-border)] flex items-center px-2">
                                     <div className="w-16 sm:w-24 h-2 bg-gray-100 rounded-sm" />
                                 </div>
                             </div>

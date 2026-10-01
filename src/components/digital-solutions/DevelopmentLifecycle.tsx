@@ -229,7 +229,6 @@ export function DevelopmentLifecycle() {
                                             animate={{ y: [0, -6, 0] }} transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
                                             className="absolute top-10 left-6 bg-white border border-gray-200/80 px-3.5 py-2 rounded-xl shadow-lg flex items-center gap-2"
                                         >
-                                            <span className="w-2.5 h-2.5 rounded-full bg-[#6B9F91] animate-ping shrink-0" />
                                             <span className="text-xs font-bold text-gray-700 whitespace-nowrap">Market Research</span>
                                         </motion.div>
 
@@ -237,7 +236,6 @@ export function DevelopmentLifecycle() {
                                             animate={{ y: [0, 8, 0] }} transition={{ repeat: Infinity, duration: 3.5, ease: "easeInOut" }}
                                             className="absolute top-8 right-6 bg-white border border-gray-200/80 px-3.5 py-2 rounded-xl shadow-lg flex items-center gap-2"
                                         >
-                                            <span className="w-2.5 h-2.5 rounded-full bg-[#2DD4BF] animate-pulse shrink-0" />
                                             <span className="text-xs font-bold text-gray-700 whitespace-nowrap">User Personas</span>
                                         </motion.div>
 
@@ -245,7 +243,6 @@ export function DevelopmentLifecycle() {
                                             animate={{ y: [0, -8, 0] }} transition={{ repeat: Infinity, duration: 3.2, ease: "easeInOut" }}
                                             className="absolute bottom-12 left-10 bg-white border border-gray-200/80 px-3.5 py-2 rounded-xl shadow-lg flex items-center gap-2"
                                         >
-                                            <span className="w-2.5 h-2.5 rounded-full bg-[#2DD4BF] shrink-0" />
                                             <span className="text-xs font-bold text-gray-700 whitespace-nowrap">Tech Architecture</span>
                                         </motion.div>
 
@@ -253,7 +250,6 @@ export function DevelopmentLifecycle() {
                                             animate={{ y: [0, 6, 0] }} transition={{ repeat: Infinity, duration: 2.8, ease: "easeInOut" }}
                                             className="absolute bottom-10 right-10 bg-white border border-gray-200/80 px-3.5 py-2 rounded-xl shadow-lg flex items-center gap-2"
                                         >
-                                            <span className="w-2.5 h-2.5 rounded-full bg-[#6B9F91] shrink-0" />
                                             <span className="text-xs font-bold text-gray-700 whitespace-nowrap">Project Backlog</span>
                                         </motion.div>
 
@@ -287,11 +283,6 @@ export function DevelopmentLifecycle() {
                                             <div className="flex items-center gap-2">
                                                 <Palette className="w-4 h-4 text-[#6B9F91]" />
                                                 <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest font-mono">Creative Suite / UI_UX_Layout</span>
-                                            </div>
-                                            <div className="flex gap-1.5">
-                                                <span className="w-2.5 h-2.5 rounded-full bg-red-400" />
-                                                <span className="w-2.5 h-2.5 rounded-full bg-yellow-400" />
-                                                <span className="w-2.5 h-2.5 rounded-full bg-green-400" />
                                             </div>
                                         </div>
 
@@ -356,7 +347,6 @@ export function DevelopmentLifecycle() {
                                                 >
                                                     <div className="flex justify-between items-center">
                                                         <span className="text-[8px] font-bold text-[#6B9F91] bg-[#D8E8E2] px-1.5 py-0.5 rounded">High-Fi Prototype</span>
-                                                        <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-ping" />
                                                     </div>
 
                                                     {/* Product preview */}
@@ -495,7 +485,6 @@ export function DevelopmentLifecycle() {
                                         </div>
                                         <div className="w-2/3 p-6 flex flex-col justify-center gap-4">
                                             <div className="flex items-center gap-3">
-                                                <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse" />
                                                 <span className="text-sm font-bold text-gray-700">All Systems Operational</span>
                                             </div>
                                             <div className="w-full h-24 bg-gray-50 rounded-xl border border-gray-100 flex items-center justify-center px-4">

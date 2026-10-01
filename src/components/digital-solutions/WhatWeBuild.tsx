@@ -259,7 +259,6 @@ export function WhatWeBuild() {
                                             initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.6 }}
                                             className="absolute -top-4 -right-4 bg-white shadow-xl shadow-[#6B9F91]/10 border border-gray-100 rounded-lg px-3 py-2 flex items-center gap-2 z-20"
                                         >
-                                            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
                                             <span className="text-[10px] font-bold text-gray-700">ERP Sync Complete</span>
                                         </motion.div>
 
@@ -322,12 +321,7 @@ export function WhatWeBuild() {
                                         <div className="w-full h-full bg-white rounded-xl border border-[var(--color-border)] shadow-sm flex flex-col overflow-hidden group">
                                             {/* Browser Chrome Header */}
                                             <div className="h-10 bg-gray-50 border-b border-gray-100 flex items-center px-4 gap-2 shrink-0">
-                                                <div className="flex gap-1.5">
-                                                    <div className="w-2.5 h-2.5 rounded-full bg-red-400" />
-                                                    <div className="w-2.5 h-2.5 rounded-full bg-yellow-400" />
-                                                    <div className="w-2.5 h-2.5 rounded-full bg-green-400" />
-                                                </div>
-                                                <div className="ml-4 flex-1 h-6 bg-white border border-gray-200 rounded flex items-center px-3 gap-2">
+                                                <div className="flex-1 h-6 bg-white border border-gray-200 rounded flex items-center px-3 gap-2">
                                                     <Lock className="w-3 h-3 text-green-600" /> <div className="w-32 h-2 bg-gray-200 rounded-full" />
                                                 </div>
                                                 <div className="w-6 h-6 rounded flex items-center justify-center text-gray-400 border border-gray-200 bg-white"><Map className="w-3 h-3" /></div>
@@ -457,7 +451,6 @@ export function WhatWeBuild() {
                                                         >
                                                             {/* Stock Tag */}
                                                             <div className="absolute top-2 right-2 bg-white/95 shadow-sm rounded-full px-2 py-0.5 flex items-center gap-1.5">
-                                                                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
                                                                 <span className="text-[7px] font-bold text-gray-700">Only 2 left</span>
                                                             </div>
 
@@ -614,7 +607,7 @@ export function WhatWeBuild() {
                                                 </div>
                                                 <div>
                                                     <div className="text-white font-bold text-sm">Enterprise AI Assistant</div>
-                                                    <div className="text-green-400 text-xs flex items-center gap-1"><div className="w-1.5 h-1.5 rounded-full bg-green-400" /> Online</div>
+                                                    <div className="text-green-400 text-xs flex items-center gap-1">Online</div>
                                                 </div>
                                             </div>
                                             <div className="p-4 flex flex-col gap-4 bg-gray-50 h-[300px]">
@@ -692,7 +685,7 @@ export function WhatWeBuild() {
 
                                         <div className="flex gap-4 z-20">
                                             <div className="px-4 py-2 bg-white shadow-md border border-gray-200 rounded-full text-xs font-bold font-mono text-green-600 flex items-center gap-2">
-                                                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" /> Auto-scaling Active
+                                                Auto-scaling Active
                                             </div>
                                             <div className="px-4 py-2 bg-white shadow-md border border-gray-200 rounded-full text-xs font-bold font-mono text-[#6B9F91] flex items-center gap-2">
                                                 <CloudUpload className="w-4 h-4" /> 99.99% Uptime
@@ -739,7 +732,6 @@ export function WhatWeBuild() {
                                                     <div className="absolute top-0 right-0 w-16 h-16 bg-[#6B9F91]/10 rounded-bl-full" />
                                                     <div className="flex justify-between items-center">
                                                         <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Processing</span>
-                                                        <div className="w-2 h-2 rounded-full bg-[#6B9F91] animate-pulse" />
                                                     </div>
                                                     <div className="flex flex-col gap-2">
                                                         <div className="w-1/2 h-2 bg-green-400 rounded-full" />

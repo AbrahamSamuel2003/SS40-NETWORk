@@ -262,10 +262,6 @@ const VisualProducts = React.memo(({ isActive = true }: { isActive?: boolean }) 
                 {/* Main Dashboard Panel */}
                 <div className="absolute w-full h-56 bg-white rounded-2xl border border-gray-100 shadow-xl flex flex-col p-5 z-10 overflow-hidden">
                     <div className="flex justify-between items-center mb-6 border-b border-gray-100 pb-3">
-                        <div className="flex gap-1.5">
-                            <div className="w-2.5 h-2.5 rounded-full bg-gray-200" />
-                            <div className="w-2.5 h-2.5 rounded-full bg-gray-200" />
-                        </div>
                         <div className="w-20 h-3 bg-gray-100 rounded-full" />
                     </div>
 
@@ -495,7 +491,6 @@ function DesktopDeckCard({ scene, index, activeScene, onSelect, onSwipeLeft, onS
                 <div>
                     {/* Badge */}
                     <div className="inline-flex items-center gap-2 rounded-md bg-[#F59E0B]/15 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-[#D97706] border border-[#F59E0B]/20 mb-3.5">
-                        <span className="w-2 h-2 rounded-full bg-[#D97706] animate-pulse" />
                         {scene.wingTag}
                     </div>
 

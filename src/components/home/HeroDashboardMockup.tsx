@@ -84,7 +84,6 @@ export function HeroDashboardMockup() {
                 <div className="bg-[#0F172A] p-3 sm:p-4 text-white">
                     <div className="flex items-center justify-between pb-3 border-b border-white/10">
                         <div className="flex items-center gap-2">
-                            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
                             <span className="text-xs font-mono font-medium tracking-wide text-slate-300">SS40 ECOSYSTEM ENGINE v2.4</span>
                         </div>
                         <div className="flex items-center gap-1.5">
