@@ -96,6 +96,7 @@ export function Navbar({ config }: { config?: SiteConfigData | null }) {
                     {/* Logo */}
                     <Link
                         href="/"
+                        prefetch={true}
                         className="flex items-center gap-2 md:gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] rounded-md shrink-0 min-w-0 py-1"
                         aria-label={`${companyName} Home`}
                     >
@@ -122,6 +123,7 @@ export function Navbar({ config }: { config?: SiteConfigData | null }) {
                                 <Link
                                     key={link.name}
                                     href={link.href}
+                                    prefetch={true}
                                     className={cn(
                                         "px-4 py-2 text-base transition-all duration-200 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F766E] outline-offset-2 font-crimson",
                                         isActive
@@ -139,7 +141,7 @@ export function Navbar({ config }: { config?: SiteConfigData | null }) {
                     {/* Desktop CTA */}
                     <div className="hidden md:flex items-center gap-3 font-crimson">
                         <Button asChild size="sm" className="md:px-6 font-crimson font-bold text-sm">
-                            <Link href="/contact">Contact Us</Link>
+                            <Link href="/contact" prefetch={true}>Contact Us</Link>
                         </Button>
                     </div>
 

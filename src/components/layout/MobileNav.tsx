@@ -186,6 +186,7 @@ export function MobileNav({ navLinks, config }: MobileNavProps) {
                                             <Link
                                                 key={item.href}
                                                 href={item.href}
+                                                prefetch={true}
                                                 onClick={() => setIsOpen(false)}
                                                 className={cn(
                                                     "group flex items-center justify-between p-3 rounded-2xl border transition-all duration-150 active:scale-[0.98]",
@@ -239,7 +240,7 @@ export function MobileNav({ navLinks, config }: MobileNavProps) {
                                         className="w-full bg-[#0F766E] hover:bg-[#115E59] text-white font-bold text-sm py-3 rounded-xl shadow-md shadow-[#0F766E]/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
                                         onClick={() => setIsOpen(false)}
                                     >
-                                        <Link href="/contact">
+                                        <Link href="/contact" prefetch={true}>
                                             <span>Contact Us</span>
                                             <ArrowRight className="w-4 h-4" />
                                         </Link>

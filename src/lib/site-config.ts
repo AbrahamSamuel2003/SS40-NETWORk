@@ -50,7 +50,7 @@ export function isSectionVisible(config: SiteConfigData | null | undefined, sect
     return true; // Default to visible
 }
 
-export async function getSiteConfig(): Promise<SiteConfigData | null> {
+async function fetchSiteConfigRaw(): Promise<SiteConfigData> {
     if (!process.env.DATABASE_URL) {
         return DEFAULT_SITE_CONFIG;
     }
@@ -99,4 +99,14 @@ export async function getSiteConfig(): Promise<SiteConfigData | null> {
         } catch {}
         return DEFAULT_SITE_CONFIG;
     }
+}
+
+const getCachedSiteConfig = unstable_cache(
+    async () => fetchSiteConfigRaw(),
+    ['site-config-main-cache'],
+    { revalidate: 3600, tags: ['site-config'] }
+);
+
+export async function getSiteConfig(): Promise<SiteConfigData | null> {
+    return await getCachedSiteConfig();
 }

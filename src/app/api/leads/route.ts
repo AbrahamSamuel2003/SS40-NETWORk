@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { sendLeadAcknowledgementEmail } from '@/lib/mail';
+import { sendLeadAcknowledgementEmail, sendAdminNewLeadNotificationEmail } from '@/lib/mail';
 
 const isValidEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -60,16 +60,25 @@ export async function POST(request: Request) {
         });
 
         try {
-            await sendLeadAcknowledgementEmail({
-                fullName: newLead.fullName,
-                email: newLead.email,
-            });
+            await Promise.allSettled([
+                sendLeadAcknowledgementEmail({
+                    fullName: newLead.fullName,
+                    email: newLead.email,
+                }),
+                sendAdminNewLeadNotificationEmail({
+                    fullName: newLead.fullName,
+                    email: newLead.email,
+                    phone: newLead.phone,
+                    company: newLead.company,
+                    serviceInterest: newLead.serviceInterest,
+                    message: newLead.message,
+                    source: newLead.source || 'WEBSITE_CONTACT_FORM',
+                    sourcePage: newLead.sourcePage,
+                    submittedAt: newLead.createdAt,
+                })
+            ]);
         } catch (emailError) {
-            console.error('Lead saved, but acknowledgement email failed:', {
-                leadId: newLead.id,
-                email: newLead.email,
-                error: emailError,
-            });
+            console.error('Lead saved, but notification email failed:', emailError);
         }
 
         // Do not return internal IDs or notes to the public

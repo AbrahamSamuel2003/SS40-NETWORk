@@ -191,11 +191,7 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="min-h-screen w-full bg-white md:bg-[#F2F7F5] flex items-stretch md:items-center justify-center p-0 md:p-6 lg:p-8 select-none relative overflow-x-hidden overflow-y-auto md:overflow-hidden">
-            {/* Soft Ambient Glow Orbs (Subtle Opacity Background on Desktop) */}
-            <div className="hidden md:block absolute top-0 left-0 w-[550px] h-[550px] bg-[#6B9F91]/12 rounded-full blur-[140px] pointer-events-none -translate-x-1/3 -translate-y-1/3" />
-            <div className="hidden md:block absolute bottom-0 right-0 w-[550px] h-[550px] bg-[#6B9F91]/10 rounded-full blur-[140px] pointer-events-none translate-x-1/3 translate-y-1/3" />
-
+        <div className="min-h-screen w-full bg-white flex items-stretch justify-center p-0 select-none relative overflow-x-hidden overflow-y-auto">
             {/* ═════════════════════════════════════════════════════════════ */}
             {/* MOBILE FULL-PAGE VIEW (Solid Brand Theme - Full Viewport)     */}
             {/* ═════════════════════════════════════════════════════════════ */}
@@ -338,143 +334,175 @@ export default function LoginPage() {
             </div>
 
             {/* ═════════════════════════════════════════════════════════════ */}
-            {/* DESKTOP CARD (Matches Desktop Split Screenshot + Brand Head)  */}
+            {/* DESKTOP FULL-PAGE VIEW (Edge-to-Edge Split Screen Layout)      */}
             {/* ═════════════════════════════════════════════════════════════ */}
-            <div className="hidden md:flex w-full max-w-4xl bg-white/95 backdrop-blur-xl rounded-[36px] shadow-[0_25px_60px_-15px_rgba(15,118,110,0.14),0_10px_30px_-10px_rgba(0,0,0,0.06)] overflow-hidden flex-row min-h-[490px] max-h-[550px] relative z-10 border border-white/80 ring-1 ring-black/5">
-                
-                {/* Left Side Illustration */}
-                <div className="w-1/2 h-full bg-white relative items-center justify-center overflow-hidden border-r border-gray-100 flex">
-                    <DesktopLoginIllustration />
-                </div>
+            <div className="hidden md:flex w-full min-h-screen flex-row relative z-10">
+                {/* Left Side: Brand Hero & Illustration Panel with Lite Ambient Shade */}
+                <div className="w-1/2 min-h-screen bg-gradient-to-br from-[#E6F3EE] via-[#EFF7F4] to-[#DFEFE9] flex flex-col justify-between p-10 xl:p-14 border-r border-[#0F766E]/15 relative overflow-hidden">
+                    {/* Soft Ambient Radial Accents */}
+                    <div className="absolute top-0 left-0 w-[400px] h-[400px] bg-[#0F766E]/10 rounded-full blur-[90px] pointer-events-none -translate-x-1/4 -translate-y-1/4" />
+                    <div className="absolute bottom-0 right-0 w-[450px] h-[450px] bg-[#2DD4BF]/12 rounded-full blur-[100px] pointer-events-none translate-x-1/4 translate-y-1/4" />
 
-                {/* Right Side Form */}
-                <div className="w-1/2 p-8 lg:p-11 flex flex-col justify-center bg-white my-auto">
-                    
-                    {/* Top Logo Branding & Enterprise Tag */}
-                    <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
-                        <Link href="/" className="inline-flex items-center gap-2.5 group">
+                    {/* Top Branding */}
+                    <div className="flex items-center justify-between relative z-10">
+                        <Link href="/" className="inline-flex items-center gap-3 group">
                             {(config?.uploadedLogoUrl || config?.logoUrl) ? (
                                 <img
                                     src={(config?.uploadedLogoUrl || config?.logoUrl) as string}
                                     alt={`${companyName} Logo`}
-                                    className="h-8 w-auto drop-shadow-xs group-hover:scale-105 transition-transform"
+                                    className="h-10 w-auto drop-shadow-xs group-hover:scale-105 transition-transform"
                                 />
                             ) : (
                                 <img
                                     src="/logos/ss40-logo.jpeg"
                                     alt={`${companyName} Logo`}
-                                    className="h-8 w-auto rounded-md drop-shadow-xs group-hover:scale-105 transition-transform"
+                                    className="h-10 w-auto rounded-xl drop-shadow-xs group-hover:scale-105 transition-transform"
                                 />
                             )}
                             <div className="flex flex-col text-left">
-                                <span className="text-sm font-extrabold text-[#111827] tracking-tight">{companyName}</span>
-                                <span className="text-[10px] font-bold text-[#0F766E] uppercase tracking-wider">Enterprise Portal</span>
+                                <span className="text-base font-extrabold text-[#0F172A] tracking-tight">{companyName}</span>
+                                <span className="text-[11px] font-bold text-[#0F766E] uppercase tracking-wider">Enterprise Administrative Portal</span>
                             </div>
                         </Link>
 
-                        <span className="inline-flex items-center gap-1 bg-[#EDF5F2] text-[#0F766E] text-[10px] font-bold px-3 py-1 rounded-full border border-[#0F766E]/20 shadow-2xs">
-                            <ShieldCheck className="w-3 h-3" />
-                            SSO Secure
+                        <span className="inline-flex items-center gap-1.5 bg-white/80 text-[#0F766E] text-xs font-bold px-3.5 py-1.5 rounded-full border border-[#0F766E]/20 shadow-2xs backdrop-blur-xs">
+                            <ShieldCheck className="w-3.5 h-3.5 text-[#0F766E]" />
+                            <span>SSL &amp; SSO Secure</span>
                         </span>
                     </div>
 
-                    {/* Welcome Back Heading & Subtext */}
-                    <div className="text-left mb-5">
-                        <h1 className="text-2xl font-black text-[#111827] tracking-tight">
-                            Welcome Back
-                        </h1>
-                        <p className="text-xs text-gray-500 mt-1">
-                            Sign in to access your administrative dashboard and manage operations.
-                        </p>
+                    {/* Centered Vector Illustration */}
+                    <div className="flex-1 flex items-center justify-center my-6 relative z-10">
+                        <div className="w-full max-w-lg h-[460px] xl:h-[500px] rounded-3xl overflow-hidden shadow-[0_24px_50px_rgba(15,118,110,0.12)] border border-white/80 bg-white/90 backdrop-blur-md flex items-center justify-center ring-1 ring-black/5">
+                            <DesktopLoginIllustration />
+                        </div>
                     </div>
 
-                    {/* Authentication Form */}
-                    <form onSubmit={handleLogin} className="space-y-4 w-full">
+                    {/* Bottom Security Note */}
+                    <div className="flex items-center justify-between text-xs text-gray-600 font-medium relative z-10 pt-2 border-t border-[#0F766E]/15">
+                        <p className="flex items-center gap-1.5 font-semibold text-[#0F766E]">
+                            <Lock className="w-3.5 h-3.5 text-[#0F766E]" />
+                            <span>Authorized Personnel Only</span>
+                        </p>
+                        <p className="text-gray-500 text-[11px]">
+                            &copy; {new Date().getFullYear()} {companyName} PRIVATE LIMITED
+                        </p>
+                    </div>
+                </div>
+
+                {/* Right Side: Spacious Full-Height Login Center */}
+                <div className="w-1/2 min-h-screen bg-white flex flex-col justify-between p-10 xl:p-16 relative">
+                    {/* Top Navigation Row */}
+                    <div className="flex items-center justify-between">
+                        <Link
+                            href="/"
+                            className="inline-flex items-center gap-2 text-xs font-semibold text-gray-500 hover:text-[#0F766E] transition-colors py-1.5 px-3 rounded-lg hover:bg-gray-50"
+                        >
+                            <ArrowLeft className="w-4 h-4" />
+                            <span>Back to Website</span>
+                        </Link>
+
+                        <span className="px-3.5 py-1 rounded-full bg-[#0F766E]/10 text-[#0F766E] text-[11px] font-bold tracking-wider uppercase border border-[#0F766E]/20">
+                            Admin Access
+                        </span>
+                    </div>
+
+                    {/* Centered Login Form Area */}
+                    <div className="max-w-md w-full mx-auto my-auto py-8">
+                        {/* Title & Description */}
+                        <div className="text-left mb-8">
+                            <h1 className="text-3xl font-black text-[#0F172A] tracking-tight">
+                                Welcome Back
+                            </h1>
+                            <p className="text-sm text-gray-500 mt-2 font-normal">
+                                Enter your administrative credentials to sign in and manage SS40 NETWORK operations.
+                            </p>
+                        </div>
+
                         {error && (
                             <motion.div
                                 initial={{ opacity: 0, y: -6 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="bg-red-50 border border-red-200 text-red-700 px-3.5 py-2.5 rounded-2xl text-xs font-semibold text-center shadow-xs"
+                                className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-2xl text-xs font-semibold text-center mb-6 shadow-xs"
                             >
                                 {error}
                             </motion.div>
                         )}
 
-                        {/* Username Input with Underline Style */}
-                        <div className="space-y-1 text-left group">
-                            <label className="block text-[11px] font-bold text-gray-600">
-                                Username or Email
-                            </label>
-                            <div className="flex items-center gap-2.5 pb-1.5 border-b-2 border-[#0F766E] transition-colors">
-                                <User className="w-4 h-4 text-[#0F766E] shrink-0" />
-                                <input
-                                    type="text"
-                                    required
-                                    value={identifier}
-                                    onChange={(e) => setIdentifier(e.target.value)}
-                                    placeholder="admin@ss40network.com"
-                                    className="w-full bg-transparent text-sm text-[#111827] placeholder-gray-300 focus:outline-none font-medium py-1"
-                                />
+                        {/* Form */}
+                        <form onSubmit={handleLogin} className="space-y-5">
+                            {/* Username / Email Field */}
+                            <div className="space-y-1.5 text-left">
+                                <label className="block text-xs font-bold text-gray-700">
+                                    Username or Email Address
+                                </label>
+                                <div className="flex items-center justify-between bg-[#F8FAF9] border border-gray-200 focus-within:border-[#0F766E] focus-within:bg-white focus-within:ring-4 focus-within:ring-[#0F766E]/10 rounded-2xl px-4 py-3.5 transition-all shadow-2xs">
+                                    <input
+                                        type="text"
+                                        required
+                                        value={identifier}
+                                        onChange={(e) => setIdentifier(e.target.value)}
+                                        placeholder="admin@ss40network.com"
+                                        className="w-full bg-transparent text-sm text-[#0F172A] placeholder:text-gray-400 focus:outline-none font-medium pr-3"
+                                    />
+                                    <User className="w-4 h-4 text-[#0F766E] shrink-0" />
+                                </div>
                             </div>
-                        </div>
 
-                        {/* Password Input with Underline Style */}
-                        <div className="space-y-1 text-left pt-1 group">
-                            <label className="block text-[11px] font-bold text-gray-600">
-                                Password
-                            </label>
-                            <div className="flex items-center gap-2.5 pb-1.5 border-b-2 border-gray-200 focus-within:border-[#0F766E] transition-colors relative">
-                                <Lock className="w-4 h-4 text-gray-400 group-focus-within:text-[#0F766E] shrink-0 transition-colors" />
-                                <input
-                                    type={showPassword ? 'text' : 'password'}
-                                    required
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    placeholder="••••••••••••"
-                                    className="w-full bg-transparent text-sm text-[#111827] placeholder-gray-300 focus:outline-none font-medium py-1 pr-7"
-                                />
+                            {/* Password Field */}
+                            <div className="space-y-1.5 text-left">
+                                <label className="block text-xs font-bold text-gray-700">
+                                    Password
+                                </label>
+                                <div className="flex items-center justify-between bg-[#F8FAF9] border border-gray-200 focus-within:border-[#0F766E] focus-within:bg-white focus-within:ring-4 focus-within:ring-[#0F766E]/10 rounded-2xl px-4 py-3.5 transition-all shadow-2xs">
+                                    <input
+                                        type={showPassword ? 'text' : 'password'}
+                                        required
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        placeholder="Enter your password"
+                                        className="w-full bg-transparent text-sm text-[#0F172A] placeholder:text-gray-400 focus:outline-none font-medium pr-3"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="text-gray-400 hover:text-[#0F766E] focus:outline-none p-1 cursor-pointer shrink-0 transition-colors"
+                                        title={showPassword ? 'Hide password' : 'Show password'}
+                                    >
+                                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Submit Button */}
+                            <div className="pt-3">
                                 <button
-                                    type="button"
-                                    onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-0 text-gray-400 hover:text-[#0F766E] focus:outline-none p-1 transition-colors"
-                                    title={showPassword ? 'Hide password' : 'Show password'}
+                                    type="submit"
+                                    disabled={isLoading}
+                                    className="w-full rounded-2xl bg-[#0F766E] hover:bg-[#115E59] active:bg-[#042F2E] text-white font-bold text-sm py-4 uppercase tracking-wider shadow-lg shadow-[#0F766E]/25 hover:shadow-xl hover:shadow-[#0F766E]/35 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.99] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center cursor-pointer"
                                 >
-                                    {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                                    {isLoading ? (
+                                        <span className="flex items-center gap-2">
+                                            <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                            </svg>
+                                            AUTHENTICATING...
+                                        </span>
+                                    ) : (
+                                        'SIGN IN TO DASHBOARD'
+                                    )}
                                 </button>
                             </div>
-                        </div>
+                        </form>
+                    </div>
 
-                        {/* Brand Emerald Rounded-Pill Button */}
-                        <div className="pt-2">
-                            <button
-                                type="submit"
-                                disabled={isLoading}
-                                className="w-full rounded-full bg-[#0F766E] hover:bg-[#115E59] active:bg-[#042F2E] text-white font-bold text-sm py-3.5 uppercase tracking-wider shadow-lg shadow-[#0F766E]/25 hover:shadow-xl hover:shadow-[#0F766E]/35 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.99] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center cursor-pointer"
-                            >
-                                {isLoading ? (
-                                    <span className="flex items-center gap-2">
-                                        <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                        </svg>
-                                        SIGNING IN...
-                                    </span>
-                                ) : (
-                                    'SIGN IN TO DASHBOARD'
-                                )}
-                            </button>
-                        </div>
-                    </form>
-
-                    {/* Back to Website Link */}
-                    <div className="mt-4 text-center">
-                        <Link
-                            href="/"
-                            className="inline-flex items-center gap-1 text-xs font-semibold text-gray-400 hover:text-[#0F766E] transition-colors"
-                        >
-                            <ArrowLeft className="w-3 h-3" />
-                            Back to Website
-                        </Link>
+                    {/* Bottom Support Info */}
+                    <div className="text-center pt-4 border-t border-gray-100 text-xs text-gray-400">
+                        <span>Need administrative assistance? Contact </span>
+                        <a href="mailto:support@ss40network.com" className="text-[#0F766E] font-semibold hover:underline">
+                            support@ss40network.com
+                        </a>
                     </div>
                 </div>
             </div>
