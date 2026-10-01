@@ -137,11 +137,26 @@ export async function generateRagResponse(
 
     // Emergency fallback only if Groq is completely unavailable
     if (!groqClient) {
+        let fallbackText = "SS40 NETWORK operates across Three Specialized Wings: SS40 Digital Solutions for custom software, SS40 Products (like ClearInvoice), and SS40 Academics for practical internships. How can I assist you today?";
+        let fallbackOptions = ["Three Wings", "SS40 Digital Solutions", "SS40 Products", "SS40 Academics"];
+
+        if (processed.isGreeting) {
+            fallbackText = "Hello! I am SS40 SKY, your official AI assistant for SS40 NETWORK. We specialize in custom software engineering (Digital Solutions), scalable SS40 Products (like ClearInvoice), and tech academic internships. What would you like to explore today?";
+            fallbackOptions = ["Three Wings", "SS40 Digital Solutions", "SS40 Products", "SS40 Academics"];
+        } else if (processed.isSmallTalk) {
+            fallbackText = "Hello! I am SS40 SKY, the AI assistant for SS40 NETWORK. I'm here to help you discover our custom software engineering, SS40 Products (like ClearInvoice), and academic internship programs. How can I assist you?";
+        } else if (processed.isOutOfScope) {
+            fallbackText = "I am specialized exclusively in SS40 NETWORK's digital solutions, software products, and academic programs. How can I assist you in exploring SS40 NETWORK today?";
+        } else if (primaryChunk && vectorResult.topScore >= 0.45) {
+            fallbackText = primaryChunk.summary || primaryChunk.content;
+            fallbackOptions = primaryChunk.suggestedOptions || fallbackOptions;
+        }
+
         return {
-            answer: primaryChunk?.content || "SS40 NETWORK operates across Three Specialized Wings: SS40 Digital Solutions for custom software, SS40 Products (like ClearInvoice), and SS40 Academics for practical internships. How can I assist you today?",
-            replyText: primaryChunk?.content || "SS40 NETWORK operates across Three Specialized Wings: SS40 Digital Solutions, SS40 Products, and SS40 Academics.",
-            options: primaryChunk?.suggestedOptions || ["Three Wings", "SS40 Digital Solutions", "SS40 Products", "SS40 Academics"],
-            quickReplies: primaryChunk?.suggestedOptions || ["Three Wings", "SS40 Digital Solutions", "SS40 Products", "SS40 Academics"],
+            answer: fallbackText,
+            replyText: fallbackText,
+            options: sanitizePillOptions(fallbackOptions, primaryChunk, rawUserMessage),
+            quickReplies: sanitizePillOptions(fallbackOptions, primaryChunk, rawUserMessage),
             navigation: primaryChunk?.route ? { label: "Explore", url: primaryChunk.route } : { label: "Explore SS40 NETWORK", url: "/#business-wings" },
             link: primaryChunk?.route ? { label: "Explore", url: primaryChunk.route } : { label: "Explore SS40 NETWORK", url: "/#business-wings" },
             actionType: "STANDARD",
@@ -302,17 +317,23 @@ ${contextText}${dynamicLeadDirective}`;
             source: "groq-rag-ai",
         };
     } catch (error) {
-        console.error("Groq dynamic generation error, using emergency fallback:", error);
+        let fallbackContent = "SS40 NETWORK operates across Three Specialized Wings: SS40 Digital Solutions for custom software, SS40 Products (like ClearInvoice), and SS40 Academics for practical internships. How can I assist you today?";
+        let fallbackOptions = ["Three Wings", "SS40 Digital Solutions", "SS40 Products", "SS40 Academics"];
 
-        const fallbackContent = stripEmojisAndSparkles(
-            primaryChunk?.content || "SS40 NETWORK operates across Three Specialized Wings: SS40 Digital Solutions, SS40 Products (like ClearInvoice), and SS40 Academics. How can I assist you today?"
-        );
+        if (processed.isGreeting) {
+            fallbackContent = "Hello! I am SS40 SKY, your official AI assistant for SS40 NETWORK. We specialize in custom software engineering (Digital Solutions), scalable SS40 Products (like ClearInvoice), and tech academic internships. What would you like to explore today?";
+        } else if (processed.isSmallTalk) {
+            fallbackContent = "Hello! I am SS40 SKY, the AI assistant for SS40 NETWORK. How can I assist you with our services, products, or academic programs today?";
+        } else if (primaryChunk && vectorResult.topScore >= 0.45) {
+            fallbackContent = stripEmojisAndSparkles(primaryChunk.summary || primaryChunk.content);
+            fallbackOptions = primaryChunk.suggestedOptions || fallbackOptions;
+        }
 
         return {
             answer: fallbackContent,
             replyText: fallbackContent,
-            options: primaryChunk?.suggestedOptions || ["Three Wings", "SS40 Digital Solutions", "SS40 Products", "Contact Team"],
-            quickReplies: primaryChunk?.suggestedOptions || ["Three Wings", "SS40 Digital Solutions", "SS40 Products", "Contact Team"],
+            options: sanitizePillOptions(fallbackOptions, primaryChunk, rawUserMessage),
+            quickReplies: sanitizePillOptions(fallbackOptions, primaryChunk, rawUserMessage),
             navigation: primaryChunk?.route ? { label: "Explore Details", url: primaryChunk.route } : { label: "Explore SS40 NETWORK", url: "/#business-wings" },
             link: primaryChunk?.route ? { label: "Explore Details", url: primaryChunk.route } : { label: "Explore SS40 NETWORK", url: "/#business-wings" },
             actionType: "STANDARD",
