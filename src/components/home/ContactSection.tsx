@@ -1,8 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { motion } from "framer-motion";
-import Link from "next/link";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
     Mail,
     Phone,
@@ -10,19 +10,123 @@ import {
     MessageCircle,
     Clock,
     Send,
-    Calendar,
-    ArrowRight
+    ArrowRight,
+    ChevronDown,
+    Check,
+    CheckCircle2,
+    AlertCircle
 } from "lucide-react";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { CardMotion } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
-import { hoverLift, staggerContainer, slideUp, fadeIn } from "@/lib/animations";
+import { hoverLift, staggerContainer, slideUp } from "@/lib/animations";
 import { cn } from "@/utils/cn";
 import type { SiteConfigData } from "@/lib/site-config";
 
+const SERVICE_OPTIONS = [
+    "Enterprise Software & Web Apps",
+    "ClearInvoice & SaaS Products",
+    "Academic Training & MoUs",
+    "Cloud Architecture & AI Solutions",
+    "Corporate Partnership & Consulting",
+    "General Inquiry",
+    "Other (Please specify)"
+];
+
 export function ContactSection({ config }: { config?: SiteConfigData | null }) {
+    const [formData, setFormData] = useState({
+        fullName: "",
+        email: "",
+        phone: "",
+        company: "",
+        serviceInterest: "",
+        customInterest: "",
+        message: ""
+    });
+
+    const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+    const [errorMessage, setErrorMessage] = useState("");
+    const [isSelectOpen, setIsSelectOpen] = useState(false);
+    const selectRef = useRef<HTMLDivElement>(null);
+
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        if (!isSelectOpen) return;
+
+        const handleClickOutside = (e: MouseEvent | TouchEvent) => {
+            if (selectRef.current && !selectRef.current.contains(e.target as Node)) {
+                setIsSelectOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        document.addEventListener("touchstart", handleClickOutside, { passive: true });
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("touchstart", handleClickOutside);
+        };
+    }, [isSelectOpen]);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setFormData(prev => ({
+            ...prev,
+            [e.target.id]: e.target.value
+        }));
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setStatus("submitting");
+        setErrorMessage("");
+
+        try {
+            const finalServiceInterest = formData.serviceInterest === "Other (Please specify)"
+                ? (formData.customInterest.trim() ? `Other: ${formData.customInterest.trim()}` : "Other")
+                : formData.serviceInterest;
+
+            const payload = {
+                fullName: formData.fullName,
+                email: formData.email,
+                phone: formData.phone,
+                company: formData.company,
+                serviceInterest: finalServiceInterest,
+                message: formData.message,
+                source: "HOME_CONTACT_SECTION",
+                sourcePage: "/",
+                landingPage: typeof window !== "undefined" ? window.location.pathname : "/",
+                referrer: typeof document !== "undefined" ? document.referrer || null : null
+            };
+
+            const res = await fetch("/api/leads", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await res.json();
+
+            if (!res.ok || !data.success) {
+                throw new Error(data.error || "We couldn't submit your request right now. Please try again.");
+            }
+
+            setStatus("success");
+            setFormData({
+                fullName: "",
+                email: "",
+                phone: "",
+                company: "",
+                serviceInterest: "",
+                customInterest: "",
+                message: ""
+            });
+        } catch (err: any) {
+            setStatus("error");
+            setErrorMessage(err.message || "We couldn't submit your request right now. Please try again.");
+        }
+    };
 
     const CONTACT_INFO = [
         {
@@ -56,11 +160,6 @@ export function ContactSection({ config }: { config?: SiteConfigData | null }) {
             href: null
         }
     ];
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        // Form submission logic will be handled here
-    };
 
     return (
         <SectionWrapper id="contact" className="bg-white lg:bg-[#D8E8E2]">
@@ -138,92 +237,282 @@ export function ContactSection({ config }: { config?: SiteConfigData | null }) {
                             whileInView="visible"
                             viewport={{ once: true, margin: "-100px" }}
                             variants={slideUp}
-                            className="p-8 md:p-10 bg-white shadow-xl shadow-gray-200/50 border border-[var(--color-border)] rounded-2xl relative overflow-hidden flex-1 flex flex-col justify-between"
+                            className="p-8 md:p-10 bg-white shadow-xl shadow-gray-200/50 border border-[var(--color-border)] rounded-2xl relative overflow-visible flex-1 flex flex-col justify-between z-10"
                         >
                             {/* Decorative Glow */}
                             <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--color-primary)]/5 blur-[80px] rounded-full pointer-events-none" />
 
-                            <form onSubmit={handleSubmit} className="relative z-10 flex flex-col gap-6">
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div className="flex flex-col gap-2">
-                                        <label htmlFor="fullName" className="text-sm font-semibold text-[var(--color-heading)]">Full Name</label>
-                                        <input
-                                            type="text"
-                                            id="fullName"
-                                            placeholder="Full Name"
-                                            className="w-full px-4 py-3 rounded-[var(--radius-input)] border border-[var(--color-border)] bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] transition-all"
-                                            required
-                                        />
-                                    </div>
-                                    <div className="flex flex-col gap-2">
-                                        <label htmlFor="email" className="text-sm font-semibold text-[var(--color-heading)]">Email Address</label>
-                                        <input
-                                            type="email"
-                                            id="email"
-                                            placeholder="Email Address"
-                                            className="w-full px-4 py-3 rounded-[var(--radius-input)] border border-[var(--color-border)] bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] transition-all"
-                                            required
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div className="flex flex-col gap-2">
-                                        <label htmlFor="mobile" className="text-sm font-semibold text-[var(--color-heading)]">Mobile Number</label>
-                                        <input
-                                            type="tel"
-                                            id="mobile"
-                                            placeholder="Mobile Number"
-                                            className="w-full px-4 py-3 rounded-[var(--radius-input)] border border-[var(--color-border)] bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] transition-all"
-                                            required
-                                        />
-                                    </div>
-                                    <div className="flex flex-col gap-2">
-                                        <label htmlFor="company" className="text-sm font-semibold text-[var(--color-heading)]">Company Name <span className="text-gray-400 font-normal">(Optional)</span></label>
-                                        <input
-                                            type="text"
-                                            id="company"
-                                            placeholder="Company Name (Optional)"
-                                            className="w-full px-4 py-3 rounded-[var(--radius-input)] border border-[var(--color-border)] bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] transition-all"
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="flex flex-col gap-2">
-                                    <label htmlFor="service" className="text-sm font-semibold text-[var(--color-heading)]">Service Required</label>
-                                    <select
-                                        id="service"
-                                        className="w-full px-4 py-3 rounded-[var(--radius-input)] border border-[var(--color-border)] bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] transition-all appearance-none cursor-pointer"
-                                        required
-                                        defaultValue=""
+                            <AnimatePresence mode="wait">
+                                {status === "success" ? (
+                                    <motion.div
+                                        key="home-success-state"
+                                        initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                                        exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                                        transition={{ duration: 0.4 }}
+                                        className="relative z-10 flex flex-col items-center justify-center text-center py-10 md:py-14"
                                     >
-                                        <option value="" disabled>Select a service category</option>
-                                        <option value="digital-solutions">Digital Solutions</option>
-                                        <option value="products">Products</option>
-                                        <option value="academics">Academics</option>
-                                        <option value="general">General Inquiry</option>
-                                    </select>
-                                </div>
+                                        <div className="w-16 h-16 bg-[#EDF5F2] rounded-2xl flex items-center justify-center mb-4 border border-[#0F766E]/20 shadow-inner">
+                                            <CheckCircle2 className="w-9 h-9 text-[#0F766E]" />
+                                        </div>
+                                        <h3 className="text-xl sm:text-2xl font-bold text-[#0F172A] mb-2 font-serif">Message Received</h3>
+                                        <p className="text-[#334155] text-xs sm:text-sm max-w-md mx-auto mb-6 leading-relaxed">
+                                            Thank you for reaching out to SS40 NETWORK. Our team will review your inquiry and respond within 24 hours.
+                                        </p>
+                                        <Button
+                                            onClick={() => setStatus("idle")}
+                                            className="bg-[#0F766E] hover:bg-[#115E59] text-white font-bold text-xs sm:text-sm px-6 py-3 rounded-xl shadow-md shadow-[#0F766E]/20 cursor-pointer"
+                                        >
+                                            Send Another Message
+                                        </Button>
+                                    </motion.div>
+                                ) : (
+                                    <motion.form
+                                        key="home-form-state"
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -10 }}
+                                        transition={{ duration: 0.4 }}
+                                        onSubmit={handleSubmit}
+                                        className="relative z-10 flex flex-col gap-5"
+                                    >
+                                        <AnimatePresence>
+                                            {status === "error" && (
+                                                <motion.div
+                                                    initial={{ opacity: 0, height: 0 }}
+                                                    animate={{ opacity: 1, height: "auto" }}
+                                                    exit={{ opacity: 0, height: 0 }}
+                                                    className="bg-rose-50 border border-rose-200 text-rose-800 p-3.5 rounded-xl flex items-start gap-2.5"
+                                                >
+                                                    <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+                                                    <div>
+                                                        <h4 className="font-bold text-xs">Unable to Send Message</h4>
+                                                        <p className="text-[11px] font-medium mt-0.5">{errorMessage}</p>
+                                                    </div>
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
 
-                                <div className="flex flex-col gap-2">
-                                    <label htmlFor="message" className="text-sm font-semibold text-[var(--color-heading)]">Project Message</label>
-                                    <textarea
-                                        id="message"
-                                        rows={4}
-                                        placeholder="Project Message"
-                                        className="w-full px-4 py-3 rounded-[var(--radius-input)] border border-[var(--color-border)] bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] transition-all resize-none"
-                                        required
-                                    />
-                                </div>
+                                        {/* Name & Email Row */}
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                                            <div className="flex flex-col gap-1.5">
+                                                <label htmlFor="fullName" className="text-xs sm:text-sm font-semibold text-[var(--color-heading)]">
+                                                    Full Name <span className="text-[#0F766E]">*</span>
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    id="fullName"
+                                                    value={formData.fullName}
+                                                    onChange={handleChange}
+                                                    placeholder="Enter your full name"
+                                                    className="w-full px-4 py-3 rounded-[var(--radius-input)] border border-[var(--color-border)] bg-[#FAFCFB] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] transition-all text-xs sm:text-sm text-[#0F172A] placeholder:text-gray-400"
+                                                    required
+                                                    disabled={status === "submitting"}
+                                                />
+                                            </div>
+                                            <div className="flex flex-col gap-1.5">
+                                                <label htmlFor="email" className="text-xs sm:text-sm font-semibold text-[var(--color-heading)]">
+                                                    Email Address <span className="text-[#0F766E]">*</span>
+                                                </label>
+                                                <input
+                                                    type="email"
+                                                    id="email"
+                                                    value={formData.email}
+                                                    onChange={handleChange}
+                                                    placeholder="Enter your email address"
+                                                    className="w-full px-4 py-3 rounded-[var(--radius-input)] border border-[var(--color-border)] bg-[#FAFCFB] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] transition-all text-xs sm:text-sm text-[#0F172A] placeholder:text-gray-400"
+                                                    required
+                                                    disabled={status === "submitting"}
+                                                />
+                                            </div>
+                                        </div>
 
-                                <div className="flex flex-col sm:flex-row items-center gap-4 mt-2">
-                                    <Button type="submit" size="lg" className="w-full sm:w-auto shadow-lg shadow-[var(--color-primary)]/20 group">
-                                        Send Message
-                                        <Send className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                                    </Button>
-                                </div>
-                            </form>
+                                        {/* Phone & Company Row */}
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                                            <div className="flex flex-col gap-1.5">
+                                                <label htmlFor="phone" className="text-xs sm:text-sm font-semibold text-[var(--color-heading)]">
+                                                    Mobile Number <span className="text-[#0F766E]">*</span>
+                                                </label>
+                                                <input
+                                                    type="tel"
+                                                    id="phone"
+                                                    value={formData.phone}
+                                                    onChange={handleChange}
+                                                    placeholder="Enter your mobile number"
+                                                    className="w-full px-4 py-3 rounded-[var(--radius-input)] border border-[var(--color-border)] bg-[#FAFCFB] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] transition-all text-xs sm:text-sm text-[#0F172A] placeholder:text-gray-400"
+                                                    required
+                                                    disabled={status === "submitting"}
+                                                />
+                                            </div>
+                                            <div className="flex flex-col gap-1.5">
+                                                <label htmlFor="company" className="text-xs sm:text-sm font-semibold text-[var(--color-heading)]">
+                                                    Company Name <span className="text-gray-400 font-normal">(Optional)</span>
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    id="company"
+                                                    value={formData.company}
+                                                    onChange={handleChange}
+                                                    placeholder="Company / Institution"
+                                                    className="w-full px-4 py-3 rounded-[var(--radius-input)] border border-[var(--color-border)] bg-[#FAFCFB] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] transition-all text-xs sm:text-sm text-[#0F172A] placeholder:text-gray-400"
+                                                    disabled={status === "submitting"}
+                                                />
+                                            </div>
+                                        </div>
+
+                                        {/* Styled Dropdown for Service Required */}
+                                        <div className="flex flex-col gap-1.5">
+                                            <label htmlFor="serviceInterest" className="text-xs sm:text-sm font-semibold text-[var(--color-heading)] select-none">
+                                                Service Required <span className="text-[#0F766E]">*</span>
+                                            </label>
+
+                                            <div className="relative" ref={selectRef}>
+                                                <input
+                                                    type="text"
+                                                    required
+                                                    tabIndex={-1}
+                                                    value={formData.serviceInterest}
+                                                    onChange={() => {}}
+                                                    className="sr-only"
+                                                    aria-hidden="true"
+                                                />
+
+                                                <button
+                                                    type="button"
+                                                    disabled={status === "submitting"}
+                                                    onClick={() => setIsSelectOpen(prev => !prev)}
+                                                    className={cn(
+                                                        "w-full px-4 py-3 rounded-[var(--radius-input)] border bg-[#FAFCFB] flex items-center justify-between text-left transition-all text-xs sm:text-sm cursor-pointer shadow-2xs outline-none touch-manipulation font-sans",
+                                                        isSelectOpen
+                                                            ? "border-[#0F766E] ring-2 ring-[#0F766E]/20 bg-white"
+                                                            : "border-[var(--color-border)] hover:border-[#0F766E]/50",
+                                                        formData.serviceInterest ? "text-[#0F172A] font-medium" : "text-gray-400 font-normal"
+                                                    )}
+                                                >
+                                                    <span className="truncate pr-2">
+                                                        {formData.serviceInterest || "Select a service category"}
+                                                    </span>
+                                                    <ChevronDown className={cn(
+                                                        "w-4 h-4 text-gray-400 transition-transform duration-200 shrink-0",
+                                                        isSelectOpen && "rotate-180 text-[#0F766E]"
+                                                    )} />
+                                                </button>
+
+                                                <AnimatePresence>
+                                                    {isSelectOpen && (
+                                                        <motion.div
+                                                            initial={{ opacity: 0, y: -4, scale: 0.99 }}
+                                                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                            exit={{ opacity: 0, y: -4, scale: 0.99 }}
+                                                            transition={{ duration: 0.15, ease: "easeOut" }}
+                                                            data-lenis-prevent="true"
+                                                            data-lenis-prevent-wheel="true"
+                                                            data-lenis-prevent-touch="true"
+                                                            onWheel={(e) => e.stopPropagation()}
+                                                            onTouchMove={(e) => e.stopPropagation()}
+                                                            className="absolute top-full left-0 right-0 mt-1.5 z-50 bg-white border border-gray-200 rounded-xl shadow-xl shadow-black/10 p-1.5 flex flex-col gap-0.5 max-h-48 overflow-y-auto overscroll-contain"
+                                                            style={{
+                                                                scrollbarWidth: 'thin',
+                                                                scrollbarColor: '#0F766E #EDF5F2'
+                                                            }}
+                                                        >
+                                                            {SERVICE_OPTIONS.map((opt) => {
+                                                                const isSelected = formData.serviceInterest === opt;
+                                                                return (
+                                                                    <button
+                                                                        key={opt}
+                                                                        type="button"
+                                                                        onClick={() => {
+                                                                            setFormData(prev => ({ ...prev, serviceInterest: opt }));
+                                                                            setIsSelectOpen(false);
+                                                                        }}
+                                                                        className={cn(
+                                                                            "w-full text-left px-3 py-2.5 rounded-lg text-xs sm:text-sm font-sans transition-colors flex items-center justify-between cursor-pointer touch-manipulation",
+                                                                            isSelected
+                                                                                ? "bg-[#EDF5F2] text-[#0F766E] font-semibold"
+                                                                                : "text-[#0F172A] hover:bg-[#F8FAF9] hover:text-[#0F766E] font-normal"
+                                                                        )}
+                                                                    >
+                                                                        <span className="truncate pr-2">{opt}</span>
+                                                                        {isSelected && (
+                                                                            <Check className="w-4 h-4 text-[#0F766E] shrink-0 stroke-[2.5]" />
+                                                                        )}
+                                                                    </button>
+                                                                );
+                                                            })}
+                                                        </motion.div>
+                                                    )}
+                                                </AnimatePresence>
+                                            </div>
+
+                                            {/* Custom Service Input (Shows when "Other (Please specify)" is selected) */}
+                                            <AnimatePresence>
+                                                {formData.serviceInterest === "Other (Please specify)" && (
+                                                    <motion.div
+                                                        initial={{ opacity: 0, height: 0, y: -4 }}
+                                                        animate={{ opacity: 1, height: "auto", y: 0 }}
+                                                        exit={{ opacity: 0, height: 0, y: -4 }}
+                                                        transition={{ duration: 0.2 }}
+                                                        className="flex flex-col gap-1 overflow-hidden pt-1.5"
+                                                    >
+                                                        <label htmlFor="customInterest" className="text-xs font-semibold text-[#0F172A]">
+                                                            Please Specify Your Required Service <span className="text-[#0F766E]">*</span>
+                                                        </label>
+                                                        <input
+                                                            required
+                                                            disabled={status === "submitting"}
+                                                            type="text"
+                                                            id="customInterest"
+                                                            value={formData.customInterest}
+                                                            onChange={handleChange}
+                                                            className="w-full px-4 py-3 rounded-[var(--radius-input)] border border-[var(--color-border)] bg-[#FAFCFB] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] transition-all text-xs sm:text-sm text-[#0F172A] placeholder:text-gray-400 disabled:opacity-50"
+                                                            placeholder="E.g., Custom SaaS development, IT consultation, MoU..."
+                                                        />
+                                                    </motion.div>
+                                                )}
+                                            </AnimatePresence>
+                                        </div>
+
+                                        {/* Project Message */}
+                                        <div className="flex flex-col gap-1.5">
+                                            <label htmlFor="message" className="text-xs sm:text-sm font-semibold text-[var(--color-heading)]">
+                                                Project Message <span className="text-[#0F766E]">*</span>
+                                            </label>
+                                            <textarea
+                                                id="message"
+                                                rows={4}
+                                                value={formData.message}
+                                                onChange={handleChange}
+                                                placeholder="Tell us about your project or inquiry..."
+                                                className="w-full px-4 py-3 rounded-[var(--radius-input)] border border-[var(--color-border)] bg-[#FAFCFB] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] transition-all resize-none text-xs sm:text-sm text-[#0F172A] placeholder:text-gray-400"
+                                                required
+                                                disabled={status === "submitting"}
+                                            />
+                                        </div>
+
+                                        <div className="flex flex-col sm:flex-row items-center gap-4 mt-2">
+                                            <Button
+                                                type="submit"
+                                                size="lg"
+                                                disabled={status === "submitting"}
+                                                className="w-full sm:w-auto bg-[#0F766E] hover:bg-[#115E59] text-white shadow-lg shadow-[#0F766E]/20 group disabled:opacity-70 transition-all duration-300 min-w-[180px] cursor-pointer"
+                                            >
+                                                {status === "submitting" ? (
+                                                    <span className="flex items-center justify-center gap-2">
+                                                        <div className="w-3.5 h-3.5 rounded-full border-2 border-white border-t-transparent animate-spin" />
+                                                        Transmitting...
+                                                    </span>
+                                                ) : (
+                                                    <span className="flex items-center justify-center gap-1.5">
+                                                        Send Message
+                                                        <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                                                    </span>
+                                                )}
+                                            </Button>
+                                        </div>
+                                    </motion.form>
+                                )}
+                            </AnimatePresence>
                         </CardMotion>
 
                     </div>
@@ -255,3 +544,4 @@ export function ContactSection({ config }: { config?: SiteConfigData | null }) {
         </SectionWrapper>
     );
 }
+

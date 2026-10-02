@@ -97,46 +97,25 @@ function stripEmojis(text: string): string {
 }
 
 function generateGmailUrl(email: string, query?: string) {
-    const subject = query ? `SS40 Network Inquiry: ${query.slice(0, 50)}` : "SS40 Network Enterprise & Academic Inquiry";
-    const body = `Hello SS40 Network Team,\n\nI am writing to inquire regarding the following details:\n\n- Area of Interest: [SS40 Digital Solutions / SS40 Products / SS40 Academics / General Support]\n- Requirement: ${query ? `"${query}"` : "Please share more information on your services."}\n- Full Name: \n- Phone Number: \n\nBest regards,`;
+    const subject = query ? `SS40 NETWORK Inquiry: ${query.slice(0, 50)}` : "SS40 NETWORK Enterprise & Academic Inquiry";
+    const body = `Hello SS40 NETWORK Team,\n\nI am writing to inquire regarding the following details:\n\n- Area of Interest: [SS40 DIGITAL SOLUTIONS / SS40 PRODUCTS / SS40 ACADEMICS / General Support]\n- Requirement: ${query ? `"${query}"` : "Please share more information on your services."}\n- Full Name: \n- Phone Number: \n\nBest regards,`;
     return `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
+
+import { SkyLogoIcon } from "@/components/ui/FloatingSupportHub";
 
 // ----------------------------------------------------------------------------
 // Bot Avatar Component
 // ----------------------------------------------------------------------------
 const BotAvatar = memo(function BotAvatar({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
-    const sizeClasses = size === "sm" ? "w-8 h-8" : size === "lg" ? "w-11 h-11" : "w-9 h-9";
+    const sizeClasses = size === "sm" ? "w-7 h-7 sm:w-8 sm:h-8" : size === "lg" ? "w-11 h-11" : "w-9 h-9 sm:w-10 sm:h-10";
+    const iconSizes = size === "sm" ? "w-4.5 h-4.5 sm:w-5 sm:h-5" : size === "lg" ? "w-8 h-8" : "w-6 h-6 sm:w-7 sm:h-7";
 
     return (
-        <div className={`${sizeClasses} rounded-full bg-gradient-to-tr from-[#0F766E] to-[#14B8A6] p-0.5 flex items-center justify-center shadow-xs shrink-0 border border-white/40 ring-1 ring-[#0F766E]/20 overflow-hidden`}>
-            <svg
-                viewBox="0 0 100 100"
-                className="w-full h-full drop-shadow-xs"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-            >
-                {/* Upper Visor Head - Enlarged */}
-                <path
-                    d="M10 34C20 14 80 14 90 34C80 54 20 54 10 34Z"
-                    fill="#FFFFFF"
-                />
-                {/* Visor Screen */}
-                <rect x="26" y="24" width="48" height="20" rx="10" fill="#0F172A" />
-                {/* Cyan Expressive Eyes */}
-                <circle cx="39" cy="34" r="4" fill="#2DD4BF" />
-                <circle cx="61" cy="34" r="4" fill="#2DD4BF" />
-
-                {/* Lower Body / Speech Bubble with Tail - Enlarged */}
-                <path
-                    d="M24 56C33 52 67 52 76 56C74 70 63 78 52 78C47 78 43 82 39 92C39 85 34 79 31 75C24 69 22 62 24 56Z"
-                    fill="#FFFFFF"
-                />
-                {/* Speech Ellipsis Dots */}
-                <circle cx="41" cy="67" r="3" fill="#0F172A" />
-                <circle cx="50" cy="67" r="3" fill="#0F172A" />
-                <circle cx="59" cy="67" r="3" fill="#0F172A" />
-            </svg>
+        <div className="relative shrink-0">
+            <div className={`${sizeClasses} rounded-xl bg-[#EDF5F2] flex items-center justify-center shadow-xs border border-[#0F766E]/25 p-1`}>
+                <SkyLogoIcon className={`${iconSizes}`} headColor="#0F766E" bubbleColor="#FFFFFF" dotsColor="#0F766E" />
+            </div>
         </div>
     );
 });
@@ -643,11 +622,16 @@ export function RuleBasedChatbot({
                                 <BotAvatar size="md" />
 
                                 <div>
-                                    <h3 className="font-bold text-sm sm:text-[15px] leading-tight text-white tracking-tight">
-                                        SS40 SKY
-                                    </h3>
+                                    <div className="flex items-center gap-1.5">
+                                        <h3 className="font-bold text-sm sm:text-[15px] leading-tight text-white tracking-tight">
+                                            SS40 SKY
+                                        </h3>
+                                        <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-extrabold bg-[#2DD4BF]/20 text-[#2DD4BF] border border-[#2DD4BF]/30 tracking-wider uppercase">
+                                            AI
+                                        </span>
+                                    </div>
                                     <p className="text-[11px] text-[#D8E8E2] font-medium leading-none mt-1">
-                                        SS40 AI Assistant
+                                        Verified AI Assistant
                                     </p>
                                 </div>
                             </div>

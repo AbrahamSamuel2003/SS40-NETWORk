@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { motion, Variants, AnimatePresence } from "framer-motion";
-import { ArrowRight, Lightbulb, Blocks, Target, Box, Sparkles, Sprout, HeartPulse, Building2, Monitor, LayoutDashboard } from "lucide-react";
+import { ArrowRight, Lightbulb, Blocks, Target, Box, Cpu, Sprout, HeartPulse, Building2, Monitor, LayoutDashboard } from "lucide-react";
 import Image from "next/image";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
@@ -56,7 +56,7 @@ function ProjectPreviewPlaceholder() {
 
 const IconMap: Record<string, React.ElementType> = {
     Building2,
-    Sparkles,
+    Cpu,
     Lightbulb,
     Target,
     HeartPulse,
@@ -492,98 +492,99 @@ export function StudentProjectModal({ project, onClose }: { project: any, onClos
     }
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center px-4 sm:px-6">
+        <div 
+            data-lenis-prevent="true"
+            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto"
+            onWheel={(e) => e.stopPropagation()}
+        >
             {/* Backdrop */}
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={onClose}
-                className="absolute inset-0 bg-gray-900/40 backdrop-blur-sm transition-opacity"
+                className="fixed inset-0 bg-[#0F172A]/70 backdrop-blur-md transition-opacity"
             />
 
             {/* Modal Dialog */}
             <motion.div
-                initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                data-lenis-prevent="true"
+                initial={{ opacity: 0, scale: 0.95, y: 15 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: 10 }}
-                transition={{ duration: 0.4, ease: [0.21, 0.47, 0.32, 0.98] }}
-                className="relative w-full max-w-3xl bg-white backdrop-blur-xl border border-gray-100 shadow-2xl rounded-[2.5rem] overflow-hidden flex flex-col max-h-[85vh] md:max-h-[90vh]"
+                exit={{ opacity: 0, scale: 0.95, y: 15 }}
+                transition={{ duration: 0.25, ease: [0.21, 0.47, 0.32, 0.98] }}
+                onWheel={(e) => e.stopPropagation()}
+                className="relative w-full max-w-3xl bg-white rounded-3xl border border-gray-100 shadow-2xl overflow-y-auto max-h-[90vh] z-10 flex flex-col my-auto custom-scrollbar"
             >
                 {/* Close Button */}
                 <button
                     onClick={onClose}
-                    className="absolute top-4 right-4 md:top-6 md:right-6 w-10 h-10 bg-gray-100 hover:bg-gray-200 text-gray-500 hover:text-gray-900 rounded-full flex items-center justify-center transition-colors z-20 focus-visible:outline-none"
+                    className="sticky top-4 self-end -mb-12 mr-4 z-30 w-10 h-10 bg-black/70 hover:bg-black text-white rounded-full flex items-center justify-center transition-colors focus-visible:outline-none cursor-pointer shadow-lg"
                     aria-label="Close modal"
                 >
                     <X className="w-5 h-5" />
                 </button>
 
-                {/* Scrollable Content Area */}
-                <div
-                    className="overflow-y-auto flex flex-col h-full [&::-webkit-scrollbar]:hidden"
-                    style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-                >
-                    {/* Header Image */}
-                    <div className="w-full h-64 md:h-80 relative overflow-hidden bg-gray-50 shrink-0">
-                        {project.image || project.imageUrl ? (
-                            <Image
-                                src={project.image || project.imageUrl}
-                                alt={project.title}
-                                fill
-                                sizes="(max-width: 768px) 100vw, 768px"
-                                className="object-cover"
-                            />
-                        ) : (
-                            <ProjectPreviewPlaceholder />
+                {/* Header Image */}
+                <div className="w-full h-64 md:h-80 relative overflow-hidden bg-gray-50 shrink-0">
+                    {project.image || project.imageUrl ? (
+                        <Image
+                            src={project.image || project.imageUrl}
+                            alt={project.title}
+                            fill
+                            sizes="(max-width: 768px) 100vw, 768px"
+                            className="object-cover"
+                        />
+                    ) : (
+                        <ProjectPreviewPlaceholder />
+                    )}
+                </div>
+
+                <div className="p-6 md:p-10 flex flex-col flex-grow text-left space-y-4">
+                    {/* Modal Header */}
+                    <div className="flex justify-between items-start gap-4">
+                        {project.badge && (
+                            <Badge className="bg-[#D8E8E2] text-[#0F766E] hover:bg-[#D8E8E2]/80 border-none font-bold uppercase tracking-wider text-[10px]">
+                                {project.badge}
+                            </Badge>
                         )}
-                        {/* Gradient overlay for text legibility if needed, but we keep content below */}
                     </div>
 
-                    <div className="p-6 md:p-10 flex flex-col flex-grow">
-                        {/* Modal Header */}
-                        <div className="mb-6 flex justify-between items-start gap-4">
-                            {project.badge && (
-                                <Badge className="bg-[#6B9F91]/10 text-[#6B9F91] hover:bg-[#6B9F91]/20 border-none font-bold uppercase tracking-wider text-[10px]">
-                                    {project.badge}
-                                </Badge>
-                            )}
-                        </div>
+                    {/* Project Title */}
+                    <h2 className="text-2xl md:text-3xl font-bold text-gray-900 leading-tight font-serif">
+                        {project.title}
+                    </h2>
 
-                        {/* Project Title */}
-                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2 leading-tight">
-                            {project.title}
-                        </h2>
+                    <p className="text-xs font-semibold text-[#0F766E] uppercase tracking-widest">
+                        {project.category}
+                    </p>
 
-                        <p className="text-sm font-semibold text-[#FFC900] uppercase tracking-widest mb-6">
-                            {project.category}
-                        </p>
+                    {/* Description */}
+                    <p className="text-gray-600 text-sm md:text-base leading-relaxed whitespace-pre-wrap">
+                        {project.description}
+                    </p>
 
-                        {/* Description */}
-                        <p className="text-gray-600 text-base md:text-lg leading-relaxed mb-8 flex-grow whitespace-pre-wrap">
-                            {project.description}
-                        </p>
+                    {/* Tags */}
+                    <div className="flex flex-wrap gap-2 pt-2">
+                        {parsedTags.map((tag: any, i: number) => (
+                            <span key={i} className="text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 border bg-[#D8E8E2] text-[#0F766E] border-[#0F766E]/20">
+                                {typeof tag === 'string' ? tag : tag.label}
+                            </span>
+                        ))}
+                    </div>
 
-                        {/* Tags */}
-                        <div className="flex flex-wrap gap-2 mb-8 mt-auto">
-                            {parsedTags.map((tag: any, i: number) => (
-                                <span key={i} className="text-xs md:text-sm font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 border bg-[#D8E8E2] text-[#0F766E] border-[#6B9F91]/20">
-                                    {typeof tag === 'string' ? tag : tag.label}
-                                </span>
-                            ))}
-                        </div>
-
-                        {project.projectUrl && (
+                    {project.projectUrl && (
+                        <div className="pt-4 border-t border-gray-100">
                             <a
                                 href={project.projectUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center justify-center w-full py-4 bg-[#6B9F91] text-white font-bold rounded-xl hover:bg-[#5C8C80] transition-colors"
+                                className="inline-flex items-center justify-center w-full py-3.5 bg-[#0F766E] hover:bg-[#115E59] text-white font-bold rounded-xl transition-colors text-sm shadow-md cursor-pointer"
                             >
-                                Explore Project
+                                Explore Live Project
                             </a>
-                        )}
-                    </div>
+                        </div>
+                    )}
                 </div>
             </motion.div>
         </div>

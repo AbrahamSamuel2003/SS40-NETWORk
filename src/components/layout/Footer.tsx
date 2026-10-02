@@ -118,7 +118,7 @@ export async function Footer() {
                             href={config?.urlLinkedin || "https://www.linkedin.com/company/ss40-network"}
                             target="_blank"
                             rel="noopener noreferrer"
-                            aria-label="Follow SS40 Network on LinkedIn"
+                            aria-label="Follow SS40 NETWORK on LinkedIn"
                             className="hover:text-[var(--color-primary)] transition-all hover:scale-110 w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 text-[#111827]"
                         >
                             <Linkedin className="w-5 h-5" />
@@ -127,7 +127,7 @@ export async function Footer() {
                             href={config?.urlInstagram || "https://instagram.com"}
                             target="_blank"
                             rel="noopener noreferrer"
-                            aria-label="Follow SS40 Network on Instagram"
+                            aria-label="Follow SS40 NETWORK on Instagram"
                             className="hover:text-[var(--color-primary)] transition-all hover:scale-110 w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 text-[#111827]"
                         >
                             <Instagram className="w-5 h-5" />
@@ -136,7 +136,7 @@ export async function Footer() {
                             href={config?.urlYoutube || "https://youtube.com"}
                             target="_blank"
                             rel="noopener noreferrer"
-                            aria-label="Follow SS40 Network on YouTube"
+                            aria-label="Follow SS40 NETWORK on YouTube"
                             className="hover:text-[var(--color-primary)] transition-all hover:scale-110 w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 text-[#111827]"
                         >
                             <Youtube className="w-5 h-5" />

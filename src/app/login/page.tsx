@@ -10,8 +10,7 @@ import {
     Eye,
     EyeOff,
     ArrowLeft,
-    ShieldCheck,
-    Sparkles
+    ShieldCheck
 } from 'lucide-react';
 import type { SiteConfigData } from '@/lib/site-config';
 
@@ -328,7 +327,7 @@ export default function LoginPage() {
                 {/* Bottom Security Note */}
                 <div className="pb-6 pt-2 text-center shrink-0">
                     <p className="text-[11px] text-gray-400 font-medium flex items-center justify-center gap-1.5">
-                        <Lock className="w-3 h-3 text-[#0F766E]" /> Authorized access only • SS40 Network
+                        <Lock className="w-3 h-3 text-[#0F766E]" /> Authorized access only • SS40 NETWORK
                     </p>
                 </div>
             </div>

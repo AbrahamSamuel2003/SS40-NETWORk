@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Hero } from "@/components/home/Hero";
 import { About } from "@/components/home/About";
 import { BusinessWings } from "@/components/home/BusinessWings";
-import { InteractiveImpactShowcase } from "@/components/home/InteractiveImpactShowcase";
 import { SuccessStories } from "@/components/home/SuccessStories";
 import { ActivityUpdates } from "@/components/home/ActivityUpdates";
 import { TrustedBy } from "@/components/home/TrustedBy";
@@ -124,7 +123,7 @@ export default async function Home() {
   return (
     <div className="w-full flex-col flex">
       {/* Declarative Speculative Preload for Primary LCP Hero Visual */}
-      <link rel="preload" href="/images/hero/wing-digital-solutions.webp" as="image" type="image/webp" fetchPriority="high" />
+      <link rel="preload" href="/images/hero/wing-digital-solutions.webp" as="image" type="image/webp" />
 
       <script
         type="application/ld+json"
@@ -148,9 +147,6 @@ export default async function Home() {
           <ActivityUpdates data={activities} />
         </div>
       )}
-      <div className="cv-auto">
-        <InteractiveImpactShowcase />
-      </div>
       {isSectionVisible(config, 'home_logos') && (
         <div className="cv-auto">
           <TrustedBy data={logos} />

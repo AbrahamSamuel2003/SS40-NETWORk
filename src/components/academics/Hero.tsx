@@ -127,7 +127,7 @@ export function Hero() {
                                 <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-gradient-to-br from-[#111827] to-gray-800 flex items-center justify-center shadow-md border border-gray-700 mb-1 sm:mb-2 group">
                                     <Rocket className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white transform group-hover:-translate-y-1 transition-transform" />
                                 </div>
-                                <span className="text-[7px] sm:text-[8px] uppercase tracking-widest text-[#6B9F91] font-bold">SS40 Network</span>
+                                <span className="text-[7px] sm:text-[8px] uppercase tracking-widest text-[#6B9F91] font-bold">SS40 NETWORK</span>
                                 <h3 className="text-[10px] sm:text-xs font-black text-[#111827] leading-tight">Career<br className="hidden sm:inline" /> Launch Pad</h3>
                             </motion.div>
 

@@ -1,6 +1,9 @@
 # Targets modern browsers only to drop legacy Next.js polyfills and reduce main-thread JS execution.
->0.3%
+defaults and fully supports es6-module
+Chrome >= 110
+Firefox >= 110
+Safari >= 16.0
+Edge >= 110
 not dead
 not op_mini all
 not IE 11
-last 2 versions

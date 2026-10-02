@@ -1,7 +1,7 @@
 import React from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft, Sparkles } from "lucide-react";
+import { ArrowLeft, Layers } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { Container } from "@/components/ui/Container";
 import { BlogsList } from "./BlogsList";
@@ -82,7 +82,7 @@ export default async function AllBlogsPage() {
 
                     <div className="flex items-center justify-center mb-4">
                         <span className="px-5 py-1.5 bg-white text-[#6B9F91] text-xs font-bold uppercase tracking-widest rounded-full shadow-sm border border-[#6B9F91]/10 flex items-center gap-1.5">
-                            <Sparkles className="w-3.5 h-3.5" />
+                            <Layers className="w-3.5 h-3.5" />
                             Blogs and Field Updates
                         </span>
                     </div>

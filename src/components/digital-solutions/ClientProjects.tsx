@@ -3,183 +3,26 @@
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight, Image as ImageIcon, Lock, ShieldCheck, CheckCircle2, X } from "lucide-react";
+import { 
+    ArrowRight, 
+    Lock, 
+    CheckCircle2, 
+    X, 
+    ExternalLink, 
+    BadgeCheck, 
+    Layers, 
+    Globe, 
+    ShieldCheck, 
+    ChevronLeft, 
+    ChevronRight,
+    Cpu
+} from "lucide-react";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
-import { slideUp, staggerContainer } from "@/lib/animations";
-import { scrollChildIntoContainer } from "@/utils/scroll";
-
-// Mock structural classes deleted: dynamic API is now the source of truth
 import { CardGridSkeleton } from "@/components/ui/Skeleton";
-
-// Helper components for card rendering
-function SingleProjectCard({ project }: { project: any }) {
-    return (
-        <>
-            {/* Featured Visual */}
-            <div className="w-full lg:w-7/12 aspect-video lg:aspect-auto bg-gray-100 relative overflow-hidden flex items-center justify-center shrink-0 min-h-[260px]">
-                {project.isConfidential ? (
-                    <div className="absolute inset-0 bg-gray-100 flex flex-col items-center justify-center text-center p-6 select-none opacity-80 backdrop-blur-md">
-                        <div className="w-14 h-14 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-400 mb-3">
-                            <Lock className="w-7 h-7" />
-                        </div>
-                        <h4 className="font-bold text-gray-700 text-xs mb-1 uppercase tracking-wider">Confidential Project</h4>
-                        <p className="text-[11px] text-gray-500">Visuals protected under corporate NDA.</p>
-                    </div>
-                ) : project.imageUrl ? (
-                    <img src={project.imageUrl} alt={project.title} loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
-                ) : (
-                    <div className="absolute inset-0 bg-[#6B9F91]/5 flex flex-col p-6 gap-3 group-hover:scale-105 transition-transform duration-700 ease-out">
-                        <div className="w-full flex justify-between items-center bg-white/80 backdrop-blur-md p-3 rounded-lg border border-gray-200 shadow-sm">
-                            <div className="flex items-center gap-2">
-                                <div className="w-6 h-6 rounded-full bg-[#6B9F91]/20" />
-                                <div className="w-24 h-2.5 bg-gray-200 rounded-full" />
-                            </div>
-                            <div className="flex gap-1.5">
-                                <div className="w-6 h-6 rounded-full bg-gray-200" />
-                                <div className="w-6 h-6 rounded-full bg-gray-200" />
-                            </div>
-                        </div>
-                        <div className="flex gap-3 flex-1">
-                            <div className="w-1/4 h-full bg-white/80 backdrop-blur-md rounded-lg border border-gray-200 shadow-sm p-3 flex flex-col gap-2">
-                                <div className="w-full h-6 bg-gray-100 rounded" />
-                                <div className="w-2/3 h-6 bg-gray-100 rounded" />
-                            </div>
-                            <div className="flex-1 h-full bg-white/80 backdrop-blur-md rounded-lg border border-gray-200 shadow-sm p-3 grid grid-cols-2 gap-3">
-                                <div className="bg-[#6B9F91]/10 rounded" />
-                                <div className="bg-gray-100 rounded" />
-                                <div className="bg-gray-100 rounded col-span-2" />
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                <div className="absolute inset-0 bg-gray-900/10 flex items-center justify-center z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    <div className="bg-white/90 backdrop-blur-sm px-5 py-2 rounded-full text-xs font-bold text-gray-800 shadow-xl flex items-center gap-2">
-                        <ImageIcon className="w-3.5 h-3.5 text-gray-500" />
-                        Project Visual Preview
-                    </div>
-                </div>
-            </div>
-
-            {/* Featured Content Area */}
-            <div className="w-full lg:w-5/12 p-6 lg:p-8 flex flex-col justify-center bg-white relative z-10 border-l border-gray-100">
-                <div className="flex items-center justify-between gap-3 mb-3">
-                    <span className="px-2.5 py-0.5 bg-gray-100 text-gray-600 text-[10px] font-bold uppercase tracking-wider rounded whitespace-nowrap">
-                        {project.industry}
-                    </span>
-                    {project.status && (
-                        <div className="flex items-center gap-1 text-[10px] font-bold text-[#6B9F91] uppercase tracking-wider">
-                            <CheckCircle2 className="w-3 h-3" />
-                            {project.status}
-                        </div>
-                    )}
-                </div>
-
-                <h3 className="text-xl md:text-2xl font-bold text-[var(--color-heading)] mb-2.5 leading-tight group-hover:text-[#6B9F91] transition-colors">
-                    {project.title}
-                </h3>
-
-                <p className="text-[var(--color-body-text)] text-sm mb-4 leading-relaxed line-clamp-3 text-gray-600">
-                    {project.description}
-                </p>
-
-                <div className="flex flex-wrap gap-1.5 mb-6">
-                    {Array.isArray(project.tags) && project.tags.slice(0, 4).map((tag: any, idx: number) => (
-                        <span key={idx} className="px-2.5 py-1 bg-[#6B9F91]/10 text-[#6B9F91] rounded-md text-xs font-semibold">
-                            {tag}
-                        </span>
-                    ))}
-                </div>
-
-                <div className="mt-auto">
-                    <Button
-                        onClick={(e: React.MouseEvent) => {
-                            e.stopPropagation();
-                        }}
-                        size="sm"
-                        className="w-full sm:w-auto bg-[#6B9F91] hover:bg-[#588478] text-white shadow-md shadow-[#6B9F91]/20 font-semibold"
-                    >
-                        View Details
-                    </Button>
-                </div>
-            </div>
-        </>
-    );
-}
-
-function GridProjectCard({ project }: { project: any }) {
-    return (
-        <>
-            {/* Grid Visual Placeholder */}
-            <div className="relative w-full aspect-[4/3] bg-gray-50 overflow-hidden shrink-0 flex items-center justify-center border-b border-gray-100">
-                {project.isConfidential ? (
-                    <div className="absolute inset-0 bg-gray-100 flex flex-col items-center justify-center text-center p-4 select-none opacity-80 backdrop-blur-md">
-                        <div className="w-12 h-12 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-400 mb-2">
-                            <Lock className="w-6 h-6" />
-                        </div>
-                        <h4 className="font-bold text-gray-700 text-xs mb-0.5 uppercase tracking-wider">Confidential Project</h4>
-                        <p className="text-[11px] text-gray-500">Visuals protected under corporate NDA.</p>
-                    </div>
-                ) : project.imageUrl ? (
-                    <img src={project.imageUrl} alt={project.title} loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
-                ) : (
-                    <div className="w-full h-full flex flex-col p-4 gap-2.5 bg-[#6B9F91]/5 group-hover:scale-105 transition-transform duration-700 ease-out">
-                        <div className="w-full h-1/2 flex gap-2.5">
-                            <div className="w-1/3 bg-white border border-gray-200 rounded-md shadow-sm" />
-                            <div className="flex-1 bg-white border border-gray-200 rounded-md shadow-sm" />
-                        </div>
-                        <div className="w-full h-1/2 bg-white border border-gray-200 rounded-md shadow-sm" />
-                    </div>
-                )}
-            </div>
-
-            {/* Grid Content Area */}
-            <div className="p-4 sm:p-5 flex flex-col flex-1">
-                <div className="flex items-center justify-between gap-3 mb-2.5">
-                    <span className="px-2.5 py-0.5 bg-gray-100 text-gray-600 text-[10px] font-bold uppercase tracking-wider rounded whitespace-nowrap overflow-hidden text-ellipsis">
-                        {project.industry}
-                    </span>
-                    {project.status && (
-                        <div className="flex items-center gap-1 text-[10px] font-bold text-[#6B9F91] uppercase tracking-wider whitespace-nowrap overflow-hidden text-ellipsis">
-                            {project.status}
-                        </div>
-                    )}
-                </div>
-
-                <h3 className="font-bold text-base md:text-lg text-[var(--color-heading)] leading-snug mb-2 group-hover:text-[#6B9F91] transition-colors">
-                    {project.title}
-                </h3>
-
-                <p className="text-[var(--color-body-text)] text-xs sm:text-sm mb-4 flex-1 line-clamp-3 text-gray-600 leading-relaxed">
-                    {project.description}
-                </p>
-
-                <div className="flex flex-wrap gap-1 mb-4">
-                    {Array.isArray(project.tags) && project.tags.slice(0, 3).map((tag: any, idx: number) => (
-                        <span key={idx} className="px-2 py-0.5 bg-[#6B9F91]/10 text-[#6B9F91] rounded text-[10px] sm:text-xs font-semibold whitespace-nowrap">
-                            {tag}
-                        </span>
-                    ))}
-                    {Array.isArray(project.tags) && project.tags.length > 3 && (
-                        <span className="px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded text-[10px] sm:text-xs font-semibold whitespace-nowrap">
-                            +{project.tags.length - 3}
-                        </span>
-                    )}
-                </div>
-
-                <div className="mt-auto pt-3 border-t border-gray-100 flex items-center justify-between">
-                    <span className="text-xs font-bold text-[#6B9F91] group-hover:text-[#588478] transition-colors inline-flex items-center gap-1.5">
-                        View Details
-                        <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                    </span>
-                </div>
-            </div>
-        </>
-    );
-}
+import { cn } from "@/utils/cn";
 
 interface ClientProjectsProps {
     initialData?: any[];
@@ -188,41 +31,10 @@ interface ClientProjectsProps {
 export function ClientProjects({ initialData }: ClientProjectsProps = {}) {
     const [projects, setProjects] = React.useState<any[]>(Array.isArray(initialData) ? initialData : []);
     const [isLoading, setIsLoading] = React.useState(!initialData || (Array.isArray(initialData) && initialData.length === 0));
+    const [activeTab, setActiveTab] = React.useState(0);
     const [activeModalProject, setActiveModalProject] = React.useState<any | null>(null);
-
     const [activeMobileIdx, setActiveMobileIdx] = React.useState(0);
     const mobileScrollRef = React.useRef<HTMLDivElement>(null);
-    
-    // Adaptive layout: determine layout type based on content count and featured status
-    const layoutConfig = React.useMemo(() => {
-        const safeProjects = Array.isArray(projects) ? projects : [];
-        if (safeProjects.length === 0) return { type: 'empty', featured: null, grid: [] };
-        
-        // If there's a featured item, use featured-grid layout regardless of count
-        const featuredItem = safeProjects.find(p => p && p.isFeatured);
-        if (featuredItem) {
-            const gridItems = safeProjects.filter(p => p && p.id !== featuredItem.id);
-            return { type: 'featured-grid', featured: featuredItem, grid: gridItems };
-        }
-        
-        // No featured item - use count-based layouts
-        if (safeProjects.length === 1) return { type: 'single', featured: safeProjects[0], grid: [] };
-        if (safeProjects.length === 2) return { type: 'two-grid', featured: null, grid: safeProjects };
-        if (safeProjects.length === 3) return { type: 'three-grid', featured: null, grid: safeProjects };
-        
-        // 4+ items with no featured: use first item as featured
-        const defaultFeatured = safeProjects[0];
-        const gridItems = safeProjects.slice(1);
-        return { type: 'featured-grid', featured: defaultFeatured, grid: gridItems };
-    }, [projects]);
-
-    const displayedProjects = React.useMemo(() => {
-        if (layoutConfig.type === 'featured-grid') {
-            // Show featured + up to 3 grid items
-            return [layoutConfig.featured, ...(layoutConfig.grid || []).slice(0, 3)].filter(Boolean);
-        }
-        return (layoutConfig.grid && layoutConfig.grid.length > 0) ? layoutConfig.grid : [layoutConfig.featured].filter(Boolean);
-    }, [layoutConfig]);
 
     React.useEffect(() => {
         if (initialData && Array.isArray(initialData) && initialData.length > 0) {
@@ -242,87 +54,36 @@ export function ClientProjects({ initialData }: ClientProjectsProps = {}) {
             .catch(() => setIsLoading(false));
     }, [initialData]);
 
+    const displayedProjects = React.useMemo(() => {
+        const safe = Array.isArray(projects) ? projects.filter(p => p && p.isActive !== false) : [];
+        const seen = new Set<string>();
+        return safe.filter(p => {
+            const key = String(p.title || p.id).trim().toLowerCase();
+            if (seen.has(key)) return false;
+            seen.add(key);
+            return true;
+        });
+    }, [projects]);
+
     const scrollToMobileProject = (idx: number) => {
         if (!mobileScrollRef.current) return;
-        const mobileCards = mobileScrollRef.current.querySelectorAll<HTMLElement>(".client-project-mobile-card");
-        const card = mobileCards[idx];
-        if (!card) return;
-
-        scrollChildIntoContainer(mobileScrollRef.current, card, "smooth");
+        const container = mobileScrollRef.current;
+        const cardWidth = container.clientWidth * 0.85 + 16;
+        container.scrollTo({
+            left: idx * cardWidth,
+            behavior: "smooth"
+        });
     };
 
-    // Scroll-based active index tracking: reliably determines which card is closest
-    // to the horizontal center of the scroll container. This is more robust than
-    // IntersectionObserver with a high threshold, because during scroll the user
-    // passes through a gap where neither card reaches the threshold.
-    const updateActiveMobileIdx = React.useCallback(() => {
-        if (!mobileScrollRef.current) return;
-        const mobileCards = mobileScrollRef.current.querySelectorAll<HTMLElement>(".client-project-mobile-card");
-        if (!mobileCards || mobileCards.length === 0) return;
-
-        const containerRect = mobileScrollRef.current.getBoundingClientRect();
-        const containerCenter = containerRect.left + containerRect.width / 2;
-
-        let closestIdx = 0;
-        let minDistance = Infinity;
-
-        mobileCards.forEach((card, idx) => {
-            if (!card) return;
-            const cardRect = card.getBoundingClientRect();
-            const cardCenter = cardRect.left + cardRect.width / 2;
-            const distance = Math.abs(containerCenter - cardCenter);
-            if (distance < minDistance) {
-                minDistance = distance;
-                closestIdx = idx;
-            }
-        });
-
-        setActiveMobileIdx(closestIdx);
-    }, []);
-
-    React.useEffect(() => {
-        if (isLoading || displayedProjects.length === 0) return;
-
-        setActiveMobileIdx(0);
-
-        const container = mobileScrollRef.current;
-        if (!container) return;
-
-        // Reset horizontal position only — never use scrollIntoView (it scrolls the page)
-        container.scrollLeft = 0;
-
-        // Set initial active index immediately after mount
-        updateActiveMobileIdx();
-
-        // Use scroll event for reliable, real-time dot updates
-        container.addEventListener("scroll", updateActiveMobileIdx, { passive: true });
-
-        return () => {
-            container.removeEventListener("scroll", updateActiveMobileIdx);
-        };
-    }, [isLoading, displayedProjects.length, updateActiveMobileIdx]);
-
-    React.useEffect(() => {
-        if (!isLoading && typeof window !== 'undefined' && (window.location.hash === '#featured-projects' || window.location.hash === '#view-all-projects')) {
-            const hashId = window.location.hash.substring(1);
-            const el = document.getElementById(hashId);
-            if (el) {
-                setTimeout(() => {
-                    el.scrollIntoView({ behavior: 'smooth' });
-                }, 100);
-            }
-        }
-    }, [isLoading]);
-
-    if (isLoading || projects.length === 0) {
+    if (isLoading || displayedProjects.length === 0) {
         return (
-            <SectionWrapper id="featured-projects" className="bg-[#D8E8E2] overflow-visible scroll-mt-24">
-                <Container className="space-y-12 lg:space-y-16">
+            <SectionWrapper id="client-projects" className="bg-[#D8E8E2] overflow-visible scroll-mt-24 py-8 sm:py-12 lg:py-14">
+                <Container className="space-y-8 lg:space-y-12 max-w-6xl">
                     <SectionHeading
-                        badge="Client Projects"
-                        title="Solutions That Drive Business Growth"
-                        highlight="Business Growth"
-                        description="Explore a selection of digital solutions developed to solve real business challenges across different industries."
+                        badge="CLIENT PROJECTS"
+                        title={<>Solutions That Drive <span className="text-[#0F766E]">Business Growth.</span></>}
+                        description="Explore enterprise digital solutions engineered to automate operations, scale workflows, and eliminate bottlenecks."
+                        align="center"
                     />
                     <CardGridSkeleton count={3} columns={3} />
                 </Container>
@@ -330,446 +91,447 @@ export function ClientProjects({ initialData }: ClientProjectsProps = {}) {
         );
     }
 
-    return (
-        <SectionWrapper id="featured-projects" className="bg-[#D8E8E2] overflow-visible scroll-mt-24">
-            <Container className="space-y-8 lg:space-y-12">
+    const currentProject = displayedProjects[activeTab] || displayedProjects[0];
+    const tags = Array.isArray(currentProject?.tags) ? currentProject.tags : [];
 
-                {/* Section Header */}
+    return (
+        <SectionWrapper id="client-projects" className="bg-[#D8E8E2] scroll-mt-24 relative overflow-hidden py-10 sm:py-14 lg:py-16">
+            {/* Ambient Background Glow */}
+            <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[#2DD4BF]/10 rounded-full blur-3xl pointer-events-none -z-0" />
+
+            <Container className="flex flex-col gap-6 sm:gap-8 lg:gap-10 relative z-10 max-w-6xl">
+                
+                {/* 1. Header Section */}
                 <SectionHeading
-                    badge="Client Projects"
-                    title="Solutions That Drive Business Growth"
-                    highlight="Business Growth"
-                    description="Explore a selection of digital solutions developed to solve real business challenges across different industries."
-                    className="mb-8 lg:mb-12"
+                    badge="CLIENT PROJECTS"
+                    title={<>Enterprise Solutions Built for <span className="text-[#0F766E]">Real Scale.</span></>}
+                    description="Explore custom software architectures, automation platforms, and digital systems engineered for high-growth businesses."
+                    align="center"
                 />
 
-                <div className="hidden lg:flex flex-col gap-6 lg:gap-8">
-                    {(() => {
-                        switch (layoutConfig.type) {
-                            case 'single':
+                {/* 2. Interactive Project Switcher Tabs (Desktop & Tablet) */}
+                {displayedProjects.length > 1 && (
+                    <div className="hidden sm:flex w-full justify-center">
+                        <div className="inline-flex flex-wrap items-center justify-center p-1 sm:p-1.5 rounded-2xl bg-white/80 backdrop-blur-md border border-gray-200/80 shadow-sm gap-1.5 max-w-full">
+                            {displayedProjects.map((p, idx) => {
+                                const isActive = activeTab === idx;
                                 return (
-                                    <motion.div
-                                        initial="hidden"
-                                        whileInView="visible"
-                                        viewport={{ once: true, margin: "-100px" }}
-                                        variants={slideUp}
-                                        role="button"
-                                        tabIndex={0}
-                                        onClick={() => setActiveModalProject(layoutConfig.featured)}
-                                        onKeyDown={(e: React.KeyboardEvent) => {
-                                            if (e.key === 'Enter' || e.key === 'Space') {
-                                                e.preventDefault();
-                                                setActiveModalProject(layoutConfig.featured);
-                                            }
-                                        }}
-                                        className="cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 w-full bg-white border border-[var(--color-border)] rounded-2xl overflow-hidden shadow-xl shadow-gray-200/50 flex flex-col lg:flex-row group"
-                                    >
-                                        <SingleProjectCard project={layoutConfig.featured} />
-                                    </motion.div>
-                                );
-                            
-                            case 'two-grid':
-                                return (
-                                    <motion.div
-                                        variants={staggerContainer}
-                                        initial="hidden"
-                                        whileInView="visible"
-                                        viewport={{ once: true, margin: "-100px" }}
-                                        className="grid grid-cols-2 gap-6"
-                                    >
-                                        {layoutConfig.grid.map((project: any) => (
-                                            <motion.div
-                                                key={project.id}
-                                                variants={slideUp}
-                                                whileHover={{ y: -6, scale: 1.015, boxShadow: "0 20px 40px -8px rgba(107,159,145,0.18), 0 8px 16px -4px rgba(107,159,145,0.10)" }}
-                                                whileTap={{ scale: 0.98, y: -2 }}
-                                                transition={{ type: "spring", stiffness: 350, damping: 22 }}
-                                                role="button"
-                                                tabIndex={0}
-                                                onClick={() => setActiveModalProject(project)}
-                                                onKeyDown={(e: React.KeyboardEvent) => {
-                                                    if (e.key === 'Enter' || e.key === 'Space') {
-                                                        e.preventDefault();
-                                                        setActiveModalProject(project);
-                                                    }
-                                                }}
-                                                className="cursor-pointer bg-white rounded-2xl flex flex-col group border border-[var(--color-border)] hover:border-[#6B9F91]/40 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 overflow-hidden"
-                                            >
-                                                <GridProjectCard project={project} />
-                                            </motion.div>
-                                        ))}
-                                    </motion.div>
-                                );
-                            
-                            case 'three-grid':
-                                return (
-                                    <motion.div
-                                        variants={staggerContainer}
-                                        initial="hidden"
-                                        whileInView="visible"
-                                        viewport={{ once: true, margin: "-100px" }}
-                                        className="grid grid-cols-3 gap-6"
-                                    >
-                                        {layoutConfig.grid.map((project: any) => (
-                                            <motion.div
-                                                key={project.id}
-                                                variants={slideUp}
-                                                whileHover={{ y: -6, scale: 1.015, boxShadow: "0 20px 40px -8px rgba(107,159,145,0.18), 0 8px 16px -4px rgba(107,159,145,0.10)" }}
-                                                whileTap={{ scale: 0.98, y: -2 }}
-                                                transition={{ type: "spring", stiffness: 350, damping: 22 }}
-                                                role="button"
-                                                tabIndex={0}
-                                                onClick={() => setActiveModalProject(project)}
-                                                onKeyDown={(e: React.KeyboardEvent) => {
-                                                    if (e.key === 'Enter' || e.key === 'Space') {
-                                                        e.preventDefault();
-                                                        setActiveModalProject(project);
-                                                    }
-                                                }}
-                                                className="cursor-pointer bg-white rounded-2xl flex flex-col group border border-[var(--color-border)] hover:border-[#6B9F91]/40 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 overflow-hidden"
-                                            >
-                                                <GridProjectCard project={project} />
-                                            </motion.div>
-                                        ))}
-                                    </motion.div>
-                                );
-                            
-                            case 'featured-grid':
-                                return (
-                                    <>
-                                        {/* Featured Project */}
-                                        <motion.div
-                                            initial="hidden"
-                                            whileInView="visible"
-                                            viewport={{ once: true, margin: "-100px" }}
-                                            variants={slideUp}
-                                            role="button"
-                                            tabIndex={0}
-                                            onClick={() => setActiveModalProject(layoutConfig.featured)}
-                                            onKeyDown={(e: React.KeyboardEvent) => {
-                                                if (e.key === 'Enter' || e.key === 'Space') {
-                                                    e.preventDefault();
-                                                    setActiveModalProject(layoutConfig.featured);
-                                                }
-                                            }}
-                                            className="cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 w-full bg-white border border-[var(--color-border)] rounded-2xl overflow-hidden shadow-xl shadow-gray-200/50 flex flex-col lg:flex-row group"
-                                        >
-                                            <SingleProjectCard project={layoutConfig.featured} />
-                                        </motion.div>
-
-                                        {/* Additional Projects Grid */}
-                                        {layoutConfig.grid.length > 0 && (
-                                            <motion.div
-                                                variants={staggerContainer}
-                                                initial="hidden"
-                                                whileInView="visible"
-                                                viewport={{ once: true, margin: "-100px" }}
-                                                className={`grid gap-6 mt-1 ${
-                                                    layoutConfig.grid.length === 1 
-                                                        ? 'grid-cols-1' 
-                                                        : layoutConfig.grid.length === 2 
-                                                        ? 'grid-cols-3 justify-center' 
-                                                        : 'grid-cols-3'
-                                                }`}
-                                            >
-                                                {layoutConfig.grid.slice(0, 3).map((project: any) => (
-                                                    <motion.div
-                                                        key={project.id}
-                                                        variants={slideUp}
-                                                        whileHover={{ y: -6, scale: 1.015, boxShadow: "0 20px 40px -8px rgba(107,159,145,0.18), 0 8px 16px -4px rgba(107,159,145,0.10)" }}
-                                                        whileTap={{ scale: 0.98, y: -2 }}
-                                                        transition={{ type: "spring", stiffness: 350, damping: 22 }}
-                                                        role="button"
-                                                        tabIndex={0}
-                                                        onClick={() => setActiveModalProject(project)}
-                                                        onKeyDown={(e: React.KeyboardEvent) => {
-                                                            if (e.key === 'Enter' || e.key === 'Space') {
-                                                                e.preventDefault();
-                                                                setActiveModalProject(project);
-                                                            }
-                                                        }}
-                                                        className="cursor-pointer bg-white rounded-2xl flex flex-col group border border-[var(--color-border)] hover:border-[#6B9F91]/40 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 overflow-hidden"
-                                                    >
-                                                        <GridProjectCard project={project} />
-                                                    </motion.div>
-                                                ))}
-                                            </motion.div>
+                                    <button
+                                        key={p.id || idx}
+                                        type="button"
+                                        onClick={() => setActiveTab(idx)}
+                                        className={cn(
+                                            "px-4 sm:px-5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 whitespace-nowrap flex items-center gap-2 select-none cursor-pointer border",
+                                            isActive
+                                                ? "bg-[#0F766E] text-white border-[#0F766E] shadow-sm shadow-[#0F766E]/20 ring-1 ring-[#2DD4BF]/40"
+                                                : "bg-white text-[#334155] border-transparent hover:border-[#0F766E]/30 hover:bg-white hover:text-[#0F766E]"
                                         )}
-                                    </>
-                                );
-                            
-                            default:
-                                return null;
-                        }
-                    })()}
-                </div>
-
-                {/* Mobile Native Horizontal Swipe Deck */}
-                <div className="flex flex-col lg:hidden relative overflow-visible -mx-6">
-                    <div
-                        ref={mobileScrollRef}
-                        className="flex w-full overflow-x-auto snap-x snap-mandatory pb-6 gap-4 items-stretch [&::-webkit-scrollbar]:hidden px-6"
-                        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-                    >
-                        {
-                            displayedProjects.map((project: any, idx: number) => (
-                                <div
-                                    key={`mobile-proj-${project.id}`}
-                                    data-mobile-id={idx}
-                                    role="button"
-                                    tabIndex={0}
-                                    onClick={() => setActiveModalProject(project)}
-                                    onKeyDown={(e: React.KeyboardEvent) => {
-                                        if (e.key === 'Enter' || e.key === 'Space') {
-                                            e.preventDefault();
-                                            setActiveModalProject(project);
-                                        }
-                                    }}
-                                    className="cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 client-project-mobile-card w-[clamp(270px,80vw,330px)] flex-shrink-0 flex flex-col bg-white rounded-2xl overflow-hidden shadow-lg shadow-gray-200/50 border border-gray-100 snap-center relative scroll-ml-6"
-                                >
-                                    {/* Visual Placeholder Area (4:3, 0 gap) */}
-                                    <div className="relative w-full aspect-[4/3] bg-gray-50 overflow-hidden shrink-0 flex items-center justify-center border-b border-gray-100">
-                                        {project.isConfidential ? (
-                                            <div className="absolute inset-0 bg-gray-100 flex flex-col items-center justify-center text-center p-4 select-none opacity-80 backdrop-blur-md">
-                                                <div className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-400 mb-2">
-                                                    <Lock className="w-5 h-5" />
-                                                </div>
-                                                <h4 className="font-bold text-gray-700 text-[11px] mb-0.5 uppercase tracking-wider">Confidential</h4>
-                                            </div>
-                                        ) : project.imageUrl ? (
-                                            <img src={project.imageUrl} alt={project.title} className="w-full h-full object-cover" />
+                                    >
+                                        {p.isConfidential ? (
+                                            <Lock className="w-3.5 h-3.5 opacity-80" />
                                         ) : (
-                                            <div className="w-full h-full flex flex-col p-3 gap-2 bg-[#6B9F91]/5">
-                                                <div className="w-full h-1/2 flex gap-2">
-                                                    <div className="w-1/3 bg-white border border-gray-200 rounded-md shadow-sm" />
-                                                    <div className="flex-1 bg-white border border-gray-200 rounded-md shadow-sm" />
-                                                </div>
-                                                <div className="w-full h-1/2 bg-white border border-gray-200 rounded-md shadow-sm" />
-                                            </div>
+                                            <Globe className="w-3.5 h-3.5 opacity-80" />
                                         )}
-                                    </div>
-
-                                    {/* Mobile Card Content */}
-                                    <div className="p-4 sm:p-5 flex flex-col flex-1 text-left relative z-10">
-                                        <span className="w-max px-2.5 py-0.5 bg-gray-100 text-gray-600 text-[10px] font-bold uppercase tracking-wider rounded whitespace-nowrap mb-2.5">
-                                            {project.industry}
-                                        </span>
-
-                                        <h3 className="font-bold text-base text-[var(--color-heading)] leading-snug mb-1.5 tracking-tight">
-                                            {project.title}
-                                        </h3>
-
-                                        <div className="flex-1 min-h-0 relative mb-3">
-                                            <p className="text-[var(--color-body-text)] text-xs sm:text-sm leading-relaxed overflow-hidden line-clamp-3 text-gray-600">
-                                                {project.description}
-                                            </p>
-                                        </div>
-
-                                        <div className="mt-auto pt-2.5 border-t border-gray-100 flex items-center justify-between">
-                                            <span className="text-xs font-bold text-[#6B9F91] inline-flex items-center gap-1.5">
-                                                View Details
-                                                <ArrowRight className="w-3.5 h-3.5" />
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))
-                        }
-                        {/* End spacer so the last card doesn't hit the right screen edge */}
-                        {!isLoading && projects.length > 0 && <div className="w-[4vw] shrink-0" />}
-                    </div>
-
-                    {/* Pagination Dots representation */}
-                    <div className="w-full flex justify-center items-center gap-2.5 mt-1 mb-6 z-10 relative">
-                        {(!isLoading && displayedProjects.length > 1) && displayedProjects.map((_, i) => (
-                            <button
-                                key={`dot-${i}`}
-                                onClick={() => scrollToMobileProject(i)}
-                                aria-label={`Scroll to project ${i + 1}`}
-                                className={`h-2 rounded-full transition-all duration-400 ease-out ${activeMobileIdx === i ? 'bg-[#6B9F91] w-7 shadow-sm scale-100' : 'bg-gray-300 w-2 hover:bg-gray-400 scale-90'} border-none cursor-pointer focus:outline-none`}
-                            />
-                        ))}
-                    </div>
-                </div>
-
-                {/* View All Projects Button */}
-                {projects.length > 0 && (
-                    <div id="view-all-projects" className="w-full flex justify-center mt-1 mb-6 scroll-mt-24">
-                        <Link href="/client-projects" className="inline-flex items-center justify-center font-bold text-base text-[#6B9F91] hover:text-[#588478] transition-colors group">
-                            View All Projects
-                            <ArrowRight className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" />
-                        </Link>
+                                        <span>{p.title}</span>
+                                    </button>
+                                );
+                            })}
+                        </div>
                     </div>
                 )}
 
-                {/* Bottom CTA Card (Compact) */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-50px" }}
-                    className="flex justify-center mt-8"
-                >
-                    <div className="w-full max-w-4xl bg-gray-50 border border-[var(--color-border)] rounded-2xl p-8 md:p-10 text-center relative overflow-hidden flex flex-col items-center">
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-[#6B9F91]/10 blur-[80px] rounded-full translate-x-1/3 -translate-y-1/3" />
-                        <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#FFC900]/10 blur-[80px] rounded-full -translate-x-1/3 translate-y-1/3" />
+                {/* 3. Flagship Showcase Deck (Desktop View) */}
+                <div className="hidden sm:block w-full bg-white/95 backdrop-blur-md rounded-3xl p-6 sm:p-8 lg:p-10 border border-white/80 shadow-xl relative overflow-hidden">
+                    {/* Inner Accent Glow */}
+                    <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-bl from-[#2DD4BF]/15 via-transparent to-transparent rounded-bl-full pointer-events-none" />
 
-                        <h3 className="text-xl md:text-2xl font-bold text-[var(--color-heading)] mb-2 relative z-10 tracking-tight">
-                            Have a project in mind?
-                        </h3>
-                        <p className="text-[var(--color-body-text)] text-sm mb-6 relative z-10 max-w-md">
-                            Let's create a digital solution tailored to your business.
-                        </p>
-                        <Button asChild size="md" className="relative z-10 shadow-md shadow-[#6B9F91]/20 bg-[#6B9F91] hover:bg-[#588478] text-white">
-                            <Link href="/contact">
-                                Start Your Project
-                            </Link>
-                        </Button>
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center relative z-10">
+                        
+                        {/* Left Column: Narrative & Technical Specifications */}
+                        <div className="lg:col-span-6 flex flex-col justify-center items-start text-left min-h-[300px]">
+                            <AnimatePresence mode="wait">
+                                <motion.div
+                                    key={currentProject?.id || activeTab}
+                                    initial={{ opacity: 0, y: 8 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -8 }}
+                                    transition={{ duration: 0.22, ease: "easeOut" }}
+                                    className="flex flex-col items-start w-full space-y-3.5"
+                                >
+                                    {/* Industry / Status Pills */}
+                                    <div className="flex flex-wrap items-center gap-2">
+                                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D8E8E2] border border-[#2DD4BF]/40 text-[#0F766E] text-[11px] font-extrabold uppercase tracking-wider shadow-2xs">
+                                            <Layers className="w-3 h-3 text-[#0F766E]" />
+                                            {currentProject?.industry || "Custom Software"}
+                                        </span>
+
+                                        {currentProject?.status && (
+                                            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200/80 text-emerald-700 text-[11px] font-bold uppercase tracking-wider">
+                                                <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                                                {currentProject.status}
+                                            </span>
+                                        )}
+
+                                        {currentProject?.isConfidential && (
+                                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-50 border border-amber-200/70 text-amber-800 text-[10px] font-bold uppercase tracking-wider">
+                                                <ShieldCheck className="w-3 h-3 text-amber-600" />
+                                                NDA Protected
+                                            </span>
+                                        )}
+                                    </div>
+
+                                    {/* Project Title */}
+                                    <h3 className="text-2xl lg:text-3xl font-bold text-[#0F172A] tracking-tight leading-snug font-serif">
+                                        {currentProject?.title}
+                                    </h3>
+
+                                    {/* Description */}
+                                    <p className="text-sm text-gray-600 leading-relaxed font-normal">
+                                        {currentProject?.description}
+                                    </p>
+
+                                    {/* Tech Stack & Feature Chips */}
+                                    {tags.length > 0 && (
+                                        <div className="flex flex-wrap gap-1.5 pt-1">
+                                            {tags.map((tag: string, tIdx: number) => (
+                                                <span
+                                                    key={tIdx}
+                                                    className="px-2.5 py-1 bg-[#F8FAF9] border border-gray-200 text-gray-700 rounded-lg text-xs font-semibold flex items-center gap-1 shadow-2xs"
+                                                >
+                                                    <BadgeCheck className="w-3 h-3 text-[#0F766E]" />
+                                                    <span>{tag}</span>
+                                                </span>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    {/* Action Buttons */}
+                                    <div className="pt-3 flex flex-wrap items-center gap-3">
+                                        <Button
+                                            onClick={() => setActiveModalProject(currentProject)}
+                                            size="sm"
+                                            className="bg-[#0F766E] hover:bg-[#115E59] text-white shadow-md shadow-[#0F766E]/20 rounded-xl px-5 py-2.5 text-xs font-bold transition-all duration-200 cursor-pointer"
+                                        >
+                                            View Full Case Study
+                                            <ArrowRight className="ml-1.5 w-3.5 h-3.5" />
+                                        </Button>
+
+                                        {currentProject?.projectUrl && (
+                                            <a
+                                                href={currentProject.projectUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-[#0F766E] hover:text-[#115E59] hover:underline"
+                                            >
+                                                <span>Live Application</span>
+                                                <ExternalLink className="w-3 h-3" />
+                                            </a>
+                                        )}
+                                    </div>
+                                </motion.div>
+                            </AnimatePresence>
+                        </div>
+
+                        {/* Right Column: Visual Stage (NDA Graphic or Image Preview) */}
+                        <div className="lg:col-span-6 relative flex justify-center items-center min-h-[260px] lg:min-h-[320px] w-full">
+                            <AnimatePresence mode="wait">
+                                <motion.div
+                                    key={currentProject?.id || activeTab}
+                                    initial={{ opacity: 0, scale: 0.96 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 1.02 }}
+                                    transition={{ duration: 0.25, ease: "easeOut" }}
+                                    className="w-full h-full flex items-center justify-center"
+                                >
+                                    {currentProject?.isConfidential ? (
+                                        <div className="w-full max-w-md aspect-video rounded-2xl bg-gradient-to-br from-gray-900 via-slate-800 to-teal-950 p-6 flex flex-col items-center justify-center text-center text-white shadow-2xl border border-gray-700/50 relative overflow-hidden">
+                                            <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center mb-3 shadow-inner text-[#2DD4BF]">
+                                                <Lock className="w-8 h-8" />
+                                            </div>
+                                            <h4 className="font-bold text-base text-white mb-1">
+                                                Enterprise Confidential Project
+                                            </h4>
+                                            <p className="text-xs text-gray-300 max-w-xs leading-relaxed">
+                                                Architectural schematics and live code repository protected under client non-disclosure agreement.
+                                            </p>
+                                        </div>
+                                    ) : currentProject?.imageUrl ? (
+                                        <div 
+                                            onClick={() => setActiveModalProject(currentProject)}
+                                            className="w-full aspect-video rounded-2xl overflow-hidden border border-gray-100 shadow-2xl relative group/img cursor-pointer"
+                                        >
+                                            <img
+                                                src={currentProject.imageUrl}
+                                                alt={currentProject.title}
+                                                loading="eager"
+                                                decoding="async"
+                                                className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-500 ease-out"
+                                            />
+                                            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
+                                                <span className="bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl text-xs font-bold text-gray-900 shadow-lg flex items-center gap-1.5">
+                                                    Expand Case Study
+                                                    <ArrowRight className="w-3.5 h-3.5" />
+                                                </span>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="w-full max-w-md aspect-video rounded-2xl bg-[#D8E8E2]/60 border border-[#2DD4BF]/30 flex flex-col items-center justify-center p-6 text-center text-[#0F766E]">
+                                            <Cpu className="w-12 h-12 mb-2 text-[#0F766E] opacity-70" />
+                                            <p className="text-xs font-bold">Production System Architecture</p>
+                                            <p className="text-[11px] text-gray-600 mt-1">{currentProject?.title}</p>
+                                        </div>
+                                    )}
+                                </motion.div>
+                            </AnimatePresence>
+                        </div>
+
                     </div>
-                </motion.div>
+                </div>
+
+                {/* 4. Mobile Native Swipe Carousel */}
+                <div className="block sm:hidden w-full">
+                    <div
+                        ref={mobileScrollRef}
+                        className="flex w-full overflow-x-auto snap-x snap-mandatory gap-4 pb-4 px-1 [&::-webkit-scrollbar]:hidden"
+                        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+                    >
+                        {displayedProjects.map((project, idx) => (
+                            <div
+                                key={project.id || idx}
+                                className="w-[85vw] shrink-0 snap-center bg-white rounded-2xl p-5 border border-gray-100 shadow-md flex flex-col justify-between"
+                            >
+                                <div>
+                                    <div className="flex items-center justify-between gap-2 mb-2">
+                                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-[#D8E8E2] text-[#0F766E]">
+                                            {project.industry || "Software"}
+                                        </span>
+                                        {project.status && (
+                                            <span className="text-[10px] font-bold text-emerald-700">
+                                                {project.status}
+                                            </span>
+                                        )}
+                                    </div>
+                                    <h4 className="text-base font-bold text-gray-900 mb-1.5 line-clamp-1">
+                                        {project.title}
+                                    </h4>
+                                    <p className="text-xs text-gray-600 line-clamp-3 leading-relaxed mb-3">
+                                        {project.description}
+                                    </p>
+                                </div>
+                                <Button
+                                    onClick={() => setActiveModalProject(project)}
+                                    size="sm"
+                                    className="w-full bg-[#0F766E] text-white text-xs font-bold rounded-xl mt-2"
+                                >
+                                    Read Details
+                                </Button>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Mobile Indicators */}
+                    {displayedProjects.length > 1 && (
+                        <div className="flex justify-center items-center gap-2 mt-2">
+                            {displayedProjects.map((_, i) => (
+                                <button
+                                    key={i}
+                                    onClick={() => scrollToMobileProject(i)}
+                                    aria-label={`Go to project ${i + 1}`}
+                                    className={`h-2 rounded-full transition-all ${
+                                        activeMobileIdx === i ? "w-6 bg-[#0F766E]" : "w-2 bg-gray-300"
+                                    }`}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                {/* View All Client Projects Link */}
+                <div className="flex justify-center pt-2">
+                    <Link
+                        href="/client-projects"
+                        className="inline-flex items-center justify-center font-bold text-xs sm:text-sm text-[#0F766E] hover:text-[#115E59] transition-colors group"
+                    >
+                        Browse All Case Studies & Enterprise Projects
+                        <ArrowRight className="w-3.5 h-3.5 ml-1.5 group-hover:translate-x-1 transition-transform" />
+                    </Link>
+                </div>
 
             </Container>
 
-            {/* View Details Reading Modal overlay */}
+            {/* 5. Detail Modal Overlay with Lenis-Prevent Scroll Isolation */}
             <AnimatePresence>
                 {activeModalProject && (
-                    <ProjectModal project={activeModalProject} onClose={() => setActiveModalProject(null)} />
+                    <ClientProjectModal
+                        project={activeModalProject}
+                        onClose={() => setActiveModalProject(null)}
+                    />
                 )}
             </AnimatePresence>
-        </SectionWrapper >
+        </SectionWrapper>
     );
 }
 
 // ============================================================================
-// MODAL COMPONENT (Reuses SuccessStories interaction pattern)
+// CLIENT PROJECT DETAIL MODAL (Desktop scrollable with Lenis isolated)
 // ============================================================================
 
-function ProjectModal({ project, onClose }: { project: any, onClose: () => void }) {
-    // Lock body scroll when modal is open
+function ClientProjectModal({ project, onClose }: { project: any; onClose: () => void }) {
     React.useEffect(() => {
-        const originalStyle = window.getComputedStyle(document.body).overflow;
-        document.body.style.overflow = 'hidden';
+        const originalOverflow = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
 
         const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === 'Escape') onClose();
+            if (e.key === "Escape") onClose();
         };
-        document.addEventListener('keydown', handleKeyDown);
+        window.addEventListener("keydown", handleKeyDown);
 
         return () => {
-            document.body.style.overflow = originalStyle;
-            document.removeEventListener('keydown', handleKeyDown);
+            document.body.style.overflow = originalOverflow;
+            window.removeEventListener("keydown", handleKeyDown);
         };
     }, [onClose]);
 
-    // Parse tags safely from CMS JSON payload
-    let parsedTags: string[] = [];
-    try {
-        if (project.tags && typeof project.tags === 'string') {
-            parsedTags = JSON.parse(project.tags);
-        } else if (Array.isArray(project.tags)) {
-            parsedTags = project.tags as string[];
-        }
-    } catch {
-        parsedTags = [];
-    }
+    const tags = Array.isArray(project?.tags) ? project.tags : [];
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center px-4 sm:px-6">
+        <div
+            data-lenis-prevent="true"
+            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto"
+            onWheel={(e) => e.stopPropagation()}
+        >
             {/* Backdrop */}
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={onClose}
-                className="absolute inset-0 bg-gray-900/40 backdrop-blur-sm transition-opacity"
+                className="fixed inset-0 bg-[#0F172A]/75 backdrop-blur-md"
             />
 
             {/* Modal Dialog */}
             <motion.div
-                initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                data-lenis-prevent="true"
+                initial={{ opacity: 0, scale: 0.95, y: 15 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: 10 }}
-                transition={{ duration: 0.3, ease: [0.21, 0.47, 0.32, 0.98] }}
-                className="relative w-full max-w-2xl bg-white/95 backdrop-blur-xl border border-gray-100 shadow-2xl rounded-3xl overflow-hidden flex flex-col max-h-[80vh] md:max-h-[85vh]"
+                exit={{ opacity: 0, scale: 0.95, y: 15 }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
+                onWheel={(e) => e.stopPropagation()}
+                className="relative w-full max-w-3xl bg-white rounded-3xl shadow-2xl overflow-y-auto max-h-[90vh] z-10 flex flex-col my-auto border border-gray-100 custom-scrollbar"
             >
-                {/* Close Button */}
+                {/* Sticky Close Button */}
                 <button
                     onClick={onClose}
-                    className="absolute top-4 right-4 md:top-6 md:right-6 w-10 h-10 bg-gray-100 hover:bg-gray-200 text-gray-500 hover:text-gray-900 rounded-full flex items-center justify-center transition-colors z-10 focus-visible:outline-none"
-                    aria-label="Close modal"
+                    className="sticky top-4 self-end -mb-12 mr-4 z-30 p-2.5 rounded-full bg-black/70 hover:bg-black text-white backdrop-blur-md transition-all shadow-xl cursor-pointer"
+                    aria-label="Close dialog"
                 >
                     <X className="w-5 h-5" />
                 </button>
 
-                {/* Scrollable Content Area */}
-                <div
-                    className="overflow-y-auto px-6 py-8 md:px-10 md:py-10 flex flex-col h-full [&::-webkit-scrollbar]:hidden"
-                    style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-                >
+                {/* Cover Image or Confidential Banner */}
+                <div className="w-full h-[220px] sm:h-[300px] bg-slate-900 shrink-0 relative overflow-hidden flex items-center justify-center">
+                    {project.isConfidential ? (
+                        <div className="flex flex-col items-center justify-center p-6 text-center text-white">
+                            <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center mb-2 text-[#2DD4BF]">
+                                <Lock className="w-7 h-7" />
+                            </div>
+                            <h3 className="font-bold text-lg text-white">Confidential Enterprise System</h3>
+                            <p className="text-xs text-gray-300">Detailed source code & customer data protected by NDA</p>
+                        </div>
+                    ) : project.imageUrl ? (
+                        <img
+                            src={project.imageUrl}
+                            alt={project.title}
+                            className="w-full h-full object-cover"
+                        />
+                    ) : (
+                        <div className="text-center text-gray-300">
+                            <Globe className="w-12 h-12 text-[#2DD4BF] mx-auto mb-2 opacity-70" />
+                            <p className="text-sm font-semibold">{project.title}</p>
+                        </div>
+                    )}
+                </div>
 
-                    {/* 1. Industry */}
-                    <div className="flex items-center gap-2 pr-12 mb-4">
-                        <span className="px-3 py-1 bg-[#6B9F91]/10 text-[#6B9F91] text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-md whitespace-nowrap">
-                            {project.industry}
+                {/* Modal Body */}
+                <div className="p-6 sm:p-8 md:p-10 space-y-6 flex-1 text-left">
+                    <div className="flex flex-wrap items-center gap-2">
+                        <span className="px-3 py-1 rounded-full bg-[#D8E8E2] text-[#0F766E] text-xs font-bold uppercase tracking-wider">
+                            {project.industry || "Enterprise Project"}
                         </span>
                         {project.status && (
-                            <span className="flex items-center gap-1 text-[10px] sm:text-xs font-bold text-[#6B9F91] uppercase tracking-wider whitespace-nowrap">
-                                <CheckCircle2 className="w-3 h-3 md:w-3.5 md:h-3.5" />
+                            <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold uppercase tracking-wider">
                                 {project.status}
                             </span>
                         )}
                     </div>
 
-                    {/* 2. Project Title */}
-                    <h2 className="text-2xl md:text-3xl lg:text-[32px] font-bold text-[var(--color-heading)] leading-tight tracking-tight mb-4 pr-6">
+                    <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight font-serif">
                         {project.title}
                     </h2>
 
-                    {/* 3. Short Description */}
-                    <p className="text-gray-600 font-medium text-sm md:text-base leading-relaxed mb-6">
-                        {project.description}
-                    </p>
+                    <div className="space-y-4 text-sm sm:text-base text-gray-700 leading-relaxed">
+                        <p className="font-semibold text-gray-900 bg-[#D8E8E2]/50 p-4 rounded-xl border border-[#2DD4BF]/20">
+                            {project.description}
+                        </p>
 
-                    {/* 4. Technologies / Tags */}
-                    {parsedTags.length > 0 && (
-                        <div className="flex flex-wrap gap-2 mb-8">
-                            {parsedTags.map((tag, idx) => (
-                                <span key={idx} className="px-2.5 py-1.5 bg-gray-100 border border-gray-200 text-gray-700 rounded-lg text-xs font-semibold">
-                                    {tag}
-                                </span>
-                            ))}
+                        {project.challenge && (
+                            <div>
+                                <h4 className="font-bold text-xs uppercase tracking-wider text-gray-500 mb-1">
+                                    The Challenge
+                                </h4>
+                                <p className="text-gray-600">{project.challenge}</p>
+                            </div>
+                        )}
+
+                        {project.solution && (
+                            <div>
+                                <h4 className="font-bold text-xs uppercase tracking-wider text-[#0F766E] mb-1">
+                                    Engineering Solution
+                                </h4>
+                                <p className="text-gray-600">{project.solution}</p>
+                            </div>
+                        )}
+                    </div>
+
+                    {tags.length > 0 && (
+                        <div className="pt-2">
+                            <h4 className="font-bold text-xs uppercase tracking-wider text-gray-500 mb-2">
+                                Technologies & Systems
+                            </h4>
+                            <div className="flex flex-wrap gap-1.5">
+                                {tags.map((t: string, idx: number) => (
+                                    <span
+                                        key={idx}
+                                        className="px-2.5 py-1 bg-gray-100 text-gray-700 rounded-lg text-xs font-semibold"
+                                    >
+                                        {t}
+                                    </span>
+                                ))}
+                            </div>
                         </div>
                     )}
 
-                    {/* 5. Visit Live Project (Primary CTA, top level before scroll needs) */}
-                    {project.projectUrl ? (
-                        <div className="mb-10 shrink-0">
+                    <div className="pt-6 border-t border-gray-100 flex flex-wrap items-center justify-between gap-3">
+                        {project.projectUrl ? (
                             <a
                                 href={project.projectUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center justify-center h-12 px-6 rounded-full bg-[#6B9F91] text-white font-bold shadow-lg shadow-[#6B9F91]/20 hover:bg-[#588478] transition-all hover:scale-105 active:scale-95"
+                                className="inline-flex items-center gap-1.5 bg-[#0F766E] hover:bg-[#115E59] text-white px-5 py-2.5 rounded-xl font-bold text-xs shadow-md transition-all"
                             >
-                                Visit Live Project
-                                <ArrowRight className="w-4 h-4 ml-2" />
+                                <span>Visit Live Platform</span>
+                                <ExternalLink className="w-3.5 h-3.5" />
                             </a>
-                        </div>
-                    ) : (
-                        <div className="mb-10 shrink-0" /> // Spacer if no URL
-                    )}
+                        ) : <div />}
 
-                    {/* 6. Case Study */}
-                    {project.caseStudy && (
-                        <div className="border-t border-gray-100 pt-8 mt-2 flex-grow">
-                            <h3 className="text-xl font-bold text-[var(--color-heading)] mb-6">
-                                Case Study Overview
-                            </h3>
-                            <div className="prose prose-sm md:prose-base prose-[#6B9F91] max-w-none text-[var(--color-body-text)]">
-                                <p className="whitespace-pre-wrap leading-relaxed">
-                                    {project.caseStudy}
-                                </p>
-                            </div>
-                        </div>
-                    )}
+                        <button
+                            type="button"
+                            onClick={onClose}
+                            className="px-5 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold text-xs transition-colors cursor-pointer"
+                        >
+                            Close Case Study
+                        </button>
+                    </div>
                 </div>
             </motion.div>
         </div>

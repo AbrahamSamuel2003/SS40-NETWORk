@@ -8,7 +8,6 @@ import {
     GraduationCap, 
     ArrowUpRight, 
     ShieldCheck, 
-    Sparkles, 
     Activity, 
     Cpu,
     CheckCircle2

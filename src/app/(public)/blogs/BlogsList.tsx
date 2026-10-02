@@ -17,7 +17,7 @@ import {
     ExternalLink,
     ChevronLeft,
     ChevronRight,
-    Sparkles
+    Layers
 } from 'lucide-react';
 import { formatCleanText } from '@/utils/text';
 
@@ -117,7 +117,7 @@ export function BlogsList({ initialActivities }: BlogsListProps) {
             {/* Grid of Cards */}
             {filteredActivities.length === 0 ? (
                 <div className="text-center py-20 bg-white rounded-3xl border border-gray-200">
-                    <Sparkles className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+                    <Layers className="w-10 h-10 text-gray-300 mx-auto mb-3" />
                     <h3 className="text-lg font-bold text-[#111827]">No Activities Found</h3>
                     <p className="text-sm text-gray-500 max-w-md mx-auto mt-1">
                         We couldn&apos;t find any activity blogs matching your search or category filter. Try clearing filters.
@@ -247,7 +247,11 @@ function ActivityStoryModal({ activity, onClose }: { activity: ActivityItem; onC
     }, [nextImg, prevImg, onClose]);
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+        <div 
+            data-lenis-prevent="true"
+            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto"
+            onWheel={(e) => e.stopPropagation()}
+        >
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -257,10 +261,12 @@ function ActivityStoryModal({ activity, onClose }: { activity: ActivityItem; onC
             />
             {/* Modal Dialog (Fluid document scroll) */}
             <motion.div
+                data-lenis-prevent="true"
                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 20 }}
                 transition={{ duration: 0.25, ease: 'easeOut' }}
+                onWheel={(e) => e.stopPropagation()}
                 className="relative w-full max-w-4xl bg-white rounded-3xl shadow-2xl overflow-y-auto max-h-[92vh] z-10 flex flex-col my-auto border border-gray-100 custom-scrollbar"
             >
                 {/* Sticky Close Button */}

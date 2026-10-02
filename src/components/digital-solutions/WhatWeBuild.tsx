@@ -7,7 +7,7 @@ import {
     AppWindow,
     Globe,
     Smartphone,
-    Sparkles,
+    Cpu,
     Cloud,
     Workflow,
     ArrowRight,
@@ -50,7 +50,7 @@ const SOLUTIONS = [
     {
         id: "ai",
         title: "AI Solutions",
-        icon: Sparkles,
+        icon: Cpu,
         description: "Intelligent systems designed to automate processes and generate insights.",
         chips: ["Chatbots", "Automation", "AI Assistants"],
     },
@@ -632,7 +632,7 @@ export function WhatWeBuild() {
                                                 <div className="flex-1 h-10 bg-gray-50 rounded-full border border-gray-200 px-4 flex items-center">
                                                     <div className="w-1/2 h-2 bg-gray-200 rounded-full" />
                                                 </div>
-                                                <div className="w-10 h-10 rounded-full bg-[#6B9F91] flex items-center justify-center text-white"><Sparkles className="w-4 h-4" /></div>
+                                                <div className="w-10 h-10 rounded-full bg-[#6B9F91] flex items-center justify-center text-white"><Bot className="w-4 h-4" /></div>
                                             </div>
                                         </div>
                                     </motion.div>

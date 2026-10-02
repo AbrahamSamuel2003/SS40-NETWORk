@@ -9,7 +9,7 @@ import {
     ShieldCheck, 
     Cpu, 
     Activity, 
-    Sparkles, 
+    LifeBuoy, 
     ArrowUpRight,
     CheckCircle2,
     Database,
@@ -237,7 +237,7 @@ export function HeroDashboardMockup() {
 
             <div className="animate-float-delayed-2 absolute -right-5 bottom-12 z-20 bg-[#0F172A] text-white px-3.5 py-2.5 rounded-xl shadow-xl border border-slate-700 hidden sm:flex items-center gap-3">
                 <div className="w-8 h-8 rounded-lg bg-teal-500/20 text-[var(--color-primary)] flex items-center justify-center">
-                    <Sparkles className="w-4 h-4" />
+                    <LifeBuoy className="w-4 h-4" />
                 </div>
                 <div>
                     <p className="text-xs font-bold text-white leading-none">30-Day Support</p>

@@ -48,7 +48,7 @@ export function ContactMethods({ config }: { config?: SiteConfigData | null }) {
             subtitle: "Instant Chat & Direct Advice",
             value: whatsappValue,
             actionLabel: "Chat Now",
-            href: `https://wa.me/${cleanWhatsapp.replace('+', '')}?text=${encodeURIComponent("Hello SS40 Network, I would like to enquire about your services.")}`,
+            href: `https://wa.me/${cleanWhatsapp.replace('+', '')}?text=${encodeURIComponent("Hello SS40 NETWORK, I would like to enquire about your services.")}`,
             target: "_blank",
             rel: "noopener noreferrer",
         },

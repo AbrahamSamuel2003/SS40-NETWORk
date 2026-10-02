@@ -12,7 +12,7 @@ const FAQ_DATA = [
         answer: "Our core engineering and advisory team typically reviews inquiries and replies within 1 business day. For urgent business requirements, you can also reach us via direct WhatsApp."
     },
     {
-        question: "Does SS40 Network handle custom enterprise development?",
+        question: "Does SS40 NETWORK handle custom enterprise development?",
         answer: "Yes. We design, architect, and deploy full-stack custom platforms, high-scale web applications, mobile apps, and proprietary AI automation workflows tailored to enterprise needs."
     },
     {

@@ -26,7 +26,8 @@ const INTEREST_OPTIONS = [
     "Academic Training & MoUs",
     "Cloud & AI Solutions",
     "Corporate Partnership",
-    "General Enquiry"
+    "General Enquiry",
+    "Other (Please specify)"
 ];
 
 const FAQ_DATA = [
@@ -35,7 +36,7 @@ const FAQ_DATA = [
         answer: "Our core engineering and advisory team typically reviews inquiries and replies within 1 business day. For urgent business requirements, you can also reach us via direct WhatsApp."
     },
     {
-        question: "Does SS40 Network handle custom enterprise development?",
+        question: "Does SS40 NETWORK handle custom enterprise development?",
         answer: "Yes. We design, architect, and deploy full-stack custom platforms, high-scale web applications, mobile apps, and proprietary AI automation workflows tailored to enterprise needs."
     },
     {
@@ -62,6 +63,7 @@ export function ContactForm() {
         phone: "",
         company: "",
         serviceInterest: "",
+        customInterest: "",
         message: ""
     });
 
@@ -134,8 +136,17 @@ export function ContactForm() {
         setErrorMessage("");
 
         try {
+            const finalServiceInterest = formData.serviceInterest === "Other (Please specify)"
+                ? (formData.customInterest.trim() ? `Other: ${formData.customInterest.trim()}` : "Other")
+                : formData.serviceInterest;
+
             const payload = {
-                ...formData,
+                fullName: formData.fullName,
+                email: formData.email,
+                phone: formData.phone,
+                company: formData.company,
+                serviceInterest: finalServiceInterest,
+                message: formData.message,
                 ...sourceContext,
                 referrer: typeof document !== "undefined" ? document.referrer || null : null
             };
@@ -159,6 +170,7 @@ export function ContactForm() {
                 phone: "",
                 company: "",
                 serviceInterest: "",
+                customInterest: "",
                 message: ""
             });
         } catch (err: any) {
@@ -375,7 +387,7 @@ export function ContactForm() {
                                                 )} />
                                             </button>
 
-                                            {/* Custom Dropdown Options Popover (Clean Production Look - No Side Icons) */}
+                                            {/* Custom Dropdown Options Popover (Scrollable with Lenis isolation) */}
                                             <AnimatePresence>
                                                 {isSelectOpen && (
                                                     <motion.div
@@ -383,10 +395,15 @@ export function ContactForm() {
                                                         animate={{ opacity: 1, y: 0, scale: 1 }}
                                                         exit={{ opacity: 0, y: -4, scale: 0.99 }}
                                                         transition={{ duration: 0.15, ease: "easeOut" }}
-                                                        className="absolute top-full left-0 right-0 mt-1.5 z-50 bg-white border border-gray-200/90 rounded-xl shadow-xl shadow-black/10 p-1.5 flex flex-col gap-0.5 max-h-56 overflow-y-auto overscroll-contain custom-scrollbar"
+                                                        data-lenis-prevent="true"
+                                                        data-lenis-prevent-wheel="true"
+                                                        data-lenis-prevent-touch="true"
+                                                        onWheel={(e) => e.stopPropagation()}
+                                                        onTouchMove={(e) => e.stopPropagation()}
+                                                        className="absolute top-full left-0 right-0 mt-1.5 z-50 bg-white border border-gray-200 rounded-xl shadow-xl shadow-black/10 p-1.5 flex flex-col gap-0.5 max-h-48 overflow-y-auto overscroll-contain"
                                                         style={{
                                                             scrollbarWidth: 'thin',
-                                                            scrollbarColor: 'rgba(15, 118, 110, 0.3) transparent'
+                                                            scrollbarColor: '#0F766E #EDF5F2'
                                                         }}
                                                     >
                                                         {INTEREST_OPTIONS.map((opt) => {
@@ -417,6 +434,33 @@ export function ContactForm() {
                                                 )}
                                             </AnimatePresence>
                                         </div>
+
+                                        {/* Custom Area of Interest Input (Shows when "Other (Please specify)" is selected) */}
+                                        <AnimatePresence>
+                                            {formData.serviceInterest === "Other (Please specify)" && (
+                                                <motion.div
+                                                    initial={{ opacity: 0, height: 0, y: -4 }}
+                                                    animate={{ opacity: 1, height: "auto", y: 0 }}
+                                                    exit={{ opacity: 0, height: 0, y: -4 }}
+                                                    transition={{ duration: 0.2 }}
+                                                    className="flex flex-col gap-1 overflow-hidden pt-1"
+                                                >
+                                                    <label htmlFor="customInterest" className="text-[11px] font-bold uppercase tracking-wider text-[#0F172A]">
+                                                        Please Specify Your Interest / Requirement <span className="text-[#0F766E]">*</span>
+                                                    </label>
+                                                    <input
+                                                        required
+                                                        disabled={status === "submitting"}
+                                                        type="text"
+                                                        id="customInterest"
+                                                        value={formData.customInterest}
+                                                        onChange={handleChange}
+                                                        className="w-full bg-[#FAFCFB] border border-gray-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] transition-all text-[#0F172A] placeholder:text-gray-400 text-xs sm:text-sm disabled:opacity-50"
+                                                        placeholder="E.g., Custom ERP integration, IoT hardware, AI pipeline, MoU..."
+                                                    />
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
                                     </div>
 
                                     {/* Message Textarea */}

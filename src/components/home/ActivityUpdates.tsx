@@ -366,7 +366,11 @@ function ActivityStoryModal({ activity, onClose }: { activity: ActivityItem; onC
     }, [nextImg, prevImg, onClose]);
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+        <div 
+            data-lenis-prevent="true"
+            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto"
+            onWheel={(e) => e.stopPropagation()}
+        >
             {/* Backdrop */}
             <motion.div
                 initial={{ opacity: 0 }}
@@ -378,10 +382,12 @@ function ActivityStoryModal({ activity, onClose }: { activity: ActivityItem; onC
 
             {/* Modal Dialog (Entire modal is fluidly scrollable) */}
             <motion.div
+                data-lenis-prevent="true"
                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 20 }}
                 transition={{ duration: 0.25, ease: 'easeOut' }}
+                onWheel={(e) => e.stopPropagation()}
                 className="relative w-full max-w-4xl bg-white rounded-3xl shadow-2xl overflow-y-auto max-h-[92vh] z-10 flex flex-col my-auto border border-gray-100 custom-scrollbar"
             >
                 {/* Sticky Close Button (Always visible on top right as modal scrolls) */}

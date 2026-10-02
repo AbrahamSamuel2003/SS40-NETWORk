@@ -130,10 +130,10 @@ export function TrustedClients({ initialData }: TrustedClientsProps = {}) {
                 <div className="absolute top-0 bottom-0 right-0 w-14 md:w-28 bg-gradient-to-l from-[#EDF5F2] via-[#EDF5F2]/40 to-transparent z-20 pointer-events-none" />
 
                 {/* ROW 1: Scroll Left */}
-                {row1.length > 0 && <MarqueeRow items={row1} direction="left" speed={35} />}
+                {row1.length > 0 && <MarqueeRow items={row1} direction="left" />}
 
                 {/* ROW 2: Scroll Right (Visible on all screens) */}
-                {row2.length > 0 && <MarqueeRow items={row2} direction="right" speed={40} />}
+                {row2.length > 0 && <MarqueeRow items={row2} direction="right" />}
             </div>
 
         </SectionWrapper>
@@ -164,10 +164,11 @@ function MarqueeRow({ items, direction, speed }: MarqueeRowProps) {
 
     const duplicatedItems = React.useMemo(() => [...baseItems, ...baseItems], [baseItems]);
 
-    // Velocity-locked duration matching Home Page speed exactly (4.375s per card for left, 5.0s for right)
+    // Constant physical velocity (seconds per card across all viewports & pages)
     const duration = React.useMemo(() => {
-        const secondsPerCard = direction === "left" ? 4.375 : 5.0;
-        return speed || Math.max(15, baseItems.length * secondsPerCard);
+        if (speed) return speed;
+        const secondsPerCard = direction === "left" ? 4.2 : 4.8;
+        return Math.max(15, Math.round(baseItems.length * secondsPerCard));
     }, [baseItems.length, direction, speed]);
 
     const pauseMarquee = (event: React.PointerEvent<HTMLDivElement>) => {

@@ -26,33 +26,44 @@ const WhatsAppIcon = ({ className }: { className?: string }) => (
     </svg>
 );
 
-const SkyIcon = ({ className }: { className?: string }) => (
+export const SkyLogoIcon = ({
+    className,
+    headColor = "#0F766E",
+    bubbleColor = "#FFFFFF",
+    dotsColor = "#0F766E"
+}: {
+    className?: string;
+    headColor?: string;
+    bubbleColor?: string;
+    dotsColor?: string;
+}) => (
     <svg
-        viewBox="0 0 100 100"
+        viewBox="0 0 100 70"
         className={className}
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
     >
-        {/* Upper Visor Head - Enlarged */}
-        <path
-            d="M10 34C20 14 80 14 90 34C80 54 20 54 10 34Z"
-            fill="#FFFFFF"
-        />
-        {/* Visor Screen */}
-        <rect x="26" y="24" width="48" height="20" rx="10" fill="#0F172A" />
-        {/* Cyan Expressive Eyes */}
-        <circle cx="39" cy="34" r="4" fill="#2DD4BF" />
-        <circle cx="61" cy="34" r="4" fill="#2DD4BF" />
+        {/* Left Ear Tab */}
+        <rect x="5" y="27" width="10" height="16" rx="5" fill={headColor} />
+        {/* Right Ear Tab */}
+        <rect x="85" y="27" width="10" height="16" rx="5" fill={headColor} />
 
-        {/* Lower Body / Speech Bubble with Tail - Enlarged */}
+        {/* Main Outer Head Frame */}
         <path
-            d="M24 56C33 52 67 52 76 56C74 70 63 78 52 78C47 78 43 82 39 92C39 85 34 79 31 75C24 69 22 62 24 56Z"
-            fill="#FFFFFF"
+            d="M 24 7 C 41 3 59 3 76 7 C 85 9 88 15 88 24 L 88 46 C 88 55 85 61 76 63 C 59 67 41 67 24 63 C 15 61 12 55 12 46 L 12 24 C 12 15 15 9 24 7 Z"
+            fill={headColor}
         />
-        {/* Speech Ellipsis Dots */}
-        <circle cx="41" cy="67" r="3" fill="#0F172A" />
-        <circle cx="50" cy="67" r="3" fill="#0F172A" />
-        <circle cx="59" cy="67" r="3" fill="#0F172A" />
+
+        {/* Inner Speech Bubble */}
+        <path
+            d="M 30 16 C 43 13 57 13 70 16 C 76 17.5 77 22 77 27 L 77 43 C 77 48 76 52.5 70 54 C 57 57 43 57 30 54 C 27.5 53.4 25.8 51.8 25 49 L 19 60 L 24.2 46.5 C 23.5 43.5 23 38 23 27 C 23 22 24 17.5 30 16 Z"
+            fill={bubbleColor}
+        />
+
+        {/* 3 Horizontal Chat Ellipsis Dots */}
+        <circle cx="37" cy="35" r="5" fill={dotsColor} />
+        <circle cx="50" cy="35" r="5" fill={dotsColor} />
+        <circle cx="63" cy="35" r="5" fill={dotsColor} />
     </svg>
 );
 
@@ -190,7 +201,6 @@ export function FloatingSupportHub({ config }: { config?: SiteConfigData | null 
                             transition={{ duration: 0.16, ease: [0.16, 1, 0.3, 1] }}
                             className="flex flex-col items-end gap-2.5 pointer-events-auto will-change-[transform,opacity]"
                         >
-                            {/* 1. SS40 SKY Action Pill */}
                             <button
                                 onClick={() => {
                                     setIsChatOpen(true);
@@ -202,8 +212,8 @@ export function FloatingSupportHub({ config }: { config?: SiteConfigData | null 
                                 <span className="text-xs font-bold text-[#0F172A] tracking-tight">
                                     SS40 SKY
                                 </span>
-                                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#0F766E] text-white flex items-center justify-center shadow-md group-hover/chat:scale-105 transition-transform">
-                                    <SkyIcon className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
+                                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#EDF5F2] flex items-center justify-center shadow-xs border border-[#0F766E]/20 p-1 group-hover/chat:scale-105 transition-transform">
+                                    <SkyLogoIcon className="w-6 h-6" headColor="#0F766E" bubbleColor="#FFFFFF" dotsColor="#0F766E" />
                                 </div>
                             </button>
 

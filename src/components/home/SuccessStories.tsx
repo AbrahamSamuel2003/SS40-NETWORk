@@ -2,10 +2,10 @@
 
 import * as React from "react";
 import { useRef, useState, useEffect } from "react";
-import { motion, useMotionValue, useSpring, useTransform, Variants, AnimatePresence } from "framer-motion";
+import { motion, Variants, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { Play, Star, ArrowRight, Quote, ChevronLeft, ChevronRight, X, Sparkles, CheckCircle2 } from "lucide-react";
+import { Play, Star, ArrowRight, Quote, ChevronLeft, ChevronRight, X, CheckCircle2 } from "lucide-react";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -175,18 +175,7 @@ function FeaturedVideoArea({ story, onOpenModal }: {
     };
     onOpenModal?: (story: any) => void;
 }) {
-    const ref = useRef<HTMLDivElement>(null);
     const [isPlaying, setIsPlaying] = useState(false);
-    const x = useMotionValue(0);
-    const y = useMotionValue(0);
-
-    // Smooth physics for subtle 3D tilt
-    const mouseX = useSpring(x, { stiffness: 150, damping: 20 });
-    const mouseY = useSpring(y, { stiffness: 150, damping: 20 });
-
-    const rotateX = useTransform(mouseY, [-0.5, 0.5], [2, -2]);
-    const rotateY = useTransform(mouseX, [-0.5, 0.5], [-2, 2]);
-
     const videoRef = useRef<HTMLVideoElement>(null);
     const iframeRef = useRef<HTMLIFrameElement>(null);
 
@@ -200,24 +189,6 @@ function FeaturedVideoArea({ story, onOpenModal }: {
                 '*'
             );
         } catch { }
-    }
-
-    function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
-        if (!ref.current || isPlaying) return;
-        const rect = ref.current.getBoundingClientRect();
-        const width = rect.width;
-        const height = rect.height;
-        const mouseXPos = e.clientX - rect.left;
-        const mouseYPos = e.clientY - rect.top;
-        const xPct = mouseXPos / width - 0.5;
-        const yPct = mouseYPos / height - 0.5;
-        x.set(xPct);
-        y.set(yPct);
-    }
-
-    function handleMouseLeave() {
-        x.set(0);
-        y.set(0);
     }
 
     // YouTube IFrame API state listener
@@ -264,16 +235,8 @@ function FeaturedVideoArea({ story, onOpenModal }: {
     return (
         <motion.div
             variants={fadeUpAnim}
-            ref={ref}
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
-            style={{
-                rotateX: isPlaying ? 0 : rotateX,
-                rotateY: isPlaying ? 0 : rotateY,
-                transformStyle: "preserve-3d"
-            }}
             onClick={handleTogglePlay}
-            className={`relative w-full aspect-video bg-gray-950 rounded-3xl overflow-hidden flex flex-col items-center justify-center group shadow-2xl shadow-gray-400/30 border border-white/80 ${isPlaying ? 'cursor-auto' : 'cursor-pointer'}`}
+            className={`relative w-full aspect-video bg-gray-950 rounded-3xl overflow-hidden flex flex-col items-center justify-center group shadow-2xl shadow-gray-400/30 border border-white/80 transition-transform duration-300 ${isPlaying ? 'cursor-auto' : 'cursor-pointer hover:scale-[1.01]'}`}
         >
             {/* Native HTML5 Video Element */}
             {!story.youtubeUrl && (

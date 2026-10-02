@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { ArrowRight, Lightbulb, Blocks, Target, Box, Sparkles, Sprout, HeartPulse, Building2, Monitor, LayoutDashboard } from "lucide-react";
+import { ArrowRight, Lightbulb, Blocks, Target, Box, Cpu, Sprout, HeartPulse, Building2, Monitor, LayoutDashboard } from "lucide-react";
 import Image from "next/image";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { StudentProjectModal } from "@/components/academics/BestProjects";
@@ -14,7 +14,7 @@ const itemVariants: Variants = {
 
 const IconMap: Record<string, React.ElementType> = {
     Building2,
-    Sparkles,
+    Cpu,
     Lightbulb,
     Target,
     HeartPulse,

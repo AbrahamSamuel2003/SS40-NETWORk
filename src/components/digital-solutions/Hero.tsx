@@ -5,7 +5,8 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import {
     ArrowRight,
-    Sparkles,
+    Zap,
+    Cpu,
     LayoutDashboard,
     LineChart,
     Smartphone,
@@ -145,8 +146,8 @@ export function Hero() {
                                     {/* Data Blocks */}
                                     <div className="grid grid-cols-2 gap-2.5 flex-1">
                                         <div className="bg-white rounded-xl border border-[var(--color-border)] shadow-2xs p-2.5 h-full flex flex-col justify-between">
-                                            <div className="w-5 h-5 rounded-full bg-[var(--color-accent)]/20 text-[var(--color-accent)] flex items-center justify-center">
-                                                <Sparkles className="w-2.5 h-2.5" />
+                                            <div className="w-5 h-5 rounded-full bg-teal-50 text-[#0F766E] flex items-center justify-center">
+                                                <Zap className="w-2.5 h-2.5" />
                                             </div>
                                             <div className="space-y-1">
                                                 <div className="w-8 h-3 bg-gray-200 rounded-sm" />
@@ -213,7 +214,7 @@ export function Hero() {
                             className="absolute left-1/4 -bottom-4 z-30 bg-gray-900 text-white py-1.5 px-3 rounded-full shadow-md flex items-center gap-1.5 border border-gray-700 hidden lg:flex transform-gpu"
                             style={{ willChange: "transform", transform: "translateZ(0)" }}
                         >
-                            <Sparkles className="w-3.5 h-3.5 text-yellow-400" />
+                            <Cpu className="w-3.5 h-3.5 text-teal-400" />
                             <p className="text-[11px] font-bold font-mono">AI analyzing metrics...</p>
                         </motion.div>
 

@@ -15,13 +15,13 @@ export function SmoothScrollProvider({ children }: { children: React.ReactNode }
         if (prefersReducedMotion || isTouchDevice) return;
 
         const lenis = new Lenis({
-            duration: 1.1,
+            duration: 0.8,
             easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
             orientation: "vertical",
             gestureOrientation: "vertical",
             smoothWheel: true,
-            wheelMultiplier: 0.95,
-            touchMultiplier: 1.5,
+            wheelMultiplier: 1.0,
+            touchMultiplier: 1.0,
             infinite: false
         });
 

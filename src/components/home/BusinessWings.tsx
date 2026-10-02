@@ -65,84 +65,97 @@ export function BusinessWings() {
 
                 <div className="relative flex flex-col items-center w-full">
 
-                    {/* Central Hub: Compact Corporate Headquarters Visual */}
+                    {/* Central Hub: Modern Light-Themed Architectural Corporate Headquarters Visual */}
                     <div
-                        className="relative z-20 flex flex-col items-center justify-center w-full max-w-[200px] sm:max-w-[240px] lg:max-w-[280px] mx-auto h-[115px] sm:h-[145px] lg:h-[175px] transform-gpu"
+                        className="relative z-20 flex flex-col items-center justify-center w-full max-w-[240px] sm:max-w-[280px] lg:max-w-[320px] mx-auto h-[135px] sm:h-[165px] lg:h-[195px] transform-gpu"
                         style={{ contain: 'paint' }}
                     >
-                        {/* Static Ambient Radial Glow */}
+                        {/* Soft Mint Ambient Glow */}
                         <div
-                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[160px] sm:w-[200px] lg:w-[240px] h-[160px] sm:h-[200px] lg:h-[240px] bg-radial from-[#0F766E]/12 via-[#0F766E]/4 to-transparent rounded-full z-0 pointer-events-none"
+                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[180px] sm:w-[240px] lg:w-[280px] h-[180px] sm:h-[240px] lg:h-[280px] bg-radial from-[#0F766E]/10 via-[#D8E8E2]/30 to-transparent rounded-full z-0 pointer-events-none"
                         />
 
-                        {/* HQ Architecture Wrapper */}
+                        {/* Architectural HQ Campus Visual (Light Company Theme) */}
                         <div className="relative z-10 w-full h-full flex items-end justify-center transform-gpu">
 
-                            {/* Background Tall Building (Left) */}
+                            {/* West Wing (Left Tiered Glass Pavilion) */}
                             <div
-                                className="transform-gpu absolute left-[15%] bottom-[6px] sm:bottom-[8px] w-[22%] h-[75px] sm:h-[95px] lg:h-[115px] bg-gradient-to-t from-gray-50 to-white rounded-tl-[0.75rem] rounded-tr-xs shadow-md border border-gray-100 z-10 overflow-hidden flex flex-col p-1 gap-0.5"
+                                className="transform-gpu absolute left-[8%] sm:left-[10%] bottom-[6px] sm:bottom-[8px] w-[26%] h-[85px] sm:h-[108px] lg:h-[128px] bg-gradient-to-t from-[#EDF5F2] via-white to-[#F2F8F5] rounded-tl-xl rounded-tr-xs shadow-md border border-[#0F766E]/20 z-10 overflow-hidden flex flex-col p-1 gap-1"
                             >
-                                <div className="absolute top-0 inset-x-0 h-3 bg-gradient-to-b from-white to-transparent" />
-                                {[...Array(3)].map((_, i) => (
-                                    <div key={`l-row-${i}`} className="flex-1 flex gap-0.5 z-10">
-                                        {[...Array(3)].map((_, j) => (
-                                            <div key={`l-col-${j}`} className="flex-1 bg-[#0F766E]/5 rounded-[1px] border border-[#0F766E]/10 relative overflow-hidden" />
-                                        ))}
+                                {/* Top Roof Accent */}
+                                <div className="w-full h-1 bg-gradient-to-r from-[#0F766E]/40 to-[#6B9F91]/30 rounded-xs" />
+                                {[...Array(4)].map((_, i) => (
+                                    <div key={`west-floor-${i}`} className="flex-1 flex gap-1 z-10">
+                                        <div className="flex-1 bg-[#D8E8E2]/50 rounded-[2px] border border-[#0F766E]/15 flex items-center justify-center">
+                                            <div className="w-full h-[1px] bg-white/80" />
+                                        </div>
+                                        <div className="flex-1 bg-[#D8E8E2]/50 rounded-[2px] border border-[#0F766E]/15 flex items-center justify-center">
+                                            <div className="w-full h-[1px] bg-white/80" />
+                                        </div>
                                     </div>
                                 ))}
                             </div>
 
-                            {/* Background Tall Building (Right) */}
+                            {/* East Wing (Right Tiered Glass Pavilion) */}
                             <div
-                                className="transform-gpu absolute right-[15%] bottom-[6px] sm:bottom-[8px] w-[22%] h-[70px] sm:h-[88px] lg:h-[105px] bg-gradient-to-t from-gray-50 to-white rounded-tr-[0.75rem] rounded-tl-xs shadow-md border border-gray-100 z-10 overflow-hidden flex flex-col p-1 gap-0.5"
+                                className="transform-gpu absolute right-[8%] sm:right-[10%] bottom-[6px] sm:bottom-[8px] w-[26%] h-[80px] sm:h-[102px] lg:h-[120px] bg-gradient-to-t from-[#EDF5F2] via-white to-[#F2F8F5] rounded-tr-xl rounded-tl-xs shadow-md border border-[#0F766E]/20 z-10 overflow-hidden flex flex-col p-1 gap-1"
                             >
-                                <div className="absolute top-0 inset-x-0 h-3 bg-gradient-to-b from-white to-transparent" />
-                                {[...Array(3)].map((_, i) => (
-                                    <div key={`r-row-${i}`} className="flex-1 flex gap-0.5 z-10">
-                                        {[...Array(3)].map((_, j) => (
-                                            <div key={`r-col-${j}`} className="flex-1 bg-[#0F766E]/5 rounded-[1px] border border-[#0F766E]/10 relative overflow-hidden" />
-                                        ))}
+                                {/* Top Roof Accent */}
+                                <div className="w-full h-1 bg-gradient-to-r from-[#6B9F91]/30 to-[#0F766E]/40 rounded-xs" />
+                                {[...Array(4)].map((_, i) => (
+                                    <div key={`east-floor-${i}`} className="flex-1 flex gap-1 z-10">
+                                        <div className="flex-1 bg-[#D8E8E2]/50 rounded-[2px] border border-[#0F766E]/15 flex items-center justify-center">
+                                            <div className="w-full h-[1px] bg-white/80" />
+                                        </div>
+                                        <div className="flex-1 bg-[#D8E8E2]/50 rounded-[2px] border border-[#0F766E]/15 flex items-center justify-center">
+                                            <div className="w-full h-[1px] bg-white/80" />
+                                        </div>
                                     </div>
                                 ))}
                             </div>
 
-                            {/* Main Center HQ Tower */}
+                            {/* Main Center HQ Skyscraper Tower */}
                             <div
-                                className="transform-gpu relative w-[48%] h-[105px] sm:h-[135px] lg:h-[165px] bg-white rounded-t-xl sm:rounded-t-2xl shadow-xl border border-gray-100/80 z-20 flex flex-col items-center p-1.5 sm:p-2.5 overflow-hidden"
+                                className="transform-gpu relative w-[52%] h-[125px] sm:h-[155px] lg:h-[185px] bg-gradient-to-b from-white via-[#FAFCFB] to-[#EDF5F2] rounded-t-2xl shadow-xl border-2 border-[#0F766E]/30 z-20 flex flex-col items-center p-2 sm:p-2.5 overflow-hidden"
                             >
-                                {/* Window Grid */}
-                                <div className="w-full flex-1 grid grid-cols-3 gap-1 sm:gap-1.5 p-1 bg-gradient-to-b from-[#0F766E]/[0.04] to-transparent rounded-lg border border-[#0F766E]/10 relative">
-                                    {[...Array(9)].map((_, i) => (
+                                {/* Rooftop Architectural Crown & Parapet (No blinking dot) */}
+                                <div className="absolute top-0 inset-x-0 h-3 bg-gradient-to-b from-[#0F766E]/15 to-transparent flex items-center justify-center">
+                                    <div className="w-10 h-0.5 bg-[#0F766E]/40 rounded-full" />
+                                </div>
+
+                                {/* Modern Window Grid / Glass Facade Matrix */}
+                                <div className="w-full flex-1 grid grid-cols-3 gap-1 sm:gap-1.5 p-1.5 mt-2 bg-[#EDF5F2]/60 rounded-xl border border-[#0F766E]/15 relative">
+                                    {[...Array(6)].map((_, i) => (
                                         <div
-                                            key={`w-${i}`}
-                                            className="bg-white rounded-[2px] border border-gray-100 shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)] flex items-center justify-center relative overflow-hidden"
-                                        />
+                                            key={`main-win-${i}`}
+                                            className="bg-white/90 rounded-[3px] border border-[#0F766E]/20 flex items-center justify-center relative overflow-hidden shadow-2xs"
+                                        >
+                                            <div className="w-full h-[1px] bg-[#0F766E]/10" />
+                                        </div>
                                     ))}
 
-                                    {/* Minimal Entrance / Lobby indication */}
-                                    <div className="w-full h-3 sm:h-4 mt-[2px] flex gap-[2px] relative z-10">
-                                        <div className="flex-1 bg-white rounded-[1px] border border-[#0F766E]/10" />
-                                        <div className="w-[35%] h-full bg-gradient-to-t from-[#0F766E]/20 to-[#0F766E]/5 border border-[#0F766E]/20 rounded-[1px]" />
-                                        <div className="flex-1 bg-white rounded-[1px] border border-[#0F766E]/10" />
+                                    {/* Double-Height Grand Canopy Entrance */}
+                                    <div className="col-span-3 h-4 sm:h-5 mt-0.5 bg-gradient-to-t from-[#D8E8E2] to-white rounded-md border border-[#0F766E]/25 flex items-center justify-center px-1">
+                                        <div className="w-1/3 h-full bg-[#0F766E]/15 rounded-xs border-x border-[#0F766E]/20" />
                                     </div>
                                 </div>
 
-                                {/* Main Company Signboard */}
-                                <div className="absolute bottom-3 sm:bottom-4 w-[80px] sm:w-[95px] lg:w-[105px] bg-white border border-gray-100 shadow-sm rounded-lg py-1 px-1 flex flex-col items-center justify-center z-30">
-                                    <span className="text-xs sm:text-sm font-black tracking-widest text-[#111827] leading-none mb-0.5">
+                                {/* Main Company Signboard Canopy */}
+                                <div className="absolute bottom-2.5 sm:bottom-3 w-[88px] sm:w-[105px] lg:w-[120px] bg-white border border-[#0F766E]/25 shadow-md rounded-lg py-1 px-1.5 flex flex-col items-center justify-center z-30">
+                                    <span className="text-xs sm:text-sm font-black tracking-widest text-[#0F172A] leading-none mb-0.5">
                                         SS40
                                     </span>
-                                    <span className="text-[7px] sm:text-[8px] font-bold tracking-[0.1em] text-[#0F766E] uppercase leading-none">
-                                        Network
+                                    <span className="text-[7.5px] sm:text-[8.5px] font-extrabold tracking-[0.12em] text-[#0F766E] uppercase leading-none">
+                                        NETWORK
                                     </span>
                                 </div>
 
-                                {/* Bottom Accent Line */}
+                                {/* Bottom Teal Power Rail */}
                                 <div className="absolute bottom-0 w-full h-1 bg-[#0F766E] opacity-90" />
                             </div>
 
-                            {/* Ground Base / Foundation */}
-                            <div className="absolute bottom-[-6px] left-1/2 -translate-x-1/2 w-[180px] sm:w-[220px] h-[16px] bg-gray-50 rounded-[100%] shadow-inner border border-gray-100 z-0" />
+                            {/* Plaza Podium Base */}
+                            <div className="absolute bottom-[-6px] left-1/2 -translate-x-1/2 w-[220px] sm:w-[260px] lg:w-[290px] h-[16px] bg-gradient-to-r from-[#E2EFEB] via-[#EDF5F2] to-[#E2EFEB] rounded-[100%] shadow-inner border border-[#0F766E]/20 z-0" />
                         </div>
                     </div>
 
