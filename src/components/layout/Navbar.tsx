@@ -82,11 +82,11 @@ export function Navbar({ config }: { config?: SiteConfigData | null }) {
             // Mobile: Always solid frosted background.
             // Desktop: 100% transparent at the top of all pages (no bg, no blur), high-transparency frosted glass on scroll.
             className={cn(
-                "fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] transform-gpu font-crimson font-serif",
-                "bg-white/95 backdrop-blur-xl shadow-xs border-b border-gray-200/50",
+                "fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] transform-gpu will-change-[transform] font-crimson font-serif",
+                "bg-white/95 backdrop-blur-md shadow-xs border-b border-gray-200/50",
                 isTop
                     ? "md:bg-transparent md:border-transparent md:shadow-none md:backdrop-blur-none"
-                    : "md:bg-white/85 md:backdrop-blur-xl md:shadow-xs md:border-b md:border-gray-200/50",
+                    : "md:bg-white/92 md:backdrop-blur-md md:shadow-xs md:border-b md:border-gray-200/50",
                 isHidden ? "-translate-y-full" : "translate-y-0"
             )}
         >
