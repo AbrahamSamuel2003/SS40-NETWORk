@@ -121,36 +121,89 @@ async function getLiveDynamicChunks(): Promise<VectorChunk[]> {
             });
         }
 
-        // 2. Active SaaS Products
+        // 2. Active SS40 Products (ClearInvoice, GTC Suite, etc.)
         const activeProducts = await prisma.product.findMany({
             where: { isActive: true },
             orderBy: { sortOrder: "asc" },
-            take: 10,
+            take: 12,
         }).catch(() => []);
 
         for (const p of activeProducts) {
             const features = Array.isArray(p.features)
                 ? p.features.map((f: any) => typeof f === "string" ? f : f.title || f.name).filter(Boolean).join(", ")
                 : "";
-            const content = `Product: ${p.name} (${p.marketingTitle || "SaaS Platform"})\nDescription: ${p.description}\n${features ? `Key Capabilities: ${features}` : ""}\nStatus: Live Active Product`;
+            const tags = Array.isArray(p.tags) ? p.tags.join(", ") : "";
+            const content = `SS40 Product: ${p.name} (${p.marketingTitle || "Business Software"})\nDescription: ${p.description}\n${features ? `Key Capabilities: ${features}\n` : ""}${tags ? `Tags: ${tags}\n` : ""}${p.productUrl ? `Product URL: ${p.productUrl}\n` : ""}Status: Official SS40 Product`;
             const embedding = await generateEmbedding(`${p.name} ${p.marketingTitle}\n${content}`);
 
             dynamicChunks.push({
                 id: `live-product-${p.id}`,
-                title: `${p.name} - ${p.marketingTitle || "SaaS Product"}`,
+                title: `${p.name} - ${p.marketingTitle || "SS40 Product"}`,
                 category: "products",
                 sourceUrl: "https://ss40network.com/products",
                 route: "/products",
                 content,
-                summary: p.description.slice(0, 120),
-                keywords: [p.name.toLowerCase(), "saas", "product", "software", "pricing", "demo"],
-                suggestedOptions: [`Book ${p.name} Demo`, "Explore Products", "Contact Sales"],
+                summary: p.description.slice(0, 140),
+                keywords: [p.name.toLowerCase(), "product", "software", "pricing", "demo", "features", "invoice", "erp", "management"],
+                suggestedOptions: [`Book ${p.name} Demo`, "Explore Products", "Contact Solutions Team"],
                 lastUpdated: p.updatedAt ? p.updatedAt.toISOString() : new Date().toISOString(),
                 embedding,
             });
         }
 
-        // 3. Active Client Projects
+        // 3. Live Client Testimonials (Happimonials)
+        const liveHappimonials = await prisma.happimonial.findMany({
+            where: { isActive: true },
+            orderBy: [{ isFeatured: "desc" }, { sortOrder: "asc" }],
+            take: 8,
+        }).catch(() => []);
+
+        for (const h of liveHappimonials) {
+            const content = `Verified Client Testimonial:\nClient: ${h.clientName}\nCompany: ${h.companyName}\nIndustry: ${h.industry}\nTestimonial Quote: "${h.testimonial}"\nScope: ${h.pageScope} Solution`;
+            const embedding = await generateEmbedding(`${h.clientName} ${h.companyName} ${h.industry} Testimonial Review Feedback\n${content}`);
+
+            dynamicChunks.push({
+                id: `live-happimonial-${h.id}`,
+                title: `Client Review: ${h.clientName} from ${h.companyName}`,
+                category: "company",
+                sourceUrl: "https://ss40network.com/happimonials",
+                route: "/happimonials",
+                content,
+                summary: `Verified review from ${h.clientName} (${h.companyName}): "${h.testimonial.slice(0, 100)}..."`,
+                keywords: [h.clientName.toLowerCase(), h.companyName.toLowerCase(), h.industry.toLowerCase(), "testimonial", "review", "feedback", "rating", "client opinion"],
+                suggestedOptions: ["Client Case Studies", "Explore Products", "Talk to Solutions Team"],
+                lastUpdated: h.updatedAt ? h.updatedAt.toISOString() : new Date().toISOString(),
+                embedding,
+            });
+        }
+
+        // 4. Live Student Career Impacts & Placement Outcomes
+        const liveStudentImpacts = await prisma.studentImpact.findMany({
+            where: { isActive: true },
+            orderBy: [{ isFeatured: "desc" }, { sortOrder: "asc" }],
+            take: 8,
+        }).catch(() => []);
+
+        for (const si of liveStudentImpacts) {
+            const content = `SS40 Academics Student Career Placement & Internship Outcome:\nStudent: ${si.studentName}\nRole/Placement: ${si.designation}\nAcademic Specialization: ${si.academicRoute}\nStudent Quote: "${si.quote}"`;
+            const embedding = await generateEmbedding(`${si.studentName} ${si.designation} Academic Internship Placement Career Outcome\n${content}`);
+
+            dynamicChunks.push({
+                id: `live-student-impact-${si.id}`,
+                title: `Academic Placement Outcome: ${si.studentName} (${si.designation})`,
+                category: "academics",
+                sourceUrl: "https://ss40network.com/academics",
+                route: "/academics",
+                content,
+                summary: `${si.studentName} (${si.designation}): "${si.quote.slice(0, 100)}..."`,
+                keywords: [si.studentName.toLowerCase(), si.designation.toLowerCase(), si.academicRoute.toLowerCase(), "internship", "placement", "career", "student review", "package", "hiring"],
+                suggestedOptions: ["Internship Sprints", "Student Projects", "SS40 Academics"],
+                lastUpdated: si.updatedAt ? si.updatedAt.toISOString() : new Date().toISOString(),
+                embedding,
+            });
+        }
+
+        // 5. Active Client Projects
         const clientProjects = await prisma.clientProject.findMany({
             where: { isActive: true, isConfidential: false },
             orderBy: { sortOrder: "asc" },
@@ -165,8 +218,8 @@ async function getLiveDynamicChunks(): Promise<VectorChunk[]> {
                 id: `live-client-proj-${cp.id}`,
                 title: `${cp.title} (${cp.industry}) - Client Project`,
                 category: "digital-solutions",
-                sourceUrl: "https://ss40network.com/digital-solutions",
-                route: "/digital-solutions",
+                sourceUrl: "https://ss40network.com/client-projects",
+                route: "/client-projects",
                 content,
                 summary: cp.description.slice(0, 120),
                 keywords: [cp.title.toLowerCase(), cp.industry.toLowerCase(), "client project", "case study"],
@@ -176,7 +229,7 @@ async function getLiveDynamicChunks(): Promise<VectorChunk[]> {
             });
         }
 
-        // 4. Active Student Projects
+        // 6. Active Student Projects
         const studentProjects = await prisma.studentProject.findMany({
             where: { isActive: true },
             orderBy: { sortOrder: "asc" },
@@ -202,7 +255,7 @@ async function getLiveDynamicChunks(): Promise<VectorChunk[]> {
             });
         }
 
-        // 5. Recent Activity Posts
+        // 7. Recent Activity Posts
         const recentActivities = await prisma.activityPost.findMany({
             where: { isActive: true },
             orderBy: { activityDate: "desc" },
@@ -289,9 +342,13 @@ export async function searchVectorKnowledge(
         }
 
         // Domain-specific keyword boosts
-        if (/\b(clearinvoice|invoice|billing|gst)\b/i.test(rawQuery) && chunk.category === "products") {
-            tokenBonus += 0.15;
-        } else if (/\b(internship|internships|intern|sprint|dsa|college|placement)\b/i.test(rawQuery) && (chunk.category === "academics" || chunk.category === "internships")) {
+        if (/\b(clearinvoice|invoice|billing|gst|gtc|gtc\s*suite|email\s*agent|products?|software)\b/i.test(rawQuery) && chunk.category === "products") {
+            tokenBonus += 0.20;
+        } else if (/\b(testimonial|testimonials|reviews?|feedback|ratings?|client\s*words?)\b/i.test(rawQuery) && (chunk.category === "company" || chunk.id.startsWith("live-happimonial"))) {
+            tokenBonus += 0.25;
+        } else if (/\b(placement|placements|package|ctc|stipend|placed|hired|career\s*outcome)\b/i.test(rawQuery) && (chunk.category === "academics" || chunk.id.startsWith("live-student-impact"))) {
+            tokenBonus += 0.25;
+        } else if (/\b(internship|internships|intern|sprint|dsa|college|academics?)\b/i.test(rawQuery) && (chunk.category === "academics" || chunk.category === "internships")) {
             tokenBonus += 0.15;
         } else if (/\b(digital\s*solutions|custom\s*software|web\s*dev|app\s*dev)\b/i.test(rawQuery) && chunk.category === "digital-solutions") {
             tokenBonus += 0.15;

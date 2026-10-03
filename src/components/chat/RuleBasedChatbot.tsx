@@ -373,6 +373,29 @@ export function RuleBasedChatbot({
         const text = (textToSend || inputValue).trim();
         if (!text || isTyping) return;
 
+        // Instant local action when user clicks "Leave Contact Details" or "Request Callback"
+        if (/^(leave contact details|request callback|callback request|share details)$/i.test(text)) {
+            const userMsg: ChatMessage = {
+                id: `user-${Date.now()}`,
+                sender: "user",
+                text,
+                timestamp: new Date()
+            };
+            const botLeadMsg: ChatMessage = {
+                id: `bot-${Date.now()}`,
+                sender: "bot",
+                text: "Please share your contact details below. Our engineering and solutions team will get in touch with you promptly.",
+                timestamp: new Date(),
+                actionType: "LEAD_CAPTURE",
+                isLeadCard: true,
+                quickReplies: ["Three Wings", "SS40 Digital Solutions", "SS40 Products", "SS40 Academics"],
+                link: { label: "Contact SS40 Team", url: "/contact" }
+            };
+            setMessages(prev => [...prev, userMsg, botLeadMsg]);
+            setInputValue("");
+            return;
+        }
+
         const userMsg: ChatMessage = {
             id: `user-${Date.now()}`,
             sender: "user",
@@ -534,53 +557,149 @@ export function RuleBasedChatbot({
         setLeadCaptured(false);
     }, []);
 
-    // Helper: Render Markdown bullet points with clean typography (zero emojis)
+    // Helper: Parse inline Markdown (bold, code)
+    const renderInlineText = useCallback((raw: string) => {
+        const parts = raw.split(/(\*\*[^*]+\*\*)/g);
+        return parts.map((part, pIdx) => {
+            if (part.startsWith("**") && part.endsWith("**")) {
+                return (
+                    <strong key={pIdx} className="font-bold text-[#0F766E]">
+                        {part.slice(2, -2)}
+                    </strong>
+                );
+            }
+            return part;
+        });
+    }, []);
+
+    // Helper: Render Markdown with semantic bullet lines, numbered badges, and proper alignment
     const renderFormattedMessage = useCallback((text: string) => {
         const sanitized = stripEmojis(text);
-        const lines = sanitized.split("\n").filter(line => line.trim().length > 0);
+
+        // Pre-normalize inline bullets, dashes (hyphen, en-dash, em-dash), and numbers so that even if the AI outputs
+        // "Intro: - Item 1 - Item 2" or "Text. - Item", they are broken into true separate bullet lines.
+        // Also split trailing calls-to-action into their own paragraph so they don't get merged into the last bullet.
+        const normalized = sanitized
+            .replace(/([:.;]|\b)\s+[-•*–—]\s+/g, "$1\n- ")
+            .replace(/([:.;]|\b)\s+(\d+)[\.\)]\s+/g, "$1\n$2. ")
+            .replace(/\.\s+(Let us know|Would you like|Feel free|Reach out|Please let|Contact our|Let me know)/gi, ".\n\n$1");
+
+        const lines = normalized.split("\n");
+
+        type Block =
+            | { type: "paragraph"; text: string }
+            | { type: "bullet-list"; items: string[] }
+            | { type: "numbered-list"; items: { number: string; text: string }[] };
+
+        const blocks: Block[] = [];
+        let currentBulletItems: string[] | null = null;
+        let currentNumberedItems: { number: string; text: string }[] | null = null;
+
+        const flushLists = () => {
+            if (currentBulletItems && currentBulletItems.length > 0) {
+                blocks.push({ type: "bullet-list", items: currentBulletItems });
+                currentBulletItems = null;
+            }
+            if (currentNumberedItems && currentNumberedItems.length > 0) {
+                blocks.push({ type: "numbered-list", items: currentNumberedItems });
+                currentNumberedItems = null;
+            }
+        };
+
+        for (const rawLine of lines) {
+            const trimmed = rawLine.trim();
+
+            if (!trimmed) {
+                flushLists();
+                continue;
+            }
+
+            // 1. Check for bullet line (- item, • item, * item, – item, — item)
+            const bulletMatch = trimmed.match(/^[-•*–—]\s+(.+)$/);
+            if (bulletMatch) {
+                if (currentNumberedItems) flushLists();
+                if (!currentBulletItems) currentBulletItems = [];
+                // Auto-bold title prefix if format is "Title: Details" without existing bold
+                let itemContent = bulletMatch[1];
+                if (!itemContent.includes("**")) {
+                    itemContent = itemContent.replace(/^([A-Za-z0-9\s‑\-\/]+?):\s+/, "**$1:** ");
+                }
+                currentBulletItems.push(itemContent);
+                continue;
+            }
+
+            // 2. Check for numbered line (1. item, 2. item, etc.)
+            const numberedMatch = trimmed.match(/^(\d+)[\.\)]\s+(.+)$/);
+            if (numberedMatch) {
+                if (currentBulletItems) flushLists();
+                if (!currentNumberedItems) currentNumberedItems = [];
+                let itemContent = numberedMatch[2];
+                if (!itemContent.includes("**")) {
+                    itemContent = itemContent.replace(/^([A-Za-z0-9\s‑\-\/]+?):\s+/, "**$1:** ");
+                }
+                currentNumberedItems.push({ number: numberedMatch[1], text: itemContent });
+                continue;
+            }
+
+            // 3. Normal paragraph text
+            flushLists();
+            blocks.push({ type: "paragraph", text: trimmed });
+        }
+
+        flushLists();
 
         return (
             <div className="space-y-2 text-[#1F2937]">
-                {lines.map((line, idx) => {
-                    const trimmed = line.trim();
-                    const isBullet = trimmed.startsWith("- ") || trimmed.startsWith("• ") || trimmed.startsWith("* ");
-
-                    if (isBullet) {
-                        const contentWithoutBullet = trimmed.replace(/^[-•*]\s+/, "");
-                        const parts = contentWithoutBullet.split(/(\*\*[^*]+\*\*)/g);
-
-                        const bulletTokens = parts.map((part, pIdx) => {
-                            if (part.startsWith("**") && part.endsWith("**")) {
-                                return <strong key={pIdx} className="font-bold text-[#0F766E]">{part.slice(2, -2)}</strong>;
-                            }
-                            return part;
-                        });
-
+                {blocks.map((block, bIdx) => {
+                    if (block.type === "bullet-list") {
                         return (
-                            <div key={idx} className="flex items-start gap-2 pl-0.5 my-1">
-                                <span className="text-[#0F766E] font-black text-sm leading-none mt-0.5 select-none">-</span>
-                                <span className="flex-1 leading-relaxed text-[#1F2937]">{bulletTokens}</span>
-                            </div>
+                            <ul key={bIdx} className="my-2 space-y-2 pl-0.5">
+                                {block.items.map((item, iIdx) => (
+                                    <li key={iIdx} className="flex items-start gap-2.5 leading-relaxed text-[#1F2937]">
+                                        {/* Sleek Horizontal Bullet Line with Hanging Indent */}
+                                        <span
+                                            className="w-2.5 sm:w-3 h-0.5 rounded-full bg-[#0F766E] shrink-0 mt-2.5 shadow-2xs"
+                                            aria-hidden="true"
+                                        />
+                                        <div className="flex-1 min-w-0">
+                                            {renderInlineText(item)}
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
                         );
                     }
 
-                    const parts = line.split(/(\*\*[^*]+\*\*)/g);
-                    const renderedParts = parts.map((part, pIdx) => {
-                        if (part.startsWith("**") && part.endsWith("**")) {
-                            return <strong key={pIdx} className="font-bold text-[#0F766E]">{part.slice(2, -2)}</strong>;
-                        }
-                        return part;
-                    });
+                    if (block.type === "numbered-list") {
+                        return (
+                            <ol key={bIdx} className="my-2 space-y-1.5 pl-0.5">
+                                {block.items.map((item, iIdx) => (
+                                    <li key={iIdx} className="flex items-start gap-2.5 leading-relaxed text-[#1F2937]">
+                                        {/* Styled Numbered Step Badge with Hanging Indent */}
+                                        <span
+                                            className="w-4.5 h-4.5 rounded-md bg-[#0F766E]/12 border border-[#0F766E]/25 text-[#0F766E] text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5 select-none"
+                                            aria-hidden="true"
+                                        >
+                                            {item.number}
+                                        </span>
+                                        <div className="flex-1 min-w-0">
+                                            {renderInlineText(item.text)}
+                                        </div>
+                                    </li>
+                                ))}
+                            </ol>
+                        );
+                    }
 
                     return (
-                        <p key={idx} className="leading-relaxed text-[#1F2937]">
-                            {renderedParts}
+                        <p key={bIdx} className="leading-relaxed text-[#1F2937]">
+                            {renderInlineText(block.text)}
                         </p>
                     );
                 })}
             </div>
         );
-    }, []);
+    }, [renderInlineText]);
 
     return (
         <AnimatePresence>
@@ -1067,27 +1186,17 @@ export function RuleBasedChatbot({
                                 );
                             })}
 
-                            {/* Typing / Thinking Indicator with Bot Avatar */}
+                            {/* Typing / Thinking Indicator with Bot Avatar (Zero-Dot, Executive Shimmer Bar) */}
                             {isTyping && (
                                 <div className="flex items-start gap-2 max-w-[85%]">
                                     <BotAvatar size="sm" />
-                                    <div className="bg-white border border-gray-200/80 rounded-2xl rounded-tl-xs px-3.5 py-2.5 shadow-xs flex items-center transition-all duration-300">
-                                        {isThinking ? (
-                                            <div className="flex items-center gap-1.5 text-xs font-semibold text-[#0F766E]">
-                                                <span>Thinking</span>
-                                                <span className="inline-flex gap-0.5">
-                                                    <span className="w-1 h-1 rounded-full bg-[#0F766E] animate-bounce" style={{ animationDelay: "0ms" }} />
-                                                    <span className="w-1 h-1 rounded-full bg-[#0F766E] animate-bounce" style={{ animationDelay: "150ms" }} />
-                                                    <span className="w-1 h-1 rounded-full bg-[#0F766E] animate-bounce" style={{ animationDelay: "300ms" }} />
-                                                </span>
-                                            </div>
-                                        ) : (
-                                            <div className="flex items-center gap-1.5 py-0.5">
-                                                <span className="w-1.5 h-1.5 rounded-full bg-[#0F766E] animate-bounce" style={{ animationDelay: "0ms" }} />
-                                                <span className="w-1.5 h-1.5 rounded-full bg-[#0F766E] animate-bounce" style={{ animationDelay: "150ms" }} />
-                                                <span className="w-1.5 h-1.5 rounded-full bg-[#0F766E] animate-bounce" style={{ animationDelay: "300ms" }} />
-                                            </div>
-                                        )}
+                                    <div className="bg-white border border-gray-200/80 rounded-2xl rounded-tl-xs px-3.5 py-2.5 shadow-xs flex flex-col gap-1.5 transition-all duration-300 min-w-[140px]">
+                                        <div className="flex items-center justify-between text-[11px] font-semibold text-[#0F766E] tracking-tight">
+                                            <span>{isThinking ? "Consulting Knowledge Base" : "SS40 SKY is replying"}</span>
+                                        </div>
+                                        <div className="w-full h-1 bg-[#F0FDFA] rounded-full overflow-hidden border border-[#0F766E]/20">
+                                            <div className="h-full bg-gradient-to-r from-[#0F766E] via-[#2DD4BF] to-[#0F766E] rounded-full animate-pulse w-full" />
+                                        </div>
                                     </div>
                                 </div>
                             )}
@@ -1125,7 +1234,7 @@ export function RuleBasedChatbot({
                                 </button>
                             </form>
                             <p className="text-[10px] text-gray-400 text-center font-medium tracking-wide">
-                                SS40 SKY • Verified Enterprise AI
+                                SS40 SKY &mdash; Verified Enterprise AI
                             </p>
                         </div>
                     </motion.div>

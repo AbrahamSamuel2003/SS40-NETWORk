@@ -58,13 +58,16 @@ ROLE & PURPOSE:
 - STRICT EMOJI & SPARKLES BAN: NEVER use any emojis, emoticons, sparkles, or unicode pictographs (such as ✨, 🚀, 💡, 💼, 🤖, etc.) anywhere in your answers, options, or navigation labels under any circumstances. Keep all text clean, professional, and strictly text-only.
 
 COMMUNICATION STYLE & TONE:
-- USE SIMPLE, CLEAR, EVERYDAY LANGUAGE: Explain technical terms simply so that any visitor, business owner, or student can easily understand. Avoid dense corporate jargon (avoid phrases like "multi-tenant data isolation", "contextual reply drafting", "milestone model custom-scoped to exact feature sets").
+- USE SIMPLE, CLEAR, EVERYDAY LANGUAGE: Explain technical terms simply so that any visitor, business owner, or student can easily understand. Avoid dense corporate jargon.
 - Keep answers concise, clear, and direct (2 to 4 sentences or clean bullet points).
+- PROPER LIST FORMATTING: When listing multiple items, features, products, or steps, format them with clean Markdown bullet points (using "- **Name**: detail") or numbered points (using "1. **Name**: detail"). Always put each point on its own fresh line for clean presentation.
 
 YOUR THREE BEHAVIORAL MODES:
 
-MODE 1: COMPANY INQUIRIES (When the user asks about services, products, pricing, client work, internships, office, founder, contact, etc.)
+MODE 1: COMPANY INQUIRIES (When the user asks about services, products, pricing, client work, internships, office, founder, contact, reviews, etc.)
 - Use ONLY the verified facts from [RETRIEVED SS40 KNOWLEDGE CONTEXT].
+- Testimonials & Client Reviews: When asked for reviews, client experiences, or testimonials, cite verified quotes from the retrieved context (e.g. client name, company, industry, and their exact feedback).
+- Student Career Outcomes: When asked about student internships or placement results, cite verified student impacts and designations from the retrieved context.
 - Describe products simply:
   * ClearInvoice: Automated GST billing, instant PDF invoices, real-time inventory tracking, Razorpay online payments, and automatic backup to Google Drive. Includes a free plan and a free 1-on-1 demo.
   * SS40 AI Email Agent: Smart AI assistant that lives strictly inside your email inbox to filter spam, prioritize key emails, and draft instant replies with zero delay. It is EXCLUSIVELY email-based and does NOT integrate with WhatsApp or messaging apps.
@@ -78,9 +81,14 @@ MODE 2: GREETINGS & SMALL TALK (When the user says "hi", "hello", "hlo", "how ar
 - Smoothly invite them to explore Digital Solutions, SS40 Products (like ClearInvoice), or Academic internship programs.
 - Keep greetings dynamic and varied.
 
-MODE 3: OUT-OF-SCOPE / UNRELATED TOPICS (Math calculations, generic coding, cooking recipes, buying appliances, general non-company trivia)
-- Politely and dynamically decline in friendly, simple words (e.g. "I'm specialized in SS40 NETWORK's services, software products, and academic programs, so I can't assist with general calculations or outside topics. How can I help you explore SS40 NETWORK today?").
-- Guide them back to SS40 NETWORK's offerings.
+MODE 3: OUT-OF-SCOPE / UNRELATED TOPICS (General world trivia, school homework, politics, non-company math, entertainment, cooking recipes, buying consumer gadgets):
+- Politely and gently decline: State that as SS40 SKY, you specialize exclusively in SS40 NETWORK's digital solutions, software products (like ClearInvoice), and tech academic programs, and cannot answer outside queries.
+- Bridge to company value: Smoothly explain that if they are looking for custom software engineering, business automation, or tech internships, you'd be glad to assist.
+- Lead Generation Invitation: Politely invite the user to connect with the team:
+  "If you have a project idea, software requirement, or tech career goal in mind, please share your name and contact details (phone or email) right here in chat, or use the quick form below so our engineering team can connect with you directly."
+- Output Action Type: ALWAYS set "actionType": "LEAD_CAPTURE" for out-of-scope inquiries so the user can easily leave their details.
+- Options: Offer relevant company exploration options (e.g. ["SS40 Digital Solutions", "SS40 Products", "SS40 Academics", "Contact Team"]).
+- Navigation: Point to "/contact" with label "Contact SS40 Team".
 
 PROGRESSIVE LEAD CONVERSION FUNNEL (POLITE, CONVERSATIONAL, ZERO-REPETITION):
 - Conversational Lead Nurturing: Lead collection happens EXCLUSIVELY within the natural message text (never in pills).
@@ -110,7 +118,7 @@ You MUST ALWAYS respond in valid JSON with this exact schema:
   "answer": "Your dynamic natural response here in simple language.",
   "options": ["Substantive Topic 1", "Substantive Topic 2", "Substantive Topic 3"],
   "navigation": { "label": "Button Label", "url": "/internal-route" }, // Or null if not linking directly
-  "actionType": "STANDARD" // Options: "STANDARD" | "WINGS_CARD" | "ACADEMIC_CARD" | "SUPPORT_CARD"
+  "actionType": "STANDARD" // Options: "STANDARD" | "WINGS_CARD" | "ACADEMIC_CARD" | "SUPPORT_CARD" | "LEAD_CAPTURE"
 }
 
 ALLOWED INTERNAL ROUTES:
@@ -124,6 +132,36 @@ export async function generateRagResponse(
 
     // 1. Process and resolve query context
     const processed = processUserQuery(rawUserMessage, history);
+
+    // High-speed, polite handler for gibberish / keysmash / meaningless inputs (e.g. "kjfbveaubviwubuEBFUjb", "asdfghjkl")
+    if (processed.isGibberish) {
+        const gibberishAnswer = "I couldn't quite understand that. I am **SS40 SKY**, your official AI assistant for **SS40 NETWORK**.\n\nWe specialize in Three Wings:\n- **SS40 Digital Solutions**: Custom software, web & mobile applications, AI, and cloud systems.\n- **SS40 Products**: ClearInvoice (automated GST billing & inventory), SS40 AI Email Agent, and GTC Suite.\n- **SS40 Academics**: Hands-on software engineering internships and DSA placement training.\n\nPlease pick an option below, or let me know what software or tech service you are looking for.";
+        return {
+            answer: gibberishAnswer,
+            replyText: gibberishAnswer,
+            options: ["SS40 Digital Solutions", "SS40 Products", "SS40 Academics", "Contact Team"],
+            quickReplies: ["SS40 Digital Solutions", "SS40 Products", "SS40 Academics", "Contact Team"],
+            navigation: { label: "Explore SS40 NETWORK", url: "/#business-wings" },
+            link: { label: "Explore SS40 NETWORK", url: "/#business-wings" },
+            actionType: "WINGS_CARD",
+            source: "groq-rag-ai"
+        };
+    }
+
+    // High-speed, polite handler for out-of-scope random questions (math, school questions, trivia, creative writing)
+    if (processed.isOutOfScope) {
+        const outOfScopeAnswer = "I am **SS40 SKY**, the official AI assistant for **SS40 NETWORK**. I specialize strictly in our custom software engineering (Digital Solutions), scalable products (like ClearInvoice), and tech academic internships, so I cannot assist with outside topics or general trivia.\n\nHowever, if you have a software requirement, project idea, or tech career goal in mind, our engineering team in Tirunelveli would love to assist you.\n\nPlease feel free to share your name and contact details (phone or email) right here in chat, or use the quick form below so our team can get in touch with you directly.";
+        return {
+            answer: outOfScopeAnswer,
+            replyText: outOfScopeAnswer,
+            options: ["SS40 Digital Solutions", "SS40 Products", "SS40 Academics", "Contact Team"],
+            quickReplies: ["SS40 Digital Solutions", "SS40 Products", "SS40 Academics", "Contact Team"],
+            navigation: { label: "Contact SS40 Team", url: "/contact" },
+            link: { label: "Contact SS40 Team", url: "/contact" },
+            actionType: "LEAD_CAPTURE",
+            source: "groq-rag-ai"
+        };
+    }
 
     // 2. Retrieve relevant company context via Neural Vector Search
     const vectorResult: VectorSearchResult = await searchVectorKnowledge(
@@ -145,8 +183,6 @@ export async function generateRagResponse(
             fallbackOptions = ["Three Wings", "SS40 Digital Solutions", "SS40 Products", "SS40 Academics"];
         } else if (processed.isSmallTalk) {
             fallbackText = "Hello! I am SS40 SKY, the AI assistant for SS40 NETWORK. I'm here to help you discover our custom software engineering, SS40 Products (like ClearInvoice), and academic internship programs. How can I assist you?";
-        } else if (processed.isOutOfScope) {
-            fallbackText = "I am specialized exclusively in SS40 NETWORK's digital solutions, software products, and academic programs. How can I assist you in exploring SS40 NETWORK today?";
         } else if (primaryChunk && vectorResult.topScore >= 0.45) {
             fallbackText = primaryChunk.summary || primaryChunk.content;
             fallbackOptions = primaryChunk.suggestedOptions || fallbackOptions;

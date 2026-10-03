@@ -5,9 +5,157 @@ export interface ProcessedQuery {
     normalizedQuery: string;
     isGreeting: boolean;
     isSmallTalk: boolean;
+    isGibberish: boolean;
     isOutOfScope: boolean;
     outOfScopeReason?: string;
     contextResolvedQuery: string;
+}
+
+/**
+ * Detects whether an input is keyboard smash, nonsense characters, or meaningless text.
+ * e.g. "kjfbveaubviwubuEBFUjb", "asdfghjkl", "zzzzzzzz", "???!!!!"
+ */
+export function isGibberishOrMeaningless(rawText: string): boolean {
+    const text = rawText.trim();
+    if (!text) return true;
+
+    // 1. Single character or pure punctuation/symbols
+    const alphanumericOnly = text.replace(/[^a-zA-Z0-9]/g, "");
+    if (alphanumericOnly.length < 2 && text.length > 0) return true;
+    if (alphanumericOnly.length === 0) return true;
+
+    // 2. High symbol ratio (more than 60% symbols)
+    if (alphanumericOnly.length / text.length < 0.4 && text.length >= 4) return true;
+
+    // 3. Repeated single character 3+ times (e.g. "aaa", "zzzz", "1111")
+    if (/(.)\1{2,}/.test(text.toLowerCase())) return true;
+
+    // 4. Common keyboard smash patterns
+    const smashPatterns = [
+        "asdf", "sdfg", "dfgh", "fghj", "ghjk", "hjkl",
+        "qwerty", "werty", "ertyu", "rtyui", "tyuio", "yuiop",
+        "zxcv", "xcvb", "cvbn", "vbnm",
+        "qazwsx", "wsxedc"
+    ];
+    const lower = text.toLowerCase();
+    for (const pat of smashPatterns) {
+        if (lower.includes(pat) && alphanumericOnly.length <= 15) return true;
+    }
+
+    // 5. Unpronounceable consonant bigrams/trigrams impossible in English and Indian languages:
+    // e.g. "kj", "kf", "fv", "vkj", "zx", "qj", "xj", "vj", "bx", "dx", "fx", "gx", "hx", "jx", "wx"
+    const unpronounceableClusters = /\b(kj|kf|fv|vk|zx|qj|xj|vj|bx|dx|fx|gx|hx|jx|wx|zq|qg|qk|qf|qm|qn|vf|vg|vh|vj|vk|vl|vm|vn|vp|vq|vr|vs|vt|vw|vx|vy|vz)/i;
+    const internalNonsense = /(kjf|fvk|vkj|zxq|qzx|bdf|fgj|gjk|jkl|klm|lmn|xcv|cvb|vbn|bnm)/i;
+
+    // 6. Check individual tokens for consonant clusters or unpronounceable patterns
+    const tokens = text.split(/\s+/).map(t => t.replace(/[^a-zA-Z]/g, ""));
+    for (const token of tokens) {
+        if (token.length >= 4) {
+            if (unpronounceableClusters.test(token)) return true;
+            if (internalNonsense.test(token)) return true;
+
+            // 5+ consecutive consonants without vowel
+            if (/[bcdfghjklmnpqrstvwxyz]{5,}/i.test(token)) return true;
+        }
+
+        // Random casing keysmashing in a single word (e.g. "wubuEBFUjb")
+        if (token.length >= 6 && /[a-z]+[A-Z]{2,}[a-z]+/.test(token)) return true;
+    }
+
+    return false;
+}
+
+/**
+ * Checks if a query is completely out-of-scope for the SS40 NETWORK company assistant.
+ * (e.g. math calculations, generic coding exercises, non-company trivia, buying appliances, creative writing)
+ */
+export function detectOutOfScope(normalizedQuery: string): { isOutOfScope: boolean; reason?: string } {
+    const trimmed = normalizedQuery.trim();
+
+    // 1. Math calculations & equations (e.g. "1+2", "7+4", "5 * 10", "sqrt(16)", "solve 2x+5=15")
+    if (/^\d+\s*[\+\-\*\/\^%]\s*\d+/.test(trimmed) || /^(calculate|what is|solve)\s+\d+\s*[\+\-\*\/]/i.test(trimmed) || /\bsolve\s+[0-9a-z\+\-\*\/\=\s]+/i.test(trimmed)) {
+        return { isOutOfScope: true, reason: "math_calculation" };
+    }
+
+    // 2. Generic coding / programming problem solving (e.g. "python program for factorial", "write code for binary search")
+    if (/\b(python program for|write a program for|write code for|factorial of|fibonacci|bubble sort|leetcode|solve in c\+\+|java code for)\b/i.test(trimmed)) {
+        return { isOutOfScope: true, reason: "generic_coding_request" };
+    }
+
+    // 3. Creative writing & jokes (e.g. "write a poem", "tell a joke", "tell a story")
+    if (/\b(write (a|me a) (poem|story|song|essay|joke)|tell (me a|a) (joke|story)|make me laugh)\b/i.test(trimmed)) {
+        return { isOutOfScope: true, reason: "creative_entertainment" };
+    }
+
+    // 4. World trivia, politics, sports, geography, astronomy
+    if (/\b(who is the (president|prime minister|governor|king|queen|ceo of google|ceo of apple)|capital of|population of|currency of|who won the (match|cup|world cup|ipl|election)|weather in|temperature in|photosynthesis|solar system|speed of light)\b/i.test(trimmed)) {
+        return { isOutOfScope: true, reason: "general_world_trivia" };
+    }
+
+    // 5. Unrelated consumer shopping / general advice (e.g. "which ac i can buy for 30000", "recipe for pizza", "best phone under 20000")
+    if (/\b(buy\s+(ac|air\s*conditioner|phone|car|bike|laptop|tv)|recipe for|cook|movie recommendation|which car to buy|how to cook)\b/i.test(trimmed)) {
+        return { isOutOfScope: true, reason: "general_consumer_trivia" };
+    }
+
+    // 6. Random single-word non-company dictionary terms (e.g. "mouse", "keyboard", "dog", "cat", "script", "what is script")
+    const words = trimmed.split(/\s+/);
+    const isKnownCompanyWord = /\b(hi|hello|hlo|hey|clearinvoice|internship|internships|intern|services|service|wings|pricing|price|contact|support|phone|email|mail|whatsapp|products|product|academics|academic|about|office|founder|ceo|sivasubramanian|clients|client|projects|project|jobs|careers|quote|demo|lecturecast|wavelink|studentos|mayil|annai|jalsa|mou|mous|blogs|dsa|placement|placements|sprint|sprints|tirunelveli)\b/i.test(trimmed);
+    
+    if (words.length === 1 && !isKnownCompanyWord) {
+        return { isOutOfScope: true, reason: "isolated_non_company_noun" };
+    }
+
+    if (/^(what is|explain)\s+(script|mouse|keyboard|cpu|ram|cloud computing|internet|biology|chemistry)$/i.test(trimmed)) {
+        return { isOutOfScope: true, reason: "generic_definition_request" };
+    }
+
+    return { isOutOfScope: false };
+}
+
+/**
+ * Analyzes and prepares the user message for RAG processing.
+ */
+export function processUserQuery(
+    message: string,
+    history: ChatHistoryMessage[] = []
+): ProcessedQuery {
+    const rawQuery = message.trim();
+    const normalizedQuery = normalizeQuery(rawQuery);
+    const tokenCount = normalizedQuery.split(/\s+/).length;
+
+    // Gibberish & meaningless input detection
+    const isGibberish = isGibberishOrMeaningless(rawQuery);
+
+    // Greeting detection
+    const isGreeting = !isGibberish && /^(h+i+|h+e+l+l*o+|h+l+o+|h+e+y+|greetings|namaste|vanakkam|start|howdy|hey there|hi there)\b/i.test(normalizedQuery) &&
+        tokenCount <= 3;
+
+    // Friendly small talk detection
+    const isSmallTalk = !isGibberish && /^(how\s*(r|are)\s*u|how\s*are\s*you|who\s*are\s*you|what\s*is\s*your\s*name|what\s*can\s*you\s*do|tell\s*me\s*about\s*yourself)\b/i.test(normalizedQuery);
+
+    // Check if the assistant recently asked for name and user is providing a valid name
+    const lastAssistantMsg = [...history].reverse().find(m => m.role === "assistant");
+    const isRespondingToNamePrompt = lastAssistantMsg
+        ? /\b(your name|share your name|may i know your name|who to address|what is your name|who am i speaking with)\b/i.test(lastAssistantMsg.content) && isLegitimateHumanName(rawQuery)
+        : false;
+
+    // Out of scope detection
+    const { isOutOfScope, reason: outOfScopeReason } = (!isGibberish && !isRespondingToNamePrompt)
+        ? detectOutOfScope(normalizedQuery)
+        : { isOutOfScope: false };
+
+    const contextResolvedQuery = resolveConversationContext(rawQuery, history);
+
+    return {
+        rawQuery,
+        normalizedQuery,
+        isGreeting,
+        isSmallTalk,
+        isGibberish,
+        isOutOfScope,
+        outOfScopeReason,
+        contextResolvedQuery,
+    };
 }
 
 const COMMON_TYPOS: Record<string, string> = {
@@ -188,77 +336,6 @@ export function resolveConversationContext(
     return normalized;
 }
 
-/**
- * Checks if a query is completely out-of-scope for the SS40 NETWORK company assistant.
- * (e.g. math calculations, generic coding exercises, non-company trivia, buying appliances)
- */
-export function detectOutOfScope(normalizedQuery: string): { isOutOfScope: boolean; reason?: string } {
-    const trimmed = normalizedQuery.trim();
-
-    // 1. Math calculations (e.g. "1+2", "7+4", "5 * 10", "sqrt(16)")
-    if (/^\d+\s*[\+\-\*\/\^%]\s*\d+/.test(trimmed) || /^(calculate|what is)\s+\d+\s*[\+\-\*\/]/i.test(trimmed)) {
-        return { isOutOfScope: true, reason: "math_calculation" };
-    }
-
-    // 2. Generic coding / programming problem solving (e.g. "python program for factorial", "write code for binary search")
-    if (/\b(python program for|write a program for|write code for|factorial of|fibonacci|bubble sort|leetcode|solve in c\+\+|java code for)\b/i.test(trimmed)) {
-        return { isOutOfScope: true, reason: "generic_coding_request" };
-    }
-
-    // 3. Unrelated consumer shopping / general advice (e.g. "which ac i can buy for 30000", "recipe for pizza", "best phone under 20000")
-    if (/\b(buy\s+(ac|air\s*conditioner|phone|car|bike|laptop|tv)|recipe for|cook|weather in|who won the (match|cup|election)|movie recommendation)\b/i.test(trimmed)) {
-        return { isOutOfScope: true, reason: "general_consumer_trivia" };
-    }
-
-    // 4. Random single-word non-company dictionary terms (e.g. "mouse", "keyboard", "dog", "cat", "script", "what is script")
-    const words = trimmed.split(/\s+/);
-    const isKnownCompanyWord = /\b(hi|hello|hlo|hey|clearinvoice|internship|internships|intern|services|service|wings|pricing|price|contact|support|phone|email|mail|whatsapp|products|product|academics|academic|about|office|founder|ceo|sivasubramanian|clients|client|projects|project|jobs|careers|quote|demo|lecturecast|wavelink|studentos|mayil|annai|jalsa|mou|mous|blogs|dsa|placement|placements|sprint|sprints|tirunelveli)\b/i.test(trimmed);
-    
-    if (words.length === 1 && !isKnownCompanyWord) {
-        return { isOutOfScope: true, reason: "isolated_non_company_noun" };
-    }
-
-    if (/^(what is|explain)\s+(script|mouse|keyboard|cpu|ram|cloud computing|internet|biology|chemistry)$/i.test(trimmed)) {
-        return { isOutOfScope: true, reason: "generic_definition_request" };
-    }
-
-    return { isOutOfScope: false };
-}
-
-/**
- * Analyzes and prepares the user message for RAG processing.
- */
-export function processUserQuery(
-    message: string,
-    history: ChatHistoryMessage[] = []
-): ProcessedQuery {
-    const rawQuery = message.trim();
-    const normalizedQuery = normalizeQuery(rawQuery);
-    const tokenCount = normalizedQuery.split(/\s+/).length;
-
-    // Greeting detection
-    const isGreeting = /^(h+i+|h+e+l+l*o+|h+l+o+|h+e+y+|greetings|namaste|vanakkam|start|howdy|hey there|hi there)\b/i.test(normalizedQuery) &&
-        tokenCount <= 3;
-
-    // Friendly small talk detection
-    const isSmallTalk = /^(how\s*(r|are)\s*u|how\s*are\s*you|who\s*are\s*you|what\s*is\s*your\s*name|what\s*can\s*you\s*do|tell\s*me\s*about\s*yourself)\b/i.test(normalizedQuery);
-
-    // Out of scope detection
-    const { isOutOfScope, reason: outOfScopeReason } = detectOutOfScope(normalizedQuery);
-
-    const contextResolvedQuery = resolveConversationContext(rawQuery, history);
-
-    return {
-        rawQuery,
-        normalizedQuery,
-        isGreeting,
-        isSmallTalk,
-        isOutOfScope,
-        outOfScopeReason,
-        contextResolvedQuery,
-    };
-}
-
 export interface ExtractedContactInfo {
     name?: string;
     phone?: string;
@@ -315,6 +392,9 @@ function isLegitimateHumanName(text: string): boolean {
     const trimmed = text.trim();
     if (!trimmed || trimmed.length < 2 || trimmed.length > 35) return false;
     if (/\d/.test(trimmed) || trimmed.includes("@") || /[!?,;:]/.test(trimmed)) return false;
+
+    // Reject keysmash / gibberish immediately
+    if (isGibberishOrMeaningless(trimmed)) return false;
 
     const words = trimmed.toLowerCase().split(/\s+/).filter(Boolean);
     if (words.length < 1 || words.length > 3) return false;
@@ -381,15 +461,16 @@ export function extractContactDetails(
         }
     }
 
-    // Pattern B: Inspect standalone user messages chronologically for genuine person names
+    // Pattern B: Inspect standalone user messages only when:
+    // 1) The assistant explicitly asked for the user's name in the conversation, OR
+    // 2) A valid phone number or email is present in the conversation
+    const assistantAskedForName = history.some(m =>
+        m.role === "assistant" && /\b(your name|share your name|may i know your name|who to address|what is your name)\b/i.test(m.content)
+    );
+
     if (!name) {
         for (const utterance of userUtterances) {
             const clean = utterance.replace(/[,;:]/g, " ").trim();
-
-            if (isLegitimateHumanName(clean)) {
-                name = cleanCapitalize(clean);
-                break;
-            }
 
             // Starts with name before contact (e.g. "Bala 7838373892" or "Bala bala@gmail.com")
             const leadingMatch = clean.match(/^([A-Za-z]{2,20}(?:\s+[A-Za-z]{2,20})?)\s+(?:[A-Za-z0-9._%+-]+@|\d{10}|\+91)/);
@@ -399,6 +480,12 @@ export function extractContactDetails(
                     name = cleanCapitalize(leadCandidate);
                     break;
                 }
+            }
+
+            // Standalone name ONLY if the assistant explicitly prompted for their name or contact exists
+            if ((assistantAskedForName || phone || email) && isLegitimateHumanName(clean)) {
+                name = cleanCapitalize(clean);
+                break;
             }
         }
     }
