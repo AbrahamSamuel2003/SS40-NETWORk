@@ -81,10 +81,17 @@ export function BestProjects({ projects = [] }: BestProjectsProps) {
     // Filter active projects natively inside component if not done already
     const activeProjects = projects.filter(p => p.isActive !== false);
 
-    // Limit to 4 maximum for the Academics page layout
-    const displayedProjects = activeProjects.slice(0, 4);
-    const featuredProject = displayedProjects[0];
-    const secondaryProjects = displayedProjects.slice(1);
+    // Look for an explicitly featured project (only when isFeatured === true)
+    const featuredProject = activeProjects.find(p => p.isFeatured === true) || null;
+
+    // When a project is featured, exclude it from the secondary grid and show up to 3 below it.
+    // When NO project is featured (toggle is off in admin), show the top 3 projects in the same row!
+    const secondaryProjects = featuredProject
+        ? activeProjects.filter(p => p.id !== featuredProject.id).slice(0, 3)
+        : activeProjects.slice(0, 3);
+
+    // For mobile swipe carousel: include featured project if one exists, otherwise the 3 row projects
+    const displayedProjects = featuredProject ? [featuredProject, ...secondaryProjects] : secondaryProjects;
 
     if (activeProjects.length === 0) {
         return (
@@ -224,77 +231,88 @@ export function BestProjects({ projects = [] }: BestProjectsProps) {
                         viewport={{ once: true, margin: "-100px" }}
                         className="hidden md:flex flex-col gap-8 lg:gap-10"
                     >
-                        {/* TOP: Featured Project (Dominant) */}
-                        <motion.div
-                            variants={itemVariants}
-                            role="button"
-                            tabIndex={0}
-                            onClick={() => setActiveModalProject(featuredProject)}
-                            onKeyDown={(e: React.KeyboardEvent) => {
-                                if (e.key === 'Enter' || e.key === ' ') {
-                                    e.preventDefault();
-                                    setActiveModalProject(featuredProject);
-                                }
-                            }}
-                            className="cursor-pointer w-full bg-white rounded-[2rem] shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden flex flex-col lg:flex-row group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2"
-                        >
-                            {/* Project Preview */}
-                            <div className="w-full lg:w-7/12 aspect-video lg:aspect-auto min-h-[350px] relative overflow-hidden bg-gray-50 border-b lg:border-b-0 lg:border-r border-gray-100 flex-grow">
-                                {featuredProject.image || featuredProject.imageUrl ? (
-                                    <Image
-                                        src={featuredProject.image || featuredProject.imageUrl}
-                                        alt={featuredProject.title}
-                                        fill
-                                        className="object-cover group-hover:scale-105 transition-transform duration-1000 ease-out"
-                                    />
-                                ) : (
-                                    <ProjectPreviewPlaceholder />
-                                )}
-                            </div>
-
-                            {/* Content */}
-                            <div className="w-full lg:w-5/12 p-6 lg:p-8 flex flex-col bg-white">
-                                <div className="mb-4 flex justify-between items-start gap-4">
-                                    {featuredProject.badge && (
-                                        <Badge className="bg-[#6B9F91]/10 text-[#6B9F91] hover:bg-[#6B9F91]/20 border-none font-bold uppercase tracking-wider text-[10px]">
-                                            {featuredProject.badge}
-                                        </Badge>
+                        {/* TOP: Featured Project (Dominant Banner) - Rendered ONLY if a project is explicitly marked as featured */}
+                        {featuredProject && (
+                            <motion.div
+                                variants={itemVariants}
+                                role="button"
+                                tabIndex={0}
+                                onClick={() => setActiveModalProject(featuredProject)}
+                                onKeyDown={(e: React.KeyboardEvent) => {
+                                    if (e.key === 'Enter' || e.key === ' ') {
+                                        e.preventDefault();
+                                        setActiveModalProject(featuredProject);
+                                    }
+                                }}
+                                className="cursor-pointer w-full bg-white rounded-[2rem] shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden flex flex-col lg:flex-row group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2"
+                            >
+                                {/* Project Preview */}
+                                <div className="w-full lg:w-7/12 aspect-video lg:aspect-auto min-h-[350px] relative overflow-hidden bg-gray-50 border-b lg:border-b-0 lg:border-r border-gray-100 flex-grow">
+                                    {featuredProject.image || featuredProject.imageUrl ? (
+                                        <Image
+                                            src={featuredProject.image || featuredProject.imageUrl}
+                                            alt={featuredProject.title}
+                                            fill
+                                            className="object-cover group-hover:scale-105 transition-transform duration-1000 ease-out"
+                                        />
+                                    ) : (
+                                        <ProjectPreviewPlaceholder />
                                     )}
-                                    <Blocks className="w-6 h-6 text-gray-300 ml-auto shrink-0" />
                                 </div>
 
-                                <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-2 leading-tight">{featuredProject.title}</h3>
-                                <p className="text-xs font-semibold text-[#FFC900] uppercase tracking-widest mb-3">{featuredProject.category}</p>
+                                {/* Content */}
+                                <div className="w-full lg:w-5/12 p-6 lg:p-8 flex flex-col bg-white">
+                                    <div className="mb-4 flex justify-between items-start gap-4">
+                                        {featuredProject.badge && (
+                                            <Badge className="bg-[#6B9F91]/10 text-[#6B9F91] hover:bg-[#6B9F91]/20 border-none font-bold uppercase tracking-wider text-[10px]">
+                                                {featuredProject.badge}
+                                            </Badge>
+                                        )}
+                                        <Blocks className="w-6 h-6 text-gray-300 ml-auto shrink-0" />
+                                    </div>
 
-                                <p className="text-gray-600 text-sm lg:text-base leading-relaxed mb-5 overflow-hidden line-clamp-3">
-                                    {featuredProject.description}
-                                </p>
+                                    <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-2 leading-tight">{featuredProject.title}</h3>
+                                    <p className="text-xs font-semibold text-[#FFC900] uppercase tracking-widest mb-3">{featuredProject.category}</p>
 
-                                <div className="flex flex-wrap gap-2 mb-6 mt-auto">
-                                    {Array.isArray(featuredProject.tags) && featuredProject.tags.map((tag: any, i: number) => (
-                                        <span key={i} className="text-[10px] lg:text-[11px] font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 whitespace-nowrap border bg-[#D8E8E2] text-[#0F766E] border-[#6B9F91]/20">
-                                            {typeof tag === 'string' ? tag : tag.label}
-                                        </span>
-                                    ))}
-                                </div>
+                                    <p className="text-gray-600 text-sm lg:text-base leading-relaxed mb-5 overflow-hidden line-clamp-3">
+                                        {featuredProject.description}
+                                    </p>
 
-                                {featuredProject.projectUrl ? (
-                                    <a href={featuredProject.projectUrl} target="_blank" rel="noopener noreferrer" className="mt-auto">
-                                        <Button className="w-full sm:w-auto bg-[#111827] text-white hover:bg-gray-800 font-bold group/btn">
+                                    <div className="flex flex-wrap gap-2 mb-6 mt-auto">
+                                        {Array.isArray(featuredProject.tags) ? featuredProject.tags.map((tag: any, i: number) => (
+                                            <span key={i} className="text-[10px] lg:text-[11px] font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 whitespace-nowrap border bg-[#D8E8E2] text-[#0F766E] border-[#6B9F91]/20">
+                                                {typeof tag === 'string' ? tag : (tag?.label || '')}
+                                            </span>
+                                        )) : typeof featuredProject.tags === 'string' ? (() => {
+                                            try {
+                                                const parsed = JSON.parse(featuredProject.tags);
+                                                return Array.isArray(parsed) ? parsed.map((tag: any, i: number) => (
+                                                    <span key={i} className="text-[10px] lg:text-[11px] font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 whitespace-nowrap border bg-[#D8E8E2] text-[#0F766E] border-[#6B9F91]/20">
+                                                        {typeof tag === 'string' ? tag : (tag?.label || '')}
+                                                    </span>
+                                                )) : null;
+                                            } catch { return null; }
+                                        })() : null}
+                                    </div>
+
+                                    {featuredProject.projectUrl ? (
+                                        <a href={featuredProject.projectUrl} target="_blank" rel="noopener noreferrer" className="mt-auto">
+                                            <Button className="w-full sm:w-auto bg-[#111827] text-white hover:bg-gray-800 font-bold group/btn">
+                                                Explore Project <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
+                                            </Button>
+                                        </a>
+                                    ) : (
+                                        <Button onClick={(e: React.MouseEvent) => { e.stopPropagation(); setActiveModalProject(featuredProject); }} className="w-full sm:w-auto bg-[#111827] text-white hover:bg-gray-800 font-bold group/btn mt-auto">
                                             Explore Project <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
                                         </Button>
-                                    </a>
-                                ) : (
-                                    <Button onClick={(e: React.MouseEvent) => { e.stopPropagation(); setActiveModalProject(featuredProject); }} className="w-full sm:w-auto bg-[#111827] text-white hover:bg-gray-800 font-bold group/btn mt-auto">
-                                        Explore Project <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
-                                    </Button>
-                                )}
-                            </div>
-                        </motion.div>
+                                    )}
+                                </div>
+                            </motion.div>
+                        )}
 
-                        {/* BOTTOM: 3 Project Cards Grid */}
+                        {/* 3 Project Cards Grid (renders in same row on desktop!) */}
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-                            {secondaryProjects.map((project, idx) => (
+                            {secondaryProjects.map((project) => (
                                 <motion.div
                                     key={project.id}
                                     variants={itemVariants}
@@ -307,7 +325,7 @@ export function BestProjects({ projects = [] }: BestProjectsProps) {
                                             setActiveModalProject(project);
                                         }
                                     }}
-                                    className={`bg-white rounded-3xl shadow-lg shadow-gray-200/40 border border-gray-100 overflow-hidden flex-col group cursor-pointer hover:-translate-y-1 transition-transform duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2 md:last:col-span-2 lg:last:col-span-1 ${idx === 2 ? 'hidden md:flex' : 'flex'}`}
+                                    className="bg-white rounded-3xl shadow-lg shadow-gray-200/40 border border-gray-100 overflow-hidden flex flex-col group cursor-pointer hover:-translate-y-1 transition-transform duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] focus-visible:ring-offset-2"
                                 >
 
                                     {/* Image / Placeholder */}
@@ -332,14 +350,27 @@ export function BestProjects({ projects = [] }: BestProjectsProps) {
                                         </p>
 
                                         <div className="flex flex-wrap gap-2 mb-6">
-                                            {Array.isArray(project.tags) && project.tags.map((tag: any, i: number) => {
-                                                const TagIcon = getIcon(tag.icon);
+                                            {Array.isArray(project.tags) ? project.tags.map((tag: any, i: number) => {
+                                                const label = typeof tag === 'string' ? tag : (tag?.label || '');
+                                                const TagIcon = (typeof tag === 'object' && tag?.icon) ? getIcon(tag.icon) : null;
+                                                const colorClass = (typeof tag === 'object' && tag?.colorClass) ? tag.colorClass : 'bg-[#D8E8E2] text-[#0F766E] border-[#6B9F91]/20';
                                                 return (
-                                                    <span key={i} className={`text-[10px] font-bold px-2.5 py-1 rounded-md flex items-center gap-1.5 border border-transparent ${tag.colorClass}`}>
-                                                        <TagIcon className="w-3 h-3" /> {tag.label}
+                                                    <span key={i} className={`text-[10px] font-bold px-2.5 py-1 rounded-md flex items-center gap-1.5 border border-transparent ${colorClass}`}>
+                                                        {TagIcon && <TagIcon className="w-3 h-3" />} {label}
                                                     </span>
                                                 );
-                                            })}
+                                            }) : typeof project.tags === 'string' ? (() => {
+                                                try {
+                                                    const parsed = JSON.parse(project.tags);
+                                                    if (Array.isArray(parsed)) {
+                                                        return parsed.map((tag: any, i: number) => (
+                                                            <span key={i} className="text-[10px] font-bold px-2.5 py-1 rounded-md flex items-center gap-1.5 border border-transparent bg-[#D8E8E2] text-[#0F766E] border-[#6B9F91]/20">
+                                                                {typeof tag === 'string' ? tag : (tag?.label || '')}
+                                                            </span>
+                                                        ));
+                                                    }
+                                                } catch { return null; }
+                                            })() : null}
                                         </div>
 
                                         <button onClick={(e) => { e.stopPropagation(); setActiveModalProject(project); }} className="mt-auto border-t border-gray-100 pt-4 flex items-center text-[#6B9F91] font-bold text-sm group-hover:text-[#5C8C80] w-full text-left focus:outline-none">

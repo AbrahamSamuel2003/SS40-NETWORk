@@ -58,29 +58,22 @@ export function StudentProjectsList({ initialProjects }: { initialProjects: any[
     const layoutConfig = React.useMemo(() => {
         if (initialProjects.length === 0) return { type: 'empty', featured: null, grid: [] };
         
-        // If there's a featured item, use featured-grid layout regardless of count
-        const featuredItem = initialProjects.find(p => p.isFeatured);
+        // If there's an explicit featured item (isFeatured === true), use featured-grid layout
+        const featuredItem = initialProjects.find(p => p.isFeatured === true);
         if (featuredItem) {
             const gridItems = initialProjects.filter(p => p.id !== featuredItem.id);
             return { type: 'featured-grid', featured: featuredItem, grid: gridItems };
         }
         
-        // No featured item - use count-based layouts
-        if (initialProjects.length === 1) return { type: 'single', featured: initialProjects[0], grid: [] };
-        if (initialProjects.length === 2) return { type: 'two-grid', featured: null, grid: initialProjects };
-        if (initialProjects.length === 3) return { type: 'three-grid', featured: null, grid: initialProjects };
-        
-        // 4+ items with no featured: use first item as featured
-        const defaultFeatured = initialProjects[0];
-        const gridItems = initialProjects.slice(1);
-        return { type: 'featured-grid', featured: defaultFeatured, grid: gridItems };
+        // No featured item - display all projects in a clean standard grid without forcing any into a hero banner!
+        return { type: 'standard-grid', featured: null, grid: initialProjects };
     }, [initialProjects]);
 
     const displayedProjects = React.useMemo(() => {
-        if (layoutConfig.type === 'featured-grid') {
-            return [layoutConfig.featured, ...layoutConfig.grid.slice(0, 3)];
+        if (layoutConfig.type === 'featured-grid' && layoutConfig.featured) {
+            return [layoutConfig.featured, ...layoutConfig.grid];
         }
-        return layoutConfig.grid.length > 0 ? layoutConfig.grid : [layoutConfig.featured].filter(Boolean);
+        return layoutConfig.grid;
     }, [layoutConfig]);
 
     return (
@@ -160,7 +153,7 @@ export function StudentProjectsList({ initialProjects }: { initialProjects: any[
                                 show: { opacity: 1, transition: { staggerChildren: 0.1 } }
                             }}
                         >
-                            {layoutConfig.grid.slice(0, 3).map((project: any) => (
+                            {layoutConfig.grid.map((project: any) => (
                                 <motion.div
                                     key={project.id}
                                     variants={itemVariants}
@@ -198,10 +191,12 @@ export function StudentProjectsList({ initialProjects }: { initialProjects: any[
 
                                         <div className="flex flex-wrap gap-2 mb-6">
                                             {Array.isArray(project.tags) ? project.tags.map((tag: any, i: number) => {
-                                                const TagIcon = getIcon(tag.icon);
+                                                const label = typeof tag === 'string' ? tag : (tag?.label || '');
+                                                const TagIcon = (typeof tag === 'object' && tag?.icon) ? getIcon(tag.icon) : null;
+                                                const colorClass = (typeof tag === 'object' && tag?.colorClass) ? tag.colorClass : 'bg-[#D8E8E2] text-[#0F766E] border-[#6B9F91]/20';
                                                 return (
-                                                    <span key={i} className={`text-[10px] font-bold px-2.5 py-1 rounded-md flex items-center gap-1.5 border border-transparent ${tag.colorClass}`}>
-                                                        <TagIcon className="w-3 h-3" /> {tag.label}
+                                                    <span key={i} className={`text-[10px] font-bold px-2.5 py-1 rounded-md flex items-center gap-1.5 border border-transparent ${colorClass}`}>
+                                                        {TagIcon && <TagIcon className="w-3 h-3" />} {label}
                                                     </span>
                                                 );
                                             }) : typeof project.tags === 'string' ? (() => {
@@ -209,10 +204,12 @@ export function StudentProjectsList({ initialProjects }: { initialProjects: any[
                                                     const tags = JSON.parse(project.tags);
                                                     if (Array.isArray(tags)) {
                                                         return tags.map((tag: any, i: number) => {
-                                                            const TagIcon = getIcon(tag.icon);
+                                                            const label = typeof tag === 'string' ? tag : (tag?.label || '');
+                                                            const TagIcon = (typeof tag === 'object' && tag?.icon) ? getIcon(tag.icon) : null;
+                                                            const colorClass = (typeof tag === 'object' && tag?.colorClass) ? tag.colorClass : 'bg-[#D8E8E2] text-[#0F766E] border-[#6B9F91]/20';
                                                             return (
-                                                                <span key={i} className={`text-[10px] font-bold px-2.5 py-1 rounded-md flex items-center gap-1.5 border border-transparent ${tag.colorClass}`}>
-                                                                    <TagIcon className="w-3 h-3" /> {tag.label}
+                                                                <span key={i} className={`text-[10px] font-bold px-2.5 py-1 rounded-md flex items-center gap-1.5 border border-transparent ${colorClass}`}>
+                                                                    {TagIcon && <TagIcon className="w-3 h-3" />} {label}
                                                                 </span>
                                                             );
                                                         });
