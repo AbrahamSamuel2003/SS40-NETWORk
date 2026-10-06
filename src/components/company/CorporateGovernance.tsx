@@ -70,7 +70,7 @@ export function CorporateGovernance() {
                                         <p className="text-xs text-gray-500 mt-0.5 truncate">Executive Leadership & Governance</p>
                                     </div>
                                 </div>
-                                <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-[#D8E8E2] text-[#0F766E] whitespace-nowrap shrink-0">
+                                <span className="hidden sm:inline-flex text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-[#D8E8E2] text-[#0F766E] whitespace-nowrap shrink-0">
                                     Active Board
                                 </span>
                             </div>
@@ -123,7 +123,7 @@ export function CorporateGovernance() {
                                         <p className="text-xs text-gray-500 mt-0.5 truncate">Official Statutory Registered Location</p>
                                     </div>
                                 </div>
-                                <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-[#D8E8E2] text-[#0F766E] whitespace-nowrap shrink-0">
+                                <span className="hidden sm:inline-flex text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-[#D8E8E2] text-[#0F766E] whitespace-nowrap shrink-0">
                                     RoC Verified
                                 </span>
                             </div>
