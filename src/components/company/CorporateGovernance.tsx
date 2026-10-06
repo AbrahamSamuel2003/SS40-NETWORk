@@ -81,7 +81,7 @@ export function CorporateGovernance() {
                                         key={idx}
                                         className="p-5 rounded-2xl bg-[#F8FAF9] border border-gray-100 space-y-2.5 hover:border-[#0F766E]/30 transition-colors"
                                     >
-                                        <div className="flex items-start justify-between gap-2">
+                                        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
                                             <div>
                                                 <h4 className="font-bold text-base text-gray-900 leading-tight">
                                                     {director.name}
@@ -90,7 +90,7 @@ export function CorporateGovernance() {
                                                     {director.role} • {director.state}
                                                 </p>
                                             </div>
-                                            <span className="text-[10px] font-bold text-gray-500 bg-white border border-gray-200 px-2 py-0.5 rounded-md shrink-0">
+                                            <span className="self-start text-[10px] font-bold text-gray-600 bg-white border border-gray-200 px-2.5 py-0.5 rounded-md shrink-0">
                                                 {director.dinStatus}
                                             </span>
                                         </div>

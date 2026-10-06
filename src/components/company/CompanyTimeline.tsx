@@ -148,18 +148,6 @@ export function CompanyTimeline() {
 
                 {/* Timeline Grid with Scroll Reveal Transitions */}
                 <div className="relative max-w-4xl mx-auto">
-                    {/* Vertical Left Track Line (Mobile - Continuous Solid Teal Spine) */}
-                    <div
-                        aria-hidden="true"
-                        className="md:hidden absolute top-6 bottom-16 w-[2px] bg-[#0F766E] z-0 pointer-events-none"
-                        style={{
-                            left: "22px",
-                            transform: "translateX(-50%)",
-                            backgroundColor: "#0F766E",
-                            width: "2px",
-                        }}
-                    />
-
                     {/* Vertical Center Track Line (Desktop - Strong Solid Teal) */}
                     <div
                         aria-hidden="true"
@@ -189,8 +177,24 @@ export function CompanyTimeline() {
                                     variants={timelineItemVariants}
                                     className="relative flex flex-row items-center md:grid md:grid-cols-2 md:gap-16 md:items-center gap-3 sm:gap-4 z-10"
                                 >
-                                    {/* Mobile Left Column: Year Badge Node (Centered in Middle of the Card) */}
-                                    <div className="flex md:hidden shrink-0 w-11 justify-center items-center z-10">
+                                    {/* Mobile Connector Spine Line (Guaranteed from center of current node to center of next node) */}
+                                    {idx < MILESTONES.length - 1 && (
+                                        <div
+                                            aria-hidden="true"
+                                            className="md:hidden absolute w-[2px] bg-[#0F766E] pointer-events-none z-0"
+                                            style={{
+                                                left: "22px",
+                                                top: "50%",
+                                                height: "calc(100% + 24px)",
+                                                transform: "translateX(-50%)",
+                                                backgroundColor: "#0F766E",
+                                                width: "2px",
+                                            }}
+                                        />
+                                    )}
+
+                                    {/* Mobile Left Column: Year Badge Node */}
+                                    <div className="relative z-10 flex md:hidden shrink-0 w-11 justify-center items-center">
                                         <div className="w-11 h-11 rounded-xl bg-white border-2 border-[#0F766E] shadow-sm flex items-center justify-center text-[#0F766E] font-bold text-xs font-mono shrink-0">
                                             <span>{milestone.year}</span>
                                         </div>
