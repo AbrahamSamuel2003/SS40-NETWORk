@@ -108,7 +108,7 @@ export default function PublicError({ error, reset }: ErrorProps) {
                 {/* Support Assistance */}
                 <div className="w-full pt-6 border-t border-gray-100 flex items-center justify-center gap-6 text-xs text-gray-500">
                     <a
-                        href="https://wa.me/918300591750"
+                        href="https://wa.me/918300591750?text=Hello%20SS40%20NETWORK%2C%20I%20need%20assistance."
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1.5 text-[#0F766E] hover:underline font-semibold"

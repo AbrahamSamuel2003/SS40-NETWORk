@@ -580,7 +580,7 @@ export function ContactForm() {
                                 </div>
                             </div>
                             <a
-                                href="https://wa.me/918300591750?text=Hello%20SS40%20Network%2C%20I%20have%20an%20inquiry."
+                                href="https://wa.me/918300591750?text=Hello%20SS40%20NETWORK%2C%20I%20have%20an%20inquiry."
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="px-3 py-1.5 bg-[#0F766E] text-white hover:bg-[#115E59] text-xs font-bold rounded-lg transition-colors shrink-0 shadow-xs inline-flex items-center gap-1"

@@ -21,19 +21,30 @@ export const VisitorTracker = React.memo(function VisitorTracker() {
 
     lastTrackedPath.current = pathname;
 
-    // Track visitor using sendBeacon for non-blocking
-    const data = JSON.stringify({ currentPath: pathname, referrer: document.referrer });
-    const blob = new Blob([data], { type: 'application/json' });
-    
-    if (navigator.sendBeacon) {
-      navigator.sendBeacon('/api/visitors', blob);
+    const track = () => {
+      // Track visitor using sendBeacon for non-blocking
+      const data = JSON.stringify({ currentPath: pathname, referrer: document.referrer });
+      const blob = new Blob([data], { type: 'application/json' });
+      
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon('/api/visitors', blob);
+      } else {
+        fetch('/api/visitors', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: data,
+          keepalive: true,
+        }).catch(console.error);
+      }
+    };
+
+    // Defer execution until browser main thread is idle (P4 optimization)
+    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+      const handle = (window as any).requestIdleCallback(track, { timeout: 2500 });
+      return () => (window as any).cancelIdleCallback(handle);
     } else {
-      fetch('/api/visitors', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: data,
-        keepalive: true,
-      }).catch(console.error);
+      const timer = setTimeout(track, 1500);
+      return () => clearTimeout(timer);
     }
   }, [pathname]);
 

@@ -14,6 +14,7 @@ const NAV_LINKS = [
     { name: "Digital Solutions", href: "/digital-solutions" },
     { name: "Products", href: "/products" },
     { name: "Academics", href: "/academics" },
+    { name: "Company", href: "/company" },
 ];
 
 export function Navbar({ config }: { config?: SiteConfigData | null }) {

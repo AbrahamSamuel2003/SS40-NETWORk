@@ -151,6 +151,7 @@ export function RuleBasedChatbot({
     const [inputValue, setInputValue] = useState("");
     const [isTyping, setIsTyping] = useState(false);
     const [isThinking, setIsThinking] = useState(false);
+    const typingTimerRef = useRef<NodeJS.Timeout | null>(null);
     const thinkingTimerRef = useRef<NodeJS.Timeout | null>(null);
     const [copiedMsgId, setCopiedMsgId] = useState<string | null>(null);
     const [copiedEmail, setCopiedEmail] = useState(false);
@@ -220,9 +221,13 @@ export function RuleBasedChatbot({
         } catch {}
     }, []);
 
-    // Cleanup thinking timer on unmount
+    // Cleanup thinking & typing timers on unmount
     useEffect(() => {
         return () => {
+            if (typingTimerRef.current) {
+                clearTimeout(typingTimerRef.current);
+                typingTimerRef.current = null;
+            }
             if (thinkingTimerRef.current) {
                 clearTimeout(thinkingTimerRef.current);
                 thinkingTimerRef.current = null;
@@ -363,7 +368,7 @@ export function RuleBasedChatbot({
     const createSupportPayload = useCallback((query: string) => ({
         phone: cleanPhone,
         email,
-        whatsappUrl: `https://wa.me/${cleanPhone}?text=${encodeURIComponent(`Hello SS40, I need assistance regarding: "${query}"`)}`,
+        whatsappUrl: `https://wa.me/${cleanPhone}?text=${encodeURIComponent(`Hello SS40 NETWORK, I need assistance regarding: "${query}"`)}`,
         gmailUrl: generateGmailUrl(email, query),
         mapsUrl: GOOGLE_MAPS_URL
     }), [cleanPhone, email]);
@@ -406,12 +411,20 @@ export function RuleBasedChatbot({
         const currentMessages = [...messages, userMsg];
         setMessages(currentMessages);
         setInputValue("");
-        setIsTyping(true);
+
+        // Reset and start typing & thinking timers
+        if (typingTimerRef.current) clearTimeout(typingTimerRef.current);
+        if (thinkingTimerRef.current) clearTimeout(thinkingTimerRef.current);
+
+        setIsTyping(false);
         setIsThinking(false);
 
-        if (thinkingTimerRef.current) {
-            clearTimeout(thinkingTimerRef.current);
-        }
+        // 1. Debounce typing indicator by 200ms so instantaneous replies don't flicker
+        typingTimerRef.current = setTimeout(() => {
+            setIsTyping(true);
+        }, 200);
+
+        // 2. If response takes more than 3 seconds (> 3 sec), transition from 3 dots to "Thinking..."
         thinkingTimerRef.current = setTimeout(() => {
             setIsThinking(true);
         }, 3000);
@@ -491,6 +504,10 @@ export function RuleBasedChatbot({
 
             setMessages(prev => [...prev, botFallbackMsg]);
         } finally {
+            if (typingTimerRef.current) {
+                clearTimeout(typingTimerRef.current);
+                typingTimerRef.current = null;
+            }
             if (thinkingTimerRef.current) {
                 clearTimeout(thinkingTimerRef.current);
                 thinkingTimerRef.current = null;
@@ -557,9 +574,13 @@ export function RuleBasedChatbot({
         setLeadCaptured(false);
     }, []);
 
-    // Helper: Parse inline Markdown (bold, code)
+    // Helper: Parse inline Markdown (bold, code, links, protected phone formatting)
     const renderInlineText = useCallback((raw: string) => {
-        const parts = raw.split(/(\*\*[^*]+\*\*)/g);
+        // Protect phone numbers: replace space between +91 and 10 digits with non-breaking space
+        // so "+91" and the number NEVER break or separate across lines
+        const preserved = raw.replace(/(\+91)\s+(\d{5}\s*\d{5}|\d{10})/g, "$1\u00A0$2");
+
+        const parts = preserved.split(/(\*\*[^*]+\*\*|\[[^\]]+\]\([^)]+\))/g);
         return parts.map((part, pIdx) => {
             if (part.startsWith("**") && part.endsWith("**")) {
                 return (
@@ -567,6 +588,22 @@ export function RuleBasedChatbot({
                         {part.slice(2, -2)}
                     </strong>
                 );
+            }
+            if (part.startsWith("[") && part.includes("](") && part.endsWith(")")) {
+                const match = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+                if (match) {
+                    return (
+                        <a
+                            key={pIdx}
+                            href={match[2]}
+                            target={match[2].startsWith("http") ? "_blank" : undefined}
+                            rel="noopener noreferrer"
+                            className="text-[#0F766E] font-semibold underline underline-offset-2 hover:text-[#0D6E66]"
+                        >
+                            {match[1]}
+                        </a>
+                    );
+                }
             }
             return part;
         });
@@ -576,12 +613,11 @@ export function RuleBasedChatbot({
     const renderFormattedMessage = useCallback((text: string) => {
         const sanitized = stripEmojis(text);
 
-        // Pre-normalize inline bullets, dashes (hyphen, en-dash, em-dash), and numbers so that even if the AI outputs
-        // "Intro: - Item 1 - Item 2" or "Text. - Item", they are broken into true separate bullet lines.
-        // Also split trailing calls-to-action into their own paragraph so they don't get merged into the last bullet.
+        // Pre-normalize inline bullets, dashes, and true numbered items (1 to 2 digits only).
+        // NEVER match 10-digit phone numbers like "+91 8300591750." or large numbers!
         const normalized = sanitized
             .replace(/([:.;]|\b)\s+[-•*–—]\s+/g, "$1\n- ")
-            .replace(/([:.;]|\b)\s+(\d+)[\.\)]\s+/g, "$1\n$2. ")
+            .replace(/(^|[:;\n])\s*(\d{1,2})[\.\)]\s+/g, "$1\n$2. ")
             .replace(/\.\s+(Let us know|Would you like|Feel free|Reach out|Please let|Contact our|Let me know)/gi, ".\n\n$1");
 
         const lines = normalized.split("\n");
@@ -619,7 +655,6 @@ export function RuleBasedChatbot({
             if (bulletMatch) {
                 if (currentNumberedItems) flushLists();
                 if (!currentBulletItems) currentBulletItems = [];
-                // Auto-bold title prefix if format is "Title: Details" without existing bold
                 let itemContent = bulletMatch[1];
                 if (!itemContent.includes("**")) {
                     itemContent = itemContent.replace(/^([A-Za-z0-9\s‑\-\/]+?):\s+/, "**$1:** ");
@@ -628,8 +663,8 @@ export function RuleBasedChatbot({
                 continue;
             }
 
-            // 2. Check for numbered line (1. item, 2. item, etc.)
-            const numberedMatch = trimmed.match(/^(\d+)[\.\)]\s+(.+)$/);
+            // 2. Check for numbered line (1. item, 2. item - strictly 1 to 2 digits to never match phone numbers!)
+            const numberedMatch = trimmed.match(/^(\d{1,2})[\.\)]\s+(.+)$/);
             if (numberedMatch) {
                 if (currentBulletItems) flushLists();
                 if (!currentNumberedItems) currentNumberedItems = [];
@@ -649,7 +684,7 @@ export function RuleBasedChatbot({
         flushLists();
 
         return (
-            <div className="space-y-2 text-[#1F2937]">
+            <div className="space-y-2 text-[#1F2937] font-sans antialiased text-left leading-relaxed">
                 {blocks.map((block, bIdx) => {
                     if (block.type === "bullet-list") {
                         return (
@@ -723,17 +758,18 @@ export function RuleBasedChatbot({
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 20, scale: 0.96 }}
                         transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-                        style={
-                            viewportStyle.top !== undefined
+                        className="fixed bottom-20 right-3 left-3 sm:left-auto sm:right-6 lg:right-8 sm:bottom-24 z-50 flex flex-col w-auto sm:w-[410px] md:w-[430px] h-[520px] sm:h-[570px] max-h-[calc(100dvh-95px)] sm:max-h-[calc(100vh-120px)] bg-white rounded-2xl sm:rounded-3xl shadow-[0_24px_70px_rgba(15,118,110,0.22)] border border-gray-200/90 overflow-hidden font-sans antialiased text-left"
+                        style={{
+                            fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+                            ...(viewportStyle.top !== undefined
                                 ? {
                                     top: `${viewportStyle.top}px`,
                                     height: `${viewportStyle.height}px`,
                                     maxHeight: `${viewportStyle.maxHeight}px`,
                                     bottom: "auto"
                                 }
-                                : undefined
-                        }
-                        className="fixed bottom-20 right-3 left-3 sm:left-auto sm:right-6 lg:right-8 sm:bottom-24 z-50 flex flex-col w-auto sm:w-[410px] md:w-[430px] h-[520px] sm:h-[570px] max-h-[calc(100dvh-95px)] sm:max-h-[calc(100vh-120px)] bg-white rounded-2xl sm:rounded-3xl shadow-[0_24px_70px_rgba(15,118,110,0.22)] border border-gray-200/90 overflow-hidden"
+                                : {})
+                        }}
                     >
                         {/* Header: Signature Teal / Emerald Gradient */}
                         <div className="bg-gradient-to-r from-[#0F766E] via-[#0D6E66] to-[#0A5751] text-white px-4 py-3.5 flex items-center justify-between shadow-xs relative z-10 shrink-0 border-b border-[#0F766E]/40">
@@ -811,11 +847,12 @@ export function RuleBasedChatbot({
                                             <div className="flex flex-col gap-1 flex-1">
                                                 {/* Chat Bubble */}
                                                 <div
-                                                    className={`group relative text-[13px] sm:text-[13.5px] leading-relaxed break-words transition-all ${
+                                                    className={`group relative text-[13px] sm:text-[13.5px] leading-relaxed break-words font-sans transition-all ${
                                                         isUser
                                                             ? "bg-gradient-to-r from-[#0F766E] to-[#115E59] text-white rounded-2xl rounded-tr-xs shadow-xs font-medium px-4 py-3"
                                                             : "bg-white text-[#1F2937] rounded-2xl rounded-tl-xs border border-gray-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)] px-4 py-3.5"
                                                     }`}
+                                                    style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" }}
                                                 >
                                                     {isUser ? (
                                                         <p className="whitespace-pre-wrap leading-relaxed">{msg.text}</p>
@@ -1186,18 +1223,28 @@ export function RuleBasedChatbot({
                                 );
                             })}
 
-                            {/* Typing / Thinking Indicator with Bot Avatar (Zero-Dot, Executive Shimmer Bar) */}
+                            {/* Typing / Thinking Indicator: Unboxed Minimalist Inline (No speech bubble / box) */}
                             {isTyping && (
-                                <div className="flex items-start gap-2 max-w-[85%]">
+                                <div className="flex items-center gap-2 max-w-[85%] font-sans py-1 pl-1">
                                     <BotAvatar size="sm" />
-                                    <div className="bg-white border border-gray-200/80 rounded-2xl rounded-tl-xs px-3.5 py-2.5 shadow-xs flex flex-col gap-1.5 transition-all duration-300 min-w-[140px]">
-                                        <div className="flex items-center justify-between text-[11px] font-semibold text-[#0F766E] tracking-tight">
-                                            <span>{isThinking ? "Consulting Knowledge Base" : "SS40 SKY is replying"}</span>
+                                    {isThinking ? (
+                                        /* Shown only when response takes > 3 sec: unboxed inline text with animated dots */
+                                        <div className="flex items-center gap-1.5 text-xs font-semibold text-[#0F766E] tracking-tight">
+                                            <span>Thinking</span>
+                                            <span className="inline-flex items-center gap-0.5">
+                                                <span className="w-1 h-1 rounded-full bg-[#0F766E] animate-bounce" style={{ animationDelay: "0ms" }} />
+                                                <span className="w-1 h-1 rounded-full bg-[#0F766E] animate-bounce" style={{ animationDelay: "150ms" }} />
+                                                <span className="w-1 h-1 rounded-full bg-[#0F766E] animate-bounce" style={{ animationDelay: "300ms" }} />
+                                            </span>
                                         </div>
-                                        <div className="w-full h-1 bg-[#F0FDFA] rounded-full overflow-hidden border border-[#0F766E]/20">
-                                            <div className="h-full bg-gradient-to-r from-[#0F766E] via-[#2DD4BF] to-[#0F766E] rounded-full animate-pulse w-full" />
+                                    ) : (
+                                        /* Initially (0-3s): 3 pulsing dots directly inline */
+                                        <div className="flex items-center gap-1.5 py-1 px-1">
+                                            <span className="w-1.5 h-1.5 rounded-full bg-[#0F766E] animate-bounce" style={{ animationDelay: "0ms" }} />
+                                            <span className="w-1.5 h-1.5 rounded-full bg-[#0F766E] animate-bounce" style={{ animationDelay: "150ms" }} />
+                                            <span className="w-1.5 h-1.5 rounded-full bg-[#0F766E] animate-bounce" style={{ animationDelay: "300ms" }} />
                                         </div>
-                                    </div>
+                                    )}
                                 </div>
                             )}
                         </div>

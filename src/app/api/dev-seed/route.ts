@@ -204,9 +204,78 @@ export async function GET() {
             });
         }
 
+        // ---------------- STUDENT PROJECTS ----------------
+        const studentProjectCount = await prisma.studentProject.count();
+        if (studentProjectCount === 0) {
+            await prisma.studentProject.createMany({
+                data: [
+                    {
+                        title: "Smart Agri-Sense IoT Network",
+                        category: "IoT & Hardware",
+                        badge: "SMART FARMING",
+                        description: "Precision agriculture mesh monitoring soil moisture, ambient humidity, and micro-climate conditions with real-time solar alerts and automated drip irrigation triggers.",
+                        tags: ["IoT", "ESP32", "MQTT", "Next.js", "InfluxDB"],
+                        isFeatured: true,
+                        imageUrl: "https://images.unsplash.com/photo-1586771107445-d3ca888129ff?q=80&w=1200&auto=format&fit=crop",
+                        projectUrl: "https://github.com/ss40-network/agri-sense",
+                        sortOrder: 1,
+                        isActive: true
+                    },
+                    {
+                        title: "MediSync Patient Triage Platform",
+                        category: "Healthcare AI",
+                        badge: "CLINICAL AI",
+                        description: "Automated emergency triage and vital signs anomaly detection platform that classifies incoming patient risk levels using predictive clinical models.",
+                        tags: ["Python", "FastAPI", "React", "PostgreSQL", "TailwindCSS"],
+                        isFeatured: false,
+                        imageUrl: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=1200&auto=format&fit=crop",
+                        projectUrl: "https://github.com/ss40-network/medisync",
+                        sortOrder: 2,
+                        isActive: true
+                    },
+                    {
+                        title: "FinFlow Micro-Lending Portal",
+                        category: "Fintech",
+                        badge: "FINTECH",
+                        description: "Peer-to-peer micro-finance management suite featuring automated KYC document parsing, credit risk scoring, and zero-knowledge transaction audit logs.",
+                        tags: ["Node.js", "TypeScript", "Next.js", "Prisma", "Docker"],
+                        isFeatured: false,
+                        imageUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop",
+                        projectUrl: "https://github.com/ss40-network/finflow",
+                        sortOrder: 3,
+                        isActive: true
+                    },
+                    {
+                        title: "EcoGrid Fleet Energy Monitor",
+                        category: "CleanTech",
+                        badge: "EV MOBILITY",
+                        description: "Real-time telemetry and battery degradation tracking dashboard for commercial electric vehicle fleets with route energy efficiency modeling.",
+                        tags: ["React", "Go", "TimescaleDB", "Leaflet", "WebSockets"],
+                        isFeatured: false,
+                        imageUrl: "https://images.unsplash.com/photo-1558441719-703e22646d65?q=80&w=1200&auto=format&fit=crop",
+                        projectUrl: "https://github.com/ss40-network/ecogrid",
+                        sortOrder: 4,
+                        isActive: true
+                    },
+                    {
+                        title: "EduMentor AI Coding Assistant",
+                        category: "EdTech",
+                        badge: "DEV TOOLS",
+                        description: "Interactive code review copilot that analyzes beginner student pull requests, flags syntax bottlenecks, and suggests step-by-step refactoring hints.",
+                        tags: ["LLM", "OpenAI", "Next.js", "Monaco Editor", "PostgreSQL"],
+                        isFeatured: false,
+                        imageUrl: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=1200&auto=format&fit=crop",
+                        projectUrl: "https://github.com/ss40-network/edumentor",
+                        sortOrder: 5,
+                        isActive: true
+                    }
+                ]
+            });
+        }
 
         return NextResponse.json({ success: true, message: "Database seeded correctly!" });
     } catch (e: any) {
         return NextResponse.json({ success: false, error: e.message });
     }
 }
+

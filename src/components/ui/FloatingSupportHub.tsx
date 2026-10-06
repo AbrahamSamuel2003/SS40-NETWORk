@@ -110,7 +110,7 @@ export function FloatingSupportHub({ config }: { config?: SiteConfigData | null 
     if (!mounted) return null;
 
     const phoneNumber = config?.whatsappNumber ? config.whatsappNumber.replace(/\s+/g, '') : "918300591750";
-    const companyName = config?.companyName || "SS40 NETWORK";
+    const companyName = "SS40 NETWORK";
     const message = encodeURIComponent(`Hello ${companyName}, I'm interested in learning more about your services.`);
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
 

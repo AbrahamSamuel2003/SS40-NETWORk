@@ -135,7 +135,7 @@ export function Faq() {
                     </div>
 
                     <a
-                        href="https://wa.me/918300591750?text=Hello%20SS40%20Network%2C%20I%20have%20a%20question%20regarding%20your%20services."
+                        href="https://wa.me/918300591750?text=Hello%20SS40%20NETWORK%2C%20I%20have%20a%20question%20regarding%20your%20services."
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#0F766E] hover:bg-[#115E59] text-white text-xs font-bold transition-all shadow-xs shrink-0"

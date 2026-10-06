@@ -41,7 +41,7 @@ const nextConfig: NextConfig = {
         hostname: '**',
       },
     ],
-    minimumCacheTTL: 60,
+    minimumCacheTTL: 31536000,
   },
   // Optimize production builds
   compiler: {
@@ -78,6 +78,15 @@ const nextConfig: NextConfig = {
   },
   async headers() {
     return [
+      {
+        source: '/images/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
       {
         source: '/((?!_next/static|_next/image|favicon.ico|images).*)',
         headers: [

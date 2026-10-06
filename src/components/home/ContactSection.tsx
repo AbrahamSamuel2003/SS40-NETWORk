@@ -151,7 +151,7 @@ export function ContactSection({ config }: { config?: SiteConfigData | null }) {
             icon: MessageCircle,
             label: "WhatsApp",
             value: "Chat with our team",
-            href: config?.whatsappNumber ? `https://wa.me/${config.whatsappNumber.replace(/\D/g, '')}` : "https://wa.me/918300591750"
+            href: config?.whatsappNumber ? `https://wa.me/${config.whatsappNumber.replace(/\D/g, '')}?text=${encodeURIComponent("Hello SS40 NETWORK, I would like to connect with your team.")}` : `https://wa.me/918300591750?text=${encodeURIComponent("Hello SS40 NETWORK, I would like to connect with your team.")}`
         },
         {
             icon: Clock,
@@ -534,7 +534,7 @@ export function ContactSection({ config }: { config?: SiteConfigData | null }) {
                         <p className="text-sm text-[#334155]">Our support team is active on WhatsApp.</p>
                     </div>
                     <Button asChild className="relative z-10 whitespace-nowrap bg-[#25D366] hover:bg-[#128C7E] text-white border-[#25D366] hover:border-[#128C7E] shadow-lg shadow-[#25D366]/20 group transition-transform hover:scale-105 active:scale-95">
-                        <a href={config?.whatsappNumber ? `https://wa.me/${config.whatsappNumber.replace(/\D/g, '')}` : "https://wa.me/918300591750"} target="_blank" rel="noopener noreferrer">
+                        <a href={config?.whatsappNumber ? `https://wa.me/${config.whatsappNumber.replace(/\D/g, '')}?text=${encodeURIComponent("Hello SS40 NETWORK, I need assistance.")}` : `https://wa.me/918300591750?text=${encodeURIComponent("Hello SS40 NETWORK, I need assistance.")}`} target="_blank" rel="noopener noreferrer">
                             <MessageCircle className="mr-2 w-5 h-5 fill-current" />
                             Chat on WhatsApp
                         </a>

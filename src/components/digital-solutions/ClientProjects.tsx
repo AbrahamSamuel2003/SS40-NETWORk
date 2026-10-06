@@ -54,6 +54,8 @@ export function ClientProjects({ initialData }: ClientProjectsProps = {}) {
             .catch(() => setIsLoading(false));
     }, [initialData]);
 
+    const [loadedImages, setLoadedImages] = React.useState<Record<string, boolean>>({});
+
     const displayedProjects = React.useMemo(() => {
         const safe = Array.isArray(projects) ? projects.filter(p => p && p.isActive !== false) : [];
         const seen = new Set<string>();
@@ -64,6 +66,24 @@ export function ClientProjects({ initialData }: ClientProjectsProps = {}) {
             return true;
         });
     }, [projects]);
+
+    // Proactive background pre-caching: fetches all project images into memory immediately
+    // so switching tabs (e.g. Jalsa Restaurant) loads instantly with zero delay
+    React.useEffect(() => {
+        if (!displayedProjects || displayedProjects.length === 0) return;
+        if (typeof window === "undefined") return;
+
+        displayedProjects.forEach(p => {
+            if (p?.imageUrl) {
+                const img = new window.Image();
+                img.src = p.imageUrl;
+                img.onload = () => {
+                    const key = p.id || p.imageUrl;
+                    setLoadedImages(prev => ({ ...prev, [key]: true }));
+                };
+            }
+        });
+    }, [displayedProjects]);
 
     const scrollToMobileProject = (idx: number) => {
         if (!mobileScrollRef.current) return;
@@ -120,6 +140,18 @@ export function ClientProjects({ initialData }: ClientProjectsProps = {}) {
                                         key={p.id || idx}
                                         type="button"
                                         onClick={() => setActiveTab(idx)}
+                                        onMouseEnter={() => {
+                                            if (p.imageUrl && typeof window !== "undefined") {
+                                                const prefetchImg = new window.Image();
+                                                prefetchImg.src = p.imageUrl;
+                                            }
+                                        }}
+                                        onTouchStart={() => {
+                                            if (p.imageUrl && typeof window !== "undefined") {
+                                                const prefetchImg = new window.Image();
+                                                prefetchImg.src = p.imageUrl;
+                                            }
+                                        }}
                                         className={cn(
                                             "px-4 sm:px-5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 whitespace-nowrap flex items-center gap-2 select-none cursor-pointer border",
                                             isActive
@@ -258,16 +290,30 @@ export function ClientProjects({ initialData }: ClientProjectsProps = {}) {
                                     ) : currentProject?.imageUrl ? (
                                         <div 
                                             onClick={() => setActiveModalProject(currentProject)}
-                                            className="w-full aspect-video rounded-2xl overflow-hidden border border-gray-100 shadow-2xl relative group/img cursor-pointer"
+                                            className="w-full aspect-video rounded-2xl overflow-hidden border border-gray-100 shadow-2xl relative group/img cursor-pointer bg-slate-100"
                                         >
+                                            {/* Shimmer skeleton placeholder while image is loading */}
+                                            {!loadedImages[currentProject.id || currentProject.imageUrl] && (
+                                                <div className="absolute inset-0 bg-gradient-to-r from-gray-100 via-gray-200/70 to-gray-100 animate-pulse flex items-center justify-center z-0">
+                                                    <div className="w-8 h-8 rounded-full border-2 border-[#0F766E]/20 border-t-[#0F766E] animate-spin" />
+                                                </div>
+                                            )}
                                             <img
                                                 src={currentProject.imageUrl}
                                                 alt={currentProject.title}
                                                 loading="eager"
+                                                fetchPriority="high"
                                                 decoding="async"
-                                                className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-500 ease-out"
+                                                onLoad={() => {
+                                                    const key = currentProject.id || currentProject.imageUrl;
+                                                    setLoadedImages(prev => ({ ...prev, [key]: true }));
+                                                }}
+                                                className={cn(
+                                                    "w-full h-full object-cover group-hover/img:scale-105 transition-all duration-500 ease-out relative z-10",
+                                                    loadedImages[currentProject.id || currentProject.imageUrl] ? "opacity-100 scale-100" : "opacity-0 scale-[0.99]"
+                                                )}
                                             />
-                                            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
+                                            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center z-20">
                                                 <span className="bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl text-xs font-bold text-gray-900 shadow-lg flex items-center gap-1.5">
                                                     Expand Case Study
                                                     <ArrowRight className="w-3.5 h-3.5" />
@@ -442,6 +488,8 @@ function ClientProjectModal({ project, onClose }: { project: any; onClose: () =>
                         <img
                             src={project.imageUrl}
                             alt={project.title}
+                            loading="eager"
+                            decoding="async"
                             className="w-full h-full object-cover"
                         />
                     ) : (

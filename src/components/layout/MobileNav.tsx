@@ -17,7 +17,8 @@ import {
     ArrowRight,
     Phone,
     Mail,
-    Landmark
+    Landmark,
+    Building2
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/utils/cn";
@@ -52,6 +53,10 @@ const NAV_DETAILS: Record<string, { subtitle: string; icon: React.ComponentType<
     "/academics": {
         subtitle: "Live Client Projects and Training",
         icon: GraduationCap
+    },
+    "/company": {
+        subtitle: "Certifications, History & Governance",
+        icon: Building2
     }
 };
 

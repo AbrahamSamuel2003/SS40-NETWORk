@@ -65,7 +65,7 @@ export function Hero() {
                             </Button>
 
                             <a
-                                href="https://wa.me/918300591750?text=Hello%20SS40%20Network%2C%20I%20would%20like%20to%20connect%20with%20your%20team."
+                                href="https://wa.me/918300591750?text=Hello%20SS40%20NETWORK%2C%20I%20would%20like%20to%20connect%20with%20your%20team."
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="w-full sm:w-auto inline-flex items-center justify-center"

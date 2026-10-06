@@ -162,20 +162,30 @@ function FeaturedVideoArea({ videoUrl, featuredStory }: { videoUrl?: string | nu
         } catch { }
     }
 
+    const rafMoveRef = useRef<number | null>(null);
+
     function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
         if (!ref.current || isPlaying) return;
-        const rect = ref.current.getBoundingClientRect();
-        const width = rect.width;
-        const height = rect.height;
-        const mouseXPos = e.clientX - rect.left;
-        const mouseYPos = e.clientY - rect.top;
-        const xPct = mouseXPos / width - 0.5;
-        const yPct = mouseYPos / height - 0.5;
-        x.set(xPct);
-        y.set(yPct);
+        if (rafMoveRef.current) cancelAnimationFrame(rafMoveRef.current);
+        const currentTarget = ref.current;
+        const clientX = e.clientX;
+        const clientY = e.clientY;
+        rafMoveRef.current = requestAnimationFrame(() => {
+            if (!currentTarget) return;
+            const rect = currentTarget.getBoundingClientRect();
+            const width = rect.width;
+            const height = rect.height;
+            const mouseXPos = clientX - rect.left;
+            const mouseYPos = clientY - rect.top;
+            const xPct = mouseXPos / width - 0.5;
+            const yPct = mouseYPos / height - 0.5;
+            x.set(xPct);
+            y.set(yPct);
+        });
     }
 
     function handleMouseLeave() {
+        if (rafMoveRef.current) cancelAnimationFrame(rafMoveRef.current);
         x.set(0);
         y.set(0);
     }
@@ -359,17 +369,22 @@ function SecondaryStoryCarousel({ stories, onOpenModal }: { stories: any[], onOp
 
     // Detect if content is overflowing (clamped) to conditionally show the "Read Full Story" button
     React.useEffect(() => {
+        let rafId: number;
         const checkTruncation = () => {
-            if (quoteRef.current) {
-                const { scrollHeight, clientHeight } = quoteRef.current;
-                // If scrollHeight is strictly greater than client height, text was cut off
-                setIsTruncated(scrollHeight > clientHeight);
-            }
+            rafId = requestAnimationFrame(() => {
+                if (quoteRef.current) {
+                    const { scrollHeight, clientHeight } = quoteRef.current;
+                    setIsTruncated(scrollHeight > clientHeight);
+                }
+            });
         };
-        // Small delay to ensure DOM rendered the text
-        setTimeout(checkTruncation, 50);
-        window.addEventListener('resize', checkTruncation);
-        return () => window.removeEventListener('resize', checkTruncation);
+        const timer = setTimeout(checkTruncation, 100);
+        window.addEventListener('resize', checkTruncation, { passive: true });
+        return () => {
+            clearTimeout(timer);
+            cancelAnimationFrame(rafId);
+            window.removeEventListener('resize', checkTruncation);
+        };
     }, [currentIndex]);
 
     // Smooth horizontal slide variants

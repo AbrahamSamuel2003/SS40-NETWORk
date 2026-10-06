@@ -51,3 +51,4 @@ prisma-*.txt
 # Local Storage for Uploads
 /storage
 scratch/
+/*.pdf
