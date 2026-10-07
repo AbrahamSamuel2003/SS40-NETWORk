@@ -126,6 +126,21 @@ export function OfficialCertifications() {
     const currentCert = CERTIFICATES[activeTab] || CERTIFICATES[0];
     const Icon = currentCert.icon;
 
+    // Lock background scroll and pause Lenis smooth scroll while modal is open
+    React.useEffect(() => {
+        if (selectedCertModal) {
+            const originalOverflow = document.body.style.overflow;
+            document.body.style.overflow = "hidden";
+            const lenis = (window as unknown as { __lenis?: { stop?: () => void; start?: () => void } }).__lenis;
+            if (lenis?.stop) lenis.stop();
+
+            return () => {
+                document.body.style.overflow = originalOverflow;
+                if (lenis?.start) lenis.start();
+            };
+        }
+    }, [selectedCertModal]);
+
     return (
         <SectionWrapper id="certifications" className="bg-[#D8E8E2] scroll-mt-20 py-12 sm:py-16 lg:py-24 border-b border-[#0F766E]/15 relative overflow-hidden font-crimson font-serif">
             {/* Subtle Ambient Pattern */}
@@ -342,13 +357,24 @@ export function OfficialCertifications() {
             {/* Full-Screen Document Inspection Modal */}
             <AnimatePresence>
                 {selectedCertModal && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto bg-black/80 backdrop-blur-xs">
+                    <div
+                        data-lenis-prevent="true"
+                        onWheel={(e) => e.stopPropagation()}
+                        onTouchMove={(e) => e.stopPropagation()}
+                        onClick={(e) => {
+                            if (e.target === e.currentTarget) setSelectedCertModal(null);
+                        }}
+                        className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto bg-black/80 backdrop-blur-xs"
+                    >
                         <motion.div
+                            data-lenis-prevent="true"
+                            onWheel={(e) => e.stopPropagation()}
+                            onTouchMove={(e) => e.stopPropagation()}
                             initial={{ opacity: 0, scale: 0.96, y: 10 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.96, y: 10 }}
                             transition={{ duration: 0.2, ease: "easeOut" }}
-                            className="bg-white rounded-3xl shadow-2xl border border-gray-200 max-w-4xl w-full overflow-hidden text-left relative z-10 flex flex-col max-h-[92vh]"
+                            className="bg-white rounded-3xl shadow-2xl border border-gray-200 max-w-4xl w-full overflow-hidden text-left relative z-10 flex flex-col max-h-[92vh] my-auto"
                         >
                             {/* Modal Header */}
                             <div className="p-4 sm:p-6 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-[#F0FDFA] to-white shrink-0">
@@ -375,7 +401,12 @@ export function OfficialCertifications() {
                             </div>
 
                             {/* Modal Body: Scrollable Document View */}
-                            <div className="p-4 sm:p-6 overflow-y-auto space-y-6">
+                            <div
+                                data-lenis-prevent="true"
+                                onWheel={(e) => e.stopPropagation()}
+                                onTouchMove={(e) => e.stopPropagation()}
+                                className="p-4 sm:p-6 overflow-y-auto space-y-6 flex-1 overscroll-contain"
+                            >
                                 <div className="relative w-full max-w-3xl mx-auto rounded-2xl overflow-hidden bg-white border border-gray-200 shadow-lg p-2 sm:p-4">
                                     <div className={`relative w-full ${selectedCertModal.aspectRatio} max-h-[65vh]`}>
                                         <Image
