@@ -310,10 +310,6 @@ export function BestProjects({ projects = [] }: BestProjectsProps) {
                                                     src={project.image || project.imageUrl}
                                                     alt={project.title}
                                                     fill
-                                                    priority
-                                                    loading="eager"
-                                                    fetchPriority="high"
-                                                    unoptimized
                                                     sizes="(max-width: 1024px) 33vw, 400px"
                                                     className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out transform-gpu will-change-transform"
                                                 />
@@ -402,10 +398,6 @@ export function BestProjects({ projects = [] }: BestProjectsProps) {
                                                             alt={spotlightProject.title}
                                                             fill
                                                             sizes="(max-width: 1200px) 60vw, 700px"
-                                                            priority
-                                                            loading="eager"
-                                                            fetchPriority="high"
-                                                            unoptimized
                                                             className="object-cover transform-gpu will-change-transform"
                                                         />
                                                     ) : (
@@ -532,10 +524,6 @@ export function BestProjects({ projects = [] }: BestProjectsProps) {
                                                                         src={project.image || project.imageUrl}
                                                                         alt={project.title}
                                                                         fill
-                                                                        priority
-                                                                        loading="eager"
-                                                                        fetchPriority="high"
-                                                                        unoptimized
                                                                         sizes="192px"
                                                                         className="object-cover group-hover:scale-105 transition-transform duration-300 transform-gpu will-change-transform"
                                                                     />

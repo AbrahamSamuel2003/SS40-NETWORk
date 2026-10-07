@@ -9,7 +9,7 @@ const crimsonPro = Crimson_Pro({
   variable: "--font-crimson-pro",
   subsets: ["latin"],
   weight: ["400", "600", "700"],
-  style: ["normal", "italic"],
+  style: ["normal"],
   display: "swap",
   adjustFontFallback: true,
   preload: true,
