@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { motion, Variants, AnimatePresence } from "framer-motion";
+import { motion, Variants, AnimatePresence, LayoutGroup } from "framer-motion";
 import { ArrowRight, ChevronDown, ExternalLink, Target, Box, LayoutDashboard, X } from "lucide-react";
 import Image from "next/image";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
@@ -293,146 +293,160 @@ export function BestProjects({ projects = [] }: BestProjectsProps) {
                 {/* DESKTOP VIEW: Adaptive Google Meet Stage & Filmstrip Dock (md & up)       */}
                 {/* ========================================================================= */}
                 <div className="hidden md:block">
-                    {!spotlightId ? (
-                        /* State A: Single Row (3 Clean Minimalist Cards matching Happimonials format) */
-                        <motion.div
-                            key="default-grid"
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.35, ease: SMOOTH_EASE }}
-                            className="grid grid-cols-3 gap-6 items-stretch"
-                        >
-                            {displayProjects.map((project, idx) => (
-                                <div
-                                    key={project.id}
-                                    role="button"
-                                    tabIndex={0}
-                                    onClick={() => toggleSpotlight(project.id)}
-                                    onKeyDown={(e) => {
-                                        if (e.key === "Enter" || e.key === " ") {
-                                            e.preventDefault();
-                                            toggleSpotlight(project.id);
-                                        }
-                                    }}
-                                    className="bg-white rounded-3xl border border-gray-200/90 hover:border-[#0F766E]/50 hover:shadow-xl hover:shadow-[#0F766E]/8 transition-all duration-300 overflow-hidden flex flex-col justify-between cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F766E]"
-                                >
-                                    {/* 1. Flushed Top Preview Image (Edge-to-Edge like Happimonials) */}
-                                    <div className="relative w-full aspect-video bg-slate-900 overflow-hidden shrink-0 border-b border-gray-100">
-                                        {project.image || project.imageUrl ? (
-                                            <Image
-                                                src={project.image || project.imageUrl}
-                                                alt={project.title}
-                                                fill
-                                                priority
-                                                loading="eager"
-                                                fetchPriority="high"
-                                                unoptimized
-                                                sizes="(max-width: 1024px) 33vw, 400px"
-                                                className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out transform-gpu will-change-transform"
-                                            />
-                                        ) : (
-                                            <ProjectPreviewPlaceholder />
-                                        )}
-                                    </div>
+                    <LayoutGroup id="best-projects-spotlight-group">
+                        {!spotlightId ? (
+                            /* State A: Single Row (3 Clean Minimalist Cards matching Happimonials format) */
+                            <motion.div
+                                key="default-grid"
+                                layout
+                                className="grid grid-cols-3 gap-6 items-stretch"
+                            >
+                                {displayProjects.map((project, idx) => (
+                                    <motion.div
+                                        key={project.id}
+                                        layout
+                                        layoutId={`project-card-container-${project.id}`}
+                                        transition={{ duration: 0.48, ease: SMOOTH_EASE }}
+                                        role="button"
+                                        tabIndex={0}
+                                        onClick={() => toggleSpotlight(project.id)}
+                                        onKeyDown={(e) => {
+                                            if (e.key === "Enter" || e.key === " ") {
+                                                e.preventDefault();
+                                                toggleSpotlight(project.id);
+                                            }
+                                        }}
+                                        className="bg-white rounded-3xl border border-gray-200/90 hover:border-[#0F766E]/50 hover:shadow-xl hover:shadow-[#0F766E]/8 transition-colors duration-300 overflow-hidden flex flex-col justify-between cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F766E]"
+                                    >
+                                        {/* 1. Flushed Top Preview Image (Edge-to-Edge like Happimonials) */}
+                                        <motion.div
+                                            layout
+                                            layoutId={`project-img-wrapper-${project.id}`}
+                                            transition={{ duration: 0.48, ease: SMOOTH_EASE }}
+                                            className="relative w-full aspect-video bg-slate-900 overflow-hidden shrink-0 border-b border-gray-100"
+                                        >
+                                            {project.image || project.imageUrl ? (
+                                                <Image
+                                                    src={project.image || project.imageUrl}
+                                                    alt={project.title}
+                                                    fill
+                                                    priority
+                                                    loading="eager"
+                                                    fetchPriority="high"
+                                                    unoptimized
+                                                    sizes="(max-width: 1024px) 33vw, 400px"
+                                                    className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out transform-gpu will-change-transform"
+                                                />
+                                            ) : (
+                                                <ProjectPreviewPlaceholder />
+                                            )}
+                                        </motion.div>
 
-                                    {/* 2. Content Body */}
-                                    <div className="p-5 sm:p-6 flex flex-col flex-1 justify-between text-left">
-                                        <div>
-                                            {/* Meta Badges: Index + Category */}
-                                            <div className="flex items-center gap-2 mb-2.5">
-                                                <span className="font-mono text-xs font-bold text-gray-400">
-                                                    {String(idx + 1).padStart(2, "0")}
-                                                </span>
-                                                <span className="h-3 w-px bg-gray-200" />
-                                                <span className="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#D8E8E2] text-[#0F766E] border border-[#2DD4BF]/40">
-                                                    {project.category || "Capstone"}
-                                                </span>
-                                                {project.badge && (
-                                                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 border border-slate-200/80 truncate max-w-[110px]">
-                                                        {project.badge}
+                                        {/* 2. Content Body */}
+                                        <motion.div
+                                            layout
+                                            layoutId={`project-body-wrapper-${project.id}`}
+                                            transition={{ duration: 0.48, ease: SMOOTH_EASE }}
+                                            className="p-5 sm:p-6 flex flex-col flex-1 justify-between text-left"
+                                        >
+                                            <div>
+                                                {/* Meta Badges: Index + Category */}
+                                                <div className="flex items-center gap-2 mb-2.5">
+                                                    <span className="font-mono text-xs font-bold text-gray-400">
+                                                        {String(idx + 1).padStart(2, "0")}
                                                     </span>
-                                                )}
+                                                    <span className="h-3 w-px bg-gray-200" />
+                                                    <span className="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#D8E8E2] text-[#0F766E] border border-[#2DD4BF]/40">
+                                                        {project.category || "Capstone"}
+                                                    </span>
+                                                    {project.badge && (
+                                                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 border border-slate-200/80 truncate max-w-[110px]">
+                                                            {project.badge}
+                                                        </span>
+                                                    )}
+                                                </div>
+
+                                                {/* Project Title */}
+                                                <h4 className="font-bold text-lg lg:text-xl text-gray-900 leading-snug font-serif group-hover:text-[#0F766E] transition-colors line-clamp-2">
+                                                    {project.title}
+                                                </h4>
                                             </div>
 
-                                            {/* Project Title */}
-                                            <h4 className="font-bold text-lg lg:text-xl text-gray-900 leading-snug font-serif group-hover:text-[#0F766E] transition-colors line-clamp-2">
-                                                {project.title}
-                                            </h4>
-                                        </div>
+                                            {/* Bottom Action Footer */}
+                                            <div className="pt-4 mt-4 border-t border-gray-100 flex items-center justify-between">
+                                                <button
+                                                    type="button"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        toggleSpotlight(project.id);
+                                                    }}
+                                                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0F766E] group-hover:text-[#115E59] group-hover:translate-x-0.5 transition-all cursor-pointer"
+                                                >
+                                                    <span>View Details</span>
+                                                    <ArrowRight className="w-3.5 h-3.5" />
+                                                </button>
+                                            </div>
+                                        </motion.div>
+                                    </motion.div>
+                                ))}
+                            </motion.div>
+                        ) : (
+                            /* State B: Google Meet Stage (Hero Stage + Bottom Dock Cards) */
+                            <motion.div layout className="flex flex-col gap-6">
+                                {(() => {
+                                    const spotlightProject = displayProjects.find(p => p.id === spotlightId) || displayProjects[0];
+                                    const dockProjects = displayProjects.filter(p => p.id !== spotlightProject.id);
+                                    const spotlightIdx = displayProjects.findIndex(p => p.id === spotlightProject.id);
+                                    const tags = parseTags(spotlightProject.tags);
 
-                                        {/* Bottom Action Footer */}
-                                        <div className="pt-4 mt-4 border-t border-gray-100 flex items-center justify-between">
-                                            <button
-                                                type="button"
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    toggleSpotlight(project.id);
-                                                }}
-                                                className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0F766E] group-hover:text-[#115E59] group-hover:translate-x-0.5 transition-all cursor-pointer"
+                                    return (
+                                        <>
+                                            {/* PRIMARY STAGE: Morphing Hero Frame with GPU FLIP Transition */}
+                                            <motion.div
+                                                key={spotlightProject.id}
+                                                layout
+                                                layoutId={`project-card-container-${spotlightProject.id}`}
+                                                transition={{ duration: 0.48, ease: SMOOTH_EASE }}
+                                                className="w-full bg-white rounded-3xl border border-[#0F766E]/40 shadow-2xl shadow-[#0F766E]/10 ring-1 ring-[#0F766E]/20 overflow-hidden flex flex-col lg:flex-row group"
                                             >
-                                                <span>View Details</span>
-                                                <ArrowRight className="w-3.5 h-3.5" />
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </motion.div>
-                    ) : (
-                        /* State B: Google Meet Stage (Hero Stage + Bottom Dock Cards) */
-                        <div className="flex flex-col gap-6">
-                            {(() => {
-                                const spotlightProject = displayProjects.find(p => p.id === spotlightId) || displayProjects[0];
-                                const dockProjects = displayProjects.filter(p => p.id !== spotlightProject.id);
-                                const spotlightIdx = displayProjects.findIndex(p => p.id === spotlightProject.id);
-                                const tags = parseTags(spotlightProject.tags);
+                                                {/* Left: Cinematic Preview Image */}
+                                                <motion.div
+                                                    layout
+                                                    layoutId={`project-img-wrapper-${spotlightProject.id}`}
+                                                    transition={{ duration: 0.48, ease: SMOOTH_EASE }}
+                                                    className="w-full lg:w-7/12 aspect-video lg:aspect-auto min-h-[300px] lg:min-h-[360px] relative bg-slate-900 overflow-hidden shrink-0 border-b lg:border-b-0 lg:border-r border-gray-100"
+                                                >
+                                                    {spotlightProject.image || spotlightProject.imageUrl ? (
+                                                        <Image
+                                                            src={spotlightProject.image || spotlightProject.imageUrl}
+                                                            alt={spotlightProject.title}
+                                                            fill
+                                                            sizes="(max-width: 1200px) 60vw, 700px"
+                                                            priority
+                                                            loading="eager"
+                                                            fetchPriority="high"
+                                                            unoptimized
+                                                            className="object-cover transform-gpu will-change-transform"
+                                                        />
+                                                    ) : (
+                                                        <ProjectPreviewPlaceholder />
+                                                    )}
+                                                </motion.div>
 
-                                return (
-                                    <>
-                                        {/* PRIMARY STAGE: Active Project with Flushed Hero Frame & Smooth Cross-Dissolve */}
-                                        <div className="w-full bg-white rounded-3xl border border-[#0F766E]/40 shadow-2xl shadow-[#0F766E]/10 ring-1 ring-[#0F766E]/20 overflow-hidden flex flex-col lg:flex-row group">
-                                            {/* Left: Flushed Cinematic Preview Image (Edge-to-Edge like Happimonials Hero) */}
-                                            <div className="w-full lg:w-7/12 aspect-video lg:aspect-auto min-h-[300px] lg:min-h-[360px] relative bg-slate-900 overflow-hidden shrink-0 border-b lg:border-b-0 lg:border-r border-gray-100">
-                                                <AnimatePresence mode="wait" initial={false}>
+                                                {/* Right: Content Area */}
+                                                <motion.div
+                                                    layout
+                                                    layoutId={`project-body-wrapper-${spotlightProject.id}`}
+                                                    transition={{ duration: 0.48, ease: SMOOTH_EASE }}
+                                                    className="w-full lg:w-5/12 p-6 lg:p-8 flex flex-col justify-between text-left min-h-[300px]"
+                                                >
                                                     <motion.div
-                                                        key={`img-${spotlightProject.id}`}
-                                                        variants={stageImageVariants}
-                                                        initial="initial"
-                                                        animate="animate"
-                                                        exit="exit"
-                                                        className="absolute inset-0 will-change-[opacity,transform]"
+                                                        initial={{ opacity: 0, y: 6 }}
+                                                        animate={{ opacity: 1, y: 0 }}
+                                                        transition={{ duration: 0.35, delay: 0.1, ease: SMOOTH_EASE }}
+                                                        className="space-y-4 w-full"
                                                     >
-                                                        {spotlightProject.image || spotlightProject.imageUrl ? (
-                                                            <Image
-                                                                src={spotlightProject.image || spotlightProject.imageUrl}
-                                                                alt={spotlightProject.title}
-                                                                fill
-                                                                sizes="(max-width: 1200px) 60vw, 700px"
-                                                                priority
-                                                                loading="eager"
-                                                                fetchPriority="high"
-                                                                unoptimized
-                                                                className="object-cover transform-gpu will-change-transform"
-                                                            />
-                                                        ) : (
-                                                            <ProjectPreviewPlaceholder />
-                                                        )}
-                                                    </motion.div>
-                                                </AnimatePresence>
-                                            </div>
-
-                                            {/* Right: Content Area */}
-                                            <div className="w-full lg:w-5/12 p-6 lg:p-8 flex flex-col justify-between text-left min-h-[300px]">
-                                                <AnimatePresence mode="wait" initial={false}>
-                                                    <motion.div
-                                                        key={`content-${spotlightProject.id}`}
-                                                        variants={stageContentVariants}
-                                                        initial="initial"
-                                                        animate="animate"
-                                                        exit="exit"
-                                                        className="space-y-4 w-full will-change-[opacity,transform]"
-                                                    >
-                                                        <motion.div variants={stageItemVariants} className="flex items-center justify-between gap-3">
+                                                        <div className="flex items-center justify-between gap-3">
                                                             <div className="flex items-center gap-2">
                                                                 <span className="font-mono text-xs sm:text-sm font-bold text-gray-400">
                                                                     {String(spotlightIdx + 1).padStart(2, "0")}
@@ -458,19 +472,19 @@ export function BestProjects({ projects = [] }: BestProjectsProps) {
                                                                 <span>Minimize</span>
                                                                 <X className="w-3.5 h-3.5" />
                                                             </button>
-                                                        </motion.div>
+                                                        </div>
 
-                                                        <motion.h3 variants={stageItemVariants} className="text-2xl lg:text-3xl font-bold text-gray-900 font-serif leading-tight">
+                                                        <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 font-serif leading-tight">
                                                             {spotlightProject.title}
-                                                        </motion.h3>
+                                                        </h3>
 
-                                                        <motion.p variants={stageItemVariants} className="text-sm text-gray-700 leading-relaxed">
+                                                        <p className="text-sm text-gray-700 leading-relaxed">
                                                             {spotlightProject.description}
-                                                        </motion.p>
+                                                        </p>
 
                                                         {/* Technology Stack Tags */}
                                                         {tags.length > 0 && (
-                                                            <motion.div variants={stageItemVariants} className="space-y-1.5 pt-1">
+                                                            <div className="space-y-1.5 pt-1">
                                                                 <h5 className="text-[11px] font-bold uppercase tracking-wider text-gray-400 font-mono">
                                                                     Technology Stack
                                                                 </h5>
@@ -484,12 +498,12 @@ export function BestProjects({ projects = [] }: BestProjectsProps) {
                                                                         </span>
                                                                     ))}
                                                                 </div>
-                                                            </motion.div>
+                                                            </div>
                                                         )}
 
                                                         {/* Outbound Project Action */}
                                                         {spotlightProject.projectUrl && (
-                                                            <motion.div variants={stageItemVariants} className="pt-3 border-t border-gray-100 flex items-center gap-3">
+                                                            <div className="pt-3 border-t border-gray-100 flex items-center gap-3">
                                                                 <a
                                                                     href={spotlightProject.projectUrl}
                                                                     target="_blank"
@@ -499,83 +513,96 @@ export function BestProjects({ projects = [] }: BestProjectsProps) {
                                                                     <span>Explore Live Project</span>
                                                                     <ExternalLink className="w-3.5 h-3.5" />
                                                                 </a>
-                                                            </motion.div>
+                                                            </div>
                                                         )}
                                                     </motion.div>
-                                                </AnimatePresence>
-                                            </div>
-                                        </div>
+                                                </motion.div>
+                                            </motion.div>
 
-                                        {/* BOTTOM DOCK: Filmstrip of Other Projects (Flushed Thumbnails) */}
-                                        <div className="grid grid-cols-2 gap-5 pt-1">
-                                            {dockProjects.map((project) => {
-                                                const origIdx = displayProjects.findIndex(p => p.id === project.id);
-                                                return (
-                                                    <div
-                                                        key={`dock-${project.id}`}
-                                                        role="button"
-                                                        tabIndex={0}
-                                                        onClick={() => setSpotlightId(project.id)}
-                                                        onKeyDown={(e) => {
-                                                            if (e.key === "Enter" || e.key === " ") {
-                                                                e.preventDefault();
-                                                                setSpotlightId(project.id);
-                                                            }
-                                                        }}
-                                                        className="bg-white rounded-2xl border border-gray-200/90 hover:border-[#0F766E]/50 hover:shadow-lg hover:shadow-[#0F766E]/5 overflow-hidden flex items-stretch cursor-pointer transition-all duration-300 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F766E]"
-                                                    >
-                                                        {/* Flushed Left Thumbnail */}
-                                                        <div className="w-40 sm:w-48 aspect-video relative bg-slate-900 shrink-0 overflow-hidden border-r border-gray-100">
-                                                            {project.image || project.imageUrl ? (
-                                                                <Image
-                                                                    src={project.image || project.imageUrl}
-                                                                    alt={project.title}
-                                                                    fill
-                                                                    priority
-                                                                    loading="eager"
-                                                                    fetchPriority="high"
-                                                                    unoptimized
-                                                                    sizes="192px"
-                                                                    className="object-cover group-hover:scale-105 transition-transform duration-300 transform-gpu will-change-transform"
-                                                                />
-                                                            ) : (
-                                                                <ProjectPreviewPlaceholder />
-                                                            )}
-                                                        </div>
+                                            {/* BOTTOM DOCK: Filmstrip of Other Projects (Morphing Cards) */}
+                                            <motion.div layout className="grid grid-cols-2 gap-5 pt-1">
+                                                {dockProjects.map((project) => {
+                                                    const origIdx = displayProjects.findIndex(p => p.id === project.id);
+                                                    return (
+                                                        <motion.div
+                                                            key={project.id}
+                                                            layout
+                                                            layoutId={`project-card-container-${project.id}`}
+                                                            transition={{ duration: 0.48, ease: SMOOTH_EASE }}
+                                                            role="button"
+                                                            tabIndex={0}
+                                                            onClick={() => setSpotlightId(project.id)}
+                                                            onKeyDown={(e) => {
+                                                                if (e.key === "Enter" || e.key === " ") {
+                                                                    e.preventDefault();
+                                                                    setSpotlightId(project.id);
+                                                                }
+                                                            }}
+                                                            className="bg-white rounded-2xl border border-gray-200/90 hover:border-[#0F766E]/50 hover:shadow-lg hover:shadow-[#0F766E]/5 overflow-hidden flex items-stretch cursor-pointer transition-colors duration-300 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F766E]"
+                                                        >
+                                                            {/* Flushed Left Thumbnail */}
+                                                            <motion.div
+                                                                layout
+                                                                layoutId={`project-img-wrapper-${project.id}`}
+                                                                transition={{ duration: 0.48, ease: SMOOTH_EASE }}
+                                                                className="w-40 sm:w-48 aspect-video relative bg-slate-900 shrink-0 overflow-hidden border-r border-gray-100"
+                                                            >
+                                                                {project.image || project.imageUrl ? (
+                                                                    <Image
+                                                                        src={project.image || project.imageUrl}
+                                                                        alt={project.title}
+                                                                        fill
+                                                                        priority
+                                                                        loading="eager"
+                                                                        fetchPriority="high"
+                                                                        unoptimized
+                                                                        sizes="192px"
+                                                                        className="object-cover group-hover:scale-105 transition-transform duration-300 transform-gpu will-change-transform"
+                                                                    />
+                                                                ) : (
+                                                                    <ProjectPreviewPlaceholder />
+                                                                )}
+                                                            </motion.div>
 
-                                                        {/* Summary Info */}
-                                                        <div className="p-4 flex flex-col justify-between flex-1 min-w-0 text-left">
-                                                            <div>
-                                                                <div className="flex items-center gap-2 mb-1">
-                                                                    <span className="font-mono text-xs font-bold text-gray-400">
-                                                                        {String(origIdx + 1).padStart(2, "0")}
-                                                                    </span>
-                                                                    <span className="h-3 w-px bg-gray-200" />
-                                                                    <span className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#D8E8E2] text-[#0F766E]">
-                                                                        {project.category || "Capstone"}
-                                                                    </span>
+                                                            {/* Summary Info */}
+                                                            <motion.div
+                                                                layout
+                                                                layoutId={`project-body-wrapper-${project.id}`}
+                                                                transition={{ duration: 0.48, ease: SMOOTH_EASE }}
+                                                                className="p-4 flex flex-col justify-between flex-1 min-w-0 text-left"
+                                                            >
+                                                                <div>
+                                                                    <div className="flex items-center gap-2 mb-1">
+                                                                        <span className="font-mono text-xs font-bold text-gray-400">
+                                                                            {String(origIdx + 1).padStart(2, "0")}
+                                                                        </span>
+                                                                        <span className="h-3 w-px bg-gray-200" />
+                                                                        <span className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#D8E8E2] text-[#0F766E]">
+                                                                            {project.category || "Capstone"}
+                                                                        </span>
+                                                                    </div>
+                                                                    <h4 className="font-bold text-base text-gray-900 font-serif truncate group-hover:text-[#0F766E] transition-colors">
+                                                                        {project.title}
+                                                                    </h4>
+                                                                    <p className="text-xs text-gray-500 truncate mt-0.5">
+                                                                        {project.description}
+                                                                    </p>
                                                                 </div>
-                                                                <h4 className="font-bold text-base text-gray-900 font-serif truncate group-hover:text-[#0F766E] transition-colors">
-                                                                    {project.title}
-                                                                </h4>
-                                                                <p className="text-xs text-gray-500 truncate mt-0.5">
-                                                                    {project.description}
-                                                                </p>
-                                                            </div>
-                                                            <span className="inline-flex items-center gap-1 text-xs font-bold text-[#0F766E] mt-2 group-hover:underline">
-                                                                <span>Switch to Stage</span>
-                                                                <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-                                    </>
-                                );
-                            })()}
-                        </div>
-                    )}
+                                                                <span className="inline-flex items-center gap-1 text-xs font-bold text-[#0F766E] mt-2 group-hover:underline">
+                                                                    <span>Switch to Stage</span>
+                                                                    <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                                                                </span>
+                                                            </motion.div>
+                                                        </motion.div>
+                                                    );
+                                                })}
+                                            </motion.div>
+                                        </>
+                                    );
+                                })()}
+                            </motion.div>
+                        )}
+                    </LayoutGroup>
                 </div>
 
                 {/* ========================================================================= */}
