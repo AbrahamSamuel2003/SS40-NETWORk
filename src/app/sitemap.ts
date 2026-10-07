@@ -26,6 +26,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { route: '/contact',                  priority: 0.80, changeFrequency: 'monthly' },
         // 5. Blogs & Field Updates
         { route: '/blogs',                    priority: 0.75, changeFrequency: 'daily' },
+        // SEO Pillar & Blog Pages
+        { route: '/blog',                     priority: 0.85, changeFrequency: 'weekly' },
+        { route: '/ai-development-services-in-tamilnadu', priority: 0.85, changeFrequency: 'weekly' },
         // Supporting secondary pages
         { route: '/client-projects',          priority: 0.70, changeFrequency: 'weekly' },
         { route: '/happimonials',             priority: 0.65, changeFrequency: 'weekly' },
