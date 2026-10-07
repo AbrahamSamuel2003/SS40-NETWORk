@@ -78,17 +78,14 @@ MODE 1: COMPANY INQUIRIES (When the user asks about services, products, pricing,
 
 MODE 2: GREETINGS & SMALL TALK (When the user says "hi", "hello", "hlo", "how are you", "who are you", etc.)
 - Greet the user warmly and naturally as SS40 SKY.
-- Smoothly invite them to explore Digital Solutions, SS40 Products (like ClearInvoice), or Academic internship programs.
+- Smoothly invite them to explore Digital Solutions, SS40 Products (ClearInvoice, AI Email Agent, GTC Suite), or Academic internship programs.
 - Keep greetings dynamic and varied.
 
 MODE 3: OUT-OF-SCOPE / UNRELATED TOPICS (General world trivia, school homework, politics, non-company math, entertainment, cooking recipes, buying consumer gadgets):
-- Politely and gently decline: State that as SS40 SKY, you specialize exclusively in SS40 NETWORK's digital solutions, software products (like ClearInvoice), and tech academic programs, and cannot answer outside queries.
+- Politely and gently decline: State that as SS40 SKY, you specialize exclusively in SS40 NETWORK's digital solutions, software products (ClearInvoice, AI Email Agent, GTC Suite), and tech academic programs, and cannot answer outside queries.
 - Bridge to company value: Smoothly explain that if they are looking for custom software engineering, business automation, or tech internships, you'd be glad to assist.
-- Lead Generation Invitation: Politely invite the user to connect with the team:
-  "If you have a project idea, software requirement, or tech career goal in mind, please share your name and contact details (phone or email) right here in chat, or use the quick form below so our engineering team can connect with you directly."
-- Output Action Type: ALWAYS set "actionType": "LEAD_CAPTURE" for out-of-scope inquiries so the user can easily leave their details.
-- Options: Offer relevant company exploration options (e.g. ["SS40 Digital Solutions", "SS40 Products", "SS40 Academics", "Contact Team"]).
 - Navigation: Point to "/contact" with label "Contact SS40 Team".
+- Output Action Type: "STANDARD".
 
 PROGRESSIVE LEAD CONVERSION FUNNEL (POLITE, CONVERSATIONAL, ZERO-REPETITION):
 - Conversational Lead Nurturing: Lead collection happens EXCLUSIVELY within the natural message text (never in pills).
@@ -150,7 +147,7 @@ export async function generateRagResponse(
 
     // High-speed, polite handler for out-of-scope random questions (math, school questions, trivia, creative writing)
     if (processed.isOutOfScope) {
-        const outOfScopeAnswer = "I am **SS40 SKY**, the official AI assistant for **SS40 NETWORK**. I specialize strictly in our custom software engineering (Digital Solutions), scalable products (like ClearInvoice), and tech academic internships, so I cannot assist with outside topics or general trivia.\n\nHowever, if you have a software requirement, project idea, or tech career goal in mind, our engineering team in Tirunelveli would love to assist you.\n\nPlease feel free to share your name and contact details (phone or email) right here in chat, or use the quick form below so our team can get in touch with you directly.";
+        const outOfScopeAnswer = "I am **SS40 SKY**, the official AI assistant for **SS40 NETWORK**. I specialize strictly in our custom software engineering (Digital Solutions), scalable products (ClearInvoice, AI Email Agent, GTC Suite), and tech academic internships, so I cannot assist with outside topics or general trivia.\n\nHowever, if you have a software requirement, project idea, or tech career goal in mind, our engineering team in Tirunelveli would love to assist you.\n\nPlease feel free to explore our services below or visit our Contact page to reach our team.";
         return {
             answer: outOfScopeAnswer,
             replyText: outOfScopeAnswer,
@@ -158,7 +155,7 @@ export async function generateRagResponse(
             quickReplies: ["SS40 Digital Solutions", "SS40 Products", "SS40 Academics", "Contact Team"],
             navigation: { label: "Contact SS40 Team", url: "/contact" },
             link: { label: "Contact SS40 Team", url: "/contact" },
-            actionType: "LEAD_CAPTURE",
+            actionType: "STANDARD",
             source: "groq-rag-ai"
         };
     }
@@ -175,14 +172,14 @@ export async function generateRagResponse(
 
     // Emergency fallback only if Groq is completely unavailable
     if (!groqClient) {
-        let fallbackText = "SS40 NETWORK operates across Three Specialized Wings: SS40 Digital Solutions for custom software, SS40 Products (like ClearInvoice), and SS40 Academics for practical internships. How can I assist you today?";
+        let fallbackText = "SS40 NETWORK operates across Three Specialized Wings: SS40 Digital Solutions for custom software, SS40 Products (ClearInvoice, AI Email Agent, GTC Suite), and SS40 Academics for practical internships. How can I assist you today?";
         let fallbackOptions = ["Three Wings", "SS40 Digital Solutions", "SS40 Products", "SS40 Academics"];
 
         if (processed.isGreeting) {
-            fallbackText = "Hello! I am SS40 SKY, your official AI assistant for SS40 NETWORK. We specialize in custom software engineering (Digital Solutions), scalable SS40 Products (like ClearInvoice), and tech academic internships. What would you like to explore today?";
+            fallbackText = "Hello! I am SS40 SKY, your official AI assistant for SS40 NETWORK. We specialize in custom software engineering (Digital Solutions), scalable SS40 Products (ClearInvoice, AI Email Agent, GTC Suite), and tech academic internships. What would you like to explore today?";
             fallbackOptions = ["Three Wings", "SS40 Digital Solutions", "SS40 Products", "SS40 Academics"];
         } else if (processed.isSmallTalk) {
-            fallbackText = "Hello! I am SS40 SKY, the AI assistant for SS40 NETWORK. I'm here to help you discover our custom software engineering, SS40 Products (like ClearInvoice), and academic internship programs. How can I assist you?";
+            fallbackText = "Hello! I am SS40 SKY, the AI assistant for SS40 NETWORK. I'm here to help you discover our custom software engineering, SS40 Products (ClearInvoice, AI Email Agent, GTC Suite), and academic internship programs. How can I assist you?";
         } else if (primaryChunk && vectorResult.topScore >= 0.45) {
             fallbackText = primaryChunk.summary || primaryChunk.content;
             fallbackOptions = primaryChunk.suggestedOptions || fallbackOptions;
@@ -228,8 +225,8 @@ export async function generateRagResponse(
 - Phrasing MUST be dynamic, varied, polite, and natural. NEVER repeat boilerplate sentences from previous turns. Keep it completely in sync with what was asked.`;
         } else if (currentContact.name && !currentContact.phone && !currentContact.email) {
             dynamicLeadDirective = `\n\n[DYNAMIC CONTEXTUAL LEAD DIRECTIVE]:
-- The user's name is "${currentContact.name}". They have not provided a phone number or email yet.
-- Acknowledge them warmly by name, answer their question, and politely invite them to share their phone number or email right here in chat so our solutions/academic team can send them the details for their inquiry.`;
+- The user's name is "${currentContact.name}".
+- Acknowledge them warmly by name as SS40 SKY (e.g. "Hello ${currentContact.name}! Great to connect with you."), answer their question or introduce our Three Wings, and invite them to explore SS40 Digital Solutions, Products (ClearInvoice, AI Email Agent, GTC Suite), or Academics.`;
         } else if (!currentContact.name && (currentContact.phone || currentContact.email)) {
             dynamicLeadDirective = `\n\n[DYNAMIC CONTEXTUAL LEAD DIRECTIVE]:
 - The user provided contact info (${currentContact.phone || currentContact.email}) but has not shared their name.
@@ -336,7 +333,7 @@ ${contextText}${dynamicLeadDirective}`;
         }
 
         let actionType: StructuredSkyResponse["actionType"] = "STANDARD";
-        if (parsed.actionType && ["STANDARD", "WINGS_CARD", "ACADEMIC_CARD", "SUPPORT_CARD"].includes(parsed.actionType)) {
+        if (parsed.actionType && ["STANDARD", "WINGS_CARD", "ACADEMIC_CARD", "SUPPORT_CARD", "LEAD_CAPTURE"].includes(parsed.actionType)) {
             actionType = parsed.actionType;
         } else {
             actionType = determineActionType(primaryChunk, rawUserMessage);
@@ -353,11 +350,11 @@ ${contextText}${dynamicLeadDirective}`;
             source: "groq-rag-ai",
         };
     } catch (error) {
-        let fallbackContent = "SS40 NETWORK operates across Three Specialized Wings: SS40 Digital Solutions for custom software, SS40 Products (like ClearInvoice), and SS40 Academics for practical internships. How can I assist you today?";
+        let fallbackContent = "SS40 NETWORK operates across Three Specialized Wings: SS40 Digital Solutions for custom software, SS40 Products (ClearInvoice, AI Email Agent, GTC Suite), and SS40 Academics for practical internships. How can I assist you today?";
         let fallbackOptions = ["Three Wings", "SS40 Digital Solutions", "SS40 Products", "SS40 Academics"];
 
         if (processed.isGreeting) {
-            fallbackContent = "Hello! I am SS40 SKY, your official AI assistant for SS40 NETWORK. We specialize in custom software engineering (Digital Solutions), scalable SS40 Products (like ClearInvoice), and tech academic internships. What would you like to explore today?";
+            fallbackContent = "Hello! I am SS40 SKY, your official AI assistant for SS40 NETWORK. We specialize in custom software engineering (Digital Solutions), scalable SS40 Products (ClearInvoice, AI Email Agent, GTC Suite), and tech academic internships. What would you like to explore today?";
         } else if (processed.isSmallTalk) {
             fallbackContent = "Hello! I am SS40 SKY, the AI assistant for SS40 NETWORK. How can I assist you with our services, products, or academic programs today?";
         } else if (primaryChunk && vectorResult.topScore >= 0.45) {
@@ -380,6 +377,9 @@ ${contextText}${dynamicLeadDirective}`;
 
 function determineActionType(chunk?: VectorChunk, query: string = ""): StructuredSkyResponse["actionType"] {
     const q = query.toLowerCase();
+    if (/\b(quote|get a quote|callback|call back|request callback|book demo|schedule demo|discuss project|hire|inquiry|consultation|scoping|leave details|my details)\b/i.test(q)) {
+        return "LEAD_CAPTURE";
+    }
     if (/\b(phone|call|email|whatsapp|address|reach|contact us|talk to human|location|where are you)\b/i.test(q)) {
         return "SUPPORT_CARD";
     }

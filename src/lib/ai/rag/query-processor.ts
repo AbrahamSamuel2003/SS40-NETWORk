@@ -65,12 +65,60 @@ export function isGibberishOrMeaningless(rawText: string): boolean {
     return false;
 }
 
+const STOP_WORDS_AND_VERBS = new Set([
+    "what", "is", "that", "this", "it", "dont", "do", "does", "did", "use", "using", "miss", "missuse",
+    "thank", "thanks", "thankyou", "u", "you", "your", "ok", "okay", "okk", "okie", "done", "cool", "how", "why", "where", "when", "which",
+    "who", "can", "could", "will", "would", "shall", "should", "tell", "show", "give", "share", "need",
+    "want", "have", "has", "had", "are", "am", "was", "were", "be", "been", "being", "help", "more",
+    "details", "info", "sure", "fine", "good", "great", "nice", "got", "know", "call", "send", "chat",
+    "talk", "team", "support", "about", "product", "products", "solution", "solutions", "academic",
+    "academics", "service", "services", "ecommerce", "website", "app", "mobile", "web", "consultation",
+    "quote", "demo", "pricing", "price", "cost", "hi", "hello", "hlo", "hloo", "hey", "start", "greetings",
+    "gud", "mrng", "morning", "afternoon", "evening", "night",
+    "yes", "no", "clearinvoice", "invoice", "billing", "gtc", "internship", "internships", "intern",
+    "student", "placement", "founder", "ceo", "location", "address", "tirunelveli", "office", "contact",
+    "mayil", "annai", "jalsa", "lecturecast", "wavelink", "studentos", "mou", "mous", "wings", "our",
+    "email", "mail", "agent", "ai", "bot", "overview", "feature", "features", "live", "system", "software",
+    "tech", "technology", "network", "code", "project", "projects", "case", "study", "dsa", "lead", "client", "user"
+]);
+
+export function isLegitimateHumanName(text: string): boolean {
+    const trimmed = text.trim();
+    if (!trimmed || trimmed.length < 2 || trimmed.length > 35) return false;
+    if (/\d/.test(trimmed) || trimmed.includes("@") || /[!?,;:]/.test(trimmed)) return false;
+
+    // Reject keysmash / gibberish immediately
+    if (isGibberishOrMeaningless(trimmed)) return false;
+
+    const words = trimmed.toLowerCase().split(/\s+/).filter(Boolean);
+    if (words.length < 1 || words.length > 3) return false;
+
+    // A real person's name will NOT contain conversational verbs, pronouns, or question words
+    for (const word of words) {
+        if (STOP_WORDS_AND_VERBS.has(word) || word.length < 2) {
+            return false;
+        }
+    }
+
+    return /^[A-Za-z\s]+$/.test(trimmed);
+}
+
 /**
  * Checks if a query is completely out-of-scope for the SS40 NETWORK company assistant.
  * (e.g. math calculations, generic coding exercises, non-company trivia, buying appliances, creative writing)
  */
 export function detectOutOfScope(normalizedQuery: string): { isOutOfScope: boolean; reason?: string } {
     const trimmed = normalizedQuery.trim();
+
+    // 0. Pleasantries & standard conversational words should NEVER be out-of-scope
+    if (/^(ok|okay|okk|okie|thanks|thank you|thank u|sure|cool|fine|great|yes|no|got it|understood|noted)$/i.test(trimmed)) {
+        return { isOutOfScope: false };
+    }
+
+    // 0. A valid human name should NEVER be treated as out-of-scope trivia
+    if (isLegitimateHumanName(trimmed)) {
+        return { isOutOfScope: false };
+    }
 
     // 1. Math calculations & equations (e.g. "1+2", "7+4", "5 * 10", "sqrt(16)", "solve 2x+5=15")
     if (/^\d+\s*[\+\-\*\/\^%]\s*\d+/.test(trimmed) || /^(calculate|what is|solve)\s+\d+\s*[\+\-\*\/]/i.test(trimmed) || /\bsolve\s+[0-9a-z\+\-\*\/\=\s]+/i.test(trimmed)) {
@@ -101,7 +149,7 @@ export function detectOutOfScope(normalizedQuery: string): { isOutOfScope: boole
     const words = trimmed.split(/\s+/);
     const isKnownCompanyWord = /\b(hi|hello|hlo|hey|clearinvoice|internship|internships|intern|services|service|wings|pricing|price|contact|support|phone|email|mail|whatsapp|products|product|academics|academic|about|office|founder|ceo|sivasubramanian|clients|client|projects|project|jobs|careers|quote|demo|lecturecast|wavelink|studentos|mayil|annai|jalsa|mou|mous|blogs|dsa|placement|placements|sprint|sprints|tirunelveli)\b/i.test(trimmed);
     
-    if (words.length === 1 && !isKnownCompanyWord) {
+    if (words.length === 1 && !isKnownCompanyWord && !isLegitimateHumanName(trimmed)) {
         return { isOutOfScope: true, reason: "isolated_non_company_noun" };
     }
 
@@ -133,14 +181,11 @@ export function processUserQuery(
     // Friendly small talk detection
     const isSmallTalk = !isGibberish && /^(how\s*(r|are)\s*u|how\s*are\s*you|who\s*are\s*you|what\s*is\s*your\s*name|what\s*can\s*you\s*do|tell\s*me\s*about\s*yourself)\b/i.test(normalizedQuery);
 
-    // Check if the assistant recently asked for name and user is providing a valid name
-    const lastAssistantMsg = [...history].reverse().find(m => m.role === "assistant");
-    const isRespondingToNamePrompt = lastAssistantMsg
-        ? /\b(your name|share your name|may i know your name|who to address|what is your name|who am i speaking with)\b/i.test(lastAssistantMsg.content) && isLegitimateHumanName(rawQuery)
-        : false;
+    // Check if user is introducing themselves with a valid human name
+    const isHumanName = isLegitimateHumanName(rawQuery);
 
     // Out of scope detection
-    const { isOutOfScope, reason: outOfScopeReason } = (!isGibberish && !isRespondingToNamePrompt)
+    const { isOutOfScope, reason: outOfScopeReason } = (!isGibberish && !isHumanName)
         ? detectOutOfScope(normalizedQuery)
         : { isOutOfScope: false };
 
@@ -371,44 +416,6 @@ function deriveNameFromEmail(email: string): string | undefined {
     return undefined;
 }
 
-const STOP_WORDS_AND_VERBS = new Set([
-    "what", "is", "that", "this", "it", "dont", "do", "does", "did", "use", "using", "miss", "missuse",
-    "thank", "thanks", "thankyou", "u", "you", "your", "ok", "okay", "okk", "okie", "done", "cool", "how", "why", "where", "when", "which",
-    "who", "can", "could", "will", "would", "shall", "should", "tell", "show", "give", "share", "need",
-    "want", "have", "has", "had", "are", "am", "was", "were", "be", "been", "being", "help", "more",
-    "details", "info", "sure", "fine", "good", "great", "nice", "got", "know", "call", "send", "chat",
-    "talk", "team", "support", "about", "product", "products", "solution", "solutions", "academic",
-    "academics", "service", "services", "ecommerce", "website", "app", "mobile", "web", "consultation",
-    "quote", "demo", "pricing", "price", "cost", "hi", "hello", "hlo", "hloo", "hey", "start", "greetings",
-    "gud", "mrng", "morning", "afternoon", "evening", "night",
-    "yes", "no", "clearinvoice", "invoice", "billing", "gtc", "internship", "internships", "intern",
-    "student", "placement", "founder", "ceo", "location", "address", "tirunelveli", "office", "contact",
-    "mayil", "annai", "jalsa", "lecturecast", "wavelink", "studentos", "mou", "mous", "wings", "our",
-    "email", "mail", "agent", "ai", "bot", "overview", "feature", "features", "live", "system", "software",
-    "tech", "technology", "network", "code", "project", "projects", "case", "study", "dsa", "lead", "client", "user"
-]);
-
-function isLegitimateHumanName(text: string): boolean {
-    const trimmed = text.trim();
-    if (!trimmed || trimmed.length < 2 || trimmed.length > 35) return false;
-    if (/\d/.test(trimmed) || trimmed.includes("@") || /[!?,;:]/.test(trimmed)) return false;
-
-    // Reject keysmash / gibberish immediately
-    if (isGibberishOrMeaningless(trimmed)) return false;
-
-    const words = trimmed.toLowerCase().split(/\s+/).filter(Boolean);
-    if (words.length < 1 || words.length > 3) return false;
-
-    // A real person's name will NOT contain conversational verbs, pronouns, or question words
-    for (const word of words) {
-        if (STOP_WORDS_AND_VERBS.has(word) || word.length < 2) {
-            return false;
-        }
-    }
-
-    return /^[A-Za-z\s]+$/.test(trimmed);
-}
-
 /**
  * Automatically extracts complete contact information (Name, Phone, Email, Company)
  * across the entire conversation history to guarantee zero loss.
@@ -461,13 +468,6 @@ export function extractContactDetails(
         }
     }
 
-    // Pattern B: Inspect standalone user messages only when:
-    // 1) The assistant explicitly asked for the user's name in the conversation, OR
-    // 2) A valid phone number or email is present in the conversation
-    const assistantAskedForName = history.some(m =>
-        m.role === "assistant" && /\b(your name|share your name|may i know your name|who to address|what is your name)\b/i.test(m.content)
-    );
-
     if (!name) {
         for (const utterance of userUtterances) {
             const clean = utterance.replace(/[,;:]/g, " ").trim();
@@ -482,8 +482,8 @@ export function extractContactDetails(
                 }
             }
 
-            // Standalone name ONLY if the assistant explicitly prompted for their name or contact exists
-            if ((assistantAskedForName || phone || email) && isLegitimateHumanName(clean)) {
+            // Standalone name if the text is a legitimate human name
+            if (isLegitimateHumanName(clean)) {
                 name = cleanCapitalize(clean);
                 break;
             }

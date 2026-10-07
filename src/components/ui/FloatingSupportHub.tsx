@@ -75,17 +75,6 @@ export function FloatingSupportHub({ config }: { config?: SiteConfigData | null 
 
     useEffect(() => {
         setMounted(true);
-        // Pre-warm the chatbot chunk during idle time for 0-latency opening
-        if (typeof window !== "undefined") {
-            if ("requestIdleCallback" in window) {
-                (window as unknown as { requestIdleCallback: (cb: () => void, opts?: { timeout: number }) => void }).requestIdleCallback(
-                    () => { loadChatbot(); },
-                    { timeout: 2500 }
-                );
-            } else {
-                setTimeout(() => { loadChatbot(); }, 1200);
-            }
-        }
     }, []);
 
     // ── CLICK OUTSIDE DETECTION TO CLOSE MENU ──

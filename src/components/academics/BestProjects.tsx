@@ -107,7 +107,7 @@ function ProjectPreviewPlaceholder() {
                 <div className="w-12 h-12 sm:w-14 sm:h-14 bg-[#6B9F91]/10 rounded-2xl flex items-center justify-center mb-2.5 text-[#0F766E]">
                     <LayoutDashboard className="w-6 h-6 sm:w-7 sm:h-7" />
                 </div>
-                <h5 className="font-bold text-gray-900 text-xs sm:text-sm mb-0.5">Project Preview</h5>
+                <span className="font-bold text-gray-900 text-xs sm:text-sm mb-0.5 block">Project Preview</span>
                 <p className="text-[10px] sm:text-xs text-gray-500">Capstone architecture showcase</p>
             </div>
         </div>
@@ -260,26 +260,6 @@ export function BestProjects({ projects = [] }: BestProjectsProps) {
                 </motion.div>
             </div>
 
-            {/* 0-Latency Preload Pipeline: Pre-fetches and decodes all project images into GPU memory on initial page load */}
-            <div className="hidden" aria-hidden="true">
-                {displayProjects.map((project) => {
-                    const imgUrl = project.image || project.imageUrl;
-                    if (!imgUrl) return null;
-                    return (
-                        <Image
-                            key={`preload-proj-${project.id}`}
-                            src={imgUrl}
-                            alt=""
-                            width={700}
-                            height={450}
-                            priority
-                            loading="eager"
-                            unoptimized
-                        />
-                    );
-                })}
-            </div>
-
             <Container className="relative z-20 max-w-6xl">
                 <SectionHeading
                     badge="BEST STUDENT PROJECTS"
@@ -367,9 +347,9 @@ export function BestProjects({ projects = [] }: BestProjectsProps) {
                                                 </div>
 
                                                 {/* Project Title */}
-                                                <h4 className="font-bold text-lg lg:text-xl text-gray-900 leading-snug font-serif group-hover:text-[#0F766E] transition-colors line-clamp-2">
+                                                <h3 className="font-bold text-lg lg:text-xl text-gray-900 leading-snug font-serif group-hover:text-[#0F766E] transition-colors line-clamp-2">
                                                     {project.title}
-                                                </h4>
+                                                </h3>
                                             </div>
 
                                             {/* Bottom Action Footer */}
@@ -485,9 +465,9 @@ export function BestProjects({ projects = [] }: BestProjectsProps) {
                                                         {/* Technology Stack Tags */}
                                                         {tags.length > 0 && (
                                                             <div className="space-y-1.5 pt-1">
-                                                                <h5 className="text-[11px] font-bold uppercase tracking-wider text-gray-400 font-mono">
+                                                                <h4 className="text-[11px] font-bold uppercase tracking-wider text-gray-400 font-mono">
                                                                     Technology Stack
-                                                                </h5>
+                                                                </h4>
                                                                 <div className="flex flex-wrap gap-1.5">
                                                                     {tags.map((tag, tIdx) => (
                                                                         <span
@@ -581,9 +561,9 @@ export function BestProjects({ projects = [] }: BestProjectsProps) {
                                                                             {project.category || "Capstone"}
                                                                         </span>
                                                                     </div>
-                                                                    <h4 className="font-bold text-base text-gray-900 font-serif truncate group-hover:text-[#0F766E] transition-colors">
+                                                                    <h3 className="font-bold text-base text-gray-900 font-serif truncate group-hover:text-[#0F766E] transition-colors">
                                                                         {project.title}
-                                                                    </h4>
+                                                                    </h3>
                                                                     <p className="text-xs text-gray-500 truncate mt-0.5">
                                                                         {project.description}
                                                                     </p>
@@ -646,9 +626,9 @@ export function BestProjects({ projects = [] }: BestProjectsProps) {
                                 <div className="p-5 flex flex-col flex-1 relative z-10 text-left">
                                     <div className="flex items-start justify-between mb-3">
                                         <div className="flex-1 pr-2">
-                                            <h4 className="font-bold text-lg sm:text-xl text-gray-900 leading-tight tracking-tight mb-1">
+                                            <h3 className="font-bold text-lg sm:text-xl text-gray-900 leading-tight tracking-tight mb-1">
                                                 {project.title}
-                                            </h4>
+                                            </h3>
                                             <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
                                                 {project.category}
                                             </p>

@@ -73,7 +73,7 @@ export interface ChatMessage {
 const INITIAL_BOT_MESSAGE: ChatMessage = {
     id: "msg-welcome",
     sender: "bot",
-    text: "Hello! I am SS40 SKY, your official AI assistant for SS40 NETWORK.\n\nWe specialize in custom software engineering (Digital Solutions), scalable SS40 Products (like ClearInvoice), and tech academic internships. How can I assist you today?",
+    text: "Hello! I am SS40 SKY, your official AI assistant for SS40 NETWORK.\n\nWe specialize in custom software engineering (Digital Solutions), scalable SS40 Products (ClearInvoice, AI Email Agent, GTC Suite), and tech academic internships. How can I assist you today?",
     timestamp: new Date(),
     actionType: "STANDARD",
     quickReplies: [
@@ -467,7 +467,7 @@ export function RuleBasedChatbot({
             const isSupport = actionType === "SUPPORT_CARD";
             const isWings = actionType === "WINGS_CARD";
             const isAcademic = actionType === "ACADEMIC_CARD";
-            const isLead = actionType === "LEAD_CAPTURE";
+            const isLead = actionType === "LEAD_CAPTURE" && !leadCaptured;
             const isProject = actionType === "PROJECT_PREVIEW";
 
             const botMsg: ChatMessage = {
@@ -1026,13 +1026,16 @@ export function RuleBasedChatbot({
                                                     {/* Inline Lead Capture Form */}
                                                     {msg.isLeadCard && (
                                                         <div className="mt-3 pt-2.5 border-t border-gray-100 flex flex-col gap-2">
-                                                            {leadSubmittedId === msg.id ? (
+                                                            {(leadCaptured || leadSubmittedId === msg.id) ? (
                                                                 <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-emerald-800 text-xs font-semibold flex items-center gap-2">
                                                                     <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                                                                     <span>Inquiry recorded! Our engineering team will contact you shortly.</span>
                                                                 </div>
                                                             ) : (
-                                                                <div className="p-3 bg-[#F8FAF9] rounded-2xl border border-gray-200/90 shadow-2xs space-y-2 text-xs">
+                                                                <div className="p-3.5 bg-[#F8FAF9] rounded-2xl border border-gray-200/90 shadow-2xs space-y-2.5 text-xs">
+                                                                    <div className="font-semibold text-gray-800 text-[11px] uppercase tracking-wider font-mono">
+                                                                        Share Your Details for Follow-up:
+                                                                    </div>
                                                                     <input
                                                                         type="text"
                                                                         placeholder="Your Full Name *"
@@ -1062,7 +1065,7 @@ export function RuleBasedChatbot({
                                                                         className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-gray-800 focus:outline-none focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E] transition-all shadow-2xs cursor-pointer"
                                                                     >
                                                                         <option value="Digital Solutions">SS40 Digital Solutions (Custom Software)</option>
-                                                                        <option value="Products - ClearInvoice">SS40 Products (ClearInvoice)</option>
+                                                                        <option value="Products - ClearInvoice, Email Agent, GTC Suite">SS40 Products (ClearInvoice, AI Email Agent, GTC Suite)</option>
                                                                         <option value="Academics - Internships">SS40 Academics (Internships &amp; Training)</option>
                                                                         <option value="General Consultation">General Scoping &amp; Consultation</option>
                                                                     </select>
@@ -1076,7 +1079,7 @@ export function RuleBasedChatbot({
                                                                             <span>Submitting Inquiry...</span>
                                                                         ) : (
                                                                             <>
-                                                                                <span>Submit Inquiry to Team</span>
+                                                                                <span>Submit Details to Team</span>
                                                                                 <SendHorizonal className="w-3.5 h-3.5" />
                                                                             </>
                                                                         )}
