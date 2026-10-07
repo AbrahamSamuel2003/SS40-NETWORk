@@ -14,16 +14,16 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export const metadata: Metadata = {
-  title: "One Company. Three Wings. Endless Possibilities. | SS40 NETWORK PRIVATE LIMITED",
-  description: "SS40 NETWORK PRIVATE LIMITED is a technology company in Tirunelveli architecting enterprise digital solutions, intelligent SaaS products, and career-launching tech academics.",
+  title: "SS40 NETWORK — Enterprise Digital Solutions, SaaS Products & Tech Academics",
+  description: "SS40 NETWORK is an enterprise technology company architecting custom digital solutions, intelligent SaaS products, and career-launching tech academics in Tirunelveli.",
   alternates: {
     canonical: "https://ss40network.com",
   },
   openGraph: {
-    title: "One Company. Three Wings. Endless Possibilities. | SS40 NETWORK PRIVATE LIMITED",
-    description: "SS40 NETWORK PRIVATE LIMITED is a technology company in Tirunelveli architecting enterprise digital solutions, intelligent SaaS products, and career-launching tech academics.",
+    title: "SS40 NETWORK — Enterprise Digital Solutions, SaaS Products & Tech Academics",
+    description: "SS40 NETWORK is an enterprise technology company architecting custom digital solutions, intelligent SaaS products, and career-launching tech academics in Tirunelveli.",
     url: "https://ss40network.com",
-    siteName: "SS40 NETWORK PRIVATE LIMITED",
+    siteName: "SS40 NETWORK",
     locale: "en_US",
     type: "website",
     images: [
@@ -33,20 +33,20 @@ export const metadata: Metadata = {
         width: 1200,
         height: 630,
         type: "image/jpeg",
-        alt: "SS40 NETWORK PRIVATE LIMITED — Digital Solutions, SaaS Products & Tech Academics",
+        alt: "SS40 NETWORK — Digital Solutions, SaaS Products & Tech Academics",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "One Company. Three Wings. Endless Possibilities. | SS40 NETWORK PRIVATE LIMITED",
-    description: "SS40 NETWORK PRIVATE LIMITED is a technology company in Tirunelveli architecting enterprise digital solutions, intelligent SaaS products, and career-launching tech academics.",
+    title: "SS40 NETWORK — Enterprise Digital Solutions, SaaS Products & Tech Academics",
+    description: "SS40 NETWORK is an enterprise technology company architecting custom digital solutions, intelligent SaaS products, and career-launching tech academics in Tirunelveli.",
     images: [
       {
         url: "https://ss40network.com/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "SS40 NETWORK PRIVATE LIMITED — Digital Solutions, SaaS Products & Tech Academics",
+        alt: "SS40 NETWORK — Digital Solutions, SaaS Products & Tech Academics",
       },
     ],
   },

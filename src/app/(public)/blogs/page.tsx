@@ -7,30 +7,30 @@ import { Container } from "@/components/ui/Container";
 import { BlogsList } from "./BlogsList";
 
 export const metadata: Metadata = {
-    title: "Field Updates, Conclaves & Founder Initiatives | SS40 NETWORK PRIVATE LIMITED",
-    description: "Explore government official dialogues, academic MoUs, industry visits, conclaves, and founder activities by SS40 NETWORK PRIVATE LIMITED.",
+    title: "Blogs & Updates | SS40 NETWORK",
+    description: "Official field updates, conclaves, MoUs, industry visits, and founder initiatives from SS40 NETWORK.",
     alternates: {
         canonical: "https://ss40network.com/blogs",
     },
     openGraph: {
-        title: "Field Updates, Conclaves & Founder Initiatives | SS40 NETWORK PRIVATE LIMITED",
-        description: "Explore government official dialogues, academic MoUs, industry visits, conclaves, and founder activities by SS40 NETWORK PRIVATE LIMITED.",
+        title: "Blogs & Updates | SS40 NETWORK",
+        description: "Official field updates, conclaves, MoUs, industry visits, and founder initiatives from SS40 NETWORK.",
         url: "https://ss40network.com/blogs",
-        siteName: "SS40 NETWORK PRIVATE LIMITED",
+        siteName: "SS40 NETWORK",
         type: "website",
         images: [
             {
                 url: "https://ss40network.com/og-image.jpg",
                 width: 1200,
                 height: 630,
-                alt: "Field Updates, Conclaves & Founder Initiatives — SS40 NETWORK PRIVATE LIMITED",
+                alt: "Blogs & Updates — SS40 NETWORK",
             },
         ],
     },
     twitter: {
         card: "summary_large_image",
-        title: "Field Updates, Conclaves & Founder Initiatives | SS40 NETWORK PRIVATE LIMITED",
-        description: "Explore government official dialogues, academic MoUs, industry visits, conclaves, and founder activities by SS40 NETWORK PRIVATE LIMITED.",
+        title: "Blogs & Updates | SS40 NETWORK",
+        description: "Official field updates, conclaves, MoUs, industry visits, and founder initiatives from SS40 NETWORK.",
         images: ["https://ss40network.com/og-image.jpg"],
     },
 };

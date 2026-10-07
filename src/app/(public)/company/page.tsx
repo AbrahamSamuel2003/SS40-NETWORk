@@ -20,10 +20,14 @@ const CompanyCTA = dynamic(
 );
 
 export const metadata: Metadata = {
-    title: "Company Profile & Official Certifications | SS40 NETWORK PRIVATE LIMITED",
+    title: "Company | SS40 NETWORK",
     description:
-        "Official corporate identity, Ministry of Corporate Affairs (MCA) incorporation (CIN: U62013TN2025PTC187678), DPIIT Startup India recognition (#DIPP268327), GST details, and milestone history of SS40 NETWORK PRIVATE LIMITED.",
+        "Official corporate identity, MCA incorporation (CIN: U62013TN2025PTC187678), DPIIT Startup India recognition (#DIPP268327), GST details, and milestone history of SS40 NETWORK.",
+    alternates: {
+        canonical: "https://ss40network.com/company",
+    },
     keywords: [
+        "SS40 NETWORK",
         "SS40 NETWORK PRIVATE LIMITED",
         "SS40 NETWORK Company Profile",
         "DPIIT Recognized Startup",
@@ -33,9 +37,9 @@ export const metadata: Metadata = {
         "CIN U62013TN2025PTC187678",
     ],
     openGraph: {
-        title: "Company Profile & Official Certifications | SS40 NETWORK",
+        title: "Company | SS40 NETWORK",
         description:
-            "Official corporate identity, MCA incorporation, DPIIT Startup India recognition, and milestones of SS40 NETWORK PRIVATE LIMITED.",
+            "Official corporate identity, MCA incorporation, DPIIT Startup India recognition, and milestones of SS40 NETWORK.",
         type: "website",
         url: "https://ss40network.com/company",
     },

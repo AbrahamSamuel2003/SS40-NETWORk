@@ -8,30 +8,30 @@ import { TrustedClients } from "@/components/digital-solutions/TrustedClients";
 import { GetQuote } from "@/components/digital-solutions/GetQuote";
 
 export const metadata: Metadata = {
-    title: "Engineering Digital Experiences That Scale | SS40 NETWORK PRIVATE LIMITED",
-    description: "Custom software development company in Tirunelveli delivering enterprise web applications, mobile apps, and scalable AI solutions by SS40 NETWORK PRIVATE LIMITED.",
+    title: "Digital Solutions | SS40 NETWORK",
+    description: "Custom software development, high-performance web applications, native mobile apps, and scalable AI solutions engineered by SS40 NETWORK.",
     alternates: {
         canonical: "https://ss40network.com/digital-solutions",
     },
     openGraph: {
-        title: "Engineering Digital Experiences That Scale | SS40 NETWORK PRIVATE LIMITED",
-        description: "Custom software development company in Tirunelveli delivering enterprise web applications, mobile apps, and scalable AI solutions by SS40 NETWORK PRIVATE LIMITED.",
+        title: "Digital Solutions | SS40 NETWORK",
+        description: "Custom software development, high-performance web applications, native mobile apps, and scalable AI solutions engineered by SS40 NETWORK.",
         url: "https://ss40network.com/digital-solutions",
-        siteName: "SS40 NETWORK PRIVATE LIMITED",
+        siteName: "SS40 NETWORK",
         type: "website",
         images: [
             {
                 url: "https://ss40network.com/og-image.jpg",
                 width: 1200,
                 height: 630,
-                alt: "Digital Solutions — SS40 NETWORK PRIVATE LIMITED",
+                alt: "Digital Solutions — SS40 NETWORK",
             },
         ],
     },
     twitter: {
         card: "summary_large_image",
-        title: "Engineering Digital Experiences That Scale | SS40 NETWORK PRIVATE LIMITED",
-        description: "Custom software development company in Tirunelveli delivering enterprise web applications, mobile apps, and scalable AI solutions by SS40 NETWORK PRIVATE LIMITED.",
+        title: "Digital Solutions | SS40 NETWORK",
+        description: "Custom software development, high-performance web applications, native mobile apps, and scalable AI solutions engineered by SS40 NETWORK.",
         images: ["https://ss40network.com/og-image.jpg"],
     },
 };

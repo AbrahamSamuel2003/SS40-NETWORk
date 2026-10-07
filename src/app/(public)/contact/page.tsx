@@ -10,30 +10,30 @@ import { getSiteConfig } from "@/lib/site-config";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Let's Build Something Amazing Together | SS40 NETWORK PRIVATE LIMITED",
-    description: "Connect with SS40 NETWORK PRIVATE LIMITED in Tirunelveli for custom digital solutions, software products, and academic tech training consultations.",
+    title: "Contact Us | SS40 NETWORK",
+    description: "Get in touch with SS40 NETWORK in Tirunelveli for custom digital solutions, SaaS software products, and academic tech training partnerships.",
     alternates: {
         canonical: "https://ss40network.com/contact",
     },
     openGraph: {
-        title: "Let's Build Something Amazing Together | SS40 NETWORK PRIVATE LIMITED",
-        description: "Connect with SS40 NETWORK PRIVATE LIMITED in Tirunelveli for custom digital solutions, software products, and academic tech training consultations.",
+        title: "Contact Us | SS40 NETWORK",
+        description: "Get in touch with SS40 NETWORK in Tirunelveli for custom digital solutions, SaaS software products, and academic tech training partnerships.",
         url: "https://ss40network.com/contact",
-        siteName: "SS40 NETWORK PRIVATE LIMITED",
+        siteName: "SS40 NETWORK",
         type: "website",
         images: [
             {
                 url: "https://ss40network.com/og-image.jpg",
                 width: 1200,
                 height: 630,
-                alt: "Contact — SS40 NETWORK PRIVATE LIMITED",
+                alt: "Contact — SS40 NETWORK",
             },
         ],
     },
     twitter: {
         card: "summary_large_image",
-        title: "Let's Build Something Amazing Together | SS40 NETWORK PRIVATE LIMITED",
-        description: "Connect with SS40 NETWORK PRIVATE LIMITED in Tirunelveli for custom digital solutions, software products, and academic tech training consultations.",
+        title: "Contact Us | SS40 NETWORK",
+        description: "Get in touch with SS40 NETWORK in Tirunelveli for custom digital solutions, SaaS software products, and academic tech training partnerships.",
         images: ["https://ss40network.com/og-image.jpg"],
     },
 };

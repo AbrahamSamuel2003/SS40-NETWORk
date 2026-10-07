@@ -6,30 +6,30 @@ import { Brands } from "@/components/products/Brands";
 import { BookDemo } from "@/components/products/BookDemo";
 
 export const metadata: Metadata = {
-    title: "Innovative Tools. Built for Real Impact. | SS40 NETWORK PRIVATE LIMITED",
-    description: "Discover business-ready SaaS products, invoicing tools, and automated software solutions engineered by SS40 NETWORK PRIVATE LIMITED in Tirunelveli, Tamil Nadu.",
+    title: "Products | SS40 NETWORK",
+    description: "Business-ready SaaS products, invoicing platforms, and automated software tools engineered by SS40 NETWORK.",
     alternates: {
         canonical: "https://ss40network.com/products",
     },
     openGraph: {
-        title: "Innovative Tools. Built for Real Impact. | SS40 NETWORK PRIVATE LIMITED",
-        description: "Discover business-ready SaaS products, invoicing tools, and automated software solutions engineered by SS40 NETWORK PRIVATE LIMITED in Tirunelveli, Tamil Nadu.",
+        title: "Products | SS40 NETWORK",
+        description: "Business-ready SaaS products, invoicing platforms, and automated software tools engineered by SS40 NETWORK.",
         url: "https://ss40network.com/products",
-        siteName: "SS40 NETWORK PRIVATE LIMITED",
+        siteName: "SS40 NETWORK",
         type: "website",
         images: [
             {
                 url: "https://ss40network.com/og-image.jpg",
                 width: 1200,
                 height: 630,
-                alt: "Products — SS40 NETWORK PRIVATE LIMITED",
+                alt: "Products — SS40 NETWORK",
             },
         ],
     },
     twitter: {
         card: "summary_large_image",
-        title: "Innovative Tools. Built for Real Impact. | SS40 NETWORK PRIVATE LIMITED",
-        description: "Discover business-ready SaaS products, invoicing tools, and automated software solutions engineered by SS40 NETWORK PRIVATE LIMITED in Tirunelveli, Tamil Nadu.",
+        title: "Products | SS40 NETWORK",
+        description: "Business-ready SaaS products, invoicing platforms, and automated software tools engineered by SS40 NETWORK.",
         images: ["https://ss40network.com/og-image.jpg"],
     },
 };

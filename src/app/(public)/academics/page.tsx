@@ -10,30 +10,30 @@ import { getSiteConfig, isSectionVisible } from "@/lib/site-config";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Learn. Build. Grow. | SS40 NETWORK PRIVATE LIMITED",
-    description: "Hands-on tech training and software engineering academy in Tirunelveli empowering students with real client sprint experience and placement prep.",
+    title: "Academics | SS40 NETWORK",
+    description: "Industry-grade tech training, software engineering internships, live client sprints, and placement prep at SS40 NETWORK.",
     alternates: {
         canonical: "https://ss40network.com/academics",
     },
     openGraph: {
-        title: "Learn. Build. Grow. | SS40 NETWORK PRIVATE LIMITED",
-        description: "Hands-on tech training and software engineering academy in Tirunelveli empowering students with real client sprint experience and placement prep.",
+        title: "Academics | SS40 NETWORK",
+        description: "Industry-grade tech training, software engineering internships, live client sprints, and placement prep at SS40 NETWORK.",
         url: "https://ss40network.com/academics",
-        siteName: "SS40 NETWORK PRIVATE LIMITED",
+        siteName: "SS40 NETWORK",
         type: "website",
         images: [
             {
                 url: "https://ss40network.com/og-image.jpg",
                 width: 1200,
                 height: 630,
-                alt: "Academics — SS40 NETWORK PRIVATE LIMITED",
+                alt: "Academics — SS40 NETWORK",
             },
         ],
     },
     twitter: {
         card: "summary_large_image",
-        title: "Learn. Build. Grow. | SS40 NETWORK PRIVATE LIMITED",
-        description: "Hands-on tech training and software engineering academy in Tirunelveli empowering students with real client sprint experience and placement prep.",
+        title: "Academics | SS40 NETWORK",
+        description: "Industry-grade tech training, software engineering internships, live client sprints, and placement prep at SS40 NETWORK.",
         images: ["https://ss40network.com/og-image.jpg"],
     },
 };

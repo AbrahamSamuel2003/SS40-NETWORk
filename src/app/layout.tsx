@@ -17,20 +17,20 @@ const crimsonPro = Crimson_Pro({
 
 export async function generateMetadata(): Promise<Metadata> {
   const config = await getSiteConfig();
-  const defaultTitle = config?.seoDefaultTitle || "One Company. Three Wings. Endless Possibilities. | SS40 NETWORK PRIVATE LIMITED";
-  const company = "SS40 NETWORK PRIVATE LIMITED";
-  const defaultDesc = config?.seoDefaultDescription || "SS40 NETWORK PRIVATE LIMITED is a technology company in Tirunelveli architecting enterprise digital solutions, intelligent SaaS products, and career-launching tech academics.";
+  const defaultTitle = config?.seoDefaultTitle || "SS40 NETWORK — Enterprise Digital Solutions, SaaS Products & Tech Academics";
+  const brandName = "SS40 NETWORK";
+  const defaultDesc = config?.seoDefaultDescription || "SS40 NETWORK is an enterprise technology company architecting digital solutions, intelligent SaaS products, and career-launching tech academics.";
   
   return {
     metadataBase: new URL("https://ss40network.com"),
     title: {
       default: defaultTitle,
-      template: `%s | ${company}`,
+      template: `%s | ${brandName}`,
     },
     description: defaultDesc,
     keywords: [
-      "SS40 NETWORK PRIVATE LIMITED",
       "SS40 NETWORK",
+      "SS40 NETWORK PRIVATE LIMITED",
       "IT company in Tirunelveli",
       "software company in Tirunelveli",
       "software development company in Tirunelveli",
@@ -52,7 +52,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: defaultTitle,
       description: defaultDesc,
       url: "https://ss40network.com",
-      siteName: company,
+      siteName: "SS40 NETWORK",
       locale: "en_US",
       type: "website",
       images: [
@@ -62,7 +62,7 @@ export async function generateMetadata(): Promise<Metadata> {
           width: 1200,
           height: 630,
           type: "image/jpeg",
-          alt: "SS40 NETWORK PRIVATE LIMITED — Digital Solutions, SaaS Products & Tech Academics",
+          alt: "SS40 NETWORK — Digital Solutions, SaaS Products & Tech Academics",
         },
       ],
     },
@@ -75,7 +75,7 @@ export async function generateMetadata(): Promise<Metadata> {
           url: "https://ss40network.com/og-image.jpg",
           width: 1200,
           height: 630,
-          alt: "SS40 NETWORK PRIVATE LIMITED — Digital Solutions, SaaS Products & Tech Academics",
+          alt: "SS40 NETWORK — Digital Solutions, SaaS Products & Tech Academics",
         },
       ],
     },
@@ -179,8 +179,8 @@ export default async function RootLayout({
         "@type": "WebSite",
         "@id": "https://ss40network.com/#website",
         "url": "https://ss40network.com",
-        "name": "SS40 NETWORK PRIVATE LIMITED",
-        "alternateName": ["SS40 NETWORK PRIVATE LIMITED", "SS40 NETWORK", "SS40"],
+        "name": "SS40 NETWORK",
+        "alternateName": ["SS40 NETWORK PRIVATE LIMITED", "SS40", "SS40 Network"],
         "publisher": {
           "@id": "https://ss40network.com/#organization"
         },
@@ -204,43 +204,43 @@ export default async function RootLayout({
             "@type": "SiteNavigationElement",
             "position": 1,
             "name": "Digital Solutions",
-            "description": "Engineering Digital Experiences That Scale | Custom software development, web applications, and AI systems.",
+            "description": "Custom enterprise software development, web applications, and AI systems.",
             "url": "https://ss40network.com/digital-solutions"
           },
           {
             "@type": "SiteNavigationElement",
             "position": 2,
             "name": "Products",
-            "description": "Innovative Tools. Built for Real Impact. | Proprietary SaaS products and automated software tools.",
+            "description": "Proprietary SaaS products, invoicing platforms, and automated software tools.",
             "url": "https://ss40network.com/products"
           },
           {
             "@type": "SiteNavigationElement",
             "position": 3,
             "name": "Academics",
-            "description": "Learn. Build. Grow. | Industry-grade tech training, software engineering programs, and live capstone projects.",
+            "description": "Industry-grade tech training, software engineering internships, and placement prep.",
             "url": "https://ss40network.com/academics"
           },
           {
             "@type": "SiteNavigationElement",
             "position": 4,
-            "name": "Contact",
-            "description": "Let's Build Something Amazing Together | Connect with SS40 NETWORK PRIVATE LIMITED in Tirunelveli.",
-            "url": "https://ss40network.com/contact"
+            "name": "Company",
+            "description": "Official corporate identity, MCA incorporation, DPIIT Startup India recognition, and milestones.",
+            "url": "https://ss40network.com/company"
           },
           {
             "@type": "SiteNavigationElement",
             "position": 5,
-            "name": "Blogs & Field Updates",
-            "description": "Field Updates, Conclaves & Founder Initiatives | Institutional partnerships and founder activities.",
-            "url": "https://ss40network.com/blogs"
+            "name": "Contact Us",
+            "description": "Get in touch with SS40 NETWORK in Tirunelveli for digital solutions, software products, and academic partnerships.",
+            "url": "https://ss40network.com/contact"
           },
           {
             "@type": "SiteNavigationElement",
             "position": 6,
-            "name": "Client Projects",
-            "description": "Enterprise Client Projects & Case Studies | Custom software systems delivered for enterprise clients.",
-            "url": "https://ss40network.com/client-projects"
+            "name": "Blogs & Updates",
+            "description": "Official field updates, conclaves, institutional partnerships, and founder initiatives.",
+            "url": "https://ss40network.com/blogs"
           }
         ]
       }

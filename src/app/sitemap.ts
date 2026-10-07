@@ -22,9 +22,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { route: '/products',                 priority: 0.90, changeFrequency: 'weekly' },
         // 3. Academics
         { route: '/academics',                priority: 0.85, changeFrequency: 'weekly' },
-        // 4. Contact
+        // 4. Company
+        { route: '/company',                  priority: 0.85, changeFrequency: 'weekly' },
+        // 5. Contact
         { route: '/contact',                  priority: 0.80, changeFrequency: 'monthly' },
-        // 5. Blogs & Field Updates
+        // 6. Blogs & Field Updates
         { route: '/blogs',                    priority: 0.75, changeFrequency: 'daily' },
         // SEO Pillar & Blog Pages
         { route: '/blog',                     priority: 0.85, changeFrequency: 'weekly' },
