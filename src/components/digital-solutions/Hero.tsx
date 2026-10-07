@@ -42,14 +42,9 @@ export function Hero() {
 
                     {/* Left Column - Content (50%) */}
                     <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left">
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6, ease: "easeOut" }}
-                            className="flex flex-col items-center lg:items-start w-full"
-                        >
+                        <div className="flex flex-col items-center lg:items-start w-full">
                             <Badge className="mb-6 rounded-md uppercase tracking-widest text-[10px] font-bold bg-[#FFC900]/15 text-[#92400E] hover:bg-[#FFC900]/25 border border-[#FFC900]/30 shadow-2xs">
-                                SS40 Digital Solutions
+                                SS40 DIGITAL SOLUTIONS
                             </Badge>
 
                             <h1 className="text-[clamp(40px,5vw,56px)] font-bold text-[var(--color-heading)] leading-[1.1] tracking-tight mb-6 max-w-2xl font-serif">
@@ -74,7 +69,7 @@ export function Hero() {
                                     </a>
                                 </Button>
                             </div>
-                        </motion.div>
+                        </div>
                     </div>
 
                     {/* Right Column - Mockup (50%) */}

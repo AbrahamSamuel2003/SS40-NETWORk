@@ -3,6 +3,7 @@
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { Play, ArrowRight, Video, X } from "lucide-react";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
@@ -217,7 +218,13 @@ export function Happimonials({ initialData }: HappimonialsProps = {}) {
                                             />
                                         </div>
                                     ) : layoutConfig.featured.thumbnailUrl ? (
-                                        <img src={layoutConfig.featured.thumbnailUrl} alt={layoutConfig.featured.clientName} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
+                                        <Image
+                                            src={layoutConfig.featured.thumbnailUrl}
+                                            alt={layoutConfig.featured.clientName}
+                                            fill
+                                            sizes="(max-width: 1024px) 100vw, 600px"
+                                            className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                                        />
                                     ) : (
                                         <div className="absolute inset-0 bg-gradient-to-br from-[#6B9F91]/20 to-[#6B9F91]/5 flex items-center justify-center">
                                             <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#6B9F91 1px, transparent 1px)', backgroundSize: '16px 16px' }} />
@@ -229,7 +236,14 @@ export function Happimonials({ initialData }: HappimonialsProps = {}) {
                                 <div className="w-full lg:w-5/12 p-6 lg:p-8 flex flex-col flex-1">
                                     <div className="flex items-center gap-3 mb-4">
                                         {layoutConfig.featured.thumbnailUrl && !layoutConfig.featured.youtubeUrl && (
-                                            <img src={layoutConfig.featured.thumbnailUrl} alt="" className="w-12 h-12 rounded-full object-cover border-2 border-[#6B9F91]/20" />
+                                            <Image
+                                                src={layoutConfig.featured.thumbnailUrl}
+                                                alt=""
+                                                width={48}
+                                                height={48}
+                                                sizes="48px"
+                                                className="w-12 h-12 rounded-full object-cover border-2 border-[#6B9F91]/20 shrink-0"
+                                            />
                                         )}
                                         <div>
                                             <h3 className="text-lg lg:text-xl font-bold text-[var(--color-heading)]">{layoutConfig.featured.clientName}</h3>
@@ -293,9 +307,15 @@ export function Happimonials({ initialData }: HappimonialsProps = {}) {
                                                     iframeClassName="absolute inset-0 w-full h-full border-0 z-0"
                                                 />
                                             </div>
-                                        ) : item.thumbnailUrl ? (
+                                         ) : item.thumbnailUrl ? (
                                             <>
-                                                <img src={item.thumbnailUrl} alt={item.clientName} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
+                                                <Image
+                                                    src={item.thumbnailUrl}
+                                                    alt={item.clientName}
+                                                    fill
+                                                    sizes="(max-width: 1024px) 100vw, 400px"
+                                                    className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                                                />
                                                 <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-900/10 group-hover:bg-gray-900/30 transition-colors duration-300">
                                                     <div className="w-14 h-14 rounded-full bg-white/90 backdrop-blur-md shadow-xl flex items-center justify-center text-[#6B9F91] group-hover:scale-110 group-hover:bg-[#6B9F91] group-hover:text-white transition-all duration-300 ease-out z-10">
                                                         <Play className="w-6 h-6 ml-1 fill-current" />
@@ -322,7 +342,14 @@ export function Happimonials({ initialData }: HappimonialsProps = {}) {
                                         <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between gap-3">
                                             <div className="flex items-center gap-2.5 min-w-0">
                                                 {item.thumbnailUrl && (
-                                                    <img src={item.thumbnailUrl} alt={item.clientName} className="w-8 h-8 rounded-full object-cover border border-gray-100 shadow-sm shrink-0" />
+                                                    <Image
+                                                        src={item.thumbnailUrl}
+                                                        alt={item.clientName}
+                                                        width={32}
+                                                        height={32}
+                                                        sizes="32px"
+                                                        className="w-8 h-8 rounded-full object-cover border border-gray-100 shadow-sm shrink-0"
+                                                    />
                                                 )}
                                                 <div className="min-w-0">
                                                     <p className="font-bold text-sm text-[var(--color-heading)] leading-tight truncate">{item.clientName}</p>
@@ -338,6 +365,7 @@ export function Happimonials({ initialData }: HappimonialsProps = {}) {
                                                         e.stopPropagation();
                                                         setActiveModalStory(item);
                                                     }}
+                                                    aria-label={`Read story from ${item.clientName}`}
                                                     className="flex items-center text-xs font-bold text-[#6B9F91] hover:text-[#588478] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B9F91] rounded-sm"
                                                 >
                                                     <ArrowRight className="w-4 h-4" />
@@ -410,7 +438,14 @@ export function Happimonials({ initialData }: HappimonialsProps = {}) {
                                             <div className="flex justify-between items-start mb-3">
                                                 <div className="flex items-center gap-3">
                                                     {item.thumbnailUrl && (
-                                                        <img src={item.thumbnailUrl} alt={item.clientName} className="w-10 h-10 rounded-full object-cover border border-gray-100 shadow-sm shrink-0" />
+                                                        <Image
+                                                            src={item.thumbnailUrl}
+                                                            alt={item.clientName}
+                                                            width={40}
+                                                            height={40}
+                                                            sizes="40px"
+                                                            className="w-10 h-10 rounded-full object-cover border border-gray-100 shadow-sm shrink-0"
+                                                        />
                                                     )}
                                                     <div>
                                                         <h3 className="font-bold text-lg text-[var(--color-heading)] leading-tight tracking-tight">{item.clientName}</h3>
@@ -536,7 +571,14 @@ function HappimonialModal({ story, onClose }: { story: any, onClose: () => void 
                     {/* Header info */}
                     <div className="flex items-center gap-4 mb-8 shrink-0 pb-6 border-b border-gray-100">
                         {story.thumbnailUrl ? (
-                            <img src={story.thumbnailUrl} alt={story.clientName} className="w-14 h-14 rounded-full object-cover border border-gray-100 shadow-sm shrink-0" />
+                            <Image
+                                src={story.thumbnailUrl}
+                                alt={story.clientName}
+                                width={56}
+                                height={56}
+                                sizes="56px"
+                                className="w-14 h-14 rounded-full object-cover border border-gray-100 shadow-sm shrink-0"
+                            />
                         ) : (
                             <div className="w-14 h-14 shrink-0 rounded-full bg-gradient-to-tr from-gray-200 to-gray-100 p-[2px]">
                                 <div className="w-full h-full bg-white rounded-full flex items-center justify-center">

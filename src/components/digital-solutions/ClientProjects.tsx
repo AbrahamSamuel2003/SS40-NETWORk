@@ -3,6 +3,7 @@
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { 
     ArrowRight, 
     Lock, 
@@ -298,18 +299,18 @@ export function ClientProjects({ initialData }: ClientProjectsProps = {}) {
                                                     <div className="w-8 h-8 rounded-full border-2 border-[#0F766E]/20 border-t-[#0F766E] animate-spin" />
                                                 </div>
                                             )}
-                                            <img
+                                            <Image
                                                 src={currentProject.imageUrl}
                                                 alt={currentProject.title}
-                                                loading="eager"
-                                                fetchPriority="high"
+                                                fill
+                                                sizes="(max-width: 1024px) 100vw, 600px"
                                                 decoding="async"
                                                 onLoad={() => {
                                                     const key = currentProject.id || currentProject.imageUrl;
                                                     setLoadedImages(prev => ({ ...prev, [key]: true }));
                                                 }}
                                                 className={cn(
-                                                    "w-full h-full object-cover group-hover/img:scale-105 transition-all duration-500 ease-out relative z-10",
+                                                    "object-cover group-hover/img:scale-105 transition-all duration-500 ease-out relative z-10",
                                                     loadedImages[currentProject.id || currentProject.imageUrl] ? "opacity-100 scale-100" : "opacity-0 scale-[0.99]"
                                                 )}
                                             />
@@ -357,9 +358,9 @@ export function ClientProjects({ initialData }: ClientProjectsProps = {}) {
                                             </span>
                                         )}
                                     </div>
-                                    <h4 className="text-base font-bold text-gray-900 mb-1.5 line-clamp-1">
+                                    <h3 className="text-base font-bold text-gray-900 mb-1.5 line-clamp-1">
                                         {project.title}
-                                    </h4>
+                                    </h3>
                                     <p className="text-xs text-gray-600 line-clamp-3 leading-relaxed mb-3">
                                         {project.description}
                                     </p>
@@ -485,12 +486,13 @@ function ClientProjectModal({ project, onClose }: { project: any; onClose: () =>
                             <p className="text-xs text-gray-300">Detailed source code & customer data protected by NDA</p>
                         </div>
                     ) : project.imageUrl ? (
-                        <img
+                        <Image
                             src={project.imageUrl}
                             alt={project.title}
-                            loading="eager"
+                            fill
+                            sizes="(max-width: 1024px) 100vw, 800px"
                             decoding="async"
-                            className="w-full h-full object-cover"
+                            className="object-cover"
                         />
                     ) : (
                         <div className="text-center text-gray-300">

@@ -225,7 +225,7 @@ export function WhatWeBuild() {
 
                         <div className="pt-4 px-2 hidden lg:block">
                             <Button asChild size="lg" className="w-full bg-[#6B9F91] hover:bg-[#588478] text-white shadow-lg shadow-[#6B9F91]/20">
-                                <Link href="/contact">
+                                <Link href="/contact?source=DIGITAL_SOLUTIONS_WHAT_WE_BUILD&sourcePage=/digital-solutions" aria-label="Start Your Digital Solutions Project">
                                     Start Your Project
                                 </Link>
                             </Button>
