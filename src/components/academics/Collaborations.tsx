@@ -134,7 +134,7 @@ export function Collaborations({ logos = [] }: { logos?: any[] }) {
                         className="mb-12 lg:mb-16"
                     />
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 md:gap-8">
                         {BENEFITS.map((benefit, idx) => {
                             const Icon = benefit.icon;
                             return (
@@ -143,14 +143,14 @@ export function Collaborations({ logos = [] }: { logos?: any[] }) {
                                     initial={{ opacity: 0, y: 20 }}
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ margin: "-50px", once: true }}
-                                    transition={{ delay: idx * 0.1, duration: 0.5 }}
-                                    className="p-6 md:p-8 bg-white rounded-[2rem] border border-gray-100 hover:border-[#6B9F91]/40 hover:shadow-xl hover:shadow-[#6B9F91]/5 transition-all duration-300 group"
+                                    transition={{ delay: idx * 0.08, duration: 0.5 }}
+                                    className="p-3.5 sm:p-6 md:p-8 bg-white rounded-2xl sm:rounded-[2rem] border border-gray-100 hover:border-[#6B9F91]/40 hover:shadow-xl hover:shadow-[#6B9F91]/5 transition-all duration-300 group flex flex-col justify-start"
                                 >
-                                    <div className="w-12 h-12 bg-[#D8E8E2]/50 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-center mb-5 group-hover:bg-[#6B9F91]/10 group-hover:border-[#6B9F91]/20 transition-colors">
-                                        <Icon className="w-6 h-6 text-[#6B9F91]" />
+                                    <div className="w-8 h-8 sm:w-12 sm:h-12 bg-[#D8E8E2]/50 rounded-xl sm:rounded-2xl shadow-sm border border-gray-100 flex items-center justify-center mb-2.5 sm:mb-5 group-hover:bg-[#6B9F91]/10 group-hover:border-[#6B9F91]/20 transition-colors shrink-0">
+                                        <Icon className="w-4 h-4 sm:w-6 sm:h-6 text-[#6B9F91]" />
                                     </div>
-                                    <h3 className="text-lg font-bold text-[#111827] mb-2">{benefit.title}</h3>
-                                    <p className="text-gray-500 text-sm leading-relaxed">{benefit.description}</p>
+                                    <h3 className="text-xs sm:text-base md:text-lg font-bold text-[#111827] mb-1 sm:mb-2 leading-snug">{benefit.title}</h3>
+                                    <p className="text-gray-500 text-[11px] sm:text-sm leading-relaxed">{benefit.description}</p>
                                 </motion.div>
                             );
                         })}

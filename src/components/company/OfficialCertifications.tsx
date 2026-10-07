@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     Award,
+    Building2,
     CheckCircle2,
     Download,
     ExternalLink,
@@ -17,13 +18,13 @@ import {
 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
-import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/utils/cn";
 
 interface CertificateItem {
     id: string;
     tabName: string;
+    mobileTabName: string;
     tag: string;
     title: string;
     subtitle: string;
@@ -39,12 +40,15 @@ interface CertificateItem {
     verifyUrl: string;
     verifyPortalName: string;
     icon: any;
+    startupTnCard?: string;
+    startupTnLogo?: string;
 }
 
 const CERTIFICATES: CertificateItem[] = [
     {
         id: "mca-incorporation",
         tabName: "MCA Incorporation",
+        mobileTabName: "MCA",
         tag: "Corporate Incorporation",
         title: "Incorporated Under Companies Act, 2013",
         subtitle: "Central Registration Centre (CRC) • Ministry of Corporate Affairs, Govt of India",
@@ -68,8 +72,35 @@ const CERTIFICATES: CertificateItem[] = [
         icon: Landmark,
     },
     {
+        id: "gst-registration",
+        tabName: "GST Registration",
+        mobileTabName: "GST",
+        tag: "Tax & Regulatory Compliance",
+        title: "100% Tax Compliant GST Registration",
+        subtitle: "Goods and Services Tax Network • Department of Revenue, Ministry of Finance",
+        regNumberLabel: "GST Identification Number (GSTIN)",
+        regNumber: "33ABSCS2156D1ZC",
+        issueDate: "23-02-2026",
+        validity: "Regular Active Taxpayer",
+        imageSrc: "/images/certificates/gst-registration-certificate.webp",
+        pdfPath: "/documents/certificates/GST-Registration-Certificate.pdf",
+        aspectRatio: "aspect-[1190/1684]",
+        narrative:
+            "Registered under the Goods and Services Tax Act (Form GST REG-06) for commercial software engineering and consulting operations. Headquartered in Tirunelveli, Tamil Nadu, SS40 NETWORK PRIVATE LIMITED maintains rigorous invoicing discipline, statutory filings, and transparent financial reporting across all enterprise engagements.",
+        highlights: [
+            "Legal & Trade Name: SS40 NETWORK PRIVATE LIMITED",
+            "Constitution: Private Limited Company",
+            "Principal Place: Tirunelveli, Tamil Nadu (PIN: 627603)",
+            "Verified Tax Invoicing & Filing Active",
+        ],
+        verifyUrl: "https://services.gst.gov.in/services/searchtp",
+        verifyPortalName: "GST Services Portal",
+        icon: ShieldCheck,
+    },
+    {
         id: "startup-india",
         tabName: "Startup India (DPIIT)",
+        mobileTabName: "DPIIT",
         tag: "Government Recognition",
         title: "DPIIT Recognized Technology Startup",
         subtitle: "Department for Promotion of Industry and Internal Trade • Ministry of Commerce & Industry",
@@ -93,29 +124,32 @@ const CERTIFICATES: CertificateItem[] = [
         icon: Award,
     },
     {
-        id: "gst-registration",
-        tabName: "GST Registration",
-        tag: "Tax & Regulatory Compliance",
-        title: "100% Tax Compliant GST Registration",
-        subtitle: "Goods and Services Tax Network • Department of Revenue, Ministry of Finance",
-        regNumberLabel: "GST Identification Number (GSTIN)",
-        regNumber: "33ABSCS2156D1ZC",
-        issueDate: "23-02-2026",
-        validity: "Regular Active Taxpayer",
-        imageSrc: "/images/certificates/gst-registration-certificate.webp",
-        pdfPath: "/documents/certificates/GST-Registration-Certificate.pdf",
+        id: "msme-udyam",
+        tabName: "MSME & StartupTN",
+        mobileTabName: "MSME",
+        tag: "MSME & State Startup Accreditation",
+        title: "Ministry of MSME & StartupTN Registered",
+        subtitle: "Ministry of Micro, Small & Medium Enterprises (Govt. of India) • StartupTN (Govt. of Tamil Nadu)",
+        regNumberLabel: "Udyam Registration Number",
+        regNumber: "UDYAM-TN-18-0099217",
+        issueDate: "27-03-2026",
+        validity: "Active Micro Enterprise (Services)",
+        imageSrc: "/images/certificates/msme-udyam-registration.webp",
+        pdfPath: "/documents/certificates/MSME-Udyam-Registration.pdf",
         aspectRatio: "aspect-[1190/1684]",
+        startupTnCard: "STN97774",
+        startupTnLogo: "/images/certificates/startuptn-logo.png",
         narrative:
-            "Registered under the Goods and Services Tax Act (Form GST REG-06) for commercial software engineering and consulting operations. Headquartered in Tirunelveli, Tamil Nadu, SS40 NETWORK PRIVATE LIMITED maintains rigorous invoicing discipline, statutory filings, and transparent financial reporting across all enterprise engagements.",
+            "SS40 NETWORK PRIVATE LIMITED is registered under the Ministry of Micro, Small and Medium Enterprises (Udyam Registration) as a certified Micro Enterprise under Services. Concurrently accredited by the Tamil Nadu Startup and Innovation Mission (StartupTN), we drive technological innovation and engineering excellence across global enterprise consulting and specialized technical training.",
         highlights: [
-            "Legal & Trade Name: SS40 NETWORK PRIVATE LIMITED",
-            "Constitution: Private Limited Company",
-            "Principal Place: Tirunelveli, Tamil Nadu (PIN: 627603)",
-            "Verified Tax Invoicing & Filing Active",
+            "NIC 6201: Software programming, web design & enterprise maintenance",
+            "NIC 85499: Specialized academic & technical education services",
+            "StartupTN SmartCard No: STN97774 (Govt. of Tamil Nadu)",
+            "Jurisdiction: DIC Tirunelveli & MSME-DFO Chennai",
         ],
-        verifyUrl: "https://services.gst.gov.in/services/searchtp",
-        verifyPortalName: "GST Services Portal",
-        icon: ShieldCheck,
+        verifyUrl: "https://udyamregistration.gov.in/Udyam_Verify.aspx",
+        verifyPortalName: "MSME Udyam Portal",
+        icon: Building2,
     },
 ];
 
@@ -125,6 +159,22 @@ export function OfficialCertifications() {
 
     const currentCert = CERTIFICATES[activeTab] || CERTIFICATES[0];
     const Icon = currentCert.icon;
+
+    // Pre-warm browser image cache & decode textures into GPU memory for instantaneous 0-latency switching
+    React.useEffect(() => {
+        if (typeof window !== "undefined") {
+            CERTIFICATES.forEach((cert) => {
+                const img = new window.Image();
+                img.decoding = "async";
+                img.src = cert.imageSrc;
+                if (cert.startupTnLogo) {
+                    const logoImg = new window.Image();
+                    logoImg.decoding = "async";
+                    logoImg.src = cert.startupTnLogo;
+                }
+            });
+        }
+    }, []);
 
     // Lock background scroll and pause Lenis smooth scroll while modal is open
     React.useEffect(() => {
@@ -154,19 +204,34 @@ export function OfficialCertifications() {
                 />
             </div>
 
-            {/* 0-Latency Preload Pipeline: Pre-fetches and decodes all certificates into GPU memory on initial page load */}
-            <div className="hidden" aria-hidden="true">
+            {/* 0-Latency Preload & GPU Warmup Engine: Keeps textures loaded and decoded in GPU VRAM */}
+            <div
+                className="absolute pointer-events-none opacity-0 select-none -top-[9999px] -left-[9999px] w-1 h-1 overflow-hidden"
+                aria-hidden="true"
+            >
                 {CERTIFICATES.map((cert) => (
-                    <Image
-                        key={`preload-${cert.id}`}
-                        src={cert.imageSrc}
-                        alt=""
-                        width={400}
-                        height={560}
-                        priority
-                        loading="eager"
-                        unoptimized
-                    />
+                    <React.Fragment key={`preload-${cert.id}`}>
+                        <Image
+                            src={cert.imageSrc}
+                            alt=""
+                            width={800}
+                            height={1130}
+                            priority
+                            loading="eager"
+                            unoptimized
+                        />
+                        {cert.startupTnLogo && (
+                            <Image
+                                src={cert.startupTnLogo}
+                                alt=""
+                                width={200}
+                                height={60}
+                                priority
+                                loading="eager"
+                                unoptimized
+                            />
+                        )}
+                    </React.Fragment>
                 ))}
             </div>
 
@@ -174,16 +239,16 @@ export function OfficialCertifications() {
                 {/* Section Header */}
                 <div className="text-center space-y-2.5 sm:space-y-3 max-w-3xl mx-auto">
                     <p className="text-[11px] sm:text-xs font-bold tracking-widest text-[#0F766E] uppercase">
-                        Awards & Recognition
+                        Statutory Accreditations & Compliance
                     </p>
                     <h2 className="text-xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-[#0F172A] font-serif leading-snug sm:leading-tight">
-                        MCA Incorporated • DPIIT Recognized • 100% GST Compliant
+                        MCA Incorporated • 100% GST Compliant • DPIIT Recognized • MSME Registered
                     </h2>
                 </div>
 
-                {/* Senior Production Segmented Switcher (Grid on Mobile, Inline on Desktop) */}
+                {/* Senior Production Segmented Switcher (Horizontal Pill Row on Mobile & Desktop) */}
                 <div className="w-full flex justify-center">
-                    <div className="w-full max-w-md sm:max-w-none sm:w-auto grid grid-cols-3 sm:inline-flex p-1 sm:p-1.5 rounded-xl sm:rounded-2xl bg-white/90 backdrop-blur-md border border-gray-200/90 shadow-xs gap-1 sm:gap-2">
+                    <div className="w-full max-w-md sm:max-w-none sm:w-auto flex flex-row items-center p-1 sm:p-1.5 rounded-xl sm:rounded-2xl bg-white/90 backdrop-blur-md border border-gray-200/90 shadow-xs gap-1 sm:gap-2">
                         {CERTIFICATES.map((cert, idx) => {
                             const isActive = activeTab === idx;
                             const TabIcon = cert.icon;
@@ -193,7 +258,7 @@ export function OfficialCertifications() {
                                     type="button"
                                     onClick={() => setActiveTab(idx)}
                                     className={cn(
-                                        "px-2 sm:px-6 py-2 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 flex items-center justify-center gap-2 select-none cursor-pointer border text-center",
+                                        "flex-1 sm:flex-initial px-2 sm:px-5 py-2 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 flex items-center justify-center gap-1.5 sm:gap-2 select-none cursor-pointer border text-center",
                                         isActive
                                             ? "bg-[#0F766E] text-white border-[#0F766E] shadow-xs shadow-[#0F766E]/20"
                                             : "bg-white/80 text-gray-700 border-transparent hover:border-[#0F766E]/30 hover:bg-white hover:text-[#0F766E]"
@@ -201,12 +266,8 @@ export function OfficialCertifications() {
                                 >
                                     <TabIcon className="w-3.5 h-3.5 hidden sm:block shrink-0" />
                                     {/* Mobile Concise Label */}
-                                    <span className="sm:hidden font-semibold truncate">
-                                        {cert.id === "mca-incorporation"
-                                            ? "MCA"
-                                            : cert.id === "startup-india"
-                                            ? "Startup India"
-                                            : "GST"}
+                                    <span className="sm:hidden font-semibold truncate text-[11px] sm:text-xs">
+                                        {cert.mobileTabName}
                                     </span>
                                     {/* Desktop Full Label */}
                                     <span className="hidden sm:inline whitespace-nowrap">
@@ -296,6 +357,35 @@ export function OfficialCertifications() {
                                         <span className="text-gray-500 text-[11px] sm:text-xs">{currentCert.validity}</span>
                                     </div>
                                 </div>
+
+                                {/* StartupTN SmartCard Badge (if present) */}
+                                {currentCert.startupTnCard && currentCert.startupTnLogo && (
+                                    <div className="p-2.5 sm:p-3 rounded-xl bg-gradient-to-r from-white to-[#F0FDFA] border border-[#0F766E]/20 shadow-2xs flex items-center justify-between gap-3">
+                                        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                                            <div className="relative w-24 sm:w-28 h-7 sm:h-8 shrink-0">
+                                                <Image
+                                                    src={currentCert.startupTnLogo}
+                                                    alt="StartupTN Logo"
+                                                    fill
+                                                    className="object-contain"
+                                                    sizes="112px"
+                                                />
+                                            </div>
+                                            <div className="h-6 w-px bg-gray-200 shrink-0" />
+                                            <div className="min-w-0">
+                                                <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400 truncate">
+                                                    StartupTN SmartCard
+                                                </p>
+                                                <p className="font-mono text-xs sm:text-sm font-bold text-[#0F766E] truncate">
+                                                    {currentCert.startupTnCard}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <span className="hidden xs:inline-flex items-center px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-bold bg-[#0F766E]/10 text-[#0F766E] shrink-0">
+                                            Govt of Tamil Nadu
+                                        </span>
+                                    </div>
+                                )}
 
                                 {/* Authoritative Narrative */}
                                 <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">
@@ -447,6 +537,34 @@ export function OfficialCertifications() {
                                             Issue Date: <strong className="text-gray-700">{selectedCertModal.issueDate}</strong>
                                         </p>
                                     </div>
+
+                                    {/* StartupTN SmartCard inside Modal */}
+                                    {selectedCertModal.startupTnCard && selectedCertModal.startupTnLogo && (
+                                        <div className="bg-[#F8FAF9] p-4 rounded-2xl border border-gray-200/80 sm:col-span-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                            <div className="flex items-center gap-3">
+                                                <div className="relative w-28 sm:w-32 h-8 shrink-0">
+                                                    <Image
+                                                        src={selectedCertModal.startupTnLogo}
+                                                        alt="StartupTN Logo"
+                                                        fill
+                                                        className="object-contain"
+                                                    />
+                                                </div>
+                                                <div className="h-6 w-px bg-gray-200" />
+                                                <div>
+                                                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+                                                        StartupTN SmartCard No
+                                                    </span>
+                                                    <p className="font-mono text-sm sm:text-base font-bold text-[#0F766E]">
+                                                        {selectedCertModal.startupTnCard}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <span className="inline-flex items-center self-start sm:self-auto px-2.5 py-1 rounded-full text-xs font-bold bg-[#0F766E]/10 text-[#0F766E]">
+                                                Govt. of Tamil Nadu Startup Mission
+                                            </span>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 

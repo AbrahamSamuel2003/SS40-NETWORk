@@ -22,7 +22,7 @@ const CompanyCTA = dynamic(
 export const metadata: Metadata = {
     title: "Company",
     description:
-        "Official corporate identity, MCA incorporation (CIN: U62013TN2025PTC187678), DPIIT Startup India recognition (#DIPP268327), GST details, and milestone history of SS40 NETWORK.",
+        "Official corporate identity, MCA incorporation (CIN: U62013TN2025PTC187678), GST compliance (33ABSCS2156D1ZC), DPIIT Startup India recognition (#DIPP268327), MSME Udyam Registration (UDYAM-TN-18-0099217), and StartupTN accreditation (STN97774) of SS40 NETWORK.",
     alternates: {
         canonical: "https://ss40network.com/company",
     },
@@ -30,16 +30,21 @@ export const metadata: Metadata = {
         "SS40 NETWORK",
         "SS40 NETWORK PRIVATE LIMITED",
         "SS40 NETWORK Company Profile",
-        "DPIIT Recognized Startup",
         "MCA Registered Company",
-        "IT Services Tamil Nadu",
+        "GST Registered Software Company",
+        "DPIIT Recognized Startup",
         "Startup India Recognition DIPP268327",
+        "MSME Udyam Registration",
+        "UDYAM-TN-18-0099217",
+        "StartupTN Recognized Startup",
+        "StartupTN SmartCard STN97774",
+        "IT Services Tamil Nadu",
         "CIN U62013TN2025PTC187678",
     ],
     openGraph: {
         title: "Company | SS40 NETWORK",
         description:
-            "Official corporate identity, MCA incorporation, DPIIT Startup India recognition, and milestones of SS40 NETWORK.",
+            "Official corporate identity, MCA incorporation, GST compliance, DPIIT recognition, MSME registration, and StartupTN accreditation of SS40 NETWORK.",
         type: "website",
         url: "https://ss40network.com/company",
     },
@@ -84,8 +89,23 @@ export default function CompanyPage() {
             },
             {
                 "@type": "PropertyValue",
+                "name": "GSTIN",
+                "value": "33ABSCS2156D1ZC"
+            },
+            {
+                "@type": "PropertyValue",
                 "name": "DPIIT Recognition Number",
                 "value": "DIPP268327"
+            },
+            {
+                "@type": "PropertyValue",
+                "name": "Udyam Registration Number",
+                "value": "UDYAM-TN-18-0099217"
+            },
+            {
+                "@type": "PropertyValue",
+                "name": "StartupTN SmartCard Number",
+                "value": "STN97774"
             }
         ]
     };
