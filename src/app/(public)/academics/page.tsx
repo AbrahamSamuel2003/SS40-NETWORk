@@ -10,7 +10,7 @@ import { getSiteConfig, isSectionVisible } from "@/lib/site-config";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Academics | SS40 NETWORK",
+    title: "Academics",
     description: "Industry-grade tech training, software engineering internships, live client sprints, and placement prep at SS40 NETWORK.",
     alternates: {
         canonical: "https://ss40network.com/academics",

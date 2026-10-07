@@ -7,7 +7,7 @@ import { Container } from "@/components/ui/Container";
 import { BlogsList } from "./BlogsList";
 
 export const metadata: Metadata = {
-    title: "Blogs & Updates | SS40 NETWORK",
+    title: "Blogs & Updates",
     description: "Official field updates, conclaves, MoUs, industry visits, and founder initiatives from SS40 NETWORK.",
     alternates: {
         canonical: "https://ss40network.com/blogs",

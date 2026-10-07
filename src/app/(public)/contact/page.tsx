@@ -10,7 +10,7 @@ import { getSiteConfig } from "@/lib/site-config";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Contact Us | SS40 NETWORK",
+    title: "Contact Us",
     description: "Get in touch with SS40 NETWORK in Tirunelveli for custom digital solutions, SaaS software products, and academic tech training partnerships.",
     alternates: {
         canonical: "https://ss40network.com/contact",

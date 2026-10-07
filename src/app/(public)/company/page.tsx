@@ -20,7 +20,7 @@ const CompanyCTA = dynamic(
 );
 
 export const metadata: Metadata = {
-    title: "Company | SS40 NETWORK",
+    title: "Company",
     description:
         "Official corporate identity, MCA incorporation (CIN: U62013TN2025PTC187678), DPIIT Startup India recognition (#DIPP268327), GST details, and milestone history of SS40 NETWORK.",
     alternates: {

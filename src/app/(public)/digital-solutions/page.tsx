@@ -8,7 +8,7 @@ import { TrustedClients } from "@/components/digital-solutions/TrustedClients";
 import { GetQuote } from "@/components/digital-solutions/GetQuote";
 
 export const metadata: Metadata = {
-    title: "Digital Solutions | SS40 NETWORK",
+    title: "Digital Solutions",
     description: "Custom software development, high-performance web applications, native mobile apps, and scalable AI solutions engineered by SS40 NETWORK.",
     alternates: {
         canonical: "https://ss40network.com/digital-solutions",

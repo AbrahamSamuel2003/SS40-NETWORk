@@ -6,7 +6,7 @@ import { Brands } from "@/components/products/Brands";
 import { BookDemo } from "@/components/products/BookDemo";
 
 export const metadata: Metadata = {
-    title: "Products | SS40 NETWORK",
+    title: "Products",
     description: "Business-ready SaaS products, invoicing platforms, and automated software tools engineered by SS40 NETWORK.",
     alternates: {
         canonical: "https://ss40network.com/products",

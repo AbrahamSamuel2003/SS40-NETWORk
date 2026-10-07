@@ -14,7 +14,9 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export const metadata: Metadata = {
-  title: "SS40 NETWORK — Enterprise Digital Solutions, SaaS Products & Tech Academics",
+  title: {
+    absolute: "SS40 NETWORK — Enterprise Digital Solutions, SaaS Products & Tech Academics",
+  },
   description: "SS40 NETWORK is an enterprise technology company architecting custom digital solutions, intelligent SaaS products, and career-launching tech academics in Tirunelveli.",
   alternates: {
     canonical: "https://ss40network.com",
@@ -73,49 +75,49 @@ export default async function Home() {
   const sitelinksSchema = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    "name": "SS40 NETWORK PRIVATE LIMITED - Core Services & Sitelinks",
+    "name": "SS40 NETWORK - Core Services & Navigation Sitelinks",
     "itemListElement": [
       {
         "@type": "SiteNavigationElement",
         "position": 1,
         "name": "Digital Solutions",
-        "description": "Engineering Digital Experiences That Scale | Custom software development, web applications, and AI systems.",
+        "description": "Custom enterprise software development, web applications, and AI systems.",
         "url": "https://ss40network.com/digital-solutions"
       },
       {
         "@type": "SiteNavigationElement",
         "position": 2,
         "name": "Products",
-        "description": "Innovative Tools. Built for Real Impact. | Proprietary SaaS products and automated software tools.",
+        "description": "Proprietary SaaS products, invoicing platforms, and automated software tools.",
         "url": "https://ss40network.com/products"
       },
       {
         "@type": "SiteNavigationElement",
         "position": 3,
         "name": "Academics",
-        "description": "Learn. Build. Grow. | Industry-grade tech training, software engineering programs, and live capstone projects.",
+        "description": "Industry-grade tech training, software engineering internships, and placement prep.",
         "url": "https://ss40network.com/academics"
       },
       {
         "@type": "SiteNavigationElement",
         "position": 4,
-        "name": "Contact",
-        "description": "Let's Build Something Amazing Together | Connect with SS40 NETWORK PRIVATE LIMITED in Tirunelveli.",
-        "url": "https://ss40network.com/contact"
+        "name": "Company",
+        "description": "Official corporate identity, MCA incorporation, DPIIT Startup India recognition, and milestones.",
+        "url": "https://ss40network.com/company"
       },
       {
         "@type": "SiteNavigationElement",
         "position": 5,
-        "name": "Blogs & Field Updates",
-        "description": "Field Updates, Conclaves & Founder Initiatives | Institutional partnerships and founder activities.",
-        "url": "https://ss40network.com/blogs"
+        "name": "Contact Us",
+        "description": "Get in touch with SS40 NETWORK in Tirunelveli for digital solutions, software products, and academic partnerships.",
+        "url": "https://ss40network.com/contact"
       },
       {
         "@type": "SiteNavigationElement",
         "position": 6,
-        "name": "Client Projects",
-        "description": "Enterprise Client Projects & Case Studies | Custom software systems delivered for enterprise clients.",
-        "url": "https://ss40network.com/client-projects"
+        "name": "Blogs & Updates",
+        "description": "Official field updates, conclaves, institutional partnerships, and founder initiatives.",
+        "url": "https://ss40network.com/blogs"
       }
     ]
   };
