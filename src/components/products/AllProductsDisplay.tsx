@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, ArrowLeft, CloudIcon, CheckCircle2, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
@@ -88,10 +89,12 @@ export function AllProductsDisplay() {
                                     {/* Grid Visual Placeholder (16:9 aspect ratio, flush to top/left/right border with 0 gap) */}
                                     <div className="relative w-full aspect-video bg-gray-50 overflow-hidden shrink-0 flex items-center justify-center border-b border-gray-100">
                                         {product.screenshotUrl ? (
-                                            <img 
+                                            <Image 
                                                 src={product.screenshotUrl} 
                                                 alt={`${product.name} - Software Solution by SS40 NETWORK Tirunelveli`} 
-                                                className="w-full h-full object-cover scale-105 select-none" 
+                                                fill
+                                                sizes="(max-width: 768px) 100vw, 400px"
+                                                className="object-cover scale-105 select-none" 
                                             />
                                         ) : (
                                             <div className="w-full h-full flex flex-col items-center justify-center p-4 gap-3 bg-[#6B9F91]/5">

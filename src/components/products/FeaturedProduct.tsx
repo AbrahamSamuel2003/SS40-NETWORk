@@ -3,6 +3,7 @@
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import {
     ArrowRight,
     CloudIcon,
@@ -245,12 +246,16 @@ export function FeaturedProduct({ initialData }: FeaturedProductProps = {}) {
                                             )}
                                         >
                                             {p.screenshotUrl ? (
-                                                <img
+                                                <Image
                                                     src={p.screenshotUrl}
                                                     alt={`${p.name} - Software Solution by SS40 NETWORK`}
-                                                    loading="eager"
+                                                    width={700}
+                                                    height={400}
+                                                    priority={idx === 0}
+                                                    loading={idx === 0 ? "eager" : "lazy"}
                                                     decoding="async"
-                                                    className="block w-auto max-w-full h-auto max-h-[170px] xs:max-h-[200px] sm:max-h-[260px] lg:max-h-[320px] rounded-xl select-none filter drop-shadow-[0_10px_24px_rgba(15,118,110,0.16)] transition-transform duration-300 hover:scale-[1.01]"
+                                                    sizes="(max-width: 768px) 100vw, 600px"
+                                                    className="block w-auto max-w-full h-auto max-h-[170px] xs:max-h-[200px] sm:max-h-[260px] lg:max-h-[320px] rounded-xl select-none filter drop-shadow-[0_10px_24px_rgba(15,118,110,0.16)] transition-transform duration-300 hover:scale-[1.01] object-contain"
                                                 />
                                             ) : (
                                                 <div className="flex flex-col items-center justify-center text-gray-400 gap-2 py-6 px-4 text-center select-none bg-[#0F766E]/5 border border-[#2DD4BF]/20 rounded-xl w-full min-w-[220px]">

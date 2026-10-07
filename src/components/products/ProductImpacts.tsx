@@ -3,6 +3,7 @@
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { Play, ArrowRight, Video, X, Loader2 } from "lucide-react";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
@@ -214,7 +215,14 @@ export function ProductImpacts({ initialData }: ProductImpactsProps = {}) {
                                         <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between gap-3">
                                             <div className="flex items-center gap-2.5 min-w-0">
                                                 {item.thumbnailUrl && (
-                                                    <img src={item.thumbnailUrl} alt={item.clientName} className="w-8 h-8 rounded-full object-cover border border-gray-100 shadow-sm shrink-0" />
+                                                    <Image
+                                                        src={item.thumbnailUrl}
+                                                        alt={item.clientName}
+                                                        width={32}
+                                                        height={32}
+                                                        sizes="32px"
+                                                        className="w-8 h-8 rounded-full object-cover border border-gray-100 shadow-sm shrink-0"
+                                                    />
                                                 )}
                                                 <div className="min-w-0">
                                                     <p className="font-bold text-sm text-[var(--color-heading)] leading-tight truncate">{item.clientName}</p>
@@ -230,6 +238,7 @@ export function ProductImpacts({ initialData }: ProductImpactsProps = {}) {
                                                         e.stopPropagation();
                                                         setActiveModalStory(item);
                                                     }}
+                                                    aria-label={`Read story from ${item.clientName}`}
                                                     className="flex items-center text-xs font-bold text-[#0F766E] hover:text-[#0D645D] transition-colors group/btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2DD4BF] rounded-sm"
                                                 >
                                                     <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" />
@@ -296,7 +305,14 @@ export function ProductImpacts({ initialData }: ProductImpactsProps = {}) {
                                             <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between gap-2">
                                                 <div className="flex items-center gap-2.5 min-w-0">
                                                     {item.thumbnailUrl && (
-                                                        <img src={item.thumbnailUrl} alt={item.clientName} className="w-8 h-8 rounded-full object-cover border border-gray-100 shadow-sm shrink-0" />
+                                                        <Image
+                                                            src={item.thumbnailUrl}
+                                                            alt={item.clientName}
+                                                            width={32}
+                                                            height={32}
+                                                            sizes="32px"
+                                                            className="w-8 h-8 rounded-full object-cover border border-gray-100 shadow-sm shrink-0"
+                                                        />
                                                     )}
                                                     <div className="min-w-0">
                                                         <p className="font-bold text-sm text-[var(--color-heading)] leading-tight truncate">{item.clientName}</p>
@@ -312,6 +328,7 @@ export function ProductImpacts({ initialData }: ProductImpactsProps = {}) {
                                                             e.stopPropagation();
                                                             setActiveModalStory(item);
                                                         }}
+                                                        aria-label={`Read story from ${item.clientName}`}
                                                         className="flex items-center text-xs font-bold text-[#0F766E] hover:text-[#0D645D] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2DD4BF] rounded-sm"
                                                     >
                                                         <ArrowRight className="w-4 h-4" />
@@ -401,7 +418,14 @@ function ProductImpactModal({ story, onClose }: { story: any; onClose: () => voi
                     <div className="flex justify-between items-start mb-6">
                         <div className="flex items-center gap-4">
                             {story.thumbnailUrl && (
-                                <img src={story.thumbnailUrl} alt={story.clientName} className="w-14 h-14 rounded-full object-cover border border-gray-100 shadow-sm shrink-0" />
+                                <Image
+                                    src={story.thumbnailUrl}
+                                    alt={story.clientName}
+                                    width={56}
+                                    height={56}
+                                    sizes="56px"
+                                    className="w-14 h-14 rounded-full object-cover border border-gray-100 shadow-sm shrink-0"
+                                />
                             )}
                             <div>
                                 <span className="inline-block px-3 py-1 bg-[#2DD4BF]/15 text-[#0F766E] text-xs font-bold uppercase tracking-wider rounded-md mb-2">

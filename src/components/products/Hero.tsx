@@ -71,7 +71,7 @@ export function Hero() {
                                     </a>
                                 </Button>
                                 <Button asChild variant="outline" size="lg" className="w-full sm:w-auto bg-white/70 backdrop-blur-sm border-gray-300 hover:bg-white text-gray-800">
-                                    <Link href="/contact" className="inline-flex items-center justify-center whitespace-nowrap">
+                                    <Link href="/contact?source=PRODUCTS_HERO&sourcePage=/products" aria-label="Book a Product Demo" className="inline-flex items-center justify-center whitespace-nowrap">
                                         Book a Demo
                                     </Link>
                                 </Button>
@@ -172,7 +172,7 @@ export function Hero() {
                                             <TrendingUp className="w-4 h-4" />
                                         </div>
                                         <div>
-                                            <h4 className="text-xs sm:text-sm font-bold text-gray-900 leading-tight">Company Growth Velocity</h4>
+                                            <span className="text-xs sm:text-sm font-bold text-gray-900 leading-tight block">Company Growth Velocity</span>
                                             <p className="text-[10px] sm:text-[11px] text-gray-500 font-medium">Powered by SS40 Product Ecosystem</p>
                                         </div>
                                     </div>
