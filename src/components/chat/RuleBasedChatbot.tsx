@@ -1025,46 +1025,41 @@ export function RuleBasedChatbot({
 
                                                     {/* Inline Lead Capture Form */}
                                                     {msg.isLeadCard && (
-                                                        <div className="mt-2.5 pt-2 border-t border-gray-100 flex flex-col gap-2">
-                                                            <div className="p-2 bg-[#E6F3EE] rounded-xl border border-[#0F766E]/25 text-xs font-bold text-[#0F766E] flex items-center gap-1.5">
-                                                                <SendHorizonal className="w-3.5 h-3.5 text-[#0F766E]" />
-                                                                <span>Fast-Track Callback &amp; Quote Request</span>
-                                                            </div>
-
+                                                        <div className="mt-3 pt-2.5 border-t border-gray-100 flex flex-col gap-2">
                                                             {leadSubmittedId === msg.id ? (
                                                                 <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-emerald-800 text-xs font-semibold flex items-center gap-2">
                                                                     <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                                                                     <span>Inquiry recorded! Our engineering team will contact you shortly.</span>
                                                                 </div>
                                                             ) : (
-                                                                <div className="space-y-1.5 text-xs">
+                                                                <div className="p-3 bg-[#F8FAF9] rounded-2xl border border-gray-200/90 shadow-2xs space-y-2 text-xs">
                                                                     <input
                                                                         type="text"
                                                                         placeholder="Your Full Name *"
                                                                         value={leadFormState.fullName}
                                                                         onChange={(e) => setLeadFormState(prev => ({ ...prev, fullName: e.target.value }))}
-                                                                        className="w-full px-2.5 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-gray-800 focus:bg-white focus:outline-none focus:border-[#0F766E]"
+                                                                        className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E] transition-all shadow-2xs"
                                                                     />
-                                                                    <div className="grid grid-cols-2 gap-1.5">
+                                                                    <div className="grid grid-cols-2 gap-2">
                                                                         <input
                                                                             type="tel"
                                                                             placeholder="Phone Number *"
                                                                             value={leadFormState.phone}
                                                                             onChange={(e) => setLeadFormState(prev => ({ ...prev, phone: e.target.value }))}
-                                                                            className="w-full px-2.5 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-gray-800 focus:bg-white focus:outline-none focus:border-[#0F766E]"
+                                                                            className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E] transition-all shadow-2xs"
                                                                         />
                                                                         <input
                                                                             type="email"
                                                                             placeholder="Email Address *"
                                                                             value={leadFormState.email}
                                                                             onChange={(e) => setLeadFormState(prev => ({ ...prev, email: e.target.value }))}
-                                                                            className="w-full px-2.5 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-gray-800 focus:bg-white focus:outline-none focus:border-[#0F766E]"
+                                                                            className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E] transition-all shadow-2xs"
                                                                         />
                                                                     </div>
                                                                     <select
                                                                         value={leadFormState.serviceInterest}
                                                                         onChange={(e) => setLeadFormState(prev => ({ ...prev, serviceInterest: e.target.value }))}
-                                                                        className="w-full px-2.5 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-gray-800 focus:bg-white focus:outline-none focus:border-[#0F766E]"
+                                                                        className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-gray-800 focus:outline-none focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E] transition-all shadow-2xs cursor-pointer"
                                                                     >
                                                                         <option value="Digital Solutions">SS40 Digital Solutions (Custom Software)</option>
                                                                         <option value="Products - ClearInvoice">SS40 Products (ClearInvoice)</option>
@@ -1075,7 +1070,7 @@ export function RuleBasedChatbot({
                                                                     <button
                                                                         onClick={() => handleLeadSubmit(msg.id)}
                                                                         disabled={leadSubmitting || !leadFormState.fullName.trim() || !leadFormState.phone.trim() || !leadFormState.email.trim()}
-                                                                        className="w-full p-2 bg-[#0F766E] hover:bg-[#115E59] active:scale-[0.98] disabled:opacity-50 text-white font-bold rounded-xl flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer"
+                                                                        className="w-full py-2.5 px-3 bg-[#0F766E] hover:bg-[#115E59] active:scale-[0.98] disabled:opacity-50 text-white font-bold rounded-xl flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer"
                                                                     >
                                                                         {leadSubmitting ? (
                                                                             <span>Submitting Inquiry...</span>
