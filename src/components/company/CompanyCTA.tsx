@@ -150,9 +150,9 @@ export function CompanyCTA() {
                                     size="lg"
                                     className="w-full border-gray-300 hover:bg-gray-50 text-gray-700 font-bold text-sm h-12 rounded-xl cursor-pointer"
                                 >
-                                    <a href="mailto:contact@ss40network.com">
+                                    <a href="mailto:support@ss40network.com">
                                         <Mail className="w-4 h-4 mr-2 text-[#0F766E]" />
-                                        <span>contact@ss40network.com</span>
+                                        <span>support@ss40network.com</span>
                                     </a>
                                 </Button>
                             </div>

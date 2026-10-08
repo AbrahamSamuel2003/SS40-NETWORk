@@ -344,7 +344,7 @@ export const OFFICIAL_SS40_CORPUS: KnowledgeSourceDocument[] = [
         ],
         suggestedOptions: ["WhatsApp Support", "Email Us", "Visit Contact Page", "Office Location"],
         content: `Official SS40 NETWORK Contact Channels:
-- Official Email: support@ss40network.com | contact@ss40network.com
+- Official Email: support@ss40network.com
 - Direct Desk Phones: +91 83005 91750 | +91 93630 33440
 - WhatsApp Support: Instant support available via the website floating widget (+91 8300591750).
 - Contact Page: Visit /contact for quote requests, demo bookings, or academic admissions.`

@@ -145,7 +145,7 @@ export function RuleBasedChatbot({
 }) {
     const rawPhone = config?.whatsappNumber || "919363033440";
     const cleanPhone = rawPhone.replace(/\D/g, "");
-    const email = config?.contactEmail || "contact@ss40network.com";
+    const email = config?.contactEmail || "support@ss40network.com";
 
     const [messages, setMessages] = useState<ChatMessage[]>([INITIAL_BOT_MESSAGE]);
     const [inputValue, setInputValue] = useState("");
