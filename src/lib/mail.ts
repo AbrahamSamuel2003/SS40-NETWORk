@@ -272,160 +272,112 @@ export async function sendAdminNewLeadNotificationEmail(lead: AdminLeadNotificat
         `====================================`,
     ].join('\n');
 
-    // Bulletproof HTML Email Template with 100% Inlined Styles for Gmail, Apple Mail, Outlook
+    // Dynamic time-of-day salutation in IST timezone matching Screenshot 2
+    const currentHourStr = new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata', hour: 'numeric', hour12: false });
+    const currentHour = parseInt(currentHourStr, 10);
+    const timeOfDay = currentHour < 12 ? 'Good Morning' : currentHour < 17 ? 'Good Afternoon' : 'Good Evening';
+    const salutation = `Hi Sivasubramanian M, ${timeOfDay}`;
+
+    // Bulletproof Minimalist HTML Email Template (Inspired by Executive Agent Briefing)
     const html = `
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
     <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>New Lead Alert - SS40 NETWORK</title>
+        <title>New Lead Report — ${escapeHtml(leadName)}</title>
     </head>
-    <body style="margin: 0; padding: 24px 12px; background-color: #F1F5F9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased;">
-        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 580px; margin: 0 auto; background-color: #FFFFFF; border-radius: 14px; overflow: hidden; border: 1px solid #E2E8F0; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);">
-            <!-- Corporate Header -->
+    <body style="margin: 0; padding: 28px 16px; background-color: #F8FAFC; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; color: #1E293B;">
+        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 520px; margin: 0 auto; background-color: #FFFFFF; border-radius: 16px; border: 1px solid #E2E8F0; overflow: hidden; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);">
             <tr>
-                <td style="background-color: #0F766E; background: linear-gradient(135deg, #0F766E 0%, #0D6E66 60%, #0A5751 100%); padding: 28px 26px 24px 26px; text-align: left;">
-                    <div style="font-size: 11px; font-weight: 800; letter-spacing: 0.12em; color: #99F6E4; text-transform: uppercase; margin-bottom: 6px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                        SS40 NETWORK &bull; PIPELINE ALERT
-                    </div>
-                    <h1 style="margin: 0 0 6px 0; color: #FFFFFF; font-size: 21px; font-weight: 700; line-height: 1.25; letter-spacing: -0.01em; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                        New Lead Generated
+                <td style="padding: 32px 28px 28px 28px;">
+                    <!-- Editorial Serif Salutation -->
+                    <h1 style="margin: 0 0 8px 0; color: #0F172A; font-family: Georgia, 'Times New Roman', serif; font-size: 22px; font-weight: 700; line-height: 1.3; letter-spacing: -0.01em;">
+                        ${salutation}
                     </h1>
-                    <p style="margin: 0; color: #CCFBF1; font-size: 13px; font-weight: 400; line-height: 1.4; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                        Instant verified inquiry captured via official digital channels.
+                    <p style="margin: 0 0 24px 0; color: #475569; font-size: 13.5px; line-height: 1.55; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+                        I&rsquo;m your Agent SKY. A new verified inquiry was just captured on the official platform. Please review the lead brief below.
                     </p>
-                    <div style="padding-top: 14px;">
-                        <span style="display: inline-block; background-color: #CCFBF1; color: #0F766E; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 9999px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                            ${escapeHtml(leadInterest)}
-                        </span>
-                    </div>
-                </td>
-            </tr>
 
-            <!-- Lead Details Table with Explicit Column Widths and Inlined Styles -->
-            <tr>
-                <td style="padding: 26px 26px 20px 26px;">
-                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;">
-                        <!-- Full Name -->
-                        <tr>
-                            <td width="135" style="width: 135px; min-width: 135px; padding: 11px 0; border-bottom: 1px solid #F1F5F9; color: #64748B; font-size: 13px; font-weight: 600; vertical-align: top; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                                Full Name
-                            </td>
-                            <td style="padding: 11px 0 11px 16px; border-bottom: 1px solid #F1F5F9; color: #0F172A; font-size: 14.5px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                                ${escapeHtml(leadName)}
-                            </td>
-                        </tr>
-
-                        <!-- Phone Number -->
-                        <tr>
-                            <td width="135" style="width: 135px; min-width: 135px; padding: 11px 0; border-bottom: 1px solid #F1F5F9; color: #64748B; font-size: 13px; font-weight: 600; vertical-align: top; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                                Phone Number
-                            </td>
-                            <td style="padding: 11px 0 11px 16px; border-bottom: 1px solid #F1F5F9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                                ${leadPhone !== 'Not provided' ? `
-                                    <a href="tel:${escapeHtml(leadPhone)}" style="color: #0F766E; text-decoration: none; font-size: 14.5px; font-weight: 700;">
-                                        ${escapeHtml(leadPhone)} &rarr;
-                                    </a>
-                                ` : `
-                                    <span style="color: #94A3B8; font-size: 13px; font-weight: 500;">Not provided</span>
-                                `}
-                            </td>
-                        </tr>
-
-                        <!-- Email Address -->
-                        <tr>
-                            <td width="135" style="width: 135px; min-width: 135px; padding: 11px 0; border-bottom: 1px solid #F1F5F9; color: #64748B; font-size: 13px; font-weight: 600; vertical-align: top; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                                Email Address
-                            </td>
-                            <td style="padding: 11px 0 11px 16px; border-bottom: 1px solid #F1F5F9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                                ${leadEmail !== 'Not provided' ? `
-                                    <a href="mailto:${escapeHtml(leadEmail)}" style="color: #0F766E; text-decoration: none; font-size: 14px; font-weight: 600; word-break: break-all;">
-                                        ${escapeHtml(leadEmail)}
-                                    </a>
-                                ` : `
-                                    <span style="color: #94A3B8; font-size: 13px; font-weight: 500;">Not provided</span>
-                                `}
-                            </td>
-                        </tr>
-
-                        <!-- Company / Org -->
-                        <tr>
-                            <td width="135" style="width: 135px; min-width: 135px; padding: 11px 0; border-bottom: 1px solid #F1F5F9; color: #64748B; font-size: 13px; font-weight: 600; vertical-align: top; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                                Company / Org
-                            </td>
-                            <td style="padding: 11px 0 11px 16px; border-bottom: 1px solid #F1F5F9; color: #334155; font-size: 13.5px; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                                ${escapeHtml(leadCompany)}
-                            </td>
-                        </tr>
-
-                        <!-- Area of Interest -->
-                        <tr>
-                            <td width="135" style="width: 135px; min-width: 135px; padding: 11px 0; border-bottom: 1px solid #F1F5F9; color: #64748B; font-size: 13px; font-weight: 600; vertical-align: top; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                                Area of Interest
-                            </td>
-                            <td style="padding: 11px 0 11px 16px; border-bottom: 1px solid #F1F5F9; color: #0F172A; font-size: 14px; font-weight: 600; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                                ${escapeHtml(leadInterest)}
-                            </td>
-                        </tr>
-
-                        <!-- Lead Source -->
-                        <tr>
-                            <td width="135" style="width: 135px; min-width: 135px; padding: 11px 0; border-bottom: 1px solid #F1F5F9; color: #64748B; font-size: 13px; font-weight: 600; vertical-align: top; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                                Lead Source
-                            </td>
-                            <td style="padding: 11px 0 11px 16px; border-bottom: 1px solid #F1F5F9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                                <span style="display: inline-block; background-color: #F1F5F9; color: #334155; font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 6px; border: 1px solid #E2E8F0;">
-                                    ${escapeHtml(formatLeadSource(leadSource))}
-                                </span>
-                            </td>
-                        </tr>
-
-                        <!-- Submitted Date -->
-                        <tr>
-                            <td width="135" style="width: 135px; min-width: 135px; padding: 11px 0; color: #64748B; font-size: 13px; font-weight: 600; vertical-align: top; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                                Submitted Date
-                            </td>
-                            <td style="padding: 11px 0 11px 16px; color: #64748B; font-size: 13px; font-weight: 400; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                                ${escapeHtml(formattedDate)}
-                            </td>
-                        </tr>
-                    </table>
-
-                    <!-- Project Brief / Inquiry Details Box (Sans-serif, Elegant Card) -->
-                    <div style="margin-top: 22px; background-color: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 10px; padding: 16px 18px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                        <div style="font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px;">
-                            Project Brief / Inquiry Details
+                    <!-- Minimalist Briefing Card (Soft Tinted Block) -->
+                    <div style="background-color: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px; padding: 18px 20px;">
+                        <!-- Section Header -->
+                        <div style="font-size: 14px; font-weight: 700; color: #0F766E; margin-bottom: 12px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; letter-spacing: -0.01em;">
+                            Lead Report &mdash; ${escapeHtml(leadName)}
                         </div>
-                        <div style="font-size: 13.5px; line-height: 1.6; color: #1E293B; white-space: pre-wrap;">
-                            ${escapeHtml(leadMessage)}
+
+                        <!-- Key-Value Pairs without Heavy Borders -->
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+                            <tr>
+                                <td width="120" style="padding: 3.5px 0; color: #64748B; font-size: 13px; font-weight: 500; vertical-align: top;">Full Name:</td>
+                                <td style="padding: 3.5px 0; color: #0F172A; font-size: 13.5px; font-weight: 600;">${escapeHtml(leadName)}</td>
+                            </tr>
+                            <tr>
+                                <td width="120" style="padding: 3.5px 0; color: #64748B; font-size: 13px; font-weight: 500; vertical-align: top;">Phone:</td>
+                                <td style="padding: 3.5px 0; font-size: 13.5px;">
+                                    ${leadPhone !== 'Not provided' ? `
+                                        <a href="tel:${escapeHtml(leadPhone)}" style="color: #0F766E; text-decoration: none; font-weight: 600;">
+                                            ${escapeHtml(leadPhone)}
+                                        </a>
+                                    ` : `
+                                        <span style="color: #94A3B8;">Not provided</span>
+                                    `}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="120" style="padding: 3.5px 0; color: #64748B; font-size: 13px; font-weight: 500; vertical-align: top;">Email:</td>
+                                <td style="padding: 3.5px 0; font-size: 13.5px;">
+                                    ${leadEmail !== 'Not provided' ? `
+                                        <a href="mailto:${escapeHtml(leadEmail)}" style="color: #0F766E; text-decoration: none; font-weight: 600; word-break: break-all;">
+                                            ${escapeHtml(leadEmail)}
+                                        </a>
+                                    ` : `
+                                        <span style="color: #94A3B8;">Not provided</span>
+                                    `}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="120" style="padding: 3.5px 0; color: #64748B; font-size: 13px; font-weight: 500; vertical-align: top;">Company / Org:</td>
+                                <td style="padding: 3.5px 0; color: #334155; font-size: 13px;">${escapeHtml(leadCompany)}</td>
+                            </tr>
+                            <tr>
+                                <td width="120" style="padding: 3.5px 0; color: #64748B; font-size: 13px; font-weight: 500; vertical-align: top;">Interest:</td>
+                                <td style="padding: 3.5px 0; color: #0F766E; font-size: 13.5px; font-weight: 600;">${escapeHtml(leadInterest)}</td>
+                            </tr>
+                            <tr>
+                                <td width="120" style="padding: 3.5px 0; color: #64748B; font-size: 13px; font-weight: 500; vertical-align: top;">Lead Source:</td>
+                                <td style="padding: 3.5px 0; color: #334155; font-size: 13px;">${escapeHtml(formatLeadSource(leadSource))}</td>
+                            </tr>
+                            <tr>
+                                <td width="120" style="padding: 3.5px 0; color: #64748B; font-size: 13px; font-weight: 500; vertical-align: top;">Captured At:</td>
+                                <td style="padding: 3.5px 0; color: #64748B; font-size: 12.5px;">${escapeHtml(formattedDate)}</td>
+                            </tr>
+                        </table>
+
+                        <!-- Optional Message / Inquiry Note -->
+                        ${leadMessage ? `
+                        <div style="margin-top: 12px; padding-top: 12px; border-top: 1px dashed #CBD5E1;">
+                            <div style="color: #64748B; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">
+                                Inquiry Note
+                            </div>
+                            <div style="color: #1E293B; font-size: 13px; line-height: 1.5; white-space: pre-wrap; font-style: italic;">
+                                &ldquo;${escapeHtml(leadMessage)}&rdquo;
+                            </div>
                         </div>
+                        ` : ''}
                     </div>
 
-                    <!-- Direct Action CTAs -->
-                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-top: 24px;">
-                        <tr>
-                            <td align="center">
-                                <a href="https://ss40network.com/admin/leads" style="display: block; width: 100%; box-sizing: border-box; background-color: #0F766E; color: #FFFFFF !important; text-decoration: none; padding: 13px 24px; font-size: 14px; font-weight: 700; border-radius: 8px; text-align: center; letter-spacing: 0.01em; box-shadow: 0 2px 8px rgba(15, 118, 110, 0.25); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                                    Open Admin Lead Pipeline &rarr;
-                                </a>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
+                    <!-- Clean Understated Action Button -->
+                    <div style="margin-top: 22px;">
+                        <a href="https://ss40network.com/admin/leads" style="display: inline-block; background-color: #0F766E; color: #FFFFFF !important; text-decoration: none; padding: 10px 18px; font-size: 13px; font-weight: 600; border-radius: 8px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; box-shadow: 0 1px 2px rgba(15, 118, 110, 0.2);">
+                            Open Admin Lead Pipeline &rarr;
+                        </a>
+                    </div>
 
-            <!-- Professional Corporate Footer -->
-            <tr>
-                <td style="background-color: #F8FAFC; padding: 18px 24px; font-size: 12px; color: #94A3B8; text-align: center; border-top: 1px solid #F1F5F9; line-height: 1.5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                    <div style="font-weight: 600; color: #64748B; margin-bottom: 4px;">
-                        &copy; ${new Date().getFullYear()} SS40 NETWORK PRIVATE LIMITED
-                    </div>
-                    <div style="font-size: 11.5px; color: #64748B;">
-                        Municipal Corporation Incubation Centre, Sree Puram, Tirunelveli &bull; support@ss40network.com
-                    </div>
-                    <div style="font-size: 10.5px; color: #94A3B8; margin-top: 6px;">
-                        Confidential operational dispatch &bull; Generated by SS40 SKY AI Assistant
+                    <!-- Quiet Minimalist Footer -->
+                    <div style="margin-top: 26px; padding-top: 18px; border-top: 1px solid #F1F5F9; color: #94A3B8; font-size: 11.5px; line-height: 1.5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+                        <span style="color: #64748B; font-weight: 600;">Agent SKY</span> &bull; SS40 NETWORK PRIVATE LIMITED<br />
+                        Confidential operational dispatch
                     </div>
                 </td>
             </tr>
