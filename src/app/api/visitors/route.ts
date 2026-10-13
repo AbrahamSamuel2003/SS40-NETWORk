@@ -1,51 +1,128 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-// Simple in-memory cache for geolocation results
-const geoCache = new Map<string, { city: string; country: string; timestamp: number }>();
-const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
+interface GeoRecord {
+    city: string;
+    country: string;
+    isBot: boolean;
+    timestamp: number;
+}
 
-async function getGeolocation(ipAddress: string): Promise<{ city: string; country: string } | null> {
-    // Check cache first
+// In-memory cache for geolocation lookups (24 hours TTL)
+const geoCache = new Map<string, GeoRecord>();
+const CACHE_TTL = 24 * 60 * 60 * 1000;
+
+// Datacenter ASN / Cloud hosting providers commonly used by scrapers
+const DATACENTER_KEYWORDS = [
+    'amazon', 'aws', 'microsoft', 'azure', 'google cloud', 'digitalocean',
+    'cloudflare', 'oracle', 'linode', 'ovh', 'hetzner', 'facebook', 'meta',
+    'alibaba', 'tencent', 'fastly', 'akamai', 'm247', 'choopa', 'vultr', 'leaseweb'
+];
+
+// User-Agent crawler and bot signatures
+const BOT_KEYWORDS = [
+    'bot', 'crawler', 'spider', 'google', 'bing', 'yandex', 'baidu',
+    'slurp', 'duckduckgo', 'facebookexternalhit', 'whatsapp', 'telegram',
+    'headlesschrome', 'lighthouse', 'bytespider', 'python', 'curl', 'wget',
+    'semrush', 'ahrefs', 'mj12bot', 'dotbot', 'rogerbot', 'exabot'
+];
+
+function isInternalIp(ip: string): boolean {
+    if (!ip || ip === 'Unknown' || ip === '127.0.0.1' || ip === '::1') return true;
+    if (ip.startsWith('192.168.') || ip.startsWith('10.') || ip.startsWith('172.16.') || ip.startsWith('172.31.')) return true;
+    return false;
+}
+
+async function resolveVisitorIntelligence(
+    request: Request,
+    ipAddress: string,
+    userAgent: string
+): Promise<{ city: string; country: string; isBot: boolean }> {
+    let city = 'Unknown';
+    let region = '';
+    let country = 'Unknown';
+    let isBot = false;
+
+    // 1. Detect User-Agent bot signatures
+    const uaLower = userAgent.toLowerCase();
+    if (BOT_KEYWORDS.some(k => uaLower.includes(k))) {
+        isBot = true;
+    }
+
+    // 2. Read Edge CDN headers (0ms latency on Vercel / Cloudflare)
+    const edgeCity = request.headers.get('x-vercel-ip-city') || request.headers.get('cf-ipcity');
+    const edgeRegion = request.headers.get('x-vercel-ip-country-region') || request.headers.get('cf-region');
+    const edgeCountry = request.headers.get('x-vercel-ip-country') || request.headers.get('cf-ipcountry');
+
+    if (edgeCity) city = decodeURIComponent(edgeCity);
+    if (edgeRegion) region = decodeURIComponent(edgeRegion);
+    if (edgeCountry) country = decodeURIComponent(edgeCountry);
+
+    // 3. Skip external lookup for internal or missing IPs
+    if (isInternalIp(ipAddress)) {
+        const formattedCity = city !== 'Unknown' && region && city.toLowerCase() !== region.toLowerCase()
+            ? `${city}, ${region}`
+            : (city !== 'Unknown' ? city : (region || 'Unknown'));
+        return { city: formattedCity, country, isBot };
+    }
+
+    // 4. Check in-memory cache
     const cached = geoCache.get(ipAddress);
     if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
-        return { city: cached.city, country: cached.country };
+        return {
+            city: edgeCity && edgeRegion ? `${city}, ${region}` : cached.city,
+            country: edgeCountry ? country : cached.country,
+            isBot: isBot || cached.isBot
+        };
     }
 
-    // Skip geolocation for localhost/internal IPs
-    if (ipAddress === 'Unknown' || ipAddress === '127.0.0.1' || ipAddress === '::1' || ipAddress.startsWith('192.168.') || ipAddress.startsWith('10.') || ipAddress.startsWith('172.')) {
-        console.log('Skipping geolocation for internal IP:', ipAddress);
-        return null;
-    }
-
+    // 5. Query IP API with carrier and datacenter fields
     try {
-        // Use ip-api.com (free, no API key required)
-        const response = await fetch(`http://ip-api.com/json/${ipAddress}`);
-        if (!response.ok) {
-            console.error('Geolocation API failed:', response.status, response.statusText);
-            return null;
-        }
+        const response = await fetch(
+            `http://ip-api.com/json/${encodeURIComponent(ipAddress)}?fields=status,message,country,regionName,city,isp,org,as,hosting,proxy`,
+            { signal: AbortSignal.timeout(3000) }
+        );
 
-        const data = await response.json();
-        console.log('Geolocation response for IP', ipAddress, ':', data);
-        
-        if (data.status === 'success') {
-            const result = {
-                city: data.city || 'Unknown',
-                country: data.country || 'Unknown'
-            };
-            // Cache the result
-            geoCache.set(ipAddress, { ...result, timestamp: Date.now() });
-            console.log('Geolocation result:', result);
-            return result;
-        } else {
-            console.error('Geolocation API returned error:', data.message);
+        if (response.ok) {
+            const data = await response.json();
+            if (data.status === 'success') {
+                const apiCity = data.city || '';
+                const apiRegion = data.regionName || '';
+                const apiCountry = data.country || '';
+                const apiOrg = (data.org || '').toLowerCase();
+                const apiAs = (data.as || '').toLowerCase();
+
+                if (!edgeCity && apiCity) city = apiCity;
+                if (!edgeRegion && apiRegion) region = apiRegion;
+                if (!edgeCountry && apiCountry) country = apiCountry;
+
+                // Identify server crawlers / hosting datacenters masquerading as organic users
+                if (
+                    data.hosting === true ||
+                    data.proxy === true ||
+                    DATACENTER_KEYWORDS.some(k => apiOrg.includes(k) || apiAs.includes(k))
+                ) {
+                    isBot = true;
+                }
+
+                const formattedCity = city !== 'Unknown' && region && city.toLowerCase() !== region.toLowerCase()
+                    ? `${city}, ${region}`
+                    : (city !== 'Unknown' ? city : (region || 'Unknown'));
+
+                const result = { city: formattedCity, country, isBot };
+                geoCache.set(ipAddress, { ...result, timestamp: Date.now() });
+                return result;
+            }
         }
-    } catch (error) {
-        console.error('Geolocation lookup failed:', error);
+    } catch {
+        // Fallback silently if lookup times out or fails
     }
 
-    return null;
+    const fallbackCity = city !== 'Unknown' && region && city.toLowerCase() !== region.toLowerCase()
+        ? `${city}, ${region}`
+        : (city !== 'Unknown' ? city : (region || 'Unknown'));
+
+    return { city: fallbackCity, country, isBot };
 }
 
 export async function POST(request: Request) {
@@ -58,27 +135,14 @@ export async function POST(request: Request) {
             .find(c => c.startsWith('visitor_session='))
             ?.split('=')[1];
 
-        const ipAddress = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'Unknown';
+        const rawIp = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'Unknown';
+        const ipAddress = rawIp.split(',')[0].trim();
         const userAgent = request.headers.get('user-agent') || 'Unknown';
 
-        // Get geolocation for IP address
-        let city = 'Unknown';
-        let country = 'Unknown';
-        if (ipAddress !== 'Unknown') {
-            const geo = await getGeolocation(ipAddress);
-            if (geo) {
-                city = geo.city;
-                country = geo.country;
-            }
-        }
+        // Resolve carrier-aware geolocation and bot intelligence
+        const { city, country, isBot } = await resolveVisitorIntelligence(request, ipAddress, userAgent);
 
-        let isBot = false;
-        const botKeywords = ['bot', 'crawler', 'spider', 'google', 'bing', 'yandex', 'baidu'];
-        if (botKeywords.some(keyword => userAgent.toLowerCase().includes(keyword))) {
-            isBot = true;
-        }
-
-        // Extremely basic user agent parsing to avoid adding heavy libraries
+        // Parse client device and browser
         let browser = 'Unknown';
         let os = 'Unknown';
         let deviceType = 'Desktop';
@@ -103,27 +167,37 @@ export async function POST(request: Request) {
         let resCookieValue: string | null = null;
 
         if (sessionId) {
-            // Update existing
             const existing = await prisma.visitor.findFirst({
                 where: { sessionId }
             });
 
             if (existing) {
-                // Add current page visit to history
                 const currentVisits = (existing.pageVisits as any[]) || [];
                 const newVisit = { path: currentPath, timestamp: new Date().toISOString() };
-                const updatedVisits = [newVisit, ...currentVisits].slice(0, 100); // Keep last 100 visits
+                const updatedVisits = [newVisit, ...currentVisits].slice(0, 100);
+
+                const updateData: any = {
+                    pageViews: { increment: 1 },
+                    lastVisitedAt: new Date(),
+                    pageVisits: updatedVisits
+                };
+
+                // Update location if previously unpopulated
+                if ((!existing.city || existing.city === 'Unknown') && city !== 'Unknown') {
+                    updateData.city = city;
+                }
+                if ((!existing.country || existing.country === 'Unknown') && country !== 'Unknown') {
+                    updateData.country = country;
+                }
+                if (!existing.isBot && isBot) {
+                    updateData.isBot = true;
+                }
 
                 await prisma.visitor.update({
                     where: { id: existing.id },
-                    data: {
-                        pageViews: { increment: 1 },
-                        lastVisitedAt: new Date(),
-                        pageVisits: updatedVisits
-                    }
+                    data: updateData
                 });
             } else {
-                // Cookie has invalid session, create a new one
                 sessionId = crypto.randomUUID();
                 resCookieValue = sessionId;
 
@@ -173,7 +247,7 @@ export async function POST(request: Request) {
                 path: '/',
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
-                maxAge: 60 * 60 * 24 * 365, // 1 year
+                maxAge: 60 * 60 * 24 * 365,
                 sameSite: 'lax'
             });
         }

@@ -75,11 +75,12 @@ const STOP_WORDS_AND_VERBS = new Set([
     "academics", "service", "services", "ecommerce", "website", "app", "mobile", "web", "consultation",
     "quote", "demo", "pricing", "price", "cost", "hi", "hello", "hlo", "hloo", "hey", "start", "greetings",
     "gud", "mrng", "morning", "afternoon", "evening", "night",
-    "yes", "no", "clearinvoice", "invoice", "billing", "gtc", "internship", "internships", "intern",
-    "student", "placement", "founder", "ceo", "location", "address", "tirunelveli", "office", "contact",
+    "yes", "no", "clearinvoice", "invoice", "billing", "gtc", "internship", "internships", "intern", "interns",
+    "student", "students", "placement", "placements", "founder", "ceo", "location", "address", "tirunelveli", "office", "contact",
     "mayil", "annai", "jalsa", "lecturecast", "wavelink", "studentos", "mou", "mous", "wings", "our",
     "email", "mail", "agent", "ai", "bot", "overview", "feature", "features", "live", "system", "software",
-    "tech", "technology", "network", "code", "project", "projects", "case", "study", "dsa", "lead", "client", "user"
+    "tech", "technology", "network", "code", "project", "projects", "case", "study", "dsa", "lead", "leads",
+    "client", "clients", "customer", "customers", "user", "users", "inquiry", "inquiries", "app", "apps", "website", "websites", "quote", "quotes"
 ]);
 
 export function isLegitimateHumanName(text: string): boolean {
@@ -120,6 +121,15 @@ export function detectOutOfScope(normalizedQuery: string): { isOutOfScope: boole
         return { isOutOfScope: false };
     }
 
+    // 0. Contact information (Phone numbers, emails) should NEVER be treated as out-of-scope trivia
+    const isContactInfo = /(?:\+91[\s-]?)?[6-9]\d{4}[\s-]?\d{5}\b/.test(trimmed) ||
+        /\b\d{10}\b/.test(trimmed) ||
+        /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/.test(trimmed) ||
+        /^\+?[\d\s-]{10,15}$/.test(trimmed);
+    if (isContactInfo) {
+        return { isOutOfScope: false };
+    }
+
     // 1. Math calculations & equations (e.g. "1+2", "7+4", "5 * 10", "sqrt(16)", "solve 2x+5=15")
     if (/^\d+\s*[\+\-\*\/\^%]\s*\d+/.test(trimmed) || /^(calculate|what is|solve)\s+\d+\s*[\+\-\*\/]/i.test(trimmed) || /\bsolve\s+[0-9a-z\+\-\*\/\=\s]+/i.test(trimmed)) {
         return { isOutOfScope: true, reason: "math_calculation" };
@@ -149,7 +159,7 @@ export function detectOutOfScope(normalizedQuery: string): { isOutOfScope: boole
     const words = trimmed.split(/\s+/);
     const isKnownCompanyWord = /\b(hi|hello|hlo|hey|clearinvoice|internship|internships|intern|services|service|wings|pricing|price|contact|support|phone|email|mail|whatsapp|products|product|academics|academic|about|office|founder|ceo|sivasubramanian|clients|client|projects|project|jobs|careers|quote|demo|lecturecast|wavelink|studentos|mayil|annai|jalsa|mou|mous|blogs|dsa|placement|placements|sprint|sprints|tirunelveli)\b/i.test(trimmed);
     
-    if (words.length === 1 && !isKnownCompanyWord && !isLegitimateHumanName(trimmed)) {
+    if (words.length === 1 && !isKnownCompanyWord && !isLegitimateHumanName(trimmed) && !isContactInfo) {
         return { isOutOfScope: true, reason: "isolated_non_company_noun" };
     }
 
@@ -181,11 +191,15 @@ export function processUserQuery(
     // Friendly small talk detection
     const isSmallTalk = !isGibberish && /^(how\s*(r|are)\s*u|how\s*are\s*you|who\s*are\s*you|what\s*is\s*your\s*name|what\s*can\s*you\s*do|tell\s*me\s*about\s*yourself)\b/i.test(normalizedQuery);
 
-    // Check if user is introducing themselves with a valid human name
+    // Check if user is introducing themselves with a valid human name or providing contact details
     const isHumanName = isLegitimateHumanName(rawQuery);
+    const hasContactDetails = /(?:\+91[\s-]?)?[6-9]\d{4}[\s-]?\d{5}\b/.test(rawQuery) ||
+        /\b\d{10}\b/.test(rawQuery) ||
+        /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/.test(rawQuery) ||
+        /^\+?[\d\s-]{10,15}$/.test(rawQuery);
 
     // Out of scope detection
-    const { isOutOfScope, reason: outOfScopeReason } = (!isGibberish && !isHumanName)
+    const { isOutOfScope, reason: outOfScopeReason } = (!isGibberish && !isHumanName && !hasContactDetails)
         ? detectOutOfScope(normalizedQuery)
         : { isOutOfScope: false };
 
@@ -513,7 +527,7 @@ export function extractContactDetails(
         phone,
         email,
         company,
-        hasAnyContactInfo: Boolean(name || phone || email),
+        hasAnyContactInfo: Boolean(phone || email),
         synthesizedBrief,
     };
 }

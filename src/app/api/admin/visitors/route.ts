@@ -12,14 +12,17 @@ export async function GET(request: Request) {
 
         const { searchParams } = new URL(request.url);
         const searchParam = searchParams.get('search');
+        const botParam = searchParams.get('bot');
         const limitStr = searchParams.get('limit') || '20';
         const pageStr = searchParams.get('page') || '1';
 
-        // Note: The prompt requested `isActive` filtering, but `Visitor` model 
-        // does not contain an `isActive` field. We will silently ignore it to 
-        // prevent Prisma query crashes, complying with the directive to not invent fields.
-
         const where: any = {};
+
+        if (botParam === 'false') {
+            where.isBot = false;
+        } else if (botParam === 'true') {
+            where.isBot = true;
+        }
 
         if (searchParam && searchParam.trim() !== '') {
             where.OR = [
@@ -49,19 +52,54 @@ export async function GET(request: Request) {
 
         const skip = (page - 1) * limit;
 
-        const [data, total] = await Promise.all([
+        const [data, total, deviceGroups, pageGroups, organicCount, botCount] = await Promise.all([
             prisma.visitor.findMany({
                 where,
                 orderBy: { createdAt: 'desc' },
                 skip,
                 take: limit
             }),
-            prisma.visitor.count({ where })
+            prisma.visitor.count({ where }),
+            prisma.visitor.groupBy({
+                by: ['deviceType'],
+                _count: { _all: true },
+                where: { isBot: false }
+            }),
+            prisma.visitor.groupBy({
+                by: ['landingPage'],
+                _count: { _all: true },
+                where: { isBot: false },
+                orderBy: { _count: { landingPage: 'desc' } },
+                take: 6
+            }),
+            prisma.visitor.count({ where: { isBot: false } }),
+            prisma.visitor.count({ where: { isBot: true } })
         ]);
+
+        const totalOrganic = organicCount > 0 ? organicCount : 1;
+
+        const deviceStats = deviceGroups.map((g: any) => ({
+            device: g.deviceType || 'Desktop',
+            count: g._count._all,
+            percentage: Math.round((g._count._all / totalOrganic) * 100)
+        }));
+
+        const topPages = pageGroups.map((g: any) => ({
+            page: g.landingPage || '/',
+            count: g._count._all,
+            percentage: Math.round((g._count._all / totalOrganic) * 100)
+        }));
 
         return NextResponse.json({
             success: true,
             data,
+            analytics: {
+                totalVisitors: total,
+                organicCount,
+                botCount,
+                deviceStats,
+                topPages
+            },
             pagination: {
                 page,
                 limit,

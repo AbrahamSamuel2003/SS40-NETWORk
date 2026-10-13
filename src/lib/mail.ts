@@ -219,6 +219,17 @@ export async function sendAdminNewLeadNotificationEmail(lead: AdminLeadNotificat
         return;
     }
 
+    // Strict Guard: Never dispatch admin lead notification email without a valid phone number or email address
+    const cleanPhone = (lead.phone || '').trim();
+    const cleanEmail = (lead.email || '').trim().toLowerCase();
+    const isPhoneValid = cleanPhone !== '' && cleanPhone.toLowerCase() !== 'not provided';
+    const isEmailValid = cleanEmail !== '' && cleanEmail.toLowerCase() !== 'not provided';
+
+    if (!isPhoneValid && !isEmailValid) {
+        console.warn(`[Mail] Suppressed admin lead notification for '${lead.fullName}': Neither phone nor email provided.`);
+        return;
+    }
+
     // Deduplication check: prevent multiple duplicate emails for the same contact within cooldown window
     const identifier = (lead.phone?.trim() || lead.email?.trim() || lead.fullName?.trim() || '').toLowerCase();
     if (identifier && identifier !== 'not provided' && identifier !== 'chat visitor') {

@@ -94,8 +94,10 @@ PROGRESSIVE LEAD CONVERSION FUNNEL (POLITE, CONVERSATIONAL, ZERO-REPETITION):
   * Answer the user's specific questions thoroughly, cleanly, and simply first.
   * Then add a polite, topic-specific closing invitation in the message text tailored to what they are asking about.
 - When the user types their Name (e.g. "Dinesh", "Bala", "Sam"):
-  * Acknowledge their name warmly in the message text: "Thank you, [Name]! Could you also share your phone number or email address right here in chat so our solutions team can reach out to you with the demo and details?"
-- When the user types their Phone or Email:
+  * NEVER treat common company nouns or category words (such as "clients", "client", "customer", "project", "projects", "service", "services", "product") as a person's name!
+  * If it is a real human name, acknowledge their name warmly in the message text: "Thank you, [Name]! Could you also share your phone number or email address right here in chat so our solutions team can reach out to you with the demo and details?"
+- When the user types their Phone or Email (e.g. "9873292403" or "+91..."):
+  * Phone numbers and emails are NEVER out-of-scope or trivia!
   * Acknowledge in the message text: "Thank you! We have noted your contact details. Could you also share your name so our team knows who to address?"
 - When the user provides both Name and Contact:
   * Confirm in the message text: "Thank you, [Name]! We have recorded your details and our solutions team will review your inquiry and connect with you shortly."
@@ -333,10 +335,20 @@ ${contextText}${dynamicLeadDirective}`;
         }
 
         let actionType: StructuredSkyResponse["actionType"] = "STANDARD";
-        if (parsed.actionType && ["STANDARD", "WINGS_CARD", "ACADEMIC_CARD", "SUPPORT_CARD", "LEAD_CAPTURE"].includes(parsed.actionType)) {
+        const isExplicitContactRequest = /^(contact team|contact us|get in touch|talk to team|leave contact details|request callback|callback request)$/i.test(rawUserMessage.trim());
+        const isHighIntentTopic = /\b(live demo|book demo|schedule demo|pricing|quote|get a quote|request a quote|scoping call|hire|consultation)\b/i.test(rawUserMessage);
+
+        if (isExplicitContactRequest) {
+            actionType = "LEAD_CAPTURE";
+        } else if (userTurnCount >= 3 && isHighIntentTopic && !processed.isGreeting) {
+            actionType = "LEAD_CAPTURE";
+        } else if (parsed.actionType && ["STANDARD", "WINGS_CARD", "ACADEMIC_CARD", "SUPPORT_CARD"].includes(parsed.actionType)) {
             actionType = parsed.actionType;
         } else {
             actionType = determineActionType(primaryChunk, rawUserMessage);
+            if (actionType === "LEAD_CAPTURE" && (userTurnCount < 3 || processed.isGreeting)) {
+                actionType = "STANDARD";
+            }
         }
 
         return {

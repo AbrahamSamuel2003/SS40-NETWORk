@@ -107,18 +107,19 @@ export async function POST(req: NextRequest) {
         const trimmedMessage = message.trim().slice(0, 500);
         const historyArr = Array.isArray(history) ? history : [];
 
-        // 3. Zero-loss Lead Detection: Auto-extract any provided contact info (Name, Phone, Email, Company)
+        // 3. Lead Detection: Auto-extract contact info and only save/email if a phone or email is provided
         const extractedContact = extractContactDetails(trimmedMessage, historyArr);
+        const hasValidContactChannel = Boolean(extractedContact.phone || extractedContact.email);
         let autoLeadSaved = false;
 
-        if (extractedContact.hasAnyContactInfo) {
+        if (hasValidContactChannel) {
             try {
                 const service = inferServiceInterest(trimmedMessage, historyArr);
                 const leadName = extractedContact.name && extractedContact.name.trim().length > 0
                     ? extractedContact.name.trim()
                     : "Chat Visitor";
 
-                // Check if a recent chat lead from the same email, phone, or name exists to update
+                // Check if a recent chat lead from the same email or phone exists to update
                 let existingLead = null;
                 if (extractedContact.email) {
                     existingLead = await prisma.lead.findFirst({
@@ -129,16 +130,6 @@ export async function POST(req: NextRequest) {
                 if (!existingLead && extractedContact.phone) {
                     existingLead = await prisma.lead.findFirst({
                         where: { phone: extractedContact.phone, source: "SS40_SKY_CHATBOT" },
-                        orderBy: { createdAt: "desc" }
-                    });
-                }
-                if (!existingLead && extractedContact.name && extractedContact.name !== "Chat Visitor") {
-                    existingLead = await prisma.lead.findFirst({
-                        where: {
-                            fullName: extractedContact.name,
-                            source: "SS40_SKY_CHATBOT",
-                            createdAt: { gte: new Date(Date.now() - 2 * 60 * 60 * 1000) }
-                        },
                         orderBy: { createdAt: "desc" }
                     });
                 }
@@ -173,8 +164,8 @@ export async function POST(req: NextRequest) {
                 }
                 autoLeadSaved = true;
 
-                // Send instant Admin Email Notification only for newly captured leads
-                if (!existingLead && (extractedContact.phone || extractedContact.email || leadName !== "Chat Visitor")) {
+                // Send instant Admin Email Notification only when phone or email is present
+                if (!existingLead && (extractedContact.phone || extractedContact.email)) {
                     sendAdminNewLeadNotificationEmail({
                         fullName: leadName,
                         phone: extractedContact.phone || null,
@@ -190,6 +181,40 @@ export async function POST(req: NextRequest) {
             } catch (err) {
                 console.warn("Could not auto-save conversational lead to database:", err);
             }
+        }
+
+        // 3.1 Instant zero-latency acknowledgement if user primarily provided contact information (e.g. phone/email)
+        const isPureContactSubmission = (
+            /^\+?[\d\s-]{10,15}$/.test(trimmedMessage.trim()) ||
+            /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$/i.test(trimmedMessage.trim()) ||
+            (trimmedMessage.trim().length <= 60 && (extractedContact.phone || extractedContact.email) && !/\b(what|how|why|when|where|which|can you|explain|tell me|is there|portfolio|case study|projects)\b/i.test(trimmedMessage))
+        );
+
+        if (isPureContactSubmission && (extractedContact.phone || extractedContact.email)) {
+            const formattedPhone = extractedContact.phone ? `+91\u00A0${extractedContact.phone}` : "";
+            const hasExplicitName = extractedContact.name && extractedContact.name !== "Chat Visitor" && extractedContact.name.toLowerCase() !== "clients";
+
+            let ackText = "";
+            if (hasExplicitName) {
+                ackText = `- **Inquiry Registered**: Thank you, **${extractedContact.name}**! We have securely recorded your contact details (${formattedPhone || extractedContact.email}).\n- **Prompt Follow-up**: Our solutions engineering team at **SS40 NETWORK** will review your requirements and connect with you shortly.\n- **Direct Chat**: Feel free to connect directly via WhatsApp anytime.`;
+            } else if (extractedContact.phone) {
+                ackText = `- **Contact Received**: Thank you! I have securely recorded your contact number (**${formattedPhone}**).\n- **Prompt Follow-up**: Our solutions engineering team will reach out to you shortly.\n- **Quick Detail**: Could you also share your **Name** so our team knows who to address?`;
+            } else {
+                ackText = `- **Email Received**: Thank you! I have securely recorded your email address (**${extractedContact.email}**).\n- **Prompt Follow-up**: Our solutions engineering team will review your inquiry and reach out to you promptly.\n- **Quick Detail**: Could you also share your **Name** so our team knows who to address?`;
+            }
+
+            return NextResponse.json({
+                answer: ackText,
+                replyText: ackText,
+                options: ["Three Wings", "SS40 Digital Solutions", "SS40 Products", "SS40 Academics"],
+                quickReplies: ["Three Wings", "SS40 Digital Solutions", "SS40 Products", "SS40 Academics"],
+                navigation: { label: "Explore Services", url: "/digital-solutions" },
+                link: { label: "Explore Services", url: "/digital-solutions" },
+                actionType: "SUPPORT_CARD",
+                leadRecorded: true,
+                extractedLeadInfo: extractedContact,
+                source: "contact-direct-acknowledgement"
+            }, { status: 200 });
         }
 
         // 4. Generate Structured Vector RAG response via Groq AI

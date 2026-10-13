@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, X, Bot, Globe, Shield, Trash2, Eye, RefreshCw, Play, Pause, Calendar } from 'lucide-react';
+import { Search, X, Bot, Globe, Shield, Trash2, Eye, RefreshCw, Play, Pause, Calendar, Smartphone, Laptop, Tablet, Compass } from 'lucide-react';
 
 export default function VisitorsPage() {
     const [visitors, setVisitors] = useState<any[]>([]);
@@ -14,6 +14,7 @@ export default function VisitorsPage() {
 
     // Filters and Search
     const [searchTerm, setSearchTerm] = useState('');
+    const [botFilter, setBotFilter] = useState<'all' | 'organic' | 'bots'>('all');
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
 
@@ -29,11 +30,18 @@ export default function VisitorsPage() {
 
     // View Visitor states
     const [visitorData, setVisitorData] = useState<any>(null);
+    const [analytics, setAnalytics] = useState<{
+        totalVisitors: number;
+        organicCount?: number;
+        botCount?: number;
+        deviceStats: { device: string; count: number; percentage: number }[];
+        topPages: { page: string; count: number; percentage: number }[];
+    } | null>(null);
 
     useEffect(() => {
         fetchData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [page, searchTerm]);
+    }, [page, searchTerm, botFilter]);
 
     const fetchData = async () => {
         try {
@@ -41,11 +49,16 @@ export default function VisitorsPage() {
             const params = new URLSearchParams();
             if (page) params.append('page', page.toString());
             if (searchTerm) params.append('search', searchTerm);
+            if (botFilter === 'organic') params.append('bot', 'false');
+            if (botFilter === 'bots') params.append('bot', 'true');
 
             const res = await fetch('/api/admin/visitors?' + params.toString());
             const data = await res.json();
             if (data.success) {
                 setVisitors(data.data);
+                if (data.analytics) {
+                    setAnalytics(data.analytics);
+                }
                 setTotalPages(data.pagination.totalPages);
                 setLastUpdated(new Date());
                 setErrorMsg('');
@@ -53,7 +66,7 @@ export default function VisitorsPage() {
                 setErrorMsg(data.error || 'Failed to load visitors');
             }
         } catch {
-            setErrorMsg('Failed to load visitors.');
+            setErrorMsg('Failed to load visitors');
         } finally {
             setIsLoading(false);
         }
@@ -78,7 +91,7 @@ export default function VisitorsPage() {
                 clearInterval(pollingIntervalRef.current);
             }
         };
-    }, [isPolling, isModalOpen, page, searchTerm]);
+    }, [isPolling, isModalOpen, page, searchTerm, botFilter]);
 
     useEffect(() => {
         const handleVisibilityChange = () => {
@@ -155,7 +168,10 @@ export default function VisitorsPage() {
     };
 
     const formatLocation = (city?: string, country?: string) => {
-        if (city && country) return `${city}, ${country}`;
+        if (city && country) {
+            if (city.toLowerCase().includes(country.toLowerCase())) return city;
+            return `${city}, ${country}`;
+        }
         if (city) return city;
         if (country) return country;
         return 'Unknown Location';
@@ -169,7 +185,7 @@ export default function VisitorsPage() {
                     <p className="text-sm text-[#475569] mt-0.5">
                         Live traffic telemetry and session intelligence. Last updated:{' '}
                         <span className="font-mono text-xs text-[#0F766E]">
-                            {lastUpdated ? lastUpdated.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : '...'}
+                            {lastUpdated ? lastUpdated.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : 'Ready'}
                         </span>
                     </p>
                 </div>
@@ -200,25 +216,140 @@ export default function VisitorsPage() {
                 </div>
             </div>
 
+            {/* Top Visited Pages & Device Ratio Analytics Widget */}
+            {analytics && (
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                    {/* Top Visited Pages Leaderboard */}
+                    <div className="lg:col-span-2 bg-white border border-gray-200/90 rounded-2xl p-4 sm:p-5 shadow-xs space-y-3">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                                <div className="w-8 h-8 rounded-lg bg-[#EDF5F2] flex items-center justify-center text-[#0F766E]">
+                                    <Compass className="w-4 h-4" />
+                                </div>
+                                <div>
+                                    <h3 className="text-sm font-bold text-[#0F172A]">Top Visited Pages</h3>
+                                    <p className="text-[11px] text-gray-400">Ranked by incoming visitor volume</p>
+                                </div>
+                            </div>
+                            <span className="text-xs font-bold text-[#0F766E] bg-[#EDF5F2] px-2.5 py-1 rounded-full border border-[#0F766E]/20">
+                                {analytics.totalVisitors} Total Visits
+                            </span>
+                        </div>
+
+                        <div className="space-y-2.5 pt-1">
+                            {analytics.topPages && analytics.topPages.length > 0 ? (
+                                analytics.topPages.map((pageItem, pIdx) => (
+                                    <div key={pIdx} className="space-y-1">
+                                        <div className="flex items-center justify-between text-xs">
+                                            <span className="font-semibold text-gray-800 font-mono text-[11.5px] truncate max-w-[280px] sm:max-w-md">
+                                                {pageItem.page}
+                                            </span>
+                                            <span className="font-bold text-gray-600">
+                                                {pageItem.count} visits ({pageItem.percentage}%)
+                                            </span>
+                                        </div>
+                                        <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
+                                            <div
+                                                className="bg-[#0F766E] h-2 rounded-full transition-all duration-500"
+                                                style={{ width: `${Math.max(pageItem.percentage, 4)}%` }}
+                                            />
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="text-xs text-gray-400 py-3 text-center">No page traffic recorded yet</div>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Device Ratio Card */}
+                    <div className="bg-white border border-gray-200/90 rounded-2xl p-4 sm:p-5 shadow-xs space-y-3">
+                        <div className="flex items-center gap-2">
+                            <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600">
+                                <Laptop className="w-4 h-4" />
+                            </div>
+                            <div>
+                                <h3 className="text-sm font-bold text-[#0F172A]">Device Ratio</h3>
+                                <p className="text-[11px] text-gray-400">Visitor hardware distribution</p>
+                            </div>
+                        </div>
+
+                        <div className="space-y-3 pt-1">
+                            {analytics.deviceStats && analytics.deviceStats.length > 0 ? (
+                                analytics.deviceStats.map((devItem, dIdx) => {
+                                    const isMobile = /mobile|phone/i.test(devItem.device);
+                                    const isTablet = /tablet|ipad/i.test(devItem.device);
+                                    const DevIcon = isMobile ? Smartphone : isTablet ? Tablet : Laptop;
+                                    return (
+                                        <div key={dIdx} className="p-3 rounded-xl border border-gray-150 bg-gray-50/60 space-y-2">
+                                            <div className="flex items-center justify-between text-xs">
+                                                <div className="flex items-center gap-2 font-semibold text-gray-800">
+                                                    <DevIcon className="w-3.5 h-3.5 text-[#0F766E]" />
+                                                    <span>{devItem.device}</span>
+                                                </div>
+                                                <span className="font-bold text-[#0F766E]">
+                                                    {devItem.count} ({devItem.percentage}%)
+                                                </span>
+                                            </div>
+                                            <div className="w-full bg-gray-200 rounded-full h-1.5 overflow-hidden">
+                                                <div
+                                                    className="bg-[#0F766E] h-1.5 rounded-full"
+                                                    style={{ width: `${Math.max(devItem.percentage, 5)}%` }}
+                                                />
+                                            </div>
+                                        </div>
+                                    );
+                                })
+                            ) : (
+                                <div className="text-xs text-gray-400 py-3 text-center">No device traffic recorded yet</div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {errorMsg && (
                 <div className="p-3 text-xs sm:text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg">
                     {errorMsg}
                 </div>
             )}
 
-            <div className="relative w-full max-w-md">
-                <Search className="w-4 h-4 absolute left-3 top-2.5 text-slate-400" />
-                <input
-                    type="text"
-                    placeholder="Search session ID, browser, city, landing page..."
-                    value={searchTerm}
-                    onChange={e => {
-                        setSearchTerm(e.target.value);
-                        setPage(1);
-                    }}
-                    onKeyDown={e => e.key === 'Enter' && fetchData()}
-                    className="admin-input pl-9"
-                />
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                <div className="relative w-full md:max-w-md">
+                    <Search className="w-4 h-4 absolute left-3 top-2.5 text-slate-400" />
+                    <input
+                        type="text"
+                        placeholder="Search session ID, browser, city, landing page"
+                        value={searchTerm}
+                        onChange={e => {
+                            setSearchTerm(e.target.value);
+                            setPage(1);
+                        }}
+                        onKeyDown={e => e.key === 'Enter' && fetchData()}
+                        className="admin-input pl-9"
+                    />
+                </div>
+
+                <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-xl text-xs font-semibold self-start md:self-auto">
+                    <button
+                        onClick={() => { setBotFilter('all'); setPage(1); }}
+                        className={`px-3 py-1.5 rounded-lg transition-colors ${botFilter === 'all' ? 'bg-white text-[#0F766E] shadow-xs' : 'text-slate-600 hover:text-slate-900'}`}
+                    >
+                        All Traffic
+                    </button>
+                    <button
+                        onClick={() => { setBotFilter('organic'); setPage(1); }}
+                        className={`px-3 py-1.5 rounded-lg transition-colors ${botFilter === 'organic' ? 'bg-white text-[#0F766E] shadow-xs' : 'text-slate-600 hover:text-slate-900'}`}
+                    >
+                        Organic Humans {analytics?.organicCount !== undefined ? `(${analytics.organicCount})` : ''}
+                    </button>
+                    <button
+                        onClick={() => { setBotFilter('bots'); setPage(1); }}
+                        className={`px-3 py-1.5 rounded-lg transition-colors ${botFilter === 'bots' ? 'bg-white text-amber-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'}`}
+                    >
+                        Bots &amp; Crawlers {analytics?.botCount !== undefined ? `(${analytics.botCount})` : ''}
+                    </button>
+                </div>
             </div>
 
             <div className="admin-card overflow-hidden">
@@ -227,7 +358,7 @@ export default function VisitorsPage() {
                     {isLoading ? (
                         <div className="p-8 text-center text-sm text-[#64748B]">
                             <div className="animate-spin rounded-full h-6 w-6 mx-auto border-t-2 border-b-2 border-[#0F766E] mb-2"></div>
-                            Loading visitor sessions...
+                            Loading visitor sessions
                         </div>
                     ) : visitors.length === 0 ? (
                         <div className="p-8 text-center text-sm text-[#64748B]">No tracked visitors match your query.</div>
@@ -239,7 +370,7 @@ export default function VisitorsPage() {
                                         <div className="flex items-center justify-between gap-1">
                                             <div className="flex items-center gap-1 font-mono text-[10px] font-bold text-[#0F172A] truncate">
                                                 {item.isBot && <Bot className="w-3 h-3 text-amber-600 shrink-0" />}
-                                                <span className="truncate">{item.sessionId.substring(0, 8)}...</span>
+                                                <span className="truncate">{item.sessionId.slice(0, 10)}</span>
                                             </div>
                                             <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold bg-[#EDF5F2] text-[#0F766E] shrink-0">
                                                 {item.pageViews}v
@@ -247,7 +378,7 @@ export default function VisitorsPage() {
                                         </div>
 
                                         <div className="text-[10px] text-[#475569] space-y-0.5">
-                                            <div className="font-semibold text-[#0F172A] truncate">{item.deviceType || 'Device'} · {item.browser || 'Browser'}</div>
+                                            <div className="font-semibold text-[#0F172A] truncate">{item.deviceType || 'Device'} / {item.browser || 'Browser'}</div>
                                             <div className="flex items-center gap-1 text-[#64748B] truncate">
                                                 <Globe className="w-2.5 h-2.5 text-[#0F766E] shrink-0" />
                                                 <span className="truncate">{formatLocation(item.city, item.country)}</span>
@@ -304,7 +435,7 @@ export default function VisitorsPage() {
                                 <tr>
                                     <td colSpan={6} className="p-12 text-center text-[#64748B]">
                                         <div className="animate-spin rounded-full h-6 w-6 mx-auto border-t-2 border-b-2 border-[#0F766E] mb-2"></div>
-                                        Fetching visitor sessions...
+                                        Fetching visitor sessions
                                     </td>
                                 </tr>
                             ) : visitors.length === 0 ? (
@@ -317,13 +448,13 @@ export default function VisitorsPage() {
                                         <td>
                                             <div className="flex items-center gap-1.5 font-mono text-xs font-semibold text-[#0F172A]">
                                                 {item.isBot && <span title="Bot Detected"><Bot className="w-3.5 h-3.5 text-amber-600" /></span>}
-                                                <span>{item.sessionId.substring(0, 16)}...</span>
+                                                <span>{item.sessionId.slice(0, 16)}</span>
                                             </div>
                                             <div className="text-[11px] text-[#64748B] font-mono mt-0.5 truncate max-w-[160px]">{item.landingPage || '/'}</div>
                                         </td>
                                         <td>
                                             <div className="text-xs font-semibold text-[#0F172A]">{item.deviceType || 'Unknown'}</div>
-                                            <div className="text-[11px] text-[#64748B]">{item.browser || 'Unknown'} · {item.operatingSystem || 'N/A'}</div>
+                                            <div className="text-[11px] text-[#64748B]">{item.browser || 'Unknown'} / {item.operatingSystem || 'N/A'}</div>
                                         </td>
                                         <td>
                                             <div className="text-xs text-[#0F172A] flex items-center gap-1">
@@ -427,7 +558,7 @@ export default function VisitorsPage() {
                                     <span className="text-[10px] font-bold uppercase tracking-wider text-[#0F766E]">Hardware &amp; Location</span>
                                     <div>
                                         <span className="text-[10px] text-[#64748B] block">Device / Browser</span>
-                                        <span className="text-[#0F172A] text-xs font-semibold">{visitorData.deviceType || 'Unknown'} · {visitorData.browser || 'Unknown'}</span>
+                                        <span className="text-[#0F172A] text-xs font-semibold">{visitorData.deviceType || 'Unknown'} / {visitorData.browser || 'Unknown'}</span>
                                     </div>
                                     <div>
                                         <span className="text-[10px] text-[#64748B] block">Operating System</span>

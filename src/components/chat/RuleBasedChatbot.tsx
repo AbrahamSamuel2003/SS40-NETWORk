@@ -29,7 +29,8 @@ import {
     Copy,
     ThumbsUp,
     ThumbsDown,
-    User
+    User,
+    ChevronDown
 } from "lucide-react";
 import type { SiteConfigData } from "@/lib/site-config";
 
@@ -37,6 +38,13 @@ import type { SiteConfigData } from "@/lib/site-config";
 // Constants & Static Config
 // ----------------------------------------------------------------------------
 const GOOGLE_MAPS_URL = "https://www.google.com/maps?q=8.729284,77.697432";
+
+const SERVICE_OPTIONS = [
+    { label: "Digital Solutions (Custom Software)", value: "Digital Solutions" },
+    { label: "SS40 Products (ClearInvoice, AI Email Agent)", value: "Products - ClearInvoice, Email Agent, GTC Suite" },
+    { label: "SS40 Academics (Internships & Sprints)", value: "Academics - Internships" },
+    { label: "General Consultation & Quote", value: "General Consultation" }
+];
 
 export interface ChatMessage {
     id: string;
@@ -77,6 +85,7 @@ const INITIAL_BOT_MESSAGE: ChatMessage = {
     timestamp: new Date(),
     actionType: "STANDARD",
     quickReplies: [
+        "Contact Team",
         "Three Wings",
         "SS40 Digital Solutions",
         "SS40 Products",
@@ -165,12 +174,16 @@ export function RuleBasedChatbot({
         phone: string;
         email: string;
         serviceInterest: string;
+        message: string;
     }>({
         fullName: "",
         phone: "",
         email: "",
-        serviceInterest: "Digital Solutions"
+        serviceInterest: "Digital Solutions",
+        message: ""
     });
+    const [serviceDropdownOpen, setServiceDropdownOpen] = useState(false);
+    const serviceDropdownRef = useRef<HTMLDivElement>(null);
 
     const [viewportStyle, setViewportStyle] = useState<{
         top?: number;
@@ -220,6 +233,22 @@ export function RuleBasedChatbot({
             }
         } catch {}
     }, []);
+
+    // Close custom service dropdown when clicking outside
+    useEffect(() => {
+        if (!serviceDropdownOpen) return;
+        const handleClickOutside = (e: MouseEvent | TouchEvent) => {
+            if (serviceDropdownRef.current && !serviceDropdownRef.current.contains(e.target as Node)) {
+                setServiceDropdownOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        document.addEventListener("touchstart", handleClickOutside, { passive: true });
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("touchstart", handleClickOutside);
+        };
+    }, [serviceDropdownOpen]);
 
     // Cleanup thinking & typing timers on unmount
     useEffect(() => {
@@ -378,8 +407,8 @@ export function RuleBasedChatbot({
         const text = (textToSend || inputValue).trim();
         if (!text || isTyping) return;
 
-        // Instant local action when user clicks "Leave Contact Details" or "Request Callback"
-        if (/^(leave contact details|request callback|callback request|share details)$/i.test(text)) {
+        // Instant local action when user clicks "Leave Contact Details", "Request Callback", "Contact Team", "Contact Us", etc.
+        if (/^(leave contact details|request callback|callback request|share details|contact team|contact us|get in touch|talk to team)$/i.test(text.trim())) {
             const userMsg: ChatMessage = {
                 id: `user-${Date.now()}`,
                 sender: "user",
@@ -389,7 +418,7 @@ export function RuleBasedChatbot({
             const botLeadMsg: ChatMessage = {
                 id: `bot-${Date.now()}`,
                 sender: "bot",
-                text: "Please share your contact details below. Our engineering and solutions team will get in touch with you promptly.",
+                text: "You can reach our engineering & solutions team directly using the form below, by phone at +91\u00A083005\u00A091750, or via email at support@ss40network.com. Fill in your details below for a free scoping consultation, demo, or quote:",
                 timestamp: new Date(),
                 actionType: "LEAD_CAPTURE",
                 isLeadCard: true,
@@ -464,10 +493,37 @@ export function RuleBasedChatbot({
                 }));
             }
 
+            const userTurnCount = messages.filter(m => m.sender === "user").length + 1;
+            const isExplicitContact = /^(contact\s*team|contact\s*us|get\s*in\s*touch|talk\s*to\s*team|leave\s*contact(\s*details)?|request\s*callback|callback\s*request|reach\s*out|hire\s*us|book\s*a\s*call)$/i.test(text.trim());
+            const isHighIntent = /\b(live demo|book demo|schedule demo|pricing|quote|request quote|scoping call|hire)\b/i.test(text);
+            const isNameIntro = /(?:my name is|i am|this is|call me|name\s*[:\-])\s+[A-Za-z]/i.test(text.trim());
+
+            const isLead = !leadCaptured && (
+                isExplicitContact ||
+                isHighIntent ||
+                isNameIntro ||
+                (actionType === "LEAD_CAPTURE" && (userTurnCount >= 3 || isHighIntent))
+            );
+
+            if (isLead) {
+                const lowerText = text.toLowerCase();
+                let inferred = "General Consultation";
+                if (/clearinvoice|email agent|gtc|billing|product/i.test(lowerText)) {
+                    inferred = "Products - ClearInvoice, Email Agent, GTC Suite";
+                } else if (/web|app|mobile|software|cloud|solution|development/i.test(lowerText)) {
+                    inferred = "Digital Solutions";
+                } else if (/intern|academic|student|training|course|dsa/i.test(lowerText)) {
+                    inferred = "Academics - Internships";
+                }
+                setLeadFormState(prev => ({
+                    ...prev,
+                    serviceInterest: inferred
+                }));
+            }
+
             const isSupport = actionType === "SUPPORT_CARD";
             const isWings = actionType === "WINGS_CARD";
             const isAcademic = actionType === "ACADEMIC_CARD";
-            const isLead = actionType === "LEAD_CAPTURE" && !leadCaptured;
             const isProject = actionType === "PROJECT_PREVIEW";
 
             const botMsg: ChatMessage = {
@@ -534,7 +590,7 @@ export function RuleBasedChatbot({
                     phone: leadFormState.phone,
                     email: leadFormState.email,
                     serviceInterest: leadFormState.serviceInterest,
-                    message: "Inquiry submitted through SS40 SKY AI Assistant"
+                    message: leadFormState.message?.trim() || "Inquiry submitted through SS40 SKY AI Assistant"
                 })
             });
 
@@ -684,7 +740,7 @@ export function RuleBasedChatbot({
         flushLists();
 
         return (
-            <div className="space-y-2 text-[#1F2937] font-sans antialiased text-left leading-relaxed">
+            <div className="space-y-2 text-[#1F2937] font-serif font-crimson antialiased text-left leading-relaxed">
                 {blocks.map((block, bIdx) => {
                     if (block.type === "bullet-list") {
                         return (
@@ -758,9 +814,9 @@ export function RuleBasedChatbot({
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 20, scale: 0.96 }}
                         transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-                        className="fixed bottom-20 right-3 left-3 sm:left-auto sm:right-6 lg:right-8 sm:bottom-24 z-50 flex flex-col w-auto sm:w-[410px] md:w-[430px] h-[520px] sm:h-[570px] max-h-[calc(100dvh-95px)] sm:max-h-[calc(100vh-120px)] bg-white rounded-2xl sm:rounded-3xl shadow-[0_24px_70px_rgba(15,118,110,0.22)] border border-gray-200/90 overflow-hidden font-sans antialiased text-left"
+                        className="fixed bottom-20 right-3 left-3 sm:left-auto sm:right-6 lg:right-8 sm:bottom-24 z-50 flex flex-col w-auto sm:w-[410px] md:w-[430px] h-[520px] sm:h-[570px] max-h-[calc(100dvh-95px)] sm:max-h-[calc(100vh-120px)] bg-white rounded-2xl sm:rounded-3xl shadow-[0_24px_70px_rgba(15,118,110,0.22)] border border-gray-200/90 overflow-hidden font-serif font-crimson antialiased text-left"
                         style={{
-                            fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+                            fontFamily: "var(--font-crimson-pro), Georgia, 'Times New Roman', serif",
                             ...(viewportStyle.top !== undefined
                                 ? {
                                     top: `${viewportStyle.top}px`,
@@ -847,12 +903,12 @@ export function RuleBasedChatbot({
                                             <div className="flex flex-col gap-1 flex-1">
                                                 {/* Chat Bubble */}
                                                 <div
-                                                    className={`group relative text-[13px] sm:text-[13.5px] leading-relaxed break-words font-sans transition-all ${
+                                                    className={`group relative text-[13.5px] sm:text-[14px] leading-relaxed break-words font-serif font-crimson transition-all ${
                                                         isUser
                                                             ? "bg-gradient-to-r from-[#0F766E] to-[#115E59] text-white rounded-2xl rounded-tr-xs shadow-xs font-medium px-4 py-3"
                                                             : "bg-white text-[#1F2937] rounded-2xl rounded-tl-xs border border-gray-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)] px-4 py-3.5"
                                                     }`}
-                                                    style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" }}
+                                                    style={{ fontFamily: "var(--font-crimson-pro), Georgia, 'Times New Roman', serif" }}
                                                 >
                                                     {isUser ? (
                                                         <p className="whitespace-pre-wrap leading-relaxed">{msg.text}</p>
@@ -1027,21 +1083,37 @@ export function RuleBasedChatbot({
                                                     {msg.isLeadCard && (
                                                         <div className="mt-3 pt-2.5 border-t border-gray-100 flex flex-col gap-2">
                                                             {(leadCaptured || leadSubmittedId === msg.id) ? (
-                                                                <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-emerald-800 text-xs font-semibold flex items-center gap-2">
-                                                                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                                                                    <span>Inquiry recorded! Our engineering team will contact you shortly.</span>
+                                                                <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-emerald-800 text-xs font-semibold flex items-center justify-between gap-2 shadow-2xs">
+                                                                    <div className="flex items-center gap-2">
+                                                                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                                                                        <span>Inquiry recorded! Our engineering team will contact you shortly.</span>
+                                                                    </div>
+                                                                    <a
+                                                                        href={`https://wa.me/${cleanPhone}?text=${encodeURIComponent("Hello SS40 NETWORK, I submitted my inquiry and would like to chat.")}`}
+                                                                        target="_blank"
+                                                                        rel="noopener noreferrer"
+                                                                        className="p-1.5 bg-[#0F766E] text-white rounded-lg flex items-center gap-1 hover:bg-[#115E59] transition-colors shrink-0"
+                                                                        title="Chat on WhatsApp"
+                                                                    >
+                                                                        <MessageCircle className="w-3.5 h-3.5" />
+                                                                    </a>
                                                                 </div>
                                                             ) : (
-                                                                <div className="p-3.5 bg-[#F8FAF9] rounded-2xl border border-gray-200/90 shadow-2xs space-y-2.5 text-xs">
-                                                                    <div className="font-semibold text-gray-800 text-[11px] uppercase tracking-wider font-mono">
-                                                                        Share Your Details for Follow-up:
+                                                                <div className="p-3.5 bg-[#F8FAF9] rounded-2xl border border-gray-200/90 shadow-2xs space-y-2.5 text-xs font-serif font-crimson">
+                                                                    <div className="flex items-center justify-between">
+                                                                        <span className="font-bold text-gray-800 text-[11.5px] uppercase tracking-wider font-serif font-crimson">
+                                                                            Quick Inquiry &amp; Demo Request
+                                                                        </span>
+                                                                        <span className="text-[10px] text-[#0F766E] font-bold bg-[#E6F3EE] px-2 py-0.5 rounded-full border border-[#0F766E]/20">
+                                                                            Free Scoping
+                                                                        </span>
                                                                     </div>
                                                                     <input
                                                                         type="text"
                                                                         placeholder="Your Full Name *"
                                                                         value={leadFormState.fullName}
                                                                         onChange={(e) => setLeadFormState(prev => ({ ...prev, fullName: e.target.value }))}
-                                                                        className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E] transition-all shadow-2xs"
+                                                                        className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-gray-800 placeholder-gray-400 font-serif font-crimson focus:outline-none focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E] transition-all shadow-2xs"
                                                                     />
                                                                     <div className="grid grid-cols-2 gap-2">
                                                                         <input
@@ -1049,31 +1121,83 @@ export function RuleBasedChatbot({
                                                                             placeholder="Phone Number *"
                                                                             value={leadFormState.phone}
                                                                             onChange={(e) => setLeadFormState(prev => ({ ...prev, phone: e.target.value }))}
-                                                                            className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E] transition-all shadow-2xs"
+                                                                            className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-gray-800 placeholder-gray-400 font-serif font-crimson focus:outline-none focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E] transition-all shadow-2xs"
                                                                         />
                                                                         <input
                                                                             type="email"
                                                                             placeholder="Email Address *"
                                                                             value={leadFormState.email}
                                                                             onChange={(e) => setLeadFormState(prev => ({ ...prev, email: e.target.value }))}
-                                                                            className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E] transition-all shadow-2xs"
+                                                                            className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-gray-800 placeholder-gray-400 font-serif font-crimson focus:outline-none focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E] transition-all shadow-2xs"
                                                                         />
                                                                     </div>
-                                                                    <select
-                                                                        value={leadFormState.serviceInterest}
-                                                                        onChange={(e) => setLeadFormState(prev => ({ ...prev, serviceInterest: e.target.value }))}
-                                                                        className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-gray-800 focus:outline-none focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E] transition-all shadow-2xs cursor-pointer"
-                                                                    >
-                                                                        <option value="Digital Solutions">SS40 Digital Solutions (Custom Software)</option>
-                                                                        <option value="Products - ClearInvoice, Email Agent, GTC Suite">SS40 Products (ClearInvoice, AI Email Agent, GTC Suite)</option>
-                                                                        <option value="Academics - Internships">SS40 Academics (Internships &amp; Training)</option>
-                                                                        <option value="General Consultation">General Scoping &amp; Consultation</option>
-                                                                    </select>
+
+                                                                    {/* Custom Bounded Dropdown: 100% Constrained to Card Width, Zero Overflow */}
+                                                                    <div className="relative w-full" ref={serviceDropdownRef}>
+                                                                        <button
+                                                                            type="button"
+                                                                            onClick={() => {
+                                                                                setServiceDropdownOpen(prev => !prev);
+                                                                                setTimeout(() => scrollToBottom(), 80);
+                                                                            }}
+                                                                            className="w-full pl-3 pr-9 py-2 bg-white border border-gray-200 rounded-xl text-gray-800 text-xs font-serif font-crimson flex items-center justify-between cursor-pointer focus:outline-none focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E] transition-all shadow-2xs text-left"
+                                                                            aria-haspopup="listbox"
+                                                                            aria-expanded={serviceDropdownOpen}
+                                                                        >
+                                                                            <span className="truncate pr-1">
+                                                                                {SERVICE_OPTIONS.find(o => o.value === leadFormState.serviceInterest)?.label || leadFormState.serviceInterest || "Select Service Interest"}
+                                                                            </span>
+                                                                            <ChevronDown
+                                                                                className={`w-4 h-4 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none transition-transform duration-200 ${
+                                                                                    serviceDropdownOpen ? "rotate-180 text-[#0F766E]" : ""
+                                                                                }`}
+                                                                            />
+                                                                        </button>
+
+                                                                        {serviceDropdownOpen && (
+                                                                            <div
+                                                                                role="listbox"
+                                                                                className="absolute left-0 right-0 top-full mt-1.5 w-full bg-white border border-gray-200/90 rounded-xl shadow-xl z-30 overflow-hidden divide-y divide-gray-100 font-serif font-crimson"
+                                                                            >
+                                                                                {SERVICE_OPTIONS.map((opt) => {
+                                                                                    const isSelected = leadFormState.serviceInterest === opt.value;
+                                                                                    return (
+                                                                                        <button
+                                                                                            key={opt.value}
+                                                                                            type="button"
+                                                                                            role="option"
+                                                                                            aria-selected={isSelected}
+                                                                                            onClick={() => {
+                                                                                                setLeadFormState(prev => ({ ...prev, serviceInterest: opt.value }));
+                                                                                                setServiceDropdownOpen(false);
+                                                                                            }}
+                                                                                            className={`w-full px-3 py-2.5 text-xs text-left cursor-pointer flex items-center justify-between transition-colors ${
+                                                                                                isSelected
+                                                                                                    ? "bg-[#EDF5F2] text-[#0F766E] font-bold"
+                                                                                                    : "hover:bg-[#F8FAF9] text-gray-700 font-medium"
+                                                                                            }`}
+                                                                                        >
+                                                                                            <span className="truncate pr-2">{opt.label}</span>
+                                                                                            {isSelected && <Check className="w-3.5 h-3.5 text-[#0F766E] shrink-0" />}
+                                                                                        </button>
+                                                                                    );
+                                                                                })}
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
+
+                                                                    <textarea
+                                                                        rows={2}
+                                                                        placeholder="Project requirement or note (Optional)"
+                                                                        value={leadFormState.message || ""}
+                                                                        onChange={(e) => setLeadFormState(prev => ({ ...prev, message: e.target.value }))}
+                                                                        className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-gray-800 placeholder-gray-400 font-serif font-crimson focus:outline-none focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E] transition-all shadow-2xs resize-none"
+                                                                    />
 
                                                                     <button
                                                                         onClick={() => handleLeadSubmit(msg.id)}
                                                                         disabled={leadSubmitting || !leadFormState.fullName.trim() || !leadFormState.phone.trim() || !leadFormState.email.trim()}
-                                                                        className="w-full py-2.5 px-3 bg-[#0F766E] hover:bg-[#115E59] active:scale-[0.98] disabled:opacity-50 text-white font-bold rounded-xl flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer"
+                                                                        className="w-full py-2.5 px-3 bg-[#0F766E] hover:bg-[#115E59] active:scale-[0.98] disabled:opacity-50 text-white font-bold rounded-xl flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer font-serif font-crimson text-xs sm:text-sm"
                                                                     >
                                                                         {leadSubmitting ? (
                                                                             <span>Submitting Inquiry...</span>
@@ -1223,7 +1347,7 @@ export function RuleBasedChatbot({
 
                             {/* Typing / Thinking Indicator: Unboxed Minimalist Inline (No speech bubble / box) */}
                             {isTyping && (
-                                <div className="flex items-center gap-2 max-w-[85%] font-sans py-1 pl-1">
+                                <div className="flex items-center gap-2 max-w-[85%] font-serif font-crimson py-1 pl-1">
                                     <BotAvatar size="sm" />
                                     {isThinking ? (
                                         /* Shown only when response takes > 3 sec: unboxed inline text with animated dots */
@@ -1267,7 +1391,7 @@ export function RuleBasedChatbot({
                                         }, 180);
                                     }}
                                     placeholder="Ask a question or select a topic..."
-                                    className="flex-1 bg-transparent py-1 text-base sm:text-sm text-[#111827] placeholder:text-gray-400 font-medium focus:outline-none"
+                                    className="flex-1 bg-transparent py-1 text-base sm:text-sm text-[#111827] placeholder:text-gray-400 font-medium font-serif font-crimson focus:outline-none"
                                 />
                                 <button
                                     type="submit"
@@ -1278,7 +1402,7 @@ export function RuleBasedChatbot({
                                     <SendHorizonal className="w-3.5 h-3.5 translate-x-px" />
                                 </button>
                             </form>
-                            <p className="text-[10px] text-gray-400 text-center font-medium tracking-wide">
+                            <p className="text-[10px] text-gray-400 text-center font-medium font-serif font-crimson tracking-wide">
                                 SS40 SKY &mdash; Verified Enterprise AI
                             </p>
                         </div>

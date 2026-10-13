@@ -1,7 +1,39 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Edit2, Trash2, AlertCircle, X, Search, Phone, Mail, User, Clock, ArrowRight, CheckCircle2, ChevronDown, Archive } from 'lucide-react';
+import { Edit2, Trash2, AlertCircle, X, Search, Phone, Mail, User, Clock, ArrowRight, CheckCircle2, ChevronDown, Archive, MessageCircle, Bot, Globe, FileText } from 'lucide-react';
+
+const getCleanWhatsAppPhone = (rawPhone: string) => {
+    const digits = (rawPhone || '').replace(/\D/g, '');
+    if (digits.length === 10) return `91${digits}`;
+    return digits;
+};
+
+const getSourceBadge = (source?: string) => {
+    const s = (source || '').toLowerCase();
+    if (s.includes('sky') || s.includes('chat') || s.includes('ai')) {
+        return (
+            <span className="inline-flex items-center gap-1 bg-[#EDF5F2] text-[#0F766E] border border-[#0F766E]/25 px-2 py-0.5 rounded-md text-[10.5px] font-semibold">
+                <Bot className="w-3 h-3 text-[#0F766E]" />
+                SS40 SKY (Chatbot)
+            </span>
+        );
+    }
+    if (s.includes('contact')) {
+        return (
+            <span className="inline-flex items-center gap-1 bg-purple-50 text-purple-700 border border-purple-200 px-2 py-0.5 rounded-md text-[10.5px] font-semibold">
+                <Mail className="w-3 h-3 text-purple-600" />
+                Contact Form
+            </span>
+        );
+    }
+    return (
+        <span className="inline-flex items-center gap-1 bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-md text-[10.5px] font-semibold">
+            <Globe className="w-3 h-3 text-blue-600" />
+            {source || 'Direct Website'}
+        </span>
+    );
+};
 
 export default function LeadsPage() {
     const [leads, setLeads] = useState<any[]>([]);
@@ -148,6 +180,32 @@ export default function LeadsPage() {
                 </div>
             </div>
 
+            {/* KPI Summary Cards */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                <div className="bg-white border border-gray-200/90 rounded-2xl p-3.5 sm:p-4 shadow-xs">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">Total Records</span>
+                    <span className="text-xl sm:text-2xl font-black text-[#0F172A] mt-1 block">{leads.length}</span>
+                </div>
+                <div className="bg-white border border-emerald-200/70 rounded-2xl p-3.5 sm:p-4 shadow-xs bg-emerald-50/20">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#0F766E] block">New Inquiries</span>
+                    <span className="text-xl sm:text-2xl font-black text-[#0F766E] mt-1 block">
+                        {leads.filter(l => l.status === 'NEW').length}
+                    </span>
+                </div>
+                <div className="bg-white border border-amber-200/70 rounded-2xl p-3.5 sm:p-4 shadow-xs bg-amber-50/20">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-amber-700 block">Contacted</span>
+                    <span className="text-xl sm:text-2xl font-black text-amber-700 mt-1 block">
+                        {leads.filter(l => l.status === 'CONTACTED').length}
+                    </span>
+                </div>
+                <div className="bg-white border border-teal-200/70 rounded-2xl p-3.5 sm:p-4 shadow-xs bg-teal-50/20">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-teal-800 block">Converted</span>
+                    <span className="text-xl sm:text-2xl font-black text-teal-850 mt-1 block">
+                        {leads.filter(l => l.status === 'CONVERTED').length}
+                    </span>
+                </div>
+            </div>
+
             {/* Filter Bar */}
             <div className="bg-white border border-gray-200/90 rounded-2xl p-3.5 sm:p-4 shadow-xs flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
                 <div className="relative flex-1 max-w-md">
@@ -229,6 +287,10 @@ export default function LeadsPage() {
                                             </p>
                                         </div>
 
+                                        <div className="pt-0.5">
+                                            {getSourceBadge(item.source)}
+                                        </div>
+
                                         <div className="bg-[#EDF5F2]/60 rounded-lg p-2 text-[11px] text-[#0F766E] border border-[#2DD4BF]/20 font-medium line-clamp-1">
                                             {item.serviceInterest || 'General Inquiry'}
                                         </div>
@@ -249,6 +311,17 @@ export default function LeadsPage() {
                                         >
                                             <Phone className="w-3.5 h-3.5" />
                                         </a>
+                                        {item.phone && (
+                                            <a
+                                                href={`https://wa.me/${getCleanWhatsAppPhone(item.phone)}?text=${encodeURIComponent(`Hello ${item.fullName}, thank you for contacting SS40 NETWORK regarding ${item.serviceInterest || 'our services'}. We are reaching out to discuss your requirements.`)}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="p-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg border border-emerald-200 transition-colors flex-1 flex items-center justify-center"
+                                                title="WhatsApp Lead"
+                                            >
+                                                <MessageCircle className="w-3.5 h-3.5" />
+                                            </a>
+                                        )}
                                         <a
                                             href={`mailto:${item.email}`}
                                             className="p-1.5 bg-gray-50 hover:bg-[#EDF5F2] text-[#0F766E] rounded-lg border border-gray-200 transition-colors flex-1 flex items-center justify-center"
@@ -258,7 +331,7 @@ export default function LeadsPage() {
                                         </a>
                                         <button
                                             onClick={() => handleOpenModal(item)}
-                                            className="p-1.5 bg-[#0F766E] hover:bg-[#115E59] text-white rounded-lg transition-colors flex-1 flex items-center justify-center"
+                                            className="p-1.5 bg-[#0F766E] hover:bg-[#115E59] text-white rounded-lg transition-colors flex-1 flex items-center justify-center cursor-pointer"
                                             title="View Details"
                                         >
                                             <Edit2 className="w-3.5 h-3.5" />
@@ -314,9 +387,7 @@ export default function LeadsPage() {
                                             </span>
                                         </td>
                                         <td className="p-4 text-xs font-medium text-gray-600">
-                                            <span className="bg-gray-100 px-2 py-0.5 rounded-md font-mono text-[10px]">
-                                                {item.source || 'Website Form'}
-                                            </span>
+                                            {getSourceBadge(item.source)}
                                         </td>
                                         <td className="p-4 text-xs text-gray-500">
                                             {new Date(item.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
@@ -330,10 +401,37 @@ export default function LeadsPage() {
                                             )}
                                         </td>
                                         <td className="p-4 text-right">
-                                            <div className="flex items-center justify-end gap-2">
+                                            <div className="flex items-center justify-end gap-1.5">
+                                                {item.phone && (
+                                                    <a
+                                                        href={`tel:${item.phone.replace(/\s+/g, '')}`}
+                                                        className="p-1.5 rounded-xl text-[#0F766E] hover:bg-[#EDF5F2] border border-[#0F766E]/20 transition-colors flex items-center justify-center"
+                                                        title="Call Lead"
+                                                    >
+                                                        <Phone className="w-3.5 h-3.5" />
+                                                    </a>
+                                                )}
+                                                {item.phone && (
+                                                    <a
+                                                        href={`https://wa.me/${getCleanWhatsAppPhone(item.phone)}?text=${encodeURIComponent(`Hello ${item.fullName}, thank you for contacting SS40 NETWORK regarding ${item.serviceInterest || 'our services'}. We are reaching out to discuss your requirements.`)}`}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="p-1.5 rounded-xl text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 border border-emerald-200/80 transition-colors flex items-center justify-center"
+                                                        title="WhatsApp Lead"
+                                                    >
+                                                        <MessageCircle className="w-3.5 h-3.5" />
+                                                    </a>
+                                                )}
+                                                <a
+                                                    href={`mailto:${item.email}`}
+                                                    className="p-1.5 rounded-xl text-blue-600 hover:text-blue-700 hover:bg-blue-50 border border-blue-200/80 transition-colors flex items-center justify-center"
+                                                    title="Email Lead"
+                                                >
+                                                    <Mail className="w-3.5 h-3.5" />
+                                                </a>
                                                 <button
                                                     onClick={() => handleOpenModal(item)}
-                                                    className="px-3 py-1.5 rounded-xl border border-[#0F766E]/30 text-[#0F766E] text-xs font-bold hover:bg-[#EDF5F2] transition-colors cursor-pointer"
+                                                    className="px-2.5 py-1.5 rounded-xl border border-[#0F766E]/30 text-[#0F766E] text-xs font-bold hover:bg-[#EDF5F2] transition-colors cursor-pointer"
                                                 >
                                                     View Details
                                                 </button>
@@ -342,7 +440,7 @@ export default function LeadsPage() {
                                                     className="p-1.5 rounded-xl text-gray-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
                                                     title="Delete Inquiry"
                                                 >
-                                                    <Trash2 className="w-4 h-4" />
+                                                    <Trash2 className="w-3.5 h-3.5" />
                                                 </button>
                                             </div>
                                         </td>
@@ -401,10 +499,24 @@ export default function LeadsPage() {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-2xl border border-gray-100 text-xs">
                                 <div>
                                     <span className="text-gray-400 font-bold uppercase text-[10px] block">Contact Phone</span>
-                                    <a href={`tel:${leadData.phone}`} className="font-bold text-[#0F766E] hover:underline flex items-center gap-1 mt-0.5">
-                                        <Phone className="w-3 h-3" />
-                                        {leadData.phone}
-                                    </a>
+                                    <div className="flex items-center gap-2 mt-0.5">
+                                        <a href={`tel:${leadData.phone}`} className="font-bold text-[#0F766E] hover:underline flex items-center gap-1">
+                                            <Phone className="w-3 h-3" />
+                                            {leadData.phone}
+                                        </a>
+                                        {leadData.phone && (
+                                            <a
+                                                href={`https://wa.me/${getCleanWhatsAppPhone(leadData.phone)}?text=${encodeURIComponent(`Hello ${leadData.fullName}, following up from SS40 NETWORK regarding your inquiry for ${leadData.serviceInterest || 'our services'}.`)}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 text-[10px] font-bold"
+                                                title="Open in WhatsApp"
+                                            >
+                                                <MessageCircle className="w-3 h-3" />
+                                                WhatsApp
+                                            </a>
+                                        )}
+                                    </div>
                                 </div>
                                 <div>
                                     <span className="text-gray-400 font-bold uppercase text-[10px] block">Company / Institution</span>

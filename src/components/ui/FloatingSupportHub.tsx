@@ -188,7 +188,7 @@ export function FloatingSupportHub({ config }: { config?: SiteConfigData | null 
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: 10, scale: 0.96 }}
                             transition={{ duration: 0.16, ease: [0.16, 1, 0.3, 1] }}
-                            className="flex flex-col items-end gap-2.5 pointer-events-auto will-change-[transform,opacity]"
+                            className="flex flex-col items-end gap-2.5 pointer-events-auto will-change-[transform,opacity] font-serif font-crimson"
                         >
                             <button
                                 onClick={() => {
