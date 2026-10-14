@@ -81,7 +81,7 @@ export interface ChatMessage {
 const INITIAL_BOT_MESSAGE: ChatMessage = {
     id: "msg-welcome",
     sender: "bot",
-    text: "Hello! I am SS40 SKY, your official AI assistant for SS40 NETWORK.\n\nWe specialize in custom software engineering (Digital Solutions), scalable SS40 Products (ClearInvoice, AI Email Agent, GTC Suite), and tech academic internships. How can I assist you today?",
+    text: "Hello! I am SS40 SKY, your official AI assistant for SS40 NETWORK.\n\nWe specialize in custom software engineering (Digital Solutions), scalable SS40 Products, and tech academic internships. How can I assist you today?",
     timestamp: new Date(),
     actionType: "STANDARD",
     quickReplies: [
@@ -418,7 +418,7 @@ export function RuleBasedChatbot({
             const botLeadMsg: ChatMessage = {
                 id: `bot-${Date.now()}`,
                 sender: "bot",
-                text: "Phone: +91 93605 51750\nEmail: support@ss40network.com\nLocation: Tirunelveli, Tamil Nadu\n\nOr share your details below for a direct callback:",
+                text: "Phone: +91 83005 91750\nEmail: support@ss40network.com\nLocation: Tirunelveli, Tamil Nadu\n\nOr share your details below for a direct callback:",
                 timestamp: new Date(),
                 actionType: "LEAD_CAPTURE",
                 isLeadCard: true,
@@ -1099,12 +1099,9 @@ export function RuleBasedChatbot({
                                                                 </div>
                                                             ) : (
                                                                 <div className="p-2.5 bg-[#F8FAF9] rounded-xl border border-gray-200/90 shadow-2xs space-y-1.5 text-xs font-serif font-crimson">
-                                                                    <div className="flex items-center justify-between pb-0.5">
+                                                                    <div className="pb-0.5">
                                                                         <span className="font-bold text-gray-800 text-[11px] uppercase tracking-wider font-serif font-crimson">
                                                                             Direct Inquiry &amp; Callback
-                                                                        </span>
-                                                                        <span className="text-[9.5px] text-[#0F766E] font-bold bg-[#E6F3EE] px-1.5 py-0.5 rounded-full border border-[#0F766E]/20">
-                                                                            Free Scoping
                                                                         </span>
                                                                     </div>
                                                                     <input
@@ -1327,7 +1324,7 @@ export function RuleBasedChatbot({
                                             if (displayedPills.length === 0) return null;
 
                                             return (
-                                                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-1.5 mt-2 w-full sm:w-auto sm:pl-9 sm:max-w-[95%]">
+                                                <div className="flex flex-wrap items-center justify-start gap-1.5 mt-2 w-full pl-9 max-w-[95%]">
                                                     {displayedPills.map((pill, i) => (
                                                         <button
                                                             key={i}

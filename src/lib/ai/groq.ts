@@ -62,7 +62,7 @@ COMMUNICATION STYLE & TONE:
 - STRICT RULE - SHORT & CRISP ANSWERS: Keep every answer strictly short, direct, and concise (maximum 2 to 3 sentences or brief points). Avoid lengthy paragraphs, filler words, and repetitive padding. Mobile users need quick, immediate information without scrolling.
 - CONTACT INQUIRIES RULE: When the user asks for contact info, contact details, or asks how to reach the team:
   * Provide the official contact channels in a short, crisp format:
-    Phone: +91 93605 51750
+    Phone: +91 83005 91750
     Email: support@ss40network.com
     Location: Tirunelveli, Tamil Nadu
   * Invite them to share their details below for a direct consultation.
@@ -86,11 +86,11 @@ MODE 1: COMPANY INQUIRIES (When the user asks about services, products, pricing,
 
 MODE 2: GREETINGS & SMALL TALK (When the user says "hi", "hello", "hlo", "how are you", "who are you", etc.)
 - Greet the user warmly and naturally as SS40 SKY.
-- Smoothly invite them to explore Digital Solutions, SS40 Products (ClearInvoice, AI Email Agent, GTC Suite), or Academic internship programs.
+- Smoothly invite them to explore Digital Solutions, SS40 Products, or Academic internship programs.
 - Keep greetings dynamic and varied.
 
 MODE 3: OUT-OF-SCOPE / UNRELATED TOPICS (General world trivia, school homework, politics, non-company math, entertainment, cooking recipes, buying consumer gadgets):
-- Politely and gently decline: State that as SS40 SKY, you specialize exclusively in SS40 NETWORK's digital solutions, software products (ClearInvoice, AI Email Agent, GTC Suite), and tech academic programs, and cannot answer outside queries.
+- Politely and gently decline: State that as SS40 SKY, you specialize exclusively in SS40 NETWORK's digital solutions, software products, and tech academic programs, and cannot answer outside queries.
 - Bridge to company value: Smoothly explain that if they are looking for custom software engineering, business automation, or tech internships, you'd be glad to assist.
 - Navigation: Point to "/contact" with label "Contact SS40 Team".
 - Output Action Type: "STANDARD".
@@ -147,7 +147,7 @@ export async function generateRagResponse(
 
     // High-speed, polite handler for gibberish / keysmash / meaningless inputs (e.g. "kjfbveaubviwubuEBFUjb", "asdfghjkl")
     if (processed.isGibberish) {
-        const gibberishAnswer = "I couldn't quite understand that. I am **SS40 SKY**, your official AI assistant for **SS40 NETWORK**.\n\nWe specialize in Three Wings:\n- **SS40 Digital Solutions**: Custom software, web & mobile applications, AI, and cloud systems.\n- **SS40 Products**: ClearInvoice (automated GST billing & inventory), SS40 AI Email Agent, and GTC Suite.\n- **SS40 Academics**: Hands-on software engineering internships and DSA placement training.\n\nPlease pick an option below, or let me know what software or tech service you are looking for.";
+        const gibberishAnswer = "I couldn't quite understand that. I am **SS40 SKY**, your official AI assistant for **SS40 NETWORK**.\n\nWe specialize in Three Wings:\n- **SS40 Digital Solutions**: Custom software, web & mobile applications, AI, and cloud systems.\n- **SS40 Products**: Scalable business software and enterprise tools.\n- **SS40 Academics**: Hands-on software engineering internships and DSA placement training.\n\nPlease pick an option below, or let me know what software or tech service you are looking for.";
         return {
             answer: gibberishAnswer,
             replyText: gibberishAnswer,
@@ -162,7 +162,7 @@ export async function generateRagResponse(
 
     // High-speed, polite handler for out-of-scope random questions (math, school questions, trivia, creative writing)
     if (processed.isOutOfScope) {
-        const outOfScopeAnswer = "I am **SS40 SKY**, the official AI assistant for **SS40 NETWORK**. I specialize strictly in our custom software engineering (Digital Solutions), scalable products (ClearInvoice, AI Email Agent, GTC Suite), and tech academic internships, so I cannot assist with outside topics or general trivia.\n\nHowever, if you have a software requirement, project idea, or tech career goal in mind, our engineering team in Tirunelveli would love to assist you.\n\nPlease feel free to explore our services below or visit our Contact page to reach our team.";
+        const outOfScopeAnswer = "I am **SS40 SKY**, the official AI assistant for **SS40 NETWORK**. I specialize strictly in our custom software engineering (Digital Solutions), scalable products, and tech academic internships, so I cannot assist with outside topics or general trivia.\n\nHowever, if you have a software requirement, project idea, or tech career goal in mind, our engineering team in Tirunelveli would love to assist you.\n\nPlease feel free to explore our services below or visit our Contact page to reach our team.";
         return {
             answer: outOfScopeAnswer,
             replyText: outOfScopeAnswer,
@@ -187,14 +187,14 @@ export async function generateRagResponse(
 
     // Emergency fallback only if Groq is completely unavailable
     if (!groqClient) {
-        let fallbackText = "SS40 NETWORK operates across Three Specialized Wings: SS40 Digital Solutions for custom software, SS40 Products (ClearInvoice, AI Email Agent, GTC Suite), and SS40 Academics for practical internships. How can I assist you today?";
+        let fallbackText = "SS40 NETWORK operates across Three Specialized Wings: SS40 Digital Solutions for custom software, SS40 Products, and SS40 Academics for practical internships. How can I assist you today?";
         let fallbackOptions = ["Three Wings", "SS40 Digital Solutions", "SS40 Products", "SS40 Academics"];
 
         if (processed.isGreeting) {
-            fallbackText = "Hello! I am SS40 SKY, your official AI assistant for SS40 NETWORK. We specialize in custom software engineering (Digital Solutions), scalable SS40 Products (ClearInvoice, AI Email Agent, GTC Suite), and tech academic internships. What would you like to explore today?";
+            fallbackText = "Hello! I am SS40 SKY, your official AI assistant for SS40 NETWORK. We specialize in custom software engineering (Digital Solutions), scalable SS40 Products, and tech academic internships. What would you like to explore today?";
             fallbackOptions = ["Three Wings", "SS40 Digital Solutions", "SS40 Products", "SS40 Academics"];
         } else if (processed.isSmallTalk) {
-            fallbackText = "Hello! I am SS40 SKY, the AI assistant for SS40 NETWORK. I'm here to help you discover our custom software engineering, SS40 Products (ClearInvoice, AI Email Agent, GTC Suite), and academic internship programs. How can I assist you?";
+            fallbackText = "Hello! I am SS40 SKY, the AI assistant for SS40 NETWORK. I'm here to help you discover our custom software engineering, SS40 Products, and academic internship programs. How can I assist you?";
         } else if (primaryChunk && vectorResult.topScore >= 0.45) {
             fallbackText = primaryChunk.summary || primaryChunk.content;
             fallbackOptions = primaryChunk.suggestedOptions || fallbackOptions;
@@ -241,7 +241,7 @@ export async function generateRagResponse(
         } else if (currentContact.name && !currentContact.phone && !currentContact.email) {
             dynamicLeadDirective = `\n\n[DYNAMIC CONTEXTUAL LEAD DIRECTIVE]:
 - The user's name is "${currentContact.name}".
-- Acknowledge them warmly by name as SS40 SKY (e.g. "Hello ${currentContact.name}! Great to connect with you."), answer their question or introduce our Three Wings, and invite them to explore SS40 Digital Solutions, Products (ClearInvoice, AI Email Agent, GTC Suite), or Academics.`;
+- Acknowledge them warmly by name as SS40 SKY (e.g. "Hello ${currentContact.name}! Great to connect with you."), answer their question or introduce our Three Wings, and invite them to explore SS40 Digital Solutions, SS40 Products, or Academics.`;
         } else if (!currentContact.name && (currentContact.phone || currentContact.email)) {
             dynamicLeadDirective = `\n\n[DYNAMIC CONTEXTUAL LEAD DIRECTIVE]:
 - The user provided contact info (${currentContact.phone || currentContact.email}) but has not shared their name.
@@ -381,11 +381,11 @@ ${contextText}${dynamicLeadDirective}`;
             source: "groq-rag-ai",
         };
     } catch (error) {
-        let fallbackContent = "SS40 NETWORK operates across Three Specialized Wings: SS40 Digital Solutions for custom software, SS40 Products (ClearInvoice, AI Email Agent, GTC Suite), and SS40 Academics for practical internships. How can I assist you today?";
+        let fallbackContent = "SS40 NETWORK operates across Three Specialized Wings: SS40 Digital Solutions for custom software, SS40 Products, and SS40 Academics for practical internships. How can I assist you today?";
         let fallbackOptions = ["Three Wings", "SS40 Digital Solutions", "SS40 Products", "SS40 Academics"];
 
         if (processed.isGreeting) {
-            fallbackContent = "Hello! I am SS40 SKY, your official AI assistant for SS40 NETWORK. We specialize in custom software engineering (Digital Solutions), scalable SS40 Products (ClearInvoice, AI Email Agent, GTC Suite), and tech academic internships. What would you like to explore today?";
+            fallbackContent = "Hello! I am SS40 SKY, your official AI assistant for SS40 NETWORK. We specialize in custom software engineering (Digital Solutions), scalable SS40 Products, and tech academic internships. What would you like to explore today?";
         } else if (processed.isSmallTalk) {
             fallbackContent = "Hello! I am SS40 SKY, the AI assistant for SS40 NETWORK. How can I assist you with our services, products, or academic programs today?";
         } else if (primaryChunk && vectorResult.topScore >= 0.45) {
