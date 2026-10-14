@@ -408,7 +408,7 @@ export function RuleBasedChatbot({
         if (!text || isTyping) return;
 
         // Instant local action when user clicks "Leave Contact Details", "Request Callback", "Contact Team", "Contact Us", etc.
-        if (/^(leave contact details|request callback|callback request|share details|contact team|contact us|get in touch|talk to team)$/i.test(text.trim())) {
+        if (/^(leave contact details|request callback|callback request|share details|contact team|contact us|get in touch|talk to team|contact|contact details|contact info|reach out|contact support)$/i.test(text.trim())) {
             const userMsg: ChatMessage = {
                 id: `user-${Date.now()}`,
                 sender: "user",
@@ -418,12 +418,11 @@ export function RuleBasedChatbot({
             const botLeadMsg: ChatMessage = {
                 id: `bot-${Date.now()}`,
                 sender: "bot",
-                text: "You can reach our engineering & solutions team directly using the form below, by phone at +91\u00A083005\u00A091750, or via email at support@ss40network.com. Fill in your details below for a free scoping consultation, demo, or quote:",
+                text: "Phone: +91 93605 51750\nEmail: support@ss40network.com\nLocation: Tirunelveli, Tamil Nadu\n\nOr share your details below for a direct callback:",
                 timestamp: new Date(),
                 actionType: "LEAD_CAPTURE",
                 isLeadCard: true,
-                quickReplies: ["Three Wings", "SS40 Digital Solutions", "SS40 Products", "SS40 Academics"],
-                link: { label: "Contact SS40 Team", url: "/contact" }
+                quickReplies: ["Three Wings", "SS40 Digital Solutions", "SS40 Products", "SS40 Academics"]
             };
             setMessages(prev => [...prev, userMsg, botLeadMsg]);
             setInputValue("");
@@ -740,16 +739,16 @@ export function RuleBasedChatbot({
         flushLists();
 
         return (
-            <div className="space-y-2 text-[#1F2937] font-serif font-crimson antialiased text-left leading-relaxed">
+            <div className="space-y-1.5 text-[#1F2937] font-serif font-crimson antialiased text-left leading-normal text-[13px] sm:text-[13.5px]">
                 {blocks.map((block, bIdx) => {
                     if (block.type === "bullet-list") {
                         return (
-                            <ul key={bIdx} className="my-2 space-y-2 pl-0.5">
+                            <ul key={bIdx} className="my-1.5 space-y-1 pl-0.5">
                                 {block.items.map((item, iIdx) => (
-                                    <li key={iIdx} className="flex items-start gap-2.5 leading-relaxed text-[#1F2937]">
+                                    <li key={iIdx} className="flex items-start gap-2 leading-normal text-[#1F2937]">
                                         {/* Sleek Horizontal Bullet Line with Hanging Indent */}
                                         <span
-                                            className="w-2.5 sm:w-3 h-0.5 rounded-full bg-[#0F766E] shrink-0 mt-2.5 shadow-2xs"
+                                            className="w-2.5 sm:w-3 h-0.5 rounded-full bg-[#0F766E] shrink-0 mt-2 shadow-2xs"
                                             aria-hidden="true"
                                         />
                                         <div className="flex-1 min-w-0">
@@ -763,12 +762,12 @@ export function RuleBasedChatbot({
 
                     if (block.type === "numbered-list") {
                         return (
-                            <ol key={bIdx} className="my-2 space-y-1.5 pl-0.5">
+                            <ol key={bIdx} className="my-1.5 space-y-1 pl-0.5">
                                 {block.items.map((item, iIdx) => (
-                                    <li key={iIdx} className="flex items-start gap-2.5 leading-relaxed text-[#1F2937]">
+                                    <li key={iIdx} className="flex items-start gap-2 leading-normal text-[#1F2937]">
                                         {/* Styled Numbered Step Badge with Hanging Indent */}
                                         <span
-                                            className="w-4.5 h-4.5 rounded-md bg-[#0F766E]/12 border border-[#0F766E]/25 text-[#0F766E] text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5 select-none"
+                                            className="w-4 h-4 rounded-md bg-[#0F766E]/12 border border-[#0F766E]/25 text-[#0F766E] text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5 select-none"
                                             aria-hidden="true"
                                         >
                                             {item.number}
@@ -783,7 +782,7 @@ export function RuleBasedChatbot({
                     }
 
                     return (
-                        <p key={bIdx} className="leading-relaxed text-[#1F2937]">
+                        <p key={bIdx} className="leading-normal text-[#1F2937]">
                             {renderInlineText(block.text)}
                         </p>
                     );
@@ -893,7 +892,7 @@ export function RuleBasedChatbot({
                                 return (
                                     <div
                                         key={msg.id}
-                                        className={`flex flex-col ${isUser ? "items-end" : "items-start"}`}
+                                        className={`flex flex-col w-full ${isUser ? "items-end" : "items-start"}`}
                                     >
                                         <div className={`flex items-start gap-2 max-w-[94%] sm:max-w-[90%] ${isUser ? "flex-row-reverse" : "flex-row"}`}>
                                             {/* Side Avatar */}
@@ -903,22 +902,22 @@ export function RuleBasedChatbot({
                                             <div className="flex flex-col gap-1 flex-1">
                                                 {/* Chat Bubble */}
                                                 <div
-                                                    className={`group relative text-[13.5px] sm:text-[14px] leading-relaxed break-words font-serif font-crimson transition-all ${
+                                                    className={`group relative text-[13px] sm:text-[13.5px] leading-normal break-words font-serif font-crimson transition-all ${
                                                         isUser
-                                                            ? "bg-gradient-to-r from-[#0F766E] to-[#115E59] text-white rounded-2xl rounded-tr-xs shadow-xs font-medium px-4 py-3"
-                                                            : "bg-white text-[#1F2937] rounded-2xl rounded-tl-xs border border-gray-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)] px-4 py-3.5"
+                                                            ? "bg-gradient-to-r from-[#0F766E] to-[#115E59] text-white rounded-2xl rounded-tr-xs shadow-xs font-medium px-3.5 py-2"
+                                                            : "bg-white text-[#1F2937] rounded-2xl rounded-tl-xs border border-gray-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)] px-3.5 py-2.5"
                                                     }`}
                                                     style={{ fontFamily: "var(--font-crimson-pro), Georgia, 'Times New Roman', serif" }}
                                                 >
                                                     {isUser ? (
-                                                        <p className="whitespace-pre-wrap leading-relaxed">{msg.text}</p>
+                                                        <p className="whitespace-pre-wrap leading-normal">{msg.text}</p>
                                                     ) : (
                                                         renderFormattedMessage(msg.text)
                                                     )}
 
                                                     {/* Bot Action Bar: Copy + Feedback Rating (Zero Emojis, Pure SVG Icons) */}
                                                     {!isUser && (
-                                                        <div className="mt-2.5 pt-2 border-t border-gray-100 flex items-center justify-between text-[11px] text-gray-400">
+                                                        <div className="mt-2 pt-1.5 border-t border-gray-100 flex items-center justify-between text-[10px] text-gray-400">
                                                             <div className="flex items-center gap-1">
                                                                 <button
                                                                     onClick={() => handleCopyText(msg.id, msg.text)}
@@ -928,12 +927,12 @@ export function RuleBasedChatbot({
                                                                     {copiedMsgId === msg.id ? (
                                                                         <>
                                                                             <Check className="w-3 h-3 text-emerald-600" />
-                                                                            <span className="text-[10px] text-emerald-600 font-semibold">Copied</span>
+                                                                            <span className="text-[9.5px] text-emerald-600 font-semibold">Copied</span>
                                                                         </>
                                                                     ) : (
                                                                         <>
                                                                             <Copy className="w-3 h-3" />
-                                                                            <span className="text-[10px] font-medium">Copy</span>
+                                                                            <span className="text-[9.5px] font-medium">Copy</span>
                                                                         </>
                                                                     )}
                                                                 </button>
@@ -1099,12 +1098,12 @@ export function RuleBasedChatbot({
                                                                     </a>
                                                                 </div>
                                                             ) : (
-                                                                <div className="p-3.5 bg-[#F8FAF9] rounded-2xl border border-gray-200/90 shadow-2xs space-y-2.5 text-xs font-serif font-crimson">
-                                                                    <div className="flex items-center justify-between">
-                                                                        <span className="font-bold text-gray-800 text-[11.5px] uppercase tracking-wider font-serif font-crimson">
-                                                                            Quick Inquiry &amp; Demo Request
+                                                                <div className="p-2.5 bg-[#F8FAF9] rounded-xl border border-gray-200/90 shadow-2xs space-y-1.5 text-xs font-serif font-crimson">
+                                                                    <div className="flex items-center justify-between pb-0.5">
+                                                                        <span className="font-bold text-gray-800 text-[11px] uppercase tracking-wider font-serif font-crimson">
+                                                                            Direct Inquiry &amp; Callback
                                                                         </span>
-                                                                        <span className="text-[10px] text-[#0F766E] font-bold bg-[#E6F3EE] px-2 py-0.5 rounded-full border border-[#0F766E]/20">
+                                                                        <span className="text-[9.5px] text-[#0F766E] font-bold bg-[#E6F3EE] px-1.5 py-0.5 rounded-full border border-[#0F766E]/20">
                                                                             Free Scoping
                                                                         </span>
                                                                     </div>
@@ -1113,22 +1112,22 @@ export function RuleBasedChatbot({
                                                                         placeholder="Your Full Name *"
                                                                         value={leadFormState.fullName}
                                                                         onChange={(e) => setLeadFormState(prev => ({ ...prev, fullName: e.target.value }))}
-                                                                        className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-gray-800 placeholder-gray-400 font-serif font-crimson focus:outline-none focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E] transition-all shadow-2xs"
+                                                                        className="w-full px-2.5 py-1.5 bg-white border border-gray-200 rounded-lg text-xs text-gray-800 placeholder-gray-400 font-serif font-crimson focus:outline-none focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E] transition-all shadow-2xs"
                                                                     />
-                                                                    <div className="grid grid-cols-2 gap-2">
+                                                                    <div className="grid grid-cols-2 gap-1.5">
                                                                         <input
                                                                             type="tel"
                                                                             placeholder="Phone Number *"
                                                                             value={leadFormState.phone}
                                                                             onChange={(e) => setLeadFormState(prev => ({ ...prev, phone: e.target.value }))}
-                                                                            className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-gray-800 placeholder-gray-400 font-serif font-crimson focus:outline-none focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E] transition-all shadow-2xs"
+                                                                            className="w-full px-2.5 py-1.5 bg-white border border-gray-200 rounded-lg text-xs text-gray-800 placeholder-gray-400 font-serif font-crimson focus:outline-none focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E] transition-all shadow-2xs"
                                                                         />
                                                                         <input
                                                                             type="email"
                                                                             placeholder="Email Address *"
                                                                             value={leadFormState.email}
                                                                             onChange={(e) => setLeadFormState(prev => ({ ...prev, email: e.target.value }))}
-                                                                            className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-gray-800 placeholder-gray-400 font-serif font-crimson focus:outline-none focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E] transition-all shadow-2xs"
+                                                                            className="w-full px-2.5 py-1.5 bg-white border border-gray-200 rounded-lg text-xs text-gray-800 placeholder-gray-400 font-serif font-crimson focus:outline-none focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E] transition-all shadow-2xs"
                                                                         />
                                                                     </div>
 
@@ -1140,15 +1139,15 @@ export function RuleBasedChatbot({
                                                                                 setServiceDropdownOpen(prev => !prev);
                                                                                 setTimeout(() => scrollToBottom(), 80);
                                                                             }}
-                                                                            className="w-full pl-3 pr-9 py-2 bg-white border border-gray-200 rounded-xl text-gray-800 text-xs font-serif font-crimson flex items-center justify-between cursor-pointer focus:outline-none focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E] transition-all shadow-2xs text-left"
+                                                                            className="w-full pl-2.5 pr-8 py-1.5 bg-white border border-gray-200 rounded-lg text-gray-800 text-xs font-serif font-crimson flex items-center justify-between cursor-pointer focus:outline-none focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E] transition-all shadow-2xs text-left"
                                                                             aria-haspopup="listbox"
                                                                             aria-expanded={serviceDropdownOpen}
                                                                         >
-                                                                            <span className="truncate pr-1">
-                                                                                {SERVICE_OPTIONS.find(o => o.value === leadFormState.serviceInterest)?.label || leadFormState.serviceInterest || "Select Service Interest"}
+                                                                            <span className="truncate pr-1 text-xs">
+                                                                                {SERVICE_OPTIONS.find(o => o.value === leadFormState.serviceInterest)?.label || leadFormState.serviceInterest || "Select Service"}
                                                                             </span>
                                                                             <ChevronDown
-                                                                                className={`w-4 h-4 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none transition-transform duration-200 ${
+                                                                                className={`w-3.5 h-3.5 text-gray-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none transition-transform duration-200 ${
                                                                                     serviceDropdownOpen ? "rotate-180 text-[#0F766E]" : ""
                                                                                 }`}
                                                                             />
@@ -1157,7 +1156,7 @@ export function RuleBasedChatbot({
                                                                         {serviceDropdownOpen && (
                                                                             <div
                                                                                 role="listbox"
-                                                                                className="absolute left-0 right-0 top-full mt-1.5 w-full bg-white border border-gray-200/90 rounded-xl shadow-xl z-30 overflow-hidden divide-y divide-gray-100 font-serif font-crimson"
+                                                                                className="absolute left-0 right-0 top-full mt-1 w-full bg-white border border-gray-200/90 rounded-xl shadow-xl z-30 overflow-hidden divide-y divide-gray-100 font-serif font-crimson"
                                                                             >
                                                                                 {SERVICE_OPTIONS.map((opt) => {
                                                                                     const isSelected = leadFormState.serviceInterest === opt.value;
@@ -1171,7 +1170,7 @@ export function RuleBasedChatbot({
                                                                                                 setLeadFormState(prev => ({ ...prev, serviceInterest: opt.value }));
                                                                                                 setServiceDropdownOpen(false);
                                                                                             }}
-                                                                                            className={`w-full px-3 py-2.5 text-xs text-left cursor-pointer flex items-center justify-between transition-colors ${
+                                                                                            className={`w-full px-2.5 py-2 text-xs text-left cursor-pointer flex items-center justify-between transition-colors ${
                                                                                                 isSelected
                                                                                                     ? "bg-[#EDF5F2] text-[#0F766E] font-bold"
                                                                                                     : "hover:bg-[#F8FAF9] text-gray-700 font-medium"
@@ -1186,21 +1185,21 @@ export function RuleBasedChatbot({
                                                                         )}
                                                                     </div>
 
-                                                                    <textarea
-                                                                        rows={2}
+                                                                    <input
+                                                                        type="text"
                                                                         placeholder="Project requirement or note (Optional)"
                                                                         value={leadFormState.message || ""}
                                                                         onChange={(e) => setLeadFormState(prev => ({ ...prev, message: e.target.value }))}
-                                                                        className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-gray-800 placeholder-gray-400 font-serif font-crimson focus:outline-none focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E] transition-all shadow-2xs resize-none"
+                                                                        className="w-full px-2.5 py-1.5 bg-white border border-gray-200 rounded-lg text-xs text-gray-800 placeholder-gray-400 font-serif font-crimson focus:outline-none focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E] transition-all shadow-2xs"
                                                                     />
 
                                                                     <button
                                                                         onClick={() => handleLeadSubmit(msg.id)}
                                                                         disabled={leadSubmitting || !leadFormState.fullName.trim() || !leadFormState.phone.trim() || !leadFormState.email.trim()}
-                                                                        className="w-full py-2.5 px-3 bg-[#0F766E] hover:bg-[#115E59] active:scale-[0.98] disabled:opacity-50 text-white font-bold rounded-xl flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer font-serif font-crimson text-xs sm:text-sm"
+                                                                        className="w-full py-1.5 px-3 bg-[#0F766E] hover:bg-[#115E59] active:scale-[0.98] disabled:opacity-50 text-white font-bold rounded-lg flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer font-serif font-crimson text-xs"
                                                                     >
                                                                         {leadSubmitting ? (
-                                                                            <span>Submitting Inquiry...</span>
+                                                                            <span>Submitting Inquiry</span>
                                                                         ) : (
                                                                             <>
                                                                                 <span>Submit Details to Team</span>
@@ -1322,18 +1321,18 @@ export function RuleBasedChatbot({
                                                 const filtered = rawPills.filter(p => !redundant.has(p.toLowerCase().trim()));
                                                 displayedPills = filtered.length > 0
                                                     ? filtered
-                                                    : ["Request a Quote", "ClearInvoice", "Academic Sprints", "Talk to Team"];
+                                                    : ["Request a Quote", "SS40 Products", "Academic Sprints", "Talk to Team"];
                                             }
 
                                             if (displayedPills.length === 0) return null;
 
                                             return (
-                                                <div className="flex flex-wrap gap-1.5 mt-2 pl-9 sm:pl-10 max-w-[95%]">
+                                                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-1.5 mt-2 w-full sm:w-auto sm:pl-9 sm:max-w-[95%]">
                                                     {displayedPills.map((pill, i) => (
                                                         <button
                                                             key={i}
                                                             onClick={() => handleSend(pill)}
-                                                            className="text-[11px] sm:text-xs font-semibold text-[#0F766E] bg-white hover:bg-[#D8E8E2] active:bg-[#C2DDD3] border border-[#0F766E]/20 shadow-2xs hover:shadow-xs px-3 py-1.5 rounded-full transition-all hover:scale-105 active:scale-95 cursor-pointer touch-manipulation"
+                                                            className="text-[11px] sm:text-xs font-semibold text-[#0F766E] bg-white hover:bg-[#D8E8E2] active:bg-[#C2DDD3] border border-[#0F766E]/20 shadow-2xs hover:shadow-xs px-2.5 py-1 rounded-full transition-all cursor-pointer touch-manipulation"
                                                         >
                                                             {stripEmojis(pill)}
                                                         </button>
@@ -1372,13 +1371,13 @@ export function RuleBasedChatbot({
                         </div>
 
                         {/* Input Footer */}
-                        <div className="bg-[#F8FAFB] border-t border-gray-200/90 px-3.5 py-2.5 pb-[max(0.7rem,env(safe-area-inset-bottom))] sm:pb-3 shrink-0 flex flex-col gap-1.5">
+                        <div className="bg-[#F8FAFB] border-t border-gray-200/90 px-3.5 py-2 pb-[max(0.6rem,env(safe-area-inset-bottom))] sm:pb-2.5 shrink-0 flex flex-col gap-1">
                             <form
                                 onSubmit={(e) => {
                                     e.preventDefault();
                                     handleSend();
                                 }}
-                                className="relative flex items-center w-full bg-white border-2 border-[#0F766E]/40 hover:border-[#0F766E]/60 focus-within:border-[#0F766E] focus-within:ring-3 focus-within:ring-[#0F766E]/20 rounded-full pl-4 pr-1.5 py-1.5 shadow-[0_2px_10px_rgba(15,118,110,0.08)] transition-all"
+                                className="relative flex items-center w-full bg-white border border-[#0F766E]/40 hover:border-[#0F766E]/60 focus-within:border-[#0F766E] focus-within:ring-2 focus-within:ring-[#0F766E]/20 rounded-full pl-4 pr-1.5 py-1.5 shadow-[0_2px_8px_rgba(15,118,110,0.06)] transition-all"
                             >
                                 <input
                                     ref={inputRef}
@@ -1390,8 +1389,8 @@ export function RuleBasedChatbot({
                                             scrollToBottom();
                                         }, 180);
                                     }}
-                                    placeholder="Ask a question or select a topic..."
-                                    className="flex-1 bg-transparent py-1 text-base sm:text-sm text-[#111827] placeholder:text-gray-400 font-medium font-serif font-crimson focus:outline-none"
+                                    placeholder="Ask a question or select a topic"
+                                    className="flex-1 bg-transparent py-1 text-xs sm:text-sm text-[#111827] placeholder:text-gray-400 font-medium font-serif font-crimson focus:outline-none"
                                 />
                                 <button
                                     type="submit"

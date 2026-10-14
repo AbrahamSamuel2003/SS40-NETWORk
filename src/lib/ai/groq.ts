@@ -59,7 +59,15 @@ ROLE & PURPOSE:
 
 COMMUNICATION STYLE & TONE:
 - USE SIMPLE, CLEAR, EVERYDAY LANGUAGE: Explain technical terms simply so that any visitor, business owner, or student can easily understand. Avoid dense corporate jargon.
-- Keep answers concise, clear, and direct (2 to 4 sentences or clean bullet points).
+- STRICT RULE - SHORT & CRISP ANSWERS: Keep every answer strictly short, direct, and concise (maximum 2 to 3 sentences or brief points). Avoid lengthy paragraphs, filler words, and repetitive padding. Mobile users need quick, immediate information without scrolling.
+- CONTACT INQUIRIES RULE: When the user asks for contact info, contact details, or asks how to reach the team:
+  * Provide the official contact channels in a short, crisp format:
+    Phone: +91 93605 51750
+    Email: support@ss40network.com
+    Location: Tirunelveli, Tamil Nadu
+  * Invite them to share their details below for a direct consultation.
+  * Set actionType to "LEAD_CAPTURE" so the compact inquiry form appears directly below.
+  * Set navigation to null so no duplicate button is displayed.
 - PROPER LIST FORMATTING: When listing multiple items, features, products, or steps, format them with clean Markdown bullet points (using "- **Name**: detail") or numbered points (using "1. **Name**: detail"). Always put each point on its own fresh line for clean presentation.
 
 YOUR THREE BEHAVIORAL MODES:
@@ -105,11 +113,16 @@ PROGRESSIVE LEAD CONVERSION FUNNEL (POLITE, CONVERSATIONAL, ZERO-REPETITION):
 CRITICAL RULE FOR SUGGESTION PILLS ("options"):
 - PILLS MUST BE 1-TAP TOPICAL EXPLORATION SHORTCUTS ONLY. They allow users to explore services, features, and case studies without typing long questions on mobile/desktop.
 - FORBIDDEN PILLS: NEVER generate pills that instruct the user to give info, such as "Provide Name", "Provide Email", "Provide Phone Number", "Share Contact Details", "Provide Details", "Share Details", or "Enter Phone".
-- ALLOWED PILL EXAMPLES:
-  * Products: ["ClearInvoice Live Demo", "ClearInvoice Pricing", "GST Billing Features", "SS40 AI Email Agent"]
+- TOP-LEVEL WING BALANCE RULE (STRICT):
+  * For greetings, small talk ("hi", "hello", "good morning", "who are you", etc.), and general company inquiries, pills MUST strictly represent high-level company wings: ["Three Wings Overview", "SS40 Digital Solutions", "SS40 Products", "SS40 Academics", "Contact Team"].
+  * NEVER output "ClearInvoice Live Demo" or single out specific product features during greetings or general company inquiries!
+  * Product-specific pills (e.g. "ClearInvoice Live Demo", "ClearInvoice Pricing", "GST Billing Features", "SS40 AI Email Agent") are strictly restricted to inquiries where the user explicitly asks about products, software tools, billing, or invoicing.
+- ALLOWED PILL EXAMPLES BY CONTEXT:
+  * General Inquiries & Greetings: ["Three Wings Overview", "SS40 Digital Solutions", "SS40 Products", "SS40 Academics", "Contact Team"]
+  * Product Inquiries (Only when user asks about products): ["ClearInvoice", "SS40 AI Email Agent", "GTC Suite", "Explore Products"]
+  * Invoicing / ClearInvoice Inquiries: ["ClearInvoice Live Demo", "ClearInvoice Pricing", "GST Billing Features", "Explore Products"]
   * Digital Solutions: ["Web App Development", "Mobile App Sprints", "Client Case Studies", "Cloud Architecture"]
   * Academics: ["Academic Internships", "Student Projects", "DSA Placement Prep", "College MOUs"]
-  * General: ["Three Wings Overview", "Client Projects", "Contact Team", "About SS40 NETWORK"]
 
 OUTPUT FORMAT:
 You MUST ALWAYS respond in valid JSON with this exact schema:
@@ -190,8 +203,8 @@ export async function generateRagResponse(
         return {
             answer: fallbackText,
             replyText: fallbackText,
-            options: sanitizePillOptions(fallbackOptions, primaryChunk, rawUserMessage),
-            quickReplies: sanitizePillOptions(fallbackOptions, primaryChunk, rawUserMessage),
+            options: sanitizePillOptions(fallbackOptions, primaryChunk, rawUserMessage, processed.isGreeting || processed.isSmallTalk),
+            quickReplies: sanitizePillOptions(fallbackOptions, primaryChunk, rawUserMessage, processed.isGreeting || processed.isSmallTalk),
             navigation: primaryChunk?.route ? { label: "Explore", url: primaryChunk.route } : { label: "Explore SS40 NETWORK", url: "/#business-wings" },
             link: primaryChunk?.route ? { label: "Explore", url: primaryChunk.route } : { label: "Explore SS40 NETWORK", url: "/#business-wings" },
             actionType: "STANDARD",
@@ -319,7 +332,7 @@ ${contextText}${dynamicLeadDirective}`;
         );
 
         // Sanitize pill options to guarantee they are 1-tap topic exploration shortcuts (never form prompts)
-        const options: string[] = sanitizePillOptions(parsed.options, primaryChunk, rawUserMessage);
+        const options: string[] = sanitizePillOptions(parsed.options, primaryChunk, rawUserMessage, processed.isGreeting || processed.isSmallTalk);
 
         let navigation: { label: string; url: string } | null = null;
         if (parsed.navigation && typeof parsed.navigation.url === "string" && parsed.navigation.url.startsWith("/")) {
@@ -335,20 +348,26 @@ ${contextText}${dynamicLeadDirective}`;
         }
 
         let actionType: StructuredSkyResponse["actionType"] = "STANDARD";
-        const isExplicitContactRequest = /^(contact team|contact us|get in touch|talk to team|leave contact details|request callback|callback request)$/i.test(rawUserMessage.trim());
+        const isExplicitContactRequest = /^(contact|contact team|contact us|contact details|contact info|get in touch|talk to team|leave contact details|request callback|callback request|how to contact|reach out)$/i.test(rawUserMessage.trim()) || /\b(contact details|contact info|how (can i|to) contact|phone number|reach your team)\b/i.test(rawUserMessage);
         const isHighIntentTopic = /\b(live demo|book demo|schedule demo|pricing|quote|get a quote|request a quote|scoping call|hire|consultation)\b/i.test(rawUserMessage);
 
         if (isExplicitContactRequest) {
             actionType = "LEAD_CAPTURE";
         } else if (userTurnCount >= 3 && isHighIntentTopic && !processed.isGreeting) {
             actionType = "LEAD_CAPTURE";
-        } else if (parsed.actionType && ["STANDARD", "WINGS_CARD", "ACADEMIC_CARD", "SUPPORT_CARD"].includes(parsed.actionType)) {
+        } else if (parsed.actionType && ["STANDARD", "WINGS_CARD", "ACADEMIC_CARD", "SUPPORT_CARD", "LEAD_CAPTURE"].includes(parsed.actionType)) {
             actionType = parsed.actionType;
         } else {
             actionType = determineActionType(primaryChunk, rawUserMessage);
-            if (actionType === "LEAD_CAPTURE" && (userTurnCount < 3 || processed.isGreeting)) {
+            const isContactOrLead = /\b(contact|phone|call|email|reach|quote|demo|callback)\b/i.test(rawUserMessage);
+            if (actionType === "LEAD_CAPTURE" && !isContactOrLead && (userTurnCount < 3 || processed.isGreeting)) {
                 actionType = "STANDARD";
             }
+        }
+
+        // When lead form is displayed, suppress duplicate link buttons to keep vertical height compact
+        if (actionType === "LEAD_CAPTURE" || isExplicitContactRequest) {
+            navigation = null;
         }
 
         return {
@@ -377,8 +396,8 @@ ${contextText}${dynamicLeadDirective}`;
         return {
             answer: fallbackContent,
             replyText: fallbackContent,
-            options: sanitizePillOptions(fallbackOptions, primaryChunk, rawUserMessage),
-            quickReplies: sanitizePillOptions(fallbackOptions, primaryChunk, rawUserMessage),
+            options: sanitizePillOptions(fallbackOptions, primaryChunk, rawUserMessage, processed.isGreeting || processed.isSmallTalk),
+            quickReplies: sanitizePillOptions(fallbackOptions, primaryChunk, rawUserMessage, processed.isGreeting || processed.isSmallTalk),
             navigation: primaryChunk?.route ? { label: "Explore Details", url: primaryChunk.route } : { label: "Explore SS40 NETWORK", url: "/#business-wings" },
             link: primaryChunk?.route ? { label: "Explore Details", url: primaryChunk.route } : { label: "Explore SS40 NETWORK", url: "/#business-wings" },
             actionType: "STANDARD",
@@ -389,10 +408,10 @@ ${contextText}${dynamicLeadDirective}`;
 
 function determineActionType(chunk?: VectorChunk, query: string = ""): StructuredSkyResponse["actionType"] {
     const q = query.toLowerCase();
-    if (/\b(quote|get a quote|callback|call back|request callback|book demo|schedule demo|discuss project|hire|inquiry|consultation|scoping|leave details|my details)\b/i.test(q)) {
+    if (/\b(quote|get a quote|callback|call back|request callback|book demo|schedule demo|discuss project|hire|inquiry|consultation|scoping|leave details|my details|contact|contact us|contact details|contact info|phone number)\b/i.test(q)) {
         return "LEAD_CAPTURE";
     }
-    if (/\b(phone|call|email|whatsapp|address|reach|contact us|talk to human|location|where are you)\b/i.test(q)) {
+    if (/\b(phone|call|email|whatsapp|address|reach|talk to human|location|where are you)\b/i.test(q)) {
         return "SUPPORT_CARD";
     }
     if (/\b(three wings|3 wings|all wings|what do you do|services|ecosystem)\b/i.test(q)) {
@@ -408,10 +427,24 @@ function determineActionType(chunk?: VectorChunk, query: string = ""): Structure
  * Sanitizes and validates quick-reply pills to guarantee they are 1-tap topic exploration shortcuts
  * and never form-prompting instructions (e.g. rejects "Provide Name", "Share Contact Details").
  */
-function sanitizePillOptions(rawOptions: any[], primaryChunk?: VectorChunk, query: string = ""): string[] {
+function sanitizePillOptions(
+    rawOptions: any[],
+    primaryChunk?: VectorChunk,
+    query: string = "",
+    isGreetingOrSmallTalk: boolean = false
+): string[] {
     const FORBIDDEN_PILL_REGEX = /\b(provide|share|enter|give|send|type)\s+(name|phone|email|contact|number|details|info)\b|\b(provide\s+name|share\s+contact|ask\s+another\s+question)\b/i;
 
-    const filtered = (Array.isArray(rawOptions) ? rawOptions : [])
+    const q = query.toLowerCase().trim();
+    const isGreeting = isGreetingOrSmallTalk || /^(hi|hello|hey|greetings|good morning|good afternoon|good evening|who are you|what do you do|tell me about ss40|about ss40|ss40 network)$/i.test(q);
+    const isExplicitProductQuery = /\b(product|products|clearinvoice|invoice|billing|email agent|gtc|saas)\b/i.test(q);
+
+    // On greetings, small talk, or generic company question: guarantee high-level balanced wing pills
+    if (isGreeting) {
+        return ["Three Wings Overview", "SS40 Digital Solutions", "SS40 Products", "SS40 Academics", "Contact Team"];
+    }
+
+    let filtered = (Array.isArray(rawOptions) ? rawOptions : [])
         .map(o => stripEmojisAndSparkles(String(o || "")).trim())
         .filter(pill => {
             if (!pill || pill.length < 3 || pill.length > 40) return false;
@@ -419,21 +452,28 @@ function sanitizePillOptions(rawOptions: any[], primaryChunk?: VectorChunk, quer
             return true;
         });
 
+    // If query is not specifically about products or invoicing, remove any stray single-product pills
+    if (!isExplicitProductQuery && primaryChunk?.category !== "products") {
+        filtered = filtered.filter(pill => !/\b(clearinvoice|invoice|billing|email agent|gtc)\b/i.test(pill));
+    }
+
     if (filtered.length >= 2) {
-        return filtered.slice(0, 4);
+        return filtered.slice(0, 5);
     }
 
     // Contextual exploration fallbacks
-    const q = query.toLowerCase();
-    if (q.includes("clearinvoice") || q.includes("invoice") || q.includes("product") || primaryChunk?.category === "products") {
-        return ["ClearInvoice Live Demo", "ClearInvoice Pricing", "GST Billing Features", "Explore Digital Solutions"];
+    if (q.includes("clearinvoice") || q.includes("invoice") || q.includes("billing")) {
+        return ["ClearInvoice Live Demo", "ClearInvoice Pricing", "GST Billing Features", "Explore Products"];
+    }
+    if (isExplicitProductQuery || primaryChunk?.category === "products") {
+        return ["ClearInvoice", "SS40 AI Email Agent", "GTC Suite", "Explore Products"];
     }
     if (q.includes("internship") || q.includes("academic") || q.includes("student") || primaryChunk?.category === "academics") {
-        return ["Academic Internships", "Student Projects", "DSA Placement Prep", "Explore Products"];
+        return ["Academic Internships", "Student Projects", "DSA Placement Prep", "Three Wings Overview"];
     }
     if (q.includes("client") || q.includes("project") || q.includes("ecommerce") || primaryChunk?.category === "digital-solutions") {
         return ["Web App Development", "Mobile App Sprints", "Client Case Studies", "Three Wings Overview"];
     }
 
-    return ["Three Wings", "SS40 Digital Solutions", "SS40 Products", "SS40 Academics"];
+    return ["Three Wings Overview", "SS40 Digital Solutions", "SS40 Products", "SS40 Academics", "Contact Team"];
 }
