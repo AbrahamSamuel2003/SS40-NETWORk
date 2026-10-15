@@ -234,9 +234,9 @@ export async function generateRagResponse(
             dynamicLeadDirective = `\n\n[DYNAMIC CONTEXTUAL LEAD CONVERSION DIRECTIVE - Turn ${userTurnCount}]:
 - First, answer the user's specific question completely, simply, and accurately.
 - Then, smoothly connect your answer to a polite, gentle 1-sentence closing invitation tailored to the EXACT TOPIC discussed:
-  * If discussing SS40 Products (ClearInvoice, Email Agent, GTC): Offer a quick 1-on-1 walkthrough or pricing details for their business.
-  * If discussing Digital Solutions (Web/App dev, custom software, client projects): Offer a free project scoping consultation or milestone quote.
-  * If discussing SS40 Academics (Internships, Student Projects like LectureCast/WaveLink, DSA placement): Offer the upcoming sprint syllabus, project access, or admission details.
+  * If discussing SS40 Products: Offer a quick 1-on-1 walkthrough or pricing details for their business.
+  * If discussing SS40 Digital Solutions: Offer a free project scoping consultation or milestone quote.
+  * If discussing SS40 Academics: Offer the upcoming sprint syllabus, project access, or admission details.
 - Phrasing MUST be dynamic, varied, polite, and natural. NEVER repeat boilerplate sentences from previous turns. Keep it completely in sync with what was asked.`;
         } else if (currentContact.name && !currentContact.phone && !currentContact.email) {
             dynamicLeadDirective = `\n\n[DYNAMIC CONTEXTUAL LEAD DIRECTIVE]:

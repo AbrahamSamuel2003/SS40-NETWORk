@@ -232,8 +232,8 @@ export async function POST(req: NextRequest) {
         console.error("Error in /api/chat route:", error);
         return NextResponse.json(
             {
-                answer: "SS40 NETWORK operates across Three Specialized Wings: SS40 Digital Solutions, SS40 Products (ClearInvoice), and SS40 Academics. Our team in Tirunelveli is ready to assist you.",
-                replyText: "SS40 NETWORK operates across Three Specialized Wings: SS40 Digital Solutions, SS40 Products (ClearInvoice), and SS40 Academics. Our team in Tirunelveli is ready to assist you.",
+                answer: "SS40 NETWORK operates across Three Specialized Wings: SS40 Digital Solutions, SS40 Products, and SS40 Academics. Our team in Tirunelveli is ready to assist you.",
+                replyText: "SS40 NETWORK operates across Three Specialized Wings: SS40 Digital Solutions, SS40 Products, and SS40 Academics. Our team in Tirunelveli is ready to assist you.",
                 options: ["Three Wings", "SS40 Digital Solutions", "SS40 Products", "SS40 Academics"],
                 quickReplies: ["Three Wings", "SS40 Digital Solutions", "SS40 Products", "SS40 Academics"],
                 navigation: { label: "Contact SS40 Team", url: "/contact" },

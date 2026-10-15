@@ -546,10 +546,10 @@ export function inferServiceInterest(query: string, history: ChatHistoryMessage[
         return "SS40 Digital Solutions";
     }
     if (/\b(clearinvoice|invoice|billing|gst|gtc|saas|products|product)\b/i.test(userUtterances)) {
-        return "SS40 Products (ClearInvoice)";
+        return "SS40 Products";
     }
     if (/\b(internship|intern|academic|student|placement|dsa|college|university|mou|sprint)\b/i.test(userUtterances)) {
-        return "SS40 Academics (Internships & Training)";
+        return "SS40 Academics";
     }
     return "SS40 Digital Solutions";
 }

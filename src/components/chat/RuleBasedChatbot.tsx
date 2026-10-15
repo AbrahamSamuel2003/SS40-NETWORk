@@ -40,9 +40,9 @@ import type { SiteConfigData } from "@/lib/site-config";
 const GOOGLE_MAPS_URL = "https://www.google.com/maps?q=8.729284,77.697432";
 
 const SERVICE_OPTIONS = [
-    { label: "Digital Solutions (Custom Software)", value: "Digital Solutions" },
-    { label: "SS40 Products (ClearInvoice, AI Email Agent)", value: "Products - ClearInvoice, Email Agent, GTC Suite" },
-    { label: "SS40 Academics (Internships & Sprints)", value: "Academics - Internships" },
+    { label: "SS40 Digital Solutions", value: "SS40 Digital Solutions" },
+    { label: "SS40 Products", value: "SS40 Products" },
+    { label: "SS40 Academics", value: "SS40 Academics" },
     { label: "General Consultation & Quote", value: "General Consultation" }
 ];
 
@@ -179,7 +179,7 @@ export function RuleBasedChatbot({
         fullName: "",
         phone: "",
         email: "",
-        serviceInterest: "Digital Solutions",
+        serviceInterest: "SS40 Digital Solutions",
         message: ""
     });
     const [serviceDropdownOpen, setServiceDropdownOpen] = useState(false);
@@ -508,11 +508,11 @@ export function RuleBasedChatbot({
                 const lowerText = text.toLowerCase();
                 let inferred = "General Consultation";
                 if (/clearinvoice|email agent|gtc|billing|product/i.test(lowerText)) {
-                    inferred = "Products - ClearInvoice, Email Agent, GTC Suite";
+                    inferred = "SS40 Products";
                 } else if (/web|app|mobile|software|cloud|solution|development/i.test(lowerText)) {
-                    inferred = "Digital Solutions";
+                    inferred = "SS40 Digital Solutions";
                 } else if (/intern|academic|student|training|course|dsa/i.test(lowerText)) {
-                    inferred = "Academics - Internships";
+                    inferred = "SS40 Academics";
                 }
                 setLeadFormState(prev => ({
                     ...prev,

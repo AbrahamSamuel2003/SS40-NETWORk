@@ -137,7 +137,7 @@ export async function sendLeadAcknowledgementEmail({ fullName, email }: LeadAckn
                         <tr>
                             <td style="padding: 10px 14px; background-color: #F5F3FF; border: 1px solid #EDE9FE; border-radius: 8px;">
                                 <a href="https://ss40network.com/products" style="color: #6B21A8; text-decoration: none; font-size: 13px; font-weight: 700; display: block;">
-                                    2. SS40 Products (ClearInvoice) &rarr;
+                                    2. SS40 Products &rarr;
                                     <span style="display: block; font-size: 11.5px; font-weight: 400; color: #475569; margin-top: 2px;">
                                         Automated GST billing, AI email automation, and business platforms
                                     </span>
