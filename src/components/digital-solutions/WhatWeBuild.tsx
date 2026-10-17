@@ -275,15 +275,6 @@ export function WhatWeBuild() {
                                     Start Your Project
                                 </Link>
                             </Button>
-                            <div className="pt-3 text-center">
-                                <Link
-                                    href="/blog"
-                                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0F766E] hover:underline p-1"
-                                >
-                                    <span>Explore All 18 Regional Service Locations in Blog Directory</span>
-                                    <ArrowRight className="w-3 h-3" />
-                                </Link>
-                            </div>
                         </div>
                     </div>
 
