@@ -129,14 +129,42 @@ export function ClientProjects({ initialData }: ClientProjectsProps = {}) {
         });
     }, [displayedProjects]);
 
+    const handleMobileScroll = () => {
+        if (!mobileScrollRef.current) return;
+        const container = mobileScrollRef.current;
+        const children = Array.from(container.children) as HTMLElement[];
+        if (!children.length) return;
+
+        const scrollCenter = container.scrollLeft + container.clientWidth / 2;
+        let closestIdx = 0;
+        let closestDist = Infinity;
+
+        children.forEach((child, idx) => {
+            const childCenter = child.offsetLeft + child.offsetWidth / 2;
+            const dist = Math.abs(scrollCenter - childCenter);
+            if (dist < closestDist) {
+                closestDist = dist;
+                closestIdx = idx;
+            }
+        });
+
+        if (closestIdx !== activeMobileIdx) {
+            setActiveMobileIdx(closestIdx);
+        }
+    };
+
     const scrollToMobileProject = (idx: number) => {
         if (!mobileScrollRef.current) return;
         const container = mobileScrollRef.current;
-        const cardWidth = container.clientWidth * 0.85 + 16;
-        container.scrollTo({
-            left: idx * cardWidth,
-            behavior: "smooth"
-        });
+        const targetChild = container.children[idx] as HTMLElement | undefined;
+        if (targetChild) {
+            targetChild.scrollIntoView({
+                behavior: "smooth",
+                inline: "center",
+                block: "nearest"
+            });
+        }
+        setActiveMobileIdx(idx);
     };
 
     if (isLoading || displayedProjects.length === 0) {
@@ -516,41 +544,104 @@ export function ClientProjects({ initialData }: ClientProjectsProps = {}) {
                 <div className="block sm:hidden w-full">
                     <div
                         ref={mobileScrollRef}
+                        onScroll={handleMobileScroll}
                         className="flex w-full overflow-x-auto snap-x snap-mandatory gap-4 pb-4 px-1 [&::-webkit-scrollbar]:hidden"
                         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
                     >
-                        {displayedProjects.map((project, idx) => (
-                            <div
-                                key={project.id || idx}
-                                className="w-[85vw] shrink-0 snap-center bg-white rounded-2xl p-5 border border-gray-100 shadow-md flex flex-col justify-between"
-                            >
-                                <div>
-                                    <div className="flex items-center justify-between gap-2 mb-2">
-                                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-[#D8E8E2] text-[#0F766E]">
-                                            {project.industry || "Software"}
-                                        </span>
-                                        {project.status && (
-                                            <span className="text-[10px] font-bold text-emerald-700">
-                                                {project.status}
-                                            </span>
+                        {displayedProjects.map((project, idx) => {
+                            const tags = parseProjectTags(project.tags);
+                            return (
+                                <div
+                                    key={project.id || idx}
+                                    role="button"
+                                    tabIndex={0}
+                                    onClick={() => setActiveModalProject(project)}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter" || e.key === " ") {
+                                            e.preventDefault();
+                                            setActiveModalProject(project);
+                                        }
+                                    }}
+                                    className="w-[85vw] shrink-0 snap-center bg-white rounded-2xl p-4 border border-gray-100 shadow-md hover:shadow-lg active:scale-[0.98] transition-all duration-200 flex flex-col justify-between cursor-pointer text-left select-none group"
+                                >
+                                    <div>
+                                        {/* Header Row: Small Square Image + Title & Industry */}
+                                        <div className="flex items-start gap-3 mb-2.5">
+                                            {/* Square Image Thumbnail */}
+                                            <div className="w-14 h-14 rounded-xl relative overflow-hidden bg-slate-900 border border-gray-100 shrink-0 shadow-sm flex items-center justify-center">
+                                                {project.isConfidential ? (
+                                                    <div className="w-full h-full bg-gradient-to-br from-slate-950 to-slate-900 flex flex-col items-center justify-center p-1 text-center">
+                                                        <Lock className="w-4 h-4 text-[#2DD4BF]" />
+                                                        <span className="text-[8px] text-gray-300 font-bold mt-0.5">NDA</span>
+                                                    </div>
+                                                ) : project.imageUrl ? (
+                                                    <Image
+                                                        src={project.imageUrl}
+                                                        alt={project.title}
+                                                        fill
+                                                        sizes="56px"
+                                                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                                                    />
+                                                ) : (
+                                                    <div className="w-full h-full bg-[#D8E8E2] flex items-center justify-center text-[#0F766E] font-bold text-xs">
+                                                        {project.title ? project.title.slice(0, 2).toUpperCase() : "SS"}
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {/* Title & Badges */}
+                                            <div className="min-w-0 flex-1">
+                                                <div className="flex items-center justify-between gap-1.5 mb-1">
+                                                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#D8E8E2] text-[#0F766E] truncate">
+                                                        {project.industry || "Software"}
+                                                    </span>
+                                                    {project.status && (
+                                                        <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full shrink-0">
+                                                            {project.status}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <h3 className="text-sm font-bold text-gray-900 font-serif line-clamp-2 leading-snug group-hover:text-[#0F766E] transition-colors">
+                                                    {project.title}
+                                                </h3>
+                                            </div>
+                                        </div>
+
+                                        {/* Description */}
+                                        <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed mb-3">
+                                            {project.description}
+                                        </p>
+
+                                        {/* Tech Stack Preview */}
+                                        {tags.length > 0 && (
+                                            <div className="flex flex-wrap gap-1 mb-3">
+                                                {tags.slice(0, 3).map((tag, tIdx) => (
+                                                    <span
+                                                        key={tIdx}
+                                                        className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-[#F0FDFA] text-[#0F766E] border border-[#0F766E]/15"
+                                                    >
+                                                        {tag}
+                                                    </span>
+                                                ))}
+                                                {tags.length > 3 && (
+                                                    <span className="text-[10px] text-gray-400 font-medium self-center pl-0.5">
+                                                        +{tags.length - 3}
+                                                    </span>
+                                                )}
+                                            </div>
                                         )}
                                     </div>
-                                    <h3 className="text-base font-bold text-gray-900 mb-1.5 line-clamp-1">
-                                        {project.title}
-                                    </h3>
-                                    <p className="text-xs text-gray-600 line-clamp-3 leading-relaxed mb-3">
-                                        {project.description}
-                                    </p>
+
+                                    {/* Action Footer */}
+                                    <div className="pt-2.5 border-t border-gray-100 flex items-center justify-between text-xs font-bold text-[#0F766E]">
+                                        <span>View Case Study</span>
+                                        <span className="inline-flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                                            <ArrowRight className="w-3.5 h-3.5" />
+                                        </span>
+                                    </div>
                                 </div>
-                                <Button
-                                    onClick={() => setActiveModalProject(project)}
-                                    size="sm"
-                                    className="w-full bg-[#0F766E] text-white text-xs font-bold rounded-xl mt-2"
-                                >
-                                    Read Details
-                                </Button>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
 
                     {/* Mobile Indicators */}
@@ -561,8 +652,8 @@ export function ClientProjects({ initialData }: ClientProjectsProps = {}) {
                                     key={i}
                                     onClick={() => scrollToMobileProject(i)}
                                     aria-label={`Go to project ${i + 1}`}
-                                    className={`h-2 rounded-full transition-all ${
-                                        activeMobileIdx === i ? "w-6 bg-[#0F766E]" : "w-2 bg-gray-300"
+                                    className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                                        activeMobileIdx === i ? "w-6 bg-[#0F766E]" : "w-2 bg-gray-300 hover:bg-gray-400"
                                     }`}
                                 />
                             ))}
