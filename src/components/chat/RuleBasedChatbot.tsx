@@ -336,14 +336,20 @@ export function RuleBasedChatbot({
                 const vh = vv.height;
                 const vTop = vv.offsetTop;
 
-                const safeHeight = Math.max(260, vh - 20);
-                const safeTop = Math.max(10, vTop + 10);
-
-                setViewportStyle({
-                    top: safeTop,
-                    height: safeHeight,
-                    maxHeight: safeHeight
-                });
+                // Only apply custom top/height when virtual keyboard is actively open (height reduced by > 120px)
+                // This eliminates the visual jumping on initial mount while preserving keyboard compatibility
+                const isKeyboardOpen = window.innerHeight - vh > 120;
+                if (isKeyboardOpen) {
+                    const safeHeight = Math.max(260, vh - 20);
+                    const safeTop = Math.max(10, vTop + 10);
+                    setViewportStyle({
+                        top: safeTop,
+                        height: safeHeight,
+                        maxHeight: safeHeight
+                    });
+                } else {
+                    setViewportStyle({});
+                }
             } else {
                 setViewportStyle({});
             }
@@ -352,7 +358,6 @@ export function RuleBasedChatbot({
         if (typeof window !== "undefined" && window.visualViewport) {
             window.visualViewport.addEventListener("resize", updateViewport);
             window.visualViewport.addEventListener("scroll", updateViewport);
-            updateViewport();
         }
 
         return () => {
@@ -795,27 +800,28 @@ export function RuleBasedChatbot({
         <AnimatePresence>
             {isOpen && (
                 <>
-                    {/* Mobile Backdrop Overlay */}
+                    {/* Mobile Backdrop Overlay: Pure GPU alpha without backdrop-blur stutter */}
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        transition={{ duration: 0.15 }}
+                        transition={{ duration: 0.18, ease: "easeOut" }}
                         onClick={onClose}
-                        className="fixed inset-0 bg-black/45 backdrop-blur-xs z-50 sm:hidden cursor-pointer"
+                        className="fixed inset-0 bg-black/45 z-50 sm:hidden cursor-pointer transform-gpu will-change-[opacity]"
                         aria-hidden="true"
                     />
 
-                    {/* Chat Modal Window */}
+                    {/* Chat Modal Window: Hardware-accelerated GPU layer with native 100dvh */}
                     <motion.div
                         ref={chatContainerRef}
-                        initial={{ opacity: 0, y: 20, scale: 0.96 }}
+                        initial={{ opacity: 0, y: 16, scale: 0.96 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 20, scale: 0.96 }}
+                        exit={{ opacity: 0, y: 16, scale: 0.96 }}
                         transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-                        className="fixed bottom-20 right-3 left-3 sm:left-auto sm:right-6 lg:right-8 sm:bottom-24 z-50 flex flex-col w-auto sm:w-[410px] md:w-[430px] h-[520px] sm:h-[570px] max-h-[calc(100dvh-95px)] sm:max-h-[calc(100vh-120px)] bg-white rounded-2xl sm:rounded-3xl shadow-[0_24px_70px_rgba(15,118,110,0.22)] border border-gray-200/90 overflow-hidden font-serif font-crimson antialiased text-left"
+                        className="fixed bottom-20 right-3 left-3 sm:left-auto sm:right-6 lg:right-8 sm:bottom-24 z-50 flex flex-col w-auto sm:w-[410px] md:w-[430px] h-[520px] sm:h-[570px] max-h-[calc(100dvh-95px)] sm:max-h-[calc(100vh-120px)] bg-white rounded-2xl sm:rounded-3xl shadow-[0_24px_70px_rgba(15,118,110,0.22)] border border-gray-200/90 overflow-hidden font-serif font-crimson antialiased text-left transform-gpu will-change-[transform,opacity]"
                         style={{
                             fontFamily: "var(--font-crimson-pro), Georgia, 'Times New Roman', serif",
+                            transform: "translateZ(0)",
                             ...(viewportStyle.top !== undefined
                                 ? {
                                     top: `${viewportStyle.top}px`,

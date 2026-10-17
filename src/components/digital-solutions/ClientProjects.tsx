@@ -693,7 +693,14 @@ export function ClientProjects({ initialData }: ClientProjectsProps = {}) {
 
 function ClientProjectModal({ project, onClose }: { project: any; onClose: () => void }) {
     React.useEffect(() => {
+        // Prevent layout shift by measuring scrollbar width before locking body scroll
+        const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
         const originalOverflow = document.body.style.overflow;
+        const originalPaddingRight = document.body.style.paddingRight;
+
+        if (scrollBarWidth > 0) {
+            document.body.style.paddingRight = `${scrollBarWidth}px`;
+        }
         document.body.style.overflow = "hidden";
 
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -703,6 +710,7 @@ function ClientProjectModal({ project, onClose }: { project: any; onClose: () =>
 
         return () => {
             document.body.style.overflow = originalOverflow;
+            document.body.style.paddingRight = originalPaddingRight;
             window.removeEventListener("keydown", handleKeyDown);
         };
     }, [onClose]);
@@ -710,34 +718,37 @@ function ClientProjectModal({ project, onClose }: { project: any; onClose: () =>
     const tags = Array.isArray(project?.tags) ? project.tags : [];
 
     return (
-        <div
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.22, ease: SMOOTH_EASE }}
             data-lenis-prevent="true"
-            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto"
+            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto overscroll-contain transform-gpu will-change-[opacity]"
             onWheel={(e) => e.stopPropagation()}
         >
-            {/* Backdrop */}
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
+            {/* GPU-Composited Backdrop: Fast, blur-free deep slate tint with zero frame drops */}
+            <div
                 onClick={onClose}
-                className="fixed inset-0 bg-[#0F172A]/75 backdrop-blur-md"
+                className="fixed inset-0 bg-[#0F172A]/80 -z-10 cursor-pointer"
+                aria-hidden="true"
             />
 
-            {/* Modal Dialog */}
+            {/* Modal Dialog: Hardware-accelerated transform & opacity transition */}
             <motion.div
                 data-lenis-prevent="true"
-                initial={{ opacity: 0, scale: 0.95, y: 15 }}
+                initial={{ opacity: 0, scale: 0.96, y: 14 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: 15 }}
-                transition={{ duration: 0.25, ease: "easeOut" }}
+                exit={{ opacity: 0, scale: 0.97, y: 10 }}
+                transition={{ duration: 0.28, ease: SMOOTH_EASE }}
                 onWheel={(e) => e.stopPropagation()}
-                className="relative w-full max-w-3xl bg-white rounded-3xl shadow-2xl overflow-y-auto max-h-[90vh] z-10 flex flex-col my-auto border border-gray-100 custom-scrollbar"
+                className="relative w-full max-w-3xl bg-white rounded-3xl shadow-2xl overflow-y-auto max-h-[90vh] z-10 flex flex-col my-auto border border-gray-100 custom-scrollbar transform-gpu will-change-[transform,opacity]"
+                style={{ transform: "translateZ(0)" }}
             >
                 {/* Sticky Close Button */}
                 <button
                     onClick={onClose}
-                    className="sticky top-4 self-end -mb-12 mr-4 z-30 p-2.5 rounded-full bg-black/70 hover:bg-black text-white backdrop-blur-md transition-all shadow-xl cursor-pointer"
+                    className="sticky top-4 self-end -mb-12 mr-4 z-30 p-2.5 rounded-full bg-black/75 hover:bg-black text-white transition-all shadow-xl cursor-pointer"
                     aria-label="Close dialog"
                 >
                     <X className="w-5 h-5" />
@@ -758,8 +769,8 @@ function ClientProjectModal({ project, onClose }: { project: any; onClose: () =>
                             src={project.imageUrl}
                             alt={project.title}
                             fill
+                            priority
                             sizes="(max-width: 1024px) 100vw, 800px"
-                            decoding="async"
                             className="object-cover"
                         />
                     ) : (
@@ -852,6 +863,6 @@ function ClientProjectModal({ project, onClose }: { project: any; onClose: () =>
                     </div>
                 </div>
             </motion.div>
-        </div>
+        </motion.div>
     );
 }

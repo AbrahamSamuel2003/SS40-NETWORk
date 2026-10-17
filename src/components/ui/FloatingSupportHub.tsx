@@ -71,10 +71,22 @@ export function FloatingSupportHub({ config }: { config?: SiteConfigData | null 
     const [mounted, setMounted] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isChatOpen, setIsChatOpen] = useState(false);
+    const [hasOpenedChat, setHasOpenedChat] = useState(false);
     const hubRef = React.useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         setMounted(true);
+        // Pre-warm chatbot chunk during browser idle time (zero impact on initial page load)
+        if (typeof window !== "undefined") {
+            const idleTimer = setTimeout(() => {
+                if ("requestIdleCallback" in window) {
+                    (window as any).requestIdleCallback(() => loadChatbot());
+                } else {
+                    loadChatbot();
+                }
+            }, 3000);
+            return () => clearTimeout(idleTimer);
+        }
     }, []);
 
     // ── CLICK OUTSIDE DETECTION TO CLOSE MENU ──
@@ -193,6 +205,7 @@ export function FloatingSupportHub({ config }: { config?: SiteConfigData | null 
                             <button
                                 onClick={() => {
                                     setIsChatOpen(true);
+                                    setHasOpenedChat(true);
                                     setIsMenuOpen(false);
                                 }}
                                 className="flex items-center gap-2.5 pl-3.5 pr-2 py-1.5 sm:py-2 rounded-full bg-white text-[#0F766E] shadow-xl border border-gray-200/90 hover:border-[#0F766E]/40 hover:bg-[#0F766E]/10 active:scale-95 transition-all duration-150 cursor-pointer touch-manipulation group/chat"
@@ -229,8 +242,8 @@ export function FloatingSupportHub({ config }: { config?: SiteConfigData | null 
                 </AnimatePresence>
             </div>
 
-            {/* ── Rule-Based Chatbot Window (Rendered only when opened) ── */}
-            {isChatOpen && (
+            {/* ── Rule-Based Chatbot Window (Mounted once opened to preserve exit animations) ── */}
+            {hasOpenedChat && (
                 <RuleBasedChatbot
                     isOpen={isChatOpen}
                     onClose={() => setIsChatOpen(false)}
