@@ -17,7 +17,8 @@ import {
     Bot,
     TerminalSquare,
     ChevronDown,
-    LayoutDashboard, Users, BarChart2, Settings, Lock, Map, LayoutTemplate, MousePointer2, Search, User, Heart, Home, Compass, Plus, ArrowRightLeft, HardDrive, Zap, CheckCircle2, CloudUpload, ShoppingBag, Star
+    LayoutDashboard, Users, BarChart2, Settings, Lock, Map, LayoutTemplate, MousePointer2, Search, User, Heart, Home, Compass, Plus, ArrowRightLeft, HardDrive, Zap, CheckCircle2, CloudUpload, ShoppingBag, Star,
+    MapPin
 } from "lucide-react";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
@@ -25,48 +26,85 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/utils/cn";
 
-const SOLUTIONS = [
+interface ServiceTag {
+    label: string;
+    url: string;
+}
+
+interface SolutionItem {
+    id: string;
+    title: string;
+    icon: any;
+    description: string;
+    tags: ServiceTag[];
+}
+
+const SOLUTIONS: SolutionItem[] = [
     {
         id: "enterprise",
-        title: "Enterprise Software",
+        title: "Custom Software",
         icon: AppWindow,
         description: "Custom platforms built for complex business operations.",
-        chips: ["ERP", "CRM", "Dashboards"],
+        tags: [
+            { label: "Enterprise Apps", url: "/custom-software-development-company-in-tirunelveli" },
+            { label: "Billing / POS", url: "/billing-software-development-in-tirunelveli" },
+            { label: "Cloud ERP", url: "/custom-erp-software-development-in-coimbatore" },
+        ]
     },
     {
         id: "web",
         title: "Web Applications",
         icon: Globe,
         description: "High-performance scalable portals and frontend systems.",
-        chips: ["Next.js", "React", "Admin Panels"],
+        tags: [
+            { label: "Web Design", url: "/web-designing-company-in-tirunelveli" },
+            { label: "E-Commerce", url: "/ecommerce-website-development-in-madurai" },
+            { label: "Redesign", url: "/website-redesigning-services-in-coimbatore" },
+        ]
     },
     {
         id: "mobile",
         title: "Mobile Applications",
         icon: Smartphone,
         description: "Native and cross-platform native experiences for users on the go.",
-        chips: ["Android", "iOS", "Flutter"],
+        tags: [
+            { label: "Mobile Apps", url: "/mobile-app-development-company-in-tirunelveli" },
+            { label: "Android Apps", url: "/android-app-development-company-in-madurai" },
+            { label: "iOS Apps", url: "/ios-app-development-company-in-coimbatore" },
+        ]
     },
     {
         id: "ai",
         title: "AI Solutions",
         icon: Cpu,
         description: "Intelligent systems designed to automate processes and generate insights.",
-        chips: ["Chatbots", "Automation", "AI Assistants"],
+        tags: [
+            { label: "AI Chatbots", url: "/ai-development-services-in-tamilnadu" },
+            { label: "Smart Agents", url: "/ai-automation-and-smart-agents-in-tamilnadu" },
+            { label: "Generative AI", url: "/custom-generative-ai-solutions-in-tamilnadu" },
+        ]
     },
     {
         id: "cloud",
         title: "Cloud Platforms",
         icon: Cloud,
         description: "Reliable, scalable, and secure cloud environments tailored for dynamic workloads.",
-        chips: ["AWS", "Azure", "APIs"],
+        tags: [
+            { label: "Server Mgmt", url: "/server-management-and-cloud-hosting-in-tirunelveli" },
+            { label: "DevOps & AWS", url: "/cloud-hosting-and-devops-services-in-coimbatore" },
+            { label: "Cloud Migration", url: "/cloud-migration-and-infrastructure-in-madurai" },
+        ]
     },
     {
         id: "automation",
         title: "Business Automation",
         icon: Workflow,
         description: "Streamlined operational workflows eliminating manual tasks entirely.",
-        chips: ["Workflows", "Integrations", "Efficiency"],
+        tags: [
+            { label: "WhatsApp API", url: "/whatsapp-automation-services-in-tirunelveli" },
+            { label: "RPA Tools", url: "/business-process-automation-tools-in-coimbatore" },
+            { label: "Workflows", url: "/workflow-automation-solutions-in-madurai" },
+        ]
     }
 ];
 
@@ -165,17 +203,20 @@ export function WhatWeBuild() {
                             const Icon = solution.icon;
 
                             return (
-                                <button
+                                <div
                                     key={solution.id}
-                                    onClick={() => handleTopicClick(solution.id)}
                                     className={cn(
-                                        "w-full text-left p-5 md:p-6 rounded-2xl border transition-all duration-300 relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]",
+                                        "w-full text-left p-5 md:p-6 rounded-2xl border transition-all duration-300 relative",
                                         isActive
                                             ? "bg-white border-[#6B9F91]/30 shadow-lg shadow-[#6B9F91]/10"
                                             : "bg-transparent border-transparent hover:bg-gray-100 hover:border-gray-200 opacity-70 hover:opacity-100"
                                     )}
                                 >
-                                    <div className="flex items-center gap-4">
+                                    <button
+                                        type="button"
+                                        onClick={() => handleTopicClick(solution.id)}
+                                        className="w-full text-left flex items-center gap-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] rounded-lg cursor-pointer"
+                                    >
                                         <div className={cn(
                                             "w-10 h-10 rounded-lg flex items-center justify-center transition-colors shrink-0",
                                             isActive ? "bg-[#6B9F91]/10 text-[#6B9F91]" : "bg-gray-200 text-gray-500"
@@ -195,7 +236,7 @@ export function WhatWeBuild() {
                                                 !isExpanded && isActive ? "text-[#6B9F91]" : ""
                                             )} />
                                         </div>
-                                    </div>
+                                    </button>
 
                                     <AnimatePresence>
                                         {isExpanded && (
@@ -210,16 +251,21 @@ export function WhatWeBuild() {
                                                     {solution.description}
                                                 </p>
                                                 <div className="flex flex-wrap gap-2 md:pl-14">
-                                                    {solution.chips.map((chip, idx) => (
-                                                        <span key={idx} className="px-2.5 py-1 bg-gray-50 border border-gray-100 text-gray-600 rounded-md text-[10px] sm:text-xs font-semibold uppercase tracking-wider">
-                                                            {chip}
-                                                        </span>
+                                                    {solution.tags.map((tag, idx) => (
+                                                        <Link
+                                                            key={idx}
+                                                            href={tag.url}
+                                                            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-[#0F766E]/10 border border-gray-200/90 hover:border-[#0F766E]/40 text-gray-700 hover:text-[#0F766E] rounded-md text-[11px] sm:text-xs font-semibold uppercase tracking-wider shadow-2xs transition-all group/chip"
+                                                        >
+                                                            <span>{tag.label}</span>
+                                                            <ArrowRight className="w-2.5 h-2.5 opacity-40 group-hover/chip:opacity-100 group-hover/chip:translate-x-0.5 transition-all text-[#0F766E]" />
+                                                        </Link>
                                                     ))}
                                                 </div>
                                             </motion.div>
                                         )}
                                     </AnimatePresence>
-                                </button>
+                                </div>
                             );
                         })}
 
@@ -229,6 +275,15 @@ export function WhatWeBuild() {
                                     Start Your Project
                                 </Link>
                             </Button>
+                            <div className="pt-3 text-center">
+                                <Link
+                                    href="/blog"
+                                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0F766E] hover:underline p-1"
+                                >
+                                    <span>Explore All 18 Regional Service Locations in Blog Directory</span>
+                                    <ArrowRight className="w-3 h-3" />
+                                </Link>
+                            </div>
                         </div>
                     </div>
 
