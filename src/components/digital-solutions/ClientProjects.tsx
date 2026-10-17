@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { 
@@ -25,6 +25,48 @@ import { Button } from "@/components/ui/Button";
 import { CardGridSkeleton } from "@/components/ui/Skeleton";
 import { cn } from "@/utils/cn";
 
+const SMOOTH_EASE = [0.16, 1, 0.3, 1] as const;
+
+function parseProjectTags(tags: any): string[] {
+    if (!tags) return [];
+    if (Array.isArray(tags)) {
+        return tags.map(t => typeof t === 'string' ? t : (t?.label || '')).filter(Boolean);
+    }
+    if (typeof tags === 'string') {
+        try {
+            const parsed = JSON.parse(tags);
+            if (Array.isArray(parsed)) {
+                return parsed.map(t => typeof t === 'string' ? t : (t?.label || '')).filter(Boolean);
+            }
+        } catch {
+            return tags.split(',').map((t: string) => t.trim()).filter(Boolean);
+        }
+    }
+    return [];
+}
+
+function ClientPreviewPlaceholder({ title }: { title?: string }) {
+    return (
+        <div className="w-full h-full flex flex-col items-center justify-center bg-[#D8E8E2]/60 text-[#0F766E] p-4 text-center">
+            <Cpu className="w-10 h-10 mb-2 opacity-80" />
+            <span className="font-bold text-xs">Production System</span>
+            {title && <span className="text-[10px] text-gray-600 mt-0.5 line-clamp-1">{title}</span>}
+        </div>
+    );
+}
+
+function ConfidentialPreviewPlaceholder() {
+    return (
+        <div className="w-full h-full bg-gradient-to-br from-gray-950 via-slate-900 to-teal-950 flex flex-col items-center justify-center p-6 text-center text-white">
+            <div className="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center mb-2.5 text-[#2DD4BF]">
+                <Lock className="w-6 h-6" />
+            </div>
+            <span className="font-bold text-white text-xs">Enterprise Confidential</span>
+            <span className="text-[10px] text-gray-300 mt-0.5">NDA Protected Architecture</span>
+        </div>
+    );
+}
+
 interface ClientProjectsProps {
     initialData?: any[];
 }
@@ -33,6 +75,7 @@ export function ClientProjects({ initialData }: ClientProjectsProps = {}) {
     const [projects, setProjects] = React.useState<any[]>(Array.isArray(initialData) ? initialData : []);
     const [isLoading, setIsLoading] = React.useState(!initialData || (Array.isArray(initialData) && initialData.length === 0));
     const [activeTab, setActiveTab] = React.useState(0);
+    const [spotlightId, setSpotlightId] = React.useState<string | null>(null);
     const [activeModalProject, setActiveModalProject] = React.useState<any | null>(null);
     const [activeMobileIdx, setActiveMobileIdx] = React.useState(0);
     const mobileScrollRef = React.useRef<HTMLDivElement>(null);
@@ -112,8 +155,10 @@ export function ClientProjects({ initialData }: ClientProjectsProps = {}) {
         );
     }
 
-    const currentProject = displayedProjects[activeTab] || displayedProjects[0];
-    const tags = Array.isArray(currentProject?.tags) ? currentProject.tags : [];
+    const displayProjects = displayedProjects.slice(0, 3);
+    const toggleSpotlight = (id: string) => {
+        setSpotlightId(prev => (prev === id ? null : id));
+    };
 
     return (
         <SectionWrapper id="client-projects" className="bg-[#D8E8E2] scroll-mt-24 relative overflow-hidden py-10 sm:py-14 lg:py-16">
@@ -130,209 +175,341 @@ export function ClientProjects({ initialData }: ClientProjectsProps = {}) {
                     align="center"
                 />
 
-                {/* 2. Interactive Project Switcher Tabs (Desktop & Tablet) */}
-                {displayedProjects.length > 1 && (
-                    <div className="hidden sm:flex w-full justify-center">
-                        <div className="inline-flex flex-wrap items-center justify-center p-1 sm:p-1.5 rounded-2xl bg-white/80 backdrop-blur-md border border-gray-200/80 shadow-sm gap-1.5 max-w-full">
-                            {displayedProjects.map((p, idx) => {
-                                const isActive = activeTab === idx;
-                                return (
-                                    <button
-                                        key={p.id || idx}
-                                        type="button"
-                                        onClick={() => setActiveTab(idx)}
-                                        onMouseEnter={() => {
-                                            if (p.imageUrl && typeof window !== "undefined") {
-                                                const prefetchImg = new window.Image();
-                                                prefetchImg.src = p.imageUrl;
-                                            }
-                                        }}
-                                        onTouchStart={() => {
-                                            if (p.imageUrl && typeof window !== "undefined") {
-                                                const prefetchImg = new window.Image();
-                                                prefetchImg.src = p.imageUrl;
-                                            }
-                                        }}
-                                        className={cn(
-                                            "px-4 sm:px-5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 whitespace-nowrap flex items-center gap-2 select-none cursor-pointer border",
-                                            isActive
-                                                ? "bg-[#0F766E] text-white border-[#0F766E] shadow-sm shadow-[#0F766E]/20 ring-1 ring-[#2DD4BF]/40"
-                                                : "bg-white text-[#334155] border-transparent hover:border-[#0F766E]/30 hover:bg-white hover:text-[#0F766E]"
-                                        )}
-                                    >
-                                        {p.isConfidential ? (
-                                            <Lock className="w-3.5 h-3.5 opacity-80" />
-                                        ) : (
-                                            <Globe className="w-3.5 h-3.5 opacity-80" />
-                                        )}
-                                        <span>{p.title}</span>
-                                    </button>
-                                );
-                            })}
-                        </div>
-                    </div>
-                )}
-
-                {/* 3. Flagship Showcase Deck (Desktop View) */}
-                <div className="hidden sm:block w-full bg-white/95 backdrop-blur-md rounded-3xl p-6 sm:p-8 lg:p-10 border border-white/80 shadow-xl relative overflow-hidden">
-                    {/* Inner Accent Glow */}
-                    <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-bl from-[#2DD4BF]/15 via-transparent to-transparent rounded-bl-full pointer-events-none" />
-
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center relative z-10">
-                        
-                        {/* Left Column: Narrative & Technical Specifications */}
-                        <div className="lg:col-span-6 flex flex-col justify-center items-start text-left min-h-[300px]">
-                            <AnimatePresence mode="wait">
-                                <motion.div
-                                    key={currentProject?.id || activeTab}
-                                    initial={{ opacity: 0, y: 8 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -8 }}
-                                    transition={{ duration: 0.22, ease: "easeOut" }}
-                                    className="flex flex-col items-start w-full space-y-3.5"
-                                >
-                                    {/* Industry / Status Pills */}
-                                    <div className="flex flex-wrap items-center gap-2">
-                                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D8E8E2] border border-[#2DD4BF]/40 text-[#0F766E] text-[11px] font-extrabold uppercase tracking-wider shadow-2xs">
-                                            <Layers className="w-3 h-3 text-[#0F766E]" />
-                                            {currentProject?.industry || "Custom Software"}
-                                        </span>
-
-                                        {currentProject?.status && (
-                                            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200/80 text-emerald-700 text-[11px] font-bold uppercase tracking-wider">
-                                                <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                                                {currentProject.status}
-                                            </span>
-                                        )}
-
-                                        {currentProject?.isConfidential && (
-                                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-50 border border-amber-200/70 text-amber-800 text-[10px] font-bold uppercase tracking-wider">
-                                                <ShieldCheck className="w-3 h-3 text-amber-600" />
-                                                NDA Protected
-                                            </span>
-                                        )}
-                                    </div>
-
-                                    {/* Project Title */}
-                                    <h3 className="text-2xl lg:text-3xl font-bold text-[#0F172A] tracking-tight leading-snug font-serif">
-                                        {currentProject?.title}
-                                    </h3>
-
-                                    {/* Description */}
-                                    <p className="text-sm text-gray-600 leading-relaxed font-normal">
-                                        {currentProject?.description}
-                                    </p>
-
-                                    {/* Tech Stack & Feature Chips */}
-                                    {tags.length > 0 && (
-                                        <div className="flex flex-wrap gap-1.5 pt-1">
-                                            {tags.map((tag: string, tIdx: number) => (
-                                                <span
-                                                    key={tIdx}
-                                                    className="px-2.5 py-1 bg-[#F8FAF9] border border-gray-200 text-gray-700 rounded-lg text-xs font-semibold flex items-center gap-1 shadow-2xs"
-                                                >
-                                                    <BadgeCheck className="w-3 h-3 text-[#0F766E]" />
-                                                    <span>{tag}</span>
-                                                </span>
-                                            ))}
-                                        </div>
-                                    )}
-
-                                    {/* Action Buttons */}
-                                    <div className="pt-3 flex flex-wrap items-center gap-3">
-                                        <Button
-                                            onClick={() => setActiveModalProject(currentProject)}
-                                            size="sm"
-                                            className="bg-[#0F766E] hover:bg-[#115E59] text-white shadow-md shadow-[#0F766E]/20 rounded-xl px-5 py-2.5 text-xs font-bold transition-all duration-200 cursor-pointer"
+                {/* 2. DESKTOP VIEW: Adaptive Google Meet Stage & Filmstrip Dock (sm & up) */}
+                <div className="hidden sm:block w-full">
+                    <LayoutGroup id="client-projects-spotlight-group">
+                        {!spotlightId ? (
+                            /* State A: Single Row (3 Clean Minimalist Cards matching Academics BestProjects) */
+                            <motion.div
+                                key="default-grid"
+                                layout
+                                className="grid grid-cols-3 gap-6 items-stretch"
+                            >
+                                {displayProjects.map((project, idx) => {
+                                    const key = project.id || `client-${idx}`;
+                                    return (
+                                        <motion.div
+                                            key={key}
+                                            layout
+                                            layoutId={`client-card-container-${key}`}
+                                            transition={{ duration: 0.48, ease: SMOOTH_EASE }}
+                                            role="button"
+                                            tabIndex={0}
+                                            onClick={() => toggleSpotlight(key)}
+                                            onKeyDown={(e) => {
+                                                if (e.key === "Enter" || e.key === " ") {
+                                                    e.preventDefault();
+                                                    toggleSpotlight(key);
+                                                }
+                                            }}
+                                            className="bg-white rounded-3xl border border-gray-200/90 hover:border-[#0F766E]/50 hover:shadow-xl hover:shadow-[#0F766E]/8 transition-colors duration-300 overflow-hidden flex flex-col justify-between cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F766E]"
                                         >
-                                            View Full Case Study
-                                            <ArrowRight className="ml-1.5 w-3.5 h-3.5" />
-                                        </Button>
-
-                                        {currentProject?.projectUrl && (
-                                            <a
-                                                href={currentProject.projectUrl}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-[#0F766E] hover:text-[#115E59] hover:underline"
+                                            {/* Flushed Top Preview Image */}
+                                            <motion.div
+                                                layout
+                                                layoutId={`client-img-wrapper-${key}`}
+                                                transition={{ duration: 0.48, ease: SMOOTH_EASE }}
+                                                className="relative w-full aspect-video bg-slate-900 overflow-hidden shrink-0 border-b border-gray-100"
                                             >
-                                                <span>Live Application</span>
-                                                <ExternalLink className="w-3 h-3" />
-                                            </a>
-                                        )}
-                                    </div>
-                                </motion.div>
-                            </AnimatePresence>
-                        </div>
-
-                        {/* Right Column: Visual Stage (NDA Graphic or Image Preview) */}
-                        <div className="lg:col-span-6 relative flex justify-center items-center min-h-[260px] lg:min-h-[320px] w-full">
-                            <AnimatePresence mode="wait">
-                                <motion.div
-                                    key={currentProject?.id || activeTab}
-                                    initial={{ opacity: 0, scale: 0.96 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    exit={{ opacity: 0, scale: 1.02 }}
-                                    transition={{ duration: 0.25, ease: "easeOut" }}
-                                    className="w-full h-full flex items-center justify-center"
-                                >
-                                    {currentProject?.isConfidential ? (
-                                        <div className="w-full max-w-md aspect-video rounded-2xl bg-gradient-to-br from-gray-900 via-slate-800 to-teal-950 p-6 flex flex-col items-center justify-center text-center text-white shadow-2xl border border-gray-700/50 relative overflow-hidden">
-                                            <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center mb-3 shadow-inner text-[#2DD4BF]">
-                                                <Lock className="w-8 h-8" />
-                                            </div>
-                                            <h4 className="font-bold text-base text-white mb-1">
-                                                Enterprise Confidential Project
-                                            </h4>
-                                            <p className="text-xs text-gray-300 max-w-xs leading-relaxed">
-                                                Architectural schematics and live code repository protected under client non-disclosure agreement.
-                                            </p>
-                                        </div>
-                                    ) : currentProject?.imageUrl ? (
-                                        <div 
-                                            onClick={() => setActiveModalProject(currentProject)}
-                                            className="w-full aspect-video rounded-2xl overflow-hidden border border-gray-100 shadow-2xl relative group/img cursor-pointer bg-slate-100"
-                                        >
-                                            {/* Shimmer skeleton placeholder while image is loading */}
-                                            {!loadedImages[currentProject.id || currentProject.imageUrl] && (
-                                                <div className="absolute inset-0 bg-gradient-to-r from-gray-100 via-gray-200/70 to-gray-100 animate-pulse flex items-center justify-center z-0">
-                                                    <div className="w-8 h-8 rounded-full border-2 border-[#0F766E]/20 border-t-[#0F766E] animate-spin" />
-                                                </div>
-                                            )}
-                                            <Image
-                                                src={currentProject.imageUrl}
-                                                alt={currentProject.title}
-                                                fill
-                                                sizes="(max-width: 1024px) 100vw, 600px"
-                                                decoding="async"
-                                                onLoad={() => {
-                                                    const key = currentProject.id || currentProject.imageUrl;
-                                                    setLoadedImages(prev => ({ ...prev, [key]: true }));
-                                                }}
-                                                className={cn(
-                                                    "object-cover group-hover/img:scale-105 transition-all duration-500 ease-out relative z-10",
-                                                    loadedImages[currentProject.id || currentProject.imageUrl] ? "opacity-100 scale-100" : "opacity-0 scale-[0.99]"
+                                                {project.isConfidential ? (
+                                                    <ConfidentialPreviewPlaceholder />
+                                                ) : project.imageUrl ? (
+                                                    <Image
+                                                        src={project.imageUrl}
+                                                        alt={project.title}
+                                                        fill
+                                                        sizes="(max-width: 1024px) 33vw, 400px"
+                                                        className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out transform-gpu will-change-transform"
+                                                    />
+                                                ) : (
+                                                    <ClientPreviewPlaceholder title={project.title} />
                                                 )}
-                                            />
-                                            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center z-20">
-                                                <span className="bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl text-xs font-bold text-gray-900 shadow-lg flex items-center gap-1.5">
-                                                    Expand Case Study
-                                                    <ArrowRight className="w-3.5 h-3.5" />
-                                                </span>
-                                            </div>
-                                        </div>
-                                    ) : (
-                                        <div className="w-full max-w-md aspect-video rounded-2xl bg-[#D8E8E2]/60 border border-[#2DD4BF]/30 flex flex-col items-center justify-center p-6 text-center text-[#0F766E]">
-                                            <Cpu className="w-12 h-12 mb-2 text-[#0F766E] opacity-70" />
-                                            <p className="text-xs font-bold">Production System Architecture</p>
-                                            <p className="text-[11px] text-gray-600 mt-1">{currentProject?.title}</p>
-                                        </div>
-                                    )}
-                                </motion.div>
-                            </AnimatePresence>
-                        </div>
+                                            </motion.div>
 
-                    </div>
+                                            {/* Content Body */}
+                                            <motion.div
+                                                layout
+                                                layoutId={`client-body-wrapper-${key}`}
+                                                transition={{ duration: 0.48, ease: SMOOTH_EASE }}
+                                                className="p-5 sm:p-6 flex flex-col flex-1 justify-between text-left"
+                                            >
+                                                <div>
+                                                    <div className="flex items-center gap-2 mb-2.5">
+                                                        <span className="font-mono text-xs font-bold text-gray-400">
+                                                            {String(idx + 1).padStart(2, "0")}
+                                                        </span>
+                                                        <span className="h-3 w-px bg-gray-200" />
+                                                        <span className="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#D8E8E2] text-[#0F766E] border border-[#2DD4BF]/40">
+                                                            {project.industry || "Custom Software"}
+                                                        </span>
+                                                        {project.status && (
+                                                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200/80 truncate max-w-[120px]">
+                                                                {project.status}
+                                                            </span>
+                                                        )}
+                                                        {project.isConfidential && (
+                                                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200/70">
+                                                                NDA
+                                                            </span>
+                                                        )}
+                                                    </div>
+
+                                                    <h3 className="font-bold text-lg lg:text-xl text-gray-900 leading-snug font-serif group-hover:text-[#0F766E] transition-colors line-clamp-2">
+                                                        {project.title}
+                                                    </h3>
+                                                </div>
+
+                                                <div className="pt-4 mt-4 border-t border-gray-100 flex items-center justify-between">
+                                                    <button
+                                                        type="button"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            toggleSpotlight(key);
+                                                        }}
+                                                        className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0F766E] group-hover:text-[#115E59] group-hover:translate-x-0.5 transition-all cursor-pointer"
+                                                    >
+                                                        <span>View Details</span>
+                                                        <ArrowRight className="w-3.5 h-3.5" />
+                                                    </button>
+                                                </div>
+                                            </motion.div>
+                                        </motion.div>
+                                    );
+                                })}
+                            </motion.div>
+                        ) : (
+                            /* State B: Adaptive Spotlight Stage (Hero Stage + Bottom Dock Cards) */
+                            <motion.div layout className="flex flex-col gap-6">
+                                {(() => {
+                                    const spotlightProject = displayProjects.find((p, idx) => (p.id || `client-${idx}`) === spotlightId) || displayProjects[0];
+                                    const spotlightKey = spotlightProject.id || `client-${displayProjects.indexOf(spotlightProject)}`;
+                                    const dockProjects = displayProjects.filter((p, idx) => (p.id || `client-${idx}`) !== spotlightKey);
+                                    const spotlightIdx = displayProjects.indexOf(spotlightProject);
+                                    const tags = parseProjectTags(spotlightProject.tags);
+
+                                    return (
+                                        <>
+                                            {/* PRIMARY STAGE: Morphing Hero Frame with GPU FLIP Transition */}
+                                            <motion.div
+                                                key={spotlightKey}
+                                                layout
+                                                layoutId={`client-card-container-${spotlightKey}`}
+                                                transition={{ duration: 0.48, ease: SMOOTH_EASE }}
+                                                className="w-full bg-white rounded-3xl border border-[#0F766E]/40 shadow-2xl shadow-[#0F766E]/10 ring-1 ring-[#0F766E]/20 overflow-hidden flex flex-col lg:flex-row group"
+                                            >
+                                                {/* Left: Cinematic Preview Image */}
+                                                <motion.div
+                                                    layout
+                                                    layoutId={`client-img-wrapper-${spotlightKey}`}
+                                                    transition={{ duration: 0.48, ease: SMOOTH_EASE }}
+                                                    className="w-full lg:w-7/12 aspect-video lg:aspect-auto min-h-[300px] lg:min-h-[360px] relative bg-slate-900 overflow-hidden shrink-0 border-b lg:border-b-0 lg:border-r border-gray-100"
+                                                >
+                                                    {spotlightProject.isConfidential ? (
+                                                        <div className="w-full h-full min-h-[300px] lg:min-h-[360px] bg-gradient-to-br from-gray-950 via-slate-900 to-teal-950 p-8 flex flex-col items-center justify-center text-center text-white shadow-2xl relative overflow-hidden">
+                                                            <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center mb-3 shadow-inner text-[#2DD4BF]">
+                                                                <Lock className="w-8 h-8" />
+                                                            </div>
+                                                            <h4 className="font-bold text-base text-white mb-1">
+                                                                Enterprise Confidential Project
+                                                            </h4>
+                                                            <p className="text-xs text-gray-300 max-w-xs leading-relaxed">
+                                                                Architectural schematics, proprietary data pipelines, and live codebase protected under client non-disclosure agreement.
+                                                            </p>
+                                                        </div>
+                                                    ) : spotlightProject.imageUrl ? (
+                                                        <Image
+                                                            src={spotlightProject.imageUrl}
+                                                            alt={spotlightProject.title}
+                                                            fill
+                                                            sizes="(max-width: 1200px) 60vw, 700px"
+                                                            className="object-cover transform-gpu will-change-transform"
+                                                        />
+                                                    ) : (
+                                                        <ClientPreviewPlaceholder title={spotlightProject.title} />
+                                                    )}
+                                                </motion.div>
+
+                                                {/* Right: Content Area */}
+                                                <motion.div
+                                                    layout
+                                                    layoutId={`client-body-wrapper-${spotlightKey}`}
+                                                    transition={{ duration: 0.48, ease: SMOOTH_EASE }}
+                                                    className="w-full lg:w-5/12 p-6 lg:p-8 flex flex-col justify-between text-left min-h-[300px]"
+                                                >
+                                                    <motion.div
+                                                        initial={{ opacity: 0, y: 6 }}
+                                                        animate={{ opacity: 1, y: 0 }}
+                                                        transition={{ duration: 0.35, delay: 0.1, ease: SMOOTH_EASE }}
+                                                        className="space-y-4 w-full"
+                                                    >
+                                                        <div className="flex items-center justify-between gap-3">
+                                                            <div className="flex items-center gap-2">
+                                                                <span className="font-mono text-xs sm:text-sm font-bold text-gray-400">
+                                                                    {String(spotlightIdx + 1).padStart(2, "0")}
+                                                                </span>
+                                                                <span className="h-3 w-px bg-gray-200" />
+                                                                <span className="text-xs font-extrabold uppercase tracking-wider px-3 py-0.5 rounded-full bg-[#D8E8E2] text-[#0F766E] border border-[#2DD4BF]/40">
+                                                                    {spotlightProject.industry || "Custom Software"}
+                                                                </span>
+                                                                {spotlightProject.status && (
+                                                                    <span className="text-xs font-bold px-2.5 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200/80">
+                                                                        {spotlightProject.status}
+                                                                    </span>
+                                                                )}
+                                                            </div>
+
+                                                            {/* Minimize Control */}
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => setSpotlightId(null)}
+                                                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs transition-colors cursor-pointer"
+                                                                title="Return to grid view"
+                                                            >
+                                                                <span>Minimize</span>
+                                                                <X className="w-3.5 h-3.5" />
+                                                            </button>
+                                                        </div>
+
+                                                        <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 font-serif leading-tight">
+                                                            {spotlightProject.title}
+                                                        </h3>
+
+                                                        <p className="text-sm text-gray-700 leading-relaxed font-normal">
+                                                            {spotlightProject.description}
+                                                        </p>
+
+                                                        {/* Technology Stack Tags */}
+                                                        {tags.length > 0 && (
+                                                            <div className="space-y-1.5 pt-1">
+                                                                <h4 className="text-[11px] font-bold uppercase tracking-wider text-gray-400 font-mono">
+                                                                    Technology Stack
+                                                                </h4>
+                                                                <div className="flex flex-wrap gap-1.5">
+                                                                    {tags.map((tag, tIdx) => (
+                                                                        <span
+                                                                            key={tIdx}
+                                                                            className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-[#F0FDFA] text-[#0F766E] border border-[#0F766E]/20"
+                                                                        >
+                                                                            {tag}
+                                                                        </span>
+                                                                    ))}
+                                                                </div>
+                                                            </div>
+                                                        )}
+
+                                                        {/* Action Buttons */}
+                                                        <div className="pt-3 border-t border-gray-100 flex flex-wrap items-center gap-3">
+                                                            <Button
+                                                                onClick={() => setActiveModalProject(spotlightProject)}
+                                                                size="sm"
+                                                                className="bg-[#0F766E] hover:bg-[#115E59] text-white shadow-md shadow-[#0F766E]/20 rounded-xl px-5 py-2.5 text-xs font-bold transition-all duration-200 cursor-pointer"
+                                                            >
+                                                                View Full Case Study
+                                                                <ArrowRight className="ml-1.5 w-3.5 h-3.5" />
+                                                            </Button>
+
+                                                            {spotlightProject.projectUrl && (
+                                                                <a
+                                                                    href={spotlightProject.projectUrl}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-[#0F766E] hover:text-[#115E59] hover:underline cursor-pointer"
+                                                                >
+                                                                    <span>Live Application</span>
+                                                                    <ExternalLink className="w-3.5 h-3.5" />
+                                                                </a>
+                                                            )}
+                                                        </div>
+                                                    </motion.div>
+                                                </motion.div>
+                                            </motion.div>
+
+                                            {/* BOTTOM DOCK: Filmstrip of Other Projects (Morphing Cards) */}
+                                            <motion.div layout className="grid grid-cols-2 gap-5 pt-1">
+                                                {dockProjects.map((project, dIdx) => {
+                                                    const dockKey = project.id || `client-dock-${dIdx}`;
+                                                    const origIdx = displayProjects.indexOf(project);
+                                                    return (
+                                                        <motion.div
+                                                            key={dockKey}
+                                                            layout
+                                                            layoutId={`client-card-container-${dockKey}`}
+                                                            transition={{ duration: 0.48, ease: SMOOTH_EASE }}
+                                                            role="button"
+                                                            tabIndex={0}
+                                                            onClick={() => setSpotlightId(dockKey)}
+                                                            onKeyDown={(e) => {
+                                                                if (e.key === "Enter" || e.key === " ") {
+                                                                    e.preventDefault();
+                                                                    setSpotlightId(dockKey);
+                                                                }
+                                                            }}
+                                                            className="bg-white rounded-2xl border border-gray-200/90 hover:border-[#0F766E]/50 hover:shadow-lg hover:shadow-[#0F766E]/5 overflow-hidden flex items-stretch cursor-pointer transition-colors duration-300 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F766E]"
+                                                        >
+                                                            {/* Flushed Left Thumbnail */}
+                                                            <motion.div
+                                                                layout
+                                                                layoutId={`client-img-wrapper-${dockKey}`}
+                                                                transition={{ duration: 0.48, ease: SMOOTH_EASE }}
+                                                                className="w-40 sm:w-48 aspect-video relative bg-slate-900 shrink-0 overflow-hidden border-r border-gray-100"
+                                                            >
+                                                                {project.isConfidential ? (
+                                                                    <div className="w-full h-full bg-gradient-to-br from-gray-950 to-slate-900 flex flex-col items-center justify-center p-2 text-center">
+                                                                        <Lock className="w-5 h-5 text-[#2DD4BF] mb-1" />
+                                                                        <span className="text-[10px] text-gray-300 font-bold">Confidential</span>
+                                                                    </div>
+                                                                ) : project.imageUrl ? (
+                                                                    <Image
+                                                                        src={project.imageUrl}
+                                                                        alt={project.title}
+                                                                        fill
+                                                                        sizes="192px"
+                                                                        className="object-cover group-hover:scale-105 transition-transform duration-300 transform-gpu will-change-transform"
+                                                                    />
+                                                                ) : (
+                                                                    <ClientPreviewPlaceholder title={project.title} />
+                                                                )}
+                                                            </motion.div>
+
+                                                            {/* Summary Info */}
+                                                            <motion.div
+                                                                layout
+                                                                layoutId={`client-body-wrapper-${dockKey}`}
+                                                                transition={{ duration: 0.48, ease: SMOOTH_EASE }}
+                                                                className="p-4 flex flex-col justify-between flex-1 min-w-0 text-left"
+                                                            >
+                                                                <div>
+                                                                    <div className="flex items-center gap-2 mb-1">
+                                                                        <span className="font-mono text-xs font-bold text-gray-400">
+                                                                            {String(origIdx + 1).padStart(2, "0")}
+                                                                        </span>
+                                                                        <span className="h-3 w-px bg-gray-200" />
+                                                                        <span className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#D8E8E2] text-[#0F766E]">
+                                                                            {project.industry || "Software"}
+                                                                        </span>
+                                                                    </div>
+                                                                    <h3 className="font-bold text-base text-gray-900 font-serif truncate group-hover:text-[#0F766E] transition-colors">
+                                                                        {project.title}
+                                                                    </h3>
+                                                                    <p className="text-xs text-gray-500 truncate mt-0.5">
+                                                                        {project.description}
+                                                                    </p>
+                                                                </div>
+                                                                <span className="inline-flex items-center gap-1 text-xs font-bold text-[#0F766E] mt-2 group-hover:underline">
+                                                                    <span>Switch to Stage</span>
+                                                                    <ArrowRight className="w-3.5 h-3.5" />
+                                                                </span>
+                                                            </motion.div>
+                                                        </motion.div>
+                                                    );
+                                                })}
+                                            </motion.div>
+                                        </>
+                                    );
+                                })()}
+                            </motion.div>
+                        )}
+                    </LayoutGroup>
                 </div>
 
                 {/* 4. Mobile Native Swipe Carousel */}
