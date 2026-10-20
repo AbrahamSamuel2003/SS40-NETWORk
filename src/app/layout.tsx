@@ -180,7 +180,7 @@ export default async function RootLayout({
         "@id": "https://ss40network.com/#website",
         "url": "https://ss40network.com",
         "name": "SS40 NETWORK",
-        "alternateName": ["SS40 NETWORK PRIVATE LIMITED", "SS40", "SS40 Network"],
+        "alternateName": ["SS40 NETWORK PRIVATE LIMITED", "SS40"],
         "publisher": {
           "@id": "https://ss40network.com/#organization"
         },
