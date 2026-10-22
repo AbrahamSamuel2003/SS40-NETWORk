@@ -31,6 +31,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { route: '/academics',                priority: 0.85, changeFrequency: 'weekly' },
         // 4. Company
         { route: '/company',                  priority: 0.85, changeFrequency: 'weekly' },
+        // Careers & Open Vacancies
+        { route: '/careers',                  priority: 0.85, changeFrequency: 'weekly' },
         // 5. Contact
         { route: '/contact',                  priority: 0.80, changeFrequency: 'monthly' },
         // 6. Blogs & Field Updates

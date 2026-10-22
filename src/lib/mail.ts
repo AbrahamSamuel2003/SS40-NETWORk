@@ -414,3 +414,270 @@ function escapeHtml(value: string) {
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
 }
+
+export type CareerApplicationNotificationInput = {
+    fullName: string;
+    email: string;
+    phone: string;
+    roleTitle: string;
+    department?: string | null;
+    experienceLevel?: string | null;
+    currentOrg?: string | null;
+    portfolioUrl?: string | null;
+    linkedinUrl?: string | null;
+    resumeUrl?: string | null;
+    coverLetter?: string | null;
+    submittedAt?: Date | string;
+    targetEmail?: string | null;
+};
+
+/**
+ * Sends a detailed job application notification to careers@ss40network.com
+ */
+export async function sendCareerApplicationNotification(app: CareerApplicationNotificationInput) {
+    const { config, missingKeys } = getSmtpConfig();
+
+    if (!config) {
+        console.error('Career application notification skipped: missing or invalid SMTP configuration', { missingKeys });
+        return;
+    }
+
+    const recipient = app.targetEmail?.trim() || process.env.CAREERS_NOTIFICATION_EMAIL || 'careers@ss40network.com';
+
+    const transporter = nodemailer.createTransport({
+        host: config.host,
+        port: config.port,
+        secure: config.secure,
+        auth: config.auth,
+    });
+
+    const candidateName = app.fullName?.trim() || 'Candidate';
+    const candidateEmail = app.email?.trim() || 'Not provided';
+    const candidatePhone = app.phone?.trim() || 'Not provided';
+    const roleTitle = app.roleTitle?.trim() || 'General Role';
+    const department = app.department?.trim() || 'Not Specified';
+    const experience = app.experienceLevel?.trim() || 'Not Specified';
+    const currentOrg = app.currentOrg?.trim() || 'Not Specified';
+    const portfolioUrl = app.portfolioUrl?.trim() || '';
+    const linkedinUrl = app.linkedinUrl?.trim() || '';
+    const resumeUrl = app.resumeUrl?.trim() || '';
+    const coverLetter = app.coverLetter?.trim() || '';
+    const formattedDate = app.submittedAt
+        ? new Date(app.submittedAt).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
+        : new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+
+    const subject = `[New Job Application] ${candidateName} — ${roleTitle} (${experience})`;
+
+    const text = [
+        `NEW JOB APPLICATION — SS40 NETWORK`,
+        `==================================`,
+        `Candidate Name:   ${candidateName}`,
+        `Role Applied:     ${roleTitle}`,
+        `Department:       ${department}`,
+        `Experience Level: ${experience}`,
+        `Email:            ${candidateEmail}`,
+        `Phone / WhatsApp: ${candidatePhone}`,
+        `Current Org:      ${currentOrg}`,
+        `LinkedIn URL:     ${linkedinUrl || 'Not provided'}`,
+        `Portfolio URL:    ${portfolioUrl || 'Not provided'}`,
+        `Resume Link:      ${resumeUrl || 'Not uploaded'}`,
+        `Submitted Date:   ${formattedDate}`,
+        ``,
+        `Cover Note / Introduction:`,
+        `--------------------------`,
+        `${coverLetter || 'No cover note provided.'}`,
+        ``,
+        `Admin Panel: https://ss40network.com/admin/careers`,
+        `==================================`,
+    ].join('\n');
+
+    const html = `
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>New Job Application — ${escapeHtml(candidateName)}</title>
+    </head>
+    <body style="margin: 0; padding: 28px 16px; background-color: #F8FAFC; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; color: #1E293B;">
+        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 540px; margin: 0 auto; background-color: #FFFFFF; border-radius: 16px; border: 1px solid #E2E8F0; overflow: hidden; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);">
+            <tr>
+                <td style="padding: 32px 28px 28px 28px;">
+                    <div style="font-size: 11px; font-weight: 800; letter-spacing: 0.12em; color: #0F766E; text-transform: uppercase; margin-bottom: 8px;">
+                        CAREERS &bull; TALENT ACQUISITION
+                    </div>
+                    <h1 style="margin: 0 0 12px 0; color: #0F172A; font-family: Georgia, 'Times New Roman', serif; font-size: 22px; font-weight: 700; line-height: 1.3;">
+                        New Application: ${escapeHtml(candidateName)}
+                    </h1>
+                    <p style="margin: 0 0 20px 0; color: #475569; font-size: 13.5px; line-height: 1.55;">
+                        A candidate has submitted their application for the <strong>${escapeHtml(roleTitle)}</strong> role in <strong>${escapeHtml(department)}</strong>.
+                    </p>
+
+                    <div style="background-color: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px; padding: 18px 20px; margin-bottom: 20px;">
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="font-size: 13px; line-height: 1.6;">
+                            <tr>
+                                <td style="padding: 4px 0; color: #64748B; width: 130px; font-weight: 600;">Full Name:</td>
+                                <td style="padding: 4px 0; color: #0F172A; font-weight: 600;">${escapeHtml(candidateName)}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 4px 0; color: #64748B; font-weight: 600;">Position:</td>
+                                <td style="padding: 4px 0; color: #0F766E; font-weight: 700;">${escapeHtml(roleTitle)}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 4px 0; color: #64748B; font-weight: 600;">Department:</td>
+                                <td style="padding: 4px 0; color: #334155;">${escapeHtml(department)}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 4px 0; color: #64748B; font-weight: 600;">Experience:</td>
+                                <td style="padding: 4px 0; color: #334155;">${escapeHtml(experience)}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 4px 0; color: #64748B; font-weight: 600;">Email:</td>
+                                <td style="padding: 4px 0; color: #0F172A;"><a href="mailto:${escapeHtml(candidateEmail)}" style="color: #0F766E; text-decoration: underline;">${escapeHtml(candidateEmail)}</a></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 4px 0; color: #64748B; font-weight: 600;">Phone:</td>
+                                <td style="padding: 4px 0; color: #0F172A;"><a href="tel:${escapeHtml(candidatePhone)}" style="color: #0F766E; text-decoration: underline;">${escapeHtml(candidatePhone)}</a></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 4px 0; color: #64748B; font-weight: 600;">Organization:</td>
+                                <td style="padding: 4px 0; color: #334155;">${escapeHtml(currentOrg)}</td>
+                            </tr>
+                            ${linkedinUrl ? `
+                            <tr>
+                                <td style="padding: 4px 0; color: #64748B; font-weight: 600;">LinkedIn:</td>
+                                <td style="padding: 4px 0;"><a href="${escapeHtml(linkedinUrl)}" target="_blank" style="color: #0F766E; text-decoration: underline;">View Profile &rarr;</a></td>
+                            </tr>` : ''}
+                            ${portfolioUrl ? `
+                            <tr>
+                                <td style="padding: 4px 0; color: #64748B; font-weight: 600;">Portfolio:</td>
+                                <td style="padding: 4px 0;"><a href="${escapeHtml(portfolioUrl)}" target="_blank" style="color: #0F766E; text-decoration: underline;">View Portfolio &rarr;</a></td>
+                            </tr>` : ''}
+                            ${resumeUrl ? `
+                            <tr>
+                                <td style="padding: 4px 0; color: #64748B; font-weight: 600;">Resume Link:</td>
+                                <td style="padding: 4px 0;"><a href="${resumeUrl.startsWith('http') ? escapeHtml(resumeUrl) : `https://ss40network.com${escapeHtml(resumeUrl)}`}" target="_blank" style="color: #0F766E; font-weight: 700; text-decoration: underline;">Download / View Resume &rarr;</a></td>
+                            </tr>` : ''}
+                        </table>
+                    </div>
+
+                    ${coverLetter ? `
+                    <div style="margin-bottom: 24px;">
+                        <div style="font-size: 12px; font-weight: 700; color: #64748B; text-transform: uppercase; margin-bottom: 6px;">Introduction / Cover Note</div>
+                        <div style="background-color: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px 14px; font-size: 13px; line-height: 1.6; color: #334155; white-space: pre-line;">${escapeHtml(coverLetter)}</div>
+                    </div>` : ''}
+
+                    <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid #F1F5F9; color: #94A3B8; font-size: 11.5px; line-height: 1.5;">
+                        <span style="color: #64748B; font-weight: 600;">SS40 NETWORK Careers Desk</span> &bull; Tirunelveli HQ<br />
+                        Submitted: ${formattedDate}
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </body>
+    </html>
+    `;
+
+    await transporter.sendMail({
+        from: config.from,
+        to: recipient,
+        subject,
+        text,
+        html,
+    });
+}
+
+export type ApplicantAcknowledgementInput = {
+    fullName: string;
+    email: string;
+    roleTitle: string;
+};
+
+/**
+ * Sends Option A confirmation email to the applicant
+ */
+export async function sendApplicantAcknowledgementEmail({ fullName, email, roleTitle }: ApplicantAcknowledgementInput) {
+    const { config, missingKeys } = getSmtpConfig();
+
+    if (!config) {
+        console.error('Applicant acknowledgement email skipped: missing or invalid SMTP configuration', { missingKeys });
+        return;
+    }
+
+    const transporter = nodemailer.createTransport({
+        host: config.host,
+        port: config.port,
+        secure: config.secure,
+        auth: config.auth,
+    });
+
+    const candidateName = fullName?.trim() || 'Applicant';
+    const role = roleTitle?.trim() || 'Software Engineer';
+    const subject = `Application Received — ${role} | SS40 NETWORK`;
+
+    // OPTION A MESSAGE
+    const text = [
+        `Dear ${candidateName},`,
+        ``,
+        `Thank you for applying! Our team has received your application for the ${role} position. We will review your profile and contact you soon.`,
+        ``,
+        `Best regards,`,
+        `Talent Acquisition Team`,
+        `SS40 NETWORK PRIVATE LIMITED`,
+        `Tirunelveli, Tamil Nadu, India`,
+        `https://ss40network.com`,
+    ].join('\n');
+
+    const html = `
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Application Received — SS40 NETWORK</title>
+    </head>
+    <body style="margin: 0; padding: 28px 16px; background-color: #F8FAFC; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; color: #1E293B;">
+        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 520px; margin: 0 auto; background-color: #FFFFFF; border-radius: 16px; border: 1px solid #E2E8F0; overflow: hidden; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);">
+            <tr>
+                <td style="background-color: #0F766E; padding: 24px 26px; text-align: left;">
+                    <div style="font-size: 11px; font-weight: 800; letter-spacing: 0.12em; color: #99F6E4; text-transform: uppercase;">
+                        SS40 NETWORK &bull; CAREERS
+                    </div>
+                    <div style="font-size: 18px; font-weight: 700; color: #FFFFFF; margin-top: 4px; font-family: Georgia, serif;">
+                        Application Received
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding: 28px 26px;">
+                    <p style="margin: 0 0 16px 0; font-size: 14px; line-height: 1.6; color: #0F172A;">
+                        Dear <strong>${escapeHtml(candidateName)}</strong>,
+                    </p>
+                    <div style="background-color: #EDF5F2; border-left: 4px solid #0F766E; padding: 14px 16px; border-radius: 4px; margin-bottom: 20px;">
+                        <p style="margin: 0; font-size: 14px; line-height: 1.6; color: #134E4A; font-weight: 500;">
+                            Thank you for applying! Our team has received your application for the <strong>${escapeHtml(role)}</strong> position. We will review your profile and contact you soon.
+                        </p>
+                    </div>
+                    <p style="margin: 0 0 20px 0; font-size: 13px; line-height: 1.55; color: #475569;">
+                        If you have any questions or wish to provide additional portfolio materials, you can reach out directly to <a href="mailto:careers@ss40network.com" style="color: #0F766E; text-decoration: underline;">careers@ss40network.com</a>.
+                    </p>
+                    <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid #F1F5F9; color: #94A3B8; font-size: 12px; line-height: 1.5;">
+                        <strong>Talent Acquisition Team</strong><br />
+                        SS40 NETWORK PRIVATE LIMITED &bull; Tirunelveli, Tamil Nadu<br />
+                        <a href="https://ss40network.com" style="color: #0F766E; text-decoration: none;">https://ss40network.com</a>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </body>
+    </html>
+    `;
+
+    await transporter.sendMail({
+        from: config.from,
+        to: email.trim(),
+        subject,
+        text,
+        html,
+    });
+}

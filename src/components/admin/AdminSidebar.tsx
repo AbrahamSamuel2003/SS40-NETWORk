@@ -95,7 +95,12 @@ const MENU_ITEMS: MenuBlock[] = [
         icon: ImageIcon,
     },
 
-    { label: 'CRM & ANALYTICS' },
+    { label: 'CRM & RECRUITMENT' },
+    {
+        name: 'Careers & Hiring',
+        href: '/siva/careers',
+        icon: Briefcase,
+    },
     {
         name: 'Inquiries & Leads',
         href: '/siva/leads',

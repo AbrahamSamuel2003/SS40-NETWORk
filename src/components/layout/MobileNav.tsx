@@ -18,7 +18,8 @@ import {
     Phone,
     Mail,
     Landmark,
-    Building2
+    Building2,
+    Briefcase
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/utils/cn";
@@ -57,6 +58,10 @@ const NAV_DETAILS: Record<string, { subtitle: string; icon: React.ComponentType<
     "/company": {
         subtitle: "Certifications, History & Governance",
         icon: Building2
+    },
+    "/careers": {
+        subtitle: "Join Our Team & Opportunities",
+        icon: Briefcase
     }
 };
 

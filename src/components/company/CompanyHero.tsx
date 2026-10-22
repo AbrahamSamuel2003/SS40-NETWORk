@@ -42,7 +42,7 @@ export function CompanyHero() {
                     >
                         Official{" "}
                         <span className="bg-gradient-to-r from-[#0F766E] via-[#0D9488] to-[#115E59] bg-clip-text text-transparent">
-                            Certifications & Credentials.
+                            Certifications & Licenses.
                         </span>
                     </motion.h1>
 

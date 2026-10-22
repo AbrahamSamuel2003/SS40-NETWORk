@@ -12,6 +12,16 @@ const createPrismaClient = () => {
     return new PrismaClient({ adapter });
 };
 
-export const prisma = globalForPrisma.prisma || createPrismaClient();
+const getPrismaClient = (): PrismaClient => {
+    // If a cached client exists and has all generated models (e.g. jobApplication), reuse it
+    if (globalForPrisma.prisma && (globalForPrisma.prisma as any).jobApplication) {
+        return globalForPrisma.prisma;
+    }
+    const client = createPrismaClient();
+    if (process.env.NODE_ENV !== 'production') {
+        globalForPrisma.prisma = client;
+    }
+    return client;
+};
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+export const prisma = getPrismaClient();
