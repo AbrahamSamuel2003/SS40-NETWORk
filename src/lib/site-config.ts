@@ -29,7 +29,7 @@ export const DEFAULT_SITE_CONFIG: SiteConfigData = {
     contactEmail: "support@ss40network.com",
     contactPhone: "+91 83005 91750",
     whatsappNumber: "+91 83005 91750",
-    addressText: "1st Floor, Municipal Corporation Incubation Centre (Near by trade centre), Sree Puram, Tirunelveli, Tamil Nadu 627001",
+    addressText: "Registered Office: 5/4/37A, West Car Street V, Ariyanayagipuram, Vadakku Ariyanayakipuram, Tirunelveli, Tamil Nadu 627603.\nOperational Office: 1st Floor, Municipal Corporation Incubation Centre (Near by trade centre), Sree Puram, Tirunelveli, Tamil Nadu 627001",
     businessHours: "Monday - Saturday: 09:00 AM - 06:00 PM",
     footerDescription: "Architecting high-scale digital systems, intelligent SaaS products, and career-launching tech academics. Built in India. Thinking Globally.",
     googleMapsIframeUrl: null,

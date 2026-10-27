@@ -100,14 +100,31 @@ export async function Footer() {
                                     </div>
                                 </li>
                             )}
-                            {config?.addressText && (
-                                <li className="flex flex-row items-start justify-center md:justify-start gap-3 w-full">
-                                    <MapPin className="w-5 h-5 text-[var(--color-primary)] shrink-0 mt-0.5 hidden md:block" />
-                                    <div className="text-center md:text-left">
-                                        <span className="whitespace-pre-line">{config.addressText}</span>
-                                    </div>
-                                </li>
-                            )}
+                            {/* Registered Office Location */}
+                            <li className="flex flex-row items-start justify-center md:justify-start gap-3 w-full pt-1">
+                                <MapPin className="w-5 h-5 text-[var(--color-primary)] shrink-0 mt-0.5 hidden md:block" />
+                                <div className="text-center md:text-left">
+                                    <span className="text-[11px] font-bold text-[var(--color-heading)] uppercase tracking-wider block mb-0.5">
+                                        Registered Office Location:
+                                    </span>
+                                    <span className="text-xs sm:text-sm text-[var(--color-body-text)] leading-relaxed block">
+                                        5/4/37A, West Car Street V, Ariyanayagipuram, Vadakku Ariyanayakipuram, Tirunelveli, Tamil Nadu 627603.
+                                    </span>
+                                </div>
+                            </li>
+
+                            {/* Operational Office Location */}
+                            <li className="flex flex-row items-start justify-center md:justify-start gap-3 w-full pt-1">
+                                <MapPin className="w-5 h-5 text-[var(--color-primary)] shrink-0 mt-0.5 hidden md:block" />
+                                <div className="text-center md:text-left">
+                                    <span className="text-[11px] font-bold text-[var(--color-heading)] uppercase tracking-wider block mb-0.5">
+                                        Operational Office Location:
+                                    </span>
+                                    <span className="text-xs sm:text-sm text-[var(--color-body-text)] leading-relaxed block">
+                                        1st Floor, Municipal Corporation Incubation Centre (Near by trade centre), Sree Puram, Tirunelveli, Tamil Nadu 627001.
+                                    </span>
+                                </div>
+                            </li>
                         </ul>
                     </div>
 

@@ -7,11 +7,9 @@ import {
     Award,
     Building2,
     CheckCircle2,
-    Download,
     ExternalLink,
     FileCheck,
     Landmark,
-    Maximize2,
     ShieldCheck,
     X,
     ZoomIn,
@@ -136,7 +134,7 @@ const CERTIFICATES: CertificateItem[] = [
         validity: "Active Micro Enterprise (Services)",
         imageSrc: "/images/certificates/msme-udyam-registration.webp",
         pdfPath: "/documents/certificates/MSME-Udyam-Registration.pdf",
-        aspectRatio: "aspect-[1190/1684]",
+        aspectRatio: "aspect-[2586/4400]",
         startupTnCard: "STN97774",
         startupTnLogo: "/images/certificates/startuptn-logo.png",
         narrative:
@@ -246,9 +244,9 @@ export function OfficialCertifications() {
                     </h2>
                 </div>
 
-                {/* Senior Production Segmented Switcher (Horizontal Pill Row on Mobile & Desktop) */}
+                {/* Senior Production Segmented Switcher (Aligned with 280px Certificate Width on Mobile) */}
                 <div className="w-full flex justify-center">
-                    <div className="w-full max-w-md sm:max-w-none sm:w-auto flex flex-row items-center p-1 sm:p-1.5 rounded-xl sm:rounded-2xl bg-white/90 backdrop-blur-md border border-gray-200/90 shadow-xs gap-1 sm:gap-2">
+                    <div className="w-full max-w-[280px] sm:max-w-none sm:w-auto flex flex-row items-center p-1 sm:p-1.5 rounded-xl sm:rounded-2xl bg-white/90 backdrop-blur-md border border-gray-200/90 shadow-xs gap-1 sm:gap-2">
                         {CERTIFICATES.map((cert, idx) => {
                             const isActive = activeTab === idx;
                             const TabIcon = cert.icon;
@@ -258,7 +256,7 @@ export function OfficialCertifications() {
                                     type="button"
                                     onClick={() => setActiveTab(idx)}
                                     className={cn(
-                                        "flex-1 sm:flex-initial px-2 sm:px-5 py-2 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 flex items-center justify-center gap-1.5 sm:gap-2 select-none cursor-pointer border text-center",
+                                        "flex-1 sm:flex-initial px-1 sm:px-5 py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl text-[11px] sm:text-sm font-bold transition-all duration-200 flex items-center justify-center gap-1.5 sm:gap-2 select-none cursor-pointer border text-center",
                                         isActive
                                             ? "bg-[#0F766E] text-white border-[#0F766E] shadow-xs shadow-[#0F766E]/20"
                                             : "bg-white/80 text-gray-700 border-transparent hover:border-[#0F766E]/30 hover:bg-white hover:text-[#0F766E]"
@@ -266,7 +264,7 @@ export function OfficialCertifications() {
                                 >
                                     <TabIcon className="w-3.5 h-3.5 hidden sm:block shrink-0" />
                                     {/* Mobile Concise Label */}
-                                    <span className="sm:hidden font-semibold truncate text-[11px] sm:text-xs">
+                                    <span className="sm:hidden font-bold truncate text-[11px] tracking-tight">
                                         {cert.mobileTabName}
                                     </span>
                                     {/* Desktop Full Label */}
@@ -405,29 +403,8 @@ export function OfficialCertifications() {
                                     ))}
                                 </div>
 
-                                {/* Action Buttons: 2-column tactile grid on mobile, flex on desktop */}
-                                <div className="pt-2 sm:pt-3 space-y-2 sm:space-y-0 sm:flex sm:flex-wrap sm:items-center sm:gap-3">
-                                    <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center sm:gap-3">
-                                        <Button
-                                            onClick={() => setSelectedCertModal(currentCert)}
-                                            size="sm"
-                                            className="bg-[#0F766E] hover:bg-[#115E59] text-white font-bold text-xs h-10 px-3 sm:px-5 rounded-xl cursor-pointer shadow-xs justify-center"
-                                        >
-                                            <Maximize2 className="w-3.5 h-3.5 mr-1.5 shrink-0" />
-                                            <span>Inspect</span>
-                                        </Button>
-
-                                        <a
-                                            href={currentCert.pdfPath}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="inline-flex items-center justify-center gap-1.5 px-3 sm:px-4 h-10 rounded-xl bg-white border border-gray-300 hover:border-[#0F766E] hover:text-[#0F766E] text-gray-700 font-bold text-xs transition-colors cursor-pointer shadow-2xs"
-                                        >
-                                            <Download className="w-3.5 h-3.5 shrink-0" />
-                                            <span>PDF</span>
-                                        </a>
-                                    </div>
-
+                                {/* Action Link: Verify on Official Portal */}
+                                <div className="pt-2 sm:pt-3 flex flex-col sm:flex-row sm:items-center gap-3">
                                     <a
                                         href={currentCert.verifyUrl}
                                         target="_blank"
@@ -582,18 +559,12 @@ export function OfficialCertifications() {
 
                                 <div className="flex items-center gap-2">
                                     <Button
-                                        asChild
+                                        onClick={() => setSelectedCertModal(null)}
+                                        variant="outline"
                                         size="sm"
-                                        className="bg-[#0F766E] hover:bg-[#115E59] text-white font-bold text-xs h-9 rounded-xl cursor-pointer"
+                                        className="text-xs h-9 px-4 rounded-xl cursor-pointer"
                                     >
-                                        <a
-                                            href={selectedCertModal.pdfPath}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            <Download className="w-3.5 h-3.5 mr-1.5" />
-                                            <span>Download Official PDF</span>
-                                        </a>
+                                        Close
                                     </Button>
                                 </div>
                             </div>

@@ -34,7 +34,7 @@ export function ActivityUpdates({ data = [] }: ActivityUpdatesProps) {
 
     const mobileScrollRef = useRef<HTMLDivElement | null>(null);
 
-    const homeActivities = data.slice(0, 3);
+    const homeActivities = data.slice(0, 5);
     const count = homeActivities.length;
 
     // If no activities, hide section
@@ -257,17 +257,15 @@ export function ActivityUpdates({ data = [] }: ActivityUpdatesProps) {
                 </div>
 
                 {/* View All Blogs Navigation Link */}
-                {data.length > 3 && (
-                    <div className="w-full flex justify-center mt-4 px-6">
-                        <Link
-                            href="/blogs"
-                            className="inline-flex items-center justify-center font-bold text-base text-[#0F766E] hover:text-[#115E59] transition-colors group"
-                        >
-                            View All Blogs
-                            <ArrowRight className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" />
-                        </Link>
-                    </div>
-                )}
+                <div className="w-full flex justify-center mt-4 px-6">
+                    <Link
+                        href="/blogs"
+                        className="inline-flex items-center justify-center font-bold text-sm sm:text-base text-[#0F766E] hover:text-[#115E59] bg-[#0F766E]/10 hover:bg-[#0F766E]/15 px-6 py-2.5 rounded-xl transition-all group"
+                    >
+                        <span>View All Blogs</span>
+                        <ArrowRight className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" />
+                    </Link>
+                </div>
             </div>
 
             {/* ═════════════════════════════════════════════════════════════════════ */}

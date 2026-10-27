@@ -5,13 +5,20 @@ import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { MessageSquare, X } from "lucide-react";
+import { MessageSquare, X, Video } from "lucide-react";
 import type { SiteConfigData } from "@/lib/site-config";
 
 // Pre-load RuleBasedChatbot in background for 0-latency instant opening
 const loadChatbot = () => import("@/components/chat/RuleBasedChatbot");
 const RuleBasedChatbot = dynamic(
     () => loadChatbot().then((mod) => mod.RuleBasedChatbot),
+    { ssr: false }
+);
+
+// Dynamic import for Real-Human Video AI (Anam.ai WebRTC)
+const loadAvatar = () => import("@/components/chat/SS40LiveAvatarModal");
+const SS40LiveAvatarModal = dynamic(
+    () => loadAvatar().then((mod) => mod.SS40LiveAvatarModal),
     { ssr: false }
 );
 
@@ -123,11 +130,13 @@ export function FloatingSupportHub({ config }: { config?: SiteConfigData | null 
         }
     };
 
+    const isAnyModalOpen = isChatOpen;
+
     return (
         <>
-            {/* Mobile menu backdrop dismiss overlay with pure GPU alpha (zero backdrop-blur stall) */}
+            {/* Mobile menu backdrop dismiss overlay with pure GPU alpha */}
             <AnimatePresence>
-                {isMenuOpen && !isChatOpen && (
+                {isMenuOpen && !isAnyModalOpen && (
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -157,7 +166,7 @@ export function FloatingSupportHub({ config }: { config?: SiteConfigData | null 
                 }}
                 onTouchStart={() => loadChatbot()} // Warm instantly on touch contact
             >
-                {/* ── Main Trigger Button (Message Icon) ── */}
+                {/* ── Main Trigger Button (Message Icon / Close Icon) ── */}
                 <motion.button
                     onClick={handleMainButtonClick}
                     whileHover={{ scale: 1.05 }}
@@ -166,7 +175,7 @@ export function FloatingSupportHub({ config }: { config?: SiteConfigData | null 
                     aria-label="Open support and assistant menu"
                 >
                     <AnimatePresence mode="wait" initial={false}>
-                        {isChatOpen ? (
+                        {isAnyModalOpen ? (
                             <motion.div
                                 key="close-icon"
                                 initial={{ rotate: -90, opacity: 0 }}
@@ -184,7 +193,7 @@ export function FloatingSupportHub({ config }: { config?: SiteConfigData | null 
                                 animate={{ scale: 1, opacity: 1 }}
                                 exit={{ scale: 0.85, opacity: 0 }}
                                 transition={{ duration: 0.15 }}
-                                className="flex items-center justify-center"
+                                className="flex items-center justify-center relative"
                             >
                                 <MessageSquare className="w-5 h-5 sm:w-6 sm:h-6 drop-shadow-xs" />
                             </motion.div>
@@ -192,16 +201,17 @@ export function FloatingSupportHub({ config }: { config?: SiteConfigData | null 
                     </AnimatePresence>
                 </motion.button>
 
-                {/* ── Revealed Stack Buttons (WhatsApp & SS40 SKY) ── */}
+                {/* ── Revealed Stack Buttons (Live Avatar, SS40 SKY, WhatsApp) ── */}
                 <AnimatePresence>
-                    {isMenuOpen && !isChatOpen && (
+                    {isMenuOpen && !isAnyModalOpen && (
                         <motion.div
                             initial={{ opacity: 0, y: 10, scale: 0.96 }}
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: 10, scale: 0.96 }}
                             transition={{ duration: 0.16, ease: [0.16, 1, 0.3, 1] }}
-                            className="flex flex-col items-end gap-2.5 pointer-events-auto will-change-[transform,opacity] font-serif font-crimson"
+                            className="flex flex-col items-end gap-2.5 pointer-events-auto will-change-[transform,opacity]"
                         >
+                            {/* 1. SS40 SKY AI Chatbot */}
                             <button
                                 onClick={() => {
                                     setIsChatOpen(true);
@@ -242,7 +252,7 @@ export function FloatingSupportHub({ config }: { config?: SiteConfigData | null 
                 </AnimatePresence>
             </div>
 
-            {/* ── Rule-Based Chatbot Window (Mounted once opened to preserve exit animations) ── */}
+            {/* ── Rule-Based Chatbot Window ── */}
             {hasOpenedChat && (
                 <RuleBasedChatbot
                     isOpen={isChatOpen}
@@ -250,6 +260,9 @@ export function FloatingSupportHub({ config }: { config?: SiteConfigData | null 
                     config={config}
                 />
             )}
+
+            {/* ── Real-Human Video AI Modal (Auto-disappears if credits exhausted) ── */}
+            <SS40LiveAvatarModal isSupportMenuOpen={isMenuOpen && !isAnyModalOpen} />
         </>
     );
 }

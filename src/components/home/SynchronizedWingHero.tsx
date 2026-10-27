@@ -42,7 +42,7 @@ const WINGS: WingData[] = [
         description: "We build high-performance web applications, mobile platforms, and AI automation tailored to your business.",
         ctaText: "Explore Digital Solutions",
         ctaHref: "/digital-solutions",
-        imageSrc: "/images/hero/wing-digital-solutions.webp",
+        imageSrc: "/images/hero/wing-digital-solutions.png",
         imageAlt: "SS40 Digital Solutions — Custom Software Development and Cloud Architecture in Tirunelveli",
         icon: <Code2 className="w-3.5 h-3.5 text-[#B45309]" />,
         chips: ["Web Apps", "Mobile Apps", "Cloud and AI"],
@@ -59,7 +59,7 @@ const WINGS: WingData[] = [
         description: "Ready-to-deploy software tools that automate invoicing, daily workflows, and enterprise operations.",
         ctaText: "Explore Products",
         ctaHref: "/products",
-        imageSrc: "/images/hero/wing-products.webp",
+        imageSrc: "/images/hero/wing-products.png",
         imageAlt: "SS40 Products — Enterprise Business Growth and Automated SaaS Software Solutions",
         icon: <Box className="w-3.5 h-3.5 text-[#B45309]" />,
         chips: ["ClearInvoice", "GTC Suite", "AI Email Agent"],
@@ -76,7 +76,7 @@ const WINGS: WingData[] = [
         description: "Project-based training that prepares students and freshers for top tech careers with real client sprint experience.",
         ctaText: "Explore Academics",
         ctaHref: "/academics",
-        imageSrc: "/images/hero/wing-academics.webp",
+        imageSrc: "/images/hero/wing-academics.png",
         imageAlt: "SS40 Academics — Student Tech Career Launch and Placement Success in Tirunelveli",
         icon: <GraduationCap className="w-3.5 h-3.5 text-[#B45309]" />,
         chips: ["Live Client Projects", "Career Launch"],
@@ -190,11 +190,11 @@ export function SynchronizedWingHero() {
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
-            {/* Compact 2-Column Synchronized Stage */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center relative z-10">
+            {/* Compact 2-Column Synchronized Stage (Text shifted leftwards, Image shifted rightwards) */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 xl:gap-14 items-center justify-between relative z-10">
                 
-                {/* Left Column: Wing Narrative with Silky Smooth AnimatePresence */}
-                <div className="lg:col-span-6 relative flex flex-col justify-center items-center lg:items-start text-center lg:text-left min-h-[250px] sm:min-h-[260px] w-full overflow-hidden">
+                {/* Left Column: Wing Narrative shifted leftwards on desktop */}
+                <div className="lg:col-span-6 relative flex flex-col justify-center items-center lg:items-start text-center lg:text-left min-h-[250px] sm:min-h-[260px] w-full overflow-hidden lg:-translate-x-3 xl:-translate-x-8">
                     <AnimatePresence mode="wait" initial={false}>
                         <motion.div
                             key={activeWing.id}
@@ -264,9 +264,9 @@ export function SynchronizedWingHero() {
                     </AnimatePresence>
                 </div>
 
-                {/* Right Column: Clean Vector Illustration with Cinematic Depth-of-Field Cross-Dissolve */}
-                <div className="lg:col-span-6 relative flex items-center justify-center w-full">
-                    <div className="relative w-full max-w-[380px] sm:max-w-[420px] lg:max-w-[440px] aspect-square flex items-center justify-center overflow-hidden">
+                {/* Right Column: Clean Vector Illustration shifted rightwards on desktop */}
+                <div className="lg:col-span-6 relative flex items-center justify-center lg:justify-end w-full lg:translate-x-3 xl:translate-x-8">
+                    <div className="relative w-full max-w-[380px] sm:max-w-[420px] lg:max-w-[440px] xl:max-w-[460px] aspect-square flex items-center justify-center lg:justify-end overflow-hidden lg:ml-auto">
                         <AnimatePresence mode="wait" initial={false}>
                             <motion.div
                                 key={activeWing.id}
@@ -274,14 +274,14 @@ export function SynchronizedWingHero() {
                                 initial="initial"
                                 animate="animate"
                                 exit="exit"
-                                className="absolute inset-0 flex items-center justify-center will-change-[opacity,transform,filter]"
+                                className="absolute inset-0 flex items-center justify-center lg:justify-end will-change-[opacity,transform,filter]"
                             >
                                 <Image
                                     src={activeWing.imageSrc}
                                     alt={activeWing.imageAlt}
                                     fill
                                     sizes="(max-width: 640px) 90vw, (max-width: 1024px) 50vw, 440px"
-                                    className="object-contain object-center select-none"
+                                    className="object-contain object-center lg:object-right select-none"
                                     priority={true}
                                 />
                             </motion.div>

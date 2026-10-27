@@ -1,0 +1,151 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="142 58 382 262" width="100%" height="100%" fill="none">
+    <defs>
+        <!-- SS40 Corporate Color Palette -->
+        <linearGradient id="ss40TowerGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#0F766E" />
+            <stop offset="100%" stopColor="#0B4E48" />
+        </linearGradient>
+        <linearGradient id="ss40SideGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#115E59" />
+            <stop offset="100%" stopColor="#0D4B46" />
+        </linearGradient>
+        <linearGradient id="ss40CrownGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#14B8A6" />
+            <stop offset="100%" stopColor="#0F766E" />
+        </linearGradient>
+    </defs>
+
+    <!-- Main Silhouette Group -->
+    <g>
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!-- 1. CENTER SKYSCRAPER TOWER (Tallest Hub)                            -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+
+        <!-- Left Facet of Center Tower -->
+        <path d="M 338 108 L 377 88 L 377 310 L 338 310 Z" fill="#0D534D" />
+        <!-- Top Crown Step (Left) -->
+        <path d="M 352 85 L 377 72 L 377 88 L 352 101 Z" fill="#0F766E" />
+        <!-- Horizontal Louver Slats on Left Facet -->
+        <rect x="346" y="116" width="22" height="5" rx="1" fill="#FFFFFF" />
+        <rect x="346" y="128" width="22" height="5" rx="1" fill="#FFFFFF" />
+        <rect x="346" y="140" width="22" height="5" rx="1" fill="#FFFFFF" />
+        <rect x="346" y="152" width="22" height="5" rx="1" fill="#FFFFFF" />
+
+        <!-- Vertical Crease / Gap separating Tower Facets -->
+        <line x1="379.5" y1="62" x2="379.5" y2="310" stroke="#FFFFFF" stroke-width="5" />
+
+        <!-- Right / Front Main Facet of Center Tower (with Enlarged SS40 Signage) -->
+        <path d="M 382 82 L 428 98 L 428 310 L 382 310 Z" fill="#0F766E" />
+        <!-- Top Crown Cap (Right) -->
+        <path d="M 382 66 L 416 78 L 416 88 L 382 77 Z" fill="#14B8A6" />
+
+        <!-- Vertical "SS40" Brand Typography on Central Tower Facet (Enlarged & High-Contrast) -->
+        <g transform="translate(405, 118)" text-anchor="middle">
+            <text x="0" y="0" font-family="'Inter', system-ui, -apple-system, sans-serif" font-weight="900" font-size="26" fill="#FFFFFF">S</text>
+            <text x="0" y="27" font-family="'Inter', system-ui, -apple-system, sans-serif" font-weight="900" font-size="26" fill="#FFFFFF">S</text>
+            <text x="0" y="54" font-family="'Inter', system-ui, -apple-system, sans-serif" font-weight="900" font-size="26" fill="#FFFFFF">4</text>
+            <text x="0" y="81" font-family="'Inter', system-ui, -apple-system, sans-serif" font-weight="900" font-size="26" fill="#FFFFFF">0</text>
+        </g>
+
+
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!-- 2. BUILDING 4 (Right Slanted Building)                              -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <path d="M 433 178 L 468 200 L 468 310 L 433 310 Z" fill="#0E655E" />
+        <!-- Horizontal Slits on Building 4 -->
+        <rect x="441" y="206" width="20" height="4.5" rx="1" fill="#FFFFFF" />
+        <rect x="441" y="218" width="20" height="4.5" rx="1" fill="#FFFFFF" />
+        <rect x="441" y="230" width="20" height="4.5" rx="1" fill="#FFFFFF" />
+        <rect x="441" y="242" width="20" height="4.5" rx="1" fill="#FFFFFF" />
+        <rect x="441" y="254" width="20" height="4.5" rx="1" fill="#FFFFFF" />
+        <rect x="441" y="266" width="20" height="4.5" rx="1" fill="#FFFFFF" />
+        <rect x="441" y="278" width="20" height="4.5" rx="1" fill="#FFFFFF" />
+
+
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!-- 3. BUILDING 5 (Far Right Low Block)                                 -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <path d="M 474 264 L 506 268 L 506 310 L 474 310 Z" fill="#0A4D47" />
+        <!-- Window Matrix (2 cols x 3 rows) -->
+        <rect x="480" y="274" width="8.5" height="11" rx="1" fill="#FFFFFF" />
+        <rect x="492.5" y="274" width="8.5" height="11" rx="1" fill="#FFFFFF" />
+        <rect x="480" y="289" width="8.5" height="11" rx="1" fill="#FFFFFF" />
+        <rect x="492.5" y="289" width="8.5" height="11" rx="1" fill="#FFFFFF" />
+
+
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!-- 4. ANGLED SIDE CONNECTOR (Between Building 1 and Building 2)        -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <path d="M 226 205 L 253 192 L 253 310 L 226 310 Z" fill="#0D534D" />
+
+
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!-- 5. BUILDING 2 (Middle Left - Front Pavilion with Door)              -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!-- Left Side Roof Angle & Facet -->
+        <path d="M 258 162 L 296 142 L 296 310 L 258 310 Z" fill="#0D5A53" />
+        <!-- 2 Horizontal Slits on Top of Left Facet -->
+        <rect x="266" y="166" width="21" height="5" rx="1" fill="#FFFFFF" />
+        <rect x="266" y="178" width="21" height="5" rx="1" fill="#FFFFFF" />
+
+        <!-- Vertical Crease / Gap in Building 2 -->
+        <line x1="297.5" y1="142" x2="297.5" y2="310" stroke="#FFFFFF" stroke-width="3" />
+
+        <!-- Front Facade of Building 2 -->
+        <path d="M 299 143 L 344 156 L 344 310 L 299 310 Z" fill="#0F766E" />
+
+        <!-- 3 Columns Window Matrix on Building 2 -->
+        <!-- Column 1 -->
+        <rect x="306" y="166" width="8" height="14" rx="1" fill="#FFFFFF" />
+        <rect x="306" y="188" width="8" height="14" rx="1" fill="#FFFFFF" />
+        <rect x="306" y="210" width="8" height="14" rx="1" fill="#FFFFFF" />
+        <rect x="306" y="232" width="8" height="14" rx="1" fill="#FFFFFF" />
+        <rect x="306" y="254" width="8" height="14" rx="1" fill="#FFFFFF" />
+
+        <!-- Column 2 (Middle) -->
+        <rect x="318" y="170" width="8" height="14" rx="1" fill="#FFFFFF" />
+        <rect x="318" y="192" width="8" height="14" rx="1" fill="#FFFFFF" />
+        <rect x="318" y="214" width="8" height="14" rx="1" fill="#FFFFFF" />
+        <rect x="318" y="236" width="8" height="14" rx="1" fill="#FFFFFF" />
+
+        <!-- Column 3 -->
+        <rect x="330" y="174" width="8" height="14" rx="1" fill="#FFFFFF" />
+        <rect x="330" y="196" width="8" height="14" rx="1" fill="#FFFFFF" />
+        <rect x="330" y="218" width="8" height="14" rx="1" fill="#FFFFFF" />
+        <rect x="330" y="240" width="8" height="14" rx="1" fill="#FFFFFF" />
+        <rect x="330" y="262" width="8" height="14" rx="1" fill="#FFFFFF" />
+
+        <!-- Grand Double Door Entrance under Column 2 -->
+        <rect x="316" y="278" width="12" height="32" rx="1" fill="#FFFFFF" />
+        <line x1="322" y1="278" x2="322" y2="310" stroke="#0F766E" stroke-width="1.5" />
+
+
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!-- 6. BUILDING 1 (Far Left Block)                                      -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <path d="M 162 205 L 221 196 L 221 310 L 162 310 Z" fill="#115E59" />
+        <!-- 3 Columns x 4 Rows Window Matrix on Building 1 -->
+        <!-- Row 1 -->
+        <rect x="170" y="214" width="9" height="13" rx="1" fill="#FFFFFF" />
+        <rect x="186" y="212" width="9" height="13" rx="1" fill="#FFFFFF" />
+        <rect x="202" y="210" width="9" height="13" rx="1" fill="#FFFFFF" />
+        <!-- Row 2 -->
+        <rect x="170" y="236" width="9" height="13" rx="1" fill="#FFFFFF" />
+        <rect x="186" y="234" width="9" height="13" rx="1" fill="#FFFFFF" />
+        <rect x="202" y="232" width="9" height="13" rx="1" fill="#FFFFFF" />
+        <!-- Row 3 -->
+        <rect x="170" y="258" width="9" height="13" rx="1" fill="#FFFFFF" />
+        <rect x="186" y="256" width="9" height="13" rx="1" fill="#FFFFFF" />
+        <rect x="202" y="254" width="9" height="13" rx="1" fill="#FFFFFF" />
+        <!-- Row 4 -->
+        <rect x="170" y="280" width="9" height="13" rx="1" fill="#FFFFFF" />
+        <rect x="186" y="278" width="9" height="13" rx="1" fill="#FFFFFF" />
+        <rect x="202" y="276" width="9" height="13" rx="1" fill="#FFFFFF" />
+
+
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!-- 7. BASELINE GROUND STRIP (Anchoring All Structures)                 -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <rect x="145" y="309" width="375" height="8" rx="2" fill="#0F766E" />
+    </g>
+</svg>
