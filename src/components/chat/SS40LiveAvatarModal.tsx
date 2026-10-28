@@ -22,6 +22,16 @@ export function SS40LiveAvatarModal({ isSupportMenuOpen = false }: SS40LiveAvata
     const [timeLeft, setTimeLeft] = useState<number>(TOTAL_SESSION_SECONDS);
     const [isFadingOut, setIsFadingOut] = useState<boolean>(false);
     const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
+    const [isMobile, setIsMobile] = useState<boolean>(false);
+
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 640);
+        };
+        checkMobile();
+        window.addEventListener("resize", checkMobile, { passive: true });
+        return () => window.removeEventListener("resize", checkMobile);
+    }, []);
 
     const clientRef = useRef<AnamClient | null>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -251,7 +261,7 @@ export function SS40LiveAvatarModal({ isSupportMenuOpen = false }: SS40LiveAvata
                 animate={{
                     opacity: isFadingOut ? 0 : 1,
                     scale: isFadingOut ? 0.9 : 1,
-                    y: isFadingOut ? 15 : (isCollapsed && !isConnected && isSupportMenuOpen ? -142 : 0)
+                    y: isFadingOut ? 15 : (isCollapsed && !isConnected && isSupportMenuOpen ? (isMobile ? -114 : -142) : 0)
                 }}
                 exit={{ opacity: 0, scale: 0.9, y: 20 }}
                 transition={{
