@@ -207,7 +207,7 @@ export function CareersClient({ initialCareers }: { initialCareers: CareerItem[]
                                 >
                                     {/* Floating Pill Badge Overlapping Top Border (exact match with screenshot) */}
                                     <div className="absolute -top-3 left-6 sm:left-8 z-10">
-                                        <span className={`inline-flex items-center px-3 py-0.5 rounded-full text-[10px] font-extrabold tracking-wider uppercase shadow-2xs ${
+                                        <span className={`inline-flex items-center px-3 py-0.5 rounded-full text-[10px] font-sans font-extrabold tracking-wider uppercase shadow-2xs ${
                                             isExpanded
                                                 ? 'bg-[#0F766E] text-white'
                                                 : 'bg-[#1E293B] text-white'
@@ -222,15 +222,15 @@ export function CareersClient({ initialCareers }: { initialCareers: CareerItem[]
                                         className="pt-6 pb-5 px-5 sm:p-7 flex flex-col md:flex-row md:items-center justify-between gap-4 cursor-pointer select-none"
                                     >
                                         {/* Left Column: Role Title & Department/Location Badges */}
-                                        <div className="space-y-1.5">
+                                        <div className="space-y-1.5 min-w-0 flex-1">
                                             <h3 className="text-lg sm:text-2xl font-bold text-[#0F172A] tracking-tight">
                                                 {job.title}
                                             </h3>
                                             <div className="flex flex-wrap items-center gap-2.5 pt-0.5">
-                                                <span className="inline-flex items-center text-xs font-semibold text-[#0F766E] bg-[#0F766E]/10 px-2 py-0.5 rounded-md">
+                                                <span className="inline-flex items-center text-xs font-sans font-semibold text-[#0F766E] bg-[#0F766E]/10 px-2 py-0.5 rounded-md whitespace-nowrap">
                                                     {job.department}
                                                 </span>
-                                                <span className="inline-flex items-center gap-1 text-xs text-gray-500 font-medium">
+                                                <span className="inline-flex items-center gap-1 text-xs font-sans text-gray-500 font-medium whitespace-nowrap">
                                                     <MapPin className="w-3.5 h-3.5 text-gray-400 shrink-0" />
                                                     <span>{job.location}</span>
                                                 </span>
@@ -239,15 +239,15 @@ export function CareersClient({ initialCareers }: { initialCareers: CareerItem[]
 
                                         {/* Right Column: Timeline, Status Tag & Clear Action CTA */}
                                         <div className="flex items-center justify-between md:justify-end gap-2.5 sm:gap-4 shrink-0 pt-3 md:pt-0 border-t md:border-t-0 border-gray-100">
-                                            <div className="flex items-center gap-2">
+                                            <div className="flex items-center gap-2 shrink-0">
                                                 {/* Timeline / Experience */}
-                                                <div className="flex items-center gap-1.5 text-[11px] sm:text-xs text-gray-600 font-medium bg-gray-50 px-2.5 py-1 rounded-md border border-gray-100">
+                                                <div className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs text-gray-600 font-sans font-medium bg-gray-50 px-2.5 py-1 rounded-md border border-gray-100 whitespace-nowrap shrink-0">
                                                     <Calendar className="w-3 h-3 text-gray-400 shrink-0" />
                                                     <span>{job.experienceLevel}</span>
                                                 </div>
 
                                                 {/* Status Pill */}
-                                                <span className={`px-2.5 py-1 rounded-md text-[11px] sm:text-xs font-semibold border transition-colors ${
+                                                <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-[11px] sm:text-xs font-sans font-semibold border whitespace-nowrap shrink-0 transition-colors ${
                                                     isExpanded
                                                         ? 'bg-[#0F766E]/15 text-[#0F766E] border-[#0F766E]/30'
                                                         : 'bg-emerald-50 text-emerald-700 border-emerald-200'
@@ -257,12 +257,12 @@ export function CareersClient({ initialCareers }: { initialCareers: CareerItem[]
                                             </div>
 
                                             {/* Direct Action / Toggle CTA */}
-                                            <div className="flex items-center gap-1.5 text-xs font-semibold text-[#0F766E]">
+                                            <div className="flex items-center gap-1.5 text-xs font-sans font-semibold text-[#0F766E] shrink-0 whitespace-nowrap">
                                                 <span className="text-[11px] sm:text-xs">{isExpanded ? 'Close' : 'View Details'}</span>
                                                 <button
                                                     type="button"
                                                     aria-label={isExpanded ? 'Collapse role details' : 'Expand role details'}
-                                                    className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full border flex items-center justify-center transition-all ${
+                                                    className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full border flex items-center justify-center transition-all shrink-0 ${
                                                         isExpanded
                                                             ? 'bg-[#0F766E] text-white border-[#0F766E]'
                                                             : 'bg-[#0F766E]/10 border-[#0F766E]/20 text-[#0F766E] hover:bg-[#0F766E] hover:text-white'
