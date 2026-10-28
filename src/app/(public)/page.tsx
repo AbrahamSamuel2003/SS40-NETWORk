@@ -136,28 +136,18 @@ export default async function Home() {
       <Hero />
       <About />
 
-      {/* Below the fold (GPU-accelerated with content-visibility containment to prevent main-thread layout thrashing) */}
-      <div className="cv-auto">
-        <BusinessWings />
-      </div>
+      {/* Below the fold */}
+      <BusinessWings />
       {isSectionVisible(config, 'home_happimonials') && (
-        <div className="cv-auto">
-          <SuccessStories data={happimonials} />
-        </div>
+        <SuccessStories data={happimonials} />
       )}
       {isSectionVisible(config, 'home_activities') && (
-        <div className="cv-auto">
-          <ActivityUpdates data={activities} />
-        </div>
+        <ActivityUpdates data={activities} />
       )}
       {isSectionVisible(config, 'home_logos') && (
-        <div className="cv-auto">
-          <TrustedBy data={logos} />
-        </div>
+        <TrustedBy data={logos} />
       )}
-      <div className="cv-auto">
-        <ContactSection config={config} />
-      </div>
+      <ContactSection config={config} />
     </div>
   );
 }
