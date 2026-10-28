@@ -226,11 +226,10 @@ export function CareersClient({ initialCareers }: { initialCareers: CareerItem[]
                                             <h3 className="text-lg sm:text-2xl font-bold text-[#0F172A] tracking-tight">
                                                 {job.title}
                                             </h3>
-                                            <div className="flex flex-wrap items-center gap-2 pt-0.5">
+                                            <div className="flex flex-wrap items-center gap-2.5 pt-0.5">
                                                 <span className="inline-flex items-center text-xs font-semibold text-[#0F766E] bg-[#0F766E]/10 px-2 py-0.5 rounded-md">
                                                     {job.department}
                                                 </span>
-                                                <span className="text-gray-300 hidden sm:inline">&bull;</span>
                                                 <span className="inline-flex items-center gap-1 text-xs text-gray-500 font-medium">
                                                     <MapPin className="w-3.5 h-3.5 text-gray-400 shrink-0" />
                                                     <span>{job.location}</span>
@@ -253,7 +252,7 @@ export function CareersClient({ initialCareers }: { initialCareers: CareerItem[]
                                                         ? 'bg-[#0F766E]/15 text-[#0F766E] border-[#0F766E]/30'
                                                         : 'bg-emerald-50 text-emerald-700 border-emerald-200'
                                                 }`}>
-                                                    {job.employmentType} &bull; Open
+                                                    {job.employmentType} — Open
                                                 </span>
                                             </div>
 
@@ -345,11 +344,8 @@ export function CareersClient({ initialCareers }: { initialCareers: CareerItem[]
 
                                             {/* Drop-down Footer with Role Status & "Apply Now" Button (Deduplicated Location) */}
                                             <div className="pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-                                                <div className="flex items-center gap-2 text-xs text-gray-500">
-                                                    <span className="inline-flex items-center gap-2 font-medium text-gray-600">
-                                                        <span className="w-2 h-2 rounded-full bg-[#0F766E]" />
-                                                        <span>Immediate Opening &bull; {job.department}</span>
-                                                    </span>
+                                                <div className="flex items-center text-xs text-gray-600 font-medium">
+                                                    <span>Immediate Opening — {job.department}</span>
                                                 </div>
 
                                                 {/* Apply Now button navigating directly to form page */}
