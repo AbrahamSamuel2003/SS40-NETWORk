@@ -114,24 +114,18 @@ export default async function DigitalSolutionsPage() {
             <Hero />
             <WhatWeBuild />
 
-            {/* Below the fold (GPU-accelerated with content-visibility containment) */}
+            {/* Below the fold */}
             <DevelopmentLifecycle />
             {isSectionVisible(config, 'digitalSolutions_projects') && (
                 <ClientProjects initialData={projects} />
             )}
             {isSectionVisible(config, 'digitalSolutions_happimonials') && (
-                <div className="cv-auto">
-                    <Happimonials initialData={happimonials} />
-                </div>
+                <Happimonials initialData={happimonials} />
             )}
             {isSectionVisible(config, 'digitalSolutions_logos') && (
-                <div className="cv-auto">
-                    <TrustedClients initialData={logos} />
-                </div>
+                <TrustedClients initialData={logos} />
             )}
-            <div className="cv-auto">
-                <GetQuote />
-            </div>
+            <GetQuote />
         </div>
     );
 }

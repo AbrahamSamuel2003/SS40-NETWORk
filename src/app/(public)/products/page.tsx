@@ -113,25 +113,17 @@ export default async function ProductsPage() {
             {/* Above the fold (Critical Path) */}
             <Hero />
             {isSectionVisible(config, 'products_showcase') && (
-                <div className="cv-auto">
-                    <FeaturedProduct initialData={products} />
-                </div>
+                <FeaturedProduct initialData={products} />
             )}
 
-            {/* Below the fold (GPU-accelerated with content-visibility containment) */}
+            {/* Below the fold */}
             {isSectionVisible(config, 'products_testimonials') && (
-                <div className="cv-auto">
-                    <ProductImpacts initialData={happimonials} />
-                </div>
+                <ProductImpacts initialData={happimonials} />
             )}
             {isSectionVisible(config, 'products_logos') && (
-                <div className="cv-auto">
-                    <Brands initialData={logos} />
-                </div>
+                <Brands initialData={logos} />
             )}
-            <div className="cv-auto">
-                <BookDemo />
-            </div>
+            <BookDemo />
         </div>
     );
 }

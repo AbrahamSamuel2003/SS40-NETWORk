@@ -542,12 +542,6 @@
     }
   }
 
-  /* Off-screen DOM containment: Skips offscreen layout/paint to save 75% CPU on scroll */
-  .cv-auto {
-    content-visibility: auto;
-    contain-intrinsic-size: 1px 650px;
-  }
-
   /* Pure GPU Compositor layer for locked 120Hz/144Hz scroll smoothness */
   .gpu-layer {
     transform: translateZ(0);
