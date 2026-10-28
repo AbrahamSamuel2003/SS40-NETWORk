@@ -25,6 +25,7 @@ export function SS40LiveAvatarModal({ isSupportMenuOpen = false }: SS40LiveAvata
 
     const clientRef = useRef<AnamClient | null>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
+    const modalRef = useRef<HTMLDivElement>(null);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
     const collapseTimerRef = useRef<NodeJS.Timeout | null>(null);
     const isHoveredRef = useRef<boolean>(false);
@@ -68,8 +69,28 @@ export function SS40LiveAvatarModal({ isSupportMenuOpen = false }: SS40LiveAvata
         };
     }, [isConnected, isLoading]);
 
-    // Hover-only expansion logic (after initial 3s)
-    const handlePointerEnter = () => {
+    // Outside-tap listener to collapse when expanded on mobile touch
+    useEffect(() => {
+        if (isCollapsed || isConnected || !isOpen) return;
+
+        const handleOutsideTouch = (event: MouseEvent | TouchEvent) => {
+            if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+                setIsCollapsed(true);
+            }
+        };
+
+        document.addEventListener("mousedown", handleOutsideTouch);
+        document.addEventListener("touchstart", handleOutsideTouch, { passive: true });
+
+        return () => {
+            document.removeEventListener("mousedown", handleOutsideTouch);
+            document.removeEventListener("touchstart", handleOutsideTouch);
+        };
+    }, [isCollapsed, isConnected, isOpen]);
+
+    // Mouse-only hover expansion logic (strict pointerType === "mouse" to never interfere with touch)
+    const handlePointerEnter = (e: React.PointerEvent) => {
+        if (e.pointerType !== "mouse") return;
         isHoveredRef.current = true;
         if (collapseTimerRef.current) {
             clearTimeout(collapseTimerRef.current);
@@ -78,7 +99,8 @@ export function SS40LiveAvatarModal({ isSupportMenuOpen = false }: SS40LiveAvata
         setIsCollapsed(false);
     };
 
-    const handlePointerLeave = () => {
+    const handlePointerLeave = (e: React.PointerEvent) => {
+        if (e.pointerType !== "mouse") return;
         isHoveredRef.current = false;
         if (isConnected || isLoading) return;
         // If initial 3s display has already completed, collapse promptly on mouse leave
@@ -221,28 +243,30 @@ export function SS40LiveAvatarModal({ isSupportMenuOpen = false }: SS40LiveAvata
     return (
         <AnimatePresence>
             <motion.div
+                ref={modalRef}
                 onPointerEnter={handlePointerEnter}
                 onPointerLeave={handlePointerLeave}
                 initial={{ opacity: 0, scale: 0.92, y: 20 }}
                 animate={{
                     opacity: isFadingOut ? 0 : 1,
                     scale: isFadingOut ? 0.9 : 1,
-                    y: isFadingOut ? 15 : (isCollapsed && !isConnected && isSupportMenuOpen ? -112 : 0)
+                    y: isFadingOut ? 15 : (isCollapsed && !isConnected && isSupportMenuOpen ? -130 : 0)
                 }}
                 exit={{ opacity: 0, scale: 0.9, y: 20 }}
                 transition={{ duration: isFadingOut ? 1.2 : 0.28, ease: [0.16, 1, 0.3, 1] }}
                 className={`fixed right-4 md:right-8 lg:right-10 z-40 overflow-hidden font-sans select-none transition-all duration-300 ease-out ${
                     isCollapsed && !isConnected
                         ? "bottom-[76px] md:bottom-[94px] lg:bottom-[104px] w-[52px] h-[52px] sm:w-[58px] sm:h-[58px] rounded-full shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 cursor-pointer bg-slate-900"
-                        : "bottom-[76px] md:bottom-[94px] lg:bottom-[104px] w-[310px] sm:w-[350px] md:w-[370px] h-[210px] sm:h-[235px] rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.35)] border border-gray-200/90 dark:border-white/10 bg-slate-950"
+                        : "bottom-[76px] md:bottom-[94px] lg:bottom-[104px] w-[calc(100vw-32px)] max-w-[310px] sm:max-w-none sm:w-[350px] md:w-[370px] h-[210px] sm:h-[235px] rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.35)] border border-gray-200/90 dark:border-white/10 bg-slate-950"
                 }`}
                 style={{
                     contain: "paint layout",
                     transformOrigin: "bottom right",
                     willChange: "transform, width, height, border-radius"
                 }}
-                onClick={() => {
+                onClick={(e) => {
                     if (isCollapsed && !isConnected) {
+                        e.stopPropagation();
                         setIsCollapsed(false);
                     }
                 }}
