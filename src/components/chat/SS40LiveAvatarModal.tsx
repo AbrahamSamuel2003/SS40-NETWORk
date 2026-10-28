@@ -54,7 +54,7 @@ export function SS40LiveAvatarModal({ isSupportMenuOpen = false }: SS40LiveAvata
         };
     }, []);
 
-    // Initial 3-second display on page load, then auto-collapse to circle
+    // Initial 1.5-second display on page load, then auto-collapse to circle
     useEffect(() => {
         if (hasInitialTimerRun.current || isConnected || isLoading) return;
         const initialTimer = setTimeout(() => {
@@ -62,7 +62,7 @@ export function SS40LiveAvatarModal({ isSupportMenuOpen = false }: SS40LiveAvata
             if (!isHoveredRef.current && !isConnected && !isLoading) {
                 setIsCollapsed(true);
             }
-        }, 3000);
+        }, 1500);
 
         return () => {
             clearTimeout(initialTimer);
@@ -244,19 +244,25 @@ export function SS40LiveAvatarModal({ isSupportMenuOpen = false }: SS40LiveAvata
         <AnimatePresence>
             <motion.div
                 ref={modalRef}
+                layout
                 onPointerEnter={handlePointerEnter}
                 onPointerLeave={handlePointerLeave}
                 initial={{ opacity: 0, scale: 0.92, y: 20 }}
                 animate={{
                     opacity: isFadingOut ? 0 : 1,
                     scale: isFadingOut ? 0.9 : 1,
-                    y: isFadingOut ? 15 : (isCollapsed && !isConnected && isSupportMenuOpen ? -130 : 0)
+                    y: isFadingOut ? 15 : (isCollapsed && !isConnected && isSupportMenuOpen ? -142 : 0)
                 }}
                 exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                transition={{ duration: isFadingOut ? 1.2 : 0.28, ease: [0.16, 1, 0.3, 1] }}
-                className={`fixed right-4 md:right-8 lg:right-10 z-40 overflow-hidden font-sans select-none transition-all duration-300 ease-out ${
+                transition={{
+                    layout: { duration: 0.35, ease: [0.16, 1, 0.3, 1] },
+                    opacity: { duration: isFadingOut ? 1.2 : 0.2 },
+                    scale: { duration: 0.2 },
+                    y: { duration: 0.25, ease: "easeOut" }
+                }}
+                className={`fixed right-4 md:right-8 lg:right-10 z-40 overflow-hidden font-sans select-none ${
                     isCollapsed && !isConnected
-                        ? "bottom-[76px] md:bottom-[94px] lg:bottom-[104px] w-[52px] h-[52px] sm:w-[58px] sm:h-[58px] rounded-full shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 cursor-pointer bg-slate-900"
+                        ? "bottom-[76px] md:bottom-[94px] lg:bottom-[104px] w-[52px] h-[52px] sm:w-[58px] sm:h-[58px] rounded-full shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 cursor-pointer bg-slate-900 border border-transparent"
                         : "bottom-[76px] md:bottom-[94px] lg:bottom-[104px] w-[calc(100vw-32px)] max-w-[310px] sm:max-w-none sm:w-[350px] md:w-[370px] h-[210px] sm:h-[235px] rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.35)] border border-gray-200/90 dark:border-white/10 bg-slate-950"
                 }`}
                 style={{
@@ -271,74 +277,66 @@ export function SS40LiveAvatarModal({ isSupportMenuOpen = false }: SS40LiveAvata
                     }
                 }}
             >
-                {/* ── Collapsed State: Clean Borderless Circular Avatar (Centered above support button) ── */}
-                {isCollapsed && !isConnected && (
-                    <div className="relative w-full h-full rounded-full overflow-hidden flex items-center justify-center">
-                        <img
-                            src="/avatar/siva-ceo.png"
-                            alt="Siva - CEO, SS40 Network"
-                            className="w-full h-full object-cover transition-transform duration-200 hover:scale-105"
-                            style={{ objectPosition: "center 27%" }}
-                        />
-                    </div>
-                )}
+                <div className="relative w-full h-full bg-slate-900 flex items-center justify-center overflow-hidden">
+                    {/* Continuous Representative Photo Background (Siva - CEO) */}
+                    <img
+                        src="/avatar/siva-ceo.png"
+                        alt="Siva - CEO, SS40 Network"
+                        className="absolute inset-0 w-full h-full object-cover z-0 transition-transform duration-300"
+                        style={{ objectPosition: isCollapsed ? "center 27%" : "center 28%" }}
+                    />
 
-                {/* ── Expanded State: Full Card View / Live Call View ── */}
-                {(!isCollapsed || isConnected) && (
-                    <div className="relative w-full h-full bg-slate-900 flex items-center justify-center overflow-hidden">
-                        {/* Active WebRTC Video Stream */}
-                        <video
-                            id="anam-video-element"
-                            ref={videoRef}
-                            autoPlay
-                            playsInline
-                            className={`w-full h-full object-cover transition-opacity duration-500 ${
-                                isConnected ? "opacity-100" : "opacity-0"
+                    {/* Active WebRTC Video Stream */}
+                    <video
+                        id="anam-video-element"
+                        ref={videoRef}
+                        autoPlay
+                        playsInline
+                        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 z-10 ${
+                            isConnected ? "opacity-100" : "opacity-0 pointer-events-none"
+                        }`}
+                    />
+
+                    {/* Pre-Call Poster / Preview Controls (Graceful fade-in/fade-out) */}
+                    {!isConnected && !isLoading && (
+                        <div
+                            className={`absolute inset-0 flex flex-col justify-between p-3.5 z-20 transition-opacity duration-200 ${
+                                isCollapsed
+                                    ? "opacity-0 pointer-events-none"
+                                    : "opacity-100 pointer-events-auto delay-75"
                             }`}
-                        />
+                        >
+                            {/* Subtle dark gradient overlay for button contrast */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/25 pointer-events-none z-10" />
 
-                        {/* Pre-Call Poster / Preview State (Clean Cara Avatar Photo) */}
-                        {!isConnected && !isLoading && (
-                            <div className="absolute inset-0 flex flex-col justify-between p-3.5">
-                                {/* Realistic Representative Photo Background (Siva - CEO) */}
-                                <img
-                                    src="/avatar/siva-ceo.png"
-                                    alt="Siva - CEO, SS40 NETWORK"
-                                    className="absolute inset-0 w-full h-full object-cover z-0"
-                                    style={{ objectPosition: "center 28%" }}
-                                />
-
-                                {/* Subtle dark gradient overlay for button contrast */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/25 pointer-events-none z-10" />
-
-                                {/* Top Controls: Dismiss / Minimize [X] Button */}
-                                <div className="flex justify-end w-full z-20">
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            setIsCollapsed(true);
-                                        }}
-                                        title="Minimize to Circle"
-                                        className="w-7 h-7 rounded-full bg-black/45 hover:bg-black/75 backdrop-blur-md text-white/80 hover:text-white flex items-center justify-center transition-colors cursor-pointer shadow-md"
-                                    >
-                                        <X className="w-4 h-4" />
-                                    </button>
-                                </div>
-
-                                {/* Bottom Centered "Chat now" Button (No 'English' label) */}
-                                <div className="flex items-center justify-center w-full z-20 pb-1">
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            startSession();
-                                        }}
-                                        className="px-6 py-2 rounded-full bg-[#00B4D8] hover:bg-[#0096C7] active:scale-95 text-white font-bold text-xs tracking-wide transition-all shadow-lg hover:shadow-cyan-500/25 cursor-pointer touch-manipulation flex items-center justify-center"
-                                    >
-                                        Chat now
-                                    </button>
-                                </div>
+                            {/* Top Controls: Dismiss / Minimize [X] Button */}
+                            <div className="flex justify-end w-full z-20">
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setIsCollapsed(true);
+                                    }}
+                                    title="Minimize to Circle"
+                                    className="w-7 h-7 rounded-full bg-black/45 hover:bg-black/75 backdrop-blur-md text-white/80 hover:text-white flex items-center justify-center transition-colors cursor-pointer shadow-md"
+                                >
+                                    <X className="w-4 h-4" />
+                                </button>
                             </div>
-                        )}
+
+                            {/* Bottom Centered "Chat now" Button (No 'English' label) */}
+                            <div className="flex items-center justify-center w-full z-20 pb-1">
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        startSession();
+                                    }}
+                                    className="px-6 py-2 rounded-full bg-[#00B4D8] hover:bg-[#0096C7] active:scale-95 text-white font-bold text-xs tracking-wide transition-all shadow-lg hover:shadow-cyan-500/25 cursor-pointer touch-manipulation flex items-center justify-center"
+                                >
+                                    Chat now
+                                </button>
+                            </div>
+                        </div>
+                    )}
 
                     {/* Connecting Spinner Overlay */}
                     {isLoading && (
@@ -396,7 +394,6 @@ export function SS40LiveAvatarModal({ isSupportMenuOpen = false }: SS40LiveAvata
                         </>
                     )}
                 </div>
-            )}
             </motion.div>
         </AnimatePresence>
     );
