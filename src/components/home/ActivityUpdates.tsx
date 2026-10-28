@@ -236,24 +236,27 @@ export function ActivityUpdates({ data = [] }: ActivityUpdatesProps) {
                     <div className="w-[10vw] sm:w-[4vw] shrink-0" />
                 </div>
 
-                {/* Pagination Pill Dots matching OUR IMPACT */}
-                <div className="w-full flex justify-center items-center gap-3 mt-8 z-10 relative">
-                    {homeActivities.map((_, i) => (
-                        <button
-                            key={`dot-${i}`}
-                            onClick={() => scrollToMobileCard(i)}
-                            aria-label={`Scroll to blog ${i + 1}`}
-                            className="p-3 focus:outline-none min-w-[44px] min-h-[44px] flex items-center justify-center touch-manipulation cursor-pointer"
-                        >
-                            <div
-                                className={`h-2.5 rounded-full transition-all duration-400 ease-out ${
-                                    activeMobileIdx === i
-                                        ? 'bg-[#6B9F91] w-8 shadow-sm scale-100'
-                                        : 'bg-gray-300 w-2.5 hover:bg-gray-400 scale-90'
-                                } border-none`}
-                            />
-                        </button>
-                    ))}
+                {/* Pagination Pill Dots - Compact Frosted Glass Capsule Dock */}
+                <div className="w-full flex justify-center items-center mt-7 z-10 relative">
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-900/[0.04] dark:bg-white/[0.06] backdrop-blur-md rounded-full border border-gray-200/70 dark:border-white/10 shadow-2xs">
+                        {homeActivities.map((_, i) => (
+                            <button
+                                key={`dot-${i}`}
+                                type="button"
+                                onClick={() => scrollToMobileCard(i)}
+                                aria-label={`Scroll to blog ${i + 1}`}
+                                className="py-1 px-1 focus:outline-none flex items-center justify-center touch-manipulation cursor-pointer"
+                            >
+                                <span
+                                    className={`h-2 rounded-full transition-all duration-300 ease-out block ${
+                                        activeMobileIdx === i
+                                            ? 'w-7 bg-[#0F766E] shadow-2xs'
+                                            : 'w-2 bg-gray-300 hover:bg-gray-400 dark:bg-gray-600'
+                                    }`}
+                                />
+                            </button>
+                        ))}
+                    </div>
                 </div>
 
                 {/* View All Blogs Navigation Link */}
