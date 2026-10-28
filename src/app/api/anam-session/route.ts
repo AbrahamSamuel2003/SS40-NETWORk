@@ -2,25 +2,7 @@ import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 
-export async function POST() {
-    const ANAM_API_KEY = process.env.ANAM_API_KEY;
-    const ANAM_PERSONA_ID = process.env.ANAM_PERSONA_ID;
-
-    // 1. If API key is not configured, signal frontend that avatar is unavailable
-    if (!ANAM_API_KEY) {
-        return NextResponse.json(
-            {
-                success: false,
-                available: false,
-                error: "ANAM_API_KEY is not configured",
-                code: "NOT_CONFIGURED"
-            },
-            { status: 200 }
-        );
-    }
-
-    try {
-        const ss40SystemPrompt = `You are Siva, Founder and CEO of SS40 NETWORK PRIVATE LIMITED, Tirunelveli, Tamil Nadu, India.
+const ss40SystemPrompt = `You are Siva, Founder and CEO of SS40 NETWORK PRIVATE LIMITED, Tirunelveli, Tamil Nadu, India.
 Corporate motto: 'A Little Bit More'.
 
 OFFICIAL SS40 RAG KNOWLEDGE BASE:
@@ -47,9 +29,22 @@ FEW-SHOT EXAMPLES (FOLLOW THIS EXACT CRISPNESS):
 - "What is your pricing?" -> "Our pricing is transparent and milestone-based, starting with a free scoping call and demo."
 - "How do I reach you?" -> "You can call us directly at +91 83005 91750 or email support@ss40network.com."`;
 
-        // 2. Resolve Persona Configuration
-        // Locks CEO Siva's visual avatar with the flagship fast LLM and official SS40 Knowledge Base
-        let personaConfig = {
+interface AccountConfig {
+    label: string;
+    apiKey: string;
+    personaId?: string;
+}
+
+async function tryCreateSession(account: AccountConfig): Promise<{ success: boolean; sessionToken?: string; status?: number; error?: string }> {
+    try {
+        let personaConfig: {
+            name: string;
+            avatarId: string;
+            avatarModel: string;
+            voiceId: string;
+            llmId: string;
+            systemPrompt: string;
+        } = {
             name: "Siva - CEO of SS40 Network",
             avatarId: process.env.ANAM_AVATAR_ID || "7d10dac3-9589-47be-adcd-587aa8c1be2d",
             avatarModel: "cara-4.1-express",
@@ -58,10 +53,10 @@ FEW-SHOT EXAMPLES (FOLLOW THIS EXACT CRISPNESS):
             systemPrompt: ss40SystemPrompt
         };
 
-        if (ANAM_PERSONA_ID) {
+        if (account.personaId) {
             try {
-                const personaRes = await fetch(`https://api.anam.ai/v1/personas/${ANAM_PERSONA_ID}`, {
-                    headers: { Authorization: `Bearer ${ANAM_API_KEY}` }
+                const personaRes = await fetch(`https://api.anam.ai/v1/personas/${account.personaId}`, {
+                    headers: { Authorization: `Bearer ${account.apiKey}` }
                 });
                 if (personaRes.ok) {
                     const personaData = await personaRes.json();
@@ -70,10 +65,9 @@ FEW-SHOT EXAMPLES (FOLLOW THIS EXACT CRISPNESS):
                     if (avatar?.id) personaConfig.avatarId = avatar.id;
                     if (voice?.id) personaConfig.voiceId = voice.id;
                     if (personaData.publishedCall?.avatarModel) personaConfig.avatarModel = personaData.publishedCall.avatarModel;
-                    // Retain full SS40 knowledge prompt and fast LLM to ensure crisp, accurate intelligence
                 }
             } catch (err) {
-                console.warn("[Anam API] Could not pre-fetch persona, using verified default personaConfig:", err);
+                console.warn(`[Anam API] Could not pre-fetch persona for ${account.label}:`, err);
             }
         }
 
@@ -81,63 +75,93 @@ FEW-SHOT EXAMPLES (FOLLOW THIS EXACT CRISPNESS):
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${ANAM_API_KEY}`
+                "Authorization": `Bearer ${account.apiKey}`
             },
             body: JSON.stringify({ personaConfig })
         });
 
         if (!response.ok) {
             const errText = await response.text();
-            console.warn(`[Anam API] Session request failed with status ${response.status}:`, errText);
-
-            // Determine if credit depletion or payment error
-            const isCreditExhausted =
-                response.status === 402 ||
-                response.status === 429 ||
-                errText.toLowerCase().includes("credit") ||
-                errText.toLowerCase().includes("quota") ||
-                errText.toLowerCase().includes("limit");
-
-            return NextResponse.json(
-                {
-                    success: false,
-                    available: false,
-                    error: isCreditExhausted ? "Credits exhausted" : "Failed to acquire session token",
-                    code: isCreditExhausted ? "CREDITS_EXHAUSTED" : "SESSION_FAILED"
-                },
-                { status: 200 }
-            );
+            console.warn(`[Anam API] ${account.label} account session request failed with status ${response.status}:`, errText);
+            return {
+                success: false,
+                status: response.status,
+                error: errText
+            };
         }
 
         const data = await response.json();
-
         if (!data.sessionToken) {
-            return NextResponse.json(
-                {
-                    success: false,
-                    available: false,
-                    error: "No session token returned",
-                    code: "INVALID_RESPONSE"
-                },
-                { status: 200 }
-            );
+            return {
+                success: false,
+                status: 200,
+                error: "No session token returned"
+            };
         }
 
-        return NextResponse.json({
+        return {
             success: true,
-            available: true,
             sessionToken: data.sessionToken
-        });
-    } catch (error) {
-        console.error("[Anam API] Session initialization error:", error);
+        };
+    } catch (err) {
+        console.error(`[Anam API] Network exception during ${account.label} session request:`, err);
+        return {
+            success: false,
+            status: 500,
+            error: err instanceof Error ? err.message : String(err)
+        };
+    }
+}
+
+export async function POST() {
+    const accounts: AccountConfig[] = [
+        {
+            label: "Primary",
+            apiKey: process.env.ANAM_API_KEY || "",
+            personaId: process.env.ANAM_PERSONA_ID
+        },
+        {
+            label: "Backup",
+            apiKey: process.env.ANAM_API_KEY_BACKUP || "",
+            personaId: process.env.ANAM_PERSONA_ID_BACKUP
+        }
+    ].filter((acc) => Boolean(acc.apiKey));
+
+    if (accounts.length === 0) {
         return NextResponse.json(
             {
                 success: false,
                 available: false,
-                error: "Network error connecting to Anam video cluster",
-                code: "NETWORK_ERROR"
+                error: "No Anam API key configured",
+                code: "NOT_CONFIGURED"
             },
             { status: 200 }
         );
     }
+
+    // Try Primary, then seamlessly fall back to Backup if credits/quota exhausted
+    for (const account of accounts) {
+        const result = await tryCreateSession(account);
+        if (result.success && result.sessionToken) {
+            return NextResponse.json({
+                success: true,
+                available: true,
+                sessionToken: result.sessionToken,
+                accountUsed: account.label
+            });
+        }
+        console.warn(`[Anam API] ${account.label} account failed (status ${result.status}). Trying next account in chain...`);
+    }
+
+    // If both accounts fail (credits exhausted or quota exceeded), auto-hide avatar cleanly
+    console.warn("[Anam API] All Anam accounts exhausted or unavailable. Disabling avatar on frontend.");
+    return NextResponse.json(
+        {
+            success: false,
+            available: false,
+            error: "All Anam credits exhausted",
+            code: "ALL_CREDITS_EXHAUSTED"
+        },
+        { status: 200 }
+    );
 }
