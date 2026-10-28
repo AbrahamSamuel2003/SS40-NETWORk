@@ -838,14 +838,9 @@ export function RuleBasedChatbot({
                                 <BotAvatar size="md" />
 
                                 <div>
-                                    <div className="flex items-center gap-1.5">
-                                        <h3 className="font-bold text-sm sm:text-[15px] leading-tight text-white tracking-tight">
-                                            SS40 SKY
-                                        </h3>
-                                        <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-extrabold bg-[#2DD4BF]/20 text-[#2DD4BF] border border-[#2DD4BF]/30 tracking-wider uppercase">
-                                            AI
-                                        </span>
-                                    </div>
+                                    <h3 className="font-bold text-sm sm:text-[15px] leading-tight text-white tracking-tight">
+                                        SS40 SKY
+                                    </h3>
                                     <p className="text-[11px] text-[#D8E8E2] font-medium leading-none mt-1">
                                         Verified AI Assistant
                                     </p>
