@@ -90,10 +90,6 @@ export async function generateMetadata(): Promise<Metadata> {
         "max-snippet": -1,
       },
     },
-    verification: {
-      google: "YOUR_GOOGLE_SEARCH_CONSOLE_VERIFICATION_CODE_HERE", // Replace with your actual verification code from Google Search Console
-      yandex: "YOUR_YANDEX_VERIFICATION_CODE_HERE", // Optional: Add if using Yandex Webmaster
-    }
   };
 }
 
@@ -107,7 +103,8 @@ export default async function RootLayout({
   const legalName = config?.legalName || "SS40 NETWORK PRIVATE LIMITED";
   const contactEmail = config?.contactEmail || "support@ss40network.com";
   const contactPhone = config?.contactPhone || "+91 83005 91750";
-  const addressText = config?.addressText || "1st Floor, Municipal Corporation Incubation Centre (Near by trade centre), Sree Puram, Tirunelveli, Tamil Nadu 627001";
+  const operationalAddress = "1st Floor, Municipal Corporation Incubation Centre (Near by trade centre), Sree Puram, Tirunelveli, Tamil Nadu 627001";
+  const googleMapsPlaceUrl = "https://www.google.co.in/maps/place/SS40+NETWORK+PRIVATE+LIMITED/@8.7291497,77.6975423,16z/data=!3m1!4b1!4m6!3m5!1s0x3b043d23a0d31415:0x156aa9529f1cb6e6!8m2!3d8.7291497!4d77.6975423!16s%2Fg%2F11ytv_cr14";
   const logoUrl = config?.uploadedLogoUrl || config?.logoUrl || "https://ss40network.com/icon.jpg";
 
   // Advanced SEO Sitelinks & Brand Schema Markup (JSON-LD)
@@ -127,7 +124,7 @@ export default async function RootLayout({
         "description": config?.seoDefaultDescription || "SS40 NETWORK PRIVATE LIMITED is a technology company in Tirunelveli architecting enterprise digital solutions, intelligent SaaS products, and career-launching tech academics.",
         "address": {
           "@type": "PostalAddress",
-          "streetAddress": addressText,
+          "streetAddress": operationalAddress,
           "addressLocality": "Tirunelveli",
           "addressRegion": "Tamil Nadu",
           "postalCode": "627001",
@@ -137,20 +134,28 @@ export default async function RootLayout({
         "email": contactEmail,
         "areaServed": "India, Global",
         "sameAs": [
-          config?.urlLinkedin || "https://www.linkedin.com/company/ss40-network"
+          config?.urlLinkedin || "https://www.linkedin.com/company/ss40-network",
+          googleMapsPlaceUrl
         ]
       },
       {
-        "@type": "LocalBusiness",
+        "@type": ["LocalBusiness", "ProfessionalService"],
         "@id": "https://ss40network.com/#localbusiness",
         "name": companyName,
         "legalName": legalName,
         "url": "https://ss40network.com",
         "telephone": contactPhone,
         "email": contactEmail,
+        "image": "https://ss40network.com/icon.jpg",
+        "priceRange": "$$",
+        "hasMap": googleMapsPlaceUrl,
+        "sameAs": [
+          googleMapsPlaceUrl,
+          config?.urlLinkedin || "https://www.linkedin.com/company/ss40-network"
+        ],
         "address": {
           "@type": "PostalAddress",
-          "streetAddress": addressText,
+          "streetAddress": operationalAddress,
           "addressLocality": "Tirunelveli",
           "addressRegion": "Tamil Nadu",
           "postalCode": "627001",
@@ -158,7 +163,8 @@ export default async function RootLayout({
         },
         "geo": {
           "@type": "GeoCoordinates",
-          "url": `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(companyName + " " + addressText)}`
+          "latitude": 8.7291497,
+          "longitude": 77.6975423
         },
         "openingHoursSpecification": {
           "@type": "OpeningHoursSpecification",
@@ -173,7 +179,20 @@ export default async function RootLayout({
           "opens": "09:00",
           "closes": "18:00"
         },
-        "priceRange": "$$"
+        "areaServed": [
+          { "@type": "City", "name": "Tirunelveli" },
+          { "@type": "State", "name": "Tamil Nadu" },
+          { "@type": "Country", "name": "India" }
+        ],
+        "knowsAbout": [
+          "Custom Software Engineering",
+          "Enterprise Web Application Development",
+          "Mobile App Development",
+          "Artificial Intelligence Solutions",
+          "SaaS Products",
+          "Tech Academics and Internships"
+        ],
+        "knowsLanguage": ["en", "ta"]
       },
       {
         "@type": "WebSite",

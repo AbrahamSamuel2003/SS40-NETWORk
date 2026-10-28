@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { motion } from "framer-motion";
-import { MapPin, Navigation, Phone, Clock, Map, ExternalLink } from "lucide-react";
+import { MapPin, Navigation, Phone, Clock, Map, Star } from "lucide-react";
 import { SectionWrapper } from "@/components/layout/SectionWrapper";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
@@ -16,7 +16,8 @@ export function OfficeLocation({ config }: { config?: SiteConfigData | null }) {
     const businessHours = config?.businessHours || "Monday – Friday: 9:30 AM – 6:30 PM";
     const phoneValue = config?.contactPhone || "+91 83005 91750";
 
-    const mapDirectionsUrl = "https://goo.gl/maps/DWiCMVGgqKi2r5188";
+    const mapDirectionsUrl = "https://www.google.co.in/maps/place/SS40+NETWORK+PRIVATE+LIMITED/@8.7291497,77.6975423,16z/data=!3m1!4b1!4m6!3m5!1s0x3b043d23a0d31415:0x156aa9529f1cb6e6!8m2!3d8.7291497!4d77.6975423!16s%2Fg%2F11ytv_cr14";
+    const writeReviewUrl = "https://search.google.com/local/writereview?placeid=ChIJFRTToCM9BDsR5rYcn1KpahU";
 
     return (
         <SectionWrapper id="office-location" className="bg-[#EDF5F2] py-12 md:py-16">
@@ -50,7 +51,8 @@ export function OfficeLocation({ config }: { config?: SiteConfigData | null }) {
                             <MapPin className="w-6 h-6 text-[#0F766E]" />
                         </div>
 
-                        <h3 className="text-xl md:text-2xl font-bold text-[#111827] mb-4">{companyName}</h3>
+                        <h3 className="text-xl md:text-2xl font-bold text-[#111827] mb-1">{companyName}</h3>
+                        <p className="text-xs font-bold uppercase tracking-widest text-[#0F766E] mb-3">Operational Headquarters</p>
 
                         <address className="not-italic text-gray-500 text-base leading-relaxed mb-4 whitespace-pre-line">
                             {addressText}
@@ -64,16 +66,22 @@ export function OfficeLocation({ config }: { config?: SiteConfigData | null }) {
                             </div>
                         </div>
 
-                        <div className="flex flex-wrap gap-4 mt-auto">
+                        <div className="flex flex-wrap items-center gap-3 mt-auto pt-2">
                             <a href={mapDirectionsUrl} target="_blank" rel="noopener noreferrer">
-                                <Button className="bg-[#0F766E] text-white hover:bg-[#115E59] font-bold px-5 py-3 rounded-xl group shadow-md shadow-[#0F766E]/20">
-                                    <Navigation className="w-4 h-4 mr-2 group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform" />
+                                <Button className="bg-[#0F766E] text-white hover:bg-[#115E59] font-bold px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl group shadow-md shadow-[#0F766E]/20 text-xs sm:text-sm">
+                                    <Navigation className="w-4 h-4 mr-2 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
                                     Get Directions
+                                </Button>
+                            </a>
+                            <a href={writeReviewUrl} target="_blank" rel="noopener noreferrer">
+                                <Button variant="outline" className="bg-amber-50/80 hover:bg-amber-100/90 border-amber-300 text-amber-900 font-bold px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl group shadow-2xs text-xs sm:text-sm">
+                                    <Star className="w-4 h-4 mr-1.5 text-amber-500 fill-amber-400 group-hover:rotate-12 transition-transform" />
+                                    Review Us on Google
                                 </Button>
                             </a>
                             {phoneValue && (
                                 <a href={`tel:${phoneValue.replace(/\s+/g, '')}`}>
-                                    <Button variant="outline" className="bg-transparent border-gray-200 text-[#111827] hover:bg-gray-50 font-bold px-5 py-3 rounded-xl group">
+                                    <Button variant="outline" className="bg-transparent border-gray-200 text-[#111827] hover:bg-gray-50 font-bold px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl group text-xs sm:text-sm">
                                         <Phone className="w-4 h-4 mr-2 text-[#0F766E]" />
                                         Call Now
                                     </Button>
@@ -91,25 +99,12 @@ export function OfficeLocation({ config }: { config?: SiteConfigData | null }) {
                             src={
                                 config?.googleMapsIframeUrl && config.googleMapsIframeUrl.includes("embed")
                                     ? config.googleMapsIframeUrl
-                                    : "https://www.openstreetmap.org/export/embed.html?bbox=77.6980%2C8.7150%2C77.7380%2C8.7420&layer=mapnik&marker=8.7284%2C77.7122"
+                                    : "https://maps.google.com/maps?q=SS40+NETWORK+PRIVATE+LIMITED+Tirunelveli&t=&z=16&ie=UTF8&iwloc=&output=embed"
                             }
                             className="absolute inset-0 w-full h-full border-0 contrast-[1.05]"
                             allowFullScreen
                             loading="lazy"
                         />
-
-                        {/* Custom Google Places Mock Overlay */}
-                        <div className="absolute top-3 left-3 right-3 sm:right-auto md:top-4 md:left-4 bg-white rounded-md shadow-[0_2px_6px_rgba(0,0,0,0.3)] p-3 md:p-4 z-20 w-auto sm:w-[260px] md:w-[280px] pointer-events-auto">
-                            <h4 className="text-[14px] md:text-[15px] font-semibold text-gray-900 leading-tight mb-1 flex justify-between items-start">
-                                {companyName}
-                                <a href={mapDirectionsUrl} target="_blank" rel="noopener noreferrer" className="text-[#0F766E] hover:text-[#115E59] p-1 shrink-0 ml-2">
-                                    <ExternalLink className="w-4 h-4" />
-                                </a>
-                            </h4>
-                            <p className="text-[11px] md:text-[12px] text-gray-600 leading-snug whitespace-pre-line">
-                                {addressText}
-                            </p>
-                        </div>
 
                         {/* Floating protection gradient for button */}
                         <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#111827]/30 to-transparent pointer-events-none" />
