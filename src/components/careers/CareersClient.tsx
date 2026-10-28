@@ -11,6 +11,7 @@ import {
     ArrowDown,
     MapPin,
     Check,
+    Target,
     Rocket,
     HeartHandshake,
     Mail,
@@ -39,6 +40,62 @@ interface CareerItem {
     isActive: boolean;
     sortOrder: number;
     createdAt: string | Date;
+}
+
+interface ParsedJobDescription {
+    intro: string;
+    keyObjective: string | null;
+    bulletPoints: string[];
+}
+
+function parseJobDescription(rawText: string): ParsedJobDescription {
+    if (!rawText) return { intro: '', keyObjective: null, bulletPoints: [] };
+    let text = rawText.trim();
+    let keyObjective: string | null = null;
+
+    // Extract Key Objective if present (no emojis/sparkles)
+    const objectiveMatch = text.match(/(?:[-•*]\s*)?(?:Key Objective|Objective|Primary Objective)\s*:\s*([^.\n]+(?:\.[^.\n]+)*\.?)/i);
+    if (objectiveMatch) {
+        keyObjective = objectiveMatch[1].trim();
+        text = text.replace(objectiveMatch[0], '').trim();
+    }
+
+    const lines: string[] = [];
+    const hasBullets = text.includes('\n-') || text.includes('\n•') || text.includes(' - ') || text.startsWith('- ') || text.startsWith('• ');
+
+    if (text.includes('\n')) {
+        for (const line of text.split('\n')) {
+            const t = line.trim();
+            if (t) lines.push(t);
+        }
+    } else if (hasBullets) {
+        lines.push(...text.split(/\s*[-•]\s+/).filter(Boolean));
+    } else {
+        // Plain single overview paragraph
+        return { intro: text, keyObjective, bulletPoints: [] };
+    }
+
+    let intro = '';
+    const bulletPoints: string[] = [];
+
+    lines.forEach((item, index) => {
+        const clean = item.replace(/^[•\-\*]\s*/, '').trim();
+        if (!clean) return;
+
+        if (index === 0 && (
+            clean.toLowerCase().includes('roles and responsibilities') ||
+            clean.toLowerCase().includes('job description') ||
+            clean.toLowerCase().includes('about the role') ||
+            clean.toLowerCase().includes('overview') ||
+            (!clean.endsWith('.') && clean.length < 90)
+        )) {
+            intro = clean;
+        } else {
+            bulletPoints.push(clean);
+        }
+    });
+
+    return { intro, keyObjective, bulletPoints };
 }
 
 export function CareersClient({ initialCareers }: { initialCareers: CareerItem[] }) {
@@ -134,6 +191,10 @@ export function CareersClient({ initialCareers }: { initialCareers: CareerItem[]
                         initialCareers.map((job) => {
                             const isExpanded = expandedIds.includes(job.id);
                             const badgeLabel = job.badgeText || (job.isFeatured ? 'CURRENT ROLE' : 'ACTIVE OPENING');
+                            const parsed = parseJobDescription(job.description);
+                            const responsibilitiesList = (Array.isArray(job.responsibilities) && job.responsibilities.length > 0)
+                                ? job.responsibilities
+                                : parsed.bulletPoints;
 
                             return (
                                 <div
@@ -218,28 +279,43 @@ export function CareersClient({ initialCareers }: { initialCareers: CareerItem[]
                                         </div>
                                     </div>
 
-                                    {/* EXPANDED "DROP-DOWN" CONTENT (Matching Screenshot) */}
+                                    {/* EXPANDED "DROP-DOWN" CONTENT (Executive Minimalist Layout) */}
                                     {isExpanded && (
-                                        <div className="px-5 sm:px-7 pb-6 sm:pb-7 pt-2 border-t border-gray-100 space-y-5 animate-in fade-in-50 duration-200">
+                                        <div className="px-5 sm:px-7 pb-6 sm:pb-7 pt-2 border-t border-gray-100 space-y-6 animate-in fade-in-50 duration-200">
                                             
-                                            {/* Role Overview Paragraph */}
-                                            {job.description && (
+                                            {/* Role Overview / Heading if Present */}
+                                            {parsed.intro && (
                                                 <p className="text-xs sm:text-sm text-gray-700 leading-relaxed font-normal">
-                                                    {job.description}
+                                                    {parsed.intro}
                                                 </p>
                                             )}
 
-                                            {/* Key Responsibilities with Checkmark Circles */}
-                                            {Array.isArray(job.responsibilities) && job.responsibilities.length > 0 && (
-                                                <div className="space-y-2.5">
+                                            {/* Executive Key Objective Highlight Callout (No emojis, no sparkles) */}
+                                            {parsed.keyObjective && (
+                                                <div className="rounded-xl border-l-4 border-[#0F766E] bg-[#F8FAF9] p-4 sm:p-5 border border-gray-100/80 shadow-2xs">
+                                                    <div className="flex items-center gap-2 mb-1.5">
+                                                        <Target className="w-4 h-4 text-[#0F766E] shrink-0" />
+                                                        <span className="text-[11px] font-bold uppercase tracking-wider text-[#0F766E]">
+                                                            Key Objective
+                                                        </span>
+                                                    </div>
+                                                    <p className="text-xs sm:text-sm text-gray-800 font-medium leading-relaxed">
+                                                        {parsed.keyObjective}
+                                                    </p>
+                                                </div>
+                                            )}
+
+                                            {/* Core Responsibilities with Checkmark Circles */}
+                                            {responsibilitiesList.length > 0 && (
+                                                <div className="space-y-3">
                                                     <h4 className="text-[11px] font-bold uppercase tracking-wider text-gray-500">
-                                                        Core Responsibilities:
+                                                        Core Responsibilities
                                                     </h4>
-                                                    <div className="space-y-2">
-                                                        {job.responsibilities.map((resp: string, idx: number) => (
+                                                    <div className="space-y-2.5">
+                                                        {responsibilitiesList.map((resp: string, idx: number) => (
                                                             <div key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-gray-700">
                                                                 <div className="w-4 h-4 rounded-full bg-[#0F766E]/10 border border-[#0F766E]/30 text-[#0F766E] flex items-center justify-center shrink-0 mt-0.5">
-                                                                    <Check className="w-2.5 h-2.5" />
+                                                                    <Check className="w-2.5 h-2.5 stroke-[2.5]" />
                                                                 </div>
                                                                 <span className="leading-relaxed">{resp}</span>
                                                             </div>
@@ -248,17 +324,17 @@ export function CareersClient({ initialCareers }: { initialCareers: CareerItem[]
                                                 </div>
                                             )}
 
-                                            {/* Requirements & Qualifications with Checkmark Circles */}
+                                            {/* Qualifications & Requirements with Checkmark Circles */}
                                             {Array.isArray(job.requirements) && job.requirements.length > 0 && (
-                                                <div className="space-y-2.5 pt-1">
+                                                <div className="space-y-3 pt-1">
                                                     <h4 className="text-[11px] font-bold uppercase tracking-wider text-gray-500">
-                                                        Qualifications & Requirements:
+                                                        Qualifications &amp; Requirements
                                                     </h4>
-                                                    <div className="space-y-2">
+                                                    <div className="space-y-2.5">
                                                         {job.requirements.map((req: string, idx: number) => (
                                                             <div key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-gray-700">
                                                                 <div className="w-4 h-4 rounded-full bg-[#0F766E]/10 border border-[#0F766E]/30 text-[#0F766E] flex items-center justify-center shrink-0 mt-0.5">
-                                                                    <Check className="w-2.5 h-2.5" />
+                                                                    <Check className="w-2.5 h-2.5 stroke-[2.5]" />
                                                                 </div>
                                                                 <span className="leading-relaxed">{req}</span>
                                                             </div>
@@ -267,11 +343,13 @@ export function CareersClient({ initialCareers }: { initialCareers: CareerItem[]
                                                 </div>
                                             )}
 
-                                            {/* Drop-down Footer with Location & "Apply Now" Button */}
+                                            {/* Drop-down Footer with Role Status & "Apply Now" Button (Deduplicated Location) */}
                                             <div className="pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
                                                 <div className="flex items-center gap-2 text-xs text-gray-500">
-                                                    <MapPin className="w-3.5 h-3.5 text-[#0F766E] shrink-0" />
-                                                    <span>{job.location}</span>
+                                                    <span className="inline-flex items-center gap-2 font-medium text-gray-600">
+                                                        <span className="w-2 h-2 rounded-full bg-[#0F766E]" />
+                                                        <span>Immediate Opening &bull; {job.department}</span>
+                                                    </span>
                                                 </div>
 
                                                 {/* Apply Now button navigating directly to form page */}
