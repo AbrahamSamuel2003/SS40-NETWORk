@@ -52,7 +52,7 @@ export function BusinessWings() {
         <SectionWrapper id="business-wings" className="bg-white relative overflow-hidden py-10 sm:py-14 lg:py-16">
 
             {/* 1. Minimalist Flowing Wave Gradients with Soft Top Border Fade */}
-            <div 
+            <div
                 className="absolute inset-0 pointer-events-none overflow-hidden z-0 select-none"
                 style={{
                     maskImage: "linear-gradient(to bottom, transparent 0%, black 14%, black 100%)",
@@ -122,7 +122,7 @@ export function BusinessWings() {
 
                     {/* Central Hub: Modern Architectural Corporate Headquarters Visual */}
                     <div
-                        className="relative z-20 flex flex-col items-center justify-center w-full max-w-[300px] sm:max-w-[380px] lg:max-w-[430px] mx-auto transform-gpu"
+                        className="relative z-20 flex flex-col items-center justify-center w-full max-w-[200px] sm:max-w-[380px] lg:max-w-[300px] mx-auto transform-gpu"
                     >
                         {/* Architectural HQ Campus Visual (Matching Reference Silhouette in SS40 Theme) */}
                         <div className="relative z-10 w-full flex flex-col items-center justify-center">
@@ -233,8 +233,8 @@ export function BusinessWings() {
 
                                     {/* CTA Link */}
                                     <div className="mt-auto pt-1.5 sm:pt-3 border-t border-gray-100 flex items-center justify-center sm:justify-between">
-                                        <Link 
-                                            href={wing.link} 
+                                        <Link
+                                            href={wing.link}
                                             aria-label={`${wing.cta} — SS40 ${wing.name}`}
                                             className="inline-flex items-center text-[10px] sm:text-xs font-bold text-[#0F766E] group/btn focus-visible:outline-none rounded-md hover:underline"
                                         >

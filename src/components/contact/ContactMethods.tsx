@@ -119,26 +119,26 @@ export function ContactMethods({ config }: { config?: SiteConfigData | null }) {
                                 aria-label={`${channel.title}: ${channel.value}`}
                             >
                                 <div className="flex flex-col h-full justify-between">
-                                    {/* Icon & Arrow Header Row */}
-                                    <div className="flex items-center justify-between mb-2 sm:mb-4">
-                                        <div className="w-8 h-8 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-[#EDF5F2] border border-[#0F766E]/15 flex items-center justify-center text-[#0F766E] group-hover:bg-[#0F766E] group-hover:text-white transition-all duration-300 shadow-2xs shrink-0">
-                                            <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
+                                    {/* Icon, Heading & Arrow Row */}
+                                    <div className="flex items-center justify-between gap-2 mb-2 sm:mb-3">
+                                        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                                            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-[#EDF5F2] border border-[#0F766E]/15 flex items-center justify-center text-[#0F766E] group-hover:bg-[#0F766E] group-hover:text-white transition-all duration-300 shadow-2xs shrink-0">
+                                                <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
+                                            </div>
+                                            <h3 className="text-xs sm:text-base md:text-lg font-bold text-[#0F172A] font-serif group-hover:text-[#0F766E] transition-colors truncate">
+                                                <span className="sm:hidden">{channel.mobileTitle}</span>
+                                                <span className="hidden sm:inline">{channel.title}</span>
+                                            </h3>
                                         </div>
                                         <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:text-[#0F766E] group-hover:bg-[#EDF5F2] transition-colors shrink-0">
                                             <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                                         </div>
                                     </div>
 
-                                    {/* Titles & Value */}
+                                    {/* Subtitle & Value */}
                                     <div>
-                                        {/* Responsive Title: Compact on Mobile, Full on Desktop */}
-                                        <h3 className="text-xs sm:text-base md:text-lg font-bold text-[#0F172A] mb-0.5 sm:mb-1 font-serif group-hover:text-[#0F766E] transition-colors truncate">
-                                            <span className="sm:hidden">{channel.mobileTitle}</span>
-                                            <span className="hidden sm:inline">{channel.title}</span>
-                                        </h3>
-
                                         {/* Subtitle (Hidden on small mobile screens to keep cards sleek) */}
-                                        <p className="hidden sm:block text-[11px] sm:text-xs text-gray-500 mb-3 font-normal line-clamp-1">
+                                        <p className="hidden sm:block text-[11px] sm:text-xs text-gray-500 mb-2 font-normal line-clamp-1">
                                             {channel.subtitle}
                                         </p>
 

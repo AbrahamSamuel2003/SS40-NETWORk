@@ -83,9 +83,6 @@ export function Hero() {
                     <div className="w-full lg:w-1/2 flex justify-center items-center select-none py-4 sm:py-6">
                         <div className="relative w-full max-w-[500px]">
 
-                            {/* Soft Ambient Stage Glow */}
-                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-tr from-[#2DD4BF]/20 to-[#0F766E]/10 rounded-full blur-3xl pointer-events-none -z-0" />
-
                             {/* FLOATING TAG 1: ClearInvoice (Positioned in Open Upper-Left Chart Area) */}
                             <motion.div
                                 initial={{ opacity: 0, x: -10 }}
@@ -162,9 +159,6 @@ export function Hero() {
                                 transition={{ duration: 0.6, ease: "easeOut" }}
                                 className="relative z-10 w-full bg-white/95 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-gray-200/90 shadow-2xl p-5 sm:p-6 flex flex-col justify-between overflow-hidden transform-gpu"
                             >
-                                {/* Inner Top Sheen */}
-                                <div className="absolute top-0 inset-x-0 h-24 bg-gradient-to-b from-teal-50/40 via-white/20 to-transparent pointer-events-none" />
-
                                 {/* Header: Company Scaling Hub & Growth Pill (No dot) */}
                                 <div className="flex items-center justify-between z-10 pb-3 border-b border-gray-100">
                                     <div className="flex items-center gap-2.5">
@@ -187,33 +181,6 @@ export function Hero() {
                                 <div className="relative w-full my-3 min-h-[185px] sm:min-h-[205px] flex items-end">
                                     <svg className="w-full h-full overflow-visible" viewBox="0 0 460 185" preserveAspectRatio="none">
                                         <defs>
-                                            {/* Bar Gradient */}
-                                            <linearGradient id="barGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                                <stop offset="0%" stopColor="#2DD4BF" stopOpacity="0.9" />
-                                                <stop offset="60%" stopColor="#14B8A6" stopOpacity="0.8" />
-                                                <stop offset="100%" stopColor="#0F766E" stopOpacity="0.95" />
-                                            </linearGradient>
-
-                                            {/* Bar Highlight Accent */}
-                                            <linearGradient id="barPeakGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                                <stop offset="0%" stopColor="#5EEAD4" />
-                                                <stop offset="100%" stopColor="#0D9488" />
-                                            </linearGradient>
-
-                                            {/* Line Gradient */}
-                                            <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                                                <stop offset="0%" stopColor="#0D9488" />
-                                                <stop offset="50%" stopColor="#0284C7" />
-                                                <stop offset="100%" stopColor="#0F766E" />
-                                            </linearGradient>
-
-                                            {/* Under Area Gradient */}
-                                            <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                                                <stop offset="0%" stopColor="#38BDF8" stopOpacity="0.22" />
-                                                <stop offset="50%" stopColor="#2DD4BF" stopOpacity="0.08" />
-                                                <stop offset="100%" stopColor="#0F766E" stopOpacity="0.0" />
-                                            </linearGradient>
-
                                             {/* Arrow Marker Definition */}
                                             <marker
                                                 id="arrowHead"
@@ -226,14 +193,6 @@ export function Hero() {
                                             >
                                                 <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#0F766E" />
                                             </marker>
-
-                                            <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
-                                                <feGaussianBlur stdDeviation="2.5" result="blur" />
-                                                <feMerge>
-                                                    <feMergeNode in="blur" />
-                                                    <feMergeNode in="SourceGraphic" />
-                                                </feMerge>
-                                            </filter>
                                         </defs>
 
                                         {/* Subtle Horizontal Guide Lines */}
@@ -242,7 +201,7 @@ export function Hero() {
                                         <line x1="15" y1="120" x2="445" y2="120" stroke="#E5E7EB" strokeWidth="1" strokeDasharray="3 3" opacity="0.6" />
                                         <line x1="15" y1="160" x2="445" y2="160" stroke="#E5E7EB" strokeWidth="1" />
 
-                                        {/* Dynamic Rising Column Bars */}
+                                        {/* Dynamic Rising Column Bars (Solid Flat Architecture) */}
                                         {CHART_DATA.map((item, idx) => {
                                             const x = 32 + idx * 52;
                                             const isPeak = idx === CHART_DATA.length - 1 || idx === 5;
@@ -255,13 +214,13 @@ export function Hero() {
                                                         width="24"
                                                         height={item.barH}
                                                         rx="6"
-                                                        fill={isPeak ? "url(#barPeakGrad)" : "url(#barGrad)"}
+                                                        fill={isPeak ? "#0F766E" : "#14B8A6"}
                                                         initial={{ scaleY: 0, originY: "160px" }}
                                                         animate={{ scaleY: 1 }}
                                                         transition={{
-                                                            duration: 0.6,
-                                                            delay: 0.1 + idx * 0.07,
-                                                            ease: "easeOut"
+                                                             duration: 0.6,
+                                                             delay: 0.1 + idx * 0.07,
+                                                             ease: "easeOut"
                                                         }}
                                                     />
 
@@ -273,33 +232,23 @@ export function Hero() {
                                                         height="3"
                                                         rx="1.5"
                                                         fill="#FFFFFF"
-                                                        opacity={0.5}
+                                                        opacity={0.4}
                                                         initial={{ opacity: 0 }}
-                                                        animate={{ opacity: 0.5 }}
+                                                        animate={{ opacity: 0.4 }}
                                                         transition={{ delay: 0.3 + idx * 0.07 }}
                                                     />
                                                 </g>
                                             );
                                         })}
 
-                                        {/* Under-Curve Shaded Gradient Area */}
-                                        <motion.path
-                                            d="M 32,96 L 84,62 L 136,70 L 188,80 L 240,48 L 292,22 L 344,36 L 396,8 L 396,160 L 32,160 Z"
-                                            fill="url(#areaGradient)"
-                                            initial={{ opacity: 0 }}
-                                            animate={{ opacity: 1 }}
-                                            transition={{ duration: 0.8, delay: 0.3 }}
-                                        />
-
-                                        {/* Animated Connecting Trendline */}
+                                        {/* Animated Connecting Trendline (Solid Color) */}
                                         <motion.path
                                             d="M 32,96 L 84,62 L 136,70 L 188,80 L 240,48 L 292,22 L 344,36 L 396,8"
                                             fill="none"
-                                            stroke="url(#lineGrad)"
+                                            stroke="#0F766E"
                                             strokeWidth="3.5"
                                             strokeLinecap="round"
                                             strokeLinejoin="round"
-                                            filter="url(#softGlow)"
                                             initial={{ pathLength: 0 }}
                                             animate={{ pathLength: 1 }}
                                             transition={{ duration: 1.4, delay: 0.2, ease: "easeOut" }}
@@ -341,15 +290,6 @@ export function Hero() {
                                                 </g>
                                             );
                                         })}
-
-                                        {/* Gliding Live Pulse Orb */}
-                                        <motion.circle r="5" fill="#0284C7" stroke="#FFFFFF" strokeWidth="2">
-                                            <animateMotion
-                                                path="M 32,96 L 84,62 L 136,70 L 188,80 L 240,48 L 292,22 L 344,36 L 396,8"
-                                                dur="4.5s"
-                                                repeatCount="indefinite"
-                                            />
-                                        </motion.circle>
                                     </svg>
                                 </div>
 

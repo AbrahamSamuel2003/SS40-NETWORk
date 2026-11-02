@@ -77,23 +77,23 @@ export function About() {
                             </div>
                             <div className="bg-[#F8FAF9] p-2 sm:p-2.5 rounded-xl border border-gray-100 flex flex-col items-center justify-center text-center">
                                 <p className="text-[10px] sm:text-[11px] font-medium text-gray-500">Compliance</p>
-                                <p className="text-xs sm:text-sm font-bold text-[#0F766E]">100% MCA</p>
+                                <p className="text-xs sm:text-sm font-bold text-[#0F766E]">MCA Registered</p>
                             </div>
                             <div className="bg-[#F8FAF9] p-2 sm:p-2.5 rounded-xl border border-gray-100 flex flex-col items-center justify-center text-center">
                                 <p className="text-[10px] sm:text-[11px] font-medium text-gray-500">Work with</p>
-                                <p className="text-[11px] sm:text-sm font-bold text-[var(--color-heading)] tracking-tight leading-tight text-center">International</p>
+                                <p className="text-[10px] sm:text-xs font-bold text-[var(--color-heading)] tracking-tight leading-tight text-center">International &amp; Domestic</p>
                             </div>
                             <div className="bg-[#F8FAF9] p-2 sm:p-2.5 rounded-xl border border-gray-100 flex flex-col items-center justify-center text-center">
-                                <p className="text-[10px] sm:text-[11px] font-medium text-gray-500">Delivery</p>
-                                <p className="text-xs sm:text-sm font-bold text-[var(--color-heading)]">Fixed-Scope</p>
+                                <p className="text-[10px] sm:text-[11px] font-medium text-gray-500">Response</p>
+                                <p className="text-xs sm:text-sm font-bold text-[var(--color-heading)]">Within 24 Hours</p>
                             </div>
                             <div className="bg-[#F8FAF9] p-2 sm:p-2.5 rounded-xl border border-gray-100 flex flex-col items-center justify-center text-center">
                                 <p className="text-[10px] sm:text-[11px] font-medium text-gray-500">Support</p>
-                                <p className="text-xs sm:text-sm font-bold text-[#0F766E]">30-Day Warranty</p>
+                                <p className="text-xs sm:text-sm font-bold text-[#0F766E]">Lifetime Support</p>
                             </div>
                             <div className="bg-[#F8FAF9] p-2 sm:p-2.5 rounded-xl border border-gray-100 flex flex-col items-center justify-center text-center">
                                 <p className="text-[10px] sm:text-[11px] font-medium text-gray-500">Security</p>
-                                <p className="text-xs sm:text-sm font-bold text-[var(--color-heading)]">100% Secure</p>
+                                <p className="text-xs sm:text-sm font-bold text-[var(--color-heading)]">Standard Encryption</p>
                             </div>
                         </div>
                     </div>

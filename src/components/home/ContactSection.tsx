@@ -172,23 +172,24 @@ export function ContactSection({ config }: { config?: SiteConfigData | null }) {
                     description="Whether you need digital solutions, business software, or learning programs, our team is ready to help you bring your ideas to life."
                 />
 
-                <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
+                {/* Header: Let's Talk */}
+                <motion.div
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-100px" }}
+                    variants={slideUp}
+                    className="text-center lg:text-left flex flex-col items-center lg:items-start"
+                >
+                    <h3 className="text-3xl font-bold text-[var(--color-heading)] mb-2">Let's Talk.</h3>
+                    <p className="text-[var(--color-body-text)] text-sm sm:text-base">
+                        Connect directly with our specialists. We respond to all inquiries within 24 hours.
+                    </p>
+                </motion.div>
 
-                    {/* Left Column - Contact Information (40%) */}
-                    <div className="w-full lg:w-[40%] flex flex-col gap-8 h-full">
-                        <motion.div
-                            initial="hidden"
-                            whileInView="visible"
-                            viewport={{ once: true, margin: "-100px" }}
-                            variants={slideUp}
-                            className="text-center lg:text-left flex flex-col items-center lg:items-start"
-                        >
-                            <h3 className="text-3xl font-bold text-[var(--color-heading)] mb-4">Let's Talk.</h3>
-                            <p className="text-[var(--color-body-text)] mb-8">
-                                Connect directly with our specialists. We respond to all inquiries within 24 hours.
-                            </p>
-                        </motion.div>
+                <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-stretch">
 
+                    {/* Left Column - Contact Information Cards (40%) */}
+                    <div className="w-full lg:w-[40%] flex flex-col">
                         <motion.div
                             variants={staggerContainer}
                             initial="hidden"
@@ -231,13 +232,13 @@ export function ContactSection({ config }: { config?: SiteConfigData | null }) {
                     </div>
 
                     {/* Right Column - Premium Form (60%) */}
-                    <div className="w-full lg:w-[60%] flex flex-col flex-1">
+                    <div className="w-full lg:w-[60%] flex flex-col">
                         <CardMotion
                             initial="hidden"
                             whileInView="visible"
                             viewport={{ once: true, margin: "-100px" }}
                             variants={slideUp}
-                            className="p-8 md:p-10 bg-white shadow-xl shadow-gray-200/50 border border-[var(--color-border)] rounded-2xl relative overflow-visible flex-1 flex flex-col justify-between z-10"
+                            className="p-8 md:p-10 bg-white shadow-xl shadow-gray-200/50 border border-[var(--color-border)] rounded-2xl relative overflow-visible h-full flex flex-col justify-between z-10"
                         >
                             {/* Decorative Glow */}
                             <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--color-primary)]/5 blur-[80px] rounded-full pointer-events-none" />

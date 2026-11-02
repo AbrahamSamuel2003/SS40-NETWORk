@@ -23,6 +23,9 @@ export async function generateMetadata(): Promise<Metadata> {
   
   return {
     metadataBase: new URL("https://ss40network.com"),
+    applicationName: "SS40 NETWORK",
+    creator: "SS40 NETWORK",
+    publisher: "SS40 NETWORK PRIVATE LIMITED",
     title: {
       default: defaultTitle,
       template: `%s | ${brandName}`,

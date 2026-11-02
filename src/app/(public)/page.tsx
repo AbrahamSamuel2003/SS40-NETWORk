@@ -14,6 +14,9 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export const metadata: Metadata = {
+  applicationName: "SS40 NETWORK",
+  creator: "SS40 NETWORK",
+  publisher: "SS40 NETWORK PRIVATE LIMITED",
   title: {
     absolute: "SS40 NETWORK — Enterprise Digital Solutions, SaaS Products & Tech Academics",
   },
@@ -122,12 +125,31 @@ export default async function Home() {
     ]
   };
 
+  // Official Google Search Central WebSite Schema for Site Name indexing
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": "https://ss40network.com/#website",
+    "name": "SS40 NETWORK",
+    "alternateName": [
+      "SS40 NETWORK PRIVATE LIMITED",
+      "SS40",
+      "SS40 Network"
+    ],
+    "url": "https://ss40network.com"
+  };
+
   return (
     <div className="w-full flex-col flex">
       {/* Declarative Speculative Preload for Primary LCP Hero Visual */}
       <link rel="preload" href="/images/hero/wing-digital-solutions.png" as="image" type="image/png" />
       <link rel="preload" href="/images/hero/hero-workspace-left.webp" as="image" type="image/webp" />
 
+      {/* Official Google Search Central WebSite Schema for Exact Brand Name */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(sitelinksSchema) }}

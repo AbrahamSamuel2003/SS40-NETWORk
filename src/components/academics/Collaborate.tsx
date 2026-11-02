@@ -80,9 +80,6 @@ export function Collaborate() {
                                 transition={{ duration: 0.5, delay: idx * 0.1 }}
                                 className="bg-white rounded-2xl p-8 border border-gray-100 shadow-md shadow-gray-200/40 hover:-translate-y-1 hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-300 relative overflow-hidden group flex flex-col items-center text-center"
                             >
-                                {/* Thin primary hover accent line */}
-                                <div className="absolute top-0 left-0 right-0 h-1 bg-[#6B9F91] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
                                 <div className="w-14 h-14 bg-[#D8E8E2] rounded-xl flex items-center justify-center mb-6 border border-gray-100 group-hover:bg-[#6B9F91]/5 group-hover:border-[#6B9F91]/20 transition-colors">
                                     <Icon className="w-6 h-6 text-[#6B9F91]" />
                                 </div>

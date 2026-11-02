@@ -28,7 +28,6 @@ const ICON_MAP: Record<string, React.ElementType> = {
 export function LegalHero({ title, description, lastUpdated }: { title: string, description: string, lastUpdated: string }) {
     return (
         <section className="bg-white pt-20 md:pt-24 pb-14 md:pb-20 lg:pb-24 relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-b from-[#D8E8E2] to-white pointer-events-none" />
             <Container className="relative z-10 flex flex-col items-center text-center">
                 <motion.span
                     initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
@@ -63,7 +62,7 @@ export function LegalHero({ title, description, lastUpdated }: { title: string, 
 // --- QUICK SUMMARY ---
 export function LegalSummaryBlocks({ summaries }: { summaries: { title: string, description: string, icon: string }[] }) {
     return (
-        <section className="bg-white pb-14 md:pb-20 lg:pb-24 relative z-10">
+        <section className="bg-[#D8E8E2] py-14 md:py-18 lg:py-20 relative z-10 border-t border-[#6B9F91]/20">
             <Container>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {summaries.map((item, idx) => {
@@ -72,13 +71,15 @@ export function LegalSummaryBlocks({ summaries }: { summaries: { title: string, 
                             <motion.div
                                 key={idx}
                                 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }}
-                                className="bg-[#D8E8E2] rounded-2xl p-6 border border-gray-100 hover:shadow-lg hover:shadow-gray-200/50 hover:border-gray-200 transition-all group"
+                                className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md hover:border-[#6B9F91]/30 transition-all group flex flex-col"
                             >
-                                <div className="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center mb-4 group-hover:bg-[#6B9F91]/5 transition-colors border border-gray-50">
-                                    <Icon className="w-5 h-5 text-[#6B9F91]" />
+                                <div className="flex items-center gap-3 mb-3">
+                                    <div className="w-10 h-10 shrink-0 bg-[#D8E8E2] rounded-xl flex items-center justify-center group-hover:bg-[#6B9F91]/15 transition-colors border border-gray-100">
+                                        <Icon className="w-5 h-5 text-[#0F766E]" />
+                                    </div>
+                                    <h3 className="font-bold text-[#111827] text-base font-serif leading-snug">{item.title}</h3>
                                 </div>
-                                <h3 className="font-bold text-[#111827] text-base mb-2 font-serif">{item.title}</h3>
-                                <p className="text-gray-500 text-sm leading-relaxed">{item.description}</p>
+                                <p className="text-gray-600 text-sm leading-relaxed">{item.description}</p>
                             </motion.div>
                         );
                     })}
@@ -91,36 +92,40 @@ export function LegalSummaryBlocks({ summaries }: { summaries: { title: string, 
 // --- SIDEBAR & CONTENT LAYOUT ---
 export function LegalSidebarLayout({ sections }: { sections: { id: string, title: string, content: string }[] }) {
     return (
-        <section className="bg-[#D8E8E2] border-t border-gray-100 py-14 md:py-20 lg:py-24 relative">
+        <section className="bg-white border-t border-gray-100 py-12 md:py-16 lg:py-20 relative">
             <Container>
-
-                <div className="flex flex-col relative w-full items-start">
-
-                    {/* Scrollable Article */}
-                    <div className="w-full max-w-4xl mx-auto flex flex-col gap-8 md:gap-12">
-                        {sections.map((sec, idx) => (
-                            <section
-                                key={sec.id}
-                                id={sec.id}
-                                className="bg-white rounded-3xl p-8 md:p-12 border border-gray-100 shadow-xl shadow-gray-200/40 scroll-mt-32"
+                {/* Scrollable Article Flow */}
+                <div className="w-full max-w-4xl mx-auto flex flex-col">
+                    {sections.map((sec, idx) => (
+                        <article
+                            key={sec.id}
+                            id={sec.id}
+                            className="scroll-mt-32 py-8 md:py-12 border-t border-gray-100 first:border-t-0 first:pt-0"
+                        >
+                            <motion.div
+                                initial={{ opacity: 0, y: 15 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true, margin: "-100px" }}
+                                transition={{ duration: 0.5 }}
                             >
-                                <motion.div initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.5 }}>
-                                    <div className="w-8 h-8 rounded-full bg-[#D8E8E2] text-[#6B9F91] font-bold text-xs flex items-center justify-center mb-6 border border-gray-100">
+                                <div className="flex items-center gap-3 mb-4 sm:mb-5">
+                                    <span className="w-7 h-7 shrink-0 rounded-lg bg-[#6B9F91]/15 text-[#0F766E] font-bold text-xs flex items-center justify-center">
                                         {idx + 1}
-                                    </div>
-                                    <h2 className="text-2xl md:text-3xl font-extrabold text-[#111827] mb-6 tracking-tight font-serif">
+                                    </span>
+                                    <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-[#111827] tracking-tight font-serif">
                                         {sec.title}
                                     </h2>
-                                    <div className="prose prose-gray max-w-none text-gray-500 leading-loose">
-                                        {sec.content.split('\n').map((paragraph, i) => (
-                                            <p key={i} className="mb-4 last:mb-0 text-base md:text-lg">{paragraph}</p>
-                                        ))}
-                                    </div>
-                                </motion.div>
-                            </section>
-                        ))}
-                    </div>
-
+                                </div>
+                                <div className="prose prose-gray max-w-none text-gray-600 leading-relaxed sm:leading-loose pl-0 sm:pl-10">
+                                    {sec.content.split('\n').map((paragraph, i) => (
+                                        <p key={i} className="mb-4 last:mb-0 text-sm sm:text-base md:text-lg">
+                                            {paragraph}
+                                        </p>
+                                    ))}
+                                </div>
+                            </motion.div>
+                        </article>
+                    ))}
                 </div>
             </Container>
         </section>
