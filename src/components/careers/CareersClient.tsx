@@ -258,7 +258,7 @@ export function CareersClient({ initialCareers }: { initialCareers: CareerItem[]
 
                                             {/* Direct Action / Toggle CTA */}
                                             <div className="flex items-center gap-1.5 text-xs font-sans font-semibold text-[#0F766E] shrink-0 whitespace-nowrap">
-                                                <span className="text-[11px] sm:text-xs">{isExpanded ? 'Close' : 'View Details'}</span>
+                                                <span className="hidden sm:inline text-xs">{isExpanded ? 'Close' : 'View Details'}</span>
                                                 <button
                                                     type="button"
                                                     aria-label={isExpanded ? 'Collapse role details' : 'Expand role details'}
