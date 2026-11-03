@@ -88,8 +88,8 @@ export function About() {
                                 <p className="text-xs sm:text-sm font-bold text-[var(--color-heading)]">Within 24 Hours</p>
                             </div>
                             <div className="bg-[#F8FAF9] p-2 sm:p-2.5 rounded-xl border border-gray-100 flex flex-col items-center justify-center text-center">
-                                <p className="text-[10px] sm:text-[11px] font-medium text-gray-500">Support</p>
-                                <p className="text-xs sm:text-sm font-bold text-[#0F766E]">Lifetime Support</p>
+                                <p className="text-[10px] sm:text-[11px] font-medium text-gray-500">Warranty</p>
+                                <p className="text-xs sm:text-sm font-bold text-[#0F766E]">Lifetime Warranty</p>
                             </div>
                             <div className="bg-[#F8FAF9] p-2 sm:p-2.5 rounded-xl border border-gray-100 flex flex-col items-center justify-center text-center">
                                 <p className="text-[10px] sm:text-[11px] font-medium text-gray-500">Security</p>

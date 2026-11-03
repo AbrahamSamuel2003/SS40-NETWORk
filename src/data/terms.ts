@@ -38,6 +38,11 @@ export const termsData = {
             content: "SS40 NETWORK provides Digital Solutions, Products, and Academic Collaboration programs. We reserve the right to modify, suspend, or discontinue any service at any time without prior notice. Any new features or tools added to the current services shall also be subject to these Terms of Service."
         },
         {
+            id: "lifetime-warranty",
+            title: "Lifetime Technical Warranty & Service Scope",
+            content: "SS40 NETWORK stands firmly behind the engineering quality of its deliverables by offering a Lifetime Technical Warranty on custom software solutions, enterprise web platforms, and digital applications developed and deployed by our team under executed project agreements.\n\n1. Warranty Coverage (Complimentary):\nThe Lifetime Warranty applies exclusively to the original scope of work delivered and accepted at project handover. Under this warranty, SS40 NETWORK will inspect, debug, and rectify at no charge: core software functionality defects, backend logic errors, database communication exceptions, and unexpected server-side execution failures arising directly from our authored codebase.\n\n2. Exclusions & Billable Change Requests:\nThe Lifetime Warranty does not cover: (a) new feature additions or functional extensions not specified in the original scope of work; (b) visual UI/UX modifications, design revamps, layout realignments, or aesthetic revisions; (c) third-party API deprecations, external cloud infrastructure policy revisions, or third-party service breaking changes; and (d) issues introduced by unauthorized code edits or third-party developer interventions. All feature expansions, UI adjustments, and architectural upgrades will be scoped as independent service requests and billed under our standard engineering rates."
+        },
+        {
             id: "user-responsibilities",
             title: "User Responsibilities",
             content: "You agree to use our website and services only for lawful purposes. You must not use our platform to engage in any activity that violates any applicable local, national, or international law or regulation. You are solely responsible for maintaining the confidentiality of any account credentials provided to you."

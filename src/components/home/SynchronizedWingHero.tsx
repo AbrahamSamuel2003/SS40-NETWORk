@@ -45,7 +45,7 @@ const WINGS: WingData[] = [
         imageSrc: "/images/hero/wing-digital-solutions.png",
         imageAlt: "SS40 Digital Solutions — Custom Software Development and Cloud Architecture in Tirunelveli",
         icon: <Code2 className="w-3.5 h-3.5 text-[#B45309]" />,
-        chips: ["Web & Mobile", "Cloud & AI", "Lifetime Support"],
+        chips: ["Web & Mobile", "Cloud & AI", "Lifetime Warranty"],
         buttonClass: "bg-[#0F766E] hover:bg-[#115E59] text-white shadow-lg shadow-[#0F766E]/20",
         accentColor: "#0F766E"
     },
