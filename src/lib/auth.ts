@@ -1,5 +1,5 @@
 import { SignJWT, jwtVerify } from 'jose';
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import { prisma } from './prisma';
 import * as bcrypt from 'bcryptjs';
 
@@ -15,30 +15,36 @@ export async function verifyPassword(plaintext: string, hash: string): Promise<b
     return bcrypt.compare(plaintext, hash);
 }
 
-export async function createSession(userId: string, accountType: 'AdminUser', role: 'ADMIN') {
+export async function createSession(userId: string, accountType: 'AdminUser', role: 'ADMIN'): Promise<string> {
     const token = await new SignJWT({ userId, accountType, role })
         .setProtectedHeader({ alg: 'HS256' })
         .setIssuedAt()
         .setExpirationTime('24h')
         .sign(SECRET_KEY);
 
-    const cookieStore = await cookies();
-    const isProduction = process.env.NODE_ENV === 'production';
-    const secure = isProduction && process.env.COOKIE_SECURE === 'true';
-    
-    const cookieOptions: Record<string, unknown> = {
-        httpOnly: true,
-        secure: secure,
-        sameSite: 'lax',
-        maxAge: 60 * 60 * 24, // 24 hours
-        path: '/',
-    };
+    try {
+        const cookieStore = await cookies();
+        const isProduction = process.env.NODE_ENV === 'production';
+        const secure = isProduction && process.env.COOKIE_SECURE === 'true';
+        
+        const cookieOptions: Record<string, unknown> = {
+            httpOnly: true,
+            secure: secure,
+            sameSite: 'lax',
+            maxAge: 60 * 60 * 24, // 24 hours
+            path: '/',
+        };
 
-    if (process.env.COOKIE_DOMAIN) {
-        cookieOptions.domain = process.env.COOKIE_DOMAIN;
+        if (process.env.COOKIE_DOMAIN) {
+            cookieOptions.domain = process.env.COOKIE_DOMAIN;
+        }
+
+        cookieStore.set('admin_session', token, cookieOptions);
+    } catch {
+        // Ignored if called in context without cookies support
     }
 
-    cookieStore.set('admin_session', token, cookieOptions);
+    return token;
 }
 
 export async function refreshSessionIfNeeded() {
@@ -74,14 +80,33 @@ export async function refreshSessionIfNeeded() {
     }
 }
 
-// Preserve for existing flows if needed, but redirects to the new unified session
-export async function createAdminSession(adminId: string) {
-    await createSession(adminId, 'AdminUser', 'ADMIN');
+// Preserve for existing flows if needed, returns the token for mobile app use
+export async function createAdminSession(adminId: string): Promise<string> {
+    return await createSession(adminId, 'AdminUser', 'ADMIN');
 }
 
 export async function getCurrentSession() {
-    const cookieStore = await cookies();
-    const token = cookieStore.get('admin_session')?.value;
+    let token: string | undefined;
+
+    try {
+        const headerStore = await headers();
+        const authHeader = headerStore.get('authorization');
+        if (authHeader && authHeader.startsWith('Bearer ')) {
+            token = authHeader.substring(7).trim();
+        }
+    } catch {
+        // Non-request context
+    }
+
+    if (!token) {
+        try {
+            const cookieStore = await cookies();
+            token = cookieStore.get('admin_session')?.value;
+        } catch {
+            // Non-cookie context
+        }
+    }
+
     if (!token) return null;
 
     try {

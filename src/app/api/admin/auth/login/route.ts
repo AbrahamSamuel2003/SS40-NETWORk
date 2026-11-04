@@ -65,7 +65,7 @@ export async function POST(request: Request) {
         // Reset failed login attempts on successful login
         await resetFailedLoginAttempts(adminUser.id);
         
-        await createAdminSession(adminUser.id);
+        const token = await createAdminSession(adminUser.id);
 
         // Update lastLoginAt
         await prisma.adminUser.update({
@@ -89,6 +89,7 @@ export async function POST(request: Request) {
 
         return NextResponse.json({
             success: true,
+            token,
             admin: {
                 id: adminUser.id,
                 username: adminUser.username,

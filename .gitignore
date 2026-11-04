@@ -53,3 +53,4 @@ prisma-*.txt
 scratch/
 /*.pdf
 /public/uploads/resumes/*
+*.apk.bak
