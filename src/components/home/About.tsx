@@ -71,29 +71,41 @@ export function About() {
 
                         {/* Provenance & Operations 6-Card Compact Grid */}
                         <div className="grid grid-cols-3 gap-2 sm:gap-2.5 pt-4 mt-4 border-t border-gray-100 relative z-10">
-                            <div className="bg-[#F8FAF9] p-2 sm:p-2.5 rounded-xl border border-gray-100 flex flex-col items-center justify-center text-center">
+                            <div className="bg-[#F8FAF9] p-2 sm:p-2.5 rounded-xl border border-gray-100 flex flex-col justify-between text-center min-h-[70px] sm:min-h-[76px]">
                                 <p className="text-[10px] sm:text-[11px] font-medium text-gray-500">Established</p>
-                                <p className="text-xs sm:text-sm font-bold text-[var(--color-heading)]">2023</p>
+                                <div className="flex-1 flex items-center justify-center mt-0.5">
+                                    <p className="text-[11px] sm:text-xs font-bold text-[var(--color-heading)] leading-snug">2023</p>
+                                </div>
                             </div>
-                            <div className="bg-[#F8FAF9] p-2 sm:p-2.5 rounded-xl border border-gray-100 flex flex-col items-center justify-center text-center">
+                            <div className="bg-[#F8FAF9] p-2 sm:p-2.5 rounded-xl border border-gray-100 flex flex-col justify-between text-center min-h-[70px] sm:min-h-[76px]">
                                 <p className="text-[10px] sm:text-[11px] font-medium text-gray-500">Compliance</p>
-                                <p className="text-xs sm:text-sm font-bold text-[#0F766E]">MCA Registered</p>
+                                <div className="flex-1 flex items-center justify-center mt-0.5">
+                                    <p className="text-[11px] sm:text-xs font-bold text-[#0F766E] leading-snug">Registered Pvt Ltd</p>
+                                </div>
                             </div>
-                            <div className="bg-[#F8FAF9] p-2 sm:p-2.5 rounded-xl border border-gray-100 flex flex-col items-center justify-center text-center">
+                            <div className="bg-[#F8FAF9] p-2 sm:p-2.5 rounded-xl border border-gray-100 flex flex-col justify-between text-center min-h-[70px] sm:min-h-[76px]">
                                 <p className="text-[10px] sm:text-[11px] font-medium text-gray-500">Work with</p>
-                                <p className="text-[10px] sm:text-xs font-bold text-[var(--color-heading)] tracking-tight leading-tight text-center">International &amp; Domestic</p>
+                                <div className="flex-1 flex items-center justify-center mt-0.5">
+                                    <p className="text-[11px] sm:text-xs font-bold text-[var(--color-heading)] leading-snug">International &amp; Domestic</p>
+                                </div>
                             </div>
-                            <div className="bg-[#F8FAF9] p-2 sm:p-2.5 rounded-xl border border-gray-100 flex flex-col items-center justify-center text-center">
-                                <p className="text-[10px] sm:text-[11px] font-medium text-gray-500">Response</p>
-                                <p className="text-xs sm:text-sm font-bold text-[var(--color-heading)]">Within 24 Hours</p>
-                            </div>
-                            <div className="bg-[#F8FAF9] p-2 sm:p-2.5 rounded-xl border border-gray-100 flex flex-col items-center justify-center text-center">
-                                <p className="text-[10px] sm:text-[11px] font-medium text-gray-500">Warranty</p>
-                                <p className="text-xs sm:text-sm font-bold text-[#0F766E]">Lifetime Warranty</p>
-                            </div>
-                            <div className="bg-[#F8FAF9] p-2 sm:p-2.5 rounded-xl border border-gray-100 flex flex-col items-center justify-center text-center">
+                            <div className="bg-[#F8FAF9] p-2 sm:p-2.5 rounded-xl border border-gray-100 flex flex-col justify-between text-center min-h-[70px] sm:min-h-[76px]">
                                 <p className="text-[10px] sm:text-[11px] font-medium text-gray-500">Security</p>
-                                <p className="text-xs sm:text-sm font-bold text-[var(--color-heading)]">Standard Encryption</p>
+                                <div className="flex-1 flex items-center justify-center mt-0.5">
+                                    <p className="text-[11px] sm:text-xs font-bold text-[var(--color-heading)] leading-snug">Standard Encryption</p>
+                                </div>
+                            </div>
+                            <div className="bg-[#F8FAF9] p-2 sm:p-2.5 rounded-xl border border-gray-100 flex flex-col justify-between text-center min-h-[70px] sm:min-h-[76px]">
+                                <p className="text-[10px] sm:text-[11px] font-medium text-gray-500">Warranty</p>
+                                <div className="flex-1 flex items-center justify-center mt-0.5">
+                                    <p className="text-[11px] sm:text-xs font-bold text-[#0F766E] leading-snug">Lifetime Warranty</p>
+                                </div>
+                            </div>
+                            <div className="bg-[#F8FAF9] p-2 sm:p-2.5 rounded-xl border border-gray-100 flex flex-col justify-between text-center min-h-[70px] sm:min-h-[76px]">
+                                <p className="text-[10px] sm:text-[11px] font-medium text-gray-500">Response</p>
+                                <div className="flex-1 flex items-center justify-center mt-0.5">
+                                    <p className="text-[11px] sm:text-xs font-bold text-[var(--color-heading)] leading-snug">Within 24 Hours</p>
+                                </div>
                             </div>
                         </div>
                     </div>
