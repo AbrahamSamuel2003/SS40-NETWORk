@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { sendLeadAcknowledgementEmail, sendAdminNewLeadNotificationEmail } from '@/lib/mail';
+import { sendPushToAllAdmins } from '@/lib/push';
 
 const isValidEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -75,6 +76,15 @@ export async function POST(request: Request) {
                     source: newLead.source || 'WEBSITE_CONTACT_FORM',
                     sourcePage: newLead.sourcePage,
                     submittedAt: newLead.createdAt,
+                }),
+                sendPushToAllAdmins({
+                    title: `New Inquiry: ${newLead.fullName}`,
+                    body: `${newLead.serviceInterest}${newLead.company ? ` (${newLead.company})` : ''}`,
+                    route: '/leads',
+                    type: 'NEW_LEAD',
+                    data: {
+                        leadId: newLead.id,
+                    },
                 })
             ]);
         } catch (emailError) {

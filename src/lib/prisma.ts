@@ -13,8 +13,12 @@ const createPrismaClient = () => {
 };
 
 const getPrismaClient = (): PrismaClient => {
-    // If a cached client exists and has all generated models (e.g. jobApplication), reuse it
-    if (globalForPrisma.prisma && (globalForPrisma.prisma as any).jobApplication) {
+    // If a cached client exists and has all generated models (e.g. jobApplication, adminDeviceToken), reuse it
+    if (
+        globalForPrisma.prisma &&
+        (globalForPrisma.prisma as any).jobApplication &&
+        (globalForPrisma.prisma as any).adminDeviceToken
+    ) {
         return globalForPrisma.prisma;
     }
     const client = createPrismaClient();

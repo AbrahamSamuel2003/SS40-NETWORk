@@ -247,6 +247,20 @@ model AdminUser {
   lockUntil           DateTime?
 
   activityLogs AdminActivityLog[]
+  deviceTokens AdminDeviceToken[]
+}
+
+model AdminDeviceToken {
+  id          String   @id @default(uuid())
+  adminUserId String
+  token       String   @unique
+  platform    String   @default("android")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  adminUser AdminUser @relation(fields: [adminUserId], references: [id], onDelete: Cascade)
+
+  @@index([adminUserId])
 }
 
 model AdminActivityLog {

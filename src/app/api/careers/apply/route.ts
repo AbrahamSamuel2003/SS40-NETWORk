@@ -131,34 +131,50 @@ export async function POST(request: Request) {
 
         // Automated Email Dispatches (Non-blocking)
         try {
-            const { 
-                sendCareerApplicationNotification, 
-                sendApplicantAcknowledgementEmail 
+            const {
+                sendCareerApplicationNotification,
+                sendApplicantAcknowledgementEmail
             } = await import('@/lib/mail');
+            const { sendPushToAllAdmins } = await import('@/lib/push');
 
-            // 1. Send complete application dossier to careers@ss40network.com
-            sendCareerApplicationNotification({
-                fullName: application.fullName,
-                email: application.email,
-                phone: application.phone,
-                roleTitle: application.roleTitle,
-                department: application.department,
-                experienceLevel: application.experienceLevel,
-                currentOrg: application.currentOrg,
-                portfolioUrl: application.portfolioUrl,
-                linkedinUrl: application.linkedinUrl,
-                resumeUrl: application.resumeUrl,
-                coverLetter: application.coverLetter,
-                submittedAt: application.createdAt,
-                targetEmail: targetCareersEmail
-            }).catch(mailErr => console.error('Failed to dispatch notification to careers email:', mailErr));
+            // Await async notifications together so serverless runtimes don't freeze before dispatch
+            await Promise.allSettled([
+                // 1. Send complete application dossier to careers@ss40network.com
+                sendCareerApplicationNotification({
+                    fullName: application.fullName,
+                    email: application.email,
+                    phone: application.phone,
+                    roleTitle: application.roleTitle,
+                    department: application.department,
+                    experienceLevel: application.experienceLevel,
+                    currentOrg: application.currentOrg,
+                    portfolioUrl: application.portfolioUrl,
+                    linkedinUrl: application.linkedinUrl,
+                    resumeUrl: application.resumeUrl,
+                    coverLetter: application.coverLetter,
+                    submittedAt: application.createdAt,
+                    targetEmail: targetCareersEmail
+                }).catch(mailErr => console.error('Failed to dispatch notification to careers email:', mailErr)),
 
-            // 2. Send Option A confirmation email to the applicant
-            sendApplicantAcknowledgementEmail({
-                fullName: application.fullName,
-                email: application.email,
-                roleTitle: application.roleTitle
-            }).catch(ackErr => console.error('Failed to dispatch acknowledgement email to applicant:', ackErr));
+                // 2. Send Option A confirmation email to the applicant
+                sendApplicantAcknowledgementEmail({
+                    fullName: application.fullName,
+                    email: application.email,
+                    roleTitle: application.roleTitle
+                }).catch(ackErr => console.error('Failed to dispatch acknowledgement email to applicant:', ackErr)),
+
+                // 3. Dispatch real-time mobile push notification to logged-in admins
+                sendPushToAllAdmins({
+                    title: 'New Job Application',
+                    body: `${application.fullName} applied for ${application.roleTitle}`,
+                    route: '/careers',
+                    type: 'NEW_APPLICATION',
+                    data: {
+                        applicationId: application.id,
+                        ...(application.careerId ? { careerId: application.careerId } : {}),
+                    },
+                }).catch(pushErr => console.error('Failed to dispatch career push notification:', pushErr)),
+            ]);
         } catch (mailImportErr) {
             console.error('Mail system error on career application:', mailImportErr);
         }

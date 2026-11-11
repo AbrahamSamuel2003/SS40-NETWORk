@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { sendPushToAllAdmins } from '@/lib/push';
 
 interface GeoRecord {
     city: string;
@@ -11,6 +12,10 @@ interface GeoRecord {
 // In-memory cache for geolocation lookups (24 hours TTL)
 const geoCache = new Map<string, GeoRecord>();
 const CACHE_TTL = 24 * 60 * 60 * 1000;
+
+// In-memory cooldown to avoid duplicate visitor push alerts from quick incognito reloads
+const visitorNotifyCooldown = new Map<string, number>();
+const VISITOR_NOTIFY_COOLDOWN_MS = 5 * 60 * 1000;
 
 // Datacenter ASN / Cloud hosting providers commonly used by scrapers
 const DATACENTER_KEYWORDS = [
@@ -125,6 +130,63 @@ async function resolveVisitorIntelligence(
     return { city: fallbackCity, country, isBot };
 }
 
+function formatVisitorLocation(city: string, country: string): string {
+    const cleanCity = city && city !== 'Unknown' ? city : '';
+    const cleanCountry = country && country !== 'Unknown' ? country : '';
+    if (cleanCity && cleanCountry) return `${cleanCity}, ${cleanCountry}`;
+    if (cleanCity) return cleanCity;
+    if (cleanCountry) return cleanCountry;
+    return 'New Location';
+}
+
+async function notifyNewHumanVisitor(params: {
+    visitorId: string;
+    ipAddress: string;
+    city: string;
+    country: string;
+    deviceType: string;
+    browser: string;
+    currentPath?: string;
+}): Promise<void> {
+    const now = Date.now();
+    if (params.ipAddress && params.ipAddress !== 'Unknown') {
+        const lastNotifiedAt = visitorNotifyCooldown.get(params.ipAddress);
+        if (lastNotifiedAt && now - lastNotifiedAt < VISITOR_NOTIFY_COOLDOWN_MS) {
+            return;
+        }
+        visitorNotifyCooldown.set(params.ipAddress, now);
+
+        // Keep cooldown map bounded in long-lived Node processes
+        if (visitorNotifyCooldown.size > 500) {
+            for (const [ip, ts] of visitorNotifyCooldown.entries()) {
+                if (now - ts >= VISITOR_NOTIFY_COOLDOWN_MS) {
+                    visitorNotifyCooldown.delete(ip);
+                }
+            }
+        }
+    }
+
+    const locationLabel = formatVisitorLocation(params.city, params.country);
+    const pagePath = typeof params.currentPath === 'string' && params.currentPath.trim() !== ''
+        ? params.currentPath.trim()
+        : '/';
+
+    try {
+        await sendPushToAllAdmins({
+            title: 'New Website Visitor',
+            body: `From ${locationLabel} • ${params.deviceType} (${params.browser}) on ${pagePath}`,
+            route: '/visitors',
+            type: 'NEW_VISITOR',
+            data: {
+                visitorId: params.visitorId,
+                path: pagePath,
+            },
+        });
+    } catch (pushError) {
+        console.error('Visitor logged, but push notification failed:', pushError);
+    }
+}
+
 export async function POST(request: Request) {
     try {
         const body = await request.json();
@@ -165,64 +227,41 @@ export async function POST(request: Request) {
         else if (userAgent.includes('Edg')) browser = 'Edge';
 
         let resCookieValue: string | null = null;
+        const existing = sessionId
+            ? await prisma.visitor.findFirst({ where: { sessionId } })
+            : null;
 
-        if (sessionId) {
-            const existing = await prisma.visitor.findFirst({
-                where: { sessionId }
-            });
+        if (existing) {
+            const currentVisits = (existing.pageVisits as any[]) || [];
+            const newVisit = { path: currentPath, timestamp: new Date().toISOString() };
+            const updatedVisits = [newVisit, ...currentVisits].slice(0, 100);
 
-            if (existing) {
-                const currentVisits = (existing.pageVisits as any[]) || [];
-                const newVisit = { path: currentPath, timestamp: new Date().toISOString() };
-                const updatedVisits = [newVisit, ...currentVisits].slice(0, 100);
+            const updateData: any = {
+                pageViews: { increment: 1 },
+                lastVisitedAt: new Date(),
+                pageVisits: updatedVisits
+            };
 
-                const updateData: any = {
-                    pageViews: { increment: 1 },
-                    lastVisitedAt: new Date(),
-                    pageVisits: updatedVisits
-                };
-
-                // Update location if previously unpopulated
-                if ((!existing.city || existing.city === 'Unknown') && city !== 'Unknown') {
-                    updateData.city = city;
-                }
-                if ((!existing.country || existing.country === 'Unknown') && country !== 'Unknown') {
-                    updateData.country = country;
-                }
-                if (!existing.isBot && isBot) {
-                    updateData.isBot = true;
-                }
-
-                await prisma.visitor.update({
-                    where: { id: existing.id },
-                    data: updateData
-                });
-            } else {
-                sessionId = crypto.randomUUID();
-                resCookieValue = sessionId;
-
-                await prisma.visitor.create({
-                    data: {
-                        sessionId: sessionId as string,
-                        ipAddress,
-                        userAgent,
-                        deviceType,
-                        browser,
-                        operatingSystem: os,
-                        landingPage: currentPath,
-                        referrerUrl: referrer,
-                        city,
-                        country,
-                        isBot,
-                        pageVisits: [{ path: currentPath, timestamp: new Date().toISOString() }]
-                    }
-                });
+            // Update location if previously unpopulated
+            if ((!existing.city || existing.city === 'Unknown') && city !== 'Unknown') {
+                updateData.city = city;
             }
+            if ((!existing.country || existing.country === 'Unknown') && country !== 'Unknown') {
+                updateData.country = country;
+            }
+            if (!existing.isBot && isBot) {
+                updateData.isBot = true;
+            }
+
+            await prisma.visitor.update({
+                where: { id: existing.id },
+                data: updateData
+            });
         } else {
             sessionId = crypto.randomUUID();
             resCookieValue = sessionId;
 
-            await prisma.visitor.create({
+            const createdVisitor = await prisma.visitor.create({
                 data: {
                     sessionId: sessionId as string,
                     ipAddress,
@@ -238,6 +277,18 @@ export async function POST(request: Request) {
                     pageVisits: [{ path: currentPath, timestamp: new Date().toISOString() }]
                 }
             });
+
+            if (!isBot) {
+                await notifyNewHumanVisitor({
+                    visitorId: createdVisitor.id,
+                    ipAddress,
+                    city,
+                    country,
+                    deviceType,
+                    browser,
+                    currentPath,
+                });
+            }
         }
 
         const response = NextResponse.json({ success: true });
