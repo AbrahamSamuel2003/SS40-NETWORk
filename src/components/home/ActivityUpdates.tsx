@@ -91,7 +91,7 @@ export function ActivityUpdates({ data = [] }: ActivityUpdatesProps) {
             {/* ═════════════════════════════════════════════════════════════════════ */}
             <div
                 id="activities"
-                className="hidden lg:block relative bg-white border-t border-gray-100 py-12 lg:py-16 overflow-hidden"
+                className="hidden lg:block relative bg-[#D8E8E2] border-t border-[var(--color-border)] py-12 lg:py-16 overflow-hidden"
             >
                 {/* Subtle Ambient Glow */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-[#0F766E]/5 rounded-full blur-3xl pointer-events-none" />
@@ -133,7 +133,7 @@ export function ActivityUpdates({ data = [] }: ActivityUpdatesProps) {
                     </div>
 
                     {/* Bottom Controls Bar */}
-                    <div className="w-full flex items-center justify-between pt-4 border-t border-gray-100 z-20">
+                    <div className="w-full flex items-center justify-between pt-4 border-t border-[#0F766E]/15 z-20">
                         {/* Step Progress Tracker & Controls */}
                         <div className="flex items-center gap-4">
                             <span className="text-xs font-bold text-[#1F3D35] tracking-widest uppercase font-mono">
@@ -149,7 +149,7 @@ export function ActivityUpdates({ data = [] }: ActivityUpdatesProps) {
                                         className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
                                             activeDesktopIdx === i
                                                 ? 'w-8 bg-[#0F766E]'
-                                                : 'w-2.5 bg-gray-200 hover:bg-gray-400'
+                                                : 'w-2.5 bg-[#0F766E]/20 hover:bg-[#0F766E]/40'
                                         }`}
                                     />
                                 ))}
@@ -161,7 +161,7 @@ export function ActivityUpdates({ data = [] }: ActivityUpdatesProps) {
                                     <button
                                         type="button"
                                         onClick={prevDesktopCard}
-                                        className="w-8 h-8 rounded-full border border-gray-200 bg-white hover:bg-gray-50 flex items-center justify-center text-gray-700 hover:text-[#0F766E] transition-colors cursor-pointer active:scale-95"
+                                        className="w-8 h-8 rounded-full border border-[#0F766E]/20 bg-white hover:bg-gray-50 flex items-center justify-center text-gray-700 hover:text-[#0F766E] transition-colors cursor-pointer active:scale-95"
                                         aria-label="Previous blog"
                                     >
                                         <ChevronLeft className="w-4 h-4" />
@@ -169,7 +169,7 @@ export function ActivityUpdates({ data = [] }: ActivityUpdatesProps) {
                                     <button
                                         type="button"
                                         onClick={nextDesktopCard}
-                                        className="w-8 h-8 rounded-full border border-gray-200 bg-white hover:bg-gray-50 flex items-center justify-center text-gray-700 hover:text-[#0F766E] transition-colors cursor-pointer active:scale-95"
+                                        className="w-8 h-8 rounded-full border border-[#0F766E]/20 bg-white hover:bg-gray-50 flex items-center justify-center text-gray-700 hover:text-[#0F766E] transition-colors cursor-pointer active:scale-95"
                                         aria-label="Next blog"
                                     >
                                         <ChevronRight className="w-4 h-4" />
@@ -202,7 +202,7 @@ export function ActivityUpdates({ data = [] }: ActivityUpdatesProps) {
             {/* ═════════════════════════════════════════════════════════════════════ */}
             {/* MOBILE TOUCH-SWIPE CAROUSEL (Replicating exact OUR IMPACT pattern)    */}
             {/* ═════════════════════════════════════════════════════════════════════ */}
-            <div id="activities-mobile" className="flex flex-col lg:hidden w-full bg-white pt-10 pb-16 border-t border-gray-100 relative">
+            <div id="activities-mobile" className="flex flex-col lg:hidden w-full bg-[#D8E8E2] pt-10 pb-16 border-t border-[var(--color-border)] relative">
                 <div className="px-6 mb-8 text-center">
                     <SectionHeading
                         badge="Blogs and Field Activities"
@@ -238,7 +238,7 @@ export function ActivityUpdates({ data = [] }: ActivityUpdatesProps) {
 
                 {/* Pagination Pill Dots - Compact Frosted Glass Capsule Dock */}
                 <div className="w-full flex justify-center items-center mt-7 z-10 relative">
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-900/[0.04] dark:bg-white/[0.06] backdrop-blur-md rounded-full border border-gray-200/70 dark:border-white/10 shadow-2xs">
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/80 dark:bg-white/[0.06] backdrop-blur-md rounded-full border border-[#0F766E]/15 shadow-2xs">
                         {homeActivities.map((_, i) => (
                             <button
                                 key={`dot-${i}`}
@@ -251,7 +251,7 @@ export function ActivityUpdates({ data = [] }: ActivityUpdatesProps) {
                                     className={`h-2 rounded-full transition-all duration-300 ease-out block ${
                                         activeMobileIdx === i
                                             ? 'w-7 bg-[#0F766E] shadow-2xs'
-                                            : 'w-2 bg-gray-300 hover:bg-gray-400 dark:bg-gray-600'
+                                            : 'w-2 bg-[#0F766E]/20 hover:bg-[#0F766E]/40'
                                     }`}
                                 />
                             </button>
