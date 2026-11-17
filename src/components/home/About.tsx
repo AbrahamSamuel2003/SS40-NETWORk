@@ -113,7 +113,6 @@ export function About() {
                     {/* Right Column: Dual Compass - Vision & Mission (6 Cols) */}
                     <div className="lg:col-span-6 bg-white rounded-2xl p-6 sm:p-8 border border-[var(--color-border)] shadow-xs flex flex-col justify-between relative overflow-hidden group hover:shadow-md transition-all duration-300">
                         <div className="absolute top-0 right-0 w-36 h-36 bg-gradient-to-bl from-[#EDF5F2] via-transparent to-transparent rounded-bl-full pointer-events-none" />
-
                         <div className="space-y-4 relative z-10">
                             {/* Vision Block (Soft Brand Mint/Sage) */}
                             <div className="p-4 sm:p-5 rounded-xl bg-[#EDF5F2]/80 border border-[#0F766E]/20 hover:bg-[#EDF5F2] transition-colors">

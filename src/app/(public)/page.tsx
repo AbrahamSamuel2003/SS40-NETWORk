@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Hero } from "@/components/home/Hero";
 import { About } from "@/components/home/About";
 import { BusinessWings } from "@/components/home/BusinessWings";
+import { BusinessDoctor } from "@/components/home/BusinessDoctor";
 import { SuccessStories } from "@/components/home/SuccessStories";
 import { ActivityUpdates } from "@/components/home/ActivityUpdates";
 import { TrustedBy } from "@/components/home/TrustedBy";
@@ -160,6 +161,7 @@ export default async function Home() {
 
       {/* Below the fold */}
       <BusinessWings />
+      <BusinessDoctor />
       {isSectionVisible(config, 'home_happimonials') && (
         <SuccessStories data={happimonials} />
       )}
