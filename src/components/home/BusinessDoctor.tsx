@@ -174,7 +174,7 @@ export function BusinessDoctor() {
                                 <h2 className="text-2xl sm:text-3xl lg:text-[38px] font-bold tracking-tight leading-[1.18] text-[#0F172A] font-serif">
                                     <span>Business Doctor. </span>
                                     <span className="bg-gradient-to-r from-[#0F766E] via-[#0D9488] to-[#14B8A6] bg-clip-text text-transparent block sm:inline mt-1 sm:mt-0">
-                                        Diagnose Before You Scale.
+                                        Check your business health.
                                     </span>
                                 </h2>
                             </div>
@@ -353,18 +353,13 @@ export function BusinessDoctor() {
                 {/* 3. Bottom Tier: Single-Line "How It Works" + Embedded "Who Is It For?" Card */}
                 <div className="w-full bg-white rounded-2xl p-6 sm:p-8 border border-[#E2E8F0] shadow-xs space-y-6">
                     {/* Header */}
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-gray-100">
-                        <div>
-                            <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-[#0F766E]">
-                                Consultation Flow
-                            </span>
-                            <h3 className="text-lg sm:text-xl font-bold text-[#0F172A] font-serif">
-                                How It Works
-                            </h3>
-                        </div>
-                        <span className="text-xs text-gray-500 font-medium">
-                            Simple 4-Step Process
+                    <div className="pb-3 border-b border-gray-100">
+                        <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-[#0F766E]">
+                            Consultation Flow
                         </span>
+                        <h3 className="text-lg sm:text-xl font-bold text-[#0F172A] font-serif">
+                            How It Works
+                        </h3>
                     </div>
 
                     {/* Consultation Flow: 2x2 on Mobile, 4-in-a-row on Desktop */}

@@ -6,6 +6,7 @@ import { ClientProjects } from "@/components/digital-solutions/ClientProjects";
 import { Happimonials } from "@/components/digital-solutions/Happimonials";
 import { TrustedClients } from "@/components/digital-solutions/TrustedClients";
 import { GetQuote } from "@/components/digital-solutions/GetQuote";
+import { BusinessDoctor } from "@/components/home/BusinessDoctor";
 
 export const metadata: Metadata = {
     title: "Digital Solutions",
@@ -113,6 +114,7 @@ export default async function DigitalSolutionsPage() {
             {/* Above the fold (Critical Path) */}
             <Hero />
             <WhatWeBuild />
+            <BusinessDoctor />
 
             {/* Below the fold */}
             <DevelopmentLifecycle />
