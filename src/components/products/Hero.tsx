@@ -159,7 +159,7 @@ export function Hero() {
                                 transition={{ duration: 0.6, ease: "easeOut" }}
                                 className="relative z-10 w-full bg-white/95 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-gray-200/90 shadow-2xl p-5 sm:p-6 flex flex-col justify-between overflow-hidden transform-gpu"
                             >
-                                {/* Header: Company Scaling Hub & Growth Pill (No dot) */}
+                                {/* Header: Company Scaling Hub */}
                                 <div className="flex items-center justify-between z-10 pb-3 border-b border-gray-100">
                                     <div className="flex items-center gap-2.5">
                                         <div className="w-9 h-9 rounded-xl bg-[#0F766E]/10 border border-[#0F766E]/20 flex items-center justify-center text-[#0F766E] shadow-2xs">
@@ -169,11 +169,6 @@ export function Hero() {
                                             <span className="text-xs sm:text-sm font-bold text-gray-900 leading-tight block">Company Growth Velocity</span>
                                             <p className="text-[10px] sm:text-[11px] text-gray-500 font-medium">Powered by SS40 Product Ecosystem</p>
                                         </div>
-                                    </div>
-
-                                    {/* Clean Growth Badge (Dot Removed) */}
-                                    <div className="px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200/80 shadow-2xs">
-                                        <span className="text-[11px] sm:text-xs font-black text-emerald-700 tracking-tight">+184.6% YoY</span>
                                     </div>
                                 </div>
 

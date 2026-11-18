@@ -93,11 +93,9 @@ export async function generateMetadata(): Promise<Metadata> {
         "max-snippet": -1,
       },
     },
-    ...(process.env.GOOGLE_SITE_VERIFICATION ? {
-      verification: {
-        google: process.env.GOOGLE_SITE_VERIFICATION,
-      },
-    } : {}),
+    verification: {
+      google: "xkN6IpKV5ZfKOyKt0-PcqSq4rI3VUZ3IphcK3Yt6k5I",
+    },
   };
 }
 
