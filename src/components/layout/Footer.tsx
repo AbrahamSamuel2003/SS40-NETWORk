@@ -34,19 +34,24 @@ export async function Footer() {
 
                     {/* Column 1: Logo & Description */}
                     <div className="flex flex-col items-center md:items-start text-center md:text-left gap-6">
-                        <Link href="/" className="flex items-center justify-center md:justify-start gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] rounded-md shrink-0">
+                        <Link href="/" className="flex items-center justify-center md:justify-start gap-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] rounded-md shrink-0">
                             {(config?.uploadedLogoUrl || config?.logoUrl) && (
                                 <Image
                                     src={(config?.uploadedLogoUrl || config?.logoUrl) as string}
                                     alt={`${companyName} Logo`}
                                     width={48}
                                     height={48}
-                                    className="h-7 md:h-9 w-auto object-contain shrink-0 mix-blend-multiply"
+                                    className="h-8 md:h-10 w-auto object-contain shrink-0 mix-blend-multiply"
                                 />
                             )}
-                            <span className="text-lg md:text-2xl font-black tracking-tight text-[var(--color-heading)] shrink-0 min-w-0 truncate max-w-[220px] sm:max-w-none font-crimson">
-                                SS40 <span className="text-[var(--color-primary-hover)] font-black">NETWORK</span>
-                            </span>
+                            <div className="flex flex-col justify-center leading-none text-left">
+                                <span className="text-lg md:text-xl font-black tracking-tight text-[var(--color-heading)] shrink-0 min-w-0 font-crimson">
+                                    SS40 <span className="text-[var(--color-primary-hover)] font-black">NETWORK</span>
+                                </span>
+                                <span className="text-[8px] sm:text-[9.5px] font-extrabold uppercase tracking-[0.18em] text-[#0F766E] font-crimson mt-0.5">
+                                    A LITTLE BIT MORE
+                                </span>
+                            </div>
                         </Link>
                         {config?.footerDescription && (
                             <p className="text-[var(--color-body-text)] text-sm leading-relaxed max-w-sm">

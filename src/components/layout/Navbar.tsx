@@ -153,13 +153,18 @@ export function Navbar({ config }: { config?: SiteConfigData | null }) {
                                 alt={`${companyName} Official Logo`}
                                 width={48}
                                 height={48}
-                                className="h-7 md:h-9 w-auto object-contain shrink-0 mix-blend-multiply"
+                                className="h-8 md:h-10 w-auto object-contain shrink-0 mix-blend-multiply"
                                 priority
                             />
                         )}
-                        <span className="text-xl md:text-2xl font-black tracking-tight text-[var(--color-heading)] shrink-0 min-w-0 truncate max-w-[180px] sm:max-w-none font-crimson">
-                            SS40 <span className="text-[var(--color-primary-hover)] font-black">NETWORK</span>
-                        </span>
+                        <div className="flex flex-col justify-center leading-none">
+                            <span className="text-lg md:text-xl font-black tracking-tight text-[var(--color-heading)] shrink-0 min-w-0 font-crimson">
+                                SS40 <span className="text-[var(--color-primary-hover)] font-black">NETWORK</span>
+                            </span>
+                            <span className="text-[8px] sm:text-[9.5px] font-extrabold uppercase tracking-[0.18em] text-[#0F766E] font-crimson mt-0.5">
+                                A LITTLE BIT MORE
+                            </span>
+                        </div>
                     </Link>
 
                     {/* Desktop Navigation */}
