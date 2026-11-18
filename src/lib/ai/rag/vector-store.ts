@@ -395,6 +395,8 @@ export async function searchVectorKnowledge(
         // Domain-specific keyword boosts
         if (/\b(clearinvoice|invoice|billing|gst|gtc|gtc\s*suite|email\s*agent|products?|software)\b/i.test(rawQuery) && chunk.category === "products") {
             tokenBonus += 0.20;
+        } else if (/\b(business\s*doctor|doctor|health\s*checkup|consultation|consultancy|consult|diagnostic|diagnose|workflow\s*audit|bottlenecks?|prescriptions?|strategy\s*session)\b/i.test(rawQuery) && (chunk.id === "doc-business-doctor" || chunk.title.toLowerCase().includes("business doctor"))) {
+            tokenBonus += 0.28;
         } else if (/\b(testimonial|testimonials|reviews?|feedback|ratings?|client\s*words?)\b/i.test(rawQuery) && (chunk.category === "company" || chunk.id.startsWith("live-happimonial"))) {
             tokenBonus += 0.25;
         } else if (/\b(placement|placements|package|ctc|stipend|placed|hired|career\s*outcome)\b/i.test(rawQuery) && (chunk.category === "academics" || chunk.id.startsWith("live-student-impact"))) {

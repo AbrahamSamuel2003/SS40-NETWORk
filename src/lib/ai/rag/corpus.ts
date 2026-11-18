@@ -386,6 +386,40 @@ export const OFFICIAL_SS40_CORPUS: KnowledgeSourceDocument[] = [
 - Stay Updated: Visit /blogs for real-time company announcements and milestone achievements.`
     },
     {
+        id: "doc-business-doctor",
+        title: "Business Doctor: 1-on-1 Business Health Checkup & Strategic Consultation",
+        category: "digital-solutions",
+        sourceUrl: "https://ss40-consultancy.vercel.app/",
+        route: "https://ss40-consultancy.vercel.app/",
+        lastUpdated: "2026-11-18T00:00:00.000Z",
+        summary: "Comprehensive 1-on-1 strategic diagnostic session helping businesses diagnose workflow bottlenecks, automate operations, and scale with custom technology.",
+        keywords: [
+            "business doctor", "business health checkup", "health checkup", "check your business health",
+            "consultation", "consultancy", "business consultation", "1-on-1 consultation", "one-to-one business consultation",
+            "strategic session", "diagnose", "diagnostic", "bottlenecks", "business audit", "workflow audit",
+            "operational audit", "tech prescription", "technology prescription", "scaling roadmap", "business doctor session",
+            "book consultation", "consultation appointment"
+        ],
+        suggestedOptions: ["Business Health Checkup", "Book Consultation Session", "Explore Digital Solutions"],
+        content: `SS40 Business Doctor - Check Your Business Health:
+- Concept & Motto: "Diagnose Before You Scale" — a structured, founder-to-founder diagnostic checkup to pinpoint why your business is stuck and eliminate operational drags.
+- Session Format: 45 to 60 minutes private, focused 1-on-1 consultation session with SS40 solutions architects.
+- Meeting Modes: Available In-Person at SS40 NETWORK Office (Tirunelveli) OR Online via Google Meet (GMeet) for remote & global clients.
+- Six Core Diagnostic Pillars:
+  1. Tech Stack & Automation: Pinpoint outdated legacy tools and repetitive tasks draining employee hours.
+  2. Workflow & Process Drags: Map bottlenecks between sales, inventory, accounting, and customer fulfillment.
+  3. Operational Cost Optimization: Eliminate redundant software subscriptions and inefficient manual labor.
+  4. Digital Infrastructure & Security: Audit data safety, cloud backups, and scalability vulnerabilities.
+  5. Scaling Bottlenecks: Identify what breaks when order or customer volume doubles.
+  6. Data & Reporting Gaps: Fix blind spots in revenue tracking, gross margins, and daily metrics.
+- What You Receive:
+  * Executive Diagnosis Report (unvarnished assessment of key operational vulnerabilities)
+  * Custom Technology Prescription (exact architecture recommendations, build vs buy advice)
+  * Workflow Optimization Roadmap (step-by-step automation blueprint)
+  * 30-Day Implementation Milestones (immediate high-impact wins)
+- Booking Portal: Appointments are booked directly via the official scheduling form at https://ss40-consultancy.vercel.app/`
+    },
+    {
         id: "doc-legal-privacy-terms",
         title: "Legal Policies, Data Privacy & Terms of Service",
         category: "legal",

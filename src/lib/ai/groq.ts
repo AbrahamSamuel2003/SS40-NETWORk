@@ -53,6 +53,7 @@ ROLE & PURPOSE:
   1. SS40 Digital Solutions (custom websites, mobile apps, business software, AI automations, and cloud systems)
   2. SS40 Products (ready-to-use business software like ClearInvoice, GTC Suite, and SS40 AI Email Agent)
   3. SS40 Academics (practical software engineering internships, DSA placement training, and student project showcases)
+- Business Doctor: SS40 NETWORK offers an exclusive 1-on-1 strategic diagnostic consultation called "Business Doctor (Check your business health)" to diagnose bottlenecks, workflow drags, and provide a tailored technology prescription. Sessions are 45–60 mins, available In-Person at our Tirunelveli Office OR Online via Google Meet (GMeet), booked at https://ss40-consultancy.vercel.app/.
 - Terminology rule: Always use "SS40 Products" (never "SaaS products" or "SaaS platforms").
 - Company name is ALWAYS written in full uppercase: "SS40 NETWORK" or "SS40 NETWORK PRIVATE LIMITED".
 - STRICT EMOJI & SPARKLES BAN: NEVER use any emojis, emoticons, sparkles, or unicode pictographs (such as ✨, 🚀, 💡, 💼, 🤖, etc.) anywhere in your answers, options, or navigation labels under any circumstances. Keep all text clean, professional, and strictly text-only.
@@ -82,6 +83,13 @@ MODE 1: COMPANY INQUIRIES (When the user asks about services, products, pricing,
   * GTC Suite: Complete business management platform for managing operations.
 - Client Projects: Mention verified real projects (e.g. Y.G Mayil Agro Foods online store, Annai Eva's Kitchen branding, Jalsa Restaurant billing system).
 - Academic Projects: Mention verified student projects (e.g. LectureCast classroom screen sharing, WaveLink wireless audio, StudentOS).
+- Business Doctor & Strategic Consultations: When asked about business consultations, business checkup, bottlenecks, scaling advice, process audits, or diagnostic sessions:
+  * Explain the Business Doctor concept simply: "Diagnose Before You Scale".
+  * Highlight the 45–60 min 1-on-1 focused session available In-Person at our Tirunelveli office or Online via Google Meet (GMeet).
+  * Mention the key deliverables: Executive Diagnosis Report, Technology Prescription, and 30-Day Milestones.
+  * STRICT RULE: Do NOT quote or mention any price amount under any circumstances.
+  * Navigation: Set navigation to { "label": "Book Business Health Checkup", "url": "https://ss40-consultancy.vercel.app/" }.
+  * Pills: Offer 1-tap options like ["Business Health Checkup", "Book Consultation Session", "Explore Digital Solutions"].
 - Pricing: Explain that pricing is fair, milestone-based, and tailored to project scope, starting with a free scoping call and free product demos.
 
 MODE 2: GREETINGS & SMALL TALK (When the user says "hi", "hello", "hlo", "how are you", "who are you", etc.)
@@ -122,6 +130,7 @@ CRITICAL RULE FOR SUGGESTION PILLS ("options"):
   * Product Inquiries (Only when user asks about products): ["ClearInvoice", "SS40 AI Email Agent", "GTC Suite", "Explore Products"]
   * Invoicing / ClearInvoice Inquiries: ["ClearInvoice Live Demo", "ClearInvoice Pricing", "GST Billing Features", "Explore Products"]
   * Digital Solutions: ["Web App Development", "Mobile App Sprints", "Client Case Studies", "Cloud Architecture"]
+  * Consultation & Business Doctor: ["Business Health Checkup", "Book Consultation Session", "Explore Digital Solutions", "Contact Team"]
   * Academics: ["Academic Internships", "Student Projects", "DSA Placement Prep", "College MOUs"]
 
 OUTPUT FORMAT:
@@ -134,7 +143,7 @@ You MUST ALWAYS respond in valid JSON with this exact schema:
 }
 
 ALLOWED INTERNAL ROUTES:
-Use only valid internal paths: "/products", "/digital-solutions", "/academics", "/contact", "/#about", "/academics/student-projects", "/client-projects", "/#business-wings", "/blogs". No external URLs.`;
+Use only valid internal paths or official links: "/products", "/digital-solutions", "/academics", "/contact", "/#about", "/academics/student-projects", "/client-projects", "/#business-wings", "/blogs", or "https://ss40-consultancy.vercel.app/". No other external URLs.`;
 
 export async function generateRagResponse(
     userMessage: string,
@@ -335,14 +344,16 @@ ${contextText}${dynamicLeadDirective}`;
         const options: string[] = sanitizePillOptions(parsed.options, primaryChunk, rawUserMessage, processed.isGreeting || processed.isSmallTalk);
 
         let navigation: { label: string; url: string } | null = null;
-        if (parsed.navigation && typeof parsed.navigation.url === "string" && parsed.navigation.url.startsWith("/")) {
+        if (parsed.navigation && typeof parsed.navigation.url === "string" && (parsed.navigation.url.startsWith("/") || parsed.navigation.url.startsWith("https://ss40-consultancy.vercel.app"))) {
             navigation = {
                 label: stripEmojisAndSparkles(String(parsed.navigation.label || "Learn More")),
                 url: parsed.navigation.url.trim(),
             };
         } else if (primaryChunk?.route && vectorResult.topScore >= 0.40) {
             navigation = {
-                label: `Explore ${primaryChunk.category === "products" ? "Products" : primaryChunk.category === "academics" || primaryChunk.category === "internships" ? "Academics" : primaryChunk.category === "digital-solutions" ? "Digital Solutions" : "SS40 NETWORK"}`,
+                label: primaryChunk.id === "doc-business-doctor"
+                    ? "Book Business Health Checkup"
+                    : `Explore ${primaryChunk.category === "products" ? "Products" : primaryChunk.category === "academics" || primaryChunk.category === "internships" ? "Academics" : primaryChunk.category === "digital-solutions" ? "Digital Solutions" : "SS40 NETWORK"}`,
                 url: primaryChunk.route,
             };
         }
@@ -470,6 +481,9 @@ function sanitizePillOptions(
     }
     if (q.includes("internship") || q.includes("academic") || q.includes("student") || primaryChunk?.category === "academics") {
         return ["Academic Internships", "Student Projects", "DSA Placement Prep", "Three Wings Overview"];
+    }
+    if (q.includes("doctor") || q.includes("health checkup") || q.includes("consult") || primaryChunk?.id === "doc-business-doctor") {
+        return ["Business Health Checkup", "Book Consultation Session", "Explore Digital Solutions", "Contact Team"];
     }
     if (q.includes("client") || q.includes("project") || q.includes("ecommerce") || primaryChunk?.category === "digital-solutions") {
         return ["Web App Development", "Mobile App Sprints", "Client Case Studies", "Three Wings Overview"];

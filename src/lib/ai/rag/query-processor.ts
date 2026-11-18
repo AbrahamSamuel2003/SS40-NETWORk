@@ -542,6 +542,9 @@ export function inferServiceInterest(query: string, history: ChatHistoryMessage[
         query.trim()
     ].join(" ").toLowerCase();
 
+    if (/\b(business\s*doctor|doctor|health\s*checkup|consultation|consultancy|consult|diagnostic|diagnose|workflow\s*audit)\b/i.test(userUtterances)) {
+        return "Business Doctor Consultation";
+    }
     if (/\b(ecommerce|e-commerce|online\s*store|d2c|custom\s*software|web\s*dev|app\s*dev|mobile|digital\s*solutions|cloud|enterprise|erp|crm)\b/i.test(userUtterances)) {
         return "SS40 Digital Solutions";
     }
