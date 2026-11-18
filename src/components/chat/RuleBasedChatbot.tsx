@@ -457,10 +457,10 @@ export function RuleBasedChatbot({
             setIsTyping(true);
         }, 200);
 
-        // 2. If response takes more than 3 seconds (> 3 sec), transition from 3 dots to "Thinking..."
+        // 2. If response takes more than 4.5 seconds (> 4.5 sec), transition from 3 dots to "Thinking..."
         thinkingTimerRef.current = setTimeout(() => {
             setIsThinking(true);
-        }, 3000);
+        }, 4500);
 
         const historyPayload = currentMessages.slice(-14).map(m => ({
             role: m.sender === "user" ? ("user" as const) : ("assistant" as const),

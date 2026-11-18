@@ -17,11 +17,15 @@ export interface VectorSearchResult {
 
 const STORAGE_DIR = path.join(process.cwd(), "storage");
 const VECTOR_STORE_FILE = path.join(STORAGE_DIR, "vector-store.json");
+const DYNAMIC_VECTOR_STORE_FILE = path.join(STORAGE_DIR, "dynamic-vector-store.json");
 
 // In-memory cache of static and dynamic vector chunks
 let memoryVectorStore: VectorChunk[] | null = null;
-let dynamicChunksCache: { chunks: VectorChunk[]; timestamp: number } | null = null;
-const DYNAMIC_CACHE_TTL_MS = 3 * 60 * 1000; // 3 minutes cache for live DB items
+let memoryDynamicChunks: VectorChunk[] | null = null;
+
+// In-memory query embedding cache (avoids repeated ONNX CPU inference for frequent queries)
+const queryEmbeddingCache = new Map<string, number[]>();
+const MAX_QUERY_CACHE_SIZE = 500;
 
 /**
  * Loads the persistent vector store from storage/vector-store.json.
@@ -78,19 +82,50 @@ export async function reindexVectorStore(): Promise<VectorChunk[]> {
     }
 
     memoryVectorStore = vectorizedChunks;
+
+    // Synchronize dynamic chunks to disk as well
+    try {
+        await reindexDynamicChunks();
+    } catch (dynErr) {
+        console.warn("[RAG Vector Store] Failed to synchronize dynamic chunks during reindex:", dynErr);
+    }
+
     return memoryVectorStore;
 }
 
 /**
- * Fetches dynamic entities from Prisma (Products, Client Projects, Student Projects, Activity Posts, SiteConfig)
- * and generates neural embeddings for real-time RAG synchronization.
+ * Loads dynamic entities from memory or persistent disk cache.
+ * Avoids live CPU embedding recomputation during user requests.
  */
-async function getLiveDynamicChunks(): Promise<VectorChunk[]> {
-    const now = Date.now();
-    if (dynamicChunksCache && now - dynamicChunksCache.timestamp < DYNAMIC_CACHE_TTL_MS) {
-        return dynamicChunksCache.chunks;
+export async function getLiveDynamicChunks(): Promise<VectorChunk[]> {
+    if (memoryDynamicChunks !== null) {
+        return memoryDynamicChunks;
     }
 
+    // Fast path: load from disk cache
+    try {
+        if (fs.existsSync(DYNAMIC_VECTOR_STORE_FILE)) {
+            const rawData = fs.readFileSync(DYNAMIC_VECTOR_STORE_FILE, "utf-8");
+            const parsed = JSON.parse(rawData) as VectorChunk[];
+            if (Array.isArray(parsed)) {
+                memoryDynamicChunks = parsed;
+                return memoryDynamicChunks;
+            }
+        }
+    } catch (err) {
+        console.warn("[RAG Vector Store] Could not read dynamic vector store from disk:", err);
+    }
+
+    // Initial run: compute once and persist to disk
+    return await reindexDynamicChunks();
+}
+
+/**
+ * Fetches dynamic entities from Prisma (Products, Client Projects, Student Projects, Activity Posts, SiteConfig),
+ * generates neural embeddings once, and persists to storage/dynamic-vector-store.json.
+ */
+export async function reindexDynamicChunks(): Promise<VectorChunk[]> {
+    console.log("[RAG Vector Store] Synchronizing live dynamic database chunks...");
     const dynamicChunks: VectorChunk[] = [];
 
     try {
@@ -281,15 +316,23 @@ async function getLiveDynamicChunks(): Promise<VectorChunk[]> {
             });
         }
 
-        dynamicChunksCache = {
-            chunks: dynamicChunks,
-            timestamp: now,
-        };
+        // Persist to disk
+        try {
+            if (!fs.existsSync(STORAGE_DIR)) {
+                fs.mkdirSync(STORAGE_DIR, { recursive: true });
+            }
+            fs.writeFileSync(DYNAMIC_VECTOR_STORE_FILE, JSON.stringify(dynamicChunks, null, 2), "utf-8");
+            console.log(`[RAG Vector Store] Persisted ${dynamicChunks.length} dynamic chunks to ${DYNAMIC_VECTOR_STORE_FILE}`);
+        } catch (fsErr) {
+            console.error("[RAG Vector Store] Failed to write dynamic vector store to disk:", fsErr);
+        }
+
+        memoryDynamicChunks = dynamicChunks;
     } catch (err) {
         console.warn("[RAG Vector Store] Live dynamic synchronization error, using cached items:", err);
     }
 
-    return dynamicChunksCache?.chunks || [];
+    return memoryDynamicChunks || [];
 }
 
 /**
@@ -315,8 +358,16 @@ export async function searchVectorKnowledge(
 
     const allChunks = [...dynamicChunks, ...staticChunks];
 
-    // 2. Generate neural embedding for user query
-    const queryEmbedding = await generateEmbedding(rawQuery);
+    // 2. Generate or retrieve neural embedding for user query (with in-memory LRU cache)
+    let queryEmbedding = queryEmbeddingCache.get(rawQuery);
+    if (!queryEmbedding) {
+        queryEmbedding = await generateEmbedding(rawQuery);
+        if (queryEmbeddingCache.size >= MAX_QUERY_CACHE_SIZE) {
+            const firstKey = queryEmbeddingCache.keys().next().value;
+            if (firstKey) queryEmbeddingCache.delete(firstKey);
+        }
+        queryEmbeddingCache.set(rawQuery, queryEmbedding);
+    }
 
     // 3. Compute Hybrid Score (Neural Cosine Similarity + Exact Token Overlap Bonus)
     const scoredChunks = allChunks.map(chunk => {
