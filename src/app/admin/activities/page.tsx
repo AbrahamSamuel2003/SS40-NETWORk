@@ -33,7 +33,7 @@ import { SectionVisibilityToggle } from '@/components/admin/SectionVisibilityTog
 import { toast } from '@/components/admin/AdminToast';
 import { ConfirmDialog } from '@/components/admin/ConfirmDialog';
 
-export const ACTIVITY_TYPES = [
+const ACTIVITY_TYPES = [
     { value: 'GOVERNMENT_OFFICIAL', label: 'Government / Official', icon: Building2, color: 'bg-amber-50 text-amber-800 border-amber-200' },
     { value: 'PARTNERSHIP', label: 'Partnership', icon: Handshake, color: 'bg-emerald-50 text-emerald-800 border-emerald-200' },
     { value: 'INDUSTRY_VISIT', label: 'Industry Visit', icon: Factory, color: 'bg-blue-50 text-blue-800 border-blue-200' },
@@ -46,7 +46,7 @@ export const ACTIVITY_TYPES = [
     { value: 'COMMUNITY', label: 'Community', icon: Users, color: 'bg-teal-50 text-teal-800 border-teal-200' },
 ] as const;
 
-export function getActivityTypeMeta(type: string) {
+function getActivityTypeMeta(type: string) {
     return ACTIVITY_TYPES.find(t => t.value === type) || ACTIVITY_TYPES[0];
 }
 

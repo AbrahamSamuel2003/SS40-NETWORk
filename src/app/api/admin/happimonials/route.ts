@@ -27,31 +27,7 @@ const isValidUrlPath = (u: any) => {
     }
 };
 
-/** Validates a YouTube URL and returns the 11-char video ID, or null if invalid. */
-export function extractYouTubeVideoId(url: string): string | null {
-    if (!url || url.trim() === '') return null;
-    try {
-        const parsed = new URL(url.trim());
-        const host = parsed.hostname.replace('www.', '');
-        if (host === 'youtube.com') {
-            if (parsed.pathname === '/watch') {
-                const v = parsed.searchParams.get('v');
-                return v && /^[a-zA-Z0-9_-]{11}$/.test(v) ? v : null;
-            }
-            if (parsed.pathname.startsWith('/shorts/')) {
-                const v = parsed.pathname.split('/shorts/')[1]?.split('/')[0];
-                return v && /^[a-zA-Z0-9_-]{11}$/.test(v) ? v : null;
-            }
-        }
-        if (host === 'youtu.be') {
-            const v = parsed.pathname.slice(1).split('/')[0];
-            return v && /^[a-zA-Z0-9_-]{11}$/.test(v) ? v : null;
-        }
-    } catch {
-        return null;
-    }
-    return null;
-}
+import { extractYouTubeVideoId } from '@/utils/youtube';
 
 export async function GET(request: Request) {
     try {

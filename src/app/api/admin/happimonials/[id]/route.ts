@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { getCurrentAdmin } from '@/lib/auth';
 import { logAdminActivity } from '@/lib/admin-activity';
 import { revalidateEntityCache } from '@/lib/revalidate-helpers';
-import { extractYouTubeVideoId } from '../route';
+import { extractYouTubeVideoId } from '@/utils/youtube';
 
 const isValidUUID = (id: string) => {
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;

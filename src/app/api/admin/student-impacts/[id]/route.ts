@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCurrentAdmin } from '@/lib/auth';
+import { extractYouTubeVideoId } from '@/utils/youtube';
 import { logAdminActivity } from '@/lib/admin-activity';
 import { revalidateEntityCache } from '@/lib/revalidate-helpers';
 
@@ -125,7 +126,6 @@ export async function PUT(request: Request, context: { params: Promise<{ id: str
 
         if (body.youtubeUrl !== undefined) {
             if (body.youtubeUrl && String(body.youtubeUrl).trim() !== '') {
-                const { extractYouTubeVideoId } = await import('../route');
                 const videoId = extractYouTubeVideoId(String(body.youtubeUrl).trim());
                 if (!videoId) {
                     return NextResponse.json({ success: false, error: 'Please enter a valid YouTube video URL.' }, { status: 400 });

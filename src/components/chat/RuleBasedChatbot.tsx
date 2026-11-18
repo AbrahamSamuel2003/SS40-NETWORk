@@ -1342,28 +1342,15 @@ export function RuleBasedChatbot({
                                 );
                             })}
 
-                            {/* Typing / Thinking Indicator: Unboxed Minimalist Inline (No speech bubble / box) */}
+                            {/* Typing Indicator: Clean Minimalist Inline Animated Dots */}
                             {isTyping && (
                                 <div className="flex items-center gap-2 max-w-[85%] font-serif font-crimson py-1 pl-1">
                                     <BotAvatar size="sm" />
-                                    {isThinking ? (
-                                        /* Shown only when response takes > 3 sec: unboxed inline text with animated dots */
-                                        <div className="flex items-center gap-1.5 text-xs font-semibold text-[#0F766E] tracking-tight">
-                                            <span>Thinking</span>
-                                            <span className="inline-flex items-center gap-0.5">
-                                                <span className="w-1 h-1 rounded-full bg-[#0F766E] animate-bounce" style={{ animationDelay: "0ms" }} />
-                                                <span className="w-1 h-1 rounded-full bg-[#0F766E] animate-bounce" style={{ animationDelay: "150ms" }} />
-                                                <span className="w-1 h-1 rounded-full bg-[#0F766E] animate-bounce" style={{ animationDelay: "300ms" }} />
-                                            </span>
-                                        </div>
-                                    ) : (
-                                        /* Initially (0-3s): 3 pulsing dots directly inline */
-                                        <div className="flex items-center gap-1.5 py-1 px-1">
-                                            <span className="w-1.5 h-1.5 rounded-full bg-[#0F766E] animate-bounce" style={{ animationDelay: "0ms" }} />
-                                            <span className="w-1.5 h-1.5 rounded-full bg-[#0F766E] animate-bounce" style={{ animationDelay: "150ms" }} />
-                                            <span className="w-1.5 h-1.5 rounded-full bg-[#0F766E] animate-bounce" style={{ animationDelay: "300ms" }} />
-                                        </div>
-                                    )}
+                                    <div className="flex items-center gap-1.5 py-1 px-1">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-[#0F766E] animate-bounce" style={{ animationDelay: "0ms" }} />
+                                        <span className="w-1.5 h-1.5 rounded-full bg-[#0F766E] animate-bounce" style={{ animationDelay: "150ms" }} />
+                                        <span className="w-1.5 h-1.5 rounded-full bg-[#0F766E] animate-bounce" style={{ animationDelay: "300ms" }} />
+                                    </div>
                                 </div>
                             )}
                         </div>

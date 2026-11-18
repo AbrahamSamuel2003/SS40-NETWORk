@@ -8,11 +8,7 @@ import { VisitorTracker } from "@/components/analytics/VisitorTracker";
 const crimsonPro = Crimson_Pro({
   variable: "--font-crimson-pro",
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
-  style: ["normal"],
   display: "swap",
-  adjustFontFallback: true,
-  preload: true,
 });
 
 export async function generateMetadata(): Promise<Metadata> {
