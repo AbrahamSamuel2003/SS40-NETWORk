@@ -253,10 +253,7 @@ export function BusinessDoctor() {
                     </div>
 
                     {/* Right Column (5 Cols): The Prescription Booking Card */}
-                    <div className="lg:col-span-5 bg-white rounded-2xl p-6 sm:p-7 border-2 border-[#0F766E]/20 shadow-md shadow-[#0F766E]/5 relative overflow-hidden flex flex-col justify-between">
-                        {/* Top Accent Gradient Bar */}
-                        <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-[#0F766E] via-[#0D9488] to-[#2DD4BF]" />
-
+                    <div className="lg:col-span-5 bg-white rounded-2xl p-6 sm:p-7 border-2 border-[#0F766E]/25 shadow-lg shadow-[#0F766E]/5 relative flex flex-col justify-between">
                         <div>
                             {/* Badge row - Dot removed as requested */}
                             <div className="flex items-center justify-between gap-2 mb-4">
@@ -268,18 +265,15 @@ export function BusinessDoctor() {
                                 </span>
                             </div>
 
-                            {/* Pricing Header with Emblem */}
+                            {/* Session Header with Emblem */}
                             <div className="flex items-center justify-between gap-3 mb-4 pb-4 border-b border-gray-100">
                                 <div className="space-y-1">
-                                    <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
-                                        Consultation Fee
+                                    <p className="text-xs font-semibold uppercase tracking-wider text-[#0F766E]">
+                                        Strategic Session
                                     </p>
                                     <div className="flex items-baseline gap-2">
-                                        <span className="text-3xl sm:text-4xl font-extrabold text-[#0F172A] tracking-tight">
-                                            ₹499
-                                        </span>
-                                        <span className="text-xs font-medium text-gray-500">
-                                            / complete assessment
+                                        <span className="text-2xl sm:text-3xl font-extrabold text-[#0F172A] tracking-tight">
+                                            1-on-1 Consultation
                                         </span>
                                     </div>
                                     <p className="text-xs text-[#0F766E] font-medium pt-0.5">
@@ -338,8 +332,6 @@ export function BusinessDoctor() {
                                 className="w-full flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-[#0F766E] hover:bg-[#115E59] text-white font-bold text-sm shadow-lg shadow-[#0F766E]/20 hover:shadow-xl hover:shadow-[#0F766E]/30 active:scale-[0.98] transition-all duration-300 group cursor-pointer"
                             >
                                 <span>Book Your Business Health Checkup</span>
-                                <span className="opacity-80 font-normal">|</span>
-                                <span>₹499</span>
                                 <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                             </a>
 
