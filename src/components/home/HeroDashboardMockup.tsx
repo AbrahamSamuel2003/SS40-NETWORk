@@ -167,7 +167,7 @@ export function HeroDashboardMockup() {
                         {activeTab === "solutions" && (
                             <div className="space-y-1.5 text-[11px] leading-relaxed text-slate-300">
                                 <p><span className="text-teal-400">const</span> <span className="text-yellow-300">stack</span> = [<span className="text-emerald-300">&quot;Next.js&quot;</span>, <span className="text-emerald-300">&quot;FastAPI&quot;</span>, <span className="text-emerald-300">&quot;PostgreSQL&quot;</span>];</p>
-                                <p><span className="text-teal-400">await</span> SS40.deployEnterpriseApp({`{`} scope: <span className="text-emerald-300">&quot;Fixed-Price&quot;</span>, warranty: <span className="text-emerald-300">&quot;30-Days&quot;</span> {`}`});</p>
+                                <p><span className="text-teal-400">await</span> SS40.deployEnterpriseApp({`{`} scope: <span className="text-emerald-300">&quot;Fixed-Scope&quot;</span>, warranty: <span className="text-emerald-300">&quot;Lifetime&quot;</span>, hypercare: <span className="text-emerald-300">&quot;30-Days&quot;</span> {`}`});</p>
                                 <div className="mt-2 pt-2 border-t border-slate-800 flex items-center justify-between text-[10px] text-teal-300">
                                     <span>✔ Ultra-Fast Speed</span>
                                     <span>✔ Cloud Native CI/CD</span>
@@ -240,8 +240,8 @@ export function HeroDashboardMockup() {
                     <LifeBuoy className="w-4 h-4" />
                 </div>
                 <div>
-                    <p className="text-xs font-bold text-white leading-none">30-Day Support</p>
-                    <p className="text-[10px] text-slate-300 mt-0.5">Post-launch warranty</p>
+                    <p className="text-xs font-bold text-white leading-none">Lifetime Warranty</p>
+                    <p className="text-[10px] text-slate-300 mt-0.5">Under Terms • 30-Day Hypercare</p>
                 </div>
             </div>
 

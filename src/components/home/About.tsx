@@ -1,4 +1,5 @@
 import * as React from "react";
+import Link from "next/link";
 import {
     Building2,
     Landmark,
@@ -97,8 +98,15 @@ export function About() {
                             </div>
                             <div className="bg-[#F8FAF9] p-2 sm:p-2.5 rounded-xl border border-gray-100 flex flex-col justify-between text-center min-h-[70px] sm:min-h-[76px]">
                                 <p className="text-[10px] sm:text-[11px] font-medium text-gray-500">Warranty</p>
-                                <div className="flex-1 flex items-center justify-center mt-0.5">
+                                <div className="flex-1 flex flex-col items-center justify-center mt-0.5">
                                     <p className="text-[11px] sm:text-xs font-bold text-[#0F766E] leading-snug">Lifetime Warranty</p>
+                                    <Link
+                                        href="/terms#lifetime-warranty"
+                                        className="text-[9px] sm:text-[10px] text-gray-500 hover:text-[#0F766E] underline underline-offset-2 decoration-gray-400 hover:decoration-[#0F766E] transition-colors mt-0.5"
+                                        title="View Lifetime Warranty Terms"
+                                    >
+                                        under terms
+                                    </Link>
                                 </div>
                             </div>
                             <div className="bg-[#F8FAF9] p-2 sm:p-2.5 rounded-xl border border-gray-100 flex flex-col justify-between text-center min-h-[70px] sm:min-h-[76px]">

@@ -62,8 +62,8 @@ const STAGES = [
         id: "support",
         title: "Support",
         icon: Headphones,
-        description: "Providing continuous maintenance, applying security patches, and iterative feature scaling post-launch.",
-        deliverables: ["Maintenance", "Updates", "Improvements"],
+        description: "Backed by our Lifetime Code Warranty and 30-day go-live hypercare, with optional AMC retainers for continuous feature scaling and third-party updates.",
+        deliverables: ["Lifetime Warranty", "30-Day Hypercare", "AMC Retainers"],
     }
 ];
 

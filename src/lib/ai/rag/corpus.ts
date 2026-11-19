@@ -55,7 +55,7 @@ export const OFFICIAL_SS40_CORPUS: KnowledgeSourceDocument[] = [
 - Headquarters: 1st Floor, Municipal Corporation Incubation Centre (Near Trade Centre), Sree Puram, Tirunelveli, Tamil Nadu 627001, India.
 - Contact: support@ss40network.com | +91 83005 91750 | Official website: https://ss40network.com
 - Three Specialized Business Wings: SS40 Digital Solutions (custom enterprise software & AI), SS40 Products (business software platforms like ClearInvoice, GTC Suite, AI Email Agent), and SS40 Academics (practical software engineering internships & placement preparation).
-- Delivery Commitments: Fixed-scope deliverables, 30-day post-launch warranty, enterprise security, and 99.99% uptime guarantee.`
+- Delivery Commitments: Fixed-scope deliverables, Lifetime Technical Warranty on authored codebase (under terms), 30-day go-live hypercare, enterprise security, and 99.99% uptime guarantee.`
     },
     {
         id: "doc-three-wings",
@@ -94,7 +94,7 @@ export const OFFICIAL_SS40_CORPUS: KnowledgeSourceDocument[] = [
 - Mobile App Development: High-performance native and cross-platform mobile apps for iOS and Android.
 - Enterprise Software: Custom ERPs, CRMs, interactive analytics dashboards, and business automation platforms.
 - Cloud Architecture & DevOps: Scalable serverless and microservice systems with 99.99% uptime and enterprise security.
-- Client Assurance: Fixed-scope deliverables, transparent milestone tracking, and a 30-day post-launch warranty.`
+- Client Assurance: Fixed-scope deliverables, transparent milestone tracking, Lifetime Technical Warranty on authored code (under terms), and 30-day post-launch go-live hypercare.`
     },
     {
         id: "doc-ai-workflow-automation",
@@ -131,7 +131,7 @@ export const OFFICIAL_SS40_CORPUS: KnowledgeSourceDocument[] = [
 1. Discovery & Architecture: Comprehensive requirements scoping, technical design, database schema, and fixed milestones.
 2. Agile Sprint Engineering: High-velocity bi-weekly sprint deliverables with direct client review demos.
 3. Rigorous QA & Security Audit: End-to-end automated testing, load testing, and enterprise security compliance.
-4. Deployment & 30-Day Warranty: Zero-downtime production deployment backed by a 30-day post-launch support warranty.`
+4. Deployment & Handover: Zero-downtime production launch backed by 30-day go-live hypercare and our Lifetime Technical Warranty on authored code (under terms).`
     },
     {
         id: "doc-products-portfolio",
