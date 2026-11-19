@@ -147,6 +147,7 @@ export function BlogsList({ initialActivities }: BlogsListProps) {
                                 <ActivityCard
                                     activity={activity}
                                     variant="grid"
+                                    priority={index < 3}
                                     onReadStory={(item) => setActiveModalItem(item)}
                                 />
                             </motion.div>

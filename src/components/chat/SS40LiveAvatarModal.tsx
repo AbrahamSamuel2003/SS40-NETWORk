@@ -21,7 +21,7 @@ export function SS40LiveAvatarModal({ isSupportMenuOpen = false }: SS40LiveAvata
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [timeLeft, setTimeLeft] = useState<number>(TOTAL_SESSION_SECONDS);
     const [isFadingOut, setIsFadingOut] = useState<boolean>(false);
-    const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
+    const [isCollapsed, setIsCollapsed] = useState<boolean>(true);
     const [isMobile, setIsMobile] = useState<boolean>(false);
 
     useEffect(() => {
@@ -64,13 +64,21 @@ export function SS40LiveAvatarModal({ isSupportMenuOpen = false }: SS40LiveAvata
         };
     }, []);
 
-    // Initial 1.5-second display on page load, then auto-collapse to circle
+    // Auto-open after 1.5 seconds in desktop view ONLY (window.innerWidth >= 768).
+    // On mobile view, it must never auto-open and remain strictly in circle shape.
     useEffect(() => {
         if (hasInitialTimerRun.current || isConnected || isLoading) return;
+
+        const isDesktop = typeof window !== "undefined" && window.innerWidth >= 768;
+        if (!isDesktop) {
+            hasInitialTimerRun.current = true;
+            return;
+        }
+
         const initialTimer = setTimeout(() => {
             hasInitialTimerRun.current = true;
-            if (!isHoveredRef.current && !isConnected && !isLoading) {
-                setIsCollapsed(true);
+            if (!isConnected && !isLoading) {
+                setIsCollapsed(false);
             }
         }, 1500);
 
@@ -98,9 +106,10 @@ export function SS40LiveAvatarModal({ isSupportMenuOpen = false }: SS40LiveAvata
         };
     }, [isCollapsed, isConnected, isOpen]);
 
-    // Mouse-only hover expansion logic (strict pointerType === "mouse" to never interfere with touch)
+    // Mouse-only hover expansion logic (desktop only, strict pointerType === "mouse" to never interfere with touch)
     const handlePointerEnter = (e: React.PointerEvent) => {
         if (e.pointerType !== "mouse") return;
+        if (typeof window !== "undefined" && window.innerWidth < 768) return;
         isHoveredRef.current = true;
         if (collapseTimerRef.current) {
             clearTimeout(collapseTimerRef.current);
@@ -111,16 +120,16 @@ export function SS40LiveAvatarModal({ isSupportMenuOpen = false }: SS40LiveAvata
 
     const handlePointerLeave = (e: React.PointerEvent) => {
         if (e.pointerType !== "mouse") return;
+        if (typeof window !== "undefined" && window.innerWidth < 768) return;
         isHoveredRef.current = false;
         if (isConnected || isLoading) return;
-        // If initial 3s display has already completed, collapse promptly on mouse leave
         if (hasInitialTimerRun.current) {
             if (collapseTimerRef.current) clearTimeout(collapseTimerRef.current);
             collapseTimerRef.current = setTimeout(() => {
                 if (!isHoveredRef.current && !isConnected && !isLoading) {
                     setIsCollapsed(true);
                 }
-            }, 250);
+            }, 300);
         }
     };
 
@@ -293,7 +302,7 @@ export function SS40LiveAvatarModal({ isSupportMenuOpen = false }: SS40LiveAvata
                         src="/avatar/siva-ceo.png"
                         alt="Siva - CEO, SS40 Network"
                         className="absolute inset-0 w-full h-full object-cover z-0 transition-transform duration-300"
-                        style={{ objectPosition: isCollapsed ? "center 27%" : "center 28%" }}
+                        style={{ objectPosition: isCollapsed ? "center 28%" : "center center" }}
                     />
 
                     {/* Active WebRTC Video Stream */}

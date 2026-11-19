@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     },
 };
 
-export const revalidate = 0; // Dynamic route
+export const revalidate = 60; // Cache on edge with fast background revalidation
 
 export default async function AllBlogsPage() {
     // Fetch all active activity posts with safe fallback

@@ -208,7 +208,8 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
                                     className="object-cover"
                                     priority={priority}
                                     loading={priority ? 'eager' : 'lazy'}
-                                    decoding="async"
+                                    unoptimized={images[currentIndex].url?.startsWith('/api/uploads/') || images[currentIndex].url?.endsWith('.webp')}
+                                    decoding={priority ? 'sync' : 'async'}
                                 />
                             </motion.div>
                         )}
@@ -327,10 +328,13 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
                                     src={images[currentIndex].url}
                                     alt={images[currentIndex].altText || cleanTitle}
                                     fill
+                                    quality={80}
                                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                     className="object-cover"
-                                    loading="lazy"
-                                    decoding="async"
+                                    priority={priority}
+                                    loading={priority ? 'eager' : 'lazy'}
+                                    unoptimized={images[currentIndex].url?.startsWith('/api/uploads/') || images[currentIndex].url?.endsWith('.webp')}
+                                    decoding={priority ? 'sync' : 'async'}
                                 />
                             </motion.div>
                         )}
@@ -458,7 +462,8 @@ export function ActivityCard({ activity, reversed = false, variant = 'alternatin
                                 className="object-cover"
                                 priority={priority}
                                 loading={priority ? 'eager' : 'lazy'}
-                                decoding="async"
+                                unoptimized={images[currentIndex].url?.startsWith('/api/uploads/') || images[currentIndex].url?.endsWith('.webp')}
+                                decoding={priority ? 'sync' : 'async'}
                             />
                         </motion.div>
                     )}
