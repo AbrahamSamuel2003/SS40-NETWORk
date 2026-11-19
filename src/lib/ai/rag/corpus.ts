@@ -389,9 +389,9 @@ export const OFFICIAL_SS40_CORPUS: KnowledgeSourceDocument[] = [
         id: "doc-business-doctor",
         title: "Business Doctor: 1-on-1 Business Health Checkup & Strategic Consultation",
         category: "digital-solutions",
-        sourceUrl: "https://ss40-consultancy.vercel.app/",
-        route: "https://ss40-consultancy.vercel.app/",
-        lastUpdated: "2026-11-18T00:00:00.000Z",
+        sourceUrl: "https://bdr.ss40network.com/",
+        route: "https://bdr.ss40network.com/",
+        lastUpdated: "2026-11-19T00:00:00.000Z",
         summary: "Comprehensive 1-on-1 strategic diagnostic session helping businesses diagnose workflow bottlenecks, automate operations, and scale with custom technology.",
         keywords: [
             "business doctor", "business health checkup", "health checkup", "check your business health",
@@ -417,7 +417,7 @@ export const OFFICIAL_SS40_CORPUS: KnowledgeSourceDocument[] = [
   * Custom Technology Prescription (exact architecture recommendations, build vs buy advice)
   * Workflow Optimization Roadmap (step-by-step automation blueprint)
   * 30-Day Implementation Milestones (immediate high-impact wins)
-- Booking Portal: Appointments are booked directly via the official scheduling form at https://ss40-consultancy.vercel.app/`
+- Booking Portal: Appointments are booked directly via the official scheduling form at https://bdr.ss40network.com/`
     },
     {
         id: "doc-legal-privacy-terms",

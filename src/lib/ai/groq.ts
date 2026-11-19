@@ -53,7 +53,7 @@ CORE RULES:
    - SS40 Digital Solutions (custom web, mobile apps, enterprise software, AI & cloud systems).
    - SS40 Products (ClearInvoice GST billing, GTC Suite, SS40 AI Email Agent). Never say "SaaS products".
    - SS40 Academics (practical software engineering internships, live sprints, DSA placement prep).
-3. BUSINESS DOCTOR: 1-on-1 strategic diagnostic consultation ("Diagnose Before You Scale") to identify operational bottlenecks and provide a technology prescription. 45-60 min private session available In-Person in Tirunelveli OR Online via Google Meet (GMeet), booked at https://ss40-consultancy.vercel.app/.
+3. BUSINESS DOCTOR: 1-on-1 strategic diagnostic consultation ("Diagnose Before You Scale") to identify operational bottlenecks and provide a technology prescription. 45-60 min private session available In-Person in Tirunelveli OR Online via Google Meet (GMeet), booked at https://bdr.ss40network.com/.
 4. STRICT BAN: NEVER use any emojis or sparkles under any circumstances. Text only.
 5. COMPANY NAME: Always full uppercase: "SS40 NETWORK".
 6. CRISP REPLIES: Keep answers direct, concise (2 to 3 sentences or clean markdown bullet points). No fluff or padding.
@@ -62,7 +62,7 @@ CORE RULES:
 INQUIRY MODES:
 - Company Inquiries: Use ONLY facts from [RETRIEVED SS40 KNOWLEDGE CONTEXT].
   * Products: ClearInvoice (GST billing, PDF invoices, inventory, Razorpay, Google Drive sync). AI Email Agent (inbox only, filters spam, instant drafts; no WhatsApp). GTC Suite (business management).
-  * Business Doctor: Mention 1-on-1 session (GMeet/Tirunelveli), 6 diagnostic pillars, Executive Diagnosis Report & Tech Prescription. No price. Nav: {"label": "Book Business Health Checkup", "url": "https://ss40-consultancy.vercel.app/"}.
+  * Business Doctor: Mention 1-on-1 session (GMeet/Tirunelveli), 6 diagnostic pillars, Executive Diagnosis Report & Tech Prescription. No price. Nav: {"label": "Book Business Health Checkup", "url": "https://bdr.ss40network.com/"}.
   * Academics: Mention practical sprints, live client projects, placement referrals, certificates.
   * Pricing: Explain custom milestone-based pricing with free initial scoping and product demos.
 - Contact Requests: Provide Phone: +91 83005 91750 | Email: support@ss40network.com | Location: Tirunelveli, Tamil Nadu. actionType: "LEAD_CAPTURE".
@@ -88,7 +88,7 @@ OUTPUT FORMAT (JSON ONLY):
   "navigation": { "label": "Button Label", "url": "/internal-route-or-allowed-link" }, // or null
   "actionType": "STANDARD" // STANDARD | WINGS_CARD | ACADEMIC_CARD | SUPPORT_CARD | LEAD_CAPTURE
 }
-ALLOWED ROUTES: "/products", "/digital-solutions", "/academics", "/contact", "/#about", "/academics/student-projects", "/client-projects", "/#business-wings", "/blogs", or "https://ss40-consultancy.vercel.app/".`;
+ALLOWED ROUTES: "/products", "/digital-solutions", "/academics", "/contact", "/#about", "/academics/student-projects", "/client-projects", "/#business-wings", "/blogs", or "https://bdr.ss40network.com/".`;
 
 export async function generateRagResponse(
     userMessage: string,
@@ -325,7 +325,7 @@ ${contextText}${dynamicLeadDirective}`;
         const options: string[] = sanitizePillOptions(parsed.options, primaryChunk, rawUserMessage, processed.isGreeting || processed.isSmallTalk);
 
         let navigation: { label: string; url: string } | null = null;
-        if (parsed.navigation && typeof parsed.navigation.url === "string" && (parsed.navigation.url.startsWith("/") || parsed.navigation.url.startsWith("https://ss40-consultancy.vercel.app"))) {
+        if (parsed.navigation && typeof parsed.navigation.url === "string" && (parsed.navigation.url.startsWith("/") || parsed.navigation.url.startsWith("https://bdr.ss40network.com") || parsed.navigation.url.startsWith("https://ss40-consultancy.vercel.app"))) {
             navigation = {
                 label: stripEmojisAndSparkles(String(parsed.navigation.label || "Learn More")),
                 url: parsed.navigation.url.trim(),

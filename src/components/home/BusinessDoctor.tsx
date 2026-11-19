@@ -326,7 +326,7 @@ export function BusinessDoctor() {
                         {/* Bottom CTA Block */}
                         <div className="pt-2">
                             <a
-                                href="https://ss40-consultancy.vercel.app/"
+                                href="https://bdr.ss40network.com/"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="w-full flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-[#0F766E] hover:bg-[#115E59] text-white font-bold text-sm shadow-lg shadow-[#0F766E]/20 hover:shadow-xl hover:shadow-[#0F766E]/30 active:scale-[0.98] transition-all duration-300 group cursor-pointer"
