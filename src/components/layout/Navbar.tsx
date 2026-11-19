@@ -161,7 +161,7 @@ export function Navbar({ config }: { config?: SiteConfigData | null }) {
                             <span className="text-lg md:text-xl font-black tracking-tight text-[var(--color-heading)] shrink-0 min-w-0 font-crimson">
                                 SS40 <span className="text-[var(--color-primary-hover)] font-black">NETWORK</span>
                             </span>
-                            <span className="text-[8px] sm:text-[9.5px] font-extrabold uppercase tracking-[0.18em] text-[#0F766E] font-crimson mt-0.5">
+                            <span className="text-[8px] sm:text-[9.5px] font-extrabold uppercase tracking-[0.04em] text-[#0F766E] font-crimson mt-0.5">
                                 A LITTLE BIT MORE
                             </span>
                         </div>
