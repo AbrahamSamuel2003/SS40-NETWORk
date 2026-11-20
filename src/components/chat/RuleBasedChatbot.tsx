@@ -452,10 +452,10 @@ export function RuleBasedChatbot({
         setIsTyping(false);
         setIsThinking(false);
 
-        // 1. Debounce typing indicator by 200ms so instantaneous replies don't flicker
+        // 1. Debounce typing indicator by 60ms so replies feel responsive with zero perceptible lag
         typingTimerRef.current = setTimeout(() => {
             setIsTyping(true);
-        }, 200);
+        }, 60);
 
         // 2. If response takes more than 4.5 seconds (> 4.5 sec), transition from 3 dots to "Thinking..."
         thinkingTimerRef.current = setTimeout(() => {

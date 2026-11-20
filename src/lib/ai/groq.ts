@@ -165,9 +165,10 @@ export async function generateRagResponse(
     }
 
     // 2. Retrieve relevant company context via Neural Vector Search
+    const isOverviewQuery = /\b(three wings|3 wings|all wings|what do you do|overview|divisions|services)\b/i.test(rawUserMessage);
     const vectorResult: VectorSearchResult = await searchVectorKnowledge(
         processed.contextResolvedQuery,
-        4,    // topK
+        isOverviewQuery ? 2 : 4,    // topK: 2 high-relevance chunks for overview queries to eliminate prompt bloat
         0.30  // threshold
     );
 
@@ -253,25 +254,25 @@ ${contextText}${dynamicLeadDirective}`;
 
         let completion;
         try {
+            // Primary high-speed model tier: Qwen 27B on Groq (~0.35s - 0.45s response latency)
             completion = await groqClient.chat.completions.create({
-                model: "openai/gpt-oss-120b",
-                temperature: 0.3,
-                max_tokens: 600,
-                reasoning_effort: "low",
+                model: "qwen/qwen3.8-27b",
+                temperature: 0.25,
+                max_tokens: 280,
                 response_format: { type: "json_object" },
                 messages: [
                     { role: "system", content: systemPromptWithContext },
                     ...recentHistory,
                     { role: "user", content: rawUserMessage },
                 ],
-            } as any);
+            });
         } catch (err1) {
-            console.warn("Retrying with fallback model openai/gpt-oss-20b:", err1);
+            console.warn("Retrying with secondary fallback model openai/gpt-oss-120b:", err1);
             try {
                 completion = await groqClient.chat.completions.create({
-                    model: "openai/gpt-oss-20b",
+                    model: "openai/gpt-oss-120b",
                     temperature: 0.3,
-                    max_tokens: 600,
+                    max_tokens: 350,
                     reasoning_effort: "low",
                     response_format: { type: "json_object" },
                     messages: [
@@ -281,18 +282,19 @@ ${contextText}${dynamicLeadDirective}`;
                     ],
                 } as any);
             } catch (err2) {
-                console.warn("Retrying with fallback model qwen/qwen3.8-27b:", err2);
+                console.warn("Retrying with tertiary fallback model openai/gpt-oss-20b:", err2);
                 completion = await groqClient.chat.completions.create({
-                    model: "qwen/qwen3.8-27b",
+                    model: "openai/gpt-oss-20b",
                     temperature: 0.3,
-                    max_tokens: 600,
+                    max_tokens: 350,
+                    reasoning_effort: "low",
                     response_format: { type: "json_object" },
                     messages: [
                         { role: "system", content: systemPromptWithContext },
                         ...recentHistory,
                         { role: "user", content: rawUserMessage },
                     ],
-                });
+                } as any);
             }
         }
 
@@ -346,6 +348,8 @@ ${contextText}${dynamicLeadDirective}`;
 
         if (isExplicitContactRequest) {
             actionType = "LEAD_CAPTURE";
+        } else if (/\b(three wings|3 wings|all wings|our wings|ecosystem)\b/i.test(rawUserMessage)) {
+            actionType = "WINGS_CARD";
         } else if (userTurnCount >= 3 && isHighIntentTopic && !processed.isGreeting) {
             actionType = "LEAD_CAPTURE";
         } else if (parsed.actionType && ["STANDARD", "WINGS_CARD", "ACADEMIC_CARD", "SUPPORT_CARD", "LEAD_CAPTURE"].includes(parsed.actionType)) {
