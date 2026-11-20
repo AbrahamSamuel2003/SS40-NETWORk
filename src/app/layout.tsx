@@ -271,6 +271,7 @@ export default async function RootLayout({
   return (
     <html lang="en" className={`${crimsonPro.variable} antialiased`} suppressHydrationWarning>
       <head>
+        <link rel="preload" href="/avatar/siva-ceo.webp" as="image" type="image/webp" fetchPriority="high" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

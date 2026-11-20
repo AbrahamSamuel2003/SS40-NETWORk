@@ -299,8 +299,11 @@ export function SS40LiveAvatarModal({ isSupportMenuOpen = false }: SS40LiveAvata
                 <div className="relative w-full h-full bg-slate-900 flex items-center justify-center overflow-hidden">
                     {/* Continuous Representative Photo Background (Siva - CEO) */}
                     <img
-                        src="/avatar/siva-ceo.png"
+                        src="/avatar/siva-ceo.webp"
                         alt="Siva - CEO, SS40 Network"
+                        loading="eager"
+                        decoding="sync"
+                        fetchPriority="high"
                         className="absolute inset-0 w-full h-full object-cover z-0 transition-transform duration-300"
                         style={{ objectPosition: isCollapsed ? "center 28%" : "center center" }}
                     />
